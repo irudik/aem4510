@@ -180,7 +180,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
 Background:
   -  Currie, Janet, and Reed Walker. "[What Do Economists Have to Say about the Clean Air Act 50 Years after the Establishment of the Environmental Protection Agency?](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.3)" Journal of Economic Perspectives 33, no. 4 (2019): 3-26.
-  - Schmalensee, Richard, and Robert N. Stavins. "[Policy Evolution under the Clean Air Act.](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.27" Journal of Economic Perspectives 33, no. 4 (2019): 27-50.
+  - Schmalensee, Richard, and Robert N. Stavins. "[Policy Evolution under the Clean Air Act.](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.27)" Journal of Economic Perspectives 33, no. 4 (2019): 27-50.
   - Keiser, David A., and Joseph S. Shapiro. "[US Water Pollution Regulation over the Past Half Century: Burning Waters to Crystal Springs?](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.51)" Journal of Economic Perspectives 33, no. 4 (2019): 51-75.
 
 Research:
