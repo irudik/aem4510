@@ -8,3 +8,19 @@ menu:
 type: docs
 weight: 1
 ---
+
+## Theory problem sets
+
+**Due dates:** March 7, March 28
+
+## Empirical Problem sets
+
+**Due dates:** April 18, May 6
+
+## Group project presentation
+
+**Due date:** Last two days of class
+
+## Group project paper
+
+**Due date:** May 25
