@@ -13,6 +13,10 @@
   url = "assignments"
   weight = 2
   
+[[main]]
+  name = "rstudio.cloud"
+  url = "https://rstudio.cloud"
+  weight = 3
 
 
 # Link to a PDF of your resume/CV from the menu.

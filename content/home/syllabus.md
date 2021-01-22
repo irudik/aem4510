@@ -35,7 +35,7 @@ Lin Yang (ly285): Wednesday 3:00-4:00
 
 - Markets and the Environment by Keohane and Olmstead is required.
 - [Causal Inference: The Mixtape](https://mixtape.scunning.com/) by Cunningham is required, free, and comes with R code examples in the text.
-- Other readings will be from papers that are freely available.
+- Other readings will be from papers that are freely available through the [library](https://www.library.cornell.edu/) or [Google Scholar](https://scholar.google.com/).
 
 **Prerequisites:** MATH 1110, AEM 2600 or ECON 3030. An econometrics course like AEM 4110, ECON 3200, or ECON 3210 is highly, highly recommended.
 
@@ -58,3 +58,5 @@ Assignments and grading are [here](/assignments/).
 **Grade appeals:** If you wish to appeal your grade on an assignment you must bring it to my attention, in writing, within 24 hours of when the assignment is returned.  Grades brought to my attention after this will not be eligible for a grade appeal. I reserve the right to regrade the entire assignment and the new grade will be final.
 
 **Integrity of credit:** I expect every student in this course to abide by the Cornell University Code of Academic Integrity. I strongly encourage collaboration in this course, but each student is responsible for making sure that she or he follows the rules laid out in this syllabus, and with those stated in the Code of Academic Integrity. Any student found to have violated the stated policies on problem sets will receive a zero for that assignment, and any student found to have cheated on a paper will receive a zero on that paper. Multiple violations in a semester may result in failure of the course. The Code of Academic Integrity is available for review here: https://cuinfo.cornell.edu/aic.cfm.
+
+**Coding:** We will be using [RStudio Cloud](https://rstudio.cloud) for coding. You should not need to install or download anything for what we do in class or for problem sets.

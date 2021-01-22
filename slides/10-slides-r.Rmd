@@ -2,7 +2,7 @@
 title: "Lecture 10"
 subtitle: "R and the tidyverse // randomization"
 author: Ivan Rudik
-date: AEM 6510
+date: AEM 4510
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
