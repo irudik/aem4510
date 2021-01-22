@@ -5,7 +5,7 @@ headless: true
 active: true
 weight: 10
 
-title: "AEM 4510: Environmental Economics"
+title: "AEM 4510<br>Environmental Economics"
 
 # Hero image (optional). Enter filename of an image in the `static/img/` folder.
 hero_media: tree.png
