@@ -2,8 +2,6 @@
 title: "R and the Tidyverse"
 linktitle: "LN10: R and the Tidyverse"
 date: "2020-08-24"
-start_date: "2020-08-24"
-end_date: "2020-08-28"
 menu:
   content:
     parent: Menu
@@ -16,16 +14,6 @@ output:
   blogdown::html_page:
     toc: false
 ---
-
-## Readings
-
-- The [syllabus](/), [lecture notes](/lecture-notes/), and [assignments](/assigment/) pages for this class
-- <i class="fas fa-book"></i> Chapter 1 in *Impact Evaluation in Practice* [@wb-eval]
-- <i class="fab fa-youtube"></i> DJ Patil, ["What Makes a Radical and Revolutionary Technology?"](https://www.youtube.com/watch?v=UOoMzaWOQJA) 
-    - <small>(DJ Patil is the former Chief Data Scientist of the United States under President Obama. He gave this forum address at Brigham Young University on February 13, 2018.)</small>
-- <i class="fas fa-external-link-square-alt"></i> Stephen Goldsmith, ["Next Generation of Public Employees Must Understand Data and Policy"](http://www.govtech.com/opinion/Next-Generation-Public-Employees-Must-Understand-Data-Policy.html)
-- <i class="fas fa-external-link-square-alt"></i> Hadley Wickham, ["Data Science: How is it Different To Statistics?"](http://bulletin.imstat.org/2014/09/data-science-how-is-it-different-to-statistics%E2%80%89/)
-
 
 ## Slides
 

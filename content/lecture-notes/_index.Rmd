@@ -1,5 +1,6 @@
 ---
-title: Schedule
+title: Schedule and Readings
+date: "2021-01-22"
 menu:
   content:
     parent: Menu
