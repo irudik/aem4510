@@ -1,0 +1,6 @@
+name = "lato"
+
+google_fonts = "Roboto:400,700"
+
+heading_font = "Roboto"
+body_font = "Roboto"

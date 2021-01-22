@@ -1,7 +1,8 @@
 theme: starter-academic
 title: AEM 4510
-baseurl: ''
-copyright: ''
+font: lato
+baseurl: 'aem4510.ivanrudik.com'
+copyright: 'Ivan Rudik'
 enableGitInfo: no
 defaultContentLanguage: en
 hasCJKLanguage: no

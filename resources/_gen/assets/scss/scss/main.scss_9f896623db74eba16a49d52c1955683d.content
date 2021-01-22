@@ -7228,14 +7228,14 @@ ul.task-list li input[type="checkbox"] {
 
 /* Navigation bar text */
 .navbar-light {
-  font-family: "Roboto", sans-serif;
+  font-family: "<no value>", sans-serif;
   font-weight: 400;
   line-height: 1.25;
   text-rendering: optimizeLegibility; }
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 400;
   margin-top: 1rem;
   margin-bottom: .5rem;
@@ -7335,7 +7335,7 @@ figcaption.numbered {
 
 pre,
 code {
-  font-family: "Roboto Mono", monospace;
+  font-family: "<no value>", monospace;
   color: #c7254e;
   /* Match bg of default highlight theme. */
   background-color: #f8f8f8; }
