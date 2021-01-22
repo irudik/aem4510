@@ -22,3 +22,5 @@ design:
 cta_note:
   label: Spring 2021<br>Dyson School of Applied Economics and Management<br>Cornell University
 ---
+
+The role of the environment in the theory and practice of economics
