@@ -1,0 +1,10 @@
+---
+title: Assignments
+date: "2021-01-22"
+menu:
+  content:
+    parent: Menu
+    weight: 1
+type: docs
+weight: 1
+---

@@ -5,7 +5,7 @@ date: "2020-08-24"
 menu:
   content:
     parent: Menu
-    weight: 2
+    weight: 4
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"

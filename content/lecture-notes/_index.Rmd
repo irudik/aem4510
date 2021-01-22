@@ -4,7 +4,7 @@ date: "2021-01-22"
 menu:
   content:
     parent: Menu
-    weight: 1
+    weight: 2
 type: docs
 weight: 1
 ---
@@ -116,9 +116,11 @@ Research:
 ### 22: Perverse incentives and incomplete regulation
 
 Intertemporal leakage
+
   - McDermott, Grant R., Kyle C. Meng, Gavin G. McDonald, and Christopher J. Costello. "[The blue paradox: Preemptive overfishing in marine reserves.](https://www.pnas.org/content/pnas/116/12/5319.full.pdf)" Proceedings of the National Academy of Sciences 116, no. 12 (2019): 5319-5325.
 
 Incomplete monitoring
+
   -  Zou, Eric. "[Unwatched pollution: The effect of intermittent monitoring on air quality.](http://www.eric-zou.com/s/monitor_zou_202004.pdf)" American Economic Review (2021).
 
 ### 23: Green accounting
