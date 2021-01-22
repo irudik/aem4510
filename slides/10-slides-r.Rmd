@@ -1,6 +1,6 @@
 ---
 title: "Lecture 10"
-subtitle: "R and the tidyverse // randomization"
+subtitle: "R and the tidyverse // regression"
 author: Ivan Rudik
 date: AEM 4510
 output:
