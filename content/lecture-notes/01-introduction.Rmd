@@ -1,0 +1,20 @@
+---
+title: "Introduction to Environmental Economics"
+linktitle: "LN01: Intro to Enviro Econ"
+date: "2020-08-24"
+start_date: "2020-08-24"
+end_date: "2020-08-28"
+menu:
+  content:
+    parent: Menu
+    weight: 2
+type: docs
+#bibliography: "../../static/bib/references.bib"
+#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
+slides: "01-slides"
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+Hi
