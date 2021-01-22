@@ -41,6 +41,100 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 
 # Roadmap
 
-- What is R?
-- What is the tidyverse?
-- How do we import and manipulate data?
+- What is environmental economics?
+- What are the goals for this class?
+- Microeconomics recap
+
+---
+
+class: inverse, center, middle
+name: what_is_enviro
+
+# What is environmental economics?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# What's enviro econ?
+
+First, what is economics?
+
+--
+
+.hi[Economics:] the study of how agents (people, firms, etc) make choices with scarce resources and the social results of these choices
+
+--
+
+Everything is scarce compared to wants and needs
+
+--
+
+We need to choose among alternatives and make trade offs
+
+--
+
+These ideas can be applied to the environment
+
+---
+
+# What is enviro econ?
+
+.hi[Environmental Economics:] the application of economics to the study of the environment as a resource or good
+
+--
+
+Environmental economics helps us understand things like:
+
+--
+
+- The value of mitigating pollution
+
+--
+
+How agents will response to climate change policies
+
+--
+
+Whether investment tax credits for wind power are cost-effective
+
+---
+
+class: inverse, center, middle
+name: goals
+
+# What are the goals of this class?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# What are the goals of this class?
+
+1. Enhance your understanding of	how economists think about solving real environmental problems
+--
+
+2. Prepare you for after college:
+  - Industry jobs (energy, transportation, finance)
+  - Public sector and NGOs (EPA, DOE, RFF, Brookings, Federal Reserve)
+  - Graduate programs
+  
+--
+
+3. Learn both the theory and .hi[applications] of environmental economics
+
+---
+
+class: inverse, center, middle
+name: micro_recap
+
+# Microeconomics recap
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# Micro recap
