@@ -1,6 +1,6 @@
 ---
 title: Assignments
-date: "2021-01-22"
+date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Menu

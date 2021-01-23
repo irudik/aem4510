@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -89,7 +89,7 @@ Environmental economics helps us understand things like:
 
 --
 
-- The value of mitigating pollution
+The value of mitigating pollution
 
 --
 
@@ -101,6 +101,116 @@ Whether investment tax credits for wind power are cost-effective
 
 ---
 
+# Air pollution is bad
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/01-pollution.jpg")
+```
+</center>
+
+
+---
+
+# How do people respond to info?
+
+.pull-left[
+```{r sequoia-tweet, echo = FALSE, fig.pos="c"}
+tweet_screenshot(
+  "https://twitter.com/SequoiaKingsAir/status/1300813316491673606",
+  maxwidth = 200
+  )
+```
+]
+
+.pull-right[
+
+  Places provide info to help people avoid air pollution
+  
+  Does it work?
+  
+  How well?
+
+]
+
+
+---
+
+# Climate change
+
+<center>
+```{r temp-anomaly, out.width = "50%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/01-temp-anomaly.png")
+```
+</center> 
+
+
+---
+
+# Climate change
+
+<video width="1080" controls>
+  <source src="files/01-climate-video.mp4" type="video/mp4">
+</video>
+
+
+---
+
+# Climate change
+
+Why do economists care about climate change?
+
+--
+
+It affects the economy and how we have to allocate resources!
+
+--
+
+- Production
+- Learning
+- Leisure
+- Fishing
+- etc, etc
+
+
+---
+
+# Climate change: learning
+
+<center>
+```{r learning, out.width = "60%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/01-heat-learning.png")
+```
+</center> 
+
+Park et al. (2020)
+
+---
+
+# Climate change: economic growth
+
+<center>
+```{r growth, out.width = "65%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/01-trade-growth.png")
+``` 
+</center> 
+
+Lyn et al. (2020)
+
+---
+
+# Climate change: mortality
+
+<center>
+```{r mortality, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/01-climate-mortality.png")
+``` 
+</center> 
+
+Carleton et al. (2020)
+
+---
+
 # What is enviro econ?
 
 
@@ -109,13 +219,13 @@ Environmental economics is actually pretty new
 
 It is thought to really be started by .hi[John Krutilla] in the 1950s
 
-His paper .green[Conservation Reconsidered] is the landmark paper transforming the field from focusing on managing resources to conservation of the environment
+His paper .green[Conservation Reconsidered] is the landmark paper in the field
 
 ]
 
 .pull-right[
  
-![John Krutilla](files/krutilla.jpg)
+![John Krutilla](files/01-krutilla.jpg)
 
 ]
 

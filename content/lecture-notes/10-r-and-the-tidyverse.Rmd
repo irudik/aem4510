@@ -1,7 +1,7 @@
 ---
 title: "R and the Tidyverse"
 linktitle: "LN10: R and the Tidyverse"
-date: "2021-01-22"
+date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Menu
@@ -15,11 +15,20 @@ output:
     toc: false
 ---
 
+### Overview
+
 This lecture:
 
 1. Introduces the R programming language that we will be using for the empirical section of class
 2. Introduces the `tidyverse` set of packages that make data manipulation easy
 3. Introduces the `feols` package for running regressions
+
+### Slides
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
 
 `r blogdown::shortcode("slide-buttons")`
 

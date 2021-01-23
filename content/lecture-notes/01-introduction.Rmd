@@ -1,7 +1,7 @@
 ---
 title: "Introduction to Environmental Economics"
 linktitle: "LN01: Intro to Enviro Econ"
-date: "2021-01-22"
+date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Menu
@@ -15,10 +15,19 @@ output:
     toc: false
 ---
 
+### Overview
+
 This lecture:
 
 1. Introduces environmental economics
 2. Reviews some core micro concepts we will need for later
+
+### Slides
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
 
 `r blogdown::shortcode("slide-buttons")`
 
