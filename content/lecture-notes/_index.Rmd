@@ -57,6 +57,8 @@ Optional readings are in italics
 
 ### 11: Discounting
 
+  - Giglio, Stefano, Matteo Maggiori, Johannes Stroebel, and Andreas Weber. "[Climate change and long-run discount rates: Evidence from real estate.](http://pages.stern.nyu.edu/~jstroebe/PDF/GMRSW_Climate.pdf)" Review of Financial Studies, (Forthcoming).
+
 ### 12: In class emissions trading game (with prizes!)
 
 ### 13: R and the tidyverse, regression review
@@ -84,7 +86,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 ### 17: Pollution and health
 
   - Mixtape: difference-in-differences
-  - [Hollingsworth, Alex, and Ivan Rudik. "The effect of leaded gasoline on elderly mortality: Evidence from regulatory exemptions." American Economic Journal: Economic Policy (2020).](https://osf.io/preprints/socarxiv/rdy6g/)
+  - Hollingsworth, Alex, and Ivan Rudik. "[The effect of leaded gasoline on elderly mortality: Evidence from regulatory exemptions.](https://osf.io/preprints/socarxiv/rdy6g/)" American Economic Journal: Economic Policy (2020).
   - *Deryugina, Tatyana, Garth Heutel, Nolan H. Miller, David Molitor, and Julian Reif. "[The mortality and medical costs of air pollution: Evidence from changes in wind direction.](http://www.julianreif.com/research/reif.aer.2019.pollution.pdf)" American Economic Review 109, no. 12 (2019): 4178-4219.*
 
 ### 18: Climate change science
@@ -132,6 +134,7 @@ Incomplete monitoring
 ### 23: Green accounting
 
   - [Resources Radio: Balancing the Ledgers: Pollution and GDP, with Nicholas Z. Muller](https://www.resourcesmag.org/resources-radio/balancing-ledgers-pollution-and-gdp-nicholas-z-muller/)
+  - Muller, Nicholas Z., Peter Hans Matthews, and Virginia Wiltshire-Gordon. "[The distribution of income is worse than you think: Including pollution impacts into measures of income inequality.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0192461)" PLoS One 13, no. 3 (2018): e0192461.
   - Muller, Nicholas Z., Robert Mendelsohn, and William Nordhaus. "[Environmental accounting for pollution in the United States economy.](https://www.jstor.org/stable/pdf/23045618.pdf?casa_token=bUniEpvduJ8AAAAA:U7ZaKBn5lpzjd-lfEMXtvs4xZB_yIY_0hLDVl9tGk2MPZ3TPx7Q9eRy0Vk9z3sHZGNhTxqw3w83WxT5jyGWr4HRnIGOxK1amXRBTpQWT7PrPUNhakdM)" American Economic Review 101, no. 5 (2011): 1649-75.
 
 ### 24: Non-market valuation: Hedonics
