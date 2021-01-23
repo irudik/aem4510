@@ -73,6 +73,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
 ### 16: Big data: Using satellites to measure the environment
 
+  - [Resources Radio: Sensing Pollution with Satellites, with RFF's Alan Krupnick and Daniel Sullivan](https://www.resourcesmag.org/resources-radio/resources-radio-sensing-pollution-with-satellites-with-rff039s-alan-krupnick-and-daniel-sullivan/)
   - Donaldson, Dave, and Adam Storeygard. "[The view from above: Applications of satellite data in economics.](https://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.30.4.171)" Journal of Economic Perspectives 30, no. 4 (2016): 171-98.
   - Burgess, Robin, Francisco Costa, and Benjamin A. Olken. "[The Brazilian Amazon’s Double Reversal of Fortune.](https://files.osf.io/v1/resources/67xg5/providers/osfstorage/5d4af97a272b140019eadf58?action=download&direct&version=1)" (2019).
   - *Mixtape: regression discontinuity*

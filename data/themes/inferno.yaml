@@ -13,8 +13,9 @@ link_hover: "#3C93DC"
 
 # Menu
 menu_primary: "#fff"
-menu_text: "#CF4446"
-menu_text_active: "#2e678c"
+menu_text: "#000000"
+menu_hover: "#2e678c"
+menu_text_active: "#3C93DC"
 menu_title: "#494949"
 
 # Home sections
