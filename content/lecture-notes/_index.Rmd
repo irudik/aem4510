@@ -37,6 +37,7 @@ Optional readings are in italics
 
 ### 7: Policy: Cap and trade
 
+  - [Resources Radio: A Status Report on Global Emissions Trading, with Stephanie La Hoz Theuer](https://www.resourcesmag.org/resources-radio/status-report-global-emissions-trading-stephanie-la-hoz-theuer/)
   - KO Chapters 8 and 9, 10
 
 ### 8: Second-best policy: Intensity standards and taxation under market power
@@ -76,6 +77,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
 ### 16: Environmental justice
 
+  - [Resources Radio: The Economics of Environmental Justice, with Samuel Stolper and Catherine Hausman](https://www.resourcesmag.org/resources-radio/economics-environmental-justice-samuel-stolper-and-catherine-hausman/)
   - Banzhaf, Spencer, Lala Ma, and Christopher Timmins. "[Environmental justice: The economics of race, place, and pollution.](https://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.33.1.185)" Journal of Economic Perspectives 33, no. 1 (2019): 185-208.
   - Hernandez-Cortes, Danae, and Kyle C. Meng. "[Do Environmental Markets Cause Environmental Injustice? Evidence from California’s Carbon Market.](https://www.nber.org/system/files/working_papers/w27205/w27205.pdf)" (2020).
 
@@ -87,6 +89,8 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
 ### 18: Climate change science
 
+  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman
+](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
   - Hsiang, Solomon, and Robert E. Kopp. "[An economist's guide to climate change science.](https://www.aeaweb.org/articles?id=10.1257%2Fjep.32.4.3)" Journal of Economic Perspectives 32, no. 4 (2018): 3-32.
   - Good resource on doing climate-econ research: [ClimateEstimate.net](https://climateestimate.net/getting-started)
 
@@ -105,9 +109,11 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
 Background:
 
+  - [Resources Radio: Lessons from 50 Years of the Clean Air Act, with Maureen Cropper](https://www.resourcesmag.org/resources-radio/lessons-50-years-clean-air-act-maureen-cropper/)
   -  Currie, Janet, and Reed Walker. "[What Do Economists Have to Say about the Clean Air Act 50 Years after the Establishment of the Environmental Protection Agency?](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.3)" Journal of Economic Perspectives 33, no. 4 (2019): 3-26.
-  - Schmalensee, Richard, and Robert N. Stavins. "[Policy Evolution under the Clean Air Act.](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.27)" Journal of Economic Perspectives 33, no. 4 (2019): 27-50.
+  - *Schmalensee, Richard, and Robert N. Stavins. "[Policy Evolution under the Clean Air Act.](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.27)" Journal of Economic Perspectives 33, no. 4 (2019): 27-50.*
   - Keiser, David A., and Joseph S. Shapiro. "[US Water Pollution Regulation over the Past Half Century: Burning Waters to Crystal Springs?](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.51)" Journal of Economic Perspectives 33, no. 4 (2019): 51-75.
+
 
 Research:
 
@@ -125,6 +131,7 @@ Incomplete monitoring
 
 ### 23: Green accounting
 
+  - [Resources Radio: Balancing the Ledgers: Pollution and GDP, with Nicholas Z. Muller](https://www.resourcesmag.org/resources-radio/balancing-ledgers-pollution-and-gdp-nicholas-z-muller/)
   - Muller, Nicholas Z., Robert Mendelsohn, and William Nordhaus. "[Environmental accounting for pollution in the United States economy.](https://www.jstor.org/stable/pdf/23045618.pdf?casa_token=bUniEpvduJ8AAAAA:U7ZaKBn5lpzjd-lfEMXtvs4xZB_yIY_0hLDVl9tGk2MPZ3TPx7Q9eRy0Vk9z3sHZGNhTxqw3w83WxT5jyGWr4HRnIGOxK1amXRBTpQWT7PrPUNhakdM)" American Economic Review 101, no. 5 (2011): 1649-75.
 
 ### 24: Non-market valuation: Hedonics
