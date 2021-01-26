@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 02</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="02-slides-market-failures_files/header-attrs/header-attrs.js"></script>
+    <link href="02-slides-market-failures_files/remark-css/default.css" rel="stylesheet" />
+    <link href="02-slides-market-failures_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="02-slides-market-failures_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="02-slides-market-failures_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="02-slides-market-failures_files/tile-view/tile-view.js"></script>
+    <link href="02-slides-market-failures_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="02-slides-market-failures_files/panelset/panelset.js"></script>
+    <script src="02-slides-market-failures_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="02-slides-market-failures_files/vembedr/css/vembedr.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lecture 02
+## Market Failures
+### Ivan Rudik
+### AEM 4510
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
+## refer to the documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+- What are market failures?
+- When do they happen?
+- What are the consequences?
+
+---
+
+class: inverse, center, middle
+name: what_is_enviro
+
+# Market failures and the environment
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+
+---
+
+# The ideal world
+
+In the best case scenario, a market equilibrium leads to the efficient allocation
+
+--
+
+Example: bread
+
+--
+
+We have a private bread supply curve (private MC)
+
+--
+
+We have a private bread demand curve (private MB)
+
+--
+
+In equilibrium: supply = demand so PMC = PMB = price
+
+--
+
+For bread, the private costs and benefits are very likely the social costs and benefits
+
+
+
+---
+
+# Market equilibrium
+
+.pull-left[
+
+
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
+
+.pull-right[
+
+.hi-red[Consumer surplus] is the difference between willingness to pay (demand) and price
+
+.hi-blue[Producer surplus] is the difference between price and marginal cost (supply)
+
+.hi[Total surplus] is the sum of CS and PS
+
+]
+
+---
+
+# Market equilibrium
+
+.pull-left[
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
+
+.pull-right[
+For bread, the private costs and benefits are very likely the social costs and benefits
+
+What does this mean about the market allocation?
+]
+
+---
+
+# Market equilibrium
+
+.pull-left[
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
+
+.pull-right[
+The market allocation is .hi-blue[efficient] because SMC = SMB
+
+Why?
+
+Consider deviating from `\((P^*, Q^*)\)`
+]
+
+---
+
+# Market equilibrium
+
+.pull-left[
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
+
+.pull-right[
+Cost of next unit after `\(Q^*\)` &gt; benefit
+
+Benefit of last unit `\(\geq\)` cost of last unit
+
+Competitive market allocations are efficient for private goods
+
+]
+
+---
+
+# Externalities
+
+If the world was just competitive markets, private goods, no third-parties, there would be no reason to do anything after Econ 101
+
+--
+
+That's not the case in the real world
+
+--
+
+In the real world we have .hi-blue[externalities]
+
+&gt; An externality exists whenever an individual or firm undertakes an action that impacts another individual or firm in an unintended way for which the latter is not compensated (a negative externality), or for which the latter does not pay (a positive externality)
+
+---
+
+# Externalities
+
+What is problem with externalities for market outcomes and efficiency?
+
+--
+
+There is not a market for the externality
+
+--
+
+E.g. at Wegmans or Agway you will not find on sale:
+- Cleaner air outside
+- Biodiversity in the Amazon
+
+--
+
+The central problem is that there are goods that are .hi-red[not priced]
+
+--
+
+Markets rely on prices to reflect value
+
+
+---
+
+# Externalities: several classifications
+
+We can classify externalities in a few ways:
+
+.hi[Production externalities:] generated by a firm in the process of producing some output (e.g. pollution, innovation)
+
+--
+
+.hi[Consumption externalities:] generated by an individual in the process of consuming  an output (e.g. congestion, vaccination)
+
+--
+
+.hi-red[Negative externalities:] imposes external **costs** (e.g. pollution)
+
+--
+
+.hi-blue[Negative externalities:] imposes external **benefits** (e.g. vaccination)
+
+---
+
+# Negative externalities
+
+&lt;center&gt;
+&lt;img src="files/02-ddt.jpg" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Negative externalities
+
+
+.pull-left[
+&lt;img src="files/02-ddt2.png" width="100%" /&gt;
+]
+
+.pull-right[
+DDT is a chemical that was was widely used as an insecticide in the early-mid 1900s
+
+Widely used to eradicate Typhus and Malaria
+
+Used to treat lice
+]
+
+---
+
+# Negative externalities
+
+
+.pull-left[
+&lt;img src="files/02-ddt2.png" width="100%" /&gt;
+]
+
+.pull-right[
+
+&gt; A relationship between DDT exposure and reproductive effects in humans is suspected, based on studies in animals. In addition, some animals exposed to DDT in studies developed liver tumors. As a result, today, DDT is classified as a probable human carcinogen.
+
+]
+
+---
+
+# Negative externalities: graphical
+
+.pull-left[
+
+
+![externalities shift SMC up](02-slides-market-failures_files/figure-html/neg-ext-1.png)
+]
+
+.pull-right[
+
+.hi-red[Social marginal cost (SMC)] is the sum of private marginal cost (PMC) and the external marginal cost (EMC)
+
+The PMC curve only reflects the **private costs** of making the DTT
+
+It does not account for the external health and wildlife costs
+
+]
+
+
+---
+
+# Negative externalities: graphical
+
+.pull-left[
+![externalities shift SMC up](02-slides-market-failures_files/figure-html/neg-ext-1.png)
+]
+
+.pull-right[
+
+Adding the private and external marginal costs together gives us the SMC, what we care about from the social planner or regulator's perspective
+
+The unregulated market gives us `\((P^u,Q^u)\)` as an outcome when we want `\((P^*,Q^*)\)`
+
+What's the social cost of this market failure?
+
+]
+
+
+---
+
+# Negative externalities: graphical
+
+.pull-left[
+
+
+![externalities generate DWL](02-slides-market-failures_files/figure-html/neg-ext-dwl-1.png)
+]
+
+.pull-right[
+
+Negative externalities generate deadweight loss equal to the .hi-red[red] area
+
+This is the difference in SMC and SMB for units where SMC &gt; SMB
+
+This is the loss to society caused by the externality in the unregulated private market
+
+]
+
+---
+
+# Negative externalities: graphical
+
+.pull-left[
+![externalities generate DWL](02-slides-market-failures_files/figure-html/neg-ext-dwl-1.png)
+]
+
+.pull-right[
+
+The private market produces too much DDT
+
+The private actors are not accounting for the social costs they are imposing on people who are not in the DDT transaction (e.g. third parties whose health is being affected)
+
+]
+
+---
+
+# The birth of the environmental movement
+
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/kwb6OvvxMjg" width="533" height="300" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+
+
+---
+
+# Positive externalities
+
+&lt;center&gt;
+&lt;img src="files/02-herd-immunity.png" width="50%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Positive externalities
+
+.pull-left[
+&lt;img src="files/02-mask.jpg" width="100%" /&gt;
+]
+
+.pull-right[
+Vaccines and masks are examples of good with positive externalities
+
+You getting or using them has benefits for other people not involved in your vaccine or mask transaction
+]
+
+
+---
+
+# Positive externalities: graphical
+
+.pull-left[
+
+
+![externalities shift SMB up](02-slides-market-failures_files/figure-html/pos-ext-1.png)
+]
+
+.pull-right[
+
+.hi-red[Social marginal benefit (SMB)] is the sum of private marginal benefit (PMB) and the external marginal benefit (EMB)
+
+The PMB curve only reflects the **private benefits** of getting a vaccine
+
+It does not account for the external herd immunity benefits
+
+]
+
+---
+
+# Positive externalities: graphical
+
+.pull-left[
+![externalities shift SMB up](02-slides-market-failures_files/figure-html/pos-ext-1.png)
+]
+
+.pull-right[
+
+Adding the private and external marginal benefits together gives us the SMB, what we care about from the social planner or regulator's perspective
+
+The unregulated market gives us `\((P^u,Q^u)\)` as an outcome when we want `\((P^*,Q^*)\)`
+
+What's the social cost of this market failure?
+
+]
+
+
+---
+
+# Positive externalities: graphical
+
+.pull-left[
+
+
+![pos externalities generate DWL](02-slides-market-failures_files/figure-html/pos-ext-dwl-1.png)
+]
+
+.pull-right[
+
+Positive externalities generate deadweight loss equal to the .hi-blue[blue] area
+
+This is the difference in SMB and SMC for units where SMC &lt; SMB
+
+This is the loss to society caused by the externality in the unregulated private market
+
+]
+
+
+---
+
+# Positive externalities: graphical
+
+.pull-left[
+![pos externalities generate DWL](02-slides-market-failures_files/figure-html/pos-ext-dwl-1.png)
+]
+
+.pull-right[
+
+The private market produces too few vaccines
+
+The private actors are not accounting for the social benefits they are imposing on people who are not in the vaccine transaction (e.g. third parties whose health is being affected)
+
+]
+
+
+---
+
+# Why do externalities arise?
+
+Typically one of two reasons:
+
+1. Poorly defined property rights
+  - Who owns the right to the air?
+2. High transactions costs
+  - Hard to bargain over desired air quality with millions of people
+
+
+Lets conceptualize a model of efficient bargaining using an Edgeworth Box
+  
+---
+
+# Why do externalities arise? Edgeworth Box  
+
+- Two individuals: A and B
+- Two private goods: X and Y
+
+Each individual begins with an initial endowment of each good:
+- `\(A: w_X^A, w_Y^A\)`
+- `\(B: w_X^B, w_Y^B\)`
+
+This gives us a total endowment:
+- `\(W_X = w_X^A + w_X^B\)`
+- `\(W_Y = w_Y^A + w_Y^B\)`
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Total vertical distance is `\(W_Y\)`
+
+Total horizontal distance is `\(W_X\)`
+
+Initial endowment is given by the empty circle
+
+Initial indifference curves for A and B are `\(UA(0)\)` and `\(UB(0)\)`
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Is there a possible Pareto improvement?
+
+e.g. can we make both A and B better off?
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Yes!
+
+If we move anywhere in the lens of their initial indifference curves we have a Pareto improvement
+
+If we move to an allocation where their indifference curves are .hi[tangent] to one another (e.g. the filled-in point), we have a Pareto optimum
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+In a properly functioning market:
+
+- The endowment point is well-established
+- A and B can trade X and Y to some Pareto improving point
+- They continue trading until they achieve a Pareto optimal allocaiton
+- This allocation lies on the .hi[contract curve]: the line consisting of all Pareto efficient allocations
+  
+---
+
+# Why do externalities arise? Edgeworth Box
+
+&lt;center&gt;
+&lt;img src="files/02-edgeworth2.png" width="50%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+Now suppose Y is not a private good, but a public good/bad, e.g. smoke
+
+--
+
+This means that A and B consume the .hi[exact same level of Y]
+
+--
+
+Unlike our regular Edgeworth Box, now Y increases for .hi[both] A and B as we move to the top of the slide (before Y increased for B as we moved to the bottom)
+
+--
+
+Suppose that A likes Y, but B does not
+
+--
+
+Suppose both start off with the same quantity of X
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth3.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Depending on who has property rights, we either start at:
+
+- W1 (B has property rights)
+- W2 (A has property rights)
+
+Think about why these are where we must start
+
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth3.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Suppose we start at W1, what happens?
+
+A wants to have more Y, but this imposes a cost on B
+
+Therefore, A has to .hi[pay] B to get more Y
+
+A pays B in units of X, move to Z1, Pareto optimum
+
+]
+
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth3.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Suppose we start at W2, what happens?
+
+B wants to have less Y, but this imposes a cost on A
+
+Therefore, B has to .hi[pay] A to get less Y
+
+B pays A in units of X, move to Z2, Pareto optimum
+
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+In the previous example we were able to achieve the Pareto optimum even with a public good / externality
+
+--
+
+Why?
+
+--
+
+1. Property rights were assigned to either A or B
+--
+
+2. Transactions costs were low (didn't have to pay a fee to trade X)
+
+---
+
+# Property rights and externalities
+
+A solution to many externalities is to just assign property rights and let the market do its thing
+
+--
+
+We'll talk about a few ways that we can assign property rights
+
+---
+
+# Transactions costs and externalities
+
+Now suppose there were many non-smokers
+
+--
+
+Even if they were assigned the property rights, it might be hard for them to bargain
+  - Takes a lot of time to find something that works for everyone
+  - Negotiating over how much X each person gets
+
+--
+
+The costs of bargaining may exceed the benefits and we end up stuck at W2
+
+---
+
+# Transactions costs and externalities
+
+Road noise: drivers implicitly have property rights to noise around roads
+
+--
+
+Even if you prefer quiet, you can't negotiate a payment with every loud car that might pass pay
+
+---
+
+# The free-rider problem
+
+Externalities and public goods/bads often exhibit many of the same features
+
+Both are subject to the .hi[Free-Rider Problem]
+
+&gt; A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them[1] or under-pay
+
+e.g.
+
+- people don't pay their taxes for publicly-provided services
+- non-smokers will wait for others to pay in order to reduce smoke
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
