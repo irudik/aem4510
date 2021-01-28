@@ -1,15 +1,15 @@
 ---
-title: "R and the Tidyverse"
-linktitle: "LN10: R and the Tidyverse"
+title: "Standards"
+linktitle: "LN03: Standards"
 date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Menu
-    weight: 12
+    weight: 5
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "10-slides-r"
+slides: "03-slides-standards"
 output:
   blogdown::html_page:
     toc: false
@@ -17,11 +17,11 @@ output:
 
 ### Overview
 
-This lecture:
+This lecture answers:
 
-1. Introduces the R programming language that we will be using for the empirical section of class
-2. Introduces the `tidyverse` set of packages that make data manipulation easy
-3. Introduces the `feols` package for running regressions
+1. How do we model our problems going forward?
+2. What are the different kinds of standards in theory and the real world?
+3. What happens under a standard?
 
 ### Slides
 

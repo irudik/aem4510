@@ -83,6 +83,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
   - [Resources Radio: The Economics of Environmental Justice, with Samuel Stolper and Catherine Hausman](https://www.resourcesmag.org/resources-radio/economics-environmental-justice-samuel-stolper-and-catherine-hausman/)
   - Banzhaf, Spencer, Lala Ma, and Christopher Timmins. "[Environmental justice: The economics of race, place, and pollution.](https://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.33.1.185)" Journal of Economic Perspectives 33, no. 1 (2019): 185-208.
   - Hernandez-Cortes, Danae, and Kyle C. Meng. "[Do Environmental Markets Cause Environmental Injustice? Evidence from California’s Carbon Market.](https://www.nber.org/system/files/working_papers/w27205/w27205.pdf)" (2020).
+  - Currie, Janet, John Voorheis, and Reed Walker. "[What caused racial disparities in particulate exposure to fall? New evidence from the Clean Air Act and satellite-based measures of air quality.](https://www.nber.org/system/files/working_papers/w26659/w26659.pdf)" No. w26659. National Bureau of Economic Research, 2020.
 
 ### 17: Pollution and health
 

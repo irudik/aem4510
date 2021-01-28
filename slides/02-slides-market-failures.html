@@ -14,6 +14,7 @@
     <script src="02-slides-market-failures_files/panelset/panelset.js"></script>
     <script src="02-slides-market-failures_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="02-slides-market-failures_files/vembedr/css/vembedr.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -56,1009 +57,797 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ## to update your slides.
 ```
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Roadmap --&gt;
+# Roadmap
 
-&lt;!-- - What are market failures? --&gt;
-&lt;!-- - When do they happen? --&gt;
-&lt;!-- - What are the consequences? --&gt;
+- What are market failures?
+- When do they happen?
+- What are the consequences?
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- class: inverse, center, middle --&gt;
-&lt;!-- name: what_is_enviro --&gt;
+class: inverse, center, middle
+name: what_is_enviro
 
-&lt;!-- # Market failures and the environment --&gt;
+# Market failures and the environment
 
-&lt;!-- &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt; --&gt;
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # The ideal world --&gt;
+# The ideal world
 
-&lt;!-- In the best case scenario, a market equilibrium leads to the efficient allocation --&gt;
+In the best case scenario, a market equilibrium leads to the efficient allocation
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Example: bread --&gt;
+Example: bread
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- We have a private bread supply curve (private MC) --&gt;
+We have a private bread supply curve (private MC)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- We have a private bread demand curve (private MB) --&gt;
+We have a private bread demand curve (private MB)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- In equilibrium: supply = demand so PMC = PMB = price --&gt;
+In equilibrium: supply = demand so PMC = PMB = price
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- For bread, the private costs and benefits are very likely the social costs and benefits --&gt;
+For bread, the private costs and benefits are very likely the social costs and benefits
 
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Market equilibrium --&gt;
+# Market equilibrium
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r pmb-pmb, echo = FALSE, fig.show = 'hide', warning = F} --&gt;
-&lt;!-- supply &lt;- function(x) 5 + 0.5*x --&gt;
-&lt;!-- demand &lt;- function(x) 30 - x --&gt;
-&lt;!-- cs_points &lt;- tibble(x = c(0, 16.67, 0), --&gt;
-&lt;!--                      y = c(13.33, 13.33, 30)) --&gt;
-&lt;!-- ps_points &lt;- tibble(x = c(0, 16.67, 0), --&gt;
-&lt;!--                      y = c(13.33, 13.33, 5)) --&gt;
-&lt;!-- ggplot() + --&gt;
-&lt;!--   geom_polygon(data = cs_points, aes(x = x, y = y), fill = "red", alpha = 0.2) + --&gt;
-&lt;!--   geom_polygon(data = ps_points, aes(x = x, y = y), fill = "blue", alpha = 0.2) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 22, label = "PMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 7, label = "PMB", size = 8) + --&gt;
-&lt;!--   stat_function(fun = demand, color = "#ca5670", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = supply, color = "#638ccc", size = 1.5) + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   theme_minimal() + --&gt;
-&lt;!--   theme( --&gt;
-&lt;!--     legend.position = "none", --&gt;
-&lt;!--     title = element_text(size = 24), --&gt;
-&lt;!--     axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24), --&gt;
-&lt;!--     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24), --&gt;
-&lt;!--     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), --&gt;
-&lt;!--     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(), --&gt;
-&lt;!--     panel.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     plot.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     axis.line = element_line(colour = "black") --&gt;
-&lt;!--   ) + --&gt;
-&lt;!--   scale_x_continuous(labels = expression(Q^'*'), breaks = c(16.67), limits = c(0,30)) + --&gt;
-&lt;!--   scale_y_continuous(labels = expression(P^'*'), breaks = c(13.33), limits = c(0,30)) + --&gt;
-&lt;!--   labs(x = "Quantity", --&gt;
-&lt;!--        y = "Price") --&gt;
+.pull-left[
 
-&lt;!-- ``` --&gt;
 
-&lt;!-- ![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png) --&gt;
-&lt;!-- ] --&gt;
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- .hi-red[Consumer surplus] is the difference between willingness to pay (demand) and price --&gt;
+.hi-red[Consumer surplus] is the difference between willingness to pay (demand) and price
 
-&lt;!-- .hi-blue[Producer surplus] is the difference between price and marginal cost (supply) --&gt;
+.hi-blue[Producer surplus] is the difference between price and marginal cost (supply)
 
-&lt;!-- .hi[Total surplus] is the sum of CS and PS --&gt;
+.hi[Total surplus] is the sum of CS and PS
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Market equilibrium --&gt;
+# Market equilibrium
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- For bread, the private costs and benefits are very likely the social costs and benefits --&gt;
+.pull-right[
+For bread, the private costs and benefits are very likely the social costs and benefits
 
-&lt;!-- What does this mean about the market allocation? --&gt;
-&lt;!-- ] --&gt;
+What does this mean about the market allocation?
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Market equilibrium --&gt;
+# Market equilibrium
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- The market allocation is .hi-blue[efficient] because SMC = SMB --&gt;
+.pull-right[
+The market allocation is .hi-blue[efficient] because SMC = SMB
 
-&lt;!-- Why? --&gt;
+Why?
 
-&lt;!-- Consider deviating from `\((P^*, Q^*)\)` --&gt;
-&lt;!-- ] --&gt;
+Consider deviating from `\((P^*, Q^*)\)`
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Market equilibrium --&gt;
+# Market equilibrium
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![CS is area below demand, above price](02-slides-market-failures_files/figure-html/pmb-pmb-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Cost of next unit after `\(Q^*\)` &gt; benefit --&gt;
+.pull-right[
+Cost of next unit after `\(Q^*\)` &gt; benefit
 
-&lt;!-- Benefit of last unit `\(\geq\)` cost of last unit --&gt;
+Benefit of last unit `\(\geq\)` cost of last unit
 
-&lt;!-- Competitive market allocations are efficient for private goods --&gt;
+Competitive market allocations are efficient for private goods
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- class: inverse, center, middle --&gt;
-&lt;!-- name: what_is_enviro --&gt;
+class: inverse, center, middle
+name: what_is_enviro
 
-&lt;!-- # Externalities --&gt;
+# Externalities
 
-&lt;!-- &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt; --&gt;
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Externalities --&gt;
+# Externalities
 
-&lt;!-- If the world was just competitive markets, private goods, no third-parties, there would be no reason to do anything after Econ 101 --&gt;
+If the world was just competitive markets, private goods, no third-parties, there would be no reason to do anything after Econ 101
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- That's not the case in the real world --&gt;
+That's not the case in the real world
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- In the real world we have .hi-blue[externalities] --&gt;
+In the real world we have .hi-blue[externalities]
 
-&lt;!-- &gt; An externality exists whenever an individual or firm undertakes an action that impacts another individual or firm in an unintended way for which the latter is not compensated (a negative externality), or for which the latter does not pay (a positive externality) --&gt;
+&gt; An externality exists whenever an individual or firm undertakes an action that impacts another individual or firm in an unintended way for which the latter is not compensated (a negative externality), or for which the latter does not pay (a positive externality)
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Externalities --&gt;
+# Externalities
 
-&lt;!-- What is problem with externalities for market outcomes and efficiency? --&gt;
+What is problem with externalities for market outcomes and efficiency?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- There is not a market for the externality --&gt;
+There is not a market for the externality
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- E.g. at Wegmans or Agway you will not find on sale: --&gt;
-&lt;!-- - Cleaner air outside --&gt;
-&lt;!-- - Biodiversity in the Amazon --&gt;
+E.g. at Wegmans or Agway you will not find on sale:
+- Cleaner air outside
+- Biodiversity in the Amazon
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- The central problem is that there are goods that are .hi-red[not priced] --&gt;
+The central problem is that there are goods that are .hi-red[not priced]
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Markets rely on prices to reflect value --&gt;
+Markets rely on prices to reflect value
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Externalities: several classifications --&gt;
+# Externalities: several classifications
 
-&lt;!-- We can classify externalities in a few ways: --&gt;
+We can classify externalities in a few ways:
 
-&lt;!-- .hi[Production externalities:] generated by a firm in the process of producing some output (e.g. pollution, innovation) --&gt;
+.hi[Production externalities:] generated by a firm in the process of producing some output (e.g. pollution, innovation)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- .hi[Consumption externalities:] generated by an individual in the process of consuming  an output (e.g. congestion, vaccination) --&gt;
+.hi[Consumption externalities:] generated by an individual in the process of consuming  an output (e.g. congestion, vaccination)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- .hi-red[Negative externalities:] imposes external **costs** (e.g. pollution) --&gt;
+.hi-red[Negative externalities:] imposes external **costs** (e.g. pollution)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- .hi-blue[Negative externalities:] imposes external **benefits** (e.g. vaccination) --&gt;
+.hi-blue[Negative externalities:] imposes external **benefits** (e.g. vaccination)
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities --&gt;
+# Negative externalities
 
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-ddt.jpg") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
+&lt;center&gt;
+&lt;img src="files/02-ddt.jpg" width="100%" /&gt;
+&lt;/center&gt;
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities --&gt;
+# Negative externalities
 
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-ddt2.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;img src="files/02-ddt2.png" width="100%" /&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- DDT is a chemical that was was widely used as an insecticide in the early-mid 1900s --&gt;
+.pull-right[
+DDT is a chemical that was was widely used as an insecticide in the early-mid 1900s
 
-&lt;!-- Widely used to eradicate Typhus and Malaria --&gt;
+Widely used to eradicate Typhus and Malaria
 
-&lt;!-- Used to treat lice --&gt;
-&lt;!-- ] --&gt;
+Used to treat lice
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities --&gt;
+# Negative externalities
 
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-ddt2.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;img src="files/02-ddt2.png" width="100%" /&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- &gt; A relationship between DDT exposure and reproductive effects in humans is suspected, based on studies in animals. In addition, some animals exposed to DDT in studies developed liver tumors. As a result, today, DDT is classified as a probable human carcinogen. --&gt;
+&gt; A relationship between DDT exposure and reproductive effects in humans is suspected, based on studies in animals. In addition, some animals exposed to DDT in studies developed liver tumors. As a result, today, DDT is classified as a probable human carcinogen.
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities: graphical --&gt;
+# Negative externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r neg-ext, echo = FALSE, fig.show = 'hide', warning = F} --&gt;
-&lt;!-- pmc &lt;- function(x) 5 + 0.5*x --&gt;
-&lt;!-- smc &lt;- function(x) 10 + 0.5*x --&gt;
-&lt;!-- demand &lt;- function(x) 30 - x --&gt;
-&lt;!-- cs_points &lt;- tibble(x = c(0, 16.67, 0), --&gt;
-&lt;!--                      y = c(13.33, 13.33, 30)) --&gt;
-&lt;!-- ps_points &lt;- tibble(x = c(0, 16.67, 0), --&gt;
-&lt;!--                      y = c(13.33, 13.33, 5)) --&gt;
-&lt;!-- ggplot() + --&gt;
-&lt;!--   annotate("text", x = 26, y = 26, label = "SMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 14, label = "PMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 24, y = 1, label = "PMB=SMB", size = 8) + --&gt;
-&lt;!--   stat_function(fun = demand, color = "#ca5670", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = pmc, color = "#638ccc", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = smc, color = "#444444", size = 1.5) + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 13.33, y = 16.67, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 13.33, xend = 13.33, y = 0, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   theme_minimal() + --&gt;
-&lt;!--   theme( --&gt;
-&lt;!--     legend.position = "none", --&gt;
-&lt;!--     title = element_text(size = 24), --&gt;
-&lt;!--     axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24), --&gt;
-&lt;!--     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24), --&gt;
-&lt;!--     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), --&gt;
-&lt;!--     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(), --&gt;
-&lt;!--     panel.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     plot.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     axis.line = element_line(colour = "black") --&gt;
-&lt;!--   ) + --&gt;
-&lt;!--   scale_x_continuous(labels = c(expression(Q^'u'), expression(Q^'*')), breaks = c(16.67, 13.33), limits = c(0,30)) + --&gt;
-&lt;!--   scale_y_continuous(labels = c(expression(P^'u'), expression(P^'*')), breaks = c(13.33, 16.67), limits = c(0,30)) + --&gt;
-&lt;!--   labs(x = "Quantity", --&gt;
-&lt;!--        y = "Price") --&gt;
+.pull-left[
 
-&lt;!-- ``` --&gt;
 
-&lt;!-- ![externalities shift SMC up](02-slides-market-failures_files/figure-html/neg-ext-1.png) --&gt;
-&lt;!-- ] --&gt;
+![externalities shift SMC up](02-slides-market-failures_files/figure-html/neg-ext-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- .hi-red[Social marginal cost (SMC)] is the sum of private marginal cost (PMC) and the external marginal cost (EMC) --&gt;
+.hi-red[Social marginal cost (SMC)] is the sum of private marginal cost (PMC) and the external marginal cost (EMC)
 
-&lt;!-- The PMC curve only reflects the **private costs** of making the DTT --&gt;
+The PMC curve only reflects the **private costs** of making the DTT
 
-&lt;!-- It does not account for the external health and wildlife costs --&gt;
+It does not account for the external health and wildlife costs
 
-&lt;!-- ] --&gt;
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities: graphical --&gt;
+# Negative externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![externalities shift SMC up](02-slides-market-failures_files/figure-html/neg-ext-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![externalities shift SMC up](02-slides-market-failures_files/figure-html/neg-ext-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- Adding the private and external marginal costs together gives us the SMC, what we care about from the social planner or regulator's perspective --&gt;
+Adding the private and external marginal costs together gives us the SMC, what we care about from the social planner or regulator's perspective
 
-&lt;!-- The unregulated market gives us `\((P^u,Q^u)\)` as an outcome when we want `\((P^*,Q^*)\)` --&gt;
+The unregulated market gives us `\((P^u,Q^u)\)` as an outcome when we want `\((P^*,Q^*)\)`
 
-&lt;!-- What's the social cost of this market failure? --&gt;
+What's the social cost of this market failure?
 
-&lt;!-- ] --&gt;
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities: graphical --&gt;
+# Negative externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r neg-ext-dwl, echo = FALSE, fig.show = 'hide', warning = F} --&gt;
-&lt;!-- pmc &lt;- function(x) 5 + 0.5*x --&gt;
-&lt;!-- smc &lt;- function(x) 10 + 0.5*x --&gt;
-&lt;!-- demand &lt;- function(x) 30 - x --&gt;
-&lt;!-- dwl_points &lt;- tibble(x = c(13.33, 16.67, 16.67), --&gt;
-&lt;!--                      y = c(16.67, 13.33, 18.335)) --&gt;
-&lt;!-- ggplot() + --&gt;
-&lt;!--   geom_polygon(data = dwl_points, aes(x = x, y = y), fill = "red", alpha = 0.5) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 26, label = "SMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 14, label = "PMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 24, y = 1, label = "PMB=SMB", size = 8) + --&gt;
-&lt;!--   stat_function(fun = demand, color = "#ca5670", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = pmc, color = "#638ccc", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = smc, color = "#444444", size = 1.5) + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 13.33, y = 16.67, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 13.33, xend = 13.33, y = 0, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   theme_minimal() + --&gt;
-&lt;!--   theme( --&gt;
-&lt;!--     legend.position = "none", --&gt;
-&lt;!--     title = element_text(size = 24), --&gt;
-&lt;!--     axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24), --&gt;
-&lt;!--     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24), --&gt;
-&lt;!--     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), --&gt;
-&lt;!--     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(), --&gt;
-&lt;!--     panel.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     plot.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     axis.line = element_line(colour = "black") --&gt;
-&lt;!--   ) + --&gt;
-&lt;!--   scale_x_continuous(labels = c(expression(Q^'u'), expression(Q^'*')), breaks = c(16.67, 13.33), limits = c(0,30)) + --&gt;
-&lt;!--   scale_y_continuous(labels = c(expression(P^'u'), expression(P^'*')), breaks = c(13.33, 16.67), limits = c(0,30)) + --&gt;
-&lt;!--   labs(x = "Quantity", --&gt;
-&lt;!--        y = "Price") --&gt;
+.pull-left[
 
-&lt;!-- ``` --&gt;
 
-&lt;!-- ![externalities generate DWL](02-slides-market-failures_files/figure-html/neg-ext-dwl-1.png) --&gt;
-&lt;!-- ] --&gt;
+![externalities generate DWL](02-slides-market-failures_files/figure-html/neg-ext-dwl-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- Negative externalities generate deadweight loss equal to the .hi-red[red] area --&gt;
+Negative externalities generate deadweight loss equal to the .hi-red[red] area
 
-&lt;!-- This is the difference in SMC and SMB for units where SMC &gt; SMB --&gt;
+This is the difference in SMC and SMB for units where SMC &gt; SMB
 
-&lt;!-- This is the loss to society caused by the externality in the unregulated private market --&gt;
+This is the loss to society caused by the externality in the unregulated private market
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Negative externalities: graphical --&gt;
+# Negative externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![externalities generate DWL](02-slides-market-failures_files/figure-html/neg-ext-dwl-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![externalities generate DWL](02-slides-market-failures_files/figure-html/neg-ext-dwl-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- The private market produces too much DDT --&gt;
+The private market produces too much DDT
 
-&lt;!-- The private actors are not accounting for the social costs they are imposing on people who are not in the DDT transaction (e.g. third parties whose health is being affected) --&gt;
+The private actors are not accounting for the social costs they are imposing on people who are not in the DDT transaction (e.g. third parties whose health is being affected)
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # The birth of the environmental movement --&gt;
+# The birth of the environmental movement
 
-&lt;!-- ```{r, echo = FALSE} --&gt;
-&lt;!-- embed_url("https://youtu.be/kwb6OvvxMjg") %&gt;% --&gt;
-&lt;!--   use_align("center") --&gt;
-&lt;!-- ``` --&gt;
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/kwb6OvvxMjg" width="533" height="300" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Positive externalities --&gt;
+# Positive externalities
 
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "50%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-herd-immunity.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
+&lt;center&gt;
+&lt;img src="files/02-herd-immunity.png" width="50%" /&gt;
+&lt;/center&gt;
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Positive externalities --&gt;
+# Positive externalities
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-mask.jpg") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;img src="files/02-mask.jpg" width="100%" /&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Vaccines and masks are examples of good with positive externalities --&gt;
+.pull-right[
+Vaccines and masks are examples of good with positive externalities
 
-&lt;!-- You getting or using them has benefits for other people not involved in your vaccine or mask transaction --&gt;
-&lt;!-- ] --&gt;
+You getting or using them has benefits for other people not involved in your vaccine or mask transaction
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Positive externalities: graphical --&gt;
+# Positive externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r pos-ext, echo = FALSE, fig.show = 'hide', warning = F} --&gt;
-&lt;!-- pmc &lt;- function(x) 5 + 0.5*x --&gt;
-&lt;!-- smb &lt;- function(x) 40 - x --&gt;
-&lt;!-- pmb &lt;- function(x) 30 - x --&gt;
-&lt;!-- ggplot() + --&gt;
-&lt;!--   annotate("text", x = 20, y = 26, label = "SMB", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 21, label = "SMC=PMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 1, label = "PMB", size = 8) + --&gt;
-&lt;!--   stat_function(fun = pmb, color = "#ca5670", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = pmc, color = "#638ccc", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = smb, color = "#444444", size = 1.5) + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 23.33, y = 16.67, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 23.33, xend = 23.33, y = 0, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   theme_minimal() + --&gt;
-&lt;!--   theme( --&gt;
-&lt;!--     legend.position = "none", --&gt;
-&lt;!--     title = element_text(size = 24), --&gt;
-&lt;!--     axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24), --&gt;
-&lt;!--     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24), --&gt;
-&lt;!--     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), --&gt;
-&lt;!--     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(), --&gt;
-&lt;!--     panel.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     plot.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     axis.line = element_line(colour = "black") --&gt;
-&lt;!--   ) + --&gt;
-&lt;!--   scale_x_continuous(labels = c(expression(Q^'u'), expression(Q^'*')), breaks = c(16.67, 23.33), limits = c(0,30)) + --&gt;
-&lt;!--   scale_y_continuous(labels = c(expression(P^'u'), expression(P^'*')), breaks = c(13.33, 16.67), limits = c(0,30)) + --&gt;
-&lt;!--   labs(x = "Quantity", --&gt;
-&lt;!--        y = "Price") --&gt;
+.pull-left[
 
-&lt;!-- ``` --&gt;
 
-&lt;!-- ![externalities shift SMB up](02-slides-market-failures_files/figure-html/pos-ext-1.png) --&gt;
-&lt;!-- ] --&gt;
+![externalities shift SMB up](02-slides-market-failures_files/figure-html/pos-ext-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- .hi-red[Social marginal benefit (SMB)] is the sum of private marginal benefit (PMB) and the external marginal benefit (EMB) --&gt;
+.hi-red[Social marginal benefit (SMB)] is the sum of private marginal benefit (PMB) and the external marginal benefit (EMB)
 
-&lt;!-- The PMB curve only reflects the **private benefits** of getting a vaccine --&gt;
+The PMB curve only reflects the **private benefits** of getting a vaccine
 
-&lt;!-- It does not account for the external herd immunity benefits --&gt;
+It does not account for the external herd immunity benefits
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Positive externalities: graphical --&gt;
+# Positive externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![externalities shift SMB up](02-slides-market-failures_files/figure-html/pos-ext-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![externalities shift SMB up](02-slides-market-failures_files/figure-html/pos-ext-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- Adding the private and external marginal benefits together gives us the SMB, what we care about from the social planner or regulator's perspective --&gt;
+Adding the private and external marginal benefits together gives us the SMB, what we care about from the social planner or regulator's perspective
 
-&lt;!-- The unregulated market gives us `\((P^u,Q^u)\)` as an outcome when we want `\((P^*,Q^*)\)` --&gt;
+The unregulated market gives us `\((P^u,Q^u)\)` as an outcome when we want `\((P^*,Q^*)\)`
 
-&lt;!-- What's the social cost of this market failure? --&gt;
+What's the social cost of this market failure?
 
-&lt;!-- ] --&gt;
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Positive externalities: graphical --&gt;
+# Positive externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ```{r pos-ext-dwl, echo = FALSE, fig.show = 'hide', warning = F} --&gt;
-&lt;!-- pmc &lt;- function(x) 5 + 0.5*x --&gt;
-&lt;!-- smb &lt;- function(x) 40 - x --&gt;
-&lt;!-- pmb &lt;- function(x) 30 - x --&gt;
-&lt;!-- dwl_points &lt;- tibble(x = c(23.33, 16.67, 16.67), --&gt;
-&lt;!--                      y = c(16.67, 13.33, 23.335)) --&gt;
-&lt;!-- ggplot() + --&gt;
-&lt;!--   geom_polygon(data = dwl_points, aes(x = x, y = y), fill = "blue", alpha = 0.5) + --&gt;
-&lt;!--   annotate("text", x = 20, y = 26, label = "SMB", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 21, label = "SMC=PMC", size = 8) + --&gt;
-&lt;!--   annotate("text", x = 26, y = 1, label = "PMB", size = 8) + --&gt;
-&lt;!--   stat_function(fun = pmb, color = "#ca5670", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = pmc, color = "#638ccc", size = 1.5) + --&gt;
-&lt;!--   stat_function(fun = smb, color = "#444444", size = 1.5) + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 0, xend = 23.33, y = 16.67, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   annotate("segment", x = 23.33, xend = 23.33, y = 0, yend = 16.67,  --&gt;
-&lt;!--            linetype = "dashed", size = 1.5, color = "grey50") + --&gt;
-&lt;!--   theme_minimal() + --&gt;
-&lt;!--   theme( --&gt;
-&lt;!--     legend.position = "none", --&gt;
-&lt;!--     title = element_text(size = 24), --&gt;
-&lt;!--     axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24), --&gt;
-&lt;!--     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24), --&gt;
-&lt;!--     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), --&gt;
-&lt;!--     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(), --&gt;
-&lt;!--     panel.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     plot.background = element_rect(fill = "#eeeeee",colour = NA), --&gt;
-&lt;!--     axis.line = element_line(colour = "black") --&gt;
-&lt;!--   ) + --&gt;
-&lt;!--   scale_x_continuous(labels = c(expression(Q^'u'), expression(Q^'*')), breaks = c(16.67, 23.33), limits = c(0,30)) + --&gt;
-&lt;!--   scale_y_continuous(labels = c(expression(P^'u'), expression(P^'*')), breaks = c(13.33, 16.67), limits = c(0,30)) + --&gt;
-&lt;!--   labs(x = "Quantity", --&gt;
-&lt;!--        y = "Price") --&gt;
+.pull-left[
 
-&lt;!-- ``` --&gt;
 
-&lt;!-- ![pos externalities generate DWL](02-slides-market-failures_files/figure-html/pos-ext-dwl-1.png) --&gt;
-&lt;!-- ] --&gt;
+![pos externalities generate DWL](02-slides-market-failures_files/figure-html/pos-ext-dwl-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- Positive externalities generate deadweight loss equal to the .hi-blue[blue] area --&gt;
+Positive externalities generate deadweight loss equal to the .hi-blue[blue] area
 
-&lt;!-- This is the difference in SMB and SMC for units where SMC &lt; SMB --&gt;
+This is the difference in SMB and SMC for units where SMC &lt; SMB
 
-&lt;!-- This is the loss to society caused by the externality in the unregulated private market --&gt;
+This is the loss to society caused by the externality in the unregulated private market
 
-&lt;!-- ] --&gt;
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Positive externalities: graphical --&gt;
+# Positive externalities: graphical
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![pos externalities generate DWL](02-slides-market-failures_files/figure-html/pos-ext-dwl-1.png) --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+![pos externalities generate DWL](02-slides-market-failures_files/figure-html/pos-ext-dwl-1.png)
+]
 
-&lt;!-- .pull-right[ --&gt;
+.pull-right[
 
-&lt;!-- The private market produces too few vaccines --&gt;
+The private market produces too few vaccines
 
-&lt;!-- The private actors are not accounting for the social benefits they are imposing on people who are not in the vaccine transaction (e.g. third parties whose health is being affected) --&gt;
+The private actors are not accounting for the social benefits they are imposing on people who are not in the vaccine transaction (e.g. third parties whose health is being affected)
 
-&lt;!-- ] --&gt;
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? --&gt;
+# Why do externalities arise?
 
-&lt;!-- Typically one of two reasons: --&gt;
+Typically one of two reasons:
 
-&lt;!-- 1. Poorly defined property rights --&gt;
-&lt;!--   - Who owns the right to the air? --&gt;
-&lt;!-- 2. High transactions costs --&gt;
-&lt;!--   - Hard to bargain over desired air quality with millions of people --&gt;
+1. Poorly defined property rights
+  - Who owns the right to the air?
+2. High transactions costs
+  - Hard to bargain over desired air quality with millions of people
 
 
-&lt;!-- Lets conceptualize a model of efficient bargaining using an Edgeworth Box --&gt;
+Lets conceptualize a model of efficient bargaining using an Edgeworth Box
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box   --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- - Two individuals: A and B --&gt;
-&lt;!-- - Two private goods: X and Y --&gt;
+- Two individuals: A and B
+- Two private goods: X and Y
 
-&lt;!-- Each individual begins with an initial endowment of each good: --&gt;
-&lt;!-- - `\(A: w_X^A, w_Y^A\)` --&gt;
-&lt;!-- - `\(B: w_X^B, w_Y^B\)` --&gt;
+Each individual begins with an initial endowment of each good:
+- `\(A: w_X^A, w_Y^A\)`
+- `\(B: w_X^B, w_Y^B\)`
 
-&lt;!-- This gives us a total endowment: --&gt;
-&lt;!-- - `\(W_X = w_X^A + w_X^B\)` --&gt;
-&lt;!-- - `\(W_Y = w_Y^A + w_Y^B\)` --&gt;
+This gives us a total endowment:
+- `\(W_X = w_X^A + w_X^B\)`
+- `\(W_Y = w_Y^A + w_Y^B\)`
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth1.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Total vertical distance is `\(W_Y\)` --&gt;
+.pull-right[
+Total vertical distance is `\(W_Y\)`
 
-&lt;!-- Total horizontal distance is `\(W_X\)` --&gt;
+Total horizontal distance is `\(W_X\)`
 
-&lt;!-- Initial endowment is given by the empty circle --&gt;
+Initial endowment is given by the empty circle
 
-&lt;!-- Initial indifference curves for A and B are `\(UA(0)\)` and `\(UB(0)\)` --&gt;
-&lt;!-- ] --&gt;
+Initial indifference curves for A and B are `\(UA(0)\)` and `\(UB(0)\)`
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth1.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Is there a possible Pareto improvement? --&gt;
+.pull-right[
+Is there a possible Pareto improvement?
 
-&lt;!-- e.g. can we make both A and B better off? --&gt;
-&lt;!-- ] --&gt;
+e.g. can we make both A and B better off?
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth1.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Yes! --&gt;
+.pull-right[
+Yes!
 
-&lt;!-- If we move anywhere in the lens of their initial indifference curves we have a Pareto improvement --&gt;
+If we move anywhere in the lens of their initial indifference curves we have a Pareto improvement
 
-&lt;!-- If we move to an allocation where their indifference curves are .hi[tangent] to one another (e.g. the filled-in point), we have a Pareto optimum --&gt;
-&lt;!-- ] --&gt;
+If we move to an allocation where their indifference curves are .hi[tangent] to one another (e.g. the filled-in point), we have a Pareto optimum
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- In a properly functioning market: --&gt;
+In a properly functioning market:
 
-&lt;!-- - The endowment point is well-established --&gt;
-&lt;!-- - A and B can trade X and Y to some Pareto improving point --&gt;
-&lt;!-- - They continue trading until they achieve a Pareto optimal allocaiton --&gt;
-&lt;!-- - This allocation lies on the .hi[contract curve]: the line consisting of all Pareto efficient allocations --&gt;
+- The endowment point is well-established
+- A and B can trade X and Y to some Pareto improving point
+- They continue trading until they achieve a Pareto optimal allocaiton
+- This allocation lies on the .hi[contract curve]: the line consisting of all Pareto efficient allocations
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "50%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth2.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
+&lt;center&gt;
+&lt;img src="files/02-edgeworth2.png" width="50%" /&gt;
+&lt;/center&gt;
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- Now suppose Y is not a private good, but a public good/bad, e.g. smoke --&gt;
+Now suppose Y is not a private good, but a public good/bad, e.g. smoke
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- This means that A and B consume the .hi[exact same level of Y] --&gt;
+This means that A and B consume the .hi[exact same level of Y]
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Unlike our regular Edgeworth Box, now Y increases for .hi[both] A and B as we move to the top of the slide (before Y increased for B as we moved to the bottom) --&gt;
+Unlike our regular Edgeworth Box, now Y increases for .hi[both] A and B as we move to the top of the slide (before Y increased for B as we moved to the bottom)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Suppose that A likes Y, but B does not --&gt;
+Suppose that A likes Y, but B does not
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Suppose both start off with the same quantity of X --&gt;
+Suppose both start off with the same quantity of X
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth3.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth3.png" width="100%" /&gt;
+&lt;/center&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Depending on who has property rights, we either start at: --&gt;
+.pull-right[
+Depending on who has property rights, we either start at:
 
-&lt;!-- - W1 (B has property rights) --&gt;
-&lt;!-- - W2 (A has property rights) --&gt;
+- W1 (B has property rights)
+- W2 (A has property rights)
 
-&lt;!-- Think about why these are where we must start --&gt;
+Think about why these are where we must start
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth3.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth3.png" width="100%" /&gt;
+&lt;/center&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Suppose we start at W1, what happens? --&gt;
+.pull-right[
+Suppose we start at W1, what happens?
 
-&lt;!-- A wants to have more Y, but this imposes a cost on B --&gt;
+A wants to have more Y, but this imposes a cost on B
 
-&lt;!-- Therefore, A has to .hi[pay] B to get more Y --&gt;
+Therefore, A has to .hi[pay] B to get more Y
 
-&lt;!-- A pays B in units of X, move to Z1, Pareto optimum --&gt;
+A pays B in units of X, move to Z1, Pareto optimum
 
-&lt;!-- ] --&gt;
+]
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
 
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/02-edgeworth3.png") --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-&lt;!-- ] --&gt;
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-edgeworth3.png" width="100%" /&gt;
+&lt;/center&gt;
+]
 
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- Suppose we start at W2, what happens? --&gt;
+.pull-right[
+Suppose we start at W2, what happens?
 
-&lt;!-- B wants to have less Y, but this imposes a cost on A --&gt;
+B wants to have less Y, but this imposes a cost on A
 
-&lt;!-- Therefore, B has to .hi[pay] A to get less Y --&gt;
+Therefore, B has to .hi[pay] A to get less Y
 
-&lt;!-- B pays A in units of X, move to Z2, Pareto optimum --&gt;
+B pays A in units of X, move to Z2, Pareto optimum
 
-&lt;!-- ] --&gt;
+]
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Why do externalities arise? Edgeworth Box --&gt;
+# Why do externalities arise? Edgeworth Box
 
-&lt;!-- In the previous example we were able to achieve the Pareto optimum even with a public good / externality --&gt;
+In the previous example we were able to achieve the Pareto optimum even with a public good / externality
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Why? --&gt;
+Why?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- 1. Property rights were assigned to either A or B --&gt;
-&lt;!-- -- --&gt;
+1. Property rights were assigned to either A or B
+--
 
-&lt;!-- 2. Transactions costs were low (didn't have to pay a fee to trade X) --&gt;
+2. Transactions costs were low (didn't have to pay a fee to trade X)
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Property rights and externalities --&gt;
+# Property rights and externalities
 
-&lt;!-- A solution to many externalities is to just assign property rights and let the market do its thing --&gt;
+A solution to many externalities is to just assign property rights and let the market do its thing
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- We'll talk about a few ways that we can assign property rights --&gt;
+We'll talk about a few ways that we can assign property rights
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Transactions costs and externalities --&gt;
+# Transactions costs and externalities
 
-&lt;!-- Now suppose there were many non-smokers --&gt;
+Now suppose there were many non-smokers
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Even if they were assigned the property rights, it might be hard for them to bargain --&gt;
-&lt;!--   - Takes a lot of time to find something that works for everyone --&gt;
-&lt;!--   - Negotiating over how much X each person gets --&gt;
+Even if they were assigned the property rights, it might be hard for them to bargain
+  - Takes a lot of time to find something that works for everyone
+  - Negotiating over how much X each person gets
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- The costs of bargaining may exceed the benefits and we end up stuck at W2 --&gt;
+The costs of bargaining may exceed the benefits and we end up stuck at W2
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Transactions costs and externalities --&gt;
+# Transactions costs and externalities
 
-&lt;!-- Road noise: drivers implicitly have property rights to noise around roads --&gt;
+Road noise: drivers implicitly have property rights to noise around roads
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Even if you prefer quiet, you can't negotiate a payment with every loud car that might pass pay --&gt;
+Even if you prefer quiet, you can't negotiate a payment with every loud car that might pass pay
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # The free-rider problem --&gt;
+# The free-rider problem
 
-&lt;!-- Externalities and public goods/bads often exhibit many of the same features --&gt;
+Externalities and public goods/bads often exhibit many of the same features
 
-&lt;!-- Both are subject to the .hi[Free-Rider Problem] --&gt;
+Both are subject to the .hi[Free-Rider Problem]
 
-&lt;!-- &gt; A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them[1] or under-pay --&gt;
+&gt; A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them[1] or under-pay
 
-&lt;!-- e.g. --&gt;
+e.g.
 
-&lt;!-- - people don't pay their taxes for publicly-provided services --&gt;
-&lt;!-- - non-smokers will wait for others to pay in order to reduce smoke --&gt;
+- people don't pay their taxes for publicly-provided services
+- non-smokers will wait for others to pay in order to reduce smoke
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- class: inverse, center, middle --&gt;
-&lt;!-- name: what_is_enviro --&gt;
+class: inverse, center, middle
+name: what_is_enviro
 
-&lt;!-- # The provision of public goods --&gt;
+# The provision of public goods
 
-&lt;!-- &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt; --&gt;
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Public goods --&gt;
+# Public goods
 
-&lt;!-- How do we efficiently provide public goods? --&gt;
+How do we efficiently provide public goods?
 
-&lt;!-- We know: --&gt;
+We know:
 
-&lt;!-- - Private goods: PMB = PMC `\(\leftrightarrow\)` SMB = SMC --&gt;
-&lt;!-- - Goods with negative externalities: PMB = SMC `\(\leftrightarrow\)` SMB = SMC --&gt;
-&lt;!-- - goods with positive externalities: SMB = PMC `\(\leftrightarrow\)` SMB = SMC --&gt;
+- Private goods: PMB = PMC `\(\leftrightarrow\)` SMB = SMC
+- Goods with negative externalities: PMB = SMC `\(\leftrightarrow\)` SMB = SMC
+- goods with positive externalities: SMB = PMC `\(\leftrightarrow\)` SMB = SMC
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Suppose we have a public good, e.g. depth of a river for public use --&gt;
+Suppose we have a public good, e.g. depth of a river for public use
 
-&lt;!-- How do we decide the socially efficient depth? --&gt;
+How do we decide the socially efficient depth?
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Public goods --&gt;
+# Public goods
 
-&lt;!-- Optimal provision is .hi-blue[always] given by: SMB = SMC --&gt;
+Optimal provision is .hi-blue[always] given by: SMB = SMC
 
-&lt;!-- What are the SMB and SMC for a public good? --&gt;
+What are the SMB and SMC for a public good?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Think about the characteristics of a public good, one of them is critical: --&gt;
+Think about the characteristics of a public good, one of them is critical:
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- .hi[Non-rival:] multiple people can use the same unit of a good (one person using the river doesn't 'use up' its depth) --&gt;
+.hi[Non-rival:] multiple people can use the same unit of a good (one person using the river doesn't 'use up' its depth)
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- This means multiple people can derive benefits from the provision of 1 unit of the good --&gt;
+This means multiple people can derive benefits from the provision of 1 unit of the good
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Optimal provision of public goods --&gt;
+# Optimal provision of public goods
 
-&lt;!-- What does this mean? --&gt;
+What does this mean?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- When we count up the SMB, we need to add up .hi-blue[everyone's] PMB: --&gt;
+When we count up the SMB, we need to add up .hi-blue[everyone's] PMB:
 
-&lt;!-- .hi[Optimality:] `\(SMB = \sum_i PMB_i =  PMC\)` --&gt;
+.hi[Optimality:] `\(SMB = \sum_i PMB_i =  PMC\)`
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- If we ignore the fact that public goods are non-rival, we get underprovision of the good --&gt;
+If we ignore the fact that public goods are non-rival, we get underprovision of the good
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- e.g. the free market underprovides clean air, national defense, etc --&gt;
+e.g. the free market underprovides clean air, national defense, etc
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Modeling the provision of public goods --&gt;
+# Modeling the provision of public goods
 
-&lt;!-- How do we model public goods? --&gt;
+How do we model public goods?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- First: how do we aggregate marginal benefit or demand curves? --&gt;
+First: how do we aggregate marginal benefit or demand curves?
 
-&lt;!-- Here's how to think about it: --&gt;
+Here's how to think about it:
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- .hi-blue[For private goods:] --&gt;
+.hi-blue[For private goods:]
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Private goods are rival, only one person can consume each unit --&gt;
+Private goods are rival, only one person can consume each unit
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- At each price, what is the total quantity that is demanded? --&gt;
+At each price, what is the total quantity that is demanded?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- At each price, we need to add up quantities --&gt;
+At each price, we need to add up quantities
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Private goods: we add demand curves horizontally --&gt;
+Private goods: we add demand curves horizontally
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Modeling the provision of public goods --&gt;
+# Modeling the provision of public goods
 
 
-&lt;!-- .hi-blue[For public goods:] --&gt;
+.hi-blue[For public goods:]
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Public goods are non-rival, multiple people can consume each unit --&gt;
+Public goods are non-rival, multiple people can consume each unit
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- At each quantity, what is the total marginal benefit? --&gt;
+At each quantity, what is the total marginal benefit?
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- At each quantity, we need to add up PMBs/prices --&gt;
+At each quantity, we need to add up PMBs/prices
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- Public goods: we add demand curves vertically --&gt;
+Public goods: we add demand curves vertically
 
 
 ---
