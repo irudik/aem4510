@@ -1,0 +1,421 @@
+---
+title: "Lecture 04"
+subtitle: "Taxes"
+author: Ivan Rudik
+date: AEM 4510
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+
+---
+exclude: true
+```{r setup}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo <- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+```{r xaringanExtra, echo = FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+
+```
+```{r echo=FALSE}
+xaringanExtra::style_panelset(panel_tab_color_active = "red")
+```
+
+---
+
+# Roadmap
+
+1. What are the different kinds of price instruments in theory and the real world?
+2. What happens under a tax?
+
+
+---
+
+class: inverse, center, middle
+name: taxes
+
+# Taxes
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Emission taxes
+
+The main tax we will focus on is an .hi[emission tax]
+
+--
+
+When a polluter faces an emission tax, it must pay a fee $\tau$ to the regulator for each unit of emissions $E$
+
+--
+
+It is as if the government claimed the property rights to the air on behalf of the citizens, and then sold the rights to pollute back to the firm at price $\tau$
+
+--
+
+Solves the two big problems with externalities:
+
+1. Poorly defined property rights (assigned to the regulator)
+2. High transactions costs (pay a flat fee)
+
+
+---
+
+# Emission taxes
+
+What is the socially optimal tax?
+
+--
+
+The $\tau$ that minimizes total social cost: abatement cost + damages (ignore tax payments since they're just a transfer from firms to the regulator)
+
+--
+
+Let $C(E)$ be abatement cost of emissions level $E$ and $D(E)$ be damages at $E$
+
+--
+
+We know abatement costs are decreasing in emissions and damages are increasing in emissions
+
+--
+
+To figure out the socially optimal tax we need to know how the firm and regulator make decisions
+
+--
+
+First lets set up the firm problem: they want to minimize the cost of satisfying the policy
+
+
+---
+
+# Emission taxes: firm
+
+The firm's problem is then:
+$$ \min_E C(E) + \tau E$$
+
+The firm's first-order condition to minimize costs is:
+$$-C'(E^*) = \tau$$
+
+--
+
+The firm minimizes costs by choosing emissions $E^*$ so that its MAC equals the tax
+
+---
+
+# Emission standards: firm
+
+The firm minimizes costs by choosing emissions so that its MAC equals the tax
+
+--
+
+This makes sense!
+
+--
+
+The tax is the MC of emitting, the MAC is the marginal benefit of emitting (reduced abatement cost)
+
+--
+
+Costs are minimized when these two things are equal
+
+---
+
+# Emission taxes: regulator
+
+The regulator's problem is to minimize the social cost of emissions, we know they want to set:
+$$-C'(E^*) = D'(E^*)$$
+--
+
+but we know that firms set:
+$$-C'(E^*) = \tau$$
+
+--
+
+This means that the regulator wants to set:
+$$\tau^* = D'(E^*)$$
+
+---
+
+# Emission taxes: regulator
+
+The optimal tax is equal to the MD at the optimal emission level
+
+--
+
+This also makes a lot of sense
+
+--
+
+We want the firm to act as if they are bearing the damage costs on the marginal
+
+--
+
+The tax actually makes them bear a cost exactly equal to marginal damage
+
+---
+
+# Emission taxes: graphical
+
+.pull-left[
+```{r tax, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2 - 2/3*x
+md <- function(x) x - 0.5
+ab_cost <- tibble(x = c(1.5, 1.5, 3),
+                     y = c(1, 0, 0))
+tax_payment <- tibble(x = c(1.5, 1.5, 0, 0),
+                     y = c(1, 0, 0, 1))
+ggplot() +
+  geom_polygon(data = tax_payment, aes(x = x, y = y), fill = "blue", alpha = 0.2) +
+  geom_polygon(data = ab_cost, aes(x = x, y = y), fill = "red", alpha = 0.2) +
+  annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
+  annotate("text", x = 2.5, y = 2.5, label = "MD", size = 8) +
+  annotate("text", x = 2.5, y = 0.9, label = expression(tau), size = 8) +
+  annotate("text", x = 2.15, y = .25, label = "B", size = 8) +
+  annotate("text", x = .5, y = .5, label = "F", size = 8) +
+  annotate("text", x = 1, y = .25, label = "G", size = 8) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  stat_function(fun = md, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = .99, yend = .99,
+           linetype = "dashed", size = 1.5, color = "#000000") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5,3), labels = c(expression(E^'*'), expression(E[0]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![taxes](`r knitr::fig_chunk("tax", "png")`)
+]
+
+.pull-right[
+
+The optimal tax equals MD at $E^*$
+
+You can think of this as the firm being forced to pay for damages equal to the cost of the last unit of emissions
+
+In addition to paying abatement cost equal to the red area $B$, the firm also has a tax payment equal to the blue area $F+G$
+
+]
+
+
+---
+
+# Emission taxes: real world
+
+Australia started carbon tax on July 1, 2012
+
+$23 AUD per ton of carbon emitted for large emitters as a response to the Copenhagen Accord of 2009
+
+Australia hopes to reduce carbon emissions by 80% below 2000 levels by 2050
+
+Started by Julia Gillard government and revoked by Tony Abbott government in July 2014
+
+---
+
+# Emission taxes: real world
+
+In 2008, the province of British Columbia implemented North America’s first broad-based carbon tax
+
+The carbon tax applies to the purchase and use of fossil fuels and covers approximately 70% of provincial greenhouse gas emissions
+
+Beginning April 1, 2018, B.C.'s carbon tax rate is $35 per tonne of carbon dioxide equivalent emissions
+
+To improve affordability, government increased the Climate Action Tax Credit
+
+---
+
+class: inverse, center, middle
+name: subsidies
+
+# Subsidies
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# Abatement subsidies
+
+What is the socially abatement subsidy $s$?
+
+--
+
+The $s$ that minimizes total social cost: abatement cost + damages (ignore tax payments since they're just a transfer from firms to the regulator)
+
+--
+
+Let $C(E)$ be abatement cost of emissions level $E$ and $D(E)$ be damages at $E$
+
+--
+
+First lets set up the firm problem: they want to minimize the cost of satisfying the policy
+
+
+---
+
+# Abatement subsidies: firm
+
+The firm's problem is then:
+$$ \min_E C(E) - s(-E)$$
+where we are substituting in $-E$ for $A$
+
+--
+
+The firm's first-order condition to minimize costs is:
+$$-C'(E^*) = s$$
+
+--
+
+The firm minimizes costs by choosing emissions $E^*$ so that its MAC equals the subsidy rate!
+
+---
+
+# Abatement subsidies: firm
+
+The firm minimizes costs by choosing emissions so that its MAC equals the subsidy rate
+
+--
+
+This makes sense!
+
+--
+
+The subsidy is the MC of emitting: the forgone abatement subsidy
+
+The MAC is the marginal benefit of emitting (reduced abatement cost)
+
+--
+
+Costs are minimized when these two things are equal
+
+---
+
+# Abatement subsidies: firm
+
+The regulator's problem is to minimize the social cost of emissions, we know they want to set:
+$$-C'(E^*) = D'(E^*)$$
+--
+
+but we know that firms set:
+$$-C'(E^*) = s$$
+
+--
+
+This means that the regulator wants to set:
+$$s^* = D'(E^*)$$
+
+---
+
+# Emission taxes: regulator
+
+The optimal subsidy is equal to the MD at the optimal emission level
+
+--
+
+This also makes a lot of sense
+
+--
+
+We want the firm to act as if they are bearing the damage costs on the marginal
+
+--
+
+The subsidy actually makes them bear a cost exactly equal to marginal damage
+
+
+---
+
+# Abatement subsidies: graphical
+
+.pull-left[
+```{r subsidies, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2 - 2/3*x
+md <- function(x) x - 0.5
+ab_cost <- tibble(x = c(1.5, 1.5, 3),
+                     y = c(1, 0, 0))
+tax_payment <- tibble(x = c(1.5, 1.5, 0, 0),
+                     y = c(1, 0, 0, 1))
+ggplot() +
+  geom_polygon(data = tax_payment, aes(x = x, y = y), fill = "blue", alpha = 0.2) +
+  geom_polygon(data = ab_cost, aes(x = x, y = y), fill = "red", alpha = 0.2) +
+  annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
+  annotate("text", x = 2.5, y = 2.5, label = "MD", size = 8) +
+  annotate("text", x = 2.5, y = 0.9, label = "s", size = 8) +
+  annotate("text", x = 2.15, y = .25, label = "B", size = 8) +
+  annotate("text", x = .5, y = .5, label = "F", size = 8) +
+  annotate("text", x = 1, y = .25, label = "G", size = 8) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  stat_function(fun = md, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = .99, yend = .99,
+           linetype = "dashed", size = 1.5, color = "#000000") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5,3), labels = c(expression(E^'*'), expression(E[0]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![subsidies](`r knitr::fig_chunk("subsidies", "png")`)
+]
+
+.pull-right[
+
+The optimal subsidy equals MD at $E^*$
+
+You can think of this as the firm being forced to pay for damages equal to the cost of the last unit of emissions
+
+In addition to paying abatement cost equal to the red area $B$, the firm also has subsidy **revenues** equal to the blue area $F+G$
+
+]
+
+
+---
+
+# Abatement subsidies
+
+It is as if the government claimed the property rights to the air on behalf of the firm, and then pays the firm for the right to clean air on behalf of the citizens

@@ -19,7 +19,7 @@ design:
 
 **Professor:** Ivan Rudik (ir229)
 
-**Class location:** XXXXXXXXX
+**Class location:** Bailey Hall 101
 
 **Class time:** Monday and Wednesday 1:00-2:15
 
