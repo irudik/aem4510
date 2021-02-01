@@ -52,8 +52,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to
-## the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0.
+## Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -500,6 +500,669 @@ This is true for things like climate change, less true for things like `\(SO_2\)
 --
 
 How well do permit systems perform with heterogeneous MD?
+
+---
+
+# Permit systems and heterogeneous MDs
+
+Let's think about a setting with two firms: 1 and 2
+
+--
+
+The firms have different MACs: `\(C_1(E) &gt; C_2(E)\)` for all `\(E\)`
+
+--
+
+And the firms have different marginal damages as well: `\(MD_1 &gt; MD_2\)` for all `\(E\)`
+
+--
+
+How well does a permit system work?
+
+---
+
+# Permit systems and heterogeneous MDs
+
+Well we know the following:
+
+--
+
+Firms set `\(MAC = p\)` so we will have `\(MAC_1 = MAC_2 = p\)`
+
+--
+
+But for efficiency we also want `\(MAC = MD\)`: `\(MAC_1 = MD_1\)` and `\(MAC_2 = MD_2\)`
+
+--
+
+If `\(MD_1 \neq MD_2\)` then the permit system does .hi-red[not] deliver efficiency!
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](05-slides-permits_files/figure-html/permits-hetero-1.png)
+]
+
+.pull-right[
+
+Suppose we have the two firms with different MACs and MDs:
+- `\(MAC_1 = 200-E_1\)`
+- `\(MAC_2 = 300-E_2\)`
+- `\(MD_1 = 100\)`
+- `\(MD_2 = 150\)`
+
+The efficient emissions allocation is: `\(E^* = 250: E_1^* = 100, E_2^* = 150\)`
+
+The regulator sets `\(\bar{E} = 250\)`
+
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](05-slides-permits_files/figure-html/permits-hetero2-1.png)
+]
+
+.pull-right[
+
+We can solve for the permit market allocation and price using:
+`\(MAC_1 = MAC_2\)` and `\(E_1 + E_2 = 250\)`
+
+These two conditions tell us:
+
+`\(E^p_1 = 75, E^p_2 = 175, p = 125\)`
+
+but efficiency is at:
+
+`\(E^*_1 = 100, E^*_2 = 150\)`
+
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+![permits heterogeneous damages](05-slides-permits_files/figure-html/permits-hetero2-1.png)
+]
+
+.pull-right[
+
+Relative to the optimal allocation, the permit system has DWL equal to the .hi-red[red area]
+
+The permit allocation is not an .hi[efficient] allocation, but is it a .hi[Pareto improvement] over:
+
+1. No policy?
+2. A uniform standard of `\(\bar{E}/2\)`?
+
+]
+
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](05-slides-permits_files/figure-html/permits-hetero3-1.png)
+]
+
+.pull-right[
+
+The blue area is the DWL under the uniform standard
+
+.hi[In this specific case,] a uniform standard and the permit system have the same efficiency since the red and blue areas are equal
+
+The only difference is what kind of welfare loss is occurring where
+
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](05-slides-permits_files/figure-html/permits-hetero4-1.png)
+]
+
+.pull-right[
+
+The DWL without any policy is the two large green triangles
+
+These are clearly larger than the DWL under the permit system
+
+The permit system can deliver a welfare improvement
+
+]
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+![permits heterogeneous damages](05-slides-permits_files/figure-html/permits-hetero2-1.png)
+]
+
+.pull-right[
+
+What if the high MAC firm was the low MD firm?
+
+i.e: what if the correlation between MAC and MD was .hi-red[negative] instead of .hi-blue[positive]?
+
+What might we expect the correlation to be?
+
+]
+
+---
+
+# Permit systems and heterogeneous MDs
+
+What is the problem with permit systems and heterogeneous MD?
+
+--
+
+We want to have firms pay a price equal to their MD
+
+--
+
+Firms have different MDs 
+--
+but there's only one common permit price
+
+--
+
+This means we can't make all firms correctly account for their externalities
+
+--
+
+One way around this is to use .hi[trading ratios]: firms in high damage areas need to procure more permits for the same amount of emissions
+
+--
+
+Another way is .hi[zonal trading]: firms can only trade in similar MD areas
+
+---
+
+# Trading ratios: Acid Rain Program
+
+Below are estimates of efficient trading ratios for the Acid Rain Program
+
+&lt;center&gt;
+&lt;img src="files/05-trading-ratios.png" width="80%" /&gt;
+&lt;/center&gt;
+
+Muller and Mendelsohn (2009)
+
+---
+
+# PM2.5 damages
+
+Trading ratios are required because damages are heterogeneous across space
+
+&lt;center&gt;
+&lt;img src="files/05-damages.png" width="60%" /&gt;
+&lt;/center&gt;
+
+Muller and Mendelsohn (2009)
+
+---
+
+# Damages caused by ARP
+
+The Acid Rain Program .hi-red[increased] damages in the eastern US
+
+&lt;center&gt;
+&lt;img src="files/05-arp4.png" width="50%" /&gt;
+&lt;/center&gt;
+
+Chan et al. (2018)
+
+---
+
+# Damages caused by ARP
+
+Chan et al. (2018) JEEM:
+
+&gt; We also compare health damages associated with observed SO2 emissions from all ARP units in 2002 with damages from a no-trade counterfactual. Damages under the ARP are `\(2.1 billion (1995\)`) higher than under the no-trade scenario, reflecting allowance transfers from units in the western US to units in the eastern US with larger exposed populations.
+
+---
+
+# Damages caused by ARP
+
+.hi-red[Redder:] trading lead to greater emissions vs no trading
+
+&lt;center&gt;
+&lt;img src="files/05-arp5.jpg" width="70%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+# Zonal trading: RECLAIM
+
+Regional Clean Air Management (RECLAIM) Program
+
+--
+
+California South Coast Air Quality Management District (SCAQMD)
+
+--
+
+Started in 1994, goal of cutting NOx and SOx  emissions by 80% by 2003
+
+--
+
+RECLAIM is a facility-level tradable permit system
+
+---
+
+# Zonal trading: RECLAIM
+
+14% of permits allocated to power generators
+
+--
+
+Permit prices driven by electricity sector
+
+--
+
+During 2000 electricity price spikes, lots of very dirty plants brought on-line to meet demand
+
+--
+
+Permit prices rose dramatically for everyone else
+
+--
+
+$4,284 per ton of NOx in 1999
+
+--
+
+$39,000 per ton of NOx in 2000
+
+---
+
+# Zonal trading: RECLAIM
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/05-reclaim1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+
+LA Basin has two distinct zones with very different SMCE’s
+
+1. Old heavy industry (high MAC) and mountains trap NOx emissions and heat them up `\(\rightarrow\)` smog (high MD)
+
+2. Newer firms (low MAC) close to the ocean, breezes dissipate pollution before it can turn into smog (low MD)
+
+
+]
+
+---
+
+# Other permit market examples
+
+Tradble permit systems are increasingly common:
+
+1. Acid Rain Program
+2. NOx Budget Program
+3. Regional Greenhouse Gas initative
+4. California AB32
+5. EU Emission Trading System
+6. China's National Carbon Cap and Trade
+
+---
+
+# RGGI
+
+&lt;center&gt;
+&lt;img src="files/05-rggi1.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# RGGI
+
+&lt;center&gt;
+&lt;img src="files/05-rggi2.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# AB32
+
+&lt;center&gt;
+&lt;img src="files/05-ab32.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# EU-ETS
+
+&lt;center&gt;
+&lt;img src="files/05-eu-ets.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# AB32
+
+&lt;center&gt;
+&lt;img src="files/05-china.png" width="100%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+class: inverse, center, middle
+name: policy comparison
+
+# Comparison of standards, taxes, permits
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# What do we know so far
+
+So far we have seen that:
+
+1. Standards, taxes, and tradable permits can all achieve the efficient allocation
+2. Taxes and tradable permits are cost-effective .hi[no matter what]
+  - (all firms set MAC = `\(\tau\)` and MAC = p)
+  
+--
+
+This still leaves a few questions to answer:
+
+
+1. What are the equity effects?
+2. What are the output effects?
+3. What are the administrative burdens?
+4. What are the .hi[dynamic] incentives under these policies?
+
+---
+
+# The equity set up
+
+.pull-left[
+
+
+![base set up](05-slides-permits_files/figure-html/base-1.png)
+]
+
+.pull-right[
+
+Lets consider this our base set up for 1 firm
+
+The regulator can achieve `\(E^*\)` through:
+
+- an emission standard of `\(E^*\)`
+- a tax of `\(\tau\)`
+- an abatement subsidy of `\(s\)`
+- "tradable permit" cap of `\(E^*\)`
+
+]
+
+
+---
+
+# The equity set up
+
+.pull-left[
+![base set up](05-slides-permits_files/figure-html/base-1.png)
+]
+
+.pull-right[
+
+First let's look at .hi[equity]
+
+How do the costs and benefits of the policies fall on different groups?
+
+From here on we will roll the tax and permit system into 1: they are actually identical in terms of their impacts
+
+]
+
+
+
+---
+
+# The distributional outcomes
+
+.pull-left[
+![base set up](05-slides-permits_files/figure-html/base-1.png)
+]
+
+.pull-right[
+
+|            	| Tax      	| Standard 	| Subsidy 	| Ranking         	|
+|------------	|----------	|----------	|---------	|-----------------	|
+| Firm       	| -(A+B+C) 	| -A       	| B+C-A   	| Sub &gt; Std &gt; Tax 	|
+| Households 	| A+D+E    	| A+D+E    	| A+D+E   	| Indifferent     	|
+| Government 	| B+C      	| 0        	| -(B+C)  	| Tax &gt; Std &gt; Sub 	|
+| Total      	| D+E      	| D+E      	| D+E     	|                 	|
+
+The total welfare gain is the same for all policies
+
+The difference is in the .hi[distribution]
+
+The standard strikes a middle ground out of the three
+
+]
+
+---
+
+# Output effects
+
+So far we have assumed that actual firm output is not affected by abatement/emission decisions
+
+--
+
+This won't always be true in the real world
+
+--
+
+Different policies have different implications for total cost and can thus affect production
+
+--
+
+To keep things simple lets suppose the firm has constant returns to scale technology and chooses the emissions rate / emissions per unit of output: `\(E/q\)`, this means that if they cut back on emissions it raises the MC of output
+
+
+---
+
+# Output effects
+
+The policy requires the firm
+
+---
+
+# The output set up
+
+.pull-left[
+
+
+![base set up](05-slides-permits_files/figure-html/output1-1.png)
+]
+
+.pull-right[
+
+
+
+![base set up](05-slides-permits_files/figure-html/output2-1.png)
+]
+
+]
+
+---
+
+# The output results
+
+Emission tax:
+- Firm chooses `\(E^*/q^*\)`
+- Firm pays A+B+C in tax and abatement cost
+- Costs rise, output falls
+- Pollution `\((E^*/q^*)*q^*\)` falls even more since `\(q^*\)` falls
+
+---
+
+# The output results
+
+Emission standard:
+- Firm pays A in abatement cost
+- Costs rise and output falls (but not as much as under the tax!)
+- Output and $E
+
+---
+
+# The output results
+
+Abatement subsidy:
+- Reduces firm costs
+- This raises output
+- Even though `\(E/q\)` goes down, total emissions may go up because `\(q\)` will rise
+
+--
+
+Cliffnotes:
+
+- Output falls under taxes and standards
+- This raises output prices
+- Can have regressive effects through necessities like electricity or gas
+
+---
+
+# Administration
+
+These policies are not equivalent in their cost of implementation
+
+--
+
+Enforcing a technology standard is very easy: you can inspect to see if they have installed the tech or not
+
+--
+
+Emission standards, taxes, subsidies require monitoring of emissions
+
+--
+
+Monitoring systems cost money
+
+--
+
+Firms have incentives to try to cheat!
+
+---
+
+# Administration
+
+Pigouvian policies will not work as well for .hi[non-point sources] like cars or farms
+
+--
+
+With non-point sources we observe total emissions but not who emitted it
+
+--
+
+With non-point sources it often makes sense to use technology standards
+
+--
+
+Point sources like power plants are much easier to handle with Pigouvian policies like taxes
+
+
+---
+
+# Administration
+
+Technology and emission standards typically guarantee some amount of emissions reductions
+
+--
+
+Taxes and subsidies guarantee firms pay a certain price but doesn't deliver us a guaranteed quantity
+
+--
+
+This might make things more politically difficult to pass
+
+---
+
+# Administration
+
+When does C&amp;C / technology standards make sense?
+
+1. If there's a dominant technology where there's cost benefits to coordination or scale economies from production of the technology
+2. High costs of monitoring/enforcement
+3. High admin costs and little heterogeneity across firms
+
+---
+
+# Dynamic incentives
+
+
+.pull-left[
+
+
+![taxes](05-slides-permits_files/figure-html/dynamic-1.png)
+]
+
+.pull-right[
+
+What are the gains to the firm from moving to `\(MAC_2\)`?
+
+.hi[Standard:] F (abatement cost reduction)
+
+.hi[Emission Tax:] F + D (abatement cost and tax payment reduction)
+
+.hi[Abatement Subsidy:] F + D (abatement cost reduction and abatement subsidy increase)
+
+]
+
+
+---
+
+# Dynamic incentives
+
+
+.pull-left[
+![taxes](05-slides-permits_files/figure-html/dynamic-1.png)
+]
+
+.pull-right[
+
+What are the gains to the firm from moving to `\(MAC_2\)`?
+
+Taxes and subsidies give greater incentives to innovate!
+
+Once a firm meets a standard, there's no additional incentive beyond reducing abatement costs
+
+Taxes and subsidies give the firm extra benefits for further reductions
+
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
