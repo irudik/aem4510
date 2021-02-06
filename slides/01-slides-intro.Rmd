@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -149,9 +149,10 @@ knitr::include_graphics("files/01-temp-anomaly.png")
 
 # Climate change
 
-<video width="1080" controls>
-  <source src="files/01-climate-video.mp4" type="video/mp4">
-</video>
+```{r, echo = FALSE}
+embed_url("https://youtu.be/c8vLVrxWIpg") %>%
+  use_align("center")
+```
 
 
 ---
@@ -162,20 +163,28 @@ Why do economists care about climate change?
 
 --
 
-It affects the economy and how we have to allocate resources!
+It affects the economy and how we have to allocate resources! How?
 
 --
 
 - Production
+--
+
 - Learning
+--
+
 - Leisure
+--
+
 - Fishing
+--
+
 - etc, etc
 
 
 ---
 
-# Climate change: learning
+# Climate change: heat hurts learning
 
 <center>
 ```{r learning, out.width = "60%", fig.pos="c", echo = FALSE}
@@ -187,7 +196,7 @@ Park et al. (2020)
 
 ---
 
-# Climate change: economic growth
+# Climate change: heat hurts economic growth
 
 <center>
 ```{r growth, out.width = "65%", fig.pos="c", echo = FALSE}
@@ -199,7 +208,7 @@ Lyn et al. (2020)
 
 ---
 
-# Climate change: mortality
+# Climate change: extreme heat/cold increases mortality
 
 <center>
 ```{r mortality, out.width = "100%", fig.pos="c", echo = FALSE}
@@ -217,9 +226,9 @@ Carleton et al. (2020)
 .pull-left[
 Environmental economics is actually pretty new
 
-It is thought to really be started by .hi[John Krutilla] in the 1950s
+Spurred by .hi[John Krutilla] in the 1950s
 
-His paper .green[Conservation Reconsidered] is the landmark paper in the field
+His paper .green[Conservation Reconsidered] is the landmark paper in the field (sort of like Wealth of Nations and economics as a whole)
 
 ]
 
@@ -243,17 +252,18 @@ name: goals
 
 # What are the goals of this class?
 
-1. Enhance your understanding of	how economists think about solving real environmental problems
+Enhance your understanding of	how economists think about solving real environmental problems
+
 --
 
-2. Prepare you for after college:
+Prepare you for after college:
   - Industry jobs (energy, transportation, finance)
   - Public sector and NGOs (EPA, DOE, RFF, Brookings, Federal Reserve)
   - Graduate programs
   
 --
 
-3. Learn both the theory and .hi[applications] of environmental economics
+Learn both the theory and .hi[applications] of environmental economics
 
 ---
 
@@ -273,15 +283,23 @@ Is Intro to Micro applicable everywhere?
 
 --
 
-[Joe Stiglitz takes us beyond Intro to Micro](https://www.youtube.com/watch?v=9qjvwQrZmpk)
+```{r, echo = FALSE}
+embed_url("https://youtu.be/9qjvwQrZmpk") %>%
+  use_align("center")
+```
 
---
+---
+
+# Creating markets to solve problems
 
 How do we solve some problems in practice?
 
 --
 
-[Creating new markets to solve conservation problems](https://www.youtube.com/watch?v=QwgximJ9vPk)
+```{r, echo = FALSE}
+embed_url("https://youtu.be/QwgximJ9vPk") %>%
+  use_align("center")
+```
 
 ---
 
@@ -337,6 +355,40 @@ ggplot() +
   
 ```
 
+![Demand curve](`r knitr::fig_chunk("demand", "png")`)
+]
+
+.pull-right[
+
+Market demand is aggregated from all individual demand curves
+
+
+]
+
+
+---
+
+# Market demand
+
+.pull-left[
+![Demand curve](`r knitr::fig_chunk("demand", "png")`)
+]
+
+.pull-right[
+
+Market demand is aggregated from all individual demand curves
+
+.hi-blue[Horizontal interpretation:] if buyers face a price of $10/lobster they will want to purchase 20 million
+
+
+]
+
+
+---
+
+# Market demand
+
+.pull-left[
 ![Demand curve](`r knitr::fig_chunk("demand", "png")`)
 ]
 
@@ -415,6 +467,39 @@ ggplot() +
 
 Market supply is aggregated from all individual supply/MC curves
 
+]
+
+
+---
+
+# Market supply
+
+.pull-left[
+![Supply curve](`r knitr::fig_chunk("supply", "png")`)
+]
+
+.pull-right[
+
+Market supply is aggregated from all individual supply/MC curves
+
+.hi-blue[Horizontal interpretation:] if sellers face a price of $15/lobster they will want to sell 20 million
+
+
+]
+
+
+---
+
+# Market supply
+
+.pull-left[
+![Supply curve](`r knitr::fig_chunk("supply", "png")`)
+]
+
+.pull-right[
+
+Market supply is aggregated from all individual supply/MC curves
+
 .hi-blue[Horizontal interpretation:] if sellers face a price of $15/lobster they will want to sell 20 million
 
 .hi-blue[Vertical interpretation:] if sellers are selling 20 million lobsters, the marginal cost of the last lobster is $15
@@ -480,10 +565,24 @@ ggplot() +
 
 A market equilibrium is a price/quantity pair where the demand curve crosses the supply curve
 
+]
+
+
+---
+
+# Market equilibrium
+
+.pull-left[
+![Market equilibrium is where D=S](`r knitr::fig_chunk("equilibrium", "png")`)
+]
+
+.pull-right[
+
+A market equilibrium is a price/quantity pair where the demand curve crosses the supply curve
+
 This gives us the price where the quantity demanded exactly equals the quantity supplied: no shortages, no surpluses
 
 ]
-
 
 ---
 
@@ -598,7 +697,11 @@ They drive a wedge between private and social marginal cost, or private and soci
 
 In enviro econ, the key departure from the standard perfect market is the introduction of externalities and non-rival and non-excludable goods:
 
+--
+
 .hi-red[Non-rival]: additional people can get the benefits of consuming the same unit of the good at no extra cost to others
+
+--
 
 .hi-blue[Non-excludable]: extra individuals can't be precluded from consuming the good
 
@@ -606,8 +709,8 @@ In enviro econ, the key departure from the standard perfect market is the introd
 
 |           	|          **Excludable**         	|            **Non-Excludable**            	|
 |-----------	|:---------------------------:	|:------------------------------------:	|
-|** Rival **    	|     Private goods (food)    	| Common-pool resources (fish, timber) 	|
-| **Non-rival **	| Club goods (parks, netflix) 	| Public goods (air, national defense) 	|
+|**Rival**    	|     Private goods (food)    	| Common-pool resources (fish, timber) 	|
+| **Non-rival**	| Club goods (parks, netflix) 	| Public goods (air, national defense) 	|
 
 ---
 
@@ -619,6 +722,14 @@ We will also discuss .hi[imperfect information]: when economic actors are uncert
 
 If there's imperfect information then efficiency may not be achieved
 
+--
+
+Why?
+
+--
+
+Without the adequate information, buyers or sellers cannot make the choices in their best interest
+
 ---
 
 # Efficiency and equity
@@ -627,12 +738,16 @@ The First Welfare Theorem guarantees competitive markets give (Pareto) efficient
 
 --
 
-It does not guarantee that these allocations are desirable
+It does not guarantee that these allocations are desirable, any examples?
 
 --
 
 E.g.
 
+--
+
 - If Elon Musk held **all** the wealth in the world, that would be a Pareto efficient outcome even though it goes against basically all people's notions of equity
+
+--
 
 - Perfect price discrimination is also Pareto efficient: producers capture all the surplus but it is maximized
