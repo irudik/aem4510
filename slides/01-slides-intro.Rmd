@@ -751,3 +751,13 @@ E.g.
 --
 
 - Perfect price discrimination is also Pareto efficient: producers capture all the surplus but it is maximized
+
+---
+
+# Ecological wealth
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/1yzmOrcLIPo") %>%
+  use_align("center")
+```
+

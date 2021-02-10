@@ -165,8 +165,24 @@ The market allocation is .hi-blue[efficient] because SMC = SMB
 
 Why?
 
+]
+
+---
+
+# Market equilibrium
+
+.pull-left[
+![CS is area below demand, above price](`r knitr::fig_chunk("pmb-pmb", "png")`)
+]
+
+.pull-right[
+The market allocation is .hi-blue[efficient] because SMC = SMB
+
+Why?
+
 Consider deviating from $(P^*, Q^*)$
 ]
+
 
 ---
 
@@ -179,7 +195,7 @@ Consider deviating from $(P^*, Q^*)$
 .pull-right[
 Cost of next unit after $Q^*$ > benefit
 
-Benefit of last unit $\geq$ cost of last unit
+Benefit of last unit $\geq$ cost of last unit before $Q^*$
 
 Competitive market allocations are efficient for private goods
 
@@ -315,6 +331,16 @@ knitr::include_graphics("files/02-ddt2.png")
 > A relationship between DDT exposure and reproductive effects in humans is suspected, based on studies in animals. In addition, some animals exposed to DDT in studies developed liver tumors. As a result, today, DDT is classified as a probable human carcinogen.
 
 ]
+
+
+---
+
+# The birth of the environmental movement
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/kwb6OvvxMjg") %>%
+  use_align("center")
+```
 
 ---
 
@@ -582,15 +608,15 @@ The private actors are not accounting for the .hi[external costs] they are impos
 
 ]
 
+
 ---
 
-# The birth of the environmental movement
+# Estimating marginal damages with EZ-Pass
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/kwb6OvvxMjg") %>%
+embed_url("https://youtu.be/JLHXYTbSQZY") %>%
   use_align("center")
 ```
-
 
 ---
 
@@ -871,6 +897,23 @@ The private actors are not accounting for the social benefits they are imposing 
 
 ]
 
+---
+
+# COVID and positive externalities
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/17lldWWxYC0") %>%
+  use_align("center")
+```
+
+---
+
+# COVID and positive externalities
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/4vcdJ2Zsc8U") %>%
+  use_align("center")
+```
 
 ---
 
