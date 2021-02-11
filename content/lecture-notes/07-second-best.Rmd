@@ -1,6 +1,6 @@
 ---
 title: "Distortions and Second-Best Policy"
-linktitle: "LN06: Distortions/Second-Best"
+linktitle: "LN07: Distortions/Second-Best"
 date: "`r format(Sys.time())`"
 menu:
   content:

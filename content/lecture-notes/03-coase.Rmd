@@ -19,8 +19,9 @@ output:
 
 This lecture answers:
 
-1. How do tradable permit systems work in theory and in the real world?
-2. What happens under a tradable permit system?
+1. Can we achieve the efficient outcome without government intervention?
+2. What does the Coase theorem say?
+3. What are the limits to Coasean bargaining?
 
 ### Slides
 

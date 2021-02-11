@@ -1,6 +1,6 @@
 ---
 title: "Tradable Permits"
-linktitle: "LN05: Tradable Permits"
+linktitle: "LN06: Tradable Permits"
 date: "`r format(Sys.time())`"
 menu:
   content:

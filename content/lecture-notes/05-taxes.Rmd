@@ -1,6 +1,6 @@
 ---
 title: "Taxes and Subsidies"
-linktitle: "LN04: Taxes and Subsidies"
+linktitle: "LN05: Taxes and Subsidies"
 date: "`r format(Sys.time())`"
 menu:
   content:

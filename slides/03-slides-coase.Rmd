@@ -43,7 +43,7 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 
 1. Can we achieve the efficient outcome .hi[without] government intervention?
 2. What does the Coase theorem say?
-3. What are the limits to Coasean bargaining
+3. What are the limits to Coasean bargaining?
 
 
 ---
