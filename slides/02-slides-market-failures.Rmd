@@ -282,7 +282,7 @@ imposes external **costs** (e.g. pollution)
 
 --
 
-.hi-blue[Negative externalities:] 
+.hi-blue[Positive externalities:] 
 --
 imposes external **benefits** (e.g. vaccination)
 
@@ -342,6 +342,59 @@ embed_url("https://youtu.be/kwb6OvvxMjg") %>%
   use_align("center")
 ```
 
+
+---
+
+# Negative externalities: graphical
+
+.pull-left[
+```{r neg-ext0, echo = FALSE, fig.show = 'hide', warning = F}
+pmc <- function(x) 5 + 0.5*x
+smc <- function(x) 10 + 0.5*x
+demand <- function(x) 30 - x
+cs_points <- tibble(x = c(0, 16.67, 0),
+                     y = c(13.33, 13.33, 30))
+ps_points <- tibble(x = c(0, 16.67, 0),
+                     y = c(13.33, 13.33, 5))
+ggplot() +
+  annotate("text", x = 26, y = 14, label = "PMC", size = 8) +
+  annotate("text", x = 24, y = 1, label = "PMB=SMB", size = 8) +
+  stat_function(fun = demand, color = "#ca5670", size = 1.5) +
+  stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(labels = c(expression(Q^'u')), breaks = c(16.67), limits = c(0,30)) +
+  scale_y_continuous(labels = c(expression(P^'u')), breaks = c(13.33), limits = c(0,30)) +
+  labs(x = "Quantity",
+       y = "Price")
+
+```
+
+![externalities shift SMC up](`r knitr::fig_chunk("neg-ext0", "png")`)
+]
+
+.pull-right[
+
+.hi-red[Social marginal cost (SMC)] is the sum of private marginal cost (PMC) and the external marginal cost (EMC)
+
+Where is the SMC?
+
+]
+
 ---
 
 # Negative externalities: graphical
@@ -356,7 +409,7 @@ cs_points <- tibble(x = c(0, 16.67, 0),
 ps_points <- tibble(x = c(0, 16.67, 0),
                      y = c(13.33, 13.33, 5))
 ggplot() +
-  annotate("text", x = 26, y = 26, label = "SMC", size = 8) +
+  annotate("text", x = 20, y = 26, label = "SMC = PMC + EMC", size = 8) +
   annotate("text", x = 26, y = 14, label = "PMC", size = 8) +
   annotate("text", x = 24, y = 1, label = "PMB=SMB", size = 8) +
   stat_function(fun = demand, color = "#ca5670", size = 1.5) +
@@ -396,7 +449,7 @@ ggplot() +
 
 .hi-red[Social marginal cost (SMC)] is the sum of private marginal cost (PMC) and the external marginal cost (EMC)
 
-The PMC curve only reflects the **private costs** of making the DTT
+The PMC curve only reflects the **private costs** of making the DDT
 
 It does not account for the external health and wildlife costs
 
@@ -484,7 +537,7 @@ dwl_points <- tibble(x = c(13.33, 16.67, 16.67),
                      y = c(16.67, 13.33, 18.335))
 ggplot() +
   geom_polygon(data = dwl_points, aes(x = x, y = y), fill = "red", alpha = 0.5) +
-  annotate("text", x = 26, y = 26, label = "SMC", size = 8) +
+  annotate("text", x = 20, y = 26, label = "SMC = PMC + EMC", size = 8) +
   annotate("text", x = 26, y = 14, label = "PMC", size = 8) +
   annotate("text", x = 24, y = 1, label = "PMB=SMB", size = 8) +
   stat_function(fun = demand, color = "#ca5670", size = 1.5) +
@@ -538,7 +591,9 @@ Negative externalities generate deadweight loss equal to the .hi-red[red] area
 
 Negative externalities generate deadweight loss equal to the .hi-red[red] area
 
-This is the difference in SMC and SMB for units bought/sold where SMC > SMB
+This is the difference in SMC and SMB for units bought/sold where SMC > SMB:
+
+Total SMC - SMB from $Q^*$ to $Q^u$
 
 ]
 
@@ -650,12 +705,60 @@ You getting or using them has benefits for other people not involved in your vac
 # Positive externalities: graphical
 
 .pull-left[
+```{r pos-ext0, echo = FALSE, fig.show = 'hide', warning = F}
+pmc <- function(x) 5 + 0.5*x
+smb <- function(x) 40 - x
+pmb <- function(x) 30 - x
+ggplot() +
+  annotate("text", x = 26, y = 21, label = "SMC=PMC", size = 8) +
+  annotate("text", x = 26, y = 1, label = "PMB", size = 8) +
+  stat_function(fun = pmb, color = "#ca5670", size = 1.5) +
+  stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(labels = c(expression(Q^'u')), breaks = c(16.67), limits = c(0,30)) +
+  scale_y_continuous(labels = c(expression(P^'u')), breaks = c(13.33), limits = c(0,30)) +
+  labs(x = "Quantity",
+       y = "Price")
+
+```
+
+![externalities shift SMB up](`r knitr::fig_chunk("pos-ext0", "png")`)
+]
+
+.pull-right[
+
+.hi-red[Social marginal benefit (SMB)] is the sum of private marginal benefit (PMB) and the external marginal benefit (EMB)
+
+Where does the SMB curve lie?
+
+]
+
+---
+
+# Positive externalities: graphical
+
+.pull-left[
 ```{r pos-ext, echo = FALSE, fig.show = 'hide', warning = F}
 pmc <- function(x) 5 + 0.5*x
 smb <- function(x) 40 - x
 pmb <- function(x) 30 - x
 ggplot() +
-  annotate("text", x = 20, y = 26, label = "SMB", size = 8) +
+  annotate("text", x = 22, y = 28, label = "SMB = PMB + EMB", size = 8) +
   annotate("text", x = 26, y = 21, label = "SMC=PMC", size = 8) +
   annotate("text", x = 26, y = 1, label = "PMB", size = 8) +
   stat_function(fun = pmb, color = "#ca5670", size = 1.5) +
@@ -806,7 +909,7 @@ dwl_points <- tibble(x = c(23.33, 16.67, 16.67),
                      y = c(16.67, 13.33, 23.335))
 ggplot() +
   geom_polygon(data = dwl_points, aes(x = x, y = y), fill = "blue", alpha = 0.5) +
-  annotate("text", x = 20, y = 26, label = "SMB", size = 8) +
+  annotate("text", x = 22, y = 28, label = "SMB = PMB + EMB", size = 8) +
   annotate("text", x = 26, y = 21, label = "SMC=PMC", size = 8) +
   annotate("text", x = 26, y = 1, label = "PMB", size = 8) +
   stat_function(fun = pmb, color = "#ca5670", size = 1.5) +
@@ -860,7 +963,9 @@ Positive externalities generate deadweight loss equal to the .hi-blue[blue] area
 
 Positive externalities generate deadweight loss equal to the .hi-blue[blue] area
 
-This is the difference in SMB and SMC for units where SMC < SMB
+This is the difference in SMB and SMC for units where SMC < SMB:
+
+Total SMB - SMC from $Q^u$ to $Q^*$
 
 ]
 
