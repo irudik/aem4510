@@ -1,9 +1,6 @@
 # Theme metadata
 name: "Inferno"
 
-# Is theme light or dark?
-light: true
-
 # Primary
 primary: "#CF4446"
 
@@ -20,4 +17,4 @@ menu_title: "#494949"
 
 # Home sections
 home_section_odd: "rgb(255, 255, 255)"
-home_section_even: "rgb(247, 247, 247)"
+home_section_even: "rgb(255, 255, 255)"
