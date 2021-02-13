@@ -1,0 +1,64 @@
+---
+title: "Coase Theorem Game"
+linktitle: "Games 1: Coase"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Menu
+    weight: 101
+type: docs
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+## Getting started
+
+* Pair up with a fellow student.
+* The person whose last name that comes first in alphabetical order is Player A in this game. The other person is Player B.
+
+
+## Context
+
+There are only two stakeholders at the margins of a lake, both want to maximize their individual payoffs:
+
+* Player A: a chemical plant
+* Player B: a water sports equipment rental company
+
+Players' payoffs vary based on the amount of chemical residuals the plant emits (in hundred gallons/month). Their payoff schedules (in hundred thousand dollars/month) are:
+
+| Emissions               | Player A payoff | Player B payoff |
+|:-----------------------:|:---------------:|:---------------:|
+| 0                       |0                |12               |
+| 1                       |4                |10               |
+| 2                       |6                |6                |
+| 3                       |6                |4                |
+| 4                       |9                |2                |
+| 5                       |10               |1                |
+| 6                       |11               |0                |
+
+### Round 1
+
+The chemical plant (player A) is the controller and owns the property rights on the lake. 
+
+1. Player A will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.
+2. Player B can attempt to influence A's decision by offering to pay part of all of their earnings to the controller.
+3. Once players achieve an agreement, take note of the resulting level of emissions and players' payoffs accounting for any payments made to the other player.
+
+### Round 2
+
+The water sports company (player B) is the controller and owns the property rights on the lake. 
+
+1. Player B will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.
+2. Player A can attempt to influence B's decision by offering to pay part of all of their earnings to the controller.
+3. Once players achieve an agreement, take note of the resulting level of emissions and players' payoffs accounting for any payments made to the other player.
+
+### Round 3
+
+The water sports company (player B) remains as the the controller and owns the property rights on the lake. However, now any agreements on payments must be enforced with a legal agreement that costs $5 (hundred thousand) in fees.
+
+1. Player B will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.
+2. Player A can attempt to influence B's decision by offering to pay part of all of their earnings to the controller. Players must also agree on how the costs with legal fees are going to be shared between them.
+3. Once players achieve an agreement, take note of the resulting level of emissions and players' payoffs accounting for any payments made to the other player and fees paid.
+
+

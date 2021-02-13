@@ -4,7 +4,7 @@ date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Menu
-    weight: 1
+    weight: 2
 type: docs
 weight: 1
 ---
