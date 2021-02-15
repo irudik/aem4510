@@ -1721,11 +1721,11 @@ Because at each quantity/depth, only certain groups are willing to use the river
 
 .pull-right[
 
-At prices > 10, only boaters are willing to pay
+At quantities > 10, only boaters are willing to pay
 
-At prices > 6 and <= 10, only boaters and anglers are willing to pay
+At quantities > 6 and <= 10, only boaters and anglers are willing to pay
 
-At prices =< 6 all groups are willing to pay to use the river
+At quantities =< 6 all groups are willing to pay to use the river
 
 ]
 
