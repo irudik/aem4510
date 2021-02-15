@@ -1613,8 +1613,8 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(limits = c(0,30)) +
-  scale_y_continuous(limits = c(0,12)) +
+  scale_x_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_y_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
   labs(x = "Quantity",
        y = "Marginal Benefit/Marginal Cost")
   
@@ -1673,8 +1673,8 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(limits = c(0,30)) +
-  scale_y_continuous(limits = c(0,12)) +
+  scale_x_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_y_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
   labs(x = "Quantity",
        y = "Marginal Benefit/Marginal Cost")
   
@@ -1765,8 +1765,8 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(limits = c(0,30), breaks = 22/3, labels = "22/3") +
-  scale_y_continuous(limits = c(0,12), breaks = 22/3, labels = "22/3") +
+  scale_x_continuous(limits = c(0,31), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
+  scale_y_continuous(limits = c(0,13), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
   labs(x = "Quantity",
        y = "Marginal Benefit/Marginal Cost")
   
@@ -1824,7 +1824,7 @@ What share is everyone charged?
 --
 
 Boaters pay: 14/3  
-Anglers pay: 8/3
+Anglers pay: 8/3  
 Hikers: free
 
 --
