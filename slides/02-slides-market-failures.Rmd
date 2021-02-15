@@ -1585,7 +1585,7 @@ d_b <- function(x) 12 - x
 d_a <- function(x) 10 - x
 d_h <- function(x) 6 - x
 ggplot() +
-  annotate("text", x = 10, y = 3, label = "B", size = 8) +
+  annotate("text", x = 1, y = 13, label = "B", size = 8) +
   annotate("text", x = 7.5, y = 1.5, label = "A", size = 8) +
   annotate("text", x = 4, y = 1, label = "H", size = 8) +
   annotate("text", x = 8, y = 11, label = "MC", size = 8) +
@@ -1613,8 +1613,8 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
-  scale_y_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_x_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_y_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
   labs(x = "Quantity",
        y = "Marginal Benefit/Marginal Cost")
   
@@ -1631,6 +1631,7 @@ Each has a different marginal benefit for water depth:
 - Boaters: MB = 12-Q
 - Anglers: MB = 10-Q
 - Hikers: MB = 6-Q
+- MC of provision: MC = Q
 
 ]
 
@@ -1646,20 +1647,20 @@ d_b <- function(x) 12 - x
 d_a <- function(x) 10 - x
 d_h <- function(x) 6 - x
 ggplot() +
-  annotate("text", x = 10, y = 3, label = "B", size = 8) +
+  annotate("text", x = 1, y = 13, label = "B", size = 8) +
   annotate("text", x = 7.5, y = 1.5, label = "A", size = 8) +
   annotate("text", x = 4, y = 1, label = "H", size = 8) +
-  annotate("text", x = 20, y = 5, label = "SMB", size = 8) +
-  annotate("text", x = 8, y = 11, label = "MC", size = 8) +
+  annotate("text", x = 4, y = 25, label = "SMB", size = 8) +
+  annotate("text", x = 12, y = 15, label = "MC", size = 8) +
   stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
   stat_function(fun = d_b, color = "#AAAAAA", size = 1.5) +
   stat_function(fun = d_a, color = "#AAAAAA", size = 1.5) +
   stat_function(fun = d_h, color = "#AAAAAA", size = 1.5) +
-  annotate("segment", x = 0, xend = 2, y = 12, yend = 10, 
+  annotate("segment", x = 0, xend = 6, y = 28, yend = 10, 
            linetype = "longdash", size = 1.5, color = "red") +
-  annotate("segment", x = 2, xend = 10, y = 10, yend = 6, 
+  annotate("segment", x = 6, xend = 10, y = 10, yend = 2, 
            linetype = "longdash", size = 1.5, color = "red") +
-  annotate("segment", x = 10, xend = 28, y = 6, yend = 0, 
+  annotate("segment", x = 10, xend = 12, y = 2, yend = 0, 
            linetype = "longdash", size = 1.5, color = "red") +
   theme_minimal() +
   theme(
@@ -1673,8 +1674,8 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
-  scale_y_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_x_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_y_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
   labs(x = "Quantity",
        y = "Marginal Benefit/Marginal Cost")
   
@@ -1687,9 +1688,9 @@ ggplot() +
 
 Now we need to aggregate them to get the .hi[social marginal benefit]
 
-We do so by adding up the demand curves horizontally:
+We do so by adding up the demand curves vertically:
 
-At each price: sum the Qs that are demanded
+At each Q, sum the MBs
 
 ]
 
@@ -1705,7 +1706,7 @@ At each price: sum the Qs that are demanded
 
 Why is the aggregate demand curve kinked?
 
-Because at each price, only certain groups are willing to pay to use the public good
+Because at each quantity/depth, only certain groups are willing to use the river
 
 ]
 
@@ -1740,14 +1741,14 @@ d_b <- function(x) 12 - x
 d_a <- function(x) 10 - x
 d_h <- function(x) 6 - x
 ggplot() +
-  annotate("text", x = 20, y = 5, label = "SMB", size = 8) +
-  annotate("text", x = 8, y = 11, label = "MC", size = 8) +
+  annotate("text", x = 4, y = 25, label = "SMB", size = 8) +
+  annotate("text", x = 12, y = 15, label = "MC", size = 8) +
   stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = 0, xend = 2, y = 12, yend = 10, 
+  annotate("segment", x = 0, xend = 6, y = 28, yend = 10, 
            linetype = "longdash", size = 1.5, color = "red") +
-  annotate("segment", x = 2, xend = 10, y = 10, yend = 6, 
+  annotate("segment", x = 6, xend = 10, y = 10, yend = 2, 
            linetype = "longdash", size = 1.5, color = "red") +
-  annotate("segment", x = 10, xend = 28, y = 6, yend = 0, 
+  annotate("segment", x = 10, xend = 12, y = 2, yend = 0, 
            linetype = "longdash", size = 1.5, color = "red") +
   annotate("segment", x = 22/3, xend = 22/3, y = 0, yend = 22/3, 
            linetype = "dashed", size = 1.5, color = "grey50") +
@@ -1765,8 +1766,8 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(limits = c(0,31), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
-  scale_y_continuous(limits = c(0,13), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
+  scale_x_continuous(limits = c(0,13), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
+  scale_y_continuous(limits = c(0,31), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
   labs(x = "Quantity",
        y = "Marginal Benefit/Marginal Cost")
   
