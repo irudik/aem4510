@@ -32,13 +32,6 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
@@ -60,8 +53,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -119,7 +111,7 @@ This means there's a role for government to create this market or price the exte
 
 In a famous paper (”The Problem of Social Cost”), 1991 Nobel prize winner Ronald Coase made people rethink this
 
-Do we actually .hi[NEED] government intervention
+Do we actually .hi[NEED] government intervention?
 
 ]
 
@@ -507,7 +499,11 @@ When does the doctor accept the contract?
 
 --
 
-The doctor is weakly better off accepting the contract the transfer payment `\(\theta\)` is greater than the cost of noise `\(C(N)\)` which in our example is MC `\(\times\)` N since MC is constant
+The doctor is weakly better off accepting the contract if the transfer payment `\(\theta\)` (the benefit) is at least the cost of noise `\(C(N)\)` 
+
+--
+
+In our graphical example, C(N) = MC `\(\times\)` N since MC is constant
 
 --
 
@@ -545,12 +541,117 @@ It's optimal choice of `\(N\)` (and therefore `\(\theta\)`) is given by the firs
 
 --
 
-`$$B'(E) = C'(E) \leftrightarrow MB(E) = MC$$`
+`$$B'(E) = MC \leftrightarrow MB(E) = MC$$`
 which matches our condition for efficiency in noise
 
 --
 
-Did transactions costs actually cause any problems?
+.hi[Did transactions costs actually cause any problems?]
+
+---
+
+# Coase Caveats: Transactions costs
+
+.pull-left[
+![efficiency is where MC = MB of noise](03-slides-coase_files/figure-html/doctor3-1.png)
+]
+
+.pull-right[
+
+Yes! Why?
+
+]
+
+
+---
+
+# Coase Caveats: Transactions costs
+
+.pull-left[
+![efficiency is where MC = MB of noise](03-slides-coase_files/figure-html/doctor3-1.png)
+]
+
+.pull-right[
+
+Yes! Why?
+
+To have a mutually beneficial contract we still need the total gain in surplus (.hi-blue[blue]) to be greater than `\(tr\)`
+
+]
+
+---
+
+# Coase Caveats: Transactions costs
+
+.pull-left[
+![efficiency is where MC = MB of noise](03-slides-coase_files/figure-html/doctor3-1.png)
+]
+
+.pull-right[
+
+Yes! Why?
+
+To have a mutually beneficial contract we still need the total gain in surplus (.hi-blue[blue]) to be greater than `\(tr\)`
+
+Otherwise the total cost of the bargaining is greater than the total benefit from bargaining `\(\rightarrow\)` bargaining makes us worse off
+
+]
+
+---
+
+# Coase Caveats: Transactions costs
+
+If the confectioner has the rights to noise, we just flip the script
+
+--
+
+The doctor proposes a contract `\((N, \theta)\)` where the confectioner reduces noise in exchange for a transfer payment
+
+--
+
+The confectioner accepts or rejects the contract
+
+When does the confectioner accept the contract?
+
+--
+
+The confectioner accepts if `\(\theta \geq B(N_0) - B(N)\)` (payment &gt; loss of benefits)
+
+--
+
+The doctor will then offer the minimum required: `\(\theta = B(N_0) - B(N)\)`
+
+---
+
+# Coase Caveats: Transactions costs
+
+The doctor's problem is then to maximize the benefits of the transaction:
+`$$\max_{N} \underbrace{MC \times(N_0-N)}_{\text{noise cost reduction}} - \theta - tr$$`
+Which we can write as:
+`$$\max_{N} MC \times (N_0-N) - \underbrace{(B(N_0) - B(N))}_{\theta} - tr$$`
+
+--
+
+First term is the avoided noise costs, second term is the payment, third term is the transaction cost
+
+--
+
+The doctor's problem gives us the first-order condition:
+`$$MC = B'(E) \equiv MC = MB$$`
+---
+
+# Coase Caveats: Transactions costs
+
+`$$\max_{N} MC \times (N_0-N) - \underbrace{(B(N_0) - B(N))}_{\theta} - tr$$`
+
+--
+
+First term is the avoided noise costs, second term is the payment, third term is the transaction cost
+
+--
+
+The doctor's problem gives us the first-order condition:
+`$$MC = B'(E) \equiv MC = MB$$`
 
 ---
 
@@ -562,64 +663,10 @@ Did transactions costs actually cause any problems?
 
 .pull-right[
 
-Yes!
-
-To have a mutually beneficial contract we still need the total gain in surplus (.hi-red[red]) to be greater than `\(tr\)`
-
-Otherwise the total cost of the bargaining is greater than the total benefit from bargaining `\(\rightarrow\)` bargaining makes us worse off
-
-]
----
-
-# Coase Caveats: Transactions costs
-
-If the confectioner has the rights to noise, we just flip the script
-
-The doctor proposes a contract `\((N, \theta)\)` where the confectioner reduces noise in exchange for a transfer payment
-
-The confectioner accepts or rejects the contract
-
-When does the confectioner accept the contract?
-
---
-
-The confectioner accepts if `\(\theta \geq B(N)\)`
-
---
-
-The doctor will then offer the minimum required: `\(\theta = B(N)\)`
-
----
-
-# Coase Caveats: Transactions costs
-
-The doctor's problem is then to maximize the benefits of the transaction:
-`$$\max_{N} MC \times(N_0-N) - \theta - tr \equiv \min_{N} MC \times (N_0-N) - B(N) - tr$$`
-
---
-
-First term is the avoided noise costs, second term is the payment, third term is the transaction cost
-
---
-
-The doctor's problem gives us the first-order condition:
-`$$MC = B'(E) \equiv MC = MB$$`
-
-
----
-
-# Coase Caveats: Transactions costs
-
-.pull-left[
-![efficiency is where MC = MB of noise](03-slides-coase_files/figure-html/doctor1-1.png)
-]
-
-.pull-right[
-
 We again reach the social optimum!
 
 
-To have a mutually beneficial contract we still need the total gain in surplus (.hi-blue[blue]) to be greater than `\(tr\)`
+To have a mutually beneficial contract we still need the total gain in surplus (.hi-red[red]) to be greater than `\(tr\)`
 
 Otherwise the total cost of the bargaining is greater than the total benefit from bargaining `\(\rightarrow\)` bargaining makes us worse off
 
@@ -683,7 +730,7 @@ This changes the optimal noise to N&lt;sub&gt;2&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&
 
 We have a new equilibrium!
 
-If the doctor was assigned property rights the new equilibrium could be below N&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt;
+If they contracted to reach N&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt;, it is now .hi[inefficient]
 
 ]
 
@@ -814,11 +861,19 @@ Must sign a health waiver prohibiting them from suing AEP for future health prob
 
 Must also sign a confidentiality agreement
 
+--
+
 Cheshire residents over age of 71 able to remain in homes rent free until death
+
+--
 
 Original population: 221. Current population: &lt;20
 
+--
+
 Total settlement disbursed by AEP: $20 million
+
+--
 
 Attorneys take about 1/3 of settlement money
 

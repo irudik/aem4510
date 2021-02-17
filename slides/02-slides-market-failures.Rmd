@@ -1652,6 +1652,10 @@ ggplot() +
   annotate("text", x = 4, y = 1, label = "H", size = 8) +
   annotate("text", x = 4, y = 25, label = "SMB", size = 8) +
   annotate("text", x = 12, y = 15, label = "MC", size = 8) +
+  annotate("segment", x = 6, xend = 6, y = 0, yend = 10, 
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
+  annotate("segment", x = 10, xend = 10, y = 0, yend = 2, 
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
   stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
   stat_function(fun = d_b, color = "#AAAAAA", size = 1.5) +
   stat_function(fun = d_a, color = "#AAAAAA", size = 1.5) +
@@ -1708,6 +1712,8 @@ Why is the aggregate demand curve kinked?
 
 Because at each quantity/depth, only certain groups are willing to use the river
 
+Kinks are at the dotted lines, where PMBs hit zero
+
 ]
 
 
@@ -1729,6 +1735,29 @@ At quantities =< 6 all groups are willing to pay to use the river
 
 ]
 
+---
+
+# Positive externalities: graphical
+
+.pull-left[
+![aggregate public good demand](`r knitr::fig_chunk("pub-good-agg", "png")`)
+]
+
+.pull-right[
+
+The SMB curve is:
+
+28 - 3Q for Q <= 6
+
+22 - 2Q for 6 < Q <= 10
+
+12 - Q for 10 < Q <= 12
+
+Summing the PMBs over the relevant range of Q
+
+]
+
+
 
 ---
 
@@ -1744,6 +1773,10 @@ ggplot() +
   annotate("text", x = 4, y = 25, label = "SMB", size = 8) +
   annotate("text", x = 12, y = 15, label = "MC", size = 8) +
   stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 6, xend = 6, y = 0, yend = 10, 
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
+  annotate("segment", x = 10, xend = 10, y = 0, yend = 2, 
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
   annotate("segment", x = 0, xend = 6, y = 28, yend = 10, 
            linetype = "longdash", size = 1.5, color = "red") +
   annotate("segment", x = 6, xend = 10, y = 10, yend = 2, 
@@ -1780,7 +1813,11 @@ ggplot() +
 
 The optimal provision of the public good is where the MC curve crosses the SMB curve
 
-The optimal quantity of 22/3 is greater than the quantity any individual group would be willing to purchase
+This is across the middle segment
+
+Q = 22 - 2Q $\Rightarrow$ Q = 22/3
+
+The optimal quantity of Q = 22/3 is greater than the quantity any individual group would be willing to purchase
 
 ]
 
