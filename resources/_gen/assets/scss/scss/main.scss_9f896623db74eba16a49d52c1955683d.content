@@ -8570,7 +8570,7 @@ ul.share li:hover i {
   padding-top: 50px; }
 
 .home-section:nth-of-type(even) {
-  background: #f7f7f7; }
+  background: white; }
 
 .dark .home-section {
   background: #272935; }

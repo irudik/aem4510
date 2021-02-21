@@ -1,5 +1,5 @@
 ---
-title: "Lecture 03"
+title: "Lecture 04"
 subtitle: "Standards"
 author: Ivan Rudik
 date: AEM 4510
@@ -105,7 +105,7 @@ Coal power is one of the largest sources of several of the most harmful air poll
 
 # Coal power: air pollutants
 
-```{r}
+```{r, out.width = "100%", echo = FALSE}
 embed_url("https://youtu.be/dlXptCSsdkQ") %>%
   use_align("center")
 ```
@@ -201,13 +201,15 @@ embed_url("https://youtu.be/xajjmbJrfEM") %>%
 knitr::include_graphics("files/03-coal-health.png")
 ```
 
-Beach and Hanlon (2018)
+
 ]
 
 .pull-right[
 Coal production in Britain was STRONGLY associated with mortality
 
 Coal is super bad for your health
+
+Beach and Hanlon (2018)
 ]
 
 ---
@@ -303,6 +305,177 @@ This means its .hi[increasing] in abatement: its costlier to reduce emissions as
 
 ]
 
+
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+```{r mac2, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2-2/3*x
+ggplot() +
+  annotate("text", x = 2, y = 1, label = "MAC", size = 8) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("text", x = 1.5, y = 2.75, label = "More Abatement", size = 8) +
+  geom_segment(aes(x = 2, xend = 1, y = 2.5, yend = 2.5),
+    arrow = arrow(length = unit(0.5, "cm")), size = 1)+
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24, color = "#eeeeee"), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  lims(x = c(0,3), y = c(0,3))
+
+```
+
+![marginal abatement cost](`r knitr::fig_chunk("mac2", "png")`)
+]
+
+.pull-right[
+
+Abatement increases as you move to the left on the graph
+
+This raises marginal abatement cost
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+```{r mac3, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2-2/3*x
+ggplot() +
+  annotate("text", x = 2, y = 1, label = "MAC/MEB", size = 8) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("text", x = 1.5, y = 2.75, label = "More Emissions", size = 8) +
+  geom_segment(aes(x = 1, xend = 2, y = 2.5, yend = 2.5),
+    arrow = arrow(length = unit(0.5, "cm")), size = 1)+
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24, color = "#eeeeee"), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  lims(x = c(0,3), y = c(0,3))
+
+```
+
+![marginal abatement cost is marginal emissions benefit](`r knitr::fig_chunk("mac3", "png")`)
+]
+
+.pull-right[
+
+Abatement decreases (emissions increase) as you move to the right on the graph
+
+This decreases marginal abatement cost
+
+You can think of this as alternatively the .hi[marginal emissions benefit (MEB)] from reduced abatement costs
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+
+![marginal abatement cost](`r knitr::fig_chunk("mac3", "png")`)
+]
+
+.pull-right[
+
+We can equivalently plot the MAC a different way
+
+Now plot the MAC as a function of abatement
+
+What will the MAC look like?
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+```{r mac4, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 1+2/3*x
+ggplot() +
+  annotate("text", x = 2, y = 1.75, label = "MAC", size = 8) +
+  stat_function(fun = mac, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 16.67, xend = 16.67, y = 0, yend = 13.33,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("text", x = 1.5, y = 3.5, label = "More Abatement", size = 8) +
+  geom_segment(aes(x = 1, xend = 2, y = 3.25, yend = 3.25),
+    arrow = arrow(length = unit(0.5, "cm")), size = 1)+
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24, color = "#eeeeee"), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Abatement",
+       y = "Capital/$",
+       title = "MAC as a function of abatement") +
+  lims(x = c(0,3), y = c(0,4))
+
+```
+
+![marginal abatement cost](`r knitr::fig_chunk("mac4", "png")`)
+]
+
+.pull-right[
+
+Abatement decreases (emissions increase) as you move to the right on the graph
+
+This decreases marginal abatement cost
+
+We will .hi[almost always] be working with the graph where we plot things as a function of .hi[emissions], the next slide gets at why
+
+]
 
 ---
 
@@ -416,13 +589,11 @@ Think about the firm's problem in terms of the marginal benefits and costs of em
 
 .pull-right[
 
-For firms:
+The PMB of emissions is given by the MAC (avoided abatement cost, an opportunity cost)
 
-The MB of emissions is given by the MAC (avoided abatement cost, an opportunity cost)
+The PMC of emissions without regulation is....zero
 
-The MC of emissions without regulation is....zero
-
-So firms set emissions where: MB=MC $\rightarrow$ MAC = 0
+So firms set emissions where: PMB=PMC $\rightarrow$ MAC = 0
 
 Free market outcome is $E=E_0$
 
@@ -678,7 +849,7 @@ To figure out the socially optimal standard we need to know how the firm and reg
 
 --
 
-First lets set up the firm problem: they want to minimize the cost of satisfying the policy
+The firm problem: minimize the cost of satisfying the policy
 
 
 ---
@@ -688,7 +859,7 @@ First lets set up the firm problem: they want to minimize the cost of satisfying
 The firm's problem is then:
 $$ \min_E C(E)  \,\,\, \text{subject to: } \,\,\, E \leq \bar{E}$$
 
-If $C(E)$ is decreasing in $E$, but $E$ is bounded above by $\bar{E}$....
+If $C(E)$ is decreasing in $E$, but $E$ is restricted to be below $\bar{E}$....
 
 --
 

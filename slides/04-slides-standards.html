@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 04</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="04-slides-standards_files/header-attrs/header-attrs.js"></script>
+    <link href="04-slides-standards_files/remark-css/default.css" rel="stylesheet" />
+    <link href="04-slides-standards_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="04-slides-standards_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="04-slides-standards_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="04-slides-standards_files/tile-view/tile-view.js"></script>
+    <link href="04-slides-standards_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="04-slides-standards_files/panelset/panelset.js"></script>
+    <script src="04-slides-standards_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="04-slides-standards_files/vembedr/css/vembedr.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lecture 04
+## Standards
+### Ivan Rudik
+### AEM 4510
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
+## documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. How do we model our problems going forward?
+2. What are the different kinds of standards in theory and the real world?
+3. What happens under a standard?
+
+
+---
+
+class: inverse, center, middle
+name: what_is_enviro
+
+# Pigouvian policy
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Pigouvian policy
+
+Much of what we will be looking at going forward are .hi[Pigouvian] policies
+
+--
+
+A Pigouvian policy aims to force polluters to realize the costs of their emissions (or forces the creator of a public good to  realize the external benefit) in the absence of a market to do the same
+
+--
+
+Next we will look at command and control and emission standard regulations
+
+---
+
+# Pigouvian policy: Arthur Pigou
+
+.pull-left[
+&lt;img src="files/03-pigou.png" width="100%" /&gt;
+]
+
+.pull-right[
+Pigou is responsible for the famous distinction between private and  social marginal products and costs and the idea that governments can, via a mixture of taxes and subsidies, correct such market failures: "internalize the  externalities”
+
+]
+
+---
+
+# Working example: pollution from coal
+
+.pull-left[
+&lt;img src="files/03-coal1.jpg" width="100%" /&gt;
+]
+
+.pull-right[
+When we're discussing these policies you can think about them as regulating emissions from coal-fired power plants
+
+Coal power is one of the largest sources of several of the most harmful air pollutants
+
+]
+
+---
+
+# Coal power: air pollutants
+
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/dlXptCSsdkQ" width="533" height="300" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+
+---
+
+# Coal power: air pollutants
+
+.hi[Sulfur dioxide:] Coal plants are the leading source of `\(SO_2\)` pollution
+
+- Forms small acidic particulates that can penetrate into human lungs and be  absorbed by the bloodstream
+- Causes acid rain which damages crops, forests, soils
+
+Typical plant can emit &gt; 14,000 tons per year
+
+Typical plant with control equipment (e.g. scrubbers) emits 7,000 tons
+
+---
+
+# Coal power: air pollutants
+
+.hi[Nitrogen oxides:] `\(NO_x\)` causes ground-level ozone which harms respiratory systems, damages crops
+
+Typical plant can emit &gt; 10,000 tons per year
+
+Typical plant with control equipment (e.g. catalytic tech) emits &gt; 3,000 tons
+
+---
+
+# Coal power: air pollutants
+
+.hi[Particulate matter:] PM is a catch all for small stuff, causes respiratory, cardiovascular issues, death, haze, negative effects on cognition, etc, etc
+
+PM is one of the most costly pollutants on the planet
+
+Typical plant can emit &gt; 500 tons per year
+
+Typical plant with control equipment (e.g. baghouses) emits just a few tons a year
+
+---
+
+# Costs of particulate matter
+
+&lt;img src="files/03-pm1.png" width="80%" /&gt;
+
+---
+
+# Costs of particulate matter
+
+&lt;img src="files/03-pm2.png" width="80%" /&gt;
+
+---
+
+# Costs of particulate matter
+
+&lt;img src="files/03-pm3.png" width="80%" /&gt;
+
+---
+
+# Coal power: air pollutants
+
+.hi[Mercury:] Coal plants are responsible for more than half of the U.S. human-caused emissions of mercury
+
+Mercury causes brain and heart damage
+
+Just 1/70th of a teaspoon of mercury deposited on a 25-acre lake can make the fish unsafe to eat
+
+Typical plant can emit `\(&gt;\)` 170 pounds per year
+
+Activated carbon injection technology can reduce mercury  emissions by up to 90 percent when combined with baghouses, but is only on 8% of the coal fleet
+
+---
+
+# Coal power: air pollutants
+
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/xajjmbJrfEM" width="533" height="300" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+
+---
+
+# Coal and health in 1800s Britain
+
+.pull-left[
+&lt;img src="files/03-coal-health.png" width="60%" /&gt;
+
+
+]
+
+.pull-right[
+Coal production in Britain was STRONGLY associated with mortality
+
+Coal is super bad for your health
+
+Beach and Hanlon (2018)
+]
+
+---
+
+# Coal going forward
+
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/yRcshaSK46M" width="533" height="300" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+
+---
+
+# Coal production
+
+Coal power requires a lot of inputs: capital, labor, materials, fuel, air
+
+--
+
+Clean air is the one input they don't have to buy
+
+--
+
+Coal plants avoid 'using' clean air by:
+- fuel switching
+- installing scrubbers
+
+--
+
+Repeated reductions in emissions require larger and larger increases in capital to hold electricity production fixed (i.e., movement along a convex isoquant)
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+
+
+![marginal abatement cost](04-slides-standards_files/figure-html/mac-1.png)
+]
+
+.pull-right[
+
+We will be working with graphs where we have cost as a function of emissions
+
+First we have the .hi[marginal abatement cost (MAC)] curve
+
+This tells us the cost of abating the next unit of emissions
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+![marginal abatement cost](04-slides-standards_files/figure-html/mac-1.png)
+]
+
+.pull-right[
+The MAC curve is .hi-red[decreasing] in emissions
+
+This means its .hi[increasing] in abatement: its costlier to reduce emissions as the level of emissions goes down
+
+]
+
+
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+
+
+![marginal abatement cost](04-slides-standards_files/figure-html/mac2-1.png)
+]
+
+.pull-right[
+
+Abatement increases as you move to the left on the graph
+
+This raises marginal abatement cost
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+
+
+![marginal abatement cost is marginal emissions benefit](04-slides-standards_files/figure-html/mac3-1.png)
+]
+
+.pull-right[
+
+Abatement decreases (emissions increase) as you move to the right on the graph
+
+This decreases marginal abatement cost
+
+You can think of this as alternatively the .hi[marginal emissions benefit (MEB)] from reduced abatement costs
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+
+![marginal abatement cost](04-slides-standards_files/figure-html/mac3-1.png)
+]
+
+.pull-right[
+
+We can equivalently plot the MAC a different way
+
+Now plot the MAC as a function of abatement
+
+What will the MAC look like?
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+
+
+![marginal abatement cost](04-slides-standards_files/figure-html/mac4-1.png)
+]
+
+.pull-right[
+
+Abatement decreases (emissions increase) as you move to the right on the graph
+
+This decreases marginal abatement cost
+
+We will .hi[almost always] be working with the graph where we plot things as a function of .hi[emissions], the next slide gets at why
+
+]
+
+---
+
+# Setting up our model
+
+.pull-left[
+
+
+![marginal damage](04-slides-standards_files/figure-html/mac-md-1.png)
+]
+
+.pull-right[
+
+Next we have the .hi[marginal damage (MD)] curve
+
+This gives us the external cost of the next unit of emissions
+
+It is also the social cost since we assume the private cost of emitting is zero
+
+]
+
+
+---
+
+# Setting up our model
+
+
+.pull-left[
+![marginal damage](04-slides-standards_files/figure-html/mac-md-1.png)
+]
+
+.pull-right[
+
+How do we think about this? One of two ways
+
+1. MAC is the social marginal benefit of emissions, MD is the social marginal cost of emissions
+2. MAC is the social marginal cost of abatement, MD is the social marginal benefit of abatement
+
+These are identical interpretations
+
+]
+
+---
+
+# The unregulated/free market
+
+
+.pull-left[
+![marginal damage](04-slides-standards_files/figure-html/mac-md-1.png)
+]
+
+.pull-right[
+
+What is the unregulated / free market outcome?
+
+]
+
+---
+
+# The unregulated/free market
+
+
+.pull-left[
+![marginal damage](04-slides-standards_files/figure-html/mac-md-1.png)
+]
+
+.pull-right[
+
+What is the unregulated / free market outcome?
+
+Think about the firm's problem in terms of the marginal benefits and costs of emissions
+
+]
+
+
+---
+
+# The unregulated/free market
+
+
+.pull-left[
+![marginal damage](04-slides-standards_files/figure-html/mac-md-1.png)
+]
+
+.pull-right[
+
+The PMB of emissions is given by the MAC (avoided abatement cost, an opportunity cost)
+
+The PMC of emissions without regulation is....zero
+
+So firms set emissions where: PMB=PMC `\(\rightarrow\)` MAC = 0
+
+Free market outcome is `\(E=E_0\)`
+
+]
+
+
+---
+
+# The unregulated/free market
+
+
+.pull-left[
+![marginal damage](04-slides-standards_files/figure-html/mac-md-1.png)
+]
+
+.pull-right[
+
+But, if we could get all the victims of pollution together, they are willing to pay up to `\(MD\)` in order to get the firm to abate the pollution
+
+The MAC for eliminating the first unit of emissions is `\(\approx 0\)`
+
+
+]
+
+
+---
+
+# The cost of no regulation
+
+.pull-left[
+
+
+![marginal damage](04-slides-standards_files/figure-html/no-reg-dwl-1.png)
+]
+
+.pull-right[
+
+People are willing to pay to eliminate emissions until `\(E=E^*\)`
+
+If we add up all of these potential surpluses from Pareto improving trades, we get our DWL from the externality
+
+]
+
+---
+
+class: inverse, center, middle
+name: what_is_enviro
+
+# Command and control
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Command and control
+
+How do we recover that surplus?
+
+--
+
+One way is to use .hi[command and control] policy (aka a technology standard)
+
+--
+
+Command and control requires firms all employ some particular abatement or emissions control technology (i.e., “scrubbers”—devices that  pull out bad emissions before they enter smokestack)
+
+--
+
+Common in the early days of implementing the Clean Air Act of 1970
+
+--
+
+Called “command and control” because a government agency  (e.g. the EPA) imposes (e.g. commands) a common control  technology standard on all firms
+
+---
+
+# Command and control
+
+&gt;&gt; Thirty Years ago, the economists at Resources for the Future  were pushing the idea of pollution taxes. We lawyers at the  NRDC (Natural Resources Defense Council) thought they were  nuts, and feared that they would derail command-and-control  measures like the Clean Air Act, so we opposed them. Looking  back, I’d have to say this was the single biggest failure in  environmental management – not getting the prices right…”
+
+&gt; Gus Speth, 2002. Dean, Yale School of Forestry and Environmental  Studies. Former head of World Resources Institute and co-founder of  NRDC
+
+---
+
+# Brief aside
+
+If you're interested in doing cool real world policy work on the environment, RFF hires paid interns every summer and RAs on a 1-2 year basis, RA positions there are basically a stepping stone into top graduate programs
+
+Half of the environmental economists at Dyson have current/prior affiliations with RFF
+
+&lt;img src="files/03-rff1.png" width="50%" /&gt;
+
+---
+
+# Command and control
+
+What are some CC policy examples?
+
+--
+
+1. Coal plants were required to install scrubbers with 90% efficiency ratings until 1990
+--
+
+2. In the 1970s the US mandated catalytic converters in cars
+--
+
+3. The Clean Air Act mandates that the 'Best Available Control Technology' be used by emission sources (often not clearly defined)
+
+---
+
+# Command and control
+
+.pull-left[
+&lt;img src="files/03-cc-distortion.png" width="100%" /&gt;
+]
+
+.pull-right[
+CC policies are nice because they have low administrative costs (do you have this technology installed or not?)
+
+They also have significant costs in that they lead to distortions
+]
+
+---
+
+# Command and control
+
+.pull-left[
+&lt;img src="files/03-cc-distortion.png" width="100%" /&gt;
+]
+
+.pull-right[
+Coal from WY has much lower sulfur content than coal from WV
+
+Ideally, if we want to reduce sulfur dioxide emissions, we would like coal plants to use more low-sulfur WY coal
+
+]
+
+---
+
+# Command and control
+
+&lt;img src="files/03-byrd-legislation.png" width="100%" /&gt;
+
+Senator Byrd from WV single-handledly blocked legislation for sulfur regulations and pushed for scrubber mandates so that high-sulfur WV coal could compete with low-sulfur WY coal
+
+---
+
+# Command and control
+
+What other drawbacks are there to CC policies?
+
+--
+
+CC policies can discourage firms from investing in newer and better abatement technologies
+
+If they are in compliance with the policy, why do any better?
+
+--
+
+The government is picking winners and losers in technology
+
+--
+
+Current firms can “capture” regulatory board and require  technologies that are easy to implement, or may serve as a barrier-to-entry to new competition 
+
+
+---
+
+class: inverse, center, middle
+name: what_is_enviro
+
+# Emission standards
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Emission standards
+
+An emission standard `\(\bar{E}\)` mandates a maximum amount of emissions `\(E \leq \bar{E}\)`
+
+--
+
+You can think about it as a bubble over multiple plants/emission sources owned by each firm, the firm can decide how to allocate emissions across plants
+
+--
+
+Importantly: does .hi[not] mandate a specific technology
+
+&gt; On March 16, 2011 EPA proposes Mercury and Air Toxic Standards, the first nationwide limits on coal-fired power plant emissions of mercury. Specifically, the proposal aims to reduce emissions from new and existing coal and oil-fired EGUs by 91% from current levels through national quantity-based, numerical emission limits on mercury releases.
+
+
+---
+
+# Emission standards
+
+What is the socially optimal standard?
+
+--
+
+The `\(\bar{E}\)` that minimizes total social cost: abatement cost + damages
+
+--
+
+Let `\(C(E)\)` be abatement cost of emissions level `\(E\)` and `\(D(E)\)` be damages at `\(E\)`
+
+--
+
+We know abatement costs are decreasing in emissions and damages are increasing in emissions
+
+--
+
+To figure out the socially optimal standard we need to know how the firm and regulator make decisions
+
+--
+
+The firm problem: minimize the cost of satisfying the policy
+
+
+---
+
+# Emission standards: firm
+
+The firm's problem is then:
+$$ \min_E C(E)  \,\,\, \text{subject to: } \,\,\, E \leq \bar{E}$$
+
+If `\(C(E)\)` is decreasing in `\(E\)`, but `\(E\)` is restricted to be below `\(\bar{E}\)`....
+
+--
+
+The firm optimally selects `\(E = \bar{E}\)`
+
+--
+
+Next we have the regulator's problem
+
+---
+
+# Emission standards: regulator
+
+The regulator's problem is to minimize the social cost of emissions
+`$$\min_{\bar{E}} C(E) + D(E) \,\,\, \text{subject to: } \,\,\, E = \bar{E}$$`
+
+--
+
+The optimal choice of `\(\bar{E}\)` is governed by the first-order condition:
+`$$-C'(\bar{E}) = D'(\bar{E})$$`
+
+The regulator chooses `\(\bar{E}\)` to be the emission level where MAC = MD, `\(E^*\)`
+
+--
+
+`\(-C'(\bar{E})\)` is the MAC since `\(-C'(E) = C'(A)\)` where `\(E = -A\)`
+
+---
+
+# Emission standards: graphical
+
+.pull-left[
+
+
+![standards](04-slides-standards_files/figure-html/standard-1.png)
+]
+
+.pull-right[
+
+The optimal standard restricts emissions to be `\(\bar{E} = E^*\)`
+
+You can think of this as the regulator setting a tax equal to 0 on the first `\(\bar{E}\)` units of emissions, and a tax of `\(\infty\)` on each unit after
+
+
+]
+
+
+---
+
+# Emission standards: graphical
+
+.pull-left[
+![standards](04-slides-standards_files/figure-html/standard-1.png)
+]
+
+.pull-right[
+
+
+Firms will then only emit `\(\bar{E}\)` since emitting any more has infinite cost, emitting any less incurs extra abatement cost
+
+Firms total abatement cost under the standard is equal to the red area (B)
+
+]
+
+
+---
+
+# Emission standards: graphical
+
+.pull-left[
+![standards](04-slides-standards_files/figure-html/standard-1.png)
+]
+
+.pull-right[
+
+The previous example assumed firms couldn't lie/cheat and **not** abate
+
+Suppose that they can, but they are inspected with probability `\(p\)`
+
+If they are caught cheating, they pay a fine `\(F\)`
+
+What determines whether the firm cheats?
+
+]
+
+
+---
+
+# Emission standards: graphical
+
+.pull-left[
+![standards](04-slides-standards_files/figure-html/standard-1.png)
+]
+
+.pull-right[
+
+Firm cheats if the benefits are greater than the expected costs
+
+Benefits: `\(B\)`
+
+Expected costs: `\(pF\)`
+
+Cheat if `\(B \geq pF\)`
+
+This tells us how big of a fine or how often inspections need to be to stop cheating
+
+]
+
+---
+
+# Tailpipe emission standards
+
+With the passage of the Clean Air Act (CAA) in 1970, the EPA began regulating nitrogen oxide (NOx) emissions from light duty vehicles
+
+--
+
+CAA was amended in 1990, and new emission standards (in grams/mile) were set for four additional smog pollutants
+- Non-methane organic gases (NMOG)
+- Carbon monoxide (CO)
+- Particulate matter (PM)
+- Formaldehyde (HCHO)
+
+---
+
+# Tailpipe emission standards
+
+The amendments also gave California authority to pass its own stricter vehicle emission standards, due to its particularly worse air pollution issues
+
+--
+
+EPA must approve CA’s stricter standards
+
+States may choose to follow either the federal or California standards
+
+--
+
+Smog pollution standards were initially different for cars and light duty trucks
+
+--
+
+In 2000, the Tier 2 program established one set of standards for both
+
+--
+
+Currently, Tier 3 standards are being phased in
+
+---
+
+# Tailpipe emission standards
+
+&lt;center&gt;
+&lt;img src="files/03-tailpipe.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Tailpipe emission standards
+
+&lt;center&gt;
+&lt;img src="files/03-tailpipe2.png" width="90%" /&gt;
+&lt;/center&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
