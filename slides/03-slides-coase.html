@@ -53,8 +53,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
-## documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra
+## 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -476,11 +476,15 @@ There are two key pieces we need to have satisfied:
 
 Suppose the doctor owns the property right of zero noise
 
---
-
-The confectioner could propose a contract where the doctor accepts some noise, in exchange for a transfer payment
+Noise `\(N\)` imposes cost `\(C(N)\)` on the doctor, benefits `\(B(N)\)` to the confectioner
 
 --
+
+The confectioner could propose a contract where the doctor accepts some noise `\(N\)`, in exchange for a payment `\(\theta\)`
+
+---
+
+# Coase Caveats: Transactions costs
 
 The confectioner could propose a contract `\((N,\theta)\)` consisting of noise level `\(N\)` and transfer payment `\(\theta\)`
 
@@ -510,6 +514,10 @@ In our graphical example, C(N) = MC `\(\times\)` N since MC is constant
 
 What contract does the confectioner offer in equilibrium?
 
+--
+
+i.e. what contract proposal maximizes the confectioner's profit?
+
 ---
 
 # Coase Caveats: Transactions costs
@@ -528,11 +536,11 @@ It's the least amount required for the doctor to accept
 
 # Coase Caveats: Transactions costs
 
-This means we can write the confectioner's total cost as:
+This means we can write the confectioner's total profit as:
 
 --
 
-`$$TC(N) = B(N) - MC \times N + tr$$`
+`$$\pi(N) = B(N) - MC \times N - tr$$`
 
 Where `\(B(N)\)` is the benefits to the confectioner of noise (area under the MB curve)
 
@@ -606,7 +614,7 @@ If the confectioner has the rights to noise, we just flip the script
 
 --
 
-The doctor proposes a contract `\((N, \theta)\)` where the confectioner reduces noise in exchange for a transfer payment
+The doctor proposes a contract `\((N, \theta)\)` where the confectioner reduces noise from `\(N_0\)` in exchange for a transfer payment
 
 --
 
@@ -630,15 +638,6 @@ The doctor's problem is then to maximize the benefits of the transaction:
 `$$\max_{N} \underbrace{MC \times(N_0-N)}_{\text{noise cost reduction}} - \theta - tr$$`
 Which we can write as:
 `$$\max_{N} MC \times (N_0-N) - \underbrace{(B(N_0) - B(N))}_{\theta} - tr$$`
-
---
-
-First term is the avoided noise costs, second term is the payment, third term is the transaction cost
-
---
-
-The doctor's problem gives us the first-order condition:
-`$$MC = B'(E) \equiv MC = MB$$`
 ---
 
 # Coase Caveats: Transactions costs
@@ -703,7 +702,7 @@ In cases where the gains from bargaining are small, transactions costs may excee
 
 Suppose the confectioner is given the property rights (start at N&lt;sub&gt;0&lt;/sub&gt;)
 
-Doctor pays confectioner to eliminate one noise unit and move to N&lt;sub&gt;1&lt;/sub&gt;
+Doctor pays confectioner to eliminate noise and move to N&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt;
 
 The confectioner gets some amount of surplus/income
 
@@ -901,7 +900,7 @@ Would it matter whether we granted the “right to clean air” to the town or t
 
 # Coase in practice
 
-Cap-and-trade is effectively Coase at large sale
+Cap-and-trade is effectively Coase at large scale
 
 --
 

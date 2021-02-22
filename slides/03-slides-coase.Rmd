@@ -584,11 +584,15 @@ There are two key pieces we need to have satisfied:
 
 Suppose the doctor owns the property right of zero noise
 
---
-
-The confectioner could propose a contract where the doctor accepts some noise, in exchange for a transfer payment
+Noise $N$ imposes cost $C(N)$ on the doctor, benefits $B(N)$ to the confectioner
 
 --
+
+The confectioner could propose a contract where the doctor accepts some noise $N$, in exchange for a payment $\theta$
+
+---
+
+# Coase Caveats: Transactions costs
 
 The confectioner could propose a contract $(N,\theta)$ consisting of noise level $N$ and transfer payment $\theta$
 
@@ -618,6 +622,10 @@ In our graphical example, C(N) = MC $\times$ N since MC is constant
 
 What contract does the confectioner offer in equilibrium?
 
+--
+
+i.e. what contract proposal maximizes the confectioner's profit?
+
 ---
 
 # Coase Caveats: Transactions costs
@@ -636,11 +644,11 @@ It's the least amount required for the doctor to accept
 
 # Coase Caveats: Transactions costs
 
-This means we can write the confectioner's total cost as:
+This means we can write the confectioner's total profit as:
 
 --
 
-$$TC(N) = B(N) - MC \times N + tr$$
+$$\pi(N) = B(N) - MC \times N - tr$$
 
 Where $B(N)$ is the benefits to the confectioner of noise (area under the MB curve)
 
@@ -714,7 +722,7 @@ If the confectioner has the rights to noise, we just flip the script
 
 --
 
-The doctor proposes a contract $(N, \theta)$ where the confectioner reduces noise in exchange for a transfer payment
+The doctor proposes a contract $(N, \theta)$ where the confectioner reduces noise from $N_0$ in exchange for a transfer payment
 
 --
 
@@ -738,15 +746,6 @@ The doctor's problem is then to maximize the benefits of the transaction:
 $$\max_{N} \underbrace{MC \times(N_0-N)}_{\text{noise cost reduction}} - \theta - tr$$
 Which we can write as:
 $$\max_{N} MC \times (N_0-N) - \underbrace{(B(N_0) - B(N))}_{\theta} - tr$$
-
---
-
-First term is the avoided noise costs, second term is the payment, third term is the transaction cost
-
---
-
-The doctor's problem gives us the first-order condition:
-$$MC = B'(E) \equiv MC = MB$$
 ---
 
 # Coase Caveats: Transactions costs
@@ -813,8 +812,6 @@ ggplot() +
   stat_function(fun = supply, color = "#638ccc", size = 1.5) +
   annotate("segment", x = 15, xend = 15, y = 0, yend = 15,
            linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 27, xend = 27, y = 0, yend = 3,
-           linetype = "dashed", size = 1.5, color = "grey50") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -827,7 +824,7 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  scale_x_continuous(labels = c(expression(N[1]^'*'), expression(N[1]), expression(N[0])), breaks = c(15,  27, 29), limits = c(0,30), expand = c(0,0)) +
+  scale_x_continuous(labels = c(expression(N[1]^'*'), expression(N[0])), breaks = c(15, 29), limits = c(0,30), expand = c(0,0)) +
   scale_y_continuous(labels = expression(P^'*'), breaks = c(15), limits = c(0,30), expand = c(0,0)) +
   labs(x = "Noise",
        y = "")
@@ -841,7 +838,7 @@ ggplot() +
 
 Suppose the confectioner is given the property rights (start at N<sub>0</sub>)
 
-Doctor pays confectioner to eliminate one noise unit and move to N<sub>1</sub>
+Doctor pays confectioner to eliminate noise and move to N<sub>1</sub><sup>*</sup>
 
 The confectioner gets some amount of surplus/income
 
@@ -1071,7 +1068,7 @@ Would it matter whether we granted the “right to clean air” to the town or t
 
 # Coase in practice
 
-Cap-and-trade is effectively Coase at large sale
+Cap-and-trade is effectively Coase at large scale
 
 --
 

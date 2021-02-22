@@ -116,6 +116,8 @@ embed_url("https://youtu.be/dlXptCSsdkQ") %>%
 
 .hi[Sulfur dioxide:] Coal plants are the leading source of $SO_2$ pollution
 
+--
+
 - Forms small acidic particulates that can penetrate into human lungs and be  absorbed by the bloodstream
 - Causes acid rain which damages crops, forests, soils
 
@@ -129,6 +131,8 @@ Typical plant with control equipment (e.g. scrubbers) emits 7,000 tons
 
 .hi[Nitrogen oxides:] $NO_x$ causes ground-level ozone which harms respiratory systems, damages crops
 
+--
+
 Typical plant can emit > 10,000 tons per year
 
 Typical plant with control equipment (e.g. catalytic tech) emits > 3,000 tons
@@ -138,6 +142,8 @@ Typical plant with control equipment (e.g. catalytic tech) emits > 3,000 tons
 # Coal power: air pollutants
 
 .hi[Particulate matter:] PM is a catch all for small stuff, causes respiratory, cardiovascular issues, death, haze, negative effects on cognition, etc, etc
+
+--
 
 PM is one of the most costly pollutants on the planet
 
@@ -175,6 +181,8 @@ knitr::include_graphics("files/03-pm3.png")
 
 .hi[Mercury:] Coal plants are responsible for more than half of the U.S. human-caused emissions of mercury
 
+--
+
 Mercury causes brain and heart damage
 
 Just 1/70th of a teaspoon of mercury deposited on a 25-acre lake can make the fish unsafe to eat
@@ -185,7 +193,7 @@ Activated carbon injection technology can reduce mercury  emissions by up to 90 
 
 ---
 
-# Coal power: air pollutants
+# Coal power: air pollutants 
 
 ```{r, echo = F}
 embed_url("https://youtu.be/xajjmbJrfEM") %>%
