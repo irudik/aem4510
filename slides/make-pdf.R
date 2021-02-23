@@ -1,6 +1,6 @@
 # Makes pdf slides for all lectures
 
-lapply(list.files(pattern = "*.html", recursive = T)[3:4], 
+lapply(list.files(pattern = "*.html", recursive = T)[4], 
        function(file) {
          xaringan::decktape(
            file, 

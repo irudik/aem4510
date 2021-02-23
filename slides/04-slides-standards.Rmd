@@ -481,7 +481,7 @@ Abatement decreases (emissions increase) as you move to the right on the graph
 
 This decreases marginal abatement cost
 
-We will .hi[almost always] be working with the graph where we plot things as a function of .hi[emissions], the next slide gets at why
+You should eventually be comfortable with either representation of MACs
 
 ]
 
