@@ -27,7 +27,7 @@ design:
 
 **TA zoom office hours:** 
 
-Diego Cardoso (ds2347): Monday 3:00-4:00
+Diego Cardoso (ds2347): Monday 10:15-11:15 AM
 
 Lin Yang (ly285): Wednesday 3:00-4:00
 
