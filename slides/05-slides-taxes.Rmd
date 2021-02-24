@@ -1,5 +1,5 @@
 ---
-title: "Lecture 04"
+title: "Lecture 05"
 subtitle: "Taxes"
 author: Ivan Rudik
 date: AEM 4510
@@ -94,7 +94,10 @@ Let $C(E)$ be abatement cost of emissions level $E$ and $D(E)$ be damages at $E$
 
 We know abatement costs are decreasing in emissions and damages are increasing in emissions
 
---
+
+---
+
+# Emission taxes
 
 To figure out the socially optimal tax we need to know how the firm and regulator make decisions
 
@@ -110,8 +113,10 @@ First lets set up the firm problem: they want to minimize the cost of satisfying
 The firm's problem is then:
 $$ \min_E C(E) + \tau E$$
 
+--
+
 The firm's first-order condition to minimize costs is:
-$$-C'(E^*) = \tau$$
+$$\underbrace{-C'(E^*)}_{\text{MAC}} = \tau$$
 
 --
 
@@ -129,7 +134,7 @@ This makes sense!
 
 --
 
-The tax is the MC of emitting, the MAC is the marginal benefit of emitting (reduced abatement cost)
+The tax is the PMC of emitting, the MAC is the PMB of emitting (reduced abatement cost)
 
 --
 
@@ -139,23 +144,27 @@ Costs are minimized when these two things are equal
 
 # Emission taxes: regulator
 
-The regulator's problem is to minimize the social cost of emissions, we know they want to set:
+The regulator's problem is to maximize social welfare / minimize total costs of abatement and damages
+
+--
+
+We already know this occurs when:
 $$-C'(E^*) = D'(E^*)$$
 --
 
-but we know that firms set:
+but we know that firms select $E^*$ so that:
 $$-C'(E^*) = \tau$$
 
 --
 
-This means that the regulator wants to set:
+This means that the regulator's optimal tax is given by:
 $$\tau^* = D'(E^*)$$
 
 ---
 
 # Emission taxes: regulator
 
-The optimal tax is equal to the MD at the optimal emission level
+The optimal tax is equal to the MD .hi[at the optimal emission level]
 
 --
 
@@ -163,7 +172,7 @@ This also makes a lot of sense
 
 --
 
-We want the firm to act as if they are bearing the damage costs on the marginal
+We want the firm to act as if they are bearing the damage costs on the margin
 
 --
 

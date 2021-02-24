@@ -849,23 +849,33 @@ Let $C(E)$ be abatement cost of emissions level $E$ and $D(E)$ be damages at $E$
 
 --
 
+We assume that: $C'(E) < 0 \leftrightarrow \underbrace{-C'(E)}_{\text{MAC}} > 0$ and $\underbrace{D'(E)}_{\text{MD}} > 0$
+
+---
+
+# Emission standards
+
+$-C'(E)$ is the MAC because we are decreasing emissions by 1, ${dE \over dA} = -1$:
+$$\underbrace{\frac{d C(E)}{dA}}_{\text{MAC}} = \frac{d C(E)}{dE}{dE \over dA} = -\frac{d C(E)}{dE} = -C'(E)$$
+
+--
+
 We know abatement costs are decreasing in emissions and damages are increasing in emissions
 
 --
 
-To figure out the socially optimal standard we need to know how the firm and regulator make decisions
-
---
-
-The firm problem: minimize the cost of satisfying the policy
+Next: how do the firm and regulator make decisions?
 
 
 ---
 
 # Emission standards: firm
 
-The firm's problem is then:
+The firm problem: minimize the cost of satisfying the policy:
 $$ \min_E C(E)  \,\,\, \text{subject to: } \,\,\, E \leq \bar{E}$$
+
+
+--
 
 If $C(E)$ is decreasing in $E$, but $E$ is restricted to be below $\bar{E}$....
 
@@ -882,18 +892,15 @@ Next we have the regulator's problem
 # Emission standards: regulator
 
 The regulator's problem is to minimize the social cost of emissions
-$$\min_{\bar{E}} C(E) + D(E) \,\,\, \text{subject to: } \,\,\, E = \bar{E}$$
+$$\min_{\bar{E}} \left\{C(E) + D(E)\right\} \,\,\, \text{subject to: } \,\,\, \underbrace{E = \bar{E}}_{\text{firm's choice}}$$
 
 --
 
 The optimal choice of $\bar{E}$ is governed by the first-order condition:
 $$-C'(\bar{E}) = D'(\bar{E})$$
 
-The regulator chooses $\bar{E}$ to be the emission level where MAC = MD, $E^*$
+The regulator chooses $\bar{E}$ to be the emission level where MAC = MD: $\bar{E} = E^*$
 
---
-
-$-C'(\bar{E})$ is the MAC since $-C'(E) = C'(A)$ where $E = -A$
 
 ---
 
@@ -977,7 +984,7 @@ Firms total abatement cost under the standard is equal to the red area (B)
 
 .pull-right[
 
-The previous example assumed firms couldn't lie/cheat and **not** abate
+The previous example assumed firms couldn't lie/cheat and **not** abate at all
 
 Suppose that they can, but they are inspected with probability $p$
 

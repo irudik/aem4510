@@ -27,7 +27,7 @@ design:
 
 **TA zoom office hours:** 
 
-Diego Cardoso (ds2347): Monday 3:00-4:00
+Diego Cardoso (ds2347): Monday 10:15-11:15
 
 Lin Yang (ly285): Wednesday 3:00-4:00
 
@@ -59,4 +59,4 @@ Assignments and grading are [here](/assignments/).
 
 **Integrity of credit:** I expect every student in this course to abide by the Cornell University Code of Academic Integrity. I strongly encourage collaboration in this course, but each student is responsible for making sure that she or he follows the rules laid out in this syllabus, and with those stated in the Code of Academic Integrity. Any student found to have violated the stated policies on problem sets will receive a zero for that assignment, and any student found to have cheated on a paper will receive a zero on that paper. Multiple violations in a semester may result in failure of the course. The Code of Academic Integrity is available for review here: https://cuinfo.cornell.edu/aic.cfm.
 
-**Coding:** We will be using [RStudio Cloud](https://rstudio.cloud) for coding. You should not need to install or download anything for what we do in class or for problem sets.
+**Coding:** We will be using [RStudio Cloud](https://rstudio.cloud) for coding. You should not need to install or download anything for what we do in class or for problem sets. If you prefer to do the work on your actual computer install R and RStudio.
