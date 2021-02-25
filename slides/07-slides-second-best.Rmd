@@ -1,5 +1,5 @@
 ---
-title: "Lecture 06"
+title: "Lecture 07"
 subtitle: "Multiple Market Failures and Second-Best Policies"
 author: Ivan Rudik
 date: AEM 4510

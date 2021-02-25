@@ -1,5 +1,5 @@
 ---
-title: "Lecture 05"
+title: "Lecture 06"
 subtitle: "Tradable Permits"
 author: Ivan Rudik
 date: AEM 4510
