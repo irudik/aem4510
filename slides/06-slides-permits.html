@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 06</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="06-slides-permits_files/header-attrs/header-attrs.js"></script>
+    <link href="06-slides-permits_files/remark-css/default.css" rel="stylesheet" />
+    <link href="06-slides-permits_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="06-slides-permits_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="06-slides-permits_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="06-slides-permits_files/tile-view/tile-view.js"></script>
+    <link href="06-slides-permits_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="06-slides-permits_files/panelset/panelset.js"></script>
+    <script src="06-slides-permits_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lecture 06
+## Tradable Permits
+### Ivan Rudik
+### AEM 4510
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. How do tradable permit systems work in theory and in the real world?
+2. What happens under a tradable permit system?
+
+
+---
+
+class: inverse, center, middle
+name: tradable permits
+
+# Tradable permits
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Tradable permits
+
+How do tradable permit systems work?&lt;sup&gt;1&lt;/sup&gt;
+
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt; Tradable permit systems are also called cap and trade systems.
+]
+
+--
+
+First, recall a regular emission standard: we set `\(\bar{E}\)` at the point where MAC = MD
+
+--
+
+This is easy with one firm, but what if we have several, or hundreds?
+
+---
+
+# Optimal policy with multiple firms
+
+.pull-left[
+
+
+![taxes](06-slides-permits_files/figure-html/multifirm-1.png)
+]
+
+.pull-right[
+
+Firm #2 is 'dirty': has higher MAC
+
+Firm #1 is 'clean': has lower MAC
+
+If we use a regular emission standard: it has to be firm-specific!
+
+Mandate `\(E^*_1\)` for 1 and `\(E^*_2\)` for 2
+
+This requires .hi[a lot] of info and political capital on behalf of the regulator
+
+]
+
+
+---
+
+# Optimal policy with multiple firms
+
+.pull-left[
+
+
+![taxes](06-slides-permits_files/figure-html/multi-tax-1.png)
+]
+
+.pull-right[
+
+Regulating multiple heterogeneous firms with a tax is easy:
+
+Since firms select MAC = `\(\tau\)`, as long as we set `\(\tau = MD\)` we can achieve the efficient outcome (MAC = MD) without knowing anything about the firms!
+
+]
+
+
+---
+
+# Optimal policy with multiple firms
+
+Taxes also achieve the .hi[cost-effective] outcome: achieving a given emission level at least-cost
+
+Let's see why
+
+--
+
+Suppose we want to minimize the total cost of achieving emission level `\(\bar{E}\)` by abating across two different sources, plant 1 and plant 2
+
+--
+
+The plants have abatement cost functions: `\(C_1(E_1)\)` and `\(C_2(E_2)\)`
+
+--
+
+Write down the regulator's problem
+
+---
+
+# Optimal policy with multiple firms
+
+`$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2) \,\,\,\, \text{subject to:} \, E_1 + E_2 = \bar{E}$$`
+
+Solve the constraint for `\(E_2 = \bar{E} - E_1\)` so we have a simpler problem:
+`$$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$`
+
+--
+
+Take the first-order condition to find what is necessary for a cost minimum:
+`$$\frac{dC_1(E_1)}{d E_1} + \frac{dC_2(\bar{E} - E_1)}{d E_1} \times (-1) = 0$$`
+
+---
+
+# Optimal policy with multiple firms
+
+This gives us:
+`$$\underbrace{-\frac{dC_1(E_1)}{d E_1}}_{\text{MAC}_1} = \underbrace{-\frac{dC_2(\bar{E} - E_1)}{d E_1}}_{\text{MAC}_2}$$`
+
+The marginal abatement costs across the sources must be equal at the cost-effective pollution level
+
+--
+
+This is often called the .hi-blue[equimarginal principle]
+
+---
+
+# Optimal policy with multiple firms
+
+Taxes .hi[always] achieve the equimarginal principle and get us the given amount of emission reductions at least-cost
+
+--
+
+Why?
+
+--
+
+We know firms optimally select MAC equal to the emission tax
+
+--
+
+This means all firms' MACs are equal!
+
+--
+
+Even if we don't set the tax equal to MD, whatever emission reduction we get will be as cheap as possible
+
+---
+
+# Optimal policy with multiple firms
+
+.pull-left[
+![taxes](06-slides-permits_files/figure-html/multi-tax-1.png)
+]
+
+.pull-right[
+
+The big problem is political feasibility
+
+Firms resist taxation because they have to pay a fine for each unit of emissions
+
+Tradable permit systems are a way to make emission standards flexible enough to handle heterogeneous firms
+
+]
+
+
+---
+
+# Tradable permit systems
+
+So how do these systems make standards more flexible?
+
+--
+
+They allow firms to trade their emission allowances
+
+--
+
+E.g. if firms are restricted to `\(\bar{E}_1\)` and `\(\bar{E}_2\)`, we can allow the firms to trade
+
+--
+
+If firm 1 sells an allowance/permit to firm 2, their new restrictions are: `\(\bar{E}_1 - 1\)` and `\(\bar{E}_2 + 1\)`
+
+---
+
+# Tradable permit systems: example
+
+The US Acid Rain Program is the classic example
+
+--
+
+Permit = license to create 1 ton of SO2
+
+--
+
+Phase I (1995-2000):  
+- 6.3 million permits issued per year
+- affected 263 generating units at 110 dirtiest power plants
+
+Phase II (2000+):  
+- 9 million permits issued per year
+- affects all power plants over some minimum size
+
+---
+
+# Tradable permit systems: example
+
+&lt;center&gt;
+&lt;img src="files/05-cnp1.png" width="40%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Tradable permit systems: example
+
+&lt;center&gt;
+&lt;img src="files/05-cnp2.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Tradable permit systems: example
+
+&lt;center&gt;
+&lt;img src="files/05-arp1.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Tradable permit systems: example
+
+&lt;center&gt;
+&lt;img src="files/05-arp2.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Tradable permit systems: example
+
+&lt;center&gt;
+&lt;img src="files/05-arp3.png" width="100%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+
+
+![permits](06-slides-permits_files/figure-html/permits-1.png)
+]
+
+.pull-right[
+
+Suppose we want to limit to `\(\bar{E}\)` total emissions so each firm gets `\(\bar{E}/2\)` permits
+
+.hi[This can't be efficient] (i.e. maximize social welfare given some MD curve)
+
+.hi-red[It also can't be cost-effective:] it doesn't minimize the cost of achieving `\(\bar{E}\)` total emissions
+
+]
+
+---
+
+# Tradable permits: cost-effectiveness
+
+For cost-effectiveness, we need total costs to be minimized for achieving a given level of emissions:
+`$$\min_{E_1, E_2} C(E_1) + C(E_2) \,\,\, \text{subject to: } E_1 + E_2 = \bar{E}$$`
+
+This is the same problem as:
+`$$\min_{E_1, E_2} C(E_1) + C(\bar{E} - E_1)$$`
+
+which has a solution where:
+`$$-C'(E_1^*) = -C'(\bar{E} - E^*_1)$$`
+
+---
+
+# Tradable permits: cost-effectiveness
+
+Cost-effectiveness requires:
+`$$-C'(E_1^*) = -C'(\bar{E} - E^*_1) \leftrightarrow MAC_1 = MAC_2$$`
+
+That marginal abatement costs are equal across all 
+
+--
+
+If firms have different MAC curves, giving them the same amount of emissions/permits cannot be optimal
+
+--
+
+How do we fix this?
+
+--
+
+Let them trade the permits
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+
+
+![permits](06-slides-permits_files/figure-html/permits-dwl-1.png)
+]
+
+.pull-right[
+
+We can reduce costs by increasing emissions at high MAC firm 2 and decreasing emissions at low MAC firm 1 until they are equal
+
+This allows us to recover DWL equal to the red area
+
+The red area is the difference in areas under MAC2 and MAC1 over the range of emissions changes
+
+]
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+
+![permits](06-slides-permits_files/figure-html/permits-reallo-1.png)
+]
+
+.pull-right[
+
+We want to equalize MACs for cost-effectiveness, but does the permit market cause this to happen?
+
+Firm 2 is willing to pay a price up to the blue point (5/4) to be able to emit 1 more unit
+
+Firm 1 can abate 1 more unit at cost equal to the red point (5/6)
+
+]
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+![permits](06-slides-permits_files/figure-html/permits-reallo-1.png)
+]
+
+.pull-right[
+
+Firm 2 can buy the right to emit 1 unit of pollution from firm 1 for anywhere between 5/6 - 5/4 and .hi[both will be better off]
+
+These trades can be done until the MACs are equal at a value of 1
+
+This would be the prevailing permit price in a tradable permit system
+
+]
+
+---
+
+# Tradable permits: firm
+
+We can also see this result mathematically
+
+--
+
+Suppose there is a permit price `\(p\)` in the competitive tradable permit market
+
+--
+
+Firms are price-takers
+
+--
+
+First lets set up the firm problem: they want to minimize the cost of satisfying the policy
+
+---
+
+# Tradable permits: firm
+
+The firm's problem is then:
+$$ \min_E C(E) + p E$$
+
+The firm's first-order condition to minimize costs is:
+`$$-C'(E^*) = p$$`
+
+--
+
+The firm minimizes costs by choosing emissions `\(E^*\)` so that its MAC equals the permit price
+
+---
+
+# Tradable permits: cost-effectiveness
+
+This makes sense!
+
+--
+
+The permit price is the MC of emitting, the MAC is the marginal benefit of emitting (reduced abatement cost)
+
+--
+
+Costs are minimized when these two things are equal
+
+--
+
+What else does this do?
+
+--
+
+If firms all set their MACs equal to `\(p\)` then all their MACs are equal to one another, .hi[we have cost-effectiveness:]
+`$$-C_1'(E^*_1) = -C_2'(E^*_2) = \dots = -C_N'(E^*_N) = p$$`
+
+
+---
+
+# Tradable permits: cost-effectiveness
+
+Tradable permit systems are .hi[always] cost-effective: whatever emissions limit you set, it will be achieved at least-cost&lt;sup&gt;1&lt;/sup&gt;
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt; Try to see if you can use the same mathematical derivation to show that taxes are also always cost-effective.
+]
+
+--
+
+This does not mean that it is necessarily efficient!
+
+---
+
+# Tradable permits: efficiency
+
+For efficiency, we also need MAC = MD
+
+--
+
+To keep things simple suppose MD is constant: `\(MD = d\)`&lt;sup&gt;1&lt;/sup&gt;
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt; Everything still works if it isn't, but constant MD allows us to work through the intuition without worrying about adding up everyone's emissions.
+]
+
+--
+
+If we set `\(\bar{E}\)` such that `\(p = d\)`, then we also have efficiency
+
+
+--
+
+Let's see why
+
+---
+
+# Tradable permits: efficiency
+
+Suppose we set `\(\bar{E}\)` to be the sum of the efficient level of emissions across all firms `\(\sum_i E^*_i\)`, where `\(E^*_i\)` is where `\(MAC_i = d\)`
+
+--
+
+Firms will trade until their MACs are all equal
+
+--
+
+Since there's only `\(\bar{E} = E^*\)` permits, we already know MACs are equal at `\(\{E^*_1, \dots, E^*_N\}\)` where `\(\sum_i E^*_i = E^*_i\)` 
+
+This is where their MACs all equal `\(d\)` and each other
+
+--
+
+We also know in the permit market equilibrium we have `\(MAC = p\)`, so this means that we must have `\(p = d = MD\)`!
+
+---
+
+# Tradable permits in practice
+
+Knowing MD is often difficult in practice
+
+--
+
+Tradable permit systems are nice because we can just let politicians choose a `\(\bar{E}\)` that is politically feasible, and then the permit market ensures that we get the associated emissions reductions at least-cost
+
+--
+
+What often happens in practice is `\(\bar{E}\)` starts high, giving us a low `\(p\)`, and then `\(\bar{E}\)` gets ratcheted down over time
+
+---
+
+# Political economy of permits
+
+Firms are often more willing to accept a higher `\(p\)` than `\(\tau\)` because they are often endowed with (some) permits for free
+
+--
+
+This means that *in practice*, we might expect to get greater emissions reductions under a permit system than a tax because of these political economy reasons
+
+--
+
+This is one of the key reasons the 1990 CAA amendments were able to be passed
+
+
+---
+
+# Permit systems and heterogeneous MDs
+
+So far we assumed all firms faced the same MD
+
+--
+
+This is true for things like climate change, less true for things like `\(SO_2\)` or `\(NO_x\)`
+
+--
+
+How well do permit systems perform with heterogeneous MD?
+
+---
+
+# Permit systems and heterogeneous MDs
+
+Let's think about a setting with two firms: 1 and 2
+
+--
+
+The firms have different MACs: `\(C_1(E) &gt; C_2(E)\)` for all `\(E\)`
+
+--
+
+And the firms have different marginal damages as well: `\(MD_1 &gt; MD_2\)` for all `\(E\)`
+
+--
+
+How well does a permit system work?
+
+---
+
+# Permit systems and heterogeneous MDs
+
+Well we know the following:
+
+--
+
+Firms set `\(MAC = p\)` so we will have `\(MAC_1 = MAC_2 = p\)`
+
+--
+
+But for efficiency we also want `\(MAC = MD\)`: `\(MAC_1 = MD_1\)` and `\(MAC_2 = MD_2\)`
+
+--
+
+If `\(MD_1 \neq MD_2\)` then the permit system does .hi-red[not] deliver efficiency!
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero-1.png)
+]
+
+.pull-right[
+
+Suppose we have the two firms with different MACs and MDs:
+- `\(MAC_1 = 200-E_1\)`
+- `\(MAC_2 = 300-E_2\)`
+- `\(MD_1 = 100\)`
+- `\(MD_2 = 150\)`
+
+The efficient emissions allocation is: `\(E^* = 250: E_1^* = 100, E_2^* = 150\)`
+
+The regulator sets `\(\bar{E} = 250\)`
+
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero2-1.png)
+]
+
+.pull-right[
+
+We can solve for the permit market allocation and price using:
+`\(MAC_1 = MAC_2\)` and `\(E_1 + E_2 = 250\)`
+
+These two conditions tell us:
+
+`\(E^p_1 = 75, E^p_2 = 175, p = 125\)`
+
+but efficiency is at:
+
+`\(E^*_1 = 100, E^*_2 = 150\)`
+
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero2-1.png)
+]
+
+.pull-right[
+
+Relative to the optimal allocation, the permit system has DWL equal to the .hi-red[red area]
+
+The permit allocation is not an .hi[efficient] allocation, but is it a .hi[Pareto improvement] over:
+
+1. No policy?
+2. A uniform standard of `\(\bar{E}/2\)`?
+
+]
+
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero3-1.png)
+]
+
+.pull-right[
+
+The blue area is the DWL under the uniform standard
+
+.hi[In this specific case,] a uniform standard and the permit system have the same efficiency since the red and blue areas are equal
+
+The only difference is what kind of welfare loss is occurring where
+
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+
+
+![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero4-1.png)
+]
+
+.pull-right[
+
+The DWL without any policy is the two large green triangles
+
+These are clearly larger than the DWL under the permit system
+
+The permit system can deliver a welfare improvement
+
+]
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero2-1.png)
+]
+
+.pull-right[
+
+What if the high MAC firm was the low MD firm?
+
+i.e: what if the correlation between MAC and MD was .hi-red[negative] instead of .hi-blue[positive]?
+
+What might we expect the correlation to be?
+
+]
+
+---
+
+# Permit systems and heterogeneous MDs
+
+What is the problem with permit systems and heterogeneous MD?
+
+--
+
+We want to have firms pay a price equal to their MD
+
+--
+
+Firms have different MDs 
+--
+but there's only one common permit price
+
+--
+
+This means we can't make all firms correctly account for their externalities
+
+--
+
+One way around this is to use .hi[trading ratios]: firms in high damage areas need to procure more permits for the same amount of emissions
+
+--
+
+Another way is .hi[zonal trading]: firms can only trade in similar MD areas
+
+---
+
+# Trading ratios: Acid Rain Program
+
+Below are estimates of efficient trading ratios for the Acid Rain Program
+
+&lt;center&gt;
+&lt;img src="files/05-trading-ratios.png" width="80%" /&gt;
+&lt;/center&gt;
+
+Muller and Mendelsohn (2009)
+
+---
+
+# PM2.5 damages
+
+Trading ratios are required because damages are heterogeneous across space
+
+&lt;center&gt;
+&lt;img src="files/05-damages.png" width="60%" /&gt;
+&lt;/center&gt;
+
+Muller and Mendelsohn (2009)
+
+---
+
+# Damages caused by ARP
+
+The Acid Rain Program .hi-red[increased] damages in the eastern US
+
+&lt;center&gt;
+&lt;img src="files/05-arp4.png" width="50%" /&gt;
+&lt;/center&gt;
+
+Chan et al. (2018)
+
+---
+
+# Damages caused by ARP
+
+Chan et al. (2018) JEEM:
+
+&gt; We also compare health damages associated with observed SO2 emissions from all ARP units in 2002 with damages from a no-trade counterfactual. Damages under the ARP are `\(2.1 billion (1995\)`) higher than under the no-trade scenario, reflecting allowance transfers from units in the western US to units in the eastern US with larger exposed populations.
+
+---
+
+# Damages caused by ARP
+
+.hi-red[Redder:] trading lead to greater emissions vs no trading
+
+&lt;center&gt;
+&lt;img src="files/05-arp5.jpg" width="70%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+# Zonal trading: RECLAIM
+
+Regional Clean Air Management (RECLAIM) Program
+
+--
+
+California South Coast Air Quality Management District (SCAQMD)
+
+--
+
+Started in 1994, goal of cutting NOx and SOx  emissions by 80% by 2003
+
+--
+
+RECLAIM is a facility-level tradable permit system
+
+---
+
+# Zonal trading: RECLAIM
+
+14% of permits allocated to power generators
+
+--
+
+Permit prices driven by electricity sector
+
+--
+
+During 2000 electricity price spikes, lots of very dirty plants brought on-line to meet demand
+
+--
+
+Permit prices rose dramatically for everyone else
+
+--
+
+$4,284 per ton of NOx in 1999
+
+--
+
+$39,000 per ton of NOx in 2000
+
+---
+
+# Zonal trading: RECLAIM
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/05-reclaim1.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+
+LA Basin has two distinct zones with very different SMCE’s
+
+1. Old heavy industry (high MAC) and mountains trap NOx emissions and heat them up `\(\rightarrow\)` smog (high MD)
+
+2. Newer firms (low MAC) close to the ocean, breezes dissipate pollution before it can turn into smog (low MD)
+
+
+]
+
+---
+
+# Other permit market examples
+
+Tradble permit systems are increasingly common:
+
+1. Acid Rain Program
+2. NOx Budget Program
+3. Regional Greenhouse Gas initative
+4. California AB32
+5. EU Emission Trading System
+6. China's National Carbon Cap and Trade
+
+---
+
+# RGGI
+
+&lt;center&gt;
+&lt;img src="files/05-rggi1.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# RGGI
+
+&lt;center&gt;
+&lt;img src="files/05-rggi2.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# AB32
+
+&lt;center&gt;
+&lt;img src="files/05-ab32.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# EU-ETS
+
+&lt;center&gt;
+&lt;img src="files/05-eu-ets.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# AB32
+
+&lt;center&gt;
+&lt;img src="files/05-china.png" width="100%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+class: inverse, center, middle
+name: policy comparison
+
+# Comparison of standards, taxes, permits
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# What do we know so far
+
+So far we have seen that:
+
+1. Standards, taxes, and tradable permits can all achieve the efficient allocation
+2. Taxes and tradable permits are cost-effective .hi[no matter what]
+  - (all firms set MAC = `\(\tau\)` and MAC = p)
+  
+--
+
+This still leaves a few questions to answer:
+
+
+1. What are the equity effects?
+2. What are the output effects?
+3. What are the administrative burdens?
+4. What are the .hi[dynamic] incentives under these policies?
+
+---
+
+# The equity set up
+
+.pull-left[
+
+
+![base set up](06-slides-permits_files/figure-html/base-1.png)
+]
+
+.pull-right[
+
+Lets consider this our base set up for 1 firm
+
+The regulator can achieve `\(E^*\)` through:
+
+- an emission standard of `\(E^*\)`
+- a tax of `\(\tau\)`
+- an abatement subsidy of `\(s\)`
+- "tradable permit" cap of `\(E^*\)`
+
+]
+
+
+---
+
+# The equity set up
+
+.pull-left[
+![base set up](06-slides-permits_files/figure-html/base-1.png)
+]
+
+.pull-right[
+
+First let's look at .hi[equity]
+
+How do the costs and benefits of the policies fall on different groups?
+
+From here on we will roll the tax and permit system into 1: they are actually identical in terms of their impacts
+
+]
+
+
+
+---
+
+# The distributional outcomes
+
+.pull-left[
+![base set up](06-slides-permits_files/figure-html/base-1.png)
+]
+
+.pull-right[
+
+|            	| Tax      	| Standard 	| Subsidy 	| Ranking         	|
+|------------	|----------	|----------	|---------	|-----------------	|
+| Firm       	| -(A+B+C) 	| -A       	| B+C-A   	| Sub &gt; Std &gt; Tax 	|
+| Households 	| A+D+E    	| A+D+E    	| A+D+E   	| Indifferent     	|
+| Government 	| B+C      	| 0        	| -(B+C)  	| Tax &gt; Std &gt; Sub 	|
+| Total      	| D+E      	| D+E      	| D+E     	|                 	|
+
+The total welfare gain is the same for all policies
+
+The difference is in the .hi[distribution]
+
+The standard strikes a middle ground out of the three
+
+]
+
+---
+
+# Output effects
+
+So far we have assumed that actual firm output is not affected by abatement/emission decisions
+
+--
+
+This won't always be true in the real world
+
+--
+
+Different policies have different implications for total cost and can thus affect production
+
+--
+
+To keep things simple lets suppose the firm has constant returns to scale technology and chooses the emissions rate / emissions per unit of output: `\(E/q\)`, this means that if they cut back on emissions it raises the MC of output
+
+
+---
+
+# Output effects
+
+The policy requires the firm
+
+---
+
+# The output set up
+
+.pull-left[
+
+
+![base set up](06-slides-permits_files/figure-html/output1-1.png)
+]
+
+.pull-right[
+
+
+
+![base set up](06-slides-permits_files/figure-html/output2-1.png)
+]
+
+]
+
+---
+
+# The output results
+
+Emission tax:
+- Firm chooses `\(E^*/q^*\)`
+- Firm pays A+B+C in tax and abatement cost
+- Costs rise, output falls
+- Pollution `\((E^*/q^*)*q^*\)` falls even more since `\(q^*\)` falls
+
+---
+
+# The output results
+
+Emission standard:
+- Firm pays A in abatement cost
+- Costs rise and output falls (but not as much as under the tax!)
+- Output and $E
+
+---
+
+# The output results
+
+Abatement subsidy:
+- Reduces firm costs
+- This raises output
+- Even though `\(E/q\)` goes down, total emissions may go up because `\(q\)` will rise
+
+--
+
+Cliffnotes:
+
+- Output falls under taxes and standards
+- This raises output prices
+- Can have regressive effects through necessities like electricity or gas
+
+---
+
+# Administration
+
+These policies are not equivalent in their cost of implementation
+
+--
+
+Enforcing a technology standard is very easy: you can inspect to see if they have installed the tech or not
+
+--
+
+Emission standards, taxes, subsidies require monitoring of emissions
+
+--
+
+Monitoring systems cost money
+
+--
+
+Firms have incentives to try to cheat!
+
+---
+
+# Administration
+
+Pigouvian policies will not work as well for .hi[non-point sources] like cars or farms
+
+--
+
+With non-point sources we observe total emissions but not who emitted it
+
+--
+
+With non-point sources it often makes sense to use technology standards
+
+--
+
+Point sources like power plants are much easier to handle with Pigouvian policies like taxes
+
+
+---
+
+# Administration
+
+Technology and emission standards typically guarantee some amount of emissions reductions
+
+--
+
+Taxes and subsidies guarantee firms pay a certain price but doesn't deliver us a guaranteed quantity
+
+--
+
+This might make things more politically difficult to pass
+
+---
+
+# Administration
+
+When does C&amp;C / technology standards make sense?
+
+1. If there's a dominant technology where there's cost benefits to coordination or scale economies from production of the technology
+2. High costs of monitoring/enforcement
+3. High admin costs and little heterogeneity across firms
+
+---
+
+# Dynamic incentives
+
+
+.pull-left[
+
+
+![taxes](06-slides-permits_files/figure-html/dynamic-1.png)
+]
+
+.pull-right[
+
+What are the gains to the firm from moving to `\(MAC_2\)`?
+
+.hi[Standard:] F (abatement cost reduction)
+
+.hi[Emission Tax:] F + D (abatement cost and tax payment reduction)
+
+.hi[Abatement Subsidy:] F + D (abatement cost reduction and abatement subsidy increase)
+
+]
+
+
+---
+
+# Dynamic incentives
+
+
+.pull-left[
+![taxes](06-slides-permits_files/figure-html/dynamic-1.png)
+]
+
+.pull-right[
+
+What are the gains to the firm from moving to `\(MAC_2\)`?
+
+Taxes and subsidies give greater incentives to innovate!
+
+Once a firm meets a standard, there's no additional incentive beyond reducing abatement costs
+
+Taxes and subsidies give the firm extra benefits for further reductions
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

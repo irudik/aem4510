@@ -31,13 +31,6 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
@@ -365,7 +358,7 @@ The optimal subsidy equals MD at `\(E^*\)`
 
 You can think of this as the firm being forced to pay for damages equal to the cost of the last unit of emissions
 
-In addition to paying abatement cost equal to the red area `\(B\)`, the firm also has subsidy **revenues** equal to the blue area `\(F+G\)`
+In addition to paying abatement cost equal to the red area `\(B\)`, the firm also has subsidy **revenues** equal to the red+blue area `\(B+F\)`
 
 ]
 

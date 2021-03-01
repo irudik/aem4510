@@ -187,6 +187,75 @@ Since firms select MAC = $\tau$, as long as we set $\tau = MD$ we can achieve th
 
 # Optimal policy with multiple firms
 
+Taxes also achieve the .hi[cost-effective] outcome: achieving a given emission level at least-cost
+
+Let's see why
+
+--
+
+Suppose we want to minimize the total cost of achieving emission level $\bar{E}$ by abating across two different sources, plant 1 and plant 2
+
+--
+
+The plants have abatement cost functions: $C_1(E_1)$ and $C_2(E_2)$
+
+--
+
+Write down the regulator's problem
+
+---
+
+# Optimal policy with multiple firms
+
+$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2) \,\,\,\, \text{subject to:} \, E_1 + E_2 = \bar{E}$$
+
+Solve the constraint for $E_2 = \bar{E} - E_1$ so we have a simpler problem:
+$$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$
+
+--
+
+Take the first-order condition to find what is necessary for a cost minimum:
+$$\frac{dC_1(E_1)}{d E_1} + \frac{dC_2(\bar{E} - E_1)}{d E_1} \times (-1) = 0$$
+
+---
+
+# Optimal policy with multiple firms
+
+This gives us:
+$$\underbrace{-\frac{dC_1(E_1)}{d E_1}}_{\text{MAC}_1} = \underbrace{-\frac{dC_2(\bar{E} - E_1)}{d E_1}}_{\text{MAC}_2}$$
+
+The marginal abatement costs across the sources must be equal at the cost-effective pollution level
+
+--
+
+This is often called the .hi-blue[equimarginal principle]
+
+---
+
+# Optimal policy with multiple firms
+
+Taxes .hi[always] achieve the equimarginal principle and get us the given amount of emission reductions at least-cost
+
+--
+
+Why?
+
+--
+
+We know firms optimally select MAC equal to the emission tax
+
+--
+
+This means all firms' MACs are equal!
+
+--
+
+Even if we don't set the tax equal to MD, whatever emission reduction we get will be as cheap as possible
+
+---
+
+# Optimal policy with multiple firms
+
 .pull-left[
 ![taxes](`r knitr::fig_chunk("multi-tax", "png")`)
 ]
