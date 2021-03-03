@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 09</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="09-slides-discounting_files/header-attrs/header-attrs.js"></script>
+    <link href="09-slides-discounting_files/remark-css/default.css" rel="stylesheet" />
+    <link href="09-slides-discounting_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="09-slides-discounting_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="09-slides-discounting_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="09-slides-discounting_files/tile-view/tile-view.js"></script>
+    <link href="09-slides-discounting_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="09-slides-discounting_files/panelset/panelset.js"></script>
+    <script src="09-slides-discounting_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lecture 09
+## Discounting
+### Ivan Rudik
+### AEM 4510
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra
+## 0.1.0. Please refer to the documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. What is discounting?
+2. What determines the discount rate?
+3. What are the implications of discounting on computing the costs and benefits of policies?
+
+
+---
+
+class: inverse, center, middle
+name: tradable permits
+
+# Discounting
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+At the end of the century we will have much more hot days in some places
+&lt;center&gt;
+&lt;img src="files/09-climate-change.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+At the end of the century we will have much fewer freezing days in others
+
+&lt;center&gt;
+&lt;img src="files/09-climate-change2.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+This has massive implications for mortality
+&lt;center&gt;
+&lt;img src="files/09-climate-damage.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting
+
+Some places are expecting to have huge gains in GDP from mortality risk
+
+--
+
+Others are expecting to have huge losses
+
+--
+
+This is all happening in 60-80 years
+
+--
+
+How do we compare these costs and benefits to those incurred today?
+
+--
+
+We use a .hi[discount rate:] a value that tells us how much future dollars are worth in today's terms
+
+---
+
+# Return to Manne-Richels
+
+We ignored the idea of discounting in our discussion of the Manne-Richels model
+
+--
+
+Let `\(r\)` be the discount rate, so `\(\beta = {1 \over 1+r}\)` is the discount factor
+
+--
+
+Our new problem with discounting is then:
+
+--
+
+`$$\min_{a_1} E[TC] = \underbrace{\frac{1}{2}a_1^2}_{\text{current cost}} + \beta\left[(1-p)\times \underbrace{0}_{\text{good state cost}} + p \times \underbrace{\frac{1}{2}(1-a_1)^2}_{\text{bad state cost}}\right]$$`
+
+---
+
+# Return to Manne-Richels
+
+The first-order condition is:
+`$$\frac{d E[TC]}{da_1} = a^*_1 - \beta p(1-a^*_1) = 0$$`
+
+--
+
+This gives us that:
+`$$a^*_1 = \frac{\beta p}{1-\beta p}$$`
+
+--
+
+How does discounting affect our decisionmaking?
+
+
+---
+
+# Discounting and decisionmaking
+
+`$$a^*_1 = \frac{\beta p}{1-\beta p}$$`
+
+--
+
+First, notice as `\(\delta \rightarrow \infty\)` we have `\(\beta \rightarrow 0\)`, we put less and less weight on the future
+
+--
+
+This means we do less abatement today in period 1!
+
+--
+
+That's intuitive, let's see what discount actually looks like graphically
+
+--
+
+What is the value of a future payment of $100?
+
+---
+
+# PV of $100
+
+.pull-left[
+
+![higher discount rates mean lower value](09-slides-discounting_files/figure-html/discounting-1.png)
+]
+
+.pull-right[
+Higher discount rates place less value on future benefits
+
+Things &gt; 30 years in the future have basically no value with a 10% discount rate
+
+At a 1% discount rate we value things 100 years in the future at almost half their value today
+]
+
+---
+
+# Discounting
+
+Why does this matter?
+
+--
+
+Lots of things (like climate change) have costs or benefits that occur .hi[far] in the future
+
+--
+
+e.g. the benefits of taking action against climate change will be mostly borne by future generations, decades from now
+
+--
+
+Depending on our choice of discount rate these costs and benefits can be substantial or trivial
+
+---
+
+# Discounting
+
+1 million in damages in 200 years at a discount rate of r = 2% is worth 19,053 today
+
+--
+
+1 million in damages in 200 years at a discount rate of r = 8% is worth only 21 cents today
+
+--
+
+5 orders of magnitude difference!
+
+--
+
+This makes the choice of the discount rate one of the most important (and contentious) things about climate change policy
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

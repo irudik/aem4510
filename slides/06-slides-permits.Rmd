@@ -447,6 +447,107 @@ Let them trade the permits
 # Tradable permits: graphical
 
 .pull-left[
+```{r permits-dwl0, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2 - 2/3*x
+mac2 <- function(x) 3 - x
+dwl <- tibble(x = c(1.5, 3.5/2, 3.5/2),
+                     y = c(1, 1, 2-2/3*(3.5/2)))
+dwl2 <- tibble(x = c(3.5/2, 2, 3.5/2),
+                     y = c(1, 1, 3-3.5/2))
+ggplot() +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = 3.5/2, xend = 3.5/2, y = 0, yend = 3,
+           linetype = "longdash", size = 1.5, color = "black") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(3.5/2), labels = c(expression(bar(E)/2))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![permits](`r knitr::fig_chunk("permits-dwl0", "png")`)
+]
+
+.pull-right[
+
+We can reduce costs by increasing abatement at which firm, and decreasing abatement at which firm?
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+```{r permits-dwl1, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2 - 2/3*x
+mac2 <- function(x) 3 - x
+dwl <- tibble(x = c(1.5, 3.5/2, 3.5/2),
+                     y = c(1, 1, 2-2/3*(3.5/2)))
+dwl2 <- tibble(x = c(3.5/2, 2, 3.5/2),
+                     y = c(1, 1, 3-3.5/2))
+ggplot() +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = 3.5/2, xend = 3.5/2, y = 0, yend = 3,
+           linetype = "longdash", size = 1.5, color = "black") +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 2, xend = 2, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
+           linetype = "dotted", size = 1.5, color = "black") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5, 3.5/2,2 ), labels = c(expression(E[1]), expression(bar(E)/2), expression(E[2]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![permits](`r knitr::fig_chunk("permits-dwl1", "png")`)
+]
+
+.pull-right[
+
+We can reduce costs by increasing emissions at high MAC firm 2 and decreasing emissions at low MAC firm 1 until they are equal
+
+]
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
 ```{r permits-dwl, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 mac2 <- function(x) 3 - x
@@ -501,7 +602,6 @@ The red area is the difference in areas under MAC2 and MAC1 over the range of em
 
 ]
 
-
 ---
 
 # Tradable permits: graphical
@@ -542,7 +642,7 @@ ggplot() +
   labs(x = "Emissions",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(3.5/2), labels = c(expression(bar(E)/2))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2 - 2/3*3.5/2, 1, 3 - 3.5/2), labels = c("5/6", "1", "5/4"))
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2 - 2/3*3.5/2, 1, 3 - 3.5/2), labels = c(".83", "1", "1.25"))
 
 ```
 ![permits](`r knitr::fig_chunk("permits-reallo", "png")`)
@@ -551,10 +651,6 @@ ggplot() +
 .pull-right[
 
 We want to equalize MACs for cost-effectiveness, but does the permit market cause this to happen?
-
-Firm 2 is willing to pay a price up to the blue point (5/4) to be able to emit 1 more unit
-
-Firm 1 can abate 1 more unit at cost equal to the red point (5/6)
 
 ]
 
@@ -569,11 +665,49 @@ Firm 1 can abate 1 more unit at cost equal to the red point (5/6)
 
 .pull-right[
 
-Firm 2 can buy the right to emit 1 unit of pollution from firm 1 for anywhere between 5/6 - 5/4 and .hi[both will be better off]
+We want to equalize MACs for cost-effectiveness, but does the permit market cause this to happen?
+
+Firm 2 is willing to pay a price up to the blue point (1.25) to be able to emit 1 more unit
+
+Firm 1 can abate 1 more unit at cost equal to the red point (0.83)
+
+]
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+![permits](`r knitr::fig_chunk("permits-reallo", "png")`)
+]
+
+.pull-right[
+
+Firm 2 can buy the right to emit 1 unit of pollution from firm 1 for anywhere between 1.25-0.83=.42 and .hi[both will be better off]
 
 These trades can be done until the MACs are equal at a value of 1
 
 This would be the prevailing permit price in a tradable permit system
+
+]
+
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+![permits](`r knitr::fig_chunk("permits-reallo", "png")`)
+]
+
+.pull-right[
+
+An alternative way to think about it:
+
+the prevailing permit price is the MC of freeing up one more unit, the MAC of the selling firm
+
+or it is the MB of freeing up one more unit (avoided MAC), the MAC of the buying firm
 
 ]
 
@@ -593,7 +727,7 @@ Firms are price-takers
 
 --
 
-First lets set up the firm problem: they want to minimize the cost of satisfying the policy
+Let's set up the firm problem: they want to minimize the cost of satisfying the policy
 
 ---
 
@@ -617,20 +751,39 @@ This makes sense!
 
 --
 
-The permit price is the MC of emitting, the MAC is the marginal benefit of emitting (reduced abatement cost)
+The permit price is the MC of emitting, the MAC is the MB of emitting (reduced abatement cost)
+
+--
+
+Alternatively: the permit price is the MB of abating, the MAC is the MC of abating
 
 --
 
 Costs are minimized when these two things are equal
 
---
 
-What else does this do?
+---
+
+# Tradable permits: cost-effectiveness
+
+What else does firm behavior tell us about permits?
 
 --
 
 If firms all set their MACs equal to $p$ then all their MACs are equal to one another, .hi[we have cost-effectiveness:]
 $$-C_1'(E^*_1) = -C_2'(E^*_2) = \dots = -C_N'(E^*_N) = p$$
+
+--
+
+Taxes and permits both achieve cost-effectiveness
+
+--
+
+Why?
+
+--
+
+Because firms treat permit prices and a tax identically in decisionmaking
 
 
 ---
@@ -654,14 +807,11 @@ For efficiency, we also need MAC = MD
 
 --
 
-To keep things simple suppose MD is constant: $MD = d$<sup>1</sup>
-.footnote[
-<sup>1</sup> Everything still works if it isn't, but constant MD allows us to work through the intuition without worrying about adding up everyone's emissions.
-]
+To keep things simple suppose MD is constant and the same across all firms: $MD = d$
 
 --
 
-If we set $\bar{E}$ such that $p = d$, then we also have efficiency
+If we set $\bar{E}$ such that the equilibrium permit price $p = d$, then we also have efficiency
 
 
 --
@@ -739,11 +889,11 @@ Let's think about a setting with two firms: 1 and 2
 
 --
 
-The firms have different MACs: $C_1(E) > C_2(E)$ for all $E$
+The firms have different MACs: $MAC_1 < MAC_2$ for all $E$
 
 --
 
-And the firms have different marginal damages as well: $MD_1 > MD_2$ for all $E$
+And the firms have different marginal damages as well: $MD_1 < MD_2$ for all $E$
 
 --
 
@@ -1263,7 +1413,7 @@ knitr::include_graphics("files/05-reclaim1.png")
 
 .pull-right[
 
-LA Basin has two distinct zones with very different SMCE’s
+LA Basin has two distinct zones with very different MD’s
 
 1. Old heavy industry (high MAC) and mountains trap NOx emissions and heat them up $\rightarrow$ smog (high MD)
 
@@ -1503,22 +1653,20 @@ The policy requires the firm
 .pull-left[
 ```{r output1, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
-md <- function(x) x - 0.5
+md <- function(x) 1
 
 ggplot() +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
-  annotate("text", x = 2.5, y = 2.5, label = "MD", size = 8) +
+  annotate("text", x = 2.75, y = .85, label = "MD", size = 8) +
   annotate("text", x = 2.15, y = .25, label = "A", size = 10, color = "black") +
   annotate("text", x = .5, y = .5, label = "B", size = 10, color = "black") +
-  annotate("text", x = 1, y = .25, label = "C", size = 10, color = "black") +
-  annotate("text", x = 2.65, y = 1.5, label = "D", size = 10, color = "black") +
-  annotate("text", x = 2.15, y = .75, label = "E", size = 10, color = "black") +
+  annotate("text", x = 2.15, y = .75, label = "C", size = 10, color = "black") +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
            linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 0, xend = 3, y = .99, yend = .99,
-           linetype = "dashed", size = 1.5, color = "#000000") +
+  annotate("segment", x = 3, xend = 3, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -1531,7 +1679,7 @@ ggplot() +
     plot.background = element_rect(fill = "#eeeeee",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions/Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1.5,3), labels = c(expression(E^'*'/q^'*'), expression(E[0]/q[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
@@ -1589,27 +1737,29 @@ ggplot() +
 
 Emission tax:
 - Firm chooses $E^*/q^*$
-- Firm pays A+B+C in tax and abatement cost
-- Costs rise, output falls
-- Pollution $(E^*/q^*)*q^*$ falls even more since $q^*$ falls
+- Firm pays A+B in tax and abatement cost .hi[per unit of output]
+- This raises the MC of production by A+B to MC<sup>*</sup>
+- Output $q^*$ falls
+- Pollution $(E^*/q^*)*q^*$ falls even more since the tax lowers the optimal $E^*/q^*$, and increased MC lowers $q^*$
 
 ---
 
 # The output results
 
 Emission standard:
-- Firm pays A in abatement cost
-- Costs rise and output falls (but not as much as under the tax!)
-- Output and $E
+- Firm pays B in abatement cost per unit of output
+- This raises the MC of production by B
+- Output and $(E^*/q^*)*q^*$ fall, but not by as much as under the tax
 
 ---
 
 # The output results
 
 Abatement subsidy:
-- Reduces firm costs
-- This raises output
-- Even though $E/q$ goes down, total emissions may go up because $q$ will rise
+- Reduces firm costs per unit of output by C
+- This reduces the MC of production by C
+- This .hi[raises] output
+- Even though $E/q$ goes down because the subsidy induces a lower emission intensity, total emissions may go up because $q$ will rise
 
 --
 

@@ -53,8 +53,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
-## documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra
+## 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -617,6 +617,172 @@ Taxes impose a constant incentive on the firm, closer representation of the MD
 
 
 ]
+
+---
+
+# Dynamic uncertainty
+
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/08-tax.png" width="100%" /&gt;
+Optimal carbon tax = MD
+&lt;/center&gt;
+]
+
+.pull-right[
+Current MD may be zero, but future MD could be very high
+
+
+e.g. greenhouse gases
+
+
+1 ton emitted today is not as costly as 1 ton emitted tomorrow for a lot of reasons
+
+]
+
+
+---
+
+# The Manne-Richel model
+
+Two periods (current and future)
+
+--
+
+Two possible states of nature in the future (“good” with probability (1-p) and “bad” with probability p)
+
+--
+
+The bad state is the climate is .hi[very] sensitive to greenhouse gases, good state is the climate is not very sensitive (climate change is fake news!)
+
+--
+
+Each state requires different abatement to avoid climate catastrophe
+
+| State 	| Probability 	| Cumulative Abatement Required 	|
+|-------	|:-------------:	|:-------------------------------:	|
+| Good  	| 1-p         	| 0                             	|
+| Bad   	| p           	| 1                             	|
+
+---
+
+# The Manne-Richel model
+
+Greenhouse gases are stock pollutants
+
+--
+
+Since greenhouse gases are very long-lived, abatement activity is cumulative (i.e. doing abatement activity today is as good as doing abatement activity in the future)
+
+--
+
+a&lt;sub&gt;1&lt;/sub&gt;: current abatement  
+
+a&lt;sub&gt;2&lt;/sub&gt;: future abatement  
+
+a&lt;sub&gt;1&lt;/sub&gt;+a&lt;sub&gt;2&lt;/sub&gt;: aggregate abatement
+
+---
+
+# The Manne-Richel model
+
+If we do a&lt;sub&gt;1&lt;/sub&gt; units of abatement today in the future we need to do:
+
+--
+
+1 - a&lt;sub&gt;1&lt;/sub&gt; units with probability p (bad state)
+
+--
+
+0 with probability 1-p (good state)
+
+--
+
+Suppose abatement cost is given by: `\(C(a) = 0.5 a^2\)`
+
+--
+
+What is the regulator's problem?
+
+---
+
+# The Manne-Richel model
+
+`$$\min_{a_1} E[TC] = \underbrace{\frac{1}{2}a_1^2}_{\text{current cost}} + (1-p)\times \underbrace{0}_{\text{good state cost}} + p \times \underbrace{\frac{1}{2}(1-a_1)^2}_{\text{bad state cost}}$$`
+
+--
+
+The first-order condition is:
+`$$\frac{d E[TC]}{da_1} = a^*_1 - p(1-a^*_1) = 0$$`
+
+--
+
+This gives us that:
+`$$a^*_1 = \frac{p}{1-p}$$`
+
+---
+
+# The Manne-Richel model
+
+`$$a^*_1 = \frac{p}{1-p}$$`
+
+If there is any chance of a bad state (p &gt; 0), it is optimal to do *some* abatement today
+
+--
+
+If a bad state is guaranteed (p = 1), we want `\(a^*_1 = 1/2, a^*_2 = 1/2\)`
+
+--
+
+You can think about this as basically buying insurance
+
+---
+
+# The Manne-Richel model
+
+It makes sense to do some abatement today, even if we are not sure there will be bad climate change, because the MAC is cheap for the first few units
+
+--
+
+In marginal terms: we want to equate the MAC today with the *expected* MAC in the future so that on average, we can't reallocate abatement and be better off
+
+--
+
+`$$a^*_1 = p(1-a^*_1)$$`
+
+--
+
+Now, what are some complications of this simple model?
+
+---
+
+# The Manne-Richel model
+
+Abatement tech can improve: 
+
+- future MAC different than current MAC
+- future MAC might depend on current abatement (learning by doing)
+
+
+---
+
+# The Manne-Richel model
+
+Discounting: how should we weigh future costs and benefits?
+
+- Does this matter whether the future is the same generation or unborn generations?
+- Does it matter how wealthy we think people are?
+
+---
+
+# The Manne-Richel model
+
+Alternative decision frameworks:
+
+- We just minimized expected total cost
+- We could instead do .hi[minimax regret:] minimize the cost of the worst-case outcome
+- We could use the .hi[precautionary principle:] use whatever is necessary to avoid irreversible damage
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
