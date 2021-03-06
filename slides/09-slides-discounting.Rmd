@@ -1,6 +1,6 @@
 ---
 title: "Lecture 09"
-subtitle: "Discounting"
+subtitle: "Discounting and Cost Benefit Analysis"
 author: Ivan Rudik
 date: AEM 4510
 output:
@@ -154,7 +154,7 @@ $$a^*_1 = \frac{\beta p}{1-\beta p}$$
 
 --
 
-First, notice as $\delta \rightarrow \infty$ we have $\beta \rightarrow 0$, we put less and less weight on the future
+First, notice as $r \rightarrow \infty$ we have $\beta = {1 \over 1 + r} \rightarrow 0$, we put less and less weight on the future
 
 --
 
