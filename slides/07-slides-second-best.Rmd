@@ -42,8 +42,7 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 # Roadmap
 
 1. What happens when we have another distortion like market power?
-2. What happens when we introduce other issues like fixed costs?
-3. How do second-best policies like intensity standards work?
+3. How do second-best policies like output taxes or intensity standards work?
 
 
 ---
@@ -123,6 +122,82 @@ ggplot() +
 
 The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
 
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+]
+
+.pull-right[
+
+The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+]
+
+.pull-right[
+
+The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+Avoided damages: B+C
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+]
+
+.pull-right[
+
+The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+Avoided damages: B+C
+
+Tax revenue: A
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+]
+
+.pull-right[
+
+The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+
 Loss in CS: -(A+B)
 
 Avoided damages: B+C
@@ -132,7 +207,6 @@ Tax revenue: A
 .hi-blue[Net gain: -(A+B) + (B+C) + A = C]
 
 ]
-
 
 ---
 
@@ -386,9 +460,26 @@ We now have two distortions:
 1. Market power
 2. Pollution externality
 
-With market power, the unregulated equilibrium quantity is .hi[too low]
+]
 
-With a pollution externality, the unregulated equilibrium quantity is .hi[too high]
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](`r knitr::fig_chunk("monopoly3", "png")`)
+]
+
+.pull-right[
+
+We now have two distortions:
+
+1. Market power
+2. Pollution externality
+
+With market power, the unregulated equilibrium quantity is .hi[too low]
 
 ]
 
@@ -404,7 +495,45 @@ With a pollution externality, the unregulated equilibrium quantity is .hi[too hi
 
 .pull-right[
 
-They have opposing forces on quantities, so the market failures offset each other to some degree
+We now have two distortions:
+
+1. Market power
+2. Pollution externality
+
+With market power, the unregulated equilibrium quantity is .hi[too low]
+
+With a pollution externality, the unregulated equilibrium quantity is .hi[too high]
+
+]
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](`r knitr::fig_chunk("monopoly3", "png")`)
+]
+
+.pull-right[
+
+They have opposing forces on quantities, so the market failures offset each other (partially)
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](`r knitr::fig_chunk("monopoly3", "png")`)
+]
+
+.pull-right[
+
+They have opposing forces on quantities, so the market failures offset each other (partially)
 
 This means that if we fully correct the pollution externality, we no longer get the off-setting benefit and have the full welfare cost of market power
 
@@ -417,6 +546,76 @@ This means that if we fully correct the pollution externality, we no longer get 
 
 .pull-left[
 ```{r monopoly4, echo = FALSE, fig.show = 'hide', warning = F}
+mc1 <- function(x) 1
+mc2 <- function(x) 1.5
+s <- function(x) .5
+d <- function(x) 2.5 - x
+mr <- function(x) 2.5 - 2*x
+dwl <- tibble(x = c(1, .75, .75),
+                     y = c(1.5, 1.5, 2.5-.75))
+dwl2 <- tibble(x = c(.5, .5, .75, .75),
+                     y = c(2.5-.5, 1.5, 1.5, 2.5-.75))
+
+ggplot() +
+  geom_polygon(data = dwl, aes(x = x, y = y), fill = "red", alpha = 0.5) +
+  geom_polygon(data = dwl2, aes(x = x, y = y), fill = "blue", alpha = 0.5) +
+  annotate("text", x = .5, y = 2.5, label = "Demand", size = 8) +
+  annotate("text", x = 1.35, y = .2, label = "MR", size = 8) +
+  annotate("text", x = 2.5, y = 1.6, label = "SMC", size = 8) +
+  annotate("text", x = 2.5, y = 1.1, label = "MC", size = 8) +
+  stat_function(fun = mc2, color = "#000000", size = 1.5) +
+  stat_function(fun = mc1, color = "#ca5670", size = 1.5) +
+  stat_function(fun = d, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mr, color = "darkslateblue", size = 1.5) +
+  annotate("segment", x = 1.5/2, xend = 1.5/2, y = 0, yend = 2.5-1.5/2,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 1.5/2, y = 2.5-1.5/2, yend = 2.5-1.5/2,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 1/2, y = 2.5-1/2, yend = 2.5-1/2,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 1/2, xend = 1/2, y = 0, yend = 2.5-1/2,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 1, xend = 1, y = 0, yend = 1.5,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("text", x = 0.5, y = 1.25, label = "A", size = 8, color = "black") +
+  # annotate("text", x = 1.15, y = 1.15, label = "B", size = 8, color = "black") +
+  # annotate("text", x = 1.35, y = 1.35, label = "C", size = 8, color = "black") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee",colour = NA),
+    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(.5, 1, 1.5/2), labels = c(expression(q^tau), expression(q^'*'), expression(q^m))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
+
+```
+![monopoly](`r knitr::fig_chunk("monopoly4", "png")`)
+]
+
+.pull-right[
+
+What is the actual optimal thing to do here?
+
+]
+
+
+---
+
+# Monopoly
+
+
+
+.pull-left[
+```{r monopoly5, echo = FALSE, fig.show = 'hide', warning = F}
 mc1 <- function(x) 1
 mc2 <- function(x) 1.5
 s <- function(x) .5
@@ -471,7 +670,25 @@ ggplot() +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
 
 ```
-![monopoly](`r knitr::fig_chunk("monopoly4", "png")`)
+![monopoly](`r knitr::fig_chunk("monopoly5", "png")`)
+]
+
+.pull-right[
+
+What is the actual optimal thing to do here?
+
+.hi[subsidize output] at rate $s$ so $MC - s$ crosses $MR$ at $q^*$
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](`r knitr::fig_chunk("monopoly5", "png")`)
 ]
 
 .pull-right[
@@ -484,6 +701,7 @@ In this example, the market power externality dominates the pollution externalit
 
 ]
 
+
 ---
 
 # Monopoly
@@ -492,11 +710,11 @@ What did we learn?
 
 --
 
-With multiple market failures we don't necessarily want to fully correct for a single market failure
+With multiple market failures we don't necessarily want to .hi[fully] correct for a single market failure
 
 --
 
-In this example we actually wanted to do the opposite of what you likely thought
+In this example we actually wanted to do the .hi-red[opposite] of what you likely thought
 
 --
 
@@ -674,12 +892,12 @@ What does an output tax $\tau_o$ do versus a regular emission tax $\tau_e$?
 # Output taxes, part two
 
 The regulator's problem is:
-$$\max_{L,E} (p-\tau)L^\alpha E^{1-\alpha} - wL - rE - dE$$
+$$\max_{L,E} p\,L^\alpha E^{1-\alpha} - wL - rE - dE$$
 
 --
 
 The first-order conditions for a socially efficient allocation of $L$ and $E$ are:
-$$\alpha p L^{\alpha-1} E^{1-\alpha} = w \qquad (1-\alpha) p L^{\alpha} E^{-\alpha} = r + d$$
+$$\underbrace{\alpha p L^{\alpha-1} E^{1-\alpha}}_{\text{MR}} = \underbrace{w}_{\text{MC}} \qquad \underbrace{(1-\alpha) p L^{\alpha} E^{-\alpha}}_{\text{MR}} = \underbrace{r + d}_{\text{MC}}$$
 
 --
 
@@ -691,7 +909,7 @@ The for a social optimum we want to equate the MR (left hand side) with the SMC 
 # Output taxes, part two
 
 The firm's problem for the output tax is:
-$$\max_{L,E} (p-\tau)L^\alpha E^{1-\alpha} - wL - rE$$
+$$\max_{L,E} (p-\tau_o)L^\alpha E^{1-\alpha} - wL - rE$$
 
 --
 
@@ -704,7 +922,7 @@ The firm equates the MR and MC of each input
 
 --
 
-The output tax penalizes the use of clean labor despite it not causing any externalities: $\tau_o L^{\alpha-1} E^{1-\alpha}$, this is .hi-red[not efficient]
+The output tax penalizes the use of clean labor despite it not causing any externalities at a marginal rate of: $\tau_o L^{\alpha-1} E^{1-\alpha}$, this is .hi-red[not efficient]
 
 ---
 
@@ -844,10 +1062,6 @@ The regulation pushed flaring rates down
 knitr::include_graphics("files/06-flaring3.png")
 ```
 </center>
-
----
-
-# Intensity standards: Flaring
 
 ---
 
