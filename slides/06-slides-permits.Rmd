@@ -1747,8 +1747,8 @@ Emission tax:
 # The output results
 
 Emission standard:
-- Firm pays B in abatement cost per unit of output
-- This raises the MC of production by B
+- Firm pays A in abatement cost per unit of output
+- This raises the MC of production by A
 - Output and $(E^*/q^*)*q^*$ fall, but not by as much as under the tax
 
 ---
@@ -1885,7 +1885,24 @@ ggplot() +
 
 .pull-right[
 
-What are the gains to the firm from moving to $MAC_2$?
+What are the gains to the firm from moving from $MAC_1$ to $MAC_2$?
+
+
+]
+
+
+---
+
+# Dynamic incentives
+
+
+.pull-left[
+![taxes](`r knitr::fig_chunk("dynamic", "png")`)
+]
+
+.pull-right[
+
+What are the gains to the firm from moving from $MAC_1$  to $MAC_2$?
 
 .hi[Standard:] F (abatement cost reduction)
 
@@ -1894,7 +1911,6 @@ What are the gains to the firm from moving to $MAC_2$?
 .hi[Abatement Subsidy:] F + D (abatement cost reduction and abatement subsidy increase)
 
 ]
-
 
 ---
 
