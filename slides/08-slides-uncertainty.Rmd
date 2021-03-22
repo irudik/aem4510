@@ -1212,13 +1212,13 @@ $$\frac{d E[TC]}{da_1} = a^*_1 - p(1-a^*_1) = 0$$
 --
 
 This gives us that:
-$$a^*_1 = \frac{p}{1-p}$$
+$$a^*_1 = \frac{p}{1+p}$$
 
 ---
 
 # The Manne-Richel model
 
-$$a^*_1 = \frac{p}{1-p}$$
+$$a^*_1 = \frac{p}{1+p}$$
 
 If there is any chance of a bad state (p > 0), it is optimal to do *some* abatement today
 
