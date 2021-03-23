@@ -139,7 +139,7 @@ $$\frac{d E[TC]}{da_1} = a^*_1 - \beta p(1-a^*_1) = 0$$
 --
 
 This gives us that:
-$$a^*_1 = \frac{\beta p}{1-\beta p}$$
+$$a^*_1 = \frac{\beta p}{1+\beta p}$$
 
 --
 
@@ -150,7 +150,7 @@ How does discounting affect our decisionmaking?
 
 # Discounting and decisionmaking
 
-$$a^*_1 = \frac{\beta p}{1-\beta p}$$
+$$a^*_1 = \frac{\beta p}{1+\beta p}$$
 
 --
 
@@ -252,3 +252,237 @@ Depending on our choice of discount rate these costs and benefits can be substan
 --
 
 This makes the choice of the discount rate one of the most important (and contentious) things about climate change policy
+
+---
+
+# Discounting: how do we choose?
+
+How do we choose the discount rate?
+
+--
+
+.hi[Option 1:] take the market rate
+
+--
+
+This is just the real interest paid on certain investments
+
+--
+
+In a perfect market equilibrium, it is the productivity of capital
+
+--
+
+Why might this not be the rate we want to choose as a regulator?
+
+
+---
+
+# Discounting: how do we choose?
+
+Issues with market rates:
+
+--
+
+Market rates don't reflect externalities
+
+--
+
+Super-responsibility of government: the government represents future generations as well as current generations (only current ones are represented in the market)
+
+--
+
+Dual-role of individuals: in political roles, people are more concerned about future generations than in their day-to-day behavior which determines the market rate
+
+---
+
+# Discounting: how do we choose?
+
+.hi[Option 2:] social discounting
+
+--
+
+With social discounting with determine the discount rate from economic and ethical considerations
+
+--
+
+Why should we discount the future?
+
+--
+
+Time: people are impatient
+
+--
+
+Growth: if someone is richer in 10 years, a dollar is worth more to them today than in 10 years in utility terms
+
+
+---
+
+# Ramsey Discounting
+
+With a decent amount of math we can show that the discount rate $r$ is composed of three terms:
+$$r = \delta + \eta \times g$$
+
+$\delta$ is called the .hi[pure rate of time preference] or .hi[utility discount rate]: how much do we value future *utility*
+
+$\eta$ is the .hi[elasticity of marginal utility]: how quickly does marginal utility decline in consumption?
+
+$g$ is the .hi[growth rate]: how fast does consumption grow over time?
+
+---
+
+# Ramsey Discounting
+
+Here's some alternative descriptions of how to think about these terms:
+
+$\delta$: how much is 1 util tomorrow worth today?
+
+$\eta$: how much do we value poorer vs richer times/generations? Bigger $\eta$ $\rightarrow$ more averse to inequality over time
+- $\eta = - {U''(X)X \over U'(X)}$, how many percent does MU change if consumption changes by 1%
+
+$g$: how rich will we / future generations be compared to today?
+
+---
+
+# Ramsey Discounting
+
+$$r = \delta + \eta \times g$$
+
+What this means is that if we have values for $r$, $\eta$, and $g$, we can compute the correct discount rate
+
+--
+
+How do we get values for these terms?
+
+--
+
+Two common approaches: descriptive and prescriptive
+
+
+---
+
+# Ramsey Discounting: the descriptive approach
+
+The descriptive approach aims to calibrate the discount rate to the real world
+
+--
+
+We can observe $g$ in the data / forecasts
+
+--
+
+We can sometimes estimate $\eta$ from observed behavior over time
+
+--
+
+Once we pick a $\delta$ we have our discount rate $r$
+
+--
+
+The descriptive approach generally chooses $\delta$ so $r$ matches market rates
+
+---
+
+# Ramsey Discounting: the prescriptive approach
+
+First we decide on the 'correct' level of $\delta$ and $\eta$
+
+--
+
+Then we observe $g$ in the data / forecasts
+
+--
+
+That gives us $r$
+
+---
+
+# What's the utility discount rate?
+
+Both approaches depend on us choosing $\delta$
+
+--
+
+What is the right value for $\delta$?
+
+--
+
+Ramsey (1928): placing different weights upon the utility of different generations, as ‘ethically indefensible'
+
+Harrod (1948): discounting utility represented a 'polite expression for rapacity and the conquest of reason by passion'
+
+--
+
+The above arguments are ethical arguments, so are typically used by those favoring the prescriptive approach
+
+
+---
+
+# What's the discount rate? Descriptive
+
+The descriptive approach often results in $\delta$ being between 2-3% from reverse engineering the observed market rates
+
+--
+
+$\eta$ is then often engineered to be between 1 and 4
+
+--
+
+$g$ is observed and generally between 1 and 3%
+
+--
+
+Thus the discount rate usually lies between 2 and 7%
+
+--
+
+Quick example: $\delta = 2\%, \eta = 2, g = 2\% \rightarrow r = 6\%$
+
+---
+
+# What's the discount rate? Prescriptive
+
+The prescriptive approach often results in $\delta$ being zero or nearly zero for the ethical reasons described above
+
+---
+
+# What's the discount rate? Prescriptive
+
+Choosing $\eta$ also conveys ethical choices: how do we weigh the distribution of consumption across generations
+
+Recall: $r = \delta + \eta g$
+
+- $\eta = 0$: consumption in the future doesn't change our willingness to save/invest today (r is independent of g)
+
+--
+
+- $\eta$ is large: if there is positive growth, we are .hi[less] likely to invest in the future (future generations will be rich anyway)
+
+--
+
+- $\eta$ is large: if there is negative growth, we are .hi[more] likely to invest in the future (future generations will be poorer than today)
+
+---
+
+# Distributive justice
+
+Rawl's theory of justice applied here would set $\delta = 0$ and $\eta = \infty$: fairness for all
+
+--
+
+More egalitarian perspectives with respect to:
+
+- .hi[time] yields a smaller $\delta$ and $r$
+- .hi[intergenerational inequality] yields a larger $\theta$ and larger $r$ if growth is positive
+
+
+---
+
+# What do the experts think? Weitzman (2001)
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/09-discount-rate-survey.png")
+```
+</center>
