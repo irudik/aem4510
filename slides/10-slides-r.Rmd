@@ -153,6 +153,59 @@ name: r
 
 ---
 
+# What is R?
+
+What is R?
+
+> R is a language and environment for statistical computing and graphics.
+
+What is RStudio?
+
+> RStudio is an integrated development environment (IDE) for R, a programming language for statistical computing and graphics.
+
+--
+
+Basically: R is the coding language, RStudio is the graphical interface
+
+
+---
+
+# Why are we using R?
+
+1. R is free
+
+--
+
+2. R is relatively easy to learn (especially with `tidyverse` which we will be using)
+
+--
+
+3. R is widely used for statistical analysis and data science in business, economics, natural sciences
+
+--
+
+4. R has a large online community for help (e.g. StackOverflow), and lots and lots of packages that help you do your analysis smoothly
+
+---
+
+# Let's see what we can do in R
+
+Next let's see how to use R
+
+--
+
+First we will start with the basics
+
+--
+
+Then we will start doing more complicated exercises that are important for doing data analysis and economics work
+
+--
+
+Please follow along in RStudio/RStudio Cloud
+
+---
+
 # Arithmetic operations
 
 R can do all the standard arithmetic operations
@@ -188,6 +241,7 @@ is.na(1:10)
 !is.na(1:10)
 ```
 
+`NA` means .hi[not available] (i.e. missing)
 ---
 
 # Logical operators
@@ -201,19 +255,6 @@ To see whether an object is contained within (i.e. matches one of) a list of ite
 ```
 
 This is kind of like an `any` command in other languages
-
----
-
-# Logical operators
-
-Turns out there's no %notin%, but we can make one using `Negate`
-
---
-
-```{r}
-`%notin%` <- Negate(`%in%`) ## The backticks (`) help to specify functions.
-4 %notin% 5:10
-```
 
 ---
 
@@ -232,10 +273,10 @@ To evaluate whether two expressions are equal, we need to use .hi-red[two] equal
 
 # Assignment
 
-In R, we can use either `=` or `<-` to handle assignment.<sup>1</sup>
+In R, we can use either `=` or `<-` to handle assignment<sup>1</sup>
 
 .footnote[
-<sup>1</sup> The `<-` is really a `<` followed by a `-`. It just looks like an arrow because of the font on the slides.
+<sup>1</sup> The `<-` is really a `<` followed by a `-`. It just looks like an arrow because of the font on the slides
 ]
 
 --
@@ -278,19 +319,13 @@ b
 
 Most R folks prefer `<-` for assignment
 
-.footnote[In RStudio you can assign `<-` to a hotkey to make using it as easy as `=`]
-
---
-
-`=` has a specific role for evaluation *within* functions, we don't want to mix them up
-
 --
 
 It doesn't really matter though, other languages use `=` for both 
 
 --
 
-Use whatever you prefer, just be consistent
+.hi[Use whatever you prefer, just be consistent]
 
 ---
 
@@ -328,7 +363,7 @@ In R:
 
 # What are objects? 
 
-We won't go into OOP details but here are some objects that we'll be working with regularly:
+We won't go into object details but here are some objects that we'll be working with regularly:
 - vectors
 - matrices
 - data frames
@@ -339,10 +374,6 @@ We won't go into OOP details but here are some objects that we'll be working wit
 --
 
 A lot of these are probably familiar if you have coding experience
-
---
-
-But there are always language-specific features/subtleties
 
 ---
 
@@ -356,94 +387,45 @@ df
 
 --
 
-Now, let's try to run a regression<sup>1</sup> on these "x" and "y" variables:
-
-.footnote[
-<sup>1</sup> Yes, this is a dumb regression with perfectly co-linear variables. Just go with it. 
-]
-
----
-
-# Global environment
-
-```{r, eval = F, error = T}
-lm(y ~ x) ## The "lm" stands for linear model(s)
-```
-
----
-
-# Global environment
-
-```{r, error=T}
-lm(y ~ x) ## The "lm" stands for linear model(s)
-```
+This is essentially just a table with columns named `x` and `y`
 
 --
 
-Error?
-
----
-
-# Global environment
-
-The error message is
-
-```
-*## Error in eval(predvars, data, env): object 'y' not found
-```
-
---
-
-R can't find the variables that we've supplied in our [Global Environment](https://www.datamentor.io/r-programming/environment-scope/)
-
---
-
-Can you find x or y in the RStudio panel?
-
----
-
-# Global environment
-
-We have to tell R `x` and `y` are a part of the object `df`
-
-
---
-
-How?
-
---
-
-There are a various ways to solve this problem. One is to simply specify the datasource:
-
-```{r}
-lm(y ~ x, data = df) ## Works when we add "data = df"!
-```
-
----
-
-# Global environment: why it matters
-
-This matters largely for Stata users
-
---
-
-In Stata, the workspace is basically just a single data frame $\Rightarrow$ all variables are in the global environment
-
---
-
-Big problem with this is you can't have multiple data frames / datasets in memory
-
+Each row is an observation telling us the values of both `x` and `y`
 
 ---
 
 # Working with multiple objects
 
-We can create a second data frame in memory!
+In R we can have multiple data frames in memory at once
 
 ```{r df2}
 df2 <- data.frame(x = rnorm(10), y = runif(10))
 df
 df2
+```
+
+
+---
+
+# Built in dataframes
+
+R (and its packages) also has a bunch of built in dataframes with special names that you can call upon any time, we will be using these for examples
+
+```{r}
+mtcars
+```
+
+---
+
+# Built in dataframes
+
+R (and its packages)  also has a bunch of built in dataframes with special names that you can call upon any time, we will be using these for examples
+
+This one is in the `dplyr` package that we will load later
+
+```{r}
+starwars
 ```
 
 ---
@@ -740,11 +722,7 @@ b <- "world"
 rm(a, b)
 ```
 
-You can also use `rm(list = ls())` to remove all objects in your working environment (except packages), but this is [frowned upon](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)
-
---
-
-Just start a new R session instead
+You can also use `rm(list = ls())` to remove all objects in your working environment (except packages), or just start a new R session instead
 
 ---
 
@@ -755,6 +733,15 @@ name: tidyverse
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
+---
+
+# What is "tidy" data?
+
+What we are going to learn is how to use a set of packages called the .hi[tidyverse]
+
+--
+
+These sets of packages make working with data .hi-blue[extremely easy] and .hi-blue[intuitive]
 
 ---
 
@@ -872,7 +859,7 @@ They are thus the ones that you will likely make the most use of
 
 --
 
-Data cleaning and wrangling occupies an inordinate amount of time, no matter where you are in your research career
+Data cleaning and wrangling is important and knowing how to do it well is a good skill for any data-oriented job
 
 ---
 
@@ -882,7 +869,77 @@ The pipe operator `%>%` lets us perform a sequence of operations in a very nice 
 
 --
 
-Suppose we wanted to figure out the average highway miles per gallon of Audi's in the `mpg` dataset:
+Let's consider a fake example to get the idea for why its really beneficial
+
+---
+
+# Pipes: %>%
+
+Let's say we wanted to apply a sequence of operations that tells the computer what you did throughout your day:
+
+1. Wake up
+2. Get out of bed
+3. Comb hair
+4. Go downstairs
+5. Drink a cup
+6. Grab hat
+7. Catch bus
+
+---
+
+# Pipes: %>%
+
+If you were to code this up in a traditional way it might look one of two ways:
+
+A bunch of lines doing all the different steps
+```{r, eval = F}
+me <- wake_up(me)
+me <- get_out_of_bed(me)
+me <- comb_hair(me)
+me <- go(me, "downstairs")
+me <- drink(me, "cup")
+me <- grab(me, "hat")
+me <- catch(me, "bus")
+```
+
+---
+
+# Pipes: %>%
+
+If you were to code this up in a traditional way it might look one of two ways:
+
+Or if you're a little crazy then do it all in one line
+```{r, eval = F}
+me <- catch(grab(drink(go(comb_hair(get_out_of_bed(wake_up(me))), where = "downstairs"), what = "cup"), what = "hat"), what = "bus")
+```
+
+These are kind of tedious or messy and out of the order you'd think
+
+---
+
+# Pipes: %>%
+
+With pipes we can do everything at once, but have it be .hi[in order]:
+
+```{r, eval = F}
+me <- me %>%
+  wake_up() %>%
+  get_out_of_bed() %>% 
+  comb_hair() %>% 
+  go("downstairs") %>%
+  drink("cup") %>% 
+  grab("hat") %>% 
+  catch("bus")
+```
+
+This makes everything .hi[very intuitive] to read and code!
+
+
+---
+
+# Pipes: %>%
+
+Here's a real example: suppose we wanted to figure out the average highway miles per gallon of Audi's in the `mpg` dataset:
 ```{r}
 mpg
 ```
@@ -1534,706 +1591,706 @@ See `?expand` and `?complete` for more specialized functions that allow you to f
 class: inverse, center, middle
 name: tidyverse
 
-# Randomization and inference
+# Regression
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
----
+<!-- --- -->
 
-# The Rubin causal model
+<!-- # The Rubin causal model -->
 
-.hi-blue[What is a causal effect?]
+<!-- .hi-blue[What is a causal effect?] -->
 
---
+<!-- -- -->
 
-A starting point is that a causal effect is a .hi[comparison between two potential outcomes]
+<!-- A starting point is that a causal effect is a .hi[comparison between two potential outcomes] -->
 
---
+<!-- -- -->
 
-What the difference in some outcome in the presence vs the absence of a given treatment?
+<!-- What the difference in some outcome in the presence vs the absence of a given treatment? -->
 
---
+<!-- -- -->
 
-e.g. what is the difference in health between high and low levels of air pollution?
+<!-- e.g. what is the difference in health between high and low levels of air pollution? -->
 
---
+<!-- -- -->
 
-Let's begin formalizing this idea
+<!-- Let's begin formalizing this idea -->
 
----
+<!-- --- -->
 
-# The Rubin causal model: potential outcomes
+<!-- # The Rubin causal model: potential outcomes -->
 
-Suppose we have a set of .hi-blue[observational units]
-  - These can be people, states, animals, air quality monitors, etc
-  
-Each unit has two .hi[potential outcomes], but only one is observed
+<!-- Suppose we have a set of .hi-blue[observational units] -->
+<!--   - These can be people, states, animals, air quality monitors, etc -->
 
---
+<!-- Each unit has two .hi[potential outcomes], but only one is observed -->
 
-The potential outcome is $Y^1_i$ if unit $i$ received some treatment, and $Y^0_i$ if the unit did not
+<!-- -- -->
 
---
+<!-- The potential outcome is $Y^1_i$ if unit $i$ received some treatment, and $Y^0_i$ if the unit did not -->
 
-$Y^0_i$ corresponds to the control state of the world for $i$
+<!-- -- -->
 
----
+<!-- $Y^0_i$ corresponds to the control state of the world for $i$ -->
 
-# The Rubin causal model: observable outcomes
+<!-- --- -->
 
-Note that these potential outcomes are not the same as observable outcomes
+<!-- # The Rubin causal model: observable outcomes -->
 
---
+<!-- Note that these potential outcomes are not the same as observable outcomes -->
 
-Observable outcomes are outcomes that actually show up in the data (i.e. the *factual* outcome)<sup>1</sup>
+<!-- -- -->
 
-.footnote[
-<sup>1</sup>The potential outcome that did not happen is called the *counterfactual outcome.*
-]
+<!-- Observable outcomes are outcomes that actually show up in the data (i.e. the *factual* outcome)<sup>1</sup> -->
 
---
+<!-- .footnote[ -->
+<!-- <sup>1</sup>The potential outcome that did not happen is called the *counterfactual outcome.* -->
+<!-- ] -->
 
-We can write the observable outcome $Y_i$ as a simple equation:
-$$Y_i = D_i Y^1_i  + (1-D_i)Y^0_i$$
-where $D_i = 1$ if $i$ received treatment and 0 otherwise
+<!-- -- -->
 
----
+<!-- We can write the observable outcome $Y_i$ as a simple equation: -->
+<!-- $$Y_i = D_i Y^1_i  + (1-D_i)Y^0_i$$ -->
+<!-- where $D_i = 1$ if $i$ received treatment and 0 otherwise -->
 
-# The Rubin causal model: treatment effects
+<!-- --- -->
 
-$$Y_i = D_i Y^1_i + (1-D_i)Y^0_i$$
+<!-- # The Rubin causal model: treatment effects -->
 
-This is the basis of the *Rubin causal model*
+<!-- $$Y_i = D_i Y^1_i + (1-D_i)Y^0_i$$ -->
 
---
+<!-- This is the basis of the *Rubin causal model* -->
 
-Rubin defines a treatment/causal effect $\delta_i$ as the difference between the two potential outcomes:
-$$\delta_i = Y^1_i - Y^0_i$$
+<!-- -- -->
 
---
+<!-- Rubin defines a treatment/causal effect $\delta_i$ as the difference between the two potential outcomes: -->
+<!-- $$\delta_i = Y^1_i - Y^0_i$$ -->
 
-This leads to an obvious problem: we only observe one of these two states for each unit $i$ but we need to know both to recover $\delta_i$
+<!-- -- -->
 
----
+<!-- This leads to an obvious problem: we only observe one of these two states for each unit $i$ but we need to know both to recover $\delta_i$ -->
 
-# The Rubin causal model: average treatment effect
+<!-- --- -->
 
-We can derive three parameters of interest from the definition of a treatment effect:
+<!-- # The Rubin causal model: average treatment effect -->
 
-.hi-blue[Average treatment effect (ATE):] $$E[\delta_i] = E[Y^1_i - Y^0_i] = E[Y^1_i] - E[Y^0_i]$$
+<!-- We can derive three parameters of interest from the definition of a treatment effect: -->
 
---
+<!-- .hi-blue[Average treatment effect (ATE):] $$E[\delta_i] = E[Y^1_i - Y^0_i] = E[Y^1_i] - E[Y^0_i]$$ -->
 
-This is the average of the individual treatment effects
+<!-- -- -->
 
---
+<!-- This is the average of the individual treatment effects -->
 
-It is also unknowable
+<!-- -- -->
 
+<!-- It is also unknowable -->
 
----
 
-# Rubin: average treatment on the treated
+<!-- --- -->
 
-.hi-blue[Average treatment on the treated (ATT):] $$E[\delta_i|D_i=1] = E[Y^1_i - Y^0_i |D_i=1] = E[Y^1_i|D_i=1] - E[Y^0_i|D_i=1]$$
+<!-- # Rubin: average treatment on the treated -->
 
---
+<!-- .hi-blue[Average treatment on the treated (ATT):] $$E[\delta_i|D_i=1] = E[Y^1_i - Y^0_i |D_i=1] = E[Y^1_i|D_i=1] - E[Y^0_i|D_i=1]$$ -->
 
-This is the average of the individual treatment effects only for the $i$ in the treated group
+<!-- -- -->
 
---
+<!-- This is the average of the individual treatment effects only for the $i$ in the treated group -->
 
-It is also unknowable since we never observe $E[Y^0_i|D_i=1]$
+<!-- -- -->
 
---
+<!-- It is also unknowable since we never observe $E[Y^0_i|D_i=1]$ -->
 
-If the treatment effect differs across $i$ then $ATE \neq ATT$
+<!-- -- -->
 
----
+<!-- If the treatment effect differs across $i$ then $ATE \neq ATT$ -->
 
-# Rubin: average treatment on the untreated
+<!-- --- -->
 
-.hi-blue[Average treatment on the untreated (ATU):] $$E[\delta_i|D_i=0] = E[Y^1_i - Y^0_i |D_i=0] = E[Y^1_i|D_i=0] - E[Y^0_i|D_i=0]$$
+<!-- # Rubin: average treatment on the untreated -->
 
---
+<!-- .hi-blue[Average treatment on the untreated (ATU):] $$E[\delta_i|D_i=0] = E[Y^1_i - Y^0_i |D_i=0] = E[Y^1_i|D_i=0] - E[Y^0_i|D_i=0]$$ -->
 
-This is the average of the individual treatment effects only for the $i$ in the untreated group
+<!-- -- -->
 
---
+<!-- This is the average of the individual treatment effects only for the $i$ in the untreated group -->
 
-It is also unknowable since we never observe $E[Y^1_i|D_i=0]$
+<!-- -- -->
 
---
+<!-- It is also unknowable since we never observe $E[Y^1_i|D_i=0]$ -->
 
-If the treatment effect differs across $i$ then $ATE \neq ATU$
+<!-- -- -->
 
----
+<!-- If the treatment effect differs across $i$ then $ATE \neq ATU$ -->
 
-# Hands on: understanding treatment effects
+<!-- --- -->
 
-We've got our definitions, now lets be a bit more clear as to what we are doing with some empirical examples putting our new R tools to work
+<!-- # Hands on: understanding treatment effects -->
 
---
+<!-- We've got our definitions, now lets be a bit more clear as to what we are doing with some empirical examples putting our new R tools to work -->
 
-Suppose treatment $D$ is whether a state has a conservation policy
+<!-- -- -->
 
---
+<!-- Suppose treatment $D$ is whether a state has a conservation policy -->
 
-The outcome $Y$ is the number of bird species in that state
+<!-- -- -->
 
---
+<!-- The outcome $Y$ is the number of bird species in that state -->
 
-We want to understand the causal effect of conservation policy on the number of species
+<!-- -- -->
 
----
+<!-- We want to understand the causal effect of conservation policy on the number of species -->
 
-# Hands on: understanding treatment effects
+<!-- --- -->
 
-Here's our dataset of both potential outcomes:
-```{r, echo = F}
-set.seed(12345)
-cons_df <- tibble(
-  state = seq(1, 8), # state identifier
-  Y1 = floor(state/2) + -3:4 + floor(runif(8)*10), # treatment potential outcome
-  Y0 = floor(runif(8)*10), # control potential outcome
-  delta = Y1 - Y0
-)
-```
-```{r}
-cons_df # data frame of conservation treatment, outcomes
-```
+<!-- # Hands on: understanding treatment effects -->
 
-Calculate the average treatment effect
+<!-- Here's our dataset of both potential outcomes: -->
+<!-- ```{r, echo = F} -->
+<!-- set.seed(12345) -->
+<!-- cons_df <- tibble( -->
+<!--   state = seq(1, 8), # state identifier -->
+<!--   Y1 = floor(state/2) + -3:4 + floor(runif(8)*10), # treatment potential outcome -->
+<!--   Y0 = floor(runif(8)*10), # control potential outcome -->
+<!--   delta = Y1 - Y0 -->
+<!-- ) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- cons_df # data frame of conservation treatment, outcomes -->
+<!-- ``` -->
 
----
+<!-- Calculate the average treatment effect -->
 
-# Hands on: understanding treatment effects
+<!-- --- -->
 
-ATE = $E[\delta_i]$ which we can compute with `dplyr::summarise`:
-```{r}
-cons_df %>% 
-  dplyr::summarise(mean(delta))
-```
-The average treatment effect is 4: a conservation policy increases the number of bird species in a state by 4
+<!-- # Hands on: understanding treatment effects -->
 
----
+<!-- ATE = $E[\delta_i]$ which we can compute with `dplyr::summarise`: -->
+<!-- ```{r} -->
+<!-- cons_df %>%  -->
+<!--   dplyr::summarise(mean(delta)) -->
+<!-- ``` -->
+<!-- The average treatment effect is 4: a conservation policy increases the number of bird species in a state by 4 -->
 
-# Hands on: understanding treatment effects
+<!-- --- -->
 
-Notice that not all states benefit from conservation policies, and it even backfires in one state  
-The ATE is just the average over all the different treatment effects
+<!-- # Hands on: understanding treatment effects -->
 
-```{r}
-cons_df
-```
+<!-- Notice that not all states benefit from conservation policies, and it even backfires in one state   -->
+<!-- The ATE is just the average over all the different treatment effects -->
 
----
+<!-- ```{r} -->
+<!-- cons_df -->
+<!-- ``` -->
 
-# Hands on: understanding treatment effects
+<!-- --- -->
 
-Suppose we have a perfect policymaker who knows each state's potential outcomes and can perfectly decide whether each state should have a conservation policy
+<!-- # Hands on: understanding treatment effects -->
 
---
+<!-- Suppose we have a perfect policymaker who knows each state's potential outcomes and can perfectly decide whether each state should have a conservation policy -->
 
-The policymaker assigns treatment and then observes the actual outcome according to $Y_i = D_i Y^1_i + (1-D_i)Y^0_i$
+<!-- -- -->
 
---
+<!-- The policymaker assigns treatment and then observes the actual outcome according to $Y_i = D_i Y^1_i + (1-D_i)Y^0_i$ -->
 
-What does the dataset look like for the observed outcomes?
+<!-- -- -->
 
----
+<!-- What does the dataset look like for the observed outcomes? -->
 
-# Hands on: understanding treatment effects
+<!-- --- -->
 
-```{r}
-observed_df <- cons_df %>% 
-  mutate(
-    Y = ifelse(delta > 0, Y1, Y0),
-    D = as.numeric(delta > 0)
-    ) %>% 
-  select(state, Y, D)
-observed_df
-```
+<!-- # Hands on: understanding treatment effects -->
 
----
+<!-- ```{r} -->
+<!-- observed_df <- cons_df %>%  -->
+<!--   mutate( -->
+<!--     Y = ifelse(delta > 0, Y1, Y0), -->
+<!--     D = as.numeric(delta > 0) -->
+<!--     ) %>%  -->
+<!--   select(state, Y, D) -->
+<!-- observed_df -->
+<!-- ``` -->
 
-# Hands on: estimating ATEs
+<!-- --- -->
 
-Given the .hi-blue[observed] data, what if we tried to *estimate* the ATE by comparing mean outcomes of treated $(D_i=1)$ vs untreated units $(D_i=0)$
+<!-- # Hands on: estimating ATEs -->
 
---
+<!-- Given the .hi-blue[observed] data, what if we tried to *estimate* the ATE by comparing mean outcomes of treated $(D_i=1)$ vs untreated units $(D_i=0)$ -->
 
-This is the simple difference in mean outcomes (SDO):
-\begin{align}
-  SDO &= E[Y^1|D=1] - E[Y^0|D=0] \\
-    &= \frac{1}{N_T}\sum_{i=1}^{N_T} (y_i | d_i = 1) - \frac{1}{N_U}\sum_{i=1}^{N_U} (y_i | d_i = 0)
-\end{align}
+<!-- -- -->
 
-where $N_T$ is the number of treated units and $N_U$ is the number of untreated units
+<!-- This is the simple difference in mean outcomes (SDO): -->
+<!-- \begin{align} -->
+<!--   SDO &= E[Y^1|D=1] - E[Y^0|D=0] \\ -->
+<!--     &= \frac{1}{N_T}\sum_{i=1}^{N_T} (y_i | d_i = 1) - \frac{1}{N_U}\sum_{i=1}^{N_U} (y_i | d_i = 0) -->
+<!-- \end{align} -->
 
----
+<!-- where $N_T$ is the number of treated units and $N_U$ is the number of untreated units -->
 
-# Hands on: estimating ATEs
+<!-- --- -->
 
-We can compute the SDO using `dplyr::summarise` in conjunction with `dplyr::group_by` on treatment status $D$:
-```{r}
-observed_df %>% 
-  dplyr::group_by(D) %>% 
-  dplyr::summarise(meanY = mean(Y))
-```
+<!-- # Hands on: estimating ATEs -->
 
-The SDO is 9 - 7.67 = 1.33 < 4!
+<!-- We can compute the SDO using `dplyr::summarise` in conjunction with `dplyr::group_by` on treatment status $D$: -->
+<!-- ```{r} -->
+<!-- observed_df %>%  -->
+<!--   dplyr::group_by(D) %>%  -->
+<!--   dplyr::summarise(meanY = mean(Y)) -->
+<!-- ``` -->
 
----
+<!-- The SDO is 9 - 7.67 = 1.33 < 4! -->
 
-# Hands on: estimating ATEs
+<!-- --- -->
 
-We know the ATE is 4, why is the SDO giving us a much smaller estimate of the effect of the conservation policy?
+<!-- # Hands on: estimating ATEs -->
 
---
+<!-- We know the ATE is 4, why is the SDO giving us a much smaller estimate of the effect of the conservation policy? -->
 
-Because the SDO is actually composed of three pieces, only one of which is the ATE:<sup>1</sup>
+<!-- -- -->
 
-.footnote[
-  See Mixtape pages 89-91 for the derivation.
-]
+<!-- Because the SDO is actually composed of three pieces, only one of which is the ATE:<sup>1</sup> -->
 
-<center>
-SDO = ATE + 
---
-Selection Bias + 
---
-Heterogeneous Treatment Effect Bias
-</center>
+<!-- .footnote[ -->
+<!--   See Mixtape pages 89-91 for the derivation. -->
+<!-- ] -->
 
---
+<!-- <center> -->
+<!-- SDO = ATE +  -->
+<!-- -- -->
+<!-- Selection Bias +  -->
+<!-- -- -->
+<!-- Heterogeneous Treatment Effect Bias -->
+<!-- </center> -->
 
-What are these mathematically and intuitively?
+<!-- -- -->
 
----
+<!-- What are these mathematically and intuitively? -->
 
-# Hands on: decomposing the SDO
+<!-- --- -->
 
-\begin{align}
-  \underbrace{E[Y^1|D=1] - E[Y^0|D=0]}_{\text{SDO}} =& \underbrace{\frac{1}{N_T}\sum_{i=1}^{N_T} (y_i | d_i = 1) + \frac{1}{N_U}\sum_{i=1}^{N_U} (y_i | d_i = 0)}_{\text{SDO}}  \\
-    =&\underbrace{E[Y^1] - E[Y^0]}_{\text{ATE}} \\
-    &+\underbrace{E[Y^0 | D = 1] - E[Y^0 | D= 0]}_{\text{Selection bias}} \\
-    &+\underbrace{(1-\pi)(ATT - ATU)}_{\text{Het. Treat. Eff. Bias}}
-\end{align}
-where $\pi$ is the share of treated units
+<!-- # Hands on: decomposing the SDO -->
 
----
+<!-- \begin{align} -->
+<!--   \underbrace{E[Y^1|D=1] - E[Y^0|D=0]}_{\text{SDO}} =& \underbrace{\frac{1}{N_T}\sum_{i=1}^{N_T} (y_i | d_i = 1) + \frac{1}{N_U}\sum_{i=1}^{N_U} (y_i | d_i = 0)}_{\text{SDO}}  \\ -->
+<!--     =&\underbrace{E[Y^1] - E[Y^0]}_{\text{ATE}} \\ -->
+<!--     &+\underbrace{E[Y^0 | D = 1] - E[Y^0 | D= 0]}_{\text{Selection bias}} \\ -->
+<!--     &+\underbrace{(1-\pi)(ATT - ATU)}_{\text{Het. Treat. Eff. Bias}} -->
+<!-- \end{align} -->
+<!-- where $\pi$ is the share of treated units -->
 
-# Hands on: decomposing the SDO
+<!-- --- -->
 
-The LHS we know sums to 1.33 so the RHS must as well
+<!-- # Hands on: decomposing the SDO -->
 
---
+<!-- The LHS we know sums to 1.33 so the RHS must as well -->
 
-The first term is the ATE, what we actually want to estimate
+<!-- -- -->
 
---
+<!-- The first term is the ATE, what we actually want to estimate -->
 
-We .hi-blue[know] ATE = 4 so the last two terms are why SDO < ATE
+<!-- -- -->
 
---
+<!-- We .hi-blue[know] ATE = 4 so the last two terms are why SDO < ATE -->
 
-Let's work through these two in more detail
+<!-- -- -->
 
----
+<!-- Let's work through these two in more detail -->
 
-# Hands on: Selection bias
+<!-- --- -->
 
-The second term is .hi-blue[selection bias:]
-$$E[Y^0 | D = 1] - E[Y^0 | D= 0]$$
+<!-- # Hands on: Selection bias -->
 
-It is the inherent differences between the two groups if they did not *actually* get the conservation policy
+<!-- The second term is .hi-blue[selection bias:] -->
+<!-- $$E[Y^0 | D = 1] - E[Y^0 | D= 0]$$ -->
 
---
+<!-- It is the inherent differences between the two groups if they did not *actually* get the conservation policy -->
 
-.hi[how are the two groups different at baseline?]
+<!-- -- -->
 
---
+<!-- .hi[how are the two groups different at baseline?] -->
 
-The problem is we don't observe $E[Y^0 | D = 1]$: what the treated group $(D=1)$ would have looked like without treatment $(Y^0)$
+<!-- -- -->
 
---
+<!-- The problem is we don't observe $E[Y^0 | D = 1]$: what the treated group $(D=1)$ would have looked like without treatment $(Y^0)$ -->
 
-Calculate this with the `cons_df` data frame with both potential outcomes
+<!-- -- -->
 
----
+<!-- Calculate this with the `cons_df` data frame with both potential outcomes -->
 
-# Hands on: Selection bias
+<!-- --- -->
 
-```{r}
-cons_df %>% 
-  mutate(
-    D = as.numeric(delta > 0) 
-    ) %>% 
-  group_by(D) %>% 
-  summarise(mean(Y0)) # Difference in potential control outcomes across the two groups
-```
+<!-- # Hands on: Selection bias -->
 
-Selection bias is thus 1.6 - 7.67 = -6.07
+<!-- ```{r} -->
+<!-- cons_df %>%  -->
+<!--   mutate( -->
+<!--     D = as.numeric(delta > 0)  -->
+<!--     ) %>%  -->
+<!--   group_by(D) %>%  -->
+<!--   summarise(mean(Y0)) # Difference in potential control outcomes across the two groups -->
+<!-- ``` -->
 
----
+<!-- Selection bias is thus 1.6 - 7.67 = -6.07 -->
 
-# Hands on: het. treat. effect bias
+<!-- --- -->
 
-The third term is the bias from heterogeneous treatment effects across groups:
-$$\underbrace{(1-\pi)}_{\text{Share w/o policy}} \times \underbrace{(ATT - ATU)}_{\text{Diff. in treat. effect}}$$
+<!-- # Hands on: het. treat. effect bias -->
 
-It is the difference in the effect of the conservation policy across the two groups multiplied by the share that did not get a conservation policy
+<!-- The third term is the bias from heterogeneous treatment effects across groups: -->
+<!-- $$\underbrace{(1-\pi)}_{\text{Share w/o policy}} \times \underbrace{(ATT - ATU)}_{\text{Diff. in treat. effect}}$$ -->
 
----
+<!-- It is the difference in the effect of the conservation policy across the two groups multiplied by the share that did not get a conservation policy -->
 
-# Hands on: het. treat. effect bias
+<!-- --- -->
 
-$$\underbrace{(1-\pi)}_{\text{Share w/o policy}} \times \underbrace{(ATT - ATU)}_{\text{Diff. in treat. effect}}$$
+<!-- # Hands on: het. treat. effect bias -->
 
-What's the intuition for this?
+<!-- $$\underbrace{(1-\pi)}_{\text{Share w/o policy}} \times \underbrace{(ATT - ATU)}_{\text{Diff. in treat. effect}}$$ -->
 
---
+<!-- What's the intuition for this? -->
 
-Basically:
-  - How much more of an effect did the policy have on the units that *happened* to get treatment versus the effect the policy would have had on the units that *happened* to be in the control group
---
+<!-- -- -->
 
-  - Scale the size of this difference by fraction of control units
-  
---
+<!-- Basically: -->
+<!--   - How much more of an effect did the policy have on the units that *happened* to get treatment versus the effect the policy would have had on the units that *happened* to be in the control group -->
+<!-- -- -->
 
-Calculate this with the `cons_df` data frame with both potential outcomes 
+<!--   - Scale the size of this difference by fraction of control units -->
 
----
+<!-- -- -->
 
-# Hands on: het. treat. effect bias
+<!-- Calculate this with the `cons_df` data frame with both potential outcomes  -->
 
-```{r}
-cons_df %>% 
-  mutate(
-    D = as.numeric(delta > 0) 
-    ) %>% 
-  group_by(D) %>% 
-  summarise(mean(delta), n()) # Difference in potential control and treatment outcomes across the two groups, count in treatment and control
-```
+<!-- --- -->
 
-Heterogeneous treatment effect bias is thus: (1 - 5/(5+3))*(7.4 - (-1.67)) = 3.40
+<!-- # Hands on: het. treat. effect bias -->
 
---
+<!-- ```{r} -->
+<!-- cons_df %>%  -->
+<!--   mutate( -->
+<!--     D = as.numeric(delta > 0)  -->
+<!--     ) %>%  -->
+<!--   group_by(D) %>%  -->
+<!--   summarise(mean(delta), n()) # Difference in potential control and treatment outcomes across the two groups, count in treatment and control -->
+<!-- ``` -->
 
-In total we have: .hi[SDO (1.33) = ATE (4) + SB (-6.07) + HTEB (3.40)]
+<!-- Heterogeneous treatment effect bias is thus: (1 - 5/(5+3))*(7.4 - (-1.67)) = 3.40 -->
 
----
+<!-- -- -->
 
-# Recap: treatment effect estimates
+<!-- In total we have: .hi[SDO (1.33) = ATE (4) + SB (-6.07) + HTEB (3.40)] -->
 
-Taking a simple difference in means of outcomes between treatment and control groups .hi[does] contain what we want
+<!-- --- -->
 
---
+<!-- # Recap: treatment effect estimates -->
 
-Unfortunately it is .hi-red[confounded] by two forms of bias:
+<!-- Taking a simple difference in means of outcomes between treatment and control groups .hi[does] contain what we want -->
 
---
+<!-- -- -->
 
-1. .hi-blue[Selection bias:] The units in the treatment group different from the control group in the absence of treatment
---
+<!-- Unfortunately it is .hi-red[confounded] by two forms of bias: -->
 
-2. .hi-blue[Heterogeneous treatment effect bias]: The units in the treatment group respond to treatment differently than units in the control group
+<!-- -- -->
 
----
+<!-- 1. .hi-blue[Selection bias:] The units in the treatment group different from the control group in the absence of treatment -->
+<!-- -- -->
 
-# Bias examples
+<!-- 2. .hi-blue[Heterogeneous treatment effect bias]: The units in the treatment group respond to treatment differently than units in the control group -->
 
-What are some examples of these forms of bias?
+<!-- --- -->
 
---
+<!-- # Bias examples -->
 
-.hi-blue[Selection bias:] 
---
-If we select certain groups into treatment, for example, if we pass conservation policy in states with little biodiversity
-  - This may lead to a negative bias on conservation policy impacts, even with a positive ATE
-  
---
+<!-- What are some examples of these forms of bias? -->
 
-.hi-blue[HTEB:] 
---
-If we select units into treatment based on expected response, for example, if we pass policy in states where birds are **very** sensitive to conservation
-  - This may lead to an overestimate of the size of the treatment effect
-  
----
+<!-- -- -->
 
-# Empirical economics
+<!-- .hi-blue[Selection bias:]  -->
+<!-- -- -->
+<!-- If we select certain groups into treatment, for example, if we pass conservation policy in states with little biodiversity -->
+<!--   - This may lead to a negative bias on conservation policy impacts, even with a positive ATE -->
 
-A huge chunk of economics is trying circumvent these forms of bias<sup>1</sup>
+<!-- -- -->
 
-.footnote[
-  <sup>1</sup>We're more heavily concerned with selection bias than HTEB. There are also other biases to worry about that we will get to later.
-]
+<!-- .hi-blue[HTEB:]  -->
+<!-- -- -->
+<!-- If we select units into treatment based on expected response, for example, if we pass policy in states where birds are **very** sensitive to conservation -->
+<!--   - This may lead to an overestimate of the size of the treatment effect -->
 
---
+<!-- --- -->
 
-The rest of class is largely dedicated to:
-1. Understanding what tools we have to correctly estimate the ATE
---
+<!-- # Empirical economics -->
 
-2. Understanding what assumptions are required for these tools to be valid
---
+<!-- A huge chunk of economics is trying circumvent these forms of bias<sup>1</sup> -->
 
-3. Understanding when these ATE estimates are valid
---
+<!-- .footnote[ -->
+<!--   <sup>1</sup>We're more heavily concerned with selection bias than HTEB. There are also other biases to worry about that we will get to later. -->
+<!-- ] -->
 
-4. Seeing how this all works (hands on) in modern environmental economics
+<!-- -- -->
 
---
+<!-- The rest of class is largely dedicated to: -->
+<!-- 1. Understanding what tools we have to correctly estimate the ATE -->
+<!-- -- -->
 
-This should be a less-technical complement to Brian's class
+<!-- 2. Understanding what assumptions are required for these tools to be valid -->
+<!-- -- -->
 
----
+<!-- 3. Understanding when these ATE estimates are valid -->
+<!-- -- -->
 
-# Recovering the ATE
+<!-- 4. Seeing how this all works (hands on) in modern environmental economics -->
 
-There are many different ways to recover the ATE
+<!-- -- -->
 
---
+<!-- This should be a less-technical complement to Brian's class -->
 
-We will cover some subset of:
+<!-- --- -->
 
-1. Randomized control trials
-2. Regression discontinuity
-3. Difference-in-differences
-4. Cross-sectional regressions
-5. Two way fixed effects
+<!-- # Recovering the ATE -->
 
---
+<!-- There are many different ways to recover the ATE -->
 
-All of these approaches have pluses and minuses
+<!-- -- -->
 
----
+<!-- We will cover some subset of: -->
 
-# Understanding the source of bias
+<!-- 1. Randomized control trials -->
+<!-- 2. Regression discontinuity -->
+<!-- 3. Difference-in-differences -->
+<!-- 4. Cross-sectional regressions -->
+<!-- 5. Two way fixed effects -->
 
-What is the fundamental problem leading to selection bias and HTEB?
+<!-- -- -->
 
---
+<!-- All of these approaches have pluses and minuses -->
 
-Both stem from treatment being correlated with characteristics of the observational units
+<!-- --- -->
 
---
+<!-- # Understanding the source of bias -->
 
-Selection bias is because treatment is correlated with unit characteristics in the absence of treatment
+<!-- What is the fundamental problem leading to selection bias and HTEB? -->
 
---
+<!-- -- -->
 
-HTEB is because treatment is correlated with the size of units' responses to treatment
+<!-- Both stem from treatment being correlated with characteristics of the observational units -->
 
----
+<!-- -- -->
 
-# A potential solution
+<!-- Selection bias is because treatment is correlated with unit characteristics in the absence of treatment -->
 
-What's a simple way to deal with this?
+<!-- -- -->
 
---
+<!-- HTEB is because treatment is correlated with the size of units' responses to treatment -->
 
-<center>
-.hi-blue[RANDOMIZATION]
-</center>
+<!-- --- -->
 
---
+<!-- # A potential solution -->
 
-If we randomize treatment across observational units then SDO = ATE
+<!-- What's a simple way to deal with this? -->
 
---
+<!-- -- -->
 
-Randomization drives selection bias and HTEB to zero
+<!-- <center> -->
+<!-- .hi-blue[RANDOMIZATION] -->
+<!-- </center> -->
 
---
+<!-- -- -->
 
-Let's see why
+<!-- If we randomize treatment across observational units then SDO = ATE -->
 
----
+<!-- -- -->
 
-# Randomization
+<!-- Randomization drives selection bias and HTEB to zero -->
 
-Randomization means that treatment will be .hi-blue[independent] of the potential outcomes
+<!-- -- -->
 
---
+<!-- Let's see why -->
 
-Mathematically:
+<!-- --- -->
 
-$$Y^1,Y^0 \perp D$$
+<!-- # Randomization -->
 
---
+<!-- Randomization means that treatment will be .hi-blue[independent] of the potential outcomes -->
 
-In our example we know independence is violated because we assigned the conservation policy to states that had $Y^1 > Y^0$
+<!-- -- -->
 
---
+<!-- Mathematically: -->
 
-What if we randomized conservation policy?
+<!-- $$Y^1,Y^0 \perp D$$ -->
 
----
+<!-- -- -->
 
-# Randomization
+<!-- In our example we know independence is violated because we assigned the conservation policy to states that had $Y^1 > Y^0$ -->
 
-Randomization of treatment / policy means that:
-$$E[Y^1 | D = 1] - E[Y^1 | D = 0] = 0 \qquad E[Y^0 | D = 1] - E[Y^0 | D = 0] = 0$$
+<!-- -- -->
 
---
+<!-- What if we randomized conservation policy? -->
 
-If we randomized treatment across units, then on average, the difference in potential outcomes across groups should be zero
+<!-- --- -->
 
---
+<!-- # Randomization -->
 
-This means that:
-$$E[Y^1 | D = 1] = E[Y^1 | D = 0] \qquad E[Y^0 | D = 1] = E[Y^0 | D = 0]$$
+<!-- Randomization of treatment / policy means that: -->
+<!-- $$E[Y^1 | D = 1] - E[Y^1 | D = 0] = 0 \qquad E[Y^0 | D = 1] - E[Y^0 | D = 0] = 0$$ -->
 
---
+<!-- -- -->
 
-The second equation $E[Y^0 | D = 1] - E[Y^0 | D = 0] = 0$ directly gives us that selection bias is zero with the SDO
+<!-- If we randomized treatment across units, then on average, the difference in potential outcomes across groups should be zero -->
 
----
+<!-- -- -->
 
-# Randomization
+<!-- This means that: -->
+<!-- $$E[Y^1 | D = 1] = E[Y^1 | D = 0] \qquad E[Y^0 | D = 1] = E[Y^0 | D = 0]$$ -->
 
-What does randomization do to HTEB?
+<!-- -- -->
 
---
+<!-- The second equation $E[Y^0 | D = 1] - E[Y^0 | D = 0] = 0$ directly gives us that selection bias is zero with the SDO -->
 
-\begin{align}
-  &ATT - ATU \\
-  & = (E[Y^1 | D = 1] - E[Y^0 | D = 1]) - (E[Y^1 | D = 0] - E[Y^0 | D = 0]) \\
-  & = (E[Y^1 | D = 1] - E[Y^1 | D = 0]) - (E[Y^0 | D = 1] - E[Y^0 | D = 0]) \\
-  & = (0) - (0) = 0
-\end{align}
+<!-- --- -->
 
---
+<!-- # Randomization -->
 
-HTEB goes to zero!
+<!-- What does randomization do to HTEB? -->
 
----
+<!-- -- -->
 
-# Randomization and SDO
+<!-- \begin{align} -->
+<!--   &ATT - ATU \\ -->
+<!--   & = (E[Y^1 | D = 1] - E[Y^0 | D = 1]) - (E[Y^1 | D = 0] - E[Y^0 | D = 0]) \\ -->
+<!--   & = (E[Y^1 | D = 1] - E[Y^1 | D = 0]) - (E[Y^0 | D = 1] - E[Y^0 | D = 0]) \\ -->
+<!--   & = (0) - (0) = 0 -->
+<!-- \end{align} -->
 
-Randomization means that SDO = ATE:
-$$\underbrace{\frac{1}{N_T} \sum_{i=1}^{N_T} (y_i | d_i = 1) - \frac{1}{N_C} \sum_{i=1}^{N_C} (y_i | d_i = 0)}_{\text{SDO}} = \underbrace{E[Y^1] - E[Y^0]}_{\text{ATE}}$$
+<!-- -- -->
 
---
+<!-- HTEB goes to zero! -->
 
-All we need to estimate the average treatment effect of a policy is:
---
+<!-- --- -->
 
-1. Data on treatment assignment
---
+<!-- # Randomization and SDO -->
 
-2. Data on observable outcomes
---
+<!-- Randomization means that SDO = ATE: -->
+<!-- $$\underbrace{\frac{1}{N_T} \sum_{i=1}^{N_T} (y_i | d_i = 1) - \frac{1}{N_C} \sum_{i=1}^{N_C} (y_i | d_i = 0)}_{\text{SDO}} = \underbrace{E[Y^1] - E[Y^0]}_{\text{ATE}}$$ -->
 
-3. The independence assumption: $Y^1,Y^0 \perp D$
+<!-- -- -->
 
----
+<!-- All we need to estimate the average treatment effect of a policy is: -->
+<!-- -- -->
 
-# Hands on: randomization and SDO
+<!-- 1. Data on treatment assignment -->
+<!-- -- -->
 
-Let's see how this works in practice by re-constructing our dataset and then randomizing treatment
+<!-- 2. Data on observable outcomes -->
+<!-- -- -->
 
---
+<!-- 3. The independence assumption: $Y^1,Y^0 \perp D$ -->
 
-```{r}
-set.seed(12345)
-ate <- 4 # average treatment effect
-n_obs <- 100 # number of observations
-cons_rand_df <- tibble(
-  state = seq(1, n_obs), # state identifier
-  Y0 = floor(runif(n_obs)*10)) %>%  # control/untreated potential outcome
-  mutate(
-    D = as.numeric(runif(n()) > 0.5), # randomized treatment
-    Y1 = Y0 + ate + round(rnorm(n())), # generate treatment potential outcome
-    Y = D*Y1 + (1-D)*Y0 # generate observed outcome
-  ) %>% 
-  select(
-    state, D, Y # keep only observable variables
-  )
-```
+<!-- --- -->
 
----
+<!-- # Hands on: randomization and SDO -->
 
-# Hands on: randomization and SDO
+<!-- Let's see how this works in practice by re-constructing our dataset and then randomizing treatment -->
 
-```{r}
-cons_rand_df # data frame of randomized treatment, observable outcome
-```
+<!-- -- -->
 
----
+<!-- ```{r} -->
+<!-- set.seed(12345) -->
+<!-- ate <- 4 # average treatment effect -->
+<!-- n_obs <- 100 # number of observations -->
+<!-- cons_rand_df <- tibble( -->
+<!--   state = seq(1, n_obs), # state identifier -->
+<!--   Y0 = floor(runif(n_obs)*10)) %>%  # control/untreated potential outcome -->
+<!--   mutate( -->
+<!--     D = as.numeric(runif(n()) > 0.5), # randomized treatment -->
+<!--     Y1 = Y0 + ate + round(rnorm(n())), # generate treatment potential outcome -->
+<!--     Y = D*Y1 + (1-D)*Y0 # generate observed outcome -->
+<!--   ) %>%  -->
+<!--   select( -->
+<!--     state, D, Y # keep only observable variables -->
+<!--   ) -->
+<!-- ``` -->
 
-# Hands on: randomization and SDO
+<!-- --- -->
 
-Now take the SDO:
+<!-- # Hands on: randomization and SDO -->
 
-```{r}
-cons_rand_df %>% 
-  dplyr::group_by(D) %>% 
-  dplyr::summarise(meanY = mean(Y))
-```
+<!-- ```{r} -->
+<!-- cons_rand_df # data frame of randomized treatment, observable outcome -->
+<!-- ``` -->
 
-The SDO is 8.82 - 4.42 = 4.40, a very close estimate of the ATE!
+<!-- --- -->
 
---
+<!-- # Hands on: randomization and SDO -->
 
-As `n_obs` $\rightarrow \infty$, we will have that $SDO \rightarrow ATE$
+<!-- Now take the SDO: -->
 
----
+<!-- ```{r} -->
+<!-- cons_rand_df %>%  -->
+<!--   dplyr::group_by(D) %>%  -->
+<!--   dplyr::summarise(meanY = mean(Y)) -->
+<!-- ``` -->
 
-# Randomization: what it does and doesn't do
+<!-- The SDO is 8.82 - 4.42 = 4.40, a very close estimate of the ATE! -->
 
-What does independence imply?
+<!-- -- -->
 
---
+<!-- As `n_obs` $\rightarrow \infty$, we will have that $SDO \rightarrow ATE$ -->
 
-$$E[Y^1|D = 1] - E[Y^1 | D = 0] = 0 \qquad E[Y^0|D = 1] - E[Y^0 | D = 0] = 0$$
+<!-- --- -->
 
-The two groups have the same potential outcomes, .hi-blue[*on average*]
+<!-- # Randomization: what it does and doesn't do -->
 
---
+<!-- What does independence imply? -->
 
-What does independence .hi-red[not] imply? That:
-$$E[Y^1 | D = 1] - E[Y^0 | D = 0] = 0 \qquad E[Y^1 | D = 1] - E[Y^0 | D = 1] = 0$$
+<!-- -- -->
 
-It does not imply that the observed outcomes are the same across the two groups, nor does it imply that the two potential outcomes of a single group are the same
+<!-- $$E[Y^1|D = 1] - E[Y^1 | D = 0] = 0 \qquad E[Y^0|D = 1] - E[Y^0 | D = 0] = 0$$ -->
 
----
+<!-- The two groups have the same potential outcomes, .hi-blue[*on average*] -->
 
-# Independence
+<!-- -- -->
 
-Is independence is a reasonable assumption in .hi[observational data]?
+<!-- What does independence .hi-red[not] imply? That: -->
+<!-- $$E[Y^1 | D = 1] - E[Y^0 | D = 0] = 0 \qquad E[Y^1 | D = 1] - E[Y^0 | D = 1] = 0$$ -->
 
---
+<!-- It does not imply that the observed outcomes are the same across the two groups, nor does it imply that the two potential outcomes of a single group are the same -->
 
-Observational data are just data that we collect from the real world
-  - e.g. observed state policy choices and outcomes, observed pollution levels and outcomes
-  
---
+<!-- --- -->
 
-Independence is .hi-red[unlikely] to hold in these scenarios
+<!-- # Independence -->
 
---
+<!-- Is independence is a reasonable assumption in .hi[observational data]? -->
 
-So what can we do?
+<!-- -- -->
 
----
+<!-- Observational data are just data that we collect from the real world -->
+<!--   - e.g. observed state policy choices and outcomes, observed pollution levels and outcomes -->
 
-# Conditional independence
+<!-- -- -->
 
-Often we will instead rely on .hi-red[conditional independence:]
-$$(Y^1,Y^0 \perp D) | X$$
+<!-- Independence is .hi-red[unlikely] to hold in these scenarios -->
 
---
+<!-- -- -->
 
-After controlling for some other variables $X$, the potential outcomes are independent of treatment $(Y^1,Y^0 \perp D)$
+<!-- So what can we do? -->
 
---
+<!-- --- -->
 
-This is much weaker than (unconditional) independence: we only need independence to hold for units that share the same $X$ values, not for all units
+<!-- # Conditional independence -->
 
---
+<!-- Often we will instead rely on .hi-red[conditional independence:] -->
+<!-- $$(Y^1,Y^0 \perp D) | X$$ -->
 
-Many of the estimation tools used in economics rely on (variants of) the conditional independence assumption
+<!-- -- -->
+
+<!-- After controlling for some other variables $X$, the potential outcomes are independent of treatment $(Y^1,Y^0 \perp D)$ -->
+
+<!-- -- -->
+
+<!-- This is much weaker than (unconditional) independence: we only need independence to hold for units that share the same $X$ values, not for all units -->
+
+<!-- -- -->
+
+<!-- Many of the estimation tools used in economics rely on (variants of) the conditional independence assumption -->

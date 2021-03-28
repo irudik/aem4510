@@ -52,8 +52,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
-## refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in
+## xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -291,11 +291,11 @@ Why should we discount the future?
 
 --
 
-Time: people are impatient
+First, time: people are impatient
 
 --
 
-Growth: if someone is richer in 10 years, a dollar is worth more to them today than in 10 years in utility terms
+And growth: if someone is richer in 10 years, a dollar is worth more to them today than in 10 years in utility terms 
 
 
 ---
@@ -305,9 +305,15 @@ Growth: if someone is richer in 10 years, a dollar is worth more to them today t
 With a decent amount of math we can show that the discount rate `\(r\)` is composed of three terms:
 `$$r = \delta + \eta \times g$$`
 
+--
+
 `\(\delta\)` is called the .hi[pure rate of time preference] or .hi[utility discount rate]: how much do we value future *utility*
 
+--
+
 `\(\eta\)` is the .hi[elasticity of marginal utility]: how quickly does marginal utility decline in consumption?
+
+--
 
 `\(g\)` is the .hi[growth rate]: how fast does consumption grow over time?
 
@@ -317,10 +323,16 @@ With a decent amount of math we can show that the discount rate `\(r\)` is compo
 
 Here's some alternative descriptions of how to think about these terms:
 
+--
+
 `\(\delta\)`: how much is 1 util tomorrow worth today?
+
+--
 
 `\(\eta\)`: how much do we value poorer vs richer times/generations? Bigger `\(\eta\)` `\(\rightarrow\)` more averse to inequality over time
 - `\(\eta = - {U''(X)X \over U'(X)}\)`, how many percent does MU change if consumption changes by 1%
+
+--
 
 `\(g\)`: how rich will we / future generations be compared to today?
 
@@ -391,6 +403,8 @@ What is the right value for `\(\delta\)`?
 
 Ramsey (1928): placing different weights upon the utility of different generations, as ‘ethically indefensible'
 
+--
+
 Harrod (1948): discounting utility represented a 'polite expression for rapacity and the conquest of reason by passion'
 
 --
@@ -432,7 +446,11 @@ The prescriptive approach often results in `\(\delta\)` being zero or nearly zer
 
 Choosing `\(\eta\)` also conveys ethical choices: how do we weigh the distribution of consumption across generations
 
+--
+
 Recall: `\(r = \delta + \eta g\)`
+
+--
 
 - `\(\eta = 0\)`: consumption in the future doesn't change our willingness to save/invest today (r is independent of g)
 
@@ -454,8 +472,15 @@ Rawl's theory of justice applied here would set `\(\delta = 0\)` and `\(\eta = \
 
 More egalitarian perspectives with respect to:
 
-- .hi[time] yields a smaller `\(\delta\)` and `\(r\)`
-- .hi[intergenerational inequality] yields a larger `\(\theta\)` and larger `\(r\)` if growth is positive
+.hi[time] 
+--
+yields a smaller `\(\delta\)` and `\(r\)`
+
+--
+
+.hi[intergenerational inequality] 
+--
+yields a larger `\(\theta\)` and larger `\(r\)` if growth is positive
 
 
 ---

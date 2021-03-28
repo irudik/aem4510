@@ -1,0 +1,34 @@
+---
+title: "Discounting"
+linktitle: "LN09: Discounting"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Menu
+    weight: 11
+type: docs
+#bibliography: "../../static/bib/references.bib"
+#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
+slides: "09-slides-discounting"
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+### Overview
+
+This lecture answers:
+
+1. What is discounting?
+2. What determines the discount rate?
+3. What are the implications of discounting on computing the costs and benefits of policies?
+
+### Slides
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
+
+`r blogdown::shortcode("slide-buttons")`
+
