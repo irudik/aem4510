@@ -42,6 +42,20 @@ knitr::opts_hooks$set(fig.callout = function(options) {
 knitr::opts_chunk$set(echo = TRUE, fig.align="center")
   options
 })
+red_pink &lt;- "#e64173"
+# A blank theme for ggplot
+theme_empty &lt;- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee", colour = NA),
+    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    axis.line = element_line(colour = "black"), axis.ticks = element_line(),
+  )
 ```
 
 
@@ -52,8 +66,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
-## refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
+## documentation to update your slides.
 ```
 
 ---
@@ -64,7 +78,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 - What is the tidyverse?
 - How do we import and manipulate data?
 
-Our goal is to take a hands on approach to learning how we do environmental economics research
+Our goal is to take a hands on approach to learning how we actually .hi-blue[do] environmental economics
 
 A good chunk of this lecture comes from Grant Mcdermott's [data science for economists](https://github.com/uo-ec607/lectures) notes, and [RStudio education](https://education.rstudio.com/)
 
@@ -107,15 +121,9 @@ Let's get everything going...
 
 ---
 
-# Getting started: new project from github 
+# Getting started: new project
 
-![](files/project.png)
-
----
-
-# Getting started: new project from github 
-
-![](files/github_url.png)
+![](files/10-new-project.png)
 
 
 ---
@@ -126,34 +134,35 @@ Let's get everything going...
 
 ---
 
-# Click on class-code in bottom-right
+# Click on base-code in bottom-right
 
-![](files/workspace.png)
-
----
-
-# Click on class-code.Rproj
-
-![](files/r_project.png)
-
----
-
-# Click yes
-
-&lt;img src="files/open_project.png" width="2281" style="display: block; margin: auto;" /&gt;
+![](files/10-open-base-code.png)
 
 
 ---
 
-# Check package status (not required)
+# Code script open!
 
-&lt;img src="files/package_status.png" width="80%" style="display: block; margin: auto;" /&gt;
+![](files/10-coding-window.png)
 
 ---
 
-# Install packages (then press 'y')
+# Now we're set
 
-&lt;img src="files/install_packages.png" width="60%" style="display: block; margin: auto;" /&gt;
+Now we're all set with our coding environment
+
+--
+
+You can write code in the top window and save it as a file
+
+--
+
+
+Or you can just enter it in the console in the bottom if you don't want to save it
+
+--
+
+Highlight code in the top window and press cmd+enter to run those highlighted lines
 
 ---
 
@@ -393,24 +402,11 @@ a
 ## [1] 15
 ```
 
---
-
-An arrow can point in the other direction too (i.e. `-&gt;`), this is used less frequently though
-
-```r
-10 + 5 -&gt; a
-a
-```
-
-```
-## [1] 15
-```
-
 ---
 
 # Assignment
 
-You can also use `=` for assignment, but the object must be on the left
+You can also use `=` for assignment
 
 
 ```r
@@ -430,7 +426,7 @@ Most R folks prefer `&lt;-` for assignment
 
 --
 
-It doesn't really matter though, other languages use `=` for both 
+It doesn't really matter though, other languages strictly use `=`
 
 --
 
@@ -443,7 +439,7 @@ It doesn't really matter though, other languages use `=` for both
 If you are struggling with a (named) function or object in R, simply type `?commandhere`
   
 ```R
-?Negate 
+?rowSums 
 ```
 
 ---
@@ -472,12 +468,11 @@ In R:
 
 # What are objects? 
 
-We won't go into object details but here are some objects that we'll be working with regularly:
+We won't go into details but here are some objects that we'll be working with regularly:
 - vectors
 - matrices
 - data frames
 - lists
-- functions
 - etc.
 
 --
@@ -486,7 +481,15 @@ A lot of these are probably familiar if you have coding experience
 
 ---
 
-# Global environment
+# Data frames
+
+The most important object we will be working with is the .hi[data frame]
+
+--
+
+You can think of it basically as an Excel spreadsheet
+
+--
 
 
 ```r
@@ -517,8 +520,8 @@ In R we can have multiple data frames in memory at once
 
 
 ```r
-df2 &lt;- data.frame(x = rnorm(10), y = runif(10))
-df
+df2 &lt;- data.frame(x = rnorm(10), y = rnorm(10)) # x and y are each 10 normal random numbers
+df # df still exists even though we made df2!
 ```
 
 ```
@@ -528,21 +531,21 @@ df
 ```
 
 ```r
-df2
+df2 # here's df2
 ```
 
 ```
-##              x         y
-## 1  -1.43614571 0.8393892
-## 2  -0.62925965 0.2673705
-## 3   0.24352177 0.1951011
-## 4   1.05836223 0.2513002
-## 5   0.83134882 0.3891329
-## 6   0.10521182 0.8435996
-## 7  -1.74171309 0.9805974
-## 8   0.64524699 0.3063197
-## 9   0.09710422 0.2704168
-## 10 -0.07673369 0.6229376
+##             x           y
+## 1  -1.0414974  0.65072690
+## 2   0.4649774  0.01724678
+## 3   2.1793669 -1.24808095
+## 4  -3.5293402  1.12942825
+## 5   0.8194419  0.78231033
+## 6  -0.9322116 -0.37044206
+## 7  -0.9675010 -1.15355133
+## 8  -0.1679854  1.50298961
+## 9  -0.7968792 -1.54840334
+## 10 -0.7992645 -0.32510158
 ```
 
 
@@ -608,19 +611,19 @@ starwars
 
 ```
 ## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
-## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
+##    name       height  mass hair_color   skin_color eye_color birth_year sex   gender  homeworld species films  vehicles starships
+##    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
+##  1 Luke Skyw…    172    77 blond        fair       blue            19   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
+##  2 C-3PO         167    75 &lt;NA&gt;         gold       yellow         112   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  3 R2-D2          96    32 &lt;NA&gt;         white, bl… red             33   none  mascul… Naboo     Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  4 Darth Vad…    202   136 none         white      yellow          41.9 male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+##  5 Leia Orga…    150    49 brown        light      brown           19   fema… femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+##  6 Owen Lars     178   120 brown, grey  light      blue            52   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  7 Beru Whit…    165    75 brown        light      blue            47   fema… femini… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  8 R5-D4          97    32 &lt;NA&gt;         white, red red             NA   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  9 Biggs Dar…    183    84 black        light      brown           24   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## 10 Obi-Wan K…    182    77 auburn, whi… fair       blue-gray       57   male  mascul… Stewjon   Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
+## # … with 77 more rows
 ```
 
 ---
@@ -651,7 +654,7 @@ NA # Not available / missing
 
 There are other words that are sort of reserved, in that they have a particular meaning
 
-The most important one is `c()` which binds and concatenates objects together
+The most important one is `c` which binds and concatenates objects together
 
 
 ```r
@@ -663,7 +666,7 @@ my_vector
 ## [1] 1 2 5
 ```
 
-Other ones are `pi`, `e`, etc
+This created a vector/row consisting of 1, 2, 5
 
 ---
 
@@ -781,7 +784,7 @@ We've already seen an example of indexing in the form of R console output:
 ## [1] 3
 ```
 
-The `[1]` above denotes the first (and, in this case, only) element of our output.&lt;sup&gt;1&lt;/sup&gt; 
+The `[1]` above denotes the first (and, in this case, only) element of our output
 
 --
 
@@ -794,22 +797,23 @@ In this case, a vector of length one equal to the value "3"
 Try the following in your console to see a more explicit example of indexed output:
 
 ```r
-rnorm(n = 100, mean = 0, sd = 1)
+rnorm(n = 100, mean = 0, sd = 1) # 100 random variables with mean 0 standard deviation 1
 ```
 
 ```
-##   [1]  0.31561282  0.66029338 -1.72220241 -2.13462605  0.06894560  0.86782174 -2.29004418 -0.15019029 -0.26878179
-##  [10]  1.79133204  0.67226804 -0.20930114  0.01218251  1.53411686  0.07729182  0.07843753 -0.77926107  0.16655967
-##  [19]  0.26532457  0.89078071 -0.46788837  0.75837456 -0.64173636  0.62767182  0.24833013 -0.70007582 -0.56740159
-##  [28] -0.26139393 -1.06388504 -0.10636865  0.77110374  2.74740354 -0.08393476  0.54356763  0.75286121 -0.80867413
-##  [37]  1.00111985  0.45605250 -1.43425031 -0.26530482  0.64176916 -0.41502103 -0.45957568 -0.79249402 -1.15853913
-##  [46]  0.71089000  1.26760175 -0.14315106 -0.51502891  1.48289118 -0.16258891  0.04170917  0.48303990 -1.18012717
-##  [55] -0.66357374 -0.63464989 -0.70196303  0.57685038 -2.11308037  0.26090968  1.14712719  0.01479365 -0.31173924
-##  [64] -0.95619611  0.47341376 -1.51386408  0.16428100 -0.87086522  1.59332899  0.64659752  0.35736969  0.10239306
-##  [73] -0.67526683  0.97208502  0.75586993 -0.42828562 -0.71392476 -0.19038407  0.39986481 -0.97784491  0.18373691
-##  [82] -2.15031053 -0.62296653 -0.76543932  0.46430942  0.52228217  0.00979376 -0.44052620  1.19948953 -0.11746849
-##  [91]  0.03820979  1.19480563  0.34395835 -0.32907297  1.67085792 -0.91805820 -0.08780733  1.32029372  1.73078613
-## [100]  2.16259608
+##   [1]  0.2929506466 -0.6831253787  0.0341397421  0.3966152677  1.7565666846  0.4323058087 -0.0415033727 -0.7930273791
+##   [9]  0.2205927748  0.4514750034 -0.0663383551  0.5396321600 -0.7748546975  0.3241969446  0.3701452624 -2.2638776571
+##  [17] -0.6418772877 -0.5851734343 -1.3185615350 -0.3487614435 -1.8262244526 -0.3701946140  0.4734192532 -0.1896974910
+##  [25]  0.1949362681 -0.9179659706 -0.2862306022 -1.8643666389 -0.1625640045  2.7024127356  0.7578027075 -0.8107003739
+##  [33]  0.0002464178 -1.1968188150  0.9456154656  0.1694595020 -0.2512156745  0.1810673642  0.9836681756 -1.4757182061
+##  [41] -1.6224509579  2.0413201956  1.9500548865  0.8849871795 -0.7574055459  0.4256537710  0.6016224440  1.2473786553
+##  [49]  0.7653834944  1.2268070105 -1.7662835097 -0.0366884759 -0.9025740876  0.2942214203  0.3862194488  0.7854133813
+##  [57]  1.0974340643 -0.7658525115  0.9977966418 -1.9370644667  1.2869235358 -0.9670799670 -1.6404282614  0.9725142490
+##  [65] -2.5998193548  1.3330994645  0.5431721337  0.8745711438 -0.2730077982  0.0468368371 -0.0060708305  1.3803717559
+##  [73] -0.4747752106 -0.2131817104 -0.5073455765 -0.9723187826 -1.9054516450 -0.9056415493  0.1315058220  1.1101528608
+##  [81] -0.1867160458 -0.0761517037  1.2025489654 -0.5352392956 -0.2681490904  0.1420767741  1.5322629231  0.5732915037
+##  [89] -1.0520829080 -1.0874657818 -0.2919145508  0.0334519821 -1.2819043942  2.2447570609  0.5324385933 -0.6114132193
+##  [97]  0.9331975983  0.3036762615  1.1326178901  0.0124581551
 ```
 
 ---
@@ -1095,7 +1099,7 @@ Basically, tidy data is more likely to be [long (i.e. narrow)](https://en.wikipe
 
 # Checklist
 
-Install tidyverse: `install.packages('tidyverse')`
+Install tidyverse: `install.packages('tidyverse')` (already done on cloud)
 
 Install nycflights13: `install.packages('nycflights13', repos = 'https://cran.rstudio.com')`
 
@@ -1169,10 +1173,9 @@ tidyverse_packages()
 ```
 
 ```
-##  [1] "broom"      "cli"        "crayon"     "dbplyr"     "dplyr"      "forcats"    "ggplot2"    "haven"     
-##  [9] "hms"        "httr"       "jsonlite"   "lubridate"  "magrittr"   "modelr"     "pillar"     "purrr"     
-## [17] "readr"      "readxl"     "reprex"     "rlang"      "rstudioapi" "rvest"      "stringr"    "tibble"    
-## [25] "tidyr"      "xml2"       "tidyverse"
+##  [1] "broom"      "cli"        "crayon"     "dbplyr"     "dplyr"      "forcats"    "ggplot2"    "haven"      "hms"       
+## [10] "httr"       "jsonlite"   "lubridate"  "magrittr"   "modelr"     "pillar"     "purrr"      "readr"      "readxl"    
+## [19] "reprex"     "rlang"      "rstudioapi" "rvest"      "stringr"    "tibble"     "tidyr"      "xml2"       "tidyverse"
 ```
 
 e.g. the **lubridate** package is for working with dates and the **rvest** package is for webscraping
@@ -1456,20 +1459,39 @@ starwars
 
 ```
 ## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
-## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
+##    name       height  mass hair_color   skin_color eye_color birth_year sex   gender  homeworld species films  vehicles starships
+##    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
+##  1 Luke Skyw…    172    77 blond        fair       blue            19   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
+##  2 C-3PO         167    75 &lt;NA&gt;         gold       yellow         112   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  3 R2-D2          96    32 &lt;NA&gt;         white, bl… red             33   none  mascul… Naboo     Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  4 Darth Vad…    202   136 none         white      yellow          41.9 male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+##  5 Leia Orga…    150    49 brown        light      brown           19   fema… femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+##  6 Owen Lars     178   120 brown, grey  light      blue            52   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  7 Beru Whit…    165    75 brown        light      blue            47   fema… femini… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  8 R5-D4          97    32 &lt;NA&gt;         white, red red             NA   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  9 Biggs Dar…    183    84 black        light      brown           24   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## 10 Obi-Wan K…    182    77 auburn, whi… fair       blue-gray       57   male  mascul… Stewjon   Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
+## # … with 77 more rows
 ```
+
+
+---
+
+# 1) dplyr::filter
+
+Why filter?
+
+--
+
+Filtering subsets your data
+
+--
+
+This means that you can take out data that meet certain characteristics
+
+--
+
+e.g. if you want to run your analysis only on low income areas, or if you want to focus on years after 2005
 
 ---
 
@@ -1487,13 +1509,12 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 4 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-## 1 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-## 2 Qui-…    193    89 brown      fair       blue            92   male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [1…
-## 3 Dooku    193    80 white      fair       brown          102   male  mascu… Serenno   Human   &lt;chr… &lt;chr [1…
-## 4 Bail…    191    NA black      tan        brown           67   male  mascu… Alderaan  Human   &lt;chr… &lt;chr [0…
-## # … with 1 more variable: starships &lt;list&gt;
+##   name         height  mass hair_color skin_color eye_color birth_year sex   gender   homeworld species films  vehicles starships
+##   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
+## 1 Darth Vader     202   136 none       white      yellow          41.9 male  masculi… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## 2 Qui-Gon Jinn    193    89 brown      fair       blue            92   male  masculi… &lt;NA&gt;      Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+## 3 Dooku           193    80 white      fair       brown          102   male  masculi… Serenno   Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+## 4 Bail Presto…    191    NA black      tan        brown           67   male  masculi… Alderaan  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
 ```
 
 ---
@@ -1509,12 +1530,11 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 3 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-## 1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
-## 2 Anak…    188    84 blond      fair       blue            41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
-## 3 Shmi…    163    NA black      fair       brown           72   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
-## # … with 1 more variable: starships &lt;list&gt;
+##   name        height  mass hair_color skin_color eye_color birth_year sex    gender  homeworld species films   vehicles starships
+##   &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
+## 1 Luke Skywa…    172    77 blond      fair       blue            19   male   mascul… Tatooine  Human   &lt;chr [… &lt;chr [2… &lt;chr [2]&gt;
+## 2 Anakin Sky…    188    84 blond      fair       blue            41.9 male   mascul… Tatooine  Human   &lt;chr [… &lt;chr [2… &lt;chr [3]&gt;
+## 3 Shmi Skywa…    163    NA black      fair       brown           72   female femini… Tatooine  Human   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
 ```
 
 This subsets the observations for individuals whose names contain "Skywalker"
@@ -1532,15 +1552,14 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 6 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-## 1 Arve…     NA    NA brown      fair       brown             NA male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
-## 2 Finn      NA    NA black      dark       dark              NA male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
-## 3 Rey       NA    NA brown      light      hazel             NA fema… femin… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
-## 4 Poe …     NA    NA brown      light      brown             NA male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
-## 5 BB8       NA    NA none       none       black             NA none  mascu… &lt;NA&gt;      Droid   &lt;chr… &lt;chr [0…
-## 6 Capt…     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;    &lt;chr… &lt;chr [0…
-## # … with 1 more variable: starships &lt;list&gt;
+##   name       height  mass hair_color skin_color eye_color birth_year sex    gender   homeworld species films   vehicles starships
+##   &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
+## 1 Arvel Cry…     NA    NA brown      fair       brown             NA male   masculi… &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
+## 2 Finn           NA    NA black      dark       dark              NA male   masculi… &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 3 Rey            NA    NA brown      light      hazel             NA female feminine &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 4 Poe Damer…     NA    NA brown      light      brown             NA male   masculi… &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
+## 5 BB8            NA    NA none       none       black             NA none   masculi… &lt;NA&gt;      Droid   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 6 Captain P…     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;    &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
 ```
 
 ---
@@ -1556,19 +1575,19 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 81 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
-## # … with 71 more rows, and 1 more variable: starships &lt;list&gt;
+##    name       height  mass hair_color   skin_color eye_color birth_year sex   gender  homeworld species films  vehicles starships
+##    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
+##  1 Luke Skyw…    172    77 blond        fair       blue            19   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
+##  2 C-3PO         167    75 &lt;NA&gt;         gold       yellow         112   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  3 R2-D2          96    32 &lt;NA&gt;         white, bl… red             33   none  mascul… Naboo     Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  4 Darth Vad…    202   136 none         white      yellow          41.9 male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+##  5 Leia Orga…    150    49 brown        light      brown           19   fema… femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+##  6 Owen Lars     178   120 brown, grey  light      blue            52   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  7 Beru Whit…    165    75 brown        light      blue            47   fema… femini… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  8 R5-D4          97    32 &lt;NA&gt;         white, red red             NA   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  9 Biggs Dar…    183    84 black        light      brown           24   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## 10 Obi-Wan K…    182    77 auburn, whi… fair       blue-gray       57   male  mascul… Stewjon   Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
+## # … with 71 more rows
 ```
 
 ---
@@ -1584,20 +1603,34 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-##  1 Wick…     88  20   brown      brown      brown            8   male  mascu… Endor     Ewok    &lt;chr… &lt;chr [0…
-##  2 IG-88    200 140   none       metal      red             15   none  mascu… &lt;NA&gt;      Droid   &lt;chr… &lt;chr [0…
-##  3 Luke…    172  77   blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
-##  4 Leia…    150  49   brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
-##  5 Wedg…    170  77   brown      fair       hazel           21   male  mascu… Corellia  Human   &lt;chr… &lt;chr [1…
-##  6 Plo …    188  80   none       orange     black           22   male  mascu… Dorin     Kel Dor &lt;chr… &lt;chr [0…
-##  7 Bigg…    183  84   black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-##  8 Han …    180  80   brown      fair       brown           29   male  mascu… Corellia  Human   &lt;chr… &lt;chr [0…
-##  9 Land…    177  79   black      dark       brown           31   male  mascu… Socorro   Human   &lt;chr… &lt;chr [0…
-## 10 Boba…    183  78.2 black      fair       brown           31.5 male  mascu… Kamino    Human   &lt;chr… &lt;chr [0…
-## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
+##    name        height  mass hair_color skin_color eye_color birth_year sex    gender  homeworld species films  vehicles starships
+##    &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
+##  1 Wicket Sys…     88  20   brown      brown      brown            8   male   mascul… Endor     Ewok    &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  2 IG-88          200 140   none       metal      red             15   none   mascul… &lt;NA&gt;      Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  3 Luke Skywa…    172  77   blond      fair       blue            19   male   mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
+##  4 Leia Organa    150  49   brown      light      brown           19   female femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+##  5 Wedge Anti…    170  77   brown      fair       hazel           21   male   mascul… Corellia  Human   &lt;chr … &lt;chr [1… &lt;chr [1]&gt;
+##  6 Plo Koon       188  80   none       orange     black           22   male   mascul… Dorin     Kel Dor &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+##  7 Biggs Dark…    183  84   black      light      brown           24   male   mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+##  8 Han Solo       180  80   brown      fair       brown           29   male   mascul… Corellia  Human   &lt;chr … &lt;chr [0… &lt;chr [2]&gt;
+##  9 Lando Calr…    177  79   black      dark       brown           31   male   mascul… Socorro   Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## 10 Boba Fett      183  78.2 black      fair       brown           31.5 male   mascul… Kamino    Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## # … with 77 more rows
 ```
+
+---
+
+# 1) dplyr::arrange
+
+Why arrange?
+
+--
+
+Arrange sorts your data
+
+--
+
+This makes it easy to check and see patterns in the data
 
 ---
 
@@ -1612,20 +1645,38 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-##  1 Yoda      66    17 white      green      brown            896 male  mascu… &lt;NA&gt;      Yoda's… &lt;chr… &lt;chr [0…
-##  2 Jabb…    175  1358 &lt;NA&gt;       green-tan… orange           600 herm… mascu… Nal Hutta Hutt    &lt;chr… &lt;chr [0…
-##  3 Chew…    228   112 brown      unknown    blue             200 male  mascu… Kashyyyk  Wookiee &lt;chr… &lt;chr [1…
-##  4 C-3PO    167    75 &lt;NA&gt;       gold       yellow           112 none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
-##  5 Dooku    193    80 white      fair       brown            102 male  mascu… Serenno   Human   &lt;chr… &lt;chr [1…
-##  6 Qui-…    193    89 brown      fair       blue              92 male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [1…
-##  7 Ki-A…    198    82 white      pale       yellow            92 male  mascu… Cerea     Cerean  &lt;chr… &lt;chr [0…
-##  8 Fini…    170    NA blond      fair       blue              91 male  mascu… Coruscant Human   &lt;chr… &lt;chr [0…
-##  9 Palp…    170    75 grey       pale       yellow            82 male  mascu… Naboo     Human   &lt;chr… &lt;chr [0…
-## 10 Clie…    183    NA brown      fair       blue              82 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
-## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
+##    name      height  mass hair_color skin_color   eye_color birth_year sex     gender homeworld species  films vehicles starships
+##    &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;    &lt;lis&gt; &lt;list&gt;   &lt;list&gt;   
+##  1 Yoda          66    17 white      green        brown            896 male    mascu… &lt;NA&gt;      Yoda's … &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+##  2 Jabba De…    175  1358 &lt;NA&gt;       green-tan, … orange           600 hermap… mascu… Nal Hutta Hutt     &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+##  3 Chewbacca    228   112 brown      unknown      blue             200 male    mascu… Kashyyyk  Wookiee  &lt;chr… &lt;chr [1… &lt;chr [2]&gt;
+##  4 C-3PO        167    75 &lt;NA&gt;       gold         yellow           112 none    mascu… Tatooine  Droid    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+##  5 Dooku        193    80 white      fair         brown            102 male    mascu… Serenno   Human    &lt;chr… &lt;chr [1… &lt;chr [0]&gt;
+##  6 Qui-Gon …    193    89 brown      fair         blue              92 male    mascu… &lt;NA&gt;      Human    &lt;chr… &lt;chr [1… &lt;chr [0]&gt;
+##  7 Ki-Adi-M…    198    82 white      pale         yellow            92 male    mascu… Cerea     Cerean   &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+##  8 Finis Va…    170    NA blond      fair         blue              91 male    mascu… Coruscant Human    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+##  9 Palpatine    170    75 grey       pale         yellow            82 male    mascu… Naboo     Human    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+## 10 Cliegg L…    183    NA brown      fair         blue              82 male    mascu… Tatooine  Human    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
+## # … with 77 more rows
 ```
+
+---
+
+# 3) dplyr::select
+
+Why select?
+
+--
+
+Select lets you choose columns to keep or drop
+
+--
+
+This means you are essentially getting rid of variables, likely ones you do not need
+
+--
+
+e.g. if you used an emissions rate and marginal damage per unit of pollution variable to construct the marginal damage of output, you may not need the first two variables any more
 
 ---
 
@@ -1696,19 +1747,19 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 87 x 14
-##    alias height  mass hair_color skin_color eye_color birth_year sex   gender crib  species films vehicles
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tato… Human   &lt;chr… &lt;chr [2…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tato… Droid   &lt;chr… &lt;chr [0…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo Droid   &lt;chr… &lt;chr [0…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tato… Human   &lt;chr… &lt;chr [0…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alde… Human   &lt;chr… &lt;chr [1…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tato… Human   &lt;chr… &lt;chr [0…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tato… Human   &lt;chr… &lt;chr [0…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tato… Droid   &lt;chr… &lt;chr [0…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tato… Human   &lt;chr… &lt;chr [0…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stew… Human   &lt;chr… &lt;chr [1…
-## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
+##    alias       height  mass hair_color   skin_color  eye_color birth_year sex    gender  crib   species films  vehicles starships
+##    &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
+##  1 Luke Skywa…    172    77 blond        fair        blue            19   male   mascul… Tatoo… Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
+##  2 C-3PO          167    75 &lt;NA&gt;         gold        yellow         112   none   mascul… Tatoo… Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  3 R2-D2           96    32 &lt;NA&gt;         white, blue red             33   none   mascul… Naboo  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  4 Darth Vader    202   136 none         white       yellow          41.9 male   mascul… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+##  5 Leia Organa    150    49 brown        light       brown           19   female femini… Alder… Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
+##  6 Owen Lars      178   120 brown, grey  light       blue            52   male   mascul… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  7 Beru White…    165    75 brown        light       blue            47   female femini… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  8 R5-D4           97    32 &lt;NA&gt;         white, red  red             NA   none   mascul… Tatoo… Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##  9 Biggs Dark…    183    84 black        light       brown           24   male   mascul… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
+## 10 Obi-Wan Ke…    182    77 auburn, whi… fair        blue-gray       57   male   mascul… Stewj… Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
+## # … with 77 more rows
 ```
 
 ---
@@ -1754,14 +1805,13 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 5 x 14
-##   species homeworld name  height  mass hair_color skin_color eye_color birth_year sex   gender films vehicles
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lis&gt; &lt;list&gt;  
-## 1 Human   Tatooine  Luke…    172    77 blond      fair       blue            19   male  mascu… &lt;chr… &lt;chr [2…
-## 2 Droid   Tatooine  C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… &lt;chr… &lt;chr [0…
-## 3 Droid   Naboo     R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… &lt;chr… &lt;chr [0…
-## 4 Human   Tatooine  Dart…    202   136 none       white      yellow          41.9 male  mascu… &lt;chr… &lt;chr [0…
-## 5 Human   Alderaan  Leia…    150    49 brown      light      brown           19   fema… femin… &lt;chr… &lt;chr [1…
-## # … with 1 more variable: starships &lt;list&gt;
+##   species homeworld name       height  mass hair_color skin_color  eye_color birth_year sex    gender  films   vehicles starships
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
+## 1 Human   Tatooine  Luke Skyw…    172    77 blond      fair        blue            19   male   mascul… &lt;chr [… &lt;chr [2… &lt;chr [2]&gt;
+## 2 Droid   Tatooine  C-3PO         167    75 &lt;NA&gt;       gold        yellow         112   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 3 Droid   Naboo     R2-D2          96    32 &lt;NA&gt;       white, blue red             33   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 4 Human   Tatooine  Darth Vad…    202   136 none       white       yellow          41.9 male   mascul… &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
+## 5 Human   Alderaan  Leia Orga…    150    49 brown      light       brown           19   female femini… &lt;chr [… &lt;chr [1… &lt;chr [0]&gt;
 ```
 
 ---
@@ -1779,15 +1829,28 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 5 x 14
-##   species homeworld name  height  mass hair_color skin_color eye_color birth_year sex   gender films vehicles
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lis&gt; &lt;list&gt;  
-## 1 Human   Tatooine  Luke…    172    77 blond      fair       blue            19   male  mascu… &lt;chr… &lt;chr [2…
-## 2 Droid   Tatooine  C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… &lt;chr… &lt;chr [0…
-## 3 Droid   Naboo     R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… &lt;chr… &lt;chr [0…
-## 4 Human   Tatooine  Dart…    202   136 none       white      yellow          41.9 male  mascu… &lt;chr… &lt;chr [0…
-## 5 Human   Alderaan  Leia…    150    49 brown      light      brown           19   fema… femin… &lt;chr… &lt;chr [1…
-## # … with 1 more variable: starships &lt;list&gt;
+##   species homeworld name       height  mass hair_color skin_color  eye_color birth_year sex    gender  films   vehicles starships
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
+## 1 Human   Tatooine  Luke Skyw…    172    77 blond      fair        blue            19   male   mascul… &lt;chr [… &lt;chr [2… &lt;chr [2]&gt;
+## 2 Droid   Tatooine  C-3PO         167    75 &lt;NA&gt;       gold        yellow         112   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 3 Droid   Naboo     R2-D2          96    32 &lt;NA&gt;       white, blue red             33   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+## 4 Human   Tatooine  Darth Vad…    202   136 none       white       yellow          41.9 male   mascul… &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
+## 5 Human   Alderaan  Leia Orga…    150    49 brown      light       brown           19   female femini… &lt;chr [… &lt;chr [1… &lt;chr [0]&gt;
 ```
+
+---
+
+# 4) dplyr::mutate
+
+Why mutate?
+
+--
+
+You may need to create new variables
+
+--
+
+e.g. if I give you nominal house prices and the rate of house price inflation, you need to combine these two things to make a new .hi[real house price] variable
 
 ---
 
@@ -1902,6 +1965,20 @@ starwars %&gt;%
 
 # 5) dplyr::summarise
 
+Why summarise?
+
+--
+
+Often we want to get summary statistics or *collapse* our data
+
+--
+
+e.g. if I gave you a data set of each individual's marginal damage in the US, we may want to aggregate up to county-level marginal damages
+
+---
+
+# 5) dplyr::summarise
+
 Summarising useful in combination with the `group_by` command
 
 ```r
@@ -1994,7 +2071,6 @@ starwars %&gt;%
 
 `count` and `distinct`: Number and isolate unique observations
 - E.g. `starwars %&gt;% count(species)`, or `starwars %&gt;% distinct(species)`
-- You could also use a combination of `mutate`, `group_by`, and `n()`, e.g. `starwars %&gt;% group_by(species) %&gt;% mutate(num = n())`.
 
 
 ---
@@ -2014,6 +2090,40 @@ The last set of commands we need are the `join` commands
 
 These are the same as `merge` in stata but with a bit more functionality
 
+--
+
+Why join?
+
+--
+
+Suppose we want to understand how pollution affects housing prices
+
+--
+
+You may need to combine data sets: one data sets on house prices in all counties, and another data set on pollution levels in all counties
+
+---
+
+# dplyr::xxxx_join
+
+How does joining work?
+
+--
+
+We need two datasets (e.g. housing prices and pollution)
+
+--
+
+Each dataset has the same set of .hi[key] variables (e.g. county)
+
+--
+
+When we join, we match up the two datasets on the key, and combine them into one
+
+--
+
+In our housing example, each row of the joined dataset would now tell us the house price, the county its in, and the county's pollution
+
 
 ---
 
@@ -2024,8 +2134,6 @@ We merge data with [join operations](https://cran.r-project.org/web/packages/dpl
 - `left_join(df1, df2)`
 - `right_join(df1, df2)`
 - `full_join(df1, df2)`
-- `semi_join(df1, df2)`
-- `anti_join(df1, df2)`
 
 (You can visualize the operations [here](https://r4ds.had.co.nz/relational-data.html))
 
@@ -2043,20 +2151,19 @@ flights
 
 ```
 ## # A tibble: 336,776 x 19
-##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum
-##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;  
-##  1  2013     1     1      517            515         2      830            819        11 UA        1545 N14228 
-##  2  2013     1     1      533            529         4      850            830        20 UA        1714 N24211 
-##  3  2013     1     1      542            540         2      923            850        33 AA        1141 N619AA 
-##  4  2013     1     1      544            545        -1     1004           1022       -18 B6         725 N804JB 
-##  5  2013     1     1      554            600        -6      812            837       -25 DL         461 N668DN 
-##  6  2013     1     1      554            558        -4      740            728        12 UA        1696 N39463 
-##  7  2013     1     1      555            600        -5      913            854        19 B6         507 N516JB 
-##  8  2013     1     1      557            600        -3      709            723       -14 EV        5708 N829AS 
-##  9  2013     1     1      557            600        -3      838            846        -8 B6          79 N593JB 
-## 10  2013     1     1      558            600        -2      753            745         8 AA         301 N3ALAA 
-## # … with 336,766 more rows, and 7 more variables: origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,
-## #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum origin dest 
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;
+##  1  2013     1     1      517            515         2      830            819        11 UA        1545 N14228  EWR    IAH  
+##  2  2013     1     1      533            529         4      850            830        20 UA        1714 N24211  LGA    IAH  
+##  3  2013     1     1      542            540         2      923            850        33 AA        1141 N619AA  JFK    MIA  
+##  4  2013     1     1      544            545        -1     1004           1022       -18 B6         725 N804JB  JFK    BQN  
+##  5  2013     1     1      554            600        -6      812            837       -25 DL         461 N668DN  LGA    ATL  
+##  6  2013     1     1      554            558        -4      740            728        12 UA        1696 N39463  EWR    ORD  
+##  7  2013     1     1      555            600        -5      913            854        19 B6         507 N516JB  EWR    FLL  
+##  8  2013     1     1      557            600        -3      709            723       -14 EV        5708 N829AS  LGA    IAD  
+##  9  2013     1     1      557            600        -3      838            846        -8 B6          79 N593JB  JFK    MCO  
+## 10  2013     1     1      558            600        -2      753            745         8 AA         301 N3ALAA  LGA    ORD  
+## # … with 336,766 more rows, and 5 more variables: air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
 ```
 
 ---
@@ -2222,15 +2329,15 @@ Let's practice these verbs together in class
 ```r
 stocks &lt;- data.frame(
   time = as.Date('2009-01-01') + 0:1,
-  X = rnorm(2, 0, 1),
-  Y = rnorm(2, 0, 2),
-  Z = rnorm(2, 0, 4)
+  stock_X = rnorm(2, 0, 1),
+  stock_Y = rnorm(2, 0, 2),
+  stock_Z = rnorm(2, 0, 4)
   )
 stocks
 ```
 
 ```
-##         time          X          Y         Z
+##         time    stock_X    stock_Y   stock_Z
 ## 1 2009-01-01 -0.6576081  0.3679567  4.378233
 ## 2 2009-01-02 -1.0493144 -0.5491154 -2.952837
 ```
@@ -2265,14 +2372,14 @@ stocks %&gt;% pivot_longer(-time, names_to = "stock", values_to = "price")
 
 ```
 ## # A tibble: 6 x 3
-##   time       stock  price
-##   &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt;
-## 1 2009-01-01 X     -0.658
-## 2 2009-01-01 Y      0.368
-## 3 2009-01-01 Z      4.38 
-## 4 2009-01-02 X     -1.05 
-## 5 2009-01-02 Y     -0.549
-## 6 2009-01-02 Z     -2.95
+##   time       stock    price
+##   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;
+## 1 2009-01-01 stock_X -0.658
+## 2 2009-01-01 stock_Y  0.368
+## 3 2009-01-01 stock_Z  4.38 
+## 4 2009-01-02 stock_X -1.05 
+## 5 2009-01-02 stock_Y -0.549
+## 6 2009-01-02 stock_Z -2.95
 ```
 
 ---
@@ -2298,10 +2405,10 @@ tidy_stocks %&gt;% pivot_wider(names_from = stock, values_from = price)
 
 ```
 ## # A tibble: 2 x 4
-##   time            X      Y     Z
-##   &lt;date&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1 2009-01-01 -0.658  0.368  4.38
-## 2 2009-01-02 -1.05  -0.549 -2.95
+##   time       stock_X stock_Y stock_Z
+##   &lt;date&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 2009-01-01  -0.658   0.368    4.38
+## 2 2009-01-02  -1.05   -0.549   -2.95
 ```
 
 ```r
@@ -2310,11 +2417,11 @@ tidy_stocks %&gt;% pivot_wider(names_from = time, values_from = price)
 
 ```
 ## # A tibble: 3 x 3
-##   stock `2009-01-01` `2009-01-02`
-##   &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;
-## 1 X           -0.658       -1.05 
-## 2 Y            0.368       -0.549
-## 3 Z            4.38        -2.95
+##   stock   `2009-01-01` `2009-01-02`
+##   &lt;chr&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+## 1 stock_X       -0.658       -1.05 
+## 2 stock_Y        0.368       -0.549
+## 3 stock_Z        4.38        -2.95
 ```
 
 --
@@ -2351,48 +2458,6 @@ economists %&gt;% separate(name, c("first_name", "last_name"))
 --
 
 This command is pretty smart. But to avoid ambiguity, you can also specify the separation character with `separate(..., sep=".")`
-
----
-
-# 3) tidyr::separate
-
-A related function is `separate_rows`, for splitting up cells that contain multiple fields or observations (a frustratingly common occurence with survey data)
-
-```r
-jobs &lt;- data.frame(
-  name = c("Jack", "Jill"),
-  occupation = c("Homemaker", "Philosopher, Philanthropist, Troublemaker") 
-  ) 
-jobs
-```
-
-```
-##   name                                occupation
-## 1 Jack                                 Homemaker
-## 2 Jill Philosopher, Philanthropist, Troublemaker
-```
-
----
-
-# 3) tidyr::separate
-
-A related function is `separate_rows`, for splitting up cells that contain multiple fields or observations (a frustratingly common occurence with survey data)
-
-
-```r
-## Now split out Jill's various occupations into different rows
-jobs %&gt;% separate_rows(occupation)
-```
-
-```
-## # A tibble: 4 x 2
-##   name  occupation    
-##   &lt;chr&gt; &lt;chr&gt;         
-## 1 Jack  Homemaker     
-## 2 Jill  Philosopher   
-## 3 Jill  Philanthropist
-## 4 Jill  Troublemaker
-```
 
 ---
 
@@ -2480,739 +2545,151 @@ gdp_u %&gt;% mutate(date = ymd(date))
 ## 4 2016-01-04  99.1
 ```
 
----
-
-# Other tidyr goodies
-
-Use `crossing` to get the full combination of a group of variables
-
-
-```r
-crossing(side=c("left", "right"), height=c("top", "bottom"))
-```
-
-```
-## # A tibble: 4 x 2
-##   side  height
-##   &lt;chr&gt; &lt;chr&gt; 
-## 1 left  bottom
-## 2 left  top   
-## 3 right bottom
-## 4 right top
-```
-
---
-
-See `?expand` and `?complete` for more specialized functions that allow you to fill in (implicit) missing data or variable combinations in existing data frames
 
 ---
 
 class: inverse, center, middle
 name: tidyverse
 
-# Regression
+# Regression and econometrics
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
-&lt;!-- --- --&gt;
 
-&lt;!-- # The Rubin causal model --&gt;
+---
 
-&lt;!-- .hi-blue[What is a causal effect?] --&gt;
+# Why?
 
-&lt;!-- -- --&gt;
+## Motivation
 
-&lt;!-- A starting point is that a causal effect is a .hi[comparison between two potential outcomes] --&gt;
+Let's start with a few __basic, general questions:__
 
-&lt;!-- -- --&gt;
+--
 
-&lt;!-- What the difference in some outcome in the presence vs the absence of a given treatment? --&gt;
+1. What is the goal of econometrics?
 
-&lt;!-- -- --&gt;
+2. Why do economists (or other people) study or use econometrics?
 
-&lt;!-- e.g. what is the difference in health between high and low levels of air pollution? --&gt;
+--
 
-&lt;!-- -- --&gt;
+__One simple answer:__ Learn about the world using data.
 
-&lt;!-- Let's begin formalizing this idea --&gt;
+--
 
-&lt;!-- --- --&gt;
+- _Learn about the world_ = Raise, answer, and challenge questions, theories, assumptions.
 
-&lt;!-- # The Rubin causal model: potential outcomes --&gt;
+- _data_ = Plural of datum.
 
-&lt;!-- Suppose we have a set of .hi-blue[observational units] --&gt;
-&lt;!--   - These can be people, states, animals, air quality monitors, etc --&gt;
+---
+# Why?
 
-&lt;!-- Each unit has two .hi[potential outcomes], but only one is observed --&gt;
+## Example
 
-&lt;!-- -- --&gt;
+GPA is an output from endowments (ability) and hours studied (inputs). So, one might hypothesize a model
 
-&lt;!-- The potential outcome is `\(Y^1_i\)` if unit `\(i\)` received some treatment, and `\(Y^0_i\)` if the unit did not --&gt;
+`\(\text{GPA}=f(H, \text{SAT}, \text{PCT})\)`
 
-&lt;!-- -- --&gt;
+where `\(H\)` is hours studied, `\(\text{SAT}\)` is SAT score and `\(\text{PCT}\)` is the percentage of classes an individual attended. We expect that GPA will rise with each of these variables ( `\(H\)`, `\(\text{SAT}\)`, and `\(\text{PCT}\)`).
 
-&lt;!-- `\(Y^0_i\)` corresponds to the control state of the world for `\(i\)` --&gt;
+But who needs to _expect_?
 
-&lt;!-- --- --&gt;
+We can test these hypotheses __using a regression model__.
 
-&lt;!-- # The Rubin causal model: observable outcomes --&gt;
+---
+layout: true
+# Why?
 
-&lt;!-- Note that these potential outcomes are not the same as observable outcomes --&gt;
+## Example, cont.
 
-&lt;!-- -- --&gt;
+__Regression model:__
 
-&lt;!-- Observable outcomes are outcomes that actually show up in the data (i.e. the *factual* outcome)&lt;sup&gt;1&lt;/sup&gt; --&gt;
+$$ \text{GPA}_i = \beta_0 + \beta_1 H_i + \beta_2 \text{SAT}_i + \beta_3 \text{PCT}_i + \varepsilon_i $$
 
-&lt;!-- .footnote[ --&gt;
-&lt;!-- &lt;sup&gt;1&lt;/sup&gt;The potential outcome that did not happen is called the *counterfactual outcome.* --&gt;
-&lt;!-- ] --&gt;
+---
 
-&lt;!-- -- --&gt;
+We want to test estimate/test the relationship `\(\text{GPA}=f(H, \text{SAT}, \text{PCT})\)`.
 
-&lt;!-- We can write the observable outcome `\(Y_i\)` as a simple equation: --&gt;
-&lt;!-- `$$Y_i = D_i Y^1_i  + (1-D_i)Y^0_i$$` --&gt;
-&lt;!-- where `\(D_i = 1\)` if `\(i\)` received treatment and 0 otherwise --&gt;
+---
 
-&lt;!-- --- --&gt;
+### (Review) Questions
 
-&lt;!-- # The Rubin causal model: treatment effects --&gt;
+--
 
-&lt;!-- `$$Y_i = D_i Y^1_i + (1-D_i)Y^0_i$$` --&gt;
+- __Q:__ How do we interpret `\(\beta_1\)`?
+--
 
-&lt;!-- This is the basis of the *Rubin causal model* --&gt;
+- __A:__ An additional hour in class correlates with a `\(\beta_1\)` unit increase in an individual's GPA (controlling for SAT and PCT).
 
-&lt;!-- -- --&gt;
 
-&lt;!-- Rubin defines a treatment/causal effect `\(\delta_i\)` as the difference between the two potential outcomes: --&gt;
-&lt;!-- `$$\delta_i = Y^1_i - Y^0_i$$` --&gt;
+--
 
-&lt;!-- -- --&gt;
+- __Q:__ Are the `\(\beta_k\)` terms population parameters or sample statistics?
+--
 
-&lt;!-- This leads to an obvious problem: we only observe one of these two states for each unit `\(i\)` but we need to know both to recover `\(\delta_i\)` --&gt;
+- __A:__ Greek letters denote __population parameters__. Their estimates get hats, _e.g._, `\(\hat{\beta}_k\)`.
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # The Rubin causal model: average treatment effect --&gt;
+### (Review) Questions
 
-&lt;!-- We can derive three parameters of interest from the definition of a treatment effect: --&gt;
+- __Q:__ Can we interpret the estimates for `\(\beta_2\)` as causal?
+--
 
-&lt;!-- .hi-blue[Average treatment effect (ATE):] `$$E[\delta_i] = E[Y^1_i - Y^0_i] = E[Y^1_i] - E[Y^0_i]$$` --&gt;
+- __A:__ Not without making more assumptions and/or knowing more about the data-generating process.
 
-&lt;!-- -- --&gt;
 
-&lt;!-- This is the average of the individual treatment effects --&gt;
+--
 
-&lt;!-- -- --&gt;
+- __Q:__ What is `\(\varepsilon_i\)`?
+--
 
-&lt;!-- It is also unknowable --&gt;
+- __A:__ An individual's random deviation/disturbance from the population parameters.
 
 
-&lt;!-- --- --&gt;
+---
 
-&lt;!-- # Rubin: average treatment on the treated --&gt;
+### (Review) Questions
 
-&lt;!-- .hi-blue[Average treatment on the treated (ATT):] `$$E[\delta_i|D_i=1] = E[Y^1_i - Y^0_i |D_i=1] = E[Y^1_i|D_i=1] - E[Y^0_i|D_i=1]$$` --&gt;
+- __Q:__ Which assumptions do we impose when estimating with OLS?
+--
 
-&lt;!-- -- --&gt;
+- __A:__
+  - The relationship between the GPA and the explanatory variables is linear in parameters, and `\(\varepsilon\)` enters additively.
+  - The explanatory variables are __exogenous__, _i.e._, `\(E[\varepsilon|X] = 0\)`.
+  - You've also typically assumed something along the lines of:&lt;br&gt; `\(E[\varepsilon_i] = 0\)`, `\(E[\varepsilon_i^2] = \sigma^2\)`, `\(E[\varepsilon_i \varepsilon_j] = 0\)` for `\(i \neq j\)`.
+  - And (maybe) `\(\varepsilon_i\)` is distributed normally.
 
-&lt;!-- This is the average of the individual treatment effects only for the `\(i\)` in the treated group --&gt;
 
-&lt;!-- -- --&gt;
+---
+layout: false
 
-&lt;!-- It is also unknowable since we never observe `\(E[Y^0_i|D_i=1]\)` --&gt;
+# Assumptions
 
-&lt;!-- -- --&gt;
+## How important can they be?
 
-&lt;!-- If the treatment effect differs across `\(i\)` then `\(ATE \neq ATT\)` --&gt;
+You've learned how **powerful and flexible** ordinary least squares (**OLS**) regression can be.
 
-&lt;!-- --- --&gt;
+However, the results you learned required assumptions.
 
-&lt;!-- # Rubin: average treatment on the untreated --&gt;
+**Real life often violates these assumptions.**
 
-&lt;!-- .hi-blue[Average treatment on the untreated (ATU):] `$$E[\delta_i|D_i=0] = E[Y^1_i - Y^0_i |D_i=0] = E[Y^1_i|D_i=0] - E[Y^0_i|D_i=0]$$` --&gt;
+--
 
-&lt;!-- -- --&gt;
+EC421 asks "**what happens when we violate these assumptions?**"
+- Can we find a fix? (Especially: How/when is `\(\beta\)` *causal*?)
+- What happens if we don't (or can't) apply a fix?
 
-&lt;!-- This is the average of the individual treatment effects only for the `\(i\)` in the untreated group --&gt;
+OLS still does some amazing things—but you need to know when to be **cautious, confident, or dubious**.
 
-&lt;!-- -- --&gt;
+---
 
-&lt;!-- It is also unknowable since we never observe `\(E[Y^1_i|D_i=0]\)` --&gt;
+# Not everything is causal
 
-&lt;!-- -- --&gt;
 
-&lt;!-- If the treatment effect differs across `\(i\)` then `\(ATE \neq ATU\)` --&gt;
 
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: understanding treatment effects --&gt;
-
-&lt;!-- We've got our definitions, now lets be a bit more clear as to what we are doing with some empirical examples putting our new R tools to work --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Suppose treatment `\(D\)` is whether a state has a conservation policy --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- The outcome `\(Y\)` is the number of bird species in that state --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- We want to understand the causal effect of conservation policy on the number of species --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: understanding treatment effects --&gt;
-
-&lt;!-- Here's our dataset of both potential outcomes: --&gt;
-&lt;!-- ```{r, echo = F} --&gt;
-&lt;!-- set.seed(12345) --&gt;
-&lt;!-- cons_df &lt;- tibble( --&gt;
-&lt;!--   state = seq(1, 8), # state identifier --&gt;
-&lt;!--   Y1 = floor(state/2) + -3:4 + floor(runif(8)*10), # treatment potential outcome --&gt;
-&lt;!--   Y0 = floor(runif(8)*10), # control potential outcome --&gt;
-&lt;!--   delta = Y1 - Y0 --&gt;
-&lt;!-- ) --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_df # data frame of conservation treatment, outcomes --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- Calculate the average treatment effect --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: understanding treatment effects --&gt;
-
-&lt;!-- ATE = `\(E[\delta_i]\)` which we can compute with `dplyr::summarise`: --&gt;
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_df %&gt;%  --&gt;
-&lt;!--   dplyr::summarise(mean(delta)) --&gt;
-&lt;!-- ``` --&gt;
-&lt;!-- The average treatment effect is 4: a conservation policy increases the number of bird species in a state by 4 --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: understanding treatment effects --&gt;
-
-&lt;!-- Notice that not all states benefit from conservation policies, and it even backfires in one state   --&gt;
-&lt;!-- The ATE is just the average over all the different treatment effects --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_df --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: understanding treatment effects --&gt;
-
-&lt;!-- Suppose we have a perfect policymaker who knows each state's potential outcomes and can perfectly decide whether each state should have a conservation policy --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- The policymaker assigns treatment and then observes the actual outcome according to `\(Y_i = D_i Y^1_i + (1-D_i)Y^0_i\)` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- What does the dataset look like for the observed outcomes? --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: understanding treatment effects --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- observed_df &lt;- cons_df %&gt;%  --&gt;
-&lt;!--   mutate( --&gt;
-&lt;!--     Y = ifelse(delta &gt; 0, Y1, Y0), --&gt;
-&lt;!--     D = as.numeric(delta &gt; 0) --&gt;
-&lt;!--     ) %&gt;%  --&gt;
-&lt;!--   select(state, Y, D) --&gt;
-&lt;!-- observed_df --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: estimating ATEs --&gt;
-
-&lt;!-- Given the .hi-blue[observed] data, what if we tried to *estimate* the ATE by comparing mean outcomes of treated `\((D_i=1)\)` vs untreated units `\((D_i=0)\)` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- This is the simple difference in mean outcomes (SDO): --&gt;
-&lt;!-- \begin{align} --&gt;
-&lt;!--   SDO &amp;= E[Y^1|D=1] - E[Y^0|D=0] \\ --&gt;
-&lt;!--     &amp;= \frac{1}{N_T}\sum_{i=1}^{N_T} (y_i | d_i = 1) - \frac{1}{N_U}\sum_{i=1}^{N_U} (y_i | d_i = 0) --&gt;
-&lt;!-- \end{align} --&gt;
-
-&lt;!-- where `\(N_T\)` is the number of treated units and `\(N_U\)` is the number of untreated units --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: estimating ATEs --&gt;
-
-&lt;!-- We can compute the SDO using `dplyr::summarise` in conjunction with `dplyr::group_by` on treatment status `\(D\)`: --&gt;
-&lt;!-- ```{r} --&gt;
-&lt;!-- observed_df %&gt;%  --&gt;
-&lt;!--   dplyr::group_by(D) %&gt;%  --&gt;
-&lt;!--   dplyr::summarise(meanY = mean(Y)) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- The SDO is 9 - 7.67 = 1.33 &lt; 4! --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: estimating ATEs --&gt;
-
-&lt;!-- We know the ATE is 4, why is the SDO giving us a much smaller estimate of the effect of the conservation policy? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Because the SDO is actually composed of three pieces, only one of which is the ATE:&lt;sup&gt;1&lt;/sup&gt; --&gt;
-
-&lt;!-- .footnote[ --&gt;
-&lt;!--   See Mixtape pages 89-91 for the derivation. --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- SDO = ATE +  --&gt;
-&lt;!-- -- --&gt;
-&lt;!-- Selection Bias +  --&gt;
-&lt;!-- -- --&gt;
-&lt;!-- Heterogeneous Treatment Effect Bias --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- What are these mathematically and intuitively? --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: decomposing the SDO --&gt;
-
-&lt;!-- \begin{align} --&gt;
-&lt;!--   \underbrace{E[Y^1|D=1] - E[Y^0|D=0]}_{\text{SDO}} =&amp; \underbrace{\frac{1}{N_T}\sum_{i=1}^{N_T} (y_i | d_i = 1) + \frac{1}{N_U}\sum_{i=1}^{N_U} (y_i | d_i = 0)}_{\text{SDO}}  \\ --&gt;
-&lt;!--     =&amp;\underbrace{E[Y^1] - E[Y^0]}_{\text{ATE}} \\ --&gt;
-&lt;!--     &amp;+\underbrace{E[Y^0 | D = 1] - E[Y^0 | D= 0]}_{\text{Selection bias}} \\ --&gt;
-&lt;!--     &amp;+\underbrace{(1-\pi)(ATT - ATU)}_{\text{Het. Treat. Eff. Bias}} --&gt;
-&lt;!-- \end{align} --&gt;
-&lt;!-- where `\(\pi\)` is the share of treated units --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: decomposing the SDO --&gt;
-
-&lt;!-- The LHS we know sums to 1.33 so the RHS must as well --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- The first term is the ATE, what we actually want to estimate --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- We .hi-blue[know] ATE = 4 so the last two terms are why SDO &lt; ATE --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Let's work through these two in more detail --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: Selection bias --&gt;
-
-&lt;!-- The second term is .hi-blue[selection bias:] --&gt;
-&lt;!-- `$$E[Y^0 | D = 1] - E[Y^0 | D= 0]$$` --&gt;
-
-&lt;!-- It is the inherent differences between the two groups if they did not *actually* get the conservation policy --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- .hi[how are the two groups different at baseline?] --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- The problem is we don't observe `\(E[Y^0 | D = 1]\)`: what the treated group `\((D=1)\)` would have looked like without treatment `\((Y^0)\)` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Calculate this with the `cons_df` data frame with both potential outcomes --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: Selection bias --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_df %&gt;%  --&gt;
-&lt;!--   mutate( --&gt;
-&lt;!--     D = as.numeric(delta &gt; 0)  --&gt;
-&lt;!--     ) %&gt;%  --&gt;
-&lt;!--   group_by(D) %&gt;%  --&gt;
-&lt;!--   summarise(mean(Y0)) # Difference in potential control outcomes across the two groups --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- Selection bias is thus 1.6 - 7.67 = -6.07 --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: het. treat. effect bias --&gt;
-
-&lt;!-- The third term is the bias from heterogeneous treatment effects across groups: --&gt;
-&lt;!-- `$$\underbrace{(1-\pi)}_{\text{Share w/o policy}} \times \underbrace{(ATT - ATU)}_{\text{Diff. in treat. effect}}$$` --&gt;
-
-&lt;!-- It is the difference in the effect of the conservation policy across the two groups multiplied by the share that did not get a conservation policy --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: het. treat. effect bias --&gt;
-
-&lt;!-- `$$\underbrace{(1-\pi)}_{\text{Share w/o policy}} \times \underbrace{(ATT - ATU)}_{\text{Diff. in treat. effect}}$$` --&gt;
-
-&lt;!-- What's the intuition for this? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Basically: --&gt;
-&lt;!--   - How much more of an effect did the policy have on the units that *happened* to get treatment versus the effect the policy would have had on the units that *happened* to be in the control group --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!--   - Scale the size of this difference by fraction of control units --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Calculate this with the `cons_df` data frame with both potential outcomes  --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: het. treat. effect bias --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_df %&gt;%  --&gt;
-&lt;!--   mutate( --&gt;
-&lt;!--     D = as.numeric(delta &gt; 0)  --&gt;
-&lt;!--     ) %&gt;%  --&gt;
-&lt;!--   group_by(D) %&gt;%  --&gt;
-&lt;!--   summarise(mean(delta), n()) # Difference in potential control and treatment outcomes across the two groups, count in treatment and control --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- Heterogeneous treatment effect bias is thus: (1 - 5/(5+3))*(7.4 - (-1.67)) = 3.40 --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- In total we have: .hi[SDO (1.33) = ATE (4) + SB (-6.07) + HTEB (3.40)] --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Recap: treatment effect estimates --&gt;
-
-&lt;!-- Taking a simple difference in means of outcomes between treatment and control groups .hi[does] contain what we want --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Unfortunately it is .hi-red[confounded] by two forms of bias: --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- 1. .hi-blue[Selection bias:] The units in the treatment group different from the control group in the absence of treatment --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 2. .hi-blue[Heterogeneous treatment effect bias]: The units in the treatment group respond to treatment differently than units in the control group --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Bias examples --&gt;
-
-&lt;!-- What are some examples of these forms of bias? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- .hi-blue[Selection bias:]  --&gt;
-&lt;!-- -- --&gt;
-&lt;!-- If we select certain groups into treatment, for example, if we pass conservation policy in states with little biodiversity --&gt;
-&lt;!--   - This may lead to a negative bias on conservation policy impacts, even with a positive ATE --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- .hi-blue[HTEB:]  --&gt;
-&lt;!-- -- --&gt;
-&lt;!-- If we select units into treatment based on expected response, for example, if we pass policy in states where birds are **very** sensitive to conservation --&gt;
-&lt;!--   - This may lead to an overestimate of the size of the treatment effect --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Empirical economics --&gt;
-
-&lt;!-- A huge chunk of economics is trying circumvent these forms of bias&lt;sup&gt;1&lt;/sup&gt; --&gt;
-
-&lt;!-- .footnote[ --&gt;
-&lt;!--   &lt;sup&gt;1&lt;/sup&gt;We're more heavily concerned with selection bias than HTEB. There are also other biases to worry about that we will get to later. --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- The rest of class is largely dedicated to: --&gt;
-&lt;!-- 1. Understanding what tools we have to correctly estimate the ATE --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 2. Understanding what assumptions are required for these tools to be valid --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 3. Understanding when these ATE estimates are valid --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 4. Seeing how this all works (hands on) in modern environmental economics --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- This should be a less-technical complement to Brian's class --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Recovering the ATE --&gt;
-
-&lt;!-- There are many different ways to recover the ATE --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- We will cover some subset of: --&gt;
-
-&lt;!-- 1. Randomized control trials --&gt;
-&lt;!-- 2. Regression discontinuity --&gt;
-&lt;!-- 3. Difference-in-differences --&gt;
-&lt;!-- 4. Cross-sectional regressions --&gt;
-&lt;!-- 5. Two way fixed effects --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- All of these approaches have pluses and minuses --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Understanding the source of bias --&gt;
-
-&lt;!-- What is the fundamental problem leading to selection bias and HTEB? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Both stem from treatment being correlated with characteristics of the observational units --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Selection bias is because treatment is correlated with unit characteristics in the absence of treatment --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- HTEB is because treatment is correlated with the size of units' responses to treatment --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # A potential solution --&gt;
-
-&lt;!-- What's a simple way to deal with this? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- &lt;center&gt; --&gt;
-&lt;!-- .hi-blue[RANDOMIZATION] --&gt;
-&lt;!-- &lt;/center&gt; --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- If we randomize treatment across observational units then SDO = ATE --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Randomization drives selection bias and HTEB to zero --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Let's see why --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Randomization --&gt;
-
-&lt;!-- Randomization means that treatment will be .hi-blue[independent] of the potential outcomes --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Mathematically: --&gt;
-
-&lt;!-- `$$Y^1,Y^0 \perp D$$` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- In our example we know independence is violated because we assigned the conservation policy to states that had `\(Y^1 &gt; Y^0\)` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- What if we randomized conservation policy? --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Randomization --&gt;
-
-&lt;!-- Randomization of treatment / policy means that: --&gt;
-&lt;!-- `$$E[Y^1 | D = 1] - E[Y^1 | D = 0] = 0 \qquad E[Y^0 | D = 1] - E[Y^0 | D = 0] = 0$$` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- If we randomized treatment across units, then on average, the difference in potential outcomes across groups should be zero --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- This means that: --&gt;
-&lt;!-- `$$E[Y^1 | D = 1] = E[Y^1 | D = 0] \qquad E[Y^0 | D = 1] = E[Y^0 | D = 0]$$` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- The second equation `\(E[Y^0 | D = 1] - E[Y^0 | D = 0] = 0\)` directly gives us that selection bias is zero with the SDO --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Randomization --&gt;
-
-&lt;!-- What does randomization do to HTEB? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- \begin{align} --&gt;
-&lt;!--   &amp;ATT - ATU \\ --&gt;
-&lt;!--   &amp; = (E[Y^1 | D = 1] - E[Y^0 | D = 1]) - (E[Y^1 | D = 0] - E[Y^0 | D = 0]) \\ --&gt;
-&lt;!--   &amp; = (E[Y^1 | D = 1] - E[Y^1 | D = 0]) - (E[Y^0 | D = 1] - E[Y^0 | D = 0]) \\ --&gt;
-&lt;!--   &amp; = (0) - (0) = 0 --&gt;
-&lt;!-- \end{align} --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- HTEB goes to zero! --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Randomization and SDO --&gt;
-
-&lt;!-- Randomization means that SDO = ATE: --&gt;
-&lt;!-- `$$\underbrace{\frac{1}{N_T} \sum_{i=1}^{N_T} (y_i | d_i = 1) - \frac{1}{N_C} \sum_{i=1}^{N_C} (y_i | d_i = 0)}_{\text{SDO}} = \underbrace{E[Y^1] - E[Y^0]}_{\text{ATE}}$$` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- All we need to estimate the average treatment effect of a policy is: --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 1. Data on treatment assignment --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 2. Data on observable outcomes --&gt;
-&lt;!-- -- --&gt;
-
-&lt;!-- 3. The independence assumption: `\(Y^1,Y^0 \perp D\)` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: randomization and SDO --&gt;
-
-&lt;!-- Let's see how this works in practice by re-constructing our dataset and then randomizing treatment --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- set.seed(12345) --&gt;
-&lt;!-- ate &lt;- 4 # average treatment effect --&gt;
-&lt;!-- n_obs &lt;- 100 # number of observations --&gt;
-&lt;!-- cons_rand_df &lt;- tibble( --&gt;
-&lt;!--   state = seq(1, n_obs), # state identifier --&gt;
-&lt;!--   Y0 = floor(runif(n_obs)*10)) %&gt;%  # control/untreated potential outcome --&gt;
-&lt;!--   mutate( --&gt;
-&lt;!--     D = as.numeric(runif(n()) &gt; 0.5), # randomized treatment --&gt;
-&lt;!--     Y1 = Y0 + ate + round(rnorm(n())), # generate treatment potential outcome --&gt;
-&lt;!--     Y = D*Y1 + (1-D)*Y0 # generate observed outcome --&gt;
-&lt;!--   ) %&gt;%  --&gt;
-&lt;!--   select( --&gt;
-&lt;!--     state, D, Y # keep only observable variables --&gt;
-&lt;!--   ) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: randomization and SDO --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_rand_df # data frame of randomized treatment, observable outcome --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Hands on: randomization and SDO --&gt;
-
-&lt;!-- Now take the SDO: --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- cons_rand_df %&gt;%  --&gt;
-&lt;!--   dplyr::group_by(D) %&gt;%  --&gt;
-&lt;!--   dplyr::summarise(meanY = mean(Y)) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- The SDO is 8.82 - 4.42 = 4.40, a very close estimate of the ATE! --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- As `n_obs` `\(\rightarrow \infty\)`, we will have that `\(SDO \rightarrow ATE\)` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Randomization: what it does and doesn't do --&gt;
-
-&lt;!-- What does independence imply? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- `$$E[Y^1|D = 1] - E[Y^1 | D = 0] = 0 \qquad E[Y^0|D = 1] - E[Y^0 | D = 0] = 0$$` --&gt;
-
-&lt;!-- The two groups have the same potential outcomes, .hi-blue[*on average*] --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- What does independence .hi-red[not] imply? That: --&gt;
-&lt;!-- `$$E[Y^1 | D = 1] - E[Y^0 | D = 0] = 0 \qquad E[Y^1 | D = 1] - E[Y^0 | D = 1] = 0$$` --&gt;
-
-&lt;!-- It does not imply that the observed outcomes are the same across the two groups, nor does it imply that the two potential outcomes of a single group are the same --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Independence --&gt;
-
-&lt;!-- Is independence is a reasonable assumption in .hi[observational data]? --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Observational data are just data that we collect from the real world --&gt;
-&lt;!--   - e.g. observed state policy choices and outcomes, observed pollution levels and outcomes --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Independence is .hi-red[unlikely] to hold in these scenarios --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- So what can we do? --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Conditional independence --&gt;
-
-&lt;!-- Often we will instead rely on .hi-red[conditional independence:] --&gt;
-&lt;!-- `$$(Y^1,Y^0 \perp D) | X$$` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- After controlling for some other variables `\(X\)`, the potential outcomes are independent of treatment `\((Y^1,Y^0 \perp D)\)` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- This is much weaker than (unconditional) independence: we only need independence to hold for units that share the same `\(X\)` values, not for all units --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- Many of the estimation tools used in economics rely on (variants of) the conditional independence assumption --&gt;
+.center[
+![spurious correlations](10-slides-r_files/figure-html/spurious-1.png)
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
