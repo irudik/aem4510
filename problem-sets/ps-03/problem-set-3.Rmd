@@ -1,7 +1,7 @@
 ---
-title: "AEM 6510 Problem Set 3"
-subtitle: "Fall 2020"
-date: Due November 2
+title: "AEM 4510 Problem Set 3"
+subtitle: "Spring 2021"
+date: Due April 15
 output: 
   html_document:
   theme: flatly
@@ -31,11 +31,11 @@ pacman::p_load(
 options("tidylog.display" = NULL)
 ```
 
-Using only `tidyverse` commands and the `lm` command do the following:
+Using only `tidyverse` commands and the `fixest` command do the following:
 
 1. Load the csv datasets in the `data` folder into dataframes named `storms` and `damages`
 2. Put the `damages` data in *tidy* or *long* format where each observation is a storm
-3. In `storms`: create a single date-time variable from the year, month, day, hour variables; then convert the date-time into a date variable using `lubridate` (hint: you might need to google some stuff or find the online cheat sheet for lubridate)
+3. In `storms`: create a single date-time variable from the year, month, day, hour variables; then convert the date-time into a date variable using the `lubridate` package (hint: you might need to google some stuff or find the online cheat sheet for lubridate)
 4. Keep only observations that are hurricanes
 5. Join together the storm and damage datasets, uses the join that keeps only observations that are in both datasets
 6. For each storm: calculate the average wind speed over all observations, and then calculate how much damage was caused per unit of average wind speed in a new variable named `damage_per_mph`
