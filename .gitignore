@@ -1,3 +1,6 @@
+
+/problem-sets/solutions/*
+/problem-sets/s*
 # History files
 .Rhistory
 .Rapp.history
