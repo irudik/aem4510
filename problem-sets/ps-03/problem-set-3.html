@@ -398,7 +398,7 @@ summary {
     margin-right: auto;
   }
 </style>
-<p>Using only <code>tidyverse</code> commands and the <code>fixest</code> command do the following:</p>
+<p>Using only <code>tidyverse</code> commands and the <code>fixest</code> command do the following, each step depends on the steps before it:</p>
 <ol style="list-style-type: decimal">
 <li>Load the csv datasets in the <code>data</code> folder into dataframes named <code>storms</code> and <code>damages</code></li>
 <li>Put the <code>damages</code> data in <em>tidy</em> or <em>long</em> format where each observation is a storm</li>
@@ -407,7 +407,7 @@ summary {
 <li>Join together the storm and damage datasets, uses the join that keeps only observations that are in both datasets</li>
 <li>For each storm: calculate the average wind speed over all observations, and then calculate how much damage was caused per unit of average wind speed in a new variable named <code>damage_per_mph</code></li>
 <li>Sort the data so the storms with the greatest damage per unit of average wind speed are at the top</li>
-<li>Regress damages on wind speed and store the coefficient on wind speed in a variable called <code>estimate</code></li>
+<li>Regress damages on average wind speed and store the coefficient on average wind speed in a variable called <code>estimate</code></li>
 </ol>
 
 
