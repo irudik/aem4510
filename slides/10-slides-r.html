@@ -32,7 +32,7 @@ exclude: true
 ```r
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -56,6 +56,18 @@ theme_empty &lt;- theme_minimal() +
     plot.background = element_rect(fill = "#eeeeee", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
+theme_blank &lt;- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_blank(), axis.text.y = element_blank(),
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee", colour = NA),
+    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
 ```
 
 
@@ -66,8 +78,8 @@ theme_empty &lt;- theme_minimal() +
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
-## documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
+## refer to the documentation to update your slides.
 ```
 
 ---
@@ -536,16 +548,16 @@ df2 # here's df2
 
 ```
 ##             x           y
-## 1  -1.0414974  0.65072690
-## 2   0.4649774  0.01724678
-## 3   2.1793669 -1.24808095
-## 4  -3.5293402  1.12942825
-## 5   0.8194419  0.78231033
-## 6  -0.9322116 -0.37044206
-## 7  -0.9675010 -1.15355133
-## 8  -0.1679854  1.50298961
-## 9  -0.7968792 -1.54840334
-## 10 -0.7992645 -0.32510158
+## 1  -0.5931213  0.61789560
+## 2   1.2577549 -0.21840102
+## 3   1.4785890  0.65103015
+## 4   0.2589759 -0.41870007
+## 5  -0.2724455 -0.56776428
+## 6   0.7611042  0.52591216
+## 7   1.9404307  0.43794465
+## 8   1.9574768 -1.32082649
+## 9   0.2669812  0.04972275
+## 10  0.5993414 -1.26936147
 ```
 
 
@@ -611,19 +623,19 @@ starwars
 
 ```
 ## # A tibble: 87 x 14
-##    name       height  mass hair_color   skin_color eye_color birth_year sex   gender  homeworld species films  vehicles starships
-##    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
-##  1 Luke Skyw…    172    77 blond        fair       blue            19   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
-##  2 C-3PO         167    75 &lt;NA&gt;         gold       yellow         112   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  3 R2-D2          96    32 &lt;NA&gt;         white, bl… red             33   none  mascul… Naboo     Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  4 Darth Vad…    202   136 none         white      yellow          41.9 male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-##  5 Leia Orga…    150    49 brown        light      brown           19   fema… femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-##  6 Owen Lars     178   120 brown, grey  light      blue            52   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  7 Beru Whit…    165    75 brown        light      blue            47   fema… femini… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  8 R5-D4          97    32 &lt;NA&gt;         white, red red             NA   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  9 Biggs Dar…    183    84 black        light      brown           24   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## 10 Obi-Wan K…    182    77 auburn, whi… fair       blue-gray       57   male  mascul… Stewjon   Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
-## # … with 77 more rows
+##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
+##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
+##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
+## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -801,19 +813,18 @@ rnorm(n = 100, mean = 0, sd = 1) # 100 random variables with mean 0 standard dev
 ```
 
 ```
-##   [1]  0.2929506466 -0.6831253787  0.0341397421  0.3966152677  1.7565666846  0.4323058087 -0.0415033727 -0.7930273791
-##   [9]  0.2205927748  0.4514750034 -0.0663383551  0.5396321600 -0.7748546975  0.3241969446  0.3701452624 -2.2638776571
-##  [17] -0.6418772877 -0.5851734343 -1.3185615350 -0.3487614435 -1.8262244526 -0.3701946140  0.4734192532 -0.1896974910
-##  [25]  0.1949362681 -0.9179659706 -0.2862306022 -1.8643666389 -0.1625640045  2.7024127356  0.7578027075 -0.8107003739
-##  [33]  0.0002464178 -1.1968188150  0.9456154656  0.1694595020 -0.2512156745  0.1810673642  0.9836681756 -1.4757182061
-##  [41] -1.6224509579  2.0413201956  1.9500548865  0.8849871795 -0.7574055459  0.4256537710  0.6016224440  1.2473786553
-##  [49]  0.7653834944  1.2268070105 -1.7662835097 -0.0366884759 -0.9025740876  0.2942214203  0.3862194488  0.7854133813
-##  [57]  1.0974340643 -0.7658525115  0.9977966418 -1.9370644667  1.2869235358 -0.9670799670 -1.6404282614  0.9725142490
-##  [65] -2.5998193548  1.3330994645  0.5431721337  0.8745711438 -0.2730077982  0.0468368371 -0.0060708305  1.3803717559
-##  [73] -0.4747752106 -0.2131817104 -0.5073455765 -0.9723187826 -1.9054516450 -0.9056415493  0.1315058220  1.1101528608
-##  [81] -0.1867160458 -0.0761517037  1.2025489654 -0.5352392956 -0.2681490904  0.1420767741  1.5322629231  0.5732915037
-##  [89] -1.0520829080 -1.0874657818 -0.2919145508  0.0334519821 -1.2819043942  2.2447570609  0.5324385933 -0.6114132193
-##  [97]  0.9331975983  0.3036762615  1.1326178901  0.0124581551
+##   [1]  0.09624156 -0.92935568 -2.26134254  1.59193398  0.17399060 -0.06339205  0.78440285 -0.11175877  0.46685841
+##  [10]  1.07125342  0.11530815 -1.02561823 -1.82490703  0.91480452 -0.44733162  1.03644635  0.73161043  2.46086522
+##  [19] -0.65382881  1.42584562 -1.47432514  0.67487397 -1.04597700  0.74043296  0.30407875 -0.46129219  1.03035176
+##  [28]  0.98012905 -0.73136772  1.43594170 -0.53043288  2.93487869  0.62946193 -0.15306036  0.10635456 -1.29828750
+##  [37] -0.73639126  0.74534237 -2.09415019 -0.90588744 -0.79974789 -0.80881428 -0.43920683  0.77277591 -1.76817248
+##  [46] -0.15552591  0.82839637 -0.66804680  0.21666360  2.29278223  1.68942658  0.46718001  0.11177584  1.75400672
+##  [55]  0.29735613 -0.10137821 -1.02488839 -0.54620863  0.50612632 -0.06138068  2.26030944  0.53829387  0.01881258
+##  [64]  0.44353567 -0.33670815  0.30232161 -2.08361213  0.08230098  0.32622700 -0.30511533 -0.15854782 -0.17207335
+##  [73]  0.43771517 -0.50065523  0.58507690  0.83178380 -2.02858363  0.78691988  0.47775139 -0.10569078  1.79227338
+##  [82]  0.33789474 -0.45268679 -0.94185101 -1.55154566  1.01961483  0.36500751  0.63929872  0.81073021  0.77382226
+##  [91] -0.86738960 -0.92409066  1.51547209 -0.42188791 -1.95797775 -0.71004799  0.76039718 -1.36056953 -0.72544666
+## [100]  1.10161612
 ```
 
 ---
@@ -1173,9 +1184,10 @@ tidyverse_packages()
 ```
 
 ```
-##  [1] "broom"      "cli"        "crayon"     "dbplyr"     "dplyr"      "forcats"    "ggplot2"    "haven"      "hms"       
-## [10] "httr"       "jsonlite"   "lubridate"  "magrittr"   "modelr"     "pillar"     "purrr"      "readr"      "readxl"    
-## [19] "reprex"     "rlang"      "rstudioapi" "rvest"      "stringr"    "tibble"     "tidyr"      "xml2"       "tidyverse"
+##  [1] "broom"      "cli"        "crayon"     "dbplyr"     "dplyr"      "forcats"    "ggplot2"    "haven"     
+##  [9] "hms"        "httr"       "jsonlite"   "lubridate"  "magrittr"   "modelr"     "pillar"     "purrr"     
+## [17] "readr"      "readxl"     "reprex"     "rlang"      "rstudioapi" "rvest"      "stringr"    "tibble"    
+## [25] "tidyr"      "xml2"       "tidyverse"
 ```
 
 e.g. the **lubridate** package is for working with dates and the **rvest** package is for webscraping
@@ -1459,19 +1471,19 @@ starwars
 
 ```
 ## # A tibble: 87 x 14
-##    name       height  mass hair_color   skin_color eye_color birth_year sex   gender  homeworld species films  vehicles starships
-##    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
-##  1 Luke Skyw…    172    77 blond        fair       blue            19   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
-##  2 C-3PO         167    75 &lt;NA&gt;         gold       yellow         112   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  3 R2-D2          96    32 &lt;NA&gt;         white, bl… red             33   none  mascul… Naboo     Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  4 Darth Vad…    202   136 none         white      yellow          41.9 male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-##  5 Leia Orga…    150    49 brown        light      brown           19   fema… femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-##  6 Owen Lars     178   120 brown, grey  light      blue            52   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  7 Beru Whit…    165    75 brown        light      blue            47   fema… femini… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  8 R5-D4          97    32 &lt;NA&gt;         white, red red             NA   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  9 Biggs Dar…    183    84 black        light      brown           24   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## 10 Obi-Wan K…    182    77 auburn, whi… fair       blue-gray       57   male  mascul… Stewjon   Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
-## # … with 77 more rows
+##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
+##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
+##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
+## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
 ```
 
 
@@ -1509,12 +1521,13 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 4 x 14
-##   name         height  mass hair_color skin_color eye_color birth_year sex   gender   homeworld species films  vehicles starships
-##   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
-## 1 Darth Vader     202   136 none       white      yellow          41.9 male  masculi… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## 2 Qui-Gon Jinn    193    89 brown      fair       blue            92   male  masculi… &lt;NA&gt;      Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-## 3 Dooku           193    80 white      fair       brown          102   male  masculi… Serenno   Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-## 4 Bail Presto…    191    NA black      tan        brown           67   male  masculi… Alderaan  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+## 1 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+## 2 Qui-…    193    89 brown      fair       blue            92   male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [1…
+## 3 Dooku    193    80 white      fair       brown          102   male  mascu… Serenno   Human   &lt;chr… &lt;chr [1…
+## 4 Bail…    191    NA black      tan        brown           67   male  mascu… Alderaan  Human   &lt;chr… &lt;chr [0…
+## # … with 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1530,11 +1543,12 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 3 x 14
-##   name        height  mass hair_color skin_color eye_color birth_year sex    gender  homeworld species films   vehicles starships
-##   &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
-## 1 Luke Skywa…    172    77 blond      fair       blue            19   male   mascul… Tatooine  Human   &lt;chr [… &lt;chr [2… &lt;chr [2]&gt;
-## 2 Anakin Sky…    188    84 blond      fair       blue            41.9 male   mascul… Tatooine  Human   &lt;chr [… &lt;chr [2… &lt;chr [3]&gt;
-## 3 Shmi Skywa…    163    NA black      fair       brown           72   female femini… Tatooine  Human   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+## 1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+## 2 Anak…    188    84 blond      fair       blue            41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+## 3 Shmi…    163    NA black      fair       brown           72   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
+## # … with 1 more variable: starships &lt;list&gt;
 ```
 
 This subsets the observations for individuals whose names contain "Skywalker"
@@ -1552,14 +1566,15 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 6 x 14
-##   name       height  mass hair_color skin_color eye_color birth_year sex    gender   homeworld species films   vehicles starships
-##   &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
-## 1 Arvel Cry…     NA    NA brown      fair       brown             NA male   masculi… &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
-## 2 Finn           NA    NA black      dark       dark              NA male   masculi… &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 3 Rey            NA    NA brown      light      hazel             NA female feminine &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 4 Poe Damer…     NA    NA brown      light      brown             NA male   masculi… &lt;NA&gt;      Human   &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
-## 5 BB8            NA    NA none       none       black             NA none   masculi… &lt;NA&gt;      Droid   &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 6 Captain P…     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;    &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+## 1 Arve…     NA    NA brown      fair       brown             NA male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
+## 2 Finn      NA    NA black      dark       dark              NA male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
+## 3 Rey       NA    NA brown      light      hazel             NA fema… femin… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
+## 4 Poe …     NA    NA brown      light      brown             NA male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [0…
+## 5 BB8       NA    NA none       none       black             NA none  mascu… &lt;NA&gt;      Droid   &lt;chr… &lt;chr [0…
+## 6 Capt…     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;    &lt;chr… &lt;chr [0…
+## # … with 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1575,19 +1590,19 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 81 x 14
-##    name       height  mass hair_color   skin_color eye_color birth_year sex   gender  homeworld species films  vehicles starships
-##    &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
-##  1 Luke Skyw…    172    77 blond        fair       blue            19   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
-##  2 C-3PO         167    75 &lt;NA&gt;         gold       yellow         112   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  3 R2-D2          96    32 &lt;NA&gt;         white, bl… red             33   none  mascul… Naboo     Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  4 Darth Vad…    202   136 none         white      yellow          41.9 male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-##  5 Leia Orga…    150    49 brown        light      brown           19   fema… femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-##  6 Owen Lars     178   120 brown, grey  light      blue            52   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  7 Beru Whit…    165    75 brown        light      blue            47   fema… femini… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  8 R5-D4          97    32 &lt;NA&gt;         white, red red             NA   none  mascul… Tatooine  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  9 Biggs Dar…    183    84 black        light      brown           24   male  mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## 10 Obi-Wan K…    182    77 auburn, whi… fair       blue-gray       57   male  mascul… Stewjon   Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
-## # … with 71 more rows
+##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
+##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
+##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
+## # … with 71 more rows, and 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1603,19 +1618,19 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 87 x 14
-##    name        height  mass hair_color skin_color eye_color birth_year sex    gender  homeworld species films  vehicles starships
-##    &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
-##  1 Wicket Sys…     88  20   brown      brown      brown            8   male   mascul… Endor     Ewok    &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  2 IG-88          200 140   none       metal      red             15   none   mascul… &lt;NA&gt;      Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  3 Luke Skywa…    172  77   blond      fair       blue            19   male   mascul… Tatooine  Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
-##  4 Leia Organa    150  49   brown      light      brown           19   female femini… Alderaan  Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-##  5 Wedge Anti…    170  77   brown      fair       hazel           21   male   mascul… Corellia  Human   &lt;chr … &lt;chr [1… &lt;chr [1]&gt;
-##  6 Plo Koon       188  80   none       orange     black           22   male   mascul… Dorin     Kel Dor &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-##  7 Biggs Dark…    183  84   black      light      brown           24   male   mascul… Tatooine  Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-##  8 Han Solo       180  80   brown      fair       brown           29   male   mascul… Corellia  Human   &lt;chr … &lt;chr [0… &lt;chr [2]&gt;
-##  9 Lando Calr…    177  79   black      dark       brown           31   male   mascul… Socorro   Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## 10 Boba Fett      183  78.2 black      fair       brown           31.5 male   mascul… Kamino    Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## # … with 77 more rows
+##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Wick…     88  20   brown      brown      brown            8   male  mascu… Endor     Ewok    &lt;chr… &lt;chr [0…
+##  2 IG-88    200 140   none       metal      red             15   none  mascu… &lt;NA&gt;      Droid   &lt;chr… &lt;chr [0…
+##  3 Luke…    172  77   blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+##  4 Leia…    150  49   brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
+##  5 Wedg…    170  77   brown      fair       hazel           21   male  mascu… Corellia  Human   &lt;chr… &lt;chr [1…
+##  6 Plo …    188  80   none       orange     black           22   male  mascu… Dorin     Kel Dor &lt;chr… &lt;chr [0…
+##  7 Bigg…    183  84   black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  8 Han …    180  80   brown      fair       brown           29   male  mascu… Corellia  Human   &lt;chr… &lt;chr [0…
+##  9 Land…    177  79   black      dark       brown           31   male  mascu… Socorro   Human   &lt;chr… &lt;chr [0…
+## 10 Boba…    183  78.2 black      fair       brown           31.5 male  mascu… Kamino    Human   &lt;chr… &lt;chr [0…
+## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1645,19 +1660,19 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 87 x 14
-##    name      height  mass hair_color skin_color   eye_color birth_year sex     gender homeworld species  films vehicles starships
-##    &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;    &lt;lis&gt; &lt;list&gt;   &lt;list&gt;   
-##  1 Yoda          66    17 white      green        brown            896 male    mascu… &lt;NA&gt;      Yoda's … &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-##  2 Jabba De…    175  1358 &lt;NA&gt;       green-tan, … orange           600 hermap… mascu… Nal Hutta Hutt     &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-##  3 Chewbacca    228   112 brown      unknown      blue             200 male    mascu… Kashyyyk  Wookiee  &lt;chr… &lt;chr [1… &lt;chr [2]&gt;
-##  4 C-3PO        167    75 &lt;NA&gt;       gold         yellow           112 none    mascu… Tatooine  Droid    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-##  5 Dooku        193    80 white      fair         brown            102 male    mascu… Serenno   Human    &lt;chr… &lt;chr [1… &lt;chr [0]&gt;
-##  6 Qui-Gon …    193    89 brown      fair         blue              92 male    mascu… &lt;NA&gt;      Human    &lt;chr… &lt;chr [1… &lt;chr [0]&gt;
-##  7 Ki-Adi-M…    198    82 white      pale         yellow            92 male    mascu… Cerea     Cerean   &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-##  8 Finis Va…    170    NA blond      fair         blue              91 male    mascu… Coruscant Human    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-##  9 Palpatine    170    75 grey       pale         yellow            82 male    mascu… Naboo     Human    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-## 10 Cliegg L…    183    NA brown      fair         blue              82 male    mascu… Tatooine  Human    &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-## # … with 77 more rows
+##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Yoda      66    17 white      green      brown            896 male  mascu… &lt;NA&gt;      Yoda's… &lt;chr… &lt;chr [0…
+##  2 Jabb…    175  1358 &lt;NA&gt;       green-tan… orange           600 herm… mascu… Nal Hutta Hutt    &lt;chr… &lt;chr [0…
+##  3 Chew…    228   112 brown      unknown    blue             200 male  mascu… Kashyyyk  Wookiee &lt;chr… &lt;chr [1…
+##  4 C-3PO    167    75 &lt;NA&gt;       gold       yellow           112 none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  5 Dooku    193    80 white      fair       brown            102 male  mascu… Serenno   Human   &lt;chr… &lt;chr [1…
+##  6 Qui-…    193    89 brown      fair       blue              92 male  mascu… &lt;NA&gt;      Human   &lt;chr… &lt;chr [1…
+##  7 Ki-A…    198    82 white      pale       yellow            92 male  mascu… Cerea     Cerean  &lt;chr… &lt;chr [0…
+##  8 Fini…    170    NA blond      fair       blue              91 male  mascu… Coruscant Human   &lt;chr… &lt;chr [0…
+##  9 Palp…    170    75 grey       pale       yellow            82 male  mascu… Naboo     Human   &lt;chr… &lt;chr [0…
+## 10 Clie…    183    NA brown      fair       blue              82 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1747,19 +1762,19 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 87 x 14
-##    alias       height  mass hair_color   skin_color  eye_color birth_year sex    gender  crib   species films  vehicles starships
-##    &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;list&gt; &lt;list&gt;   &lt;list&gt;   
-##  1 Luke Skywa…    172    77 blond        fair        blue            19   male   mascul… Tatoo… Human   &lt;chr … &lt;chr [2… &lt;chr [2]&gt;
-##  2 C-3PO          167    75 &lt;NA&gt;         gold        yellow         112   none   mascul… Tatoo… Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  3 R2-D2           96    32 &lt;NA&gt;         white, blue red             33   none   mascul… Naboo  Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  4 Darth Vader    202   136 none         white       yellow          41.9 male   mascul… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-##  5 Leia Organa    150    49 brown        light       brown           19   female femini… Alder… Human   &lt;chr … &lt;chr [1… &lt;chr [0]&gt;
-##  6 Owen Lars      178   120 brown, grey  light       blue            52   male   mascul… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  7 Beru White…    165    75 brown        light       blue            47   female femini… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  8 R5-D4           97    32 &lt;NA&gt;         white, red  red             NA   none   mascul… Tatoo… Droid   &lt;chr … &lt;chr [0… &lt;chr [0]&gt;
-##  9 Biggs Dark…    183    84 black        light       brown           24   male   mascul… Tatoo… Human   &lt;chr … &lt;chr [0… &lt;chr [1]&gt;
-## 10 Obi-Wan Ke…    182    77 auburn, whi… fair        blue-gray       57   male   mascul… Stewj… Human   &lt;chr … &lt;chr [1… &lt;chr [5]&gt;
-## # … with 77 more rows
+##    alias height  mass hair_color skin_color eye_color birth_year sex   gender crib  species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tato… Human   &lt;chr… &lt;chr [2…
+##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tato… Droid   &lt;chr… &lt;chr [0…
+##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo Droid   &lt;chr… &lt;chr [0…
+##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tato… Human   &lt;chr… &lt;chr [0…
+##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alde… Human   &lt;chr… &lt;chr [1…
+##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tato… Human   &lt;chr… &lt;chr [0…
+##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tato… Human   &lt;chr… &lt;chr [0…
+##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tato… Droid   &lt;chr… &lt;chr [0…
+##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tato… Human   &lt;chr… &lt;chr [0…
+## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stew… Human   &lt;chr… &lt;chr [1…
+## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1805,13 +1820,14 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 5 x 14
-##   species homeworld name       height  mass hair_color skin_color  eye_color birth_year sex    gender  films   vehicles starships
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
-## 1 Human   Tatooine  Luke Skyw…    172    77 blond      fair        blue            19   male   mascul… &lt;chr [… &lt;chr [2… &lt;chr [2]&gt;
-## 2 Droid   Tatooine  C-3PO         167    75 &lt;NA&gt;       gold        yellow         112   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 3 Droid   Naboo     R2-D2          96    32 &lt;NA&gt;       white, blue red             33   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 4 Human   Tatooine  Darth Vad…    202   136 none       white       yellow          41.9 male   mascul… &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
-## 5 Human   Alderaan  Leia Orga…    150    49 brown      light       brown           19   female femini… &lt;chr [… &lt;chr [1… &lt;chr [0]&gt;
+##   species homeworld name  height  mass hair_color skin_color eye_color birth_year sex   gender films vehicles
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lis&gt; &lt;list&gt;  
+## 1 Human   Tatooine  Luke…    172    77 blond      fair       blue            19   male  mascu… &lt;chr… &lt;chr [2…
+## 2 Droid   Tatooine  C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… &lt;chr… &lt;chr [0…
+## 3 Droid   Naboo     R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… &lt;chr… &lt;chr [0…
+## 4 Human   Tatooine  Dart…    202   136 none       white      yellow          41.9 male  mascu… &lt;chr… &lt;chr [0…
+## 5 Human   Alderaan  Leia…    150    49 brown      light      brown           19   fema… femin… &lt;chr… &lt;chr [1…
+## # … with 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -1829,13 +1845,14 @@ starwars %&gt;%
 
 ```
 ## # A tibble: 5 x 14
-##   species homeworld name       height  mass hair_color skin_color  eye_color birth_year sex    gender  films   vehicles starships
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;list&gt;  &lt;list&gt;   &lt;list&gt;   
-## 1 Human   Tatooine  Luke Skyw…    172    77 blond      fair        blue            19   male   mascul… &lt;chr [… &lt;chr [2… &lt;chr [2]&gt;
-## 2 Droid   Tatooine  C-3PO         167    75 &lt;NA&gt;       gold        yellow         112   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 3 Droid   Naboo     R2-D2          96    32 &lt;NA&gt;       white, blue red             33   none   mascul… &lt;chr [… &lt;chr [0… &lt;chr [0]&gt;
-## 4 Human   Tatooine  Darth Vad…    202   136 none       white       yellow          41.9 male   mascul… &lt;chr [… &lt;chr [0… &lt;chr [1]&gt;
-## 5 Human   Alderaan  Leia Orga…    150    49 brown      light       brown           19   female femini… &lt;chr [… &lt;chr [1… &lt;chr [0]&gt;
+##   species homeworld name  height  mass hair_color skin_color eye_color birth_year sex   gender films vehicles
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;lis&gt; &lt;list&gt;  
+## 1 Human   Tatooine  Luke…    172    77 blond      fair       blue            19   male  mascu… &lt;chr… &lt;chr [2…
+## 2 Droid   Tatooine  C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… &lt;chr… &lt;chr [0…
+## 3 Droid   Naboo     R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… &lt;chr… &lt;chr [0…
+## 4 Human   Tatooine  Dart…    202   136 none       white      yellow          41.9 male  mascu… &lt;chr… &lt;chr [0…
+## 5 Human   Alderaan  Leia…    150    49 brown      light      brown           19   fema… femin… &lt;chr… &lt;chr [1…
+## # … with 1 more variable: starships &lt;list&gt;
 ```
 
 ---
@@ -2151,19 +2168,20 @@ flights
 
 ```
 ## # A tibble: 336,776 x 19
-##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum origin dest 
-##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;
-##  1  2013     1     1      517            515         2      830            819        11 UA        1545 N14228  EWR    IAH  
-##  2  2013     1     1      533            529         4      850            830        20 UA        1714 N24211  LGA    IAH  
-##  3  2013     1     1      542            540         2      923            850        33 AA        1141 N619AA  JFK    MIA  
-##  4  2013     1     1      544            545        -1     1004           1022       -18 B6         725 N804JB  JFK    BQN  
-##  5  2013     1     1      554            600        -6      812            837       -25 DL         461 N668DN  LGA    ATL  
-##  6  2013     1     1      554            558        -4      740            728        12 UA        1696 N39463  EWR    ORD  
-##  7  2013     1     1      555            600        -5      913            854        19 B6         507 N516JB  EWR    FLL  
-##  8  2013     1     1      557            600        -3      709            723       -14 EV        5708 N829AS  LGA    IAD  
-##  9  2013     1     1      557            600        -3      838            846        -8 B6          79 N593JB  JFK    MCO  
-## 10  2013     1     1      558            600        -2      753            745         8 AA         301 N3ALAA  LGA    ORD  
-## # … with 336,766 more rows, and 5 more variables: air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;  
+##  1  2013     1     1      517            515         2      830            819        11 UA        1545 N14228 
+##  2  2013     1     1      533            529         4      850            830        20 UA        1714 N24211 
+##  3  2013     1     1      542            540         2      923            850        33 AA        1141 N619AA 
+##  4  2013     1     1      544            545        -1     1004           1022       -18 B6         725 N804JB 
+##  5  2013     1     1      554            600        -6      812            837       -25 DL         461 N668DN 
+##  6  2013     1     1      554            558        -4      740            728        12 UA        1696 N39463 
+##  7  2013     1     1      555            600        -5      913            854        19 B6         507 N516JB 
+##  8  2013     1     1      557            600        -3      709            723       -14 EV        5708 N829AS 
+##  9  2013     1     1      557            600        -3      838            846        -8 B6          79 N593JB 
+## 10  2013     1     1      558            600        -2      753            745         8 AA         301 N3ALAA 
+## # … with 336,766 more rows, and 7 more variables: origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,
+## #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
 ```
 
 ---
@@ -2551,7 +2569,7 @@ gdp_u %&gt;% mutate(date = ymd(date))
 class: inverse, center, middle
 name: tidyverse
 
-# Regression and econometrics
+# Regression and ordinary least squares
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -2562,7 +2580,7 @@ name: tidyverse
 
 ## Motivation
 
-Let's start with a few __basic, general questions:__
+Let's start with a few .hi[basic, general questions]
 
 --
 
@@ -2572,124 +2590,826 @@ Let's start with a few __basic, general questions:__
 
 --
 
-__One simple answer:__ Learn about the world using data.
+.hi[One simple answer:] Learn about the world using data
 
---
-
-- _Learn about the world_ = Raise, answer, and challenge questions, theories, assumptions.
-
-- _data_ = Plural of datum.
 
 ---
+
 # Why?
 
 ## Example
 
-GPA is an output from endowments (ability) and hours studied (inputs). So, one might hypothesize a model
+GPA is an output from endowments (ability), and hours studied (inputs), and pollution exposure (externality)
 
-`\(\text{GPA}=f(H, \text{SAT}, \text{PCT})\)`
+--
 
-where `\(H\)` is hours studied, `\(\text{SAT}\)` is SAT score and `\(\text{PCT}\)` is the percentage of classes an individual attended. We expect that GPA will rise with each of these variables ( `\(H\)`, `\(\text{SAT}\)`, and `\(\text{PCT}\)`).
+One might hypothesize a model:
+`\(\text{GPA}=f(I, P, \text{SAT}, H)\)`
+
+where `\(H\)` is hours studied, `\(P\)` is pollution exposure, `\(\text{SAT}\)` is SAT score and `\(\text{I}\)` is family income
+
+--
+
+We expect that GPA will rise with some variables, and decrease with others
+
+--
 
 But who needs to _expect_?
 
-We can test these hypotheses __using a regression model__.
+--
 
----
-layout: true
-# Why?
-
-## Example, cont.
-
-__Regression model:__
-
-$$ \text{GPA}_i = \beta_0 + \beta_1 H_i + \beta_2 \text{SAT}_i + \beta_3 \text{PCT}_i + \varepsilon_i $$
+We can test these hypotheses .hi[using a regression model]
 
 ---
 
-We want to test estimate/test the relationship `\(\text{GPA}=f(H, \text{SAT}, \text{PCT})\)`.
+# How?
+
+We can write down a linear regression model of the relationship between GPA and (H, P, SAT, PCT):
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+The left hand side of the equals sign is our .hi-blue[dependent variable] GPA
+
+The right hand side of the equals sign contains all of our .hi-red[independent variables] (I, P, SAT, H), and an error term `\(\varepsilon_i\)` (described later)
+
+The subscript `\(i\)` means that the variable contains the value for some person `\(i\)` in our dataset where `\(i = 1,\dots,N\)`
 
 ---
 
-### (Review) Questions
+# How?
+
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+We are interested in how pollution P affects GPA
 
 --
 
-- __Q:__ How do we interpret `\(\beta_1\)`?
---
-
-- __A:__ An additional hour in class correlates with a `\(\beta_1\)` unit increase in an individual's GPA (controlling for SAT and PCT).
-
+This is given by `\(\beta_2\)`
 
 --
 
-- __Q:__ Are the `\(\beta_k\)` terms population parameters or sample statistics?
---
-
-- __A:__ Greek letters denote __population parameters__. Their estimates get hats, _e.g._, `\(\hat{\beta}_k\)`.
-
----
-
-### (Review) Questions
-
-- __Q:__ Can we interpret the estimates for `\(\beta_2\)` as causal?
---
-
-- __A:__ Not without making more assumptions and/or knowing more about the data-generating process.
-
+Notice that `\(\beta_2 = \frac{\partial\text{GPA}_i}{\partial\text{P}_i}\)`
 
 --
 
-- __Q:__ What is `\(\varepsilon_i\)`?
+`\(\beta_2\)` tells us how GPA changes, given a 1 unit increase in pollution!
+
 --
 
-- __A:__ An individual's random deviation/disturbance from the population parameters.
+Our goal will be to estimate `\(\beta_2\)`, we denote estimates with hats: `\(\hat{\beta}_2\)`
 
 
 ---
 
-### (Review) Questions
+# How?
 
-- __Q:__ Which assumptions do we impose when estimating with OLS?
---
-
-- __A:__
-  - The relationship between the GPA and the explanatory variables is linear in parameters, and `\(\varepsilon\)` enters additively.
-  - The explanatory variables are __exogenous__, _i.e._, `\(E[\varepsilon|X] = 0\)`.
-  - You've also typically assumed something along the lines of:&lt;br&gt; `\(E[\varepsilon_i] = 0\)`, `\(E[\varepsilon_i^2] = \sigma^2\)`, `\(E[\varepsilon_i \varepsilon_j] = 0\)` for `\(i \neq j\)`.
-  - And (maybe) `\(\varepsilon_i\)` is distributed normally.
-
-
----
-layout: false
-
-# Assumptions
-
-## How important can they be?
-
-You've learned how **powerful and flexible** ordinary least squares (**OLS**) regression can be.
-
-However, the results you learned required assumptions.
-
-**Real life often violates these assumptions.**
+How do we estimate `\(\beta_2\)`?
 
 --
 
-EC421 asks "**what happens when we violate these assumptions?**"
-- Can we find a fix? (Especially: How/when is `\(\beta\)` *causal*?)
-- What happens if we don't (or can't) apply a fix?
-
-OLS still does some amazing things—but you need to know when to be **cautious, confident, or dubious**.
+First, suppose we have a set of estimates for all of our `\(\beta\)`s, then we can *estimate* the GPA `\((\widehat{GPA}_i)\)` for any given person based on just (I, P, SAT, H):
+`$$\widehat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 I_i + \hat{\beta}_2 P_i + \hat{\beta}_3 \text{SAT}_i + \hat{\beta}_4 H_i$$`
 
 ---
 
-# Not everything is causal
+# How?
 
+We estimate the `\(\beta\)`s with .hi[linear regression], specifically ordinary least squares
+
+.hi[Ordinary least squares:] choose all the `\(\beta\)`s so that the sum of squared errors between the *real* GPAs and model-estimated GPAs are minimized:
+`$$SSE = \sum_{i=1}^N (GPA_i - \widehat{GPA}_i)^2$$`
+
+--
+
+Choosing the `\(\beta\)`s in this fashion gives us the best-fit line through the data
+
+---
+
+# How?
+
+
+
+
+---
+
+# Simple example
+
+Suppose we were only looking at GPA and family income I
+
+![](10-slides-r_files/figure-html/ols vs lines 1-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`
+
+![](10-slides-r_files/figure-html/vs lines 2-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we can calculate errors: `\(e_i = y_i - \hat{y}_i\)`
+
+![](10-slides-r_files/figure-html/ols vs lines 3-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we can calculate errors: `\(e_i = y_i - \hat{y}_i\)`
+
+![](10-slides-r_files/figure-html/ols vs lines 4-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we can calculate errors: `\(e_i = y_i - \hat{y}_i\)`
+
+![](10-slides-r_files/figure-html/ols vs lines 5-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+SSE squares the errors `\(\left(\sum e_i^2\right)\)`: bigger errors get bigger penalties
+
+![](10-slides-r_files/figure-html/ols vs lines 6-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+The OLS estimate is the combination of `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` that minimize SSE
+
+![](10-slides-r_files/figure-html/ols vs lines 7-1.svg)&lt;!-- --&gt;
+
+---
+
+# OLS error term
+
+So OLS is just the best-fit line through your data
+
+--
+
+Remember: for any given `\(i\)`, we won't have that `\(GPA_i = \widehat{GPA}_i\)`, there's always some error
+
+--
+
+Why?
+
+--
+
+Our model isn't perfect, the people in our dataset (i.e. our sample) may not perfectly match up to the entire population of people
+
+---
+
+# OLS error term
+
+There's .hi[a lot] of other stuff that determines GPAs!
+
+--
+
+We jam all that stuff into error term `\(\varepsilon_i\)`:
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+--
+
+So `\(\varepsilon_i\)` contains all the determinants of GPA that we aren't explicitly addressing in our model
+
+---
+
+# OLS properties
+
+OLS has one .hi[very] nice property relevant for this class:&lt;sup&gt;1&lt;/sup&gt;.footnote[
+&lt;sup&gt;1&lt;/sup&gt; The other is that is has the minimum variance of all unbiased estimators but that's not super important for us.
+]
+
+--
+
+.hi-blue[Unbiasedness:] `\(E[\hat{\beta}] = \beta\)`
+
+---
+
+# OLS properties
+
+.hi-blue[Unbiasedness:] `\(E[\hat{\beta}] = \beta\)`
+
+On average, our estimate `\(\hat{\beta}\)` exactly equals the .hi[true] `\(\beta\)`
+
+--
+
+The key is .hi-red[on average:] we are estimating our model using only some sample of the data
+
+--
+
+The estimated `\(\beta\)` won't exactly be right for the entire population, but on average, we expect it to match
+
+--
+
+Let's see in an example where we only have a subsample of the full population of data
+
+---
+
+# OLS properties
+
+
+.pull-left[
+
+&lt;img src="10-slides-r_files/figure-html/pop1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Population**]
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="10-slides-r_files/figure-html/scatter1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Population relationship**]
+
+$$ y_i = 2.53 + 0.57 x_i + u_i $$
+
+$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+
+
+]
+
+---
+
+.pull-left[
+
+
+&lt;img src="10-slides-r_files/figure-html/sample1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 1:** 10 random individuals]
+
+
+]
+
+--
+
+.pull-right[
+
+
+&lt;img src="10-slides-r_files/figure-html/sample1 scatter-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 .center[
-![spurious correlations](10-slides-r_files/figure-html/spurious-1.png)
+
+**Population relationship**
+&lt;br&gt;
+`\(y_i = 2.53 + 0.57 x_i + u_i\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{y}_i = 0.72 + 0.81 x_i\)`
+
 ]
+
+]
+
+---
+count: false
+
+.pull-left[
+
+&lt;img src="10-slides-r_files/figure-html/sample2-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 2:** 10 random individuals]
+
+]
+
+.pull-right[
+
+&lt;img src="10-slides-r_files/figure-html/sample2 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(y_i = 2.53 + 0.57 x_i + u_i\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{y}_i = 2.82 + 0.53 x_i\)`
+
+]
+
+]
+---
+count: false
+
+.pull-left[
+
+&lt;img src="10-slides-r_files/figure-html/sample3-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 3:** 10 random individuals]
+
+]
+
+.pull-right[
+
+&lt;img src="10-slides-r_files/figure-html/sample3 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(y_i = 2.53 + 0.57 x_i + u_i\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{y}_i = 2.32 + 0.56 x_i\)`
+
+]
+
+]
+
+---
+layout: false
+class: clear, middle
+
+Let's repeat this **1,000 times**.
+
+(This exercise is called a (Monte Carlo) simulation.)
+
+---
+
+# Population *vs.* sample
+
+![](10-slides-r_files/figure-html/simulation scatter-1.png)&lt;!-- --&gt;
+
+---
+
+# Population *vs.* sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+---
+
+.pull-left[
+![](10-slides-r_files/figure-html/simulation scatter2-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+On .hi-blue[average], our regression lines match the population line very nicely
+
+However, .hi[individual lines] (samples) can really miss the mark
+
+Differences between individual samples and the population lead to **uncertainty** for us in the true effect
+
+]
+
+---
+
+# Population *vs.* sample
+
+**Answer:** Uncertainty matters!
+
+--
+
+`\(\hat{\beta}\)` itself is random, it will depend on the sample of data we have
+
+--
+
+When we take a sample and run a regression, we don't know if it's a 'good' sample ( `\(\hat{\beta}\)` is close to `\(\beta\)`) or a 'bad sample' (our sample differs greatly from the population)
+
+---
+
+# Unbiasedness
+
+For OLS to be unbiased and give us, on average, the causal effect of some X on some Y we need a few assumptions to hold
+
+--
+
+Whether or not these assumptions are true is why you often hear *correlation is not causation*
+
+--
+
+If we want some `\(\hat{\beta}_1\)` on a variable `\(x\)` to be unbiased we need the following to be true:
+`$$E[x \varepsilon] = 0 \quad \leftrightarrow \quad \text{correlation}(x,\varepsilon) = 0$$`
+
+--
+
+The variable you are interested in .hi[cannot] be correlated with the error term
+
+---
+
+# Unbiasedness
+
+The variable you are interested in .hi[cannot] be correlated with the error term
+
+--
+
+What does this mean in words?
+
+--
+
+The error term contains all variables that determine `\(y\)`, but we *omitted* from our model
+
+--
+
+We are assuming that our variable of interest, x, is not correlated with any of these omitted variable
+
+--
+
+If x is correlated with any of them, then we will have something called .hi[omitted variable bias]
+
+---
+
+# Omitted variable bias
+
+Here's an intuitive example
+
+--
+
+Suppose we wanted to understand the effect of lead exposure `\(P\)` on GPAs
+
+--
+
+lead harm's children's brain development, especially before age 6
+
+--
+
+We should expect early-life lead exposure to reduce future GPAs
+
+---
+
+# Omitted variable bias
+
+Our model might look like:
+`$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \varepsilon_i$$`
+
+--
+
+We want to know `\(\beta_1\)`
+
+--
+
+What would happen if we took a sample of *real world data* and used OLS to estimate `\(\hat{\beta}_1\)`?
+
+---
+
+# Omitted variable bias
+
+We would have omitted variable bias
+
+--
+
+Why? What are some examples?
+
+--
+
+.hi[Who] is more likely to be exposed to lead?
+
+--
+
+Poorer families likely have more lead exposure, why?
+
+--
+
+Richer families can move away, pay to replace lead paint, lead pipes, etc
+
+--
+
+This means lead exposure is correlated with lower income
+
+---
+
+# Omitted variable bias
+
+Why does this correlation cause us problems?
+
+--
+
+Family income *also* matters for GPA, it is in `\(\varepsilon_i\)`, so our assumption that `\(\text{correlation}(x,\varepsilon) = 0\)` is violated
+
+--
+
+Children from richer families tend to have higher GPAs
+
+---
+
+# Omitted variable bias
+
+If we just look at the effect of lead exposure on GPAs without addressing its correlation with income, lead exposure will look worse than it actually is
+
+--
+
+This is because our data on lead exposure is also proxying for income (since `\(\text{correlation}(x,\varepsilon) = 0\)` )
+
+--
+
+So `\(\hat{beta}_1\)` will pick up the effect of both!
+
+--
+
+Our estimate `\(\hat{\beta}_1\)` is .hi[biased] and overstates the negative effects of lead
+
+---
+
+# Omitted variable bias
+
+How do we fix this bias?
+
+--
+
+Make income not omitted: control for it in our model
+
+--
+
+If we have data on family income `\(I\)` we can instead write our model as:
+`$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \beta_2 \text{I}_i + \varepsilon_i$$`
+
+`\(I\)` is no longer omitted
+
+--
+
+Independent variables in our model that we include to address bias are called .hi[controls]
+
+---
+
+class: inverse, center, middle
+name: reg_in_r
+
+# Regression in R
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# How do we actually run regressions?
+
+Now we are going to learn how to run regressions in R
+
+--
+
+There's a lot of regression packages, built-in is `lm`, or you can also use a new one called `fixest`
+
+--
+
+We will also be using the `broom` package to make our output look nice
+
+--
+
+They work almost identically
+
+
+---
+
+# Using regression packages
+
+
+To run a regression we need 3 things:
+
+--
+
+1. The package that will run the regression
+2. Our regression formula
+3. The dataframe that contains our data
+
+--
+
+In general, we will always run a regression like this: `package_name(formula_here, data = dataframe_here)`
+
+--
+
+You can then store the output by assigning it to a variable: `results = package_name(formula_here, data = dataframe_here)`
+
+---
+
+# Using regression packages
+
+Let's start by using the built-in `lm` package along with the `starwars` dataset
+
+
+```r
+starwars
+```
+
+```
+## # A tibble: 87 x 14
+##    name  height  mass hair_color skin_color eye_color birth_year sex   gender homeworld species films vehicles
+##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+##  1 Luke…    172    77 blond      fair       blue            19   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [2…
+##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu… Naboo     Droid   &lt;chr… &lt;chr [0…
+##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  5 Leia…    150    49 brown      light      brown           19   fema… femin… Alderaan  Human   &lt;chr… &lt;chr [1…
+##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  7 Beru…    165    75 brown      light      blue            47   fema… femin… Tatooine  Human   &lt;chr… &lt;chr [0…
+##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu… Tatooine  Droid   &lt;chr… &lt;chr [0…
+##  9 Bigg…    183    84 black      light      brown           24   male  mascu… Tatooine  Human   &lt;chr… &lt;chr [0…
+## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu… Stewjon   Human   &lt;chr… &lt;chr [1…
+## # … with 77 more rows, and 1 more variable: starships &lt;list&gt;
+```
+
+---
+
+# Using regression packages
+
+Suppose we wanted to see what was the effect of height on mass:
+$$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
+
+--
+
+We can run the following code:
+
+
+```r
+# package_name(formula_here, data = dataframe_here)
+lm(mass ~ height, data = starwars)
+```
+
+```
+## 
+## Call:
+## lm(formula = mass ~ height, data = starwars)
+## 
+## Coefficients:
+## (Intercept)       height  
+##    -13.8103       0.6386
+```
+
+---
+
+# Using regression packages
+
+We can clean up the output a bit by piping it to `broom::tidy`:
+
+
+```r
+# package_name(formula_here, data = dataframe_here)
+lm(mass ~ height, data = starwars) %&gt;%
+  broom::tidy()
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  -13.8     111.       -0.124   0.902
+## 2 height         0.639     0.626     1.02    0.312
+```
+
+---
+
+# Using regression packages
+
+
+
+The first column gives us our estimates: `\(\hat{\beta_0}, \hat{\beta}_1\)`
+
+--
+
+The last column is the .hi[p-value]: the probability that we would have gotten an estimate at least that large, if the *true* value was actually 0
+
+Smaller values generally mean it is more likely that height has an effect on mass: the probability that we could have gotten our estimated value if height didn't matter is very low
+
+
+---
+
+# Interpreting coefficient estimates
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  -13.8     111.       -0.124   0.902
+## 2 height         0.639     0.626     1.02    0.312
+```
+
+What do these coefficient estimates mean?
+
+--
+
+The estimate for the `\(\beta\)` on height means: if we increase height by 1cm, mass increases by 0.639kg
+
+--
+
+This just comes from our previous example where `\(\beta_1 = \frac{\partial mass_i}{\partial height_i}\)`
+
+---
+
+# Interpreting coefficient estimates
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  -13.8     111.       -0.124   0.902
+## 2 height         0.639     0.626     1.02    0.312
+```
+
+How do we interpret `\(\beta_0\)`, the estimate of the *intercept*?
+
+--
+
+Well, it is just the estimated mass, given someone had zero height: 
+`$$\hat{\beta}_0 = \hat{\beta}_0 + \hat{\beta}_1 \times 0$$`
+
+--
+
+It's kind of a nonsense interpretation here since no one has zero height
+
+--
+
+Generally we don't read too much into the intercept terms
+
+---
+
+# Interpreting coefficient estimates
+
+Now, what if we changed our model a bit so it was instead:
+`$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$`
+
+What does `\(\beta_1\)` mean now?
+
+--
+
+`$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)}$$`
+
+--
+
+But we can rewrite this as:
+`$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$`
+
+---
+
+# Interpreting coefficient estimates
+
+`$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$`
+
+And this is equal to:
+`$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{1}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\text{height}_i}{1}$$`
+
+--
+
+And finally:
+`$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\text{height}_i}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}$$`
+
+which is the definition of the elasticity of mass with respect to height
+
+---
+
+# Interpreting coefficient estimates
+
+`$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$`
+
+In a *log-log* model, `\(\beta\)` 1 tells us the percent change in mass, given a percent change in height
+
+--
+
+Let's run the regression:
+
+
+```r
+# package_name(formula_here, data = dataframe_here)
+lm(log(mass) ~ log(height), data = starwars) %&gt;%
+  broom::tidy()
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic       p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 (Intercept)    -3.84     1.17      -3.27 0.00181      
+## 2 log(height)     1.58     0.228      6.93 0.00000000410
+```
+
+---
+
+# Interpreting coefficient estimates
+
+
+```r
+# package_name(formula_here, data = dataframe_here)
+lm(log(mass) ~ log(height), data = starwars) %&gt;%
+  broom::tidy()
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic       p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 (Intercept)    -3.84     1.17      -3.27 0.00181      
+## 2 log(height)     1.58     0.228      6.93 0.00000000410
+```
+
+A 1% increase in height is associated with a 1.58% increase in mass!
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

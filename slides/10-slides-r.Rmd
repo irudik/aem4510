@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -42,6 +42,18 @@ theme_empty <- theme_minimal() +
     plot.background = element_rect(fill = "#eeeeee", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
+theme_blank <- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_blank(), axis.text.y = element_blank(),
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#eeeeee", colour = NA),
+    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
 ```
 ```{r xaringanExtra, echo = FALSE}
 xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
@@ -1666,7 +1678,7 @@ gdp_u %>% mutate(date = ymd(date))
 class: inverse, center, middle
 name: tidyverse
 
-# Regression and econometrics
+# Regression and ordinary least squares
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
@@ -1677,7 +1689,7 @@ name: tidyverse
 
 ## Motivation
 
-Let's start with a few __basic, general questions:__
+Let's start with a few .hi[basic, general questions]
 
 --
 
@@ -1687,142 +1699,980 @@ Let's start with a few __basic, general questions:__
 
 --
 
-__One simple answer:__ Learn about the world using data.
+.hi[One simple answer:] Learn about the world using data
 
---
-
-- _Learn about the world_ = Raise, answer, and challenge questions, theories, assumptions.
-
-- _data_ = Plural of datum.
 
 ---
+
 # Why?
 
 ## Example
 
-GPA is an output from endowments (ability) and hours studied (inputs). So, one might hypothesize a model
+GPA is an output from endowments (ability), and hours studied (inputs), and pollution exposure (externality)
 
-$\text{GPA}=f(H, \text{SAT}, \text{PCT})$
+--
 
-where $H$ is hours studied, $\text{SAT}$ is SAT score and $\text{PCT}$ is the percentage of classes an individual attended. We expect that GPA will rise with each of these variables ( $H$, $\text{SAT}$, and $\text{PCT}$).
+One might hypothesize a model:
+$\text{GPA}=f(I, P, \text{SAT}, H)$
+
+where $H$ is hours studied, $P$ is pollution exposure, $\text{SAT}$ is SAT score and $\text{I}$ is family income
+
+--
+
+We expect that GPA will rise with some variables, and decrease with others
+
+--
 
 But who needs to _expect_?
 
-We can test these hypotheses __using a regression model__.
+--
 
----
-layout: true
-# Why?
-
-## Example, cont.
-
-__Regression model:__
-
-$$ \text{GPA}_i = \beta_0 + \beta_1 H_i + \beta_2 \text{SAT}_i + \beta_3 \text{PCT}_i + \varepsilon_i $$
+We can test these hypotheses .hi[using a regression model]
 
 ---
 
-We want to test estimate/test the relationship $\text{GPA}=f(H, \text{SAT}, \text{PCT})$.
+# How?
+
+We can write down a linear regression model of the relationship between GPA and (H, P, SAT, PCT):
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+The left hand side of the equals sign is our .hi-blue[dependent variable] GPA
+
+The right hand side of the equals sign contains all of our .hi-red[independent variables] (I, P, SAT, H), and an error term $\varepsilon_i$ (described later)
+
+The subscript $i$ means that the variable contains the value for some person $i$ in our dataset where $i = 1,\dots,N$
 
 ---
 
-### (Review) Questions
+# How?
+
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+We are interested in how pollution P affects GPA
 
 --
 
-- __Q:__ How do we interpret $\beta_1$?
---
-
-- __A:__ An additional hour in class correlates with a $\beta_1$ unit increase in an individual's GPA (controlling for SAT and PCT).
-
+This is given by $\beta_2$
 
 --
 
-- __Q:__ Are the $\beta_k$ terms population parameters or sample statistics?
---
-
-- __A:__ Greek letters denote __population parameters__. Their estimates get hats, _e.g._, $\hat{\beta}_k$.
-
----
-
-### (Review) Questions
-
-- __Q:__ Can we interpret the estimates for $\beta_2$ as causal?
---
-
-- __A:__ Not without making more assumptions and/or knowing more about the data-generating process.
-
+Notice that $\beta_2 = \frac{\partial\text{GPA}_i}{\partial\text{P}_i}$
 
 --
 
-- __Q:__ What is $\varepsilon_i$?
+$\beta_2$ tells us how GPA changes, given a 1 unit increase in pollution!
+
 --
 
-- __A:__ An individual's random deviation/disturbance from the population parameters.
+Our goal will be to estimate $\beta_2$, we denote estimates with hats: $\hat{\beta}_2$
 
 
 ---
 
-### (Review) Questions
+# How?
 
-- __Q:__ Which assumptions do we impose when estimating with OLS?
---
-
-- __A:__
-  - The relationship between the GPA and the explanatory variables is linear in parameters, and $\varepsilon$ enters additively.
-  - The explanatory variables are __exogenous__, _i.e._, $E[\varepsilon|X] = 0$.
-  - You've also typically assumed something along the lines of:<br> $E[\varepsilon_i] = 0$, $E[\varepsilon_i^2] = \sigma^2$, $E[\varepsilon_i \varepsilon_j] = 0$ for $i \neq j$.
-  - And (maybe) $\varepsilon_i$ is distributed normally.
-
-
----
-layout: false
-
-# Assumptions
-
-## How important can they be?
-
-You've learned how **powerful and flexible** ordinary least squares (**OLS**) regression can be.
-
-However, the results you learned required assumptions.
-
-**Real life often violates these assumptions.**
+How do we estimate $\beta_2$?
 
 --
 
-EC421 asks "**what happens when we violate these assumptions?**"
-- Can we find a fix? (Especially: How/when is $\beta$ *causal*?)
-- What happens if we don't (or can't) apply a fix?
-
-OLS still does some amazing things—but you need to know when to be **cautious, confident, or dubious**.
+First, suppose we have a set of estimates for all of our $\beta$s, then we can *estimate* the GPA $(\widehat{GPA}_i)$ for any given person based on just (I, P, SAT, H):
+$$\widehat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 I_i + \hat{\beta}_2 P_i + \hat{\beta}_3 \text{SAT}_i + \hat{\beta}_4 H_i$$
 
 ---
 
-# Not everything is causal
+# How?
 
-```{R, spurious, echo = F, fig.show = 'hide', warning = F}
-tmp <- data.frame(
-  year = 1999:2009,
-  count = c(
-    9, 8, 11, 12, 11, 13, 12, 9, 9, 7, 9,
-    6, 5, 5, 10, 8, 14, 10, 4, 8, 5, 6
-  ),
-  type = rep(c("letters", "deaths"), each = 11)
+We estimate the $\beta$s with .hi[linear regression], specifically ordinary least squares
+
+.hi[Ordinary least squares:] choose all the $\beta$s so that the sum of squared errors between the *real* GPAs and model-estimated GPAs are minimized:
+$$SSE = \sum_{i=1}^N (GPA_i - \widehat{GPA}_i)^2$$
+
+--
+
+Choosing the $\beta$s in this fashion gives us the best-fit line through the data
+
+---
+
+# How?
+
+
+```{R, gen dataset, include = F, cache = T}
+# Set population and sample sizes
+n_p <- 100
+n_s <- 10
+# Set the seed
+set.seed(12468)
+# Generate data
+pop_df <- tibble(
+  i = 3,
+  x = rnorm(n_p, mean = 5, sd = 1.5),
+  e = rnorm(n_p, mean = 0, sd = 1),
+  y = i + 0.5 * x + e,
+  row = rep(1:sqrt(n_p), times = sqrt(n_p)),
+  col = rep(1:sqrt(n_p), each = sqrt(n_p)),
+  s1 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
+  s2 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
+  s3 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s)))
 )
-ggplot(data = tmp, aes(x = year, y = count, color = type)) +
-  geom_path() +
-  geom_point(size = 4) +
-  xlab("Year") +
-  ylab("Count") +
-  scale_color_manual(
-    "",
-    labels = c("Deaths from spiders", "Letters in the winning spelling bee word"),
-    values = c(red_pink, "darkslategray")
-  ) +
-  theme_empty +
-  theme(legend.position = "top")
+# Regressions
+lm0 <- lm(y ~ x, data = pop_df)
+lm1 <- lm(y ~ x, data = filter(pop_df, s1 == T))
+lm2 <- lm(y ~ x, data = filter(pop_df, s2 == T))
+lm3 <- lm(y ~ x, data = filter(pop_df, s3 == T))
+# Simulation
+set.seed(12468)
+sim_df <- lapply(X = 1:1e3, FUN = function(x, size = n_s) {
+  lm(y ~ x, data = pop_df %>% sample_n(size = size)) %>% tidy()
+}) %>% do.call(rbind, .) %>% as_tibble()
+```
+
+---
+
+# Simple example
+
+Suppose we were only looking at GPA and family income I
+
+```{R, ols vs lines 1, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$
+
+```{R, vs lines 2, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat <- function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 <- 6
+b1 <- 0.2
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+# geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can calculate errors: $e_i = y_i - \hat{y}_i$
+
+```{R, ols vs lines 3, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat <- function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 <- 6
+b1 <- 0.2
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can calculate errors: $e_i = y_i - \hat{y}_i$
+
+```{R, ols vs lines 4, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat <- function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 <- 3
+b1 <- 0.2
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can calculate errors: $e_i = y_i - \hat{y}_i$
+
+```{R, ols vs lines 5, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat <- function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 <- 10
+b1 <- -0.8
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+count: false
+# Simple example
+
+
+SSE squares the errors $\left(\sum e_i^2\right)$: bigger errors get bigger penalties
+
+```{R, ols vs lines 6, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat <- function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 <- 10
+b1 <- -0.8
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+scale_color_viridis(option = "cividis", direction = -1) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+count: false
+# Simple example
+
+
+The OLS estimate is the combination of $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize SSE
+
+```{R, ols vs lines 7, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat <- function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 <- lm0$coefficients[1]
+b1 <- lm0$coefficients[2]
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
+geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+geom_abline(intercept = b0, slope = b1, color = "#ff0000", size = 2, alpha = 0.9) +
+scale_color_viridis(option = "cividis", direction = -1) +
+theme_empty +
+  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+```
+
+---
+
+# OLS error term
+
+So OLS is just the best-fit line through your data
+
+--
+
+Remember: for any given $i$, we won't have that $GPA_i = \widehat{GPA}_i$, there's always some error
+
+--
+
+Why?
+
+--
+
+Our model isn't perfect, the people in our dataset (i.e. our sample) may not perfectly match up to the entire population of people
+
+---
+
+# OLS error term
+
+There's .hi[a lot] of other stuff that determines GPAs!
+
+--
+
+We jam all that stuff into error term $\varepsilon_i$:
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+--
+
+So $\varepsilon_i$ contains all the determinants of GPA that we aren't explicitly addressing in our model
+
+---
+
+# OLS properties
+
+OLS has one .hi[very] nice property relevant for this class:<sup>1</sup>.footnote[
+<sup>1</sup> The other is that is has the minimum variance of all unbiased estimators but that's not super important for us.
+]
+
+--
+
+.hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
+
+---
+
+# OLS properties
+
+.hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
+
+On average, our estimate $\hat{\beta}$ exactly equals the .hi[true] $\beta$
+
+--
+
+The key is .hi-red[on average:] we are estimating our model using only some sample of the data
+
+--
+
+The estimated $\beta$ won't exactly be right for the entire population, but on average, we expect it to match
+
+--
+
+Let's see in an example where we only have a subsample of the full population of data
+
+---
+
+# OLS properties
+
+
+.pull-left[
+
+```{R, pop1, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col)) +
+geom_point(color = "darkslategray", size = 10) +
+theme_blank
+```
+
+.center[**Population**]
+
+]
+
+--
+
+.pull-right[
+
+```{R, scatter1, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = "#3C93DC", size = 3
+) +
+geom_point(color = "darkslategray", size = 6) +
+theme_blank
+```
+
+.center[**Population relationship**]
+
+$$ y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i $$
+
+$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+
+
+]
+
+---
+
+.pull-left[
+
+
+```{R, sample1, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col, shape = s1)) +
+geom_point(color = "darkslategray", size = 10) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[**Sample 1:** 10 random individuals]
+
+
+]
+
+--
+
+.pull-right[
+
+
+```{R, sample1 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = red_pink, size = 3, alpha = 0.3
+) +
+geom_point(aes(shape = s1), color = "darkslategray", size = 6) +
+geom_abline(
+  intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+  size = 2, linetype = 2, color = "black"
+) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+
+.center[
+
+**Population relationship**
+<br>
+$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+
+**Sample relationship**
+<br>
+$\hat{y}_i = `r round(lm1$coefficients[1], 2)` + `r round(lm1$coefficients[2], 2)` x_i$
+
+]
+
+]
+
+---
+count: false
+
+.pull-left[
+
+```{R, sample2, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col, shape = s2)) +
+geom_point(color = "darkslategray", size = 10) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[**Sample 2:** 10 random individuals]
+
+]
+
+.pull-right[
+
+```{R, sample2 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = red_pink, size = 3, alpha = 0.3
+) +
+geom_point(aes(shape = s2), color = "darkslategray", size = 6) +
+geom_abline(
+  intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+  size = 2, linetype = 2, color = "black", alpha = 0.3
+) +
+geom_abline(
+  intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
+  size = 2, linetype = 2, color = "black"
+) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
 ```
 
 .center[
-![spurious correlations](`r knitr::fig_chunk("spurious", "png")`)
+
+**Population relationship**
+<br>
+$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+
+**Sample relationship**
+<br>
+$\hat{y}_i = `r round(lm2$coefficients[1], 2)` + `r round(lm2$coefficients[2], 2)` x_i$
+
 ]
+
+]
+---
+count: false
+
+.pull-left[
+
+```{R, sample3, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col, shape = s3)) +
+geom_point(color = "darkslategray", size = 10) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[**Sample 3:** 10 random individuals]
+
+]
+
+.pull-right[
+
+```{R, sample3 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = red_pink, size = 3, alpha = 0.3
+) +
+geom_point(aes(shape = s3), color = "darkslategray", size = 6) +
+geom_abline(
+  intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+  size = 2, linetype = 2, color = "black", alpha = 0.3
+) +
+geom_abline(
+  intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
+  size = 2, linetype = 2, color = "black", alpha = 0.3
+) +
+geom_abline(
+  intercept = lm3$coefficients[1], slope = lm3$coefficients[2],
+  size = 2, linetype = 2, color = "black"
+) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[
+
+**Population relationship**
+<br>
+$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+
+**Sample relationship**
+<br>
+$\hat{y}_i = `r round(lm3$coefficients[1], 2)` + `r round(lm3$coefficients[2], 2)` x_i$
+
+]
+
+]
+
+---
+layout: false
+class: clear, middle
+
+Let's repeat this **1,000 times**.
+
+(This exercise is called a (Monte Carlo) simulation.)
+
+---
+
+# Population *vs.* sample
+
+```{R, simulation scatter, echo = F, dev = "png", dpi = 300, cache = T, fig.height = 3}
+# Reshape sim_df
+line_df <- tibble(
+  intercept = sim_df %>% filter(term != "x") %>% select(estimate) %>% unlist(),
+  slope = sim_df %>% filter(term == "x") %>% select(estimate) %>% unlist()
+)
+ggplot() +
+geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.02, color = "darkslategray") +
+geom_point(data = pop_df, aes(x = x, y = y), size = 3, color = "darkslategray") +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = "#3C93DC", size = 1.5
+) +
+theme_blank
+```
+
+---
+
+# Population *vs.* sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+---
+
+.pull-left[
+```{R, simulation scatter2, echo = F, dev = "png", dpi = 300, cache = T, fig.height = 6, fig.fullwidth = T}
+# Reshape sim_df
+line_df <- tibble(
+  intercept = sim_df %>% filter(term != "x") %>% select(estimate) %>% unlist(),
+  slope = sim_df %>% filter(term == "x") %>% select(estimate) %>% unlist()
+)
+ggplot() +
+geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
+geom_point(data = pop_df, aes(x = x, y = y), size = 6, color = "darkslategray") +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = "#3C93DC", size = 3
+) +
+theme_blank
+```
+]
+
+.pull-right[
+
+On .hi-blue[average], our regression lines match the population line very nicely
+
+However, .hi[individual lines] (samples) can really miss the mark
+
+Differences between individual samples and the population lead to **uncertainty** for us in the true effect
+
+]
+
+---
+
+# Population *vs.* sample
+
+**Answer:** Uncertainty matters!
+
+--
+
+$\hat{\beta}$ itself is random, it will depend on the sample of data we have
+
+--
+
+When we take a sample and run a regression, we don't know if it's a 'good' sample ( $\hat{\beta}$ is close to $\beta$) or a 'bad sample' (our sample differs greatly from the population)
+
+---
+
+# Unbiasedness
+
+For OLS to be unbiased and give us, on average, the causal effect of some X on some Y we need a few assumptions to hold
+
+--
+
+Whether or not these assumptions are true is why you often hear *correlation is not causation*
+
+--
+
+If we want some $\hat{\beta}_1$ on a variable $x$ to be unbiased we need the following to be true:
+$$E[x \varepsilon] = 0 \quad \leftrightarrow \quad \text{correlation}(x,\varepsilon) = 0$$
+
+--
+
+The variable you are interested in .hi[cannot] be correlated with the error term
+
+---
+
+# Unbiasedness
+
+The variable you are interested in .hi[cannot] be correlated with the error term
+
+--
+
+What does this mean in words?
+
+--
+
+The error term contains all variables that determine $y$, but we *omitted* from our model
+
+--
+
+We are assuming that our variable of interest, x, is not correlated with any of these omitted variable
+
+--
+
+If x is correlated with any of them, then we will have something called .hi[omitted variable bias]
+
+---
+
+# Omitted variable bias
+
+Here's an intuitive example
+
+--
+
+Suppose we wanted to understand the effect of lead exposure $P$ on GPAs
+
+--
+
+lead harm's children's brain development, especially before age 6
+
+--
+
+We should expect early-life lead exposure to reduce future GPAs
+
+---
+
+# Omitted variable bias
+
+Our model might look like:
+$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \varepsilon_i$$
+
+--
+
+We want to know $\beta_1$
+
+--
+
+What would happen if we took a sample of *real world data* and used OLS to estimate $\hat{\beta}_1$?
+
+---
+
+# Omitted variable bias
+
+We would have omitted variable bias
+
+--
+
+Why? What are some examples?
+
+--
+
+.hi[Who] is more likely to be exposed to lead?
+
+--
+
+Poorer families likely have more lead exposure, why?
+
+--
+
+Richer families can move away, pay to replace lead paint, lead pipes, etc
+
+--
+
+This means lead exposure is correlated with lower income
+
+---
+
+# Omitted variable bias
+
+Why does this correlation cause us problems?
+
+--
+
+Family income *also* matters for GPA, it is in $\varepsilon_i$, so our assumption that $\text{correlation}(x,\varepsilon) = 0$ is violated
+
+--
+
+Children from richer families tend to have higher GPAs
+
+---
+
+# Omitted variable bias
+
+If we just look at the effect of lead exposure on GPAs without addressing its correlation with income, lead exposure will look worse than it actually is
+
+--
+
+This is because our data on lead exposure is also proxying for income (since $\text{correlation}(x,\varepsilon) = 0$ )
+
+--
+
+So $\hat{beta}_1$ will pick up the effect of both!
+
+--
+
+Our estimate $\hat{\beta}_1$ is .hi[biased] and overstates the negative effects of lead
+
+---
+
+# Omitted variable bias
+
+How do we fix this bias?
+
+--
+
+Make income not omitted: control for it in our model
+
+--
+
+If we have data on family income $I$ we can instead write our model as:
+$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \beta_2 \text{I}_i + \varepsilon_i$$
+
+$I$ is no longer omitted
+
+--
+
+Independent variables in our model that we include to address bias are called .hi[controls]
+
+---
+
+class: inverse, center, middle
+name: reg_in_r
+
+# Regression in R
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# How do we actually run regressions?
+
+Now we are going to learn how to run regressions in R
+
+--
+
+There's a lot of regression packages, built-in is `lm`, or you can also use a new one called `fixest`
+
+--
+
+We will also be using the `broom` package to make our output look nice
+
+--
+
+They work almost identically
+
+
+---
+
+# Using regression packages
+
+
+To run a regression we need 3 things:
+
+--
+
+1. The package that will run the regression
+2. Our regression formula
+3. The dataframe that contains our data
+
+--
+
+In general, we will always run a regression like this: `package_name(formula_here, data = dataframe_here)`
+
+--
+
+You can then store the output by assigning it to a variable: `results = package_name(formula_here, data = dataframe_here)`
+
+---
+
+# Using regression packages
+
+Let's start by using the built-in `lm` package along with the `starwars` dataset
+
+```{r}
+starwars
+```
+
+---
+
+# Using regression packages
+
+Suppose we wanted to see what was the effect of height on mass:
+$$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
+
+--
+
+We can run the following code:
+
+```{r}
+# package_name(formula_here, data = dataframe_here)
+lm(mass ~ height, data = starwars)
+```
+
+---
+
+# Using regression packages
+
+We can clean up the output a bit by piping it to `broom::tidy`:
+
+```{r}
+# package_name(formula_here, data = dataframe_here)
+lm(mass ~ height, data = starwars) %>%
+  broom::tidy()
+```
+
+---
+
+# Using regression packages
+
+```{r, echo = F}
+# package_name(formula_here, data = dataframe_here)
+starwars1 <- lm(mass ~ height, data = starwars) %>%
+  broom::tidy()
+```
+
+The first column gives us our estimates: $\hat{\beta_0}, \hat{\beta}_1$
+
+--
+
+The last column is the .hi[p-value]: the probability that we would have gotten an estimate at least that large, if the *true* value was actually 0
+
+Smaller values generally mean it is more likely that height has an effect on mass: the probability that we could have gotten our estimated value if height didn't matter is very low
+
+
+---
+
+# Interpreting coefficient estimates
+
+```{r, echo = F}
+starwars1
+```
+
+What do these coefficient estimates mean?
+
+--
+
+The estimate for the $\beta$ on height means: if we increase height by 1cm, mass increases by 0.639kg
+
+--
+
+This just comes from our previous example where $\beta_1 = \frac{\partial mass_i}{\partial height_i}$
+
+---
+
+# Interpreting coefficient estimates
+
+```{r, echo = F}
+starwars1
+```
+
+How do we interpret $\beta_0$, the estimate of the *intercept*?
+
+--
+
+Well, it is just the estimated mass, given someone had zero height: 
+$$\hat{\beta}_0 = \hat{\beta}_0 + \hat{\beta}_1 \times 0$$
+
+--
+
+It's kind of a nonsense interpretation here since no one has zero height
+
+--
+
+Generally we don't read too much into the intercept terms
+
+---
+
+# Interpreting coefficient estimates
+
+Now, what if we changed our model a bit so it was instead:
+$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
+
+What does $\beta_1$ mean now?
+
+--
+
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)}$$
+
+--
+
+But we can rewrite this as:
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
+
+---
+
+# Interpreting coefficient estimates
+
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
+
+And this is equal to:
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{1}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\text{height}_i}{1}$$
+
+--
+
+And finally:
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\text{height}_i}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}$$
+
+which is the definition of the elasticity of mass with respect to height
+
+---
+
+# Interpreting coefficient estimates
+
+$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
+
+In a *log-log* model, $\beta$ 1 tells us the percent change in mass, given a percent change in height
+
+--
+
+Let's run the regression:
+
+```{r}
+# package_name(formula_here, data = dataframe_here)
+lm(log(mass) ~ log(height), data = starwars) %>%
+  broom::tidy()
+```
+
+---
+
+# Interpreting coefficient estimates
+
+```{r}
+# package_name(formula_here, data = dataframe_here)
+lm(log(mass) ~ log(height), data = starwars) %>%
+  broom::tidy()
+```
+
+A 1% increase in height is associated with a 1.58% increase in mass!
