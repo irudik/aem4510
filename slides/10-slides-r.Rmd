@@ -73,7 +73,7 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 
 Our goal is to take a hands on approach to learning how we actually .hi-blue[do] environmental economics
 
-A good chunk of this lecture comes from Grant Mcdermott's [data science for economists](https://github.com/uo-ec607/lectures) notes, and [RStudio education](https://education.rstudio.com/)
+A good chunk of this lecture comes from Grant Mcdermott's [data science for economists](https://github.com/uo-ec607/lectures) notes, Ed Rubin's [intro to econometrics](https://github.com/edrubin/EC421S20), and [RStudio education](https://education.rstudio.com/)
 
 ---
 
