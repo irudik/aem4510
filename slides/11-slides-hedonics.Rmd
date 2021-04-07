@@ -31,10 +31,70 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 ```{r xaringanExtra, echo = FALSE}
 xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
-
-```
-```{r echo=FALSE}
 xaringanExtra::style_panelset(panel_tab_color_active = "red")
+```
+```{r themes}
+red_pink <- "#e64173"
+# A blank theme for ggplot
+theme_empty <- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black"), axis.ticks = element_line(),
+  )
+theme_blank <- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_blank(), axis.text.y = element_blank(),
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
+theme_regular <- 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 14),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
+  ) 
+```
+
+```{r data}
+set.seed(1000)
+# Number of species in treatment and control
+
+house_data <- tibble(
+  house_num = seq(from = 1, to = num_houses)
+)
+
+house_data <- house_data %>%
+  as_tibble() %>%
+  mutate(
+    ozone = exp(rnorm(num_houses))*30,
+    num_bedrooms = sample(1:4, 1000, replace = TRUE),
+    num_bathrooms = sample(seq(1, 3, .5), 1000, replace = TRUE),
+    sq_feet = exp(rnorm(num_houses))*1000,
+    log_price = 12 + .1*num_bedrooms + .08*num_bathrooms + .0001*sq_feet - .005*ozone + rnorm(1000)*.5,
+    price = exp(log_price)
+  ) %>% 
+  filter(sq_feet > 500)
+
+lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %>% broom::tidy()
 ```
 
 ---
@@ -294,7 +354,7 @@ It is also characterized by an environmental good $q$
 
 # The hedonic model
 
-The price of a house is determined by a .hi[hedonic price function] $P(x,q)$
+The price of a house is determined by a .hi[hedonic price curve] $P(x,q)$
 
 
 --
@@ -311,11 +371,11 @@ $P$ arises in equilibrium from the interaction of all buyers in sellers in the m
 
 --
 
-Here we will assume the supply of houses is fixed in the short run so the price function arises from buyer behavior
+Here we will assume the supply of houses is fixed in the short run so the price curve arises from buyer behavior
 
 ---
 
-# The hedonic model: the price function
+# The hedonic model: the price curve
 
 
 .pull-left[
@@ -324,21 +384,10 @@ logx <- function(x) -x^2 + 4*x + 1
 
 ggplot() +
   stat_function(fun = logx, color = "#000000", size = 1.5, linetype = "solid") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24, color = "#EEEEEE"), axis.text.y = element_text(size = 24, color = "#EEEEEE"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(),
-    panel.grid.minor.y = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
+  theme_regular +
   labs(x = "Quantity of Environmental good (q)",
        y = "Price of Property ($)",
-       title = "The Hedonic Price Function") +
+       title = "The Hedonic Price Curve") +
   scale_x_continuous(limits = c(0,2)) +
   scale_y_continuous(limits = c(0,6))
 
@@ -348,7 +397,7 @@ ggplot() +
 
 .pull-right[
 
-The hedonic price function is $P(x,q)$
+The hedonic price curve is $P(x,q)$
 
 It's increasing in q (q is good) but at a decreasing rate (decreasing marginal utility)
 
@@ -357,7 +406,7 @@ It's increasing in q (q is good) but at a decreasing rate (decreasing marginal u
 
 ---
 
-# The hedonic model: the price function
+# The hedonic model: the price curve
 
 
 .pull-left[
@@ -367,20 +416,10 @@ logx <- function(x) x^2 + -4*x + 5
 ggplot() +
   stat_function(fun = logx, color = "#000000", size = 1.5, linetype = "solid") +
   theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24, color = "#EEEEEE"), axis.text.y = element_text(size = 24, color = "#EEEEEE"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(),
-    panel.grid.minor.y = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
+  theme_regular +
   labs(x = "Quantity of Environmental good (q)",
        y = "Implicit Price of q ($)",
-       title = "The Implicit Price Function") +
+       title = "The Implicit Price Curve") +
   scale_x_continuous(limits = c(0,1.5)) +
   scale_y_continuous(limits = c(0,6))
 
@@ -390,7 +429,7 @@ ggplot() +
 
 .pull-right[
 
-The implicit price function for q is ${\partial P(x,q) \over \partial q}$
+The implicit price curve for q is ${\partial P(x,q) \over \partial q}$
 
 It tells us how the price changes in q
 
@@ -402,7 +441,7 @@ Effectively the q demand curve
 
 ---
 
-# Price function example
+# Price curve example
 
 <center>
 ```{r, out.width = "80%", fig.pos="c", echo = FALSE}
@@ -555,7 +594,7 @@ This means that ${\partial U \over \partial q} \big/ {\partial U \over \partial 
 
 --
 
-Knowledge of the hedonic price function $P$ is enough to tell us about household WTP for $q$!
+Knowledge of the hedonic price curve $P$ is enough to tell us about household WTP for $q$!
 
 
 ---
@@ -613,28 +652,11 @@ $${\partial U \over \partial q} + {\partial U \over \partial z} {\partial b \ove
 We can then rearrange to get:
 $${\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
 
-
-
 ---
 
 # The hedonic model: deriving MWTP
 
-Recall that the bid function is separable in income: $b(x,q,y,s,\bar{u}) ;s) = y - U^{-1}(x,q,\bar{u},s)$
-
---
-
-This lets us re-write ${\partial b \over \partial q}$ as:
-$$\pi^q(x,q,s,\bar{u}) = {\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
-
---
-
-Conditional on $x$, this defines our .hi-blue[compensated inverse demand function] for $q$!
-
----
-
-# The hedonic model: deriving MWTP
-
-$$\pi^q(x,q,s,\bar{u}) = {\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
+$$\pi^q(x,q,s,\bar{u}) \equiv {\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
 
 By assuming $q$ is a part of a larger bundle of house characteristics, we are able to characterize its demand through its relationship to the housing market
 
@@ -642,9 +664,32 @@ By assuming $q$ is a part of a larger bundle of house characteristics, we are ab
 
 We can then use the bid function (which maps into prices) to understand the marginal WTP for $q$
 
+
+---
+
+# The hedonic model: deriving MWTP
+
+$$\pi^q(x,q,s,\bar{u}) \equiv {\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
+
 --
 
-Our ultimate empirical goal is to estimate $\pi^q(x,q,s,\bar{u})$
+Our ultimate empirical goal is to estimate $\pi^q(x,q,s,\bar{u})$, which is a kind of demand curve
+
+--
+
+It's called a .hi-blue[Hicksian] demand curve, whereas our regular demand curves are .hi-red[Marshallian]
+
+
+---
+
+# The hedonic model: deriving MWTP
+
+The difference is that with .hi-red[Marshallian] demand curves, we are holding .hi-red[income] constant on the curve, income changes are demand *shifters*, utility changes as you move along the curve
+
+--
+
+With .hi-blue[Hicksian] demand curves, we are holding .hi-blue[utility] constant, income can change along the curve, utility changes are demand shifters
+
 
 
 ---
@@ -670,18 +715,7 @@ ggplot() +
   annotate("text", size = 6, label = expression(b(x,q,y,s, u^1)), x = 3.25, y = 5, color = "638ccc") +
   annotate("text", size = 6, label = expression(b(x,q,y,s, u^0)), x = 3.25, y = 8.5, color = "#638ccc") +
   annotate("text", size = 6, label = "a", x = 2.6, y = 8, color = "black") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 16, color = "#000000"), axis.text.y = element_text(size = 16, color = "#000000"),
-    axis.title.x = element_text(size = 16, color = "#000000"), axis.title.y = element_text(size = 16, color = "#000000"),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
+  theme_regular +
   scale_x_continuous(expand = c(0, 0), limits = c(0, 4), breaks = c(2.75), labels = expression(q[0])) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 15), breaks = c(9.2), labels = expression(P(x,q[0]))) +
   labs(x = "q",
@@ -694,9 +728,7 @@ ggplot() +
 
 The red line is the hedonic price function
 
-The blue lines are a single household's bid functions at different reference utility levels where $u_1 > u_0 > u_2$
-
-Higher utility $\rightarrow$ lower bids because same level of $q$ can be achieved with higher $z$
+The blue lines are a single household's bid functions at different reference utility levels
 
 ]
 
@@ -734,7 +766,7 @@ Different households will have different tangency points, different $q$ and $P(x
 
 .pull-left[
 
-The hedonic price function is the upper envelope of all the bid functions
+The hedonic price function is the .hi[upper envelope] of all the bid functions
 
 i.e. all the bid functions are tangent to it
 
@@ -760,23 +792,12 @@ ggplot() +
   annotate("text", size = 6, label = expression(b[1](x,q,y,s, u)), x = 3.25, y = 7, color = "forestgreen") +
   annotate("text", size = 6, label = expression(b[2](x,q,y,s, u)), x = 3.25, y = 8.5, color = "#638ccc") +
   annotate("text", size = 6, label = expression(b[3](x,q,y,s, u)), x = 1.75, y = 3, color = "black") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 16, color = "#000000"), axis.text.y = element_text(size = 16, color = "#000000"),
-    axis.title.x = element_text(size = 16, color = "#000000"), axis.title.y = element_text(size = 16, color = "#000000"),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
+  theme_regular +
   scale_x_continuous(expand = c(0, 0), limits = c(0, 4), breaks = c(2.75), labels = expression(q[0])) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 15), breaks = c(9.2), labels = expression(P(x,q[0]))) +
   labs(x = "q",
        y = "$",
-       title = "Hedonic price function\nand bid functions")
+       title = "Hedonic price curve\nand bid functions")
   
 ```
 ![bid function is tangent to hedonic price function](`r knitr::fig_chunk("bid_functions_2", "png")`)
@@ -785,9 +806,9 @@ ggplot() +
 
 ---
 
-# Hedonic price function and willingness to pay
+# Hedonic price curve and willingness to pay
 
-The hedonic price function shows how a house varies with attributes (such as air quality)
+The hedonic price curve shows how a house varies with attributes (such as air quality)
 
 --
 
@@ -795,7 +816,7 @@ The slope gives the marginal price of the attributes
 
 --
 
-At a given point on the function, the slope also gives the marginal WTP of the consumer who purchase that level of attributes
+At a given point on the curve, the slope also gives the marginal WTP of the consumer who purchase that level of attributes
 
 --
 
@@ -803,7 +824,72 @@ But we don’t know the whole marginal WTP schedule for .hi[that person], why?
 
 --
 
-Their bid curve is only tangent at that one point, we don't see their whole bid curve
+Their bid curve is only tangent at that one point, we don't see their whole bid curve, people don't buy 1,000 houses to trace out the whole curve
+
+
+---
+
+# Estimating the effect of ozone
+
+Let's work through an example where we estimate the effect of ozone
+
+You have a dataframe `house_data` available on RStudio Cloud:
+```{r}
+house_data
+```
+
+---
+
+# Estimating the effect of ozone
+
+We want to understand the effect of ozone on housing prices: how much does a unit increase in ozone cost?
+
+--
+
+Let's take a look at the summary statistics of our dataset first:
+```{r}
+summary(house_data)
+```
+
+---
+
+# Estimating the effect of ozone
+
+Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
+```{r, eval = F}
+ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
+  geom_point(size = 3) +                        # plot points
+  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
+  theme_regular +                               # apply theme
+  labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
+```
+
+---
+
+# Estimating the effect of ozone
+
+Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
+
+.center[
+```{r, echo = F, dev = "svg", fig.height = 4.5, fig.width = 6}
+ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
+  geom_point(size = 3) +                        # plot points
+  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
+  theme_regular +                               # apply theme
+  labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
+```
+]
+
+---
+
+# Estimating the effect of ozone
+
+Now it's time to do the regression:
+```{r}
+lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %>% 
+  broom::tidy()
+```
+A 1 unit increase in ozone decreases housing values by 0.466%!
 
 ---
 
@@ -865,7 +951,7 @@ What do GG 2008 do?
 --
 
 They regress:
-$$log(2000 median home price)_c = \theta 1(cleaned up in 2000)_c + \beta X_c + \varepsilon_{c}$$
+$$\log(\text{2000 median home price})_c = \theta \underbrace{1(\text{cleaned up in 2000})_c}_{\text{= 1 if true, = 0 otherwise}} + \beta X_c + \varepsilon_{c}$$
 
 --
 
@@ -976,7 +1062,7 @@ All homes are lakefront, and all the characteristics of the homes themselves, th
 
 --
 
-At the current equilibrium price of $200,000 per house, all 200 hundred homes on either lake are equally preferred. 
+At the current equilibrium price of $200,000 per house, all 200 hundred homes on either lake are equally preferred
 
 ---
 
@@ -986,7 +1072,7 @@ Now let’s imagine the clarity on one lake, Lake A, for example, is improved
 
 --
 
-Now if any home on Lake A were offered at the original equilibrium price of \\$200,000, consumers would uniformly prefer this house to any house on Lake B
+Now if any home on Lake A were offered at the original equilibrium price of $200,000, consumers would uniformly prefer this house to any house on Lake B
 
 --
 
@@ -996,15 +1082,15 @@ In other words, at current prices, there would be excess demand on Lake A, and a
 
 # Hedonics closing intuition: L.O. Taylor, 2003
 
-The price differential that results from a change in water quality at Lake A is the implicit price that consumers are willing to pay for that incremental increase in water clarity.
+The price differential that results from a change in water quality at Lake A is the implicit price that consumers are willing to pay for that incremental increase in water clarity
 
 --
 
-This willingness to pay for water clarity is directly revealed to us through the market prices of the homes.
+This willingness to pay for water clarity is directly revealed to us through the market prices of the homes
 
 --
 
-For instance, if in the new equilibrium houses on Lake A sell for \\$210,000, while house on Lake B sell for \\$200,000, the “implicit price” associated with the increased water clarity is \\$10,000.
+If in the new equilibrium houses on Lake A sell for 210,000, while house on Lake B sell for 200,000, the “implicit price” associated with the increased water clarity is 10,000 dollars
 
 ---
 
@@ -1108,18 +1194,17 @@ VSL = $500*10,000 = 5 million dollars
 
 # Estimating a hedonic wage function
 
-Just like our hedonic price function, we can estimate a hedonic wage function:
+We can estimate a .hi[hedonic wage function:]
 $$ w_i = \alpha + \beta_1 H_i  + \beta_2  X_i + \beta_3 p_i H_i + \gamma_1 p_i + \gamma_2 q_i + \gamma_3 q_i WC_i + \varepsilon_i$$
 
 --
 
 $w$: wage  
 $H$: worker personal characteristics  
-$X$: job characteristics
+$X$: job characteristics  
 $p$: risk of death at the job  
 $q$: non-fatal risk at the job  
 $WC$: workers' compensation benefits for injury  
-$\varepsilon$: error term
 
 ${\partial w \over \partial p}$ is the wage-risk trade off for marginal changes in risk
 

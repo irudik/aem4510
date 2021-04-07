@@ -34,12 +34,12 @@ theme_empty <- theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee", colour = NA),
-    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
 theme_blank <- theme_minimal() +
@@ -50,9 +50,21 @@ theme_blank <- theme_minimal() +
     axis.title.x = element_blank(), axis.title.y = element_blank(),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee", colour = NA),
-    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
+theme_regular <- 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 14),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
   ) 
 ```
 ```{r xaringanExtra, echo = FALSE}
@@ -1704,9 +1716,7 @@ Let's start with a few .hi[basic, general questions]
 
 ---
 
-# Why?
-
-## Example
+# Why? Example
 
 GPA is an output from endowments (ability), and hours studied (inputs), and pollution exposure (externality)
 
@@ -1736,9 +1746,15 @@ We can test these hypotheses .hi[using a regression model]
 We can write down a linear regression model of the relationship between GPA and (H, P, SAT, PCT):
 $$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
 
+--
+
 The left hand side of the equals sign is our .hi-blue[dependent variable] GPA
 
+--
+
 The right hand side of the equals sign contains all of our .hi-red[independent variables] (I, P, SAT, H), and an error term $\varepsilon_i$ (described later)
+
+--
 
 The subscript $i$ means that the variable contains the value for some person $i$ in our dataset where $i = 1,\dots,N$
 
@@ -2532,7 +2548,77 @@ starwars
 Suppose we wanted to see what was the effect of height on mass:
 $$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
 
+---
+
+# Using regression packages
+ 
+Before we begin lets look at the data and see what the relationship looks like:
+.center[
+```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
+ggplot(starwars, aes(x = height, y = mass)) +
+  geom_point(size = 3) +
+  theme_regular +
+  labs(y = "Mass (kg)", x = "Height (cm)")
+```
+]
+
+Looks like there's an outlier!
+
+
+---
+
+# Using regression packages
+ 
+What if we plot it in log units?
+.center[
+```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
+ggplot(starwars, aes(x = log(height), y = log(mass))) +
+  geom_point(size = 3) +
+  theme_regular +
+  labs(y = "Log(Mass) (kg)", x = "Log(Height) (cm)")
+```
+]
+
+That dampens the outlier, the positive association is really clear!
+
+
+---
+
+# Using regression packages
+ 
+What if we plot it in log units?
+.center[
+```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
+ggplot(starwars, aes(x = log(height), y = log(mass))) +
+  geom_point(size = 3) +
+  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
+  theme_regular +
+  labs(y = "Log(Mass) (kg)", x = "Log(Height) (cm)")
+```
+]
+
+Here's the best fit line, now let's actually estimate $\beta_0, \beta_1$
+
+
+---
+
+# Using regression packages
+
+First we need to construct our formula
+
 --
+
+We do this like: `dependent variable ~ independent variable 1 + independent variable 2 + ... + independent variable N`
+
+--
+
+For this example we would write: `mass ~ height`
+
+---
+
+# Using regression packages
+
+$$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
 
 We can run the following code:
 
@@ -2541,17 +2627,21 @@ We can run the following code:
 lm(mass ~ height, data = starwars)
 ```
 
+This gives us the coefficient estimate $\hat{\beta}_0$ (intercept), and $\hat{\beta}_1$ (height)
+
 ---
 
 # Using regression packages
 
-We can clean up the output a bit by piping it to `broom::tidy`:
+We can clean up the output a bit and get other statistics by piping it to `broom::tidy`:
 
 ```{r}
 # package_name(formula_here, data = dataframe_here)
 lm(mass ~ height, data = starwars) %>%
   broom::tidy()
 ```
+
+The coefficient estimates are now in column `estimates`, and we have a few other things
 
 ---
 
@@ -2569,7 +2659,13 @@ The first column gives us our estimates: $\hat{\beta_0}, \hat{\beta}_1$
 
 The last column is the .hi[p-value]: the probability that we would have gotten an estimate at least that large, if the *true* value was actually 0
 
+--
+
 Smaller values generally mean it is more likely that height has an effect on mass: the probability that we could have gotten our estimated value if height didn't matter is very low
+
+--
+
+Alternatively: smaller values mean it is more likely that we can reject that $\beta_1 = 0$
 
 
 ---
@@ -2584,7 +2680,7 @@ What do these coefficient estimates mean?
 
 --
 
-The estimate for the $\beta$ on height means: if we increase height by 1cm, mass increases by 0.639kg
+The estimate for the $\beta$ on height means: people who are 1cm taller tend to be 0.639kg heavier
 
 --
 
@@ -2653,7 +2749,7 @@ which is the definition of the elasticity of mass with respect to height
 
 $$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
 
-In a *log-log* model, $\beta$ 1 tells us the percent change in mass, given a percent change in height
+In a *log-log* model, $\beta_1$ tells us the percent change in mass, given a percent change in height
 
 --
 

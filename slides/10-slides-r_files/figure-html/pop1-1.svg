@@ -5,11 +5,11 @@
   <path d="M 8.21875 5.480469 L 282.519531 5.480469 L 282.519531 279.78125 L 8.21875 279.78125 Z M 8.21875 5.480469 "/>
 </clipPath>
 </defs>
-<g id="surface6224">
+<g id="surface74">
 <rect x="0" y="0" width="288" height="288" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
-<rect x="0" y="0" width="288" height="288" style="fill:rgb(93.333333%,93.333333%,93.333333%);fill-opacity:1;stroke:none;"/>
+<rect x="0" y="0" width="288" height="288" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <g clip-path="url(#clip1)" clip-rule="nonzero">
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(93.333333%,93.333333%,93.333333%);fill-opacity:1;" d="M 8.21875 279.78125 L 282.519531 279.78125 L 282.519531 5.480469 L 8.21875 5.480469 Z M 8.21875 279.78125 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 8.21875 279.78125 L 282.519531 279.78125 L 282.519531 5.480469 L 8.21875 5.480469 Z M 8.21875 279.78125 "/>
 </g>
 <path style="fill-rule:nonzero;fill:rgb(18.431373%,30.980392%,30.980392%);fill-opacity:1;stroke-width:0.708661;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(18.431373%,30.980392%,30.980392%);stroke-opacity:1;stroke-miterlimit:10;" d="M 31.710938 267.3125 C 31.710938 273.402344 26.777344 278.335938 20.6875 278.335938 C 14.597656 278.335938 9.664062 273.402344 9.664062 267.3125 C 9.664062 261.222656 14.597656 256.289062 20.6875 256.289062 C 26.777344 256.289062 31.710938 261.222656 31.710938 267.3125 "/>
 <path style="fill-rule:nonzero;fill:rgb(18.431373%,30.980392%,30.980392%);fill-opacity:1;stroke-width:0.708661;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(18.431373%,30.980392%,30.980392%);stroke-opacity:1;stroke-miterlimit:10;" d="M 59.417969 267.3125 C 59.417969 273.402344 54.484375 278.335938 48.394531 278.335938 C 42.304688 278.335938 37.371094 273.402344 37.371094 267.3125 C 37.371094 261.222656 42.304688 256.289062 48.394531 256.289062 C 54.484375 256.289062 59.417969 261.222656 59.417969 267.3125 "/>

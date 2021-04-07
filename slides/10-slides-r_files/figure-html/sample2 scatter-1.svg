@@ -14,11 +14,11 @@
   <path d="M 8.21875 57 L 282.519531 57 L 282.519531 164 L 8.21875 164 Z M 8.21875 57 "/>
 </clipPath>
 </defs>
-<g id="surface6274">
+<g id="surface124">
 <rect x="0" y="0" width="288" height="216" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
-<rect x="0" y="0" width="288" height="216" style="fill:rgb(93.333333%,93.333333%,93.333333%);fill-opacity:1;stroke:none;"/>
+<rect x="0" y="0" width="288" height="216" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <g clip-path="url(#clip1)" clip-rule="nonzero">
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(93.333333%,93.333333%,93.333333%);fill-opacity:1;" d="M 8.21875 207.78125 L 282.519531 207.78125 L 282.519531 5.480469 L 8.21875 5.480469 Z M 8.21875 207.78125 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 8.21875 207.78125 L 282.519531 207.78125 L 282.519531 5.480469 L 8.21875 5.480469 Z M 8.21875 207.78125 "/>
 </g>
 <g clip-path="url(#clip2)" clip-rule="nonzero">
 <path style="fill:none;stroke-width:6.40187;stroke-linecap:butt;stroke-linejoin:round;stroke:rgb(90.196078%,25.490196%,45.098039%);stroke-opacity:0.298039;stroke-miterlimit:10;" d="M 8.21875 167.261719 L 282.519531 58.570312 "/>
