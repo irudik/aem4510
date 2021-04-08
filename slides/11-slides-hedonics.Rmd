@@ -119,7 +119,7 @@ name: hedonics
 
 # Revealed preference approaches
 
-There is no clear way to value changes in quantities of environmental goods
+There is no clear way to .hi[directly] value changes in quantities of environmental goods
 
 --
 
@@ -141,7 +141,11 @@ One way to circumvent this problem is to look at private goods that interact wit
 
 --
 
-If there are changes in the environmental good, holding everything else fixed, that should be reflected in *some way* in changes in the price of the related private good
+If there are changes in the environmental good, 
+--
+holding everything else fixed, 
+--
+that should be reflected in *some way* in changes in the price of the related private good
 
 --
 
@@ -149,7 +153,7 @@ This change in price can tell us something about how people value the change in 
 
 ---
 
-# Revealed preference approaches
+# Revealed preference approaches: example
 
 There is no market for orcas
 
@@ -490,7 +494,7 @@ We won't touch on this in class because it's a bit more complicated, but economi
 
 # Choosing q
 
-Another thing to note: the consumer *chooses* $q$ where as before it was fixed
+Another thing to note: the consumer *chooses* $q$
 
 --
 
@@ -526,7 +530,12 @@ For homeowners we are basically assuming they rent from themselves every year
 
 $$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, s.t. \,\,\,\,\, y = z + P(x,q)$$
 
+--
+
 The FOCs for this problem are:
+
+--
+
 \begin{align}
   {\partial U \over \partial x_j} =& \lambda {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \\
   {\partial U \over \partial q} =& \lambda {\partial P \over \partial q} \\
@@ -576,9 +585,13 @@ $$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \unde
 
 $$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$
 
-At a utility-maximizing choice, a household equates their MRS between $q$ and $z$ and the marginal implicit cost of $q$
+At a utility-maximizing choice, 
+--
+a household equates their MRS between $q$ and $z$ and the marginal implicit cost of $q$
 
-Let's give this some more context
+--
+
+®emember the MRS tells us how the household trades off $q$ and $z$ while keeping utility constant
 
 ---
 
@@ -590,7 +603,7 @@ Recall that $z$ is the numeraire good so we can think of it in terms of dollars
 
 --
 
-This means that ${\partial U \over \partial q} \big/ {\partial U \over \partial z}$ is the WTP for $q$, the reduction in income needed to compensate for an additional unit of $q$
+This means that ${\partial U \over \partial q} \big/ {\partial U \over \partial z}$ is the WTP for $q$, the reduction in income needed to compensate for an additional unit of $q$, while maintaining the same level of utility
 
 --
 
@@ -618,28 +631,6 @@ The bid function $b$ is the maximum amount the household is willing to pay for:
 
 ---
 
-# The hedonic model: bid functions
-
-$$U(x,q,z;s) = \bar{u}$$
-
-We can also invert this to solve for $z$:<sup>1</sup>
-$$z = U^{-1}(x,q,\bar{u},s)$$
-
-.footnote[
-<sup>1</sup> We can do this because $U$ is monotonically increasing in $z$
-]
-
---
-
-Income, the bid function and $z$ are related by:
-$$b(x,q,y,s,\bar{u}) ;s) = y - U^{-1}(x,q,\bar{u},s)$$
-
---
-
-Now we have everything we need to derive a marginal WTP function for $q$
-
----
-
 # The hedonic model: deriving MWTP
 
 $$U(x,q,y -b(x,q,y,s,\bar{u}) ;s) = \bar{u}$$
@@ -650,13 +641,17 @@ $${\partial U \over \partial q} + {\partial U \over \partial z} {\partial b \ove
 --
 
 We can then rearrange to get:
-$${\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
+$${\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z} = {\partial P \over \partial q}$$
+
+--
+
+The maximum WTP is given by the implicit price curve
 
 ---
 
 # The hedonic model: deriving MWTP
 
-$$\pi^q(x,q,s,\bar{u}) \equiv {\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
+$$\underbrace{\pi^q(x,q,s,\bar{u})}_{\text{marginal WTP for q}} \equiv {\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
 
 By assuming $q$ is a part of a larger bundle of house characteristics, we are able to characterize its demand through its relationship to the housing market
 
@@ -669,7 +664,7 @@ We can then use the bid function (which maps into prices) to understand the marg
 
 # The hedonic model: deriving MWTP
 
-$$\pi^q(x,q,s,\bar{u}) \equiv {\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
+$$\underbrace{\pi^q(x,q,s,\bar{u})}_{\text{marginal WTP for q}} \equiv {\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
 
 --
 
@@ -684,7 +679,7 @@ It's called a .hi-blue[Hicksian] demand curve, whereas our regular demand curves
 
 # The hedonic model: deriving MWTP
 
-The difference is that with .hi-red[Marshallian] demand curves, we are holding .hi-red[income] constant on the curve, income changes are demand *shifters*, utility changes as you move along the curve
+The difference is that with .hi-red[Marshallian] demand curves, we are holding .hi-red[income] constant on the curve, income changes are demand shifters, utility changes as you move along the curve
 
 --
 
@@ -963,16 +958,6 @@ $-\theta$ is telling us the .hi-red[cost] of a superfund site to households
 
 ---
 
-# Superfund results: conventional approach
-
-<center>
-```{r, out.width = "50%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-superfund-results1.png")
-```
-</center>
-
----
-
 # Superfund results: "quasi-experimental"
 
 <center>
@@ -985,7 +970,7 @@ knitr::include_graphics("files/11-superfund-results2.png")
 
 # Superfund results
 
-Superfund cleanups had economically and statistically insignificant effects on property values, rental rates, housing supply, population, who lives near the site
+Superfund cleanups had .hi[economically and statistically insignificant effects] on property values, rental rates, housing supply, population, who lives near the site
 
 --
 
@@ -1008,7 +993,7 @@ Why does granularity matter?
 
 Superfund sites are a localized disamenity
 
-Previous attempts to value cleanup looked at changes incensus tract median housing values and found no impacts
+Previous attempts to value cleanup looked at changes in census tract median housing values and found no impacts
 
 Need to look .hi[within] census tracts
 

@@ -33,7 +33,7 @@ exclude: true
 ```r
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
+  tidyverse, magrittr, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
 )
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -47,17 +47,32 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 red_pink &lt;- "#e64173"
 blue &lt;- "#3C93DC"
 red &lt;- "#ff0000"
+```
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
+## refer to the documentation to update your slides.
+```
+
+```r
+red_pink &lt;- "#e64173"
 # A blank theme for ggplot
 theme_empty &lt;- theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee", colour = NA),
-    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
 theme_blank &lt;- theme_minimal() +
@@ -68,22 +83,52 @@ theme_blank &lt;- theme_minimal() +
     axis.title.x = element_blank(), axis.title.y = element_blank(),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee", colour = NA),
-    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
+theme_regular &lt;- 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 14),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
   ) 
 ```
 
+```r
+# initialize seed and data
+set.seed(1000)
+num_trips &lt;- 100
+trip_data &lt;- expand.grid(
+  house_num = seq(from = 1, to = num_trips),
+  site = 1:26
+)
 
-```
-## Warning: 'xaringanExtra::style_panelset' is deprecated.
-## Use 'style_panelset_tabs' instead.
-## See help("Deprecated")
-```
-
-```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer
-## to the documentation to update your slides.
+# make fake dataset
+trip_data &lt;- trip_data %&gt;%
+  as_tibble() %&gt;%
+  mutate(
+    trips = sample(0:8, num_trips * 26, replace = TRUE),
+    income = exp(rnorm(num_trips * 26)) * 3000 + 50000 + rnorm(num_trips * 2) * 15000,
+    income = ifelse(income &lt; 10000, 10000, income),
+    travel_cost = exp(rnorm(num_trips * 26)) * 30,
+    travel_cost_other = exp(rnorm(num_trips * 26)) * 35,
+    trips = round(-.01 * travel_cost + .01 * travel_cost_other + 3 / 100000 * income),
+    water_clarity = runif(num_trips * 26)
+  ) %&gt;%
+  group_by(site) %&gt;%
+  mutate(water_clarity = mean(water_clarity)) %&gt;%
+  ungroup() %&gt;%
+  mutate(trips = case_when(
+    trips &lt;= 0 ~ 0,
+    TRUE ~ trips + 3 * round(water_clarity)
+  ))
 ```
 
 ---
@@ -521,7 +566,7 @@ The multi-site model works as follows
 # Multi-site model
 
 .hi[Step 1:] Do the single-site estimation for each site:
-`$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} x_i + \varepsilon_ij$$`
+`$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} x_i + \varepsilon_{ij}$$`
 
 --
 
@@ -564,6 +609,153 @@ Once we estimate demand curves, we can see how welfare changes when we alter qua
 .pull-right[
 &lt;img src="12-travel-cost_files/figure-html/multi site example-1.svg" style="display: block; margin: auto;" /&gt;
 ]
+
+---
+
+# Multi-site example
+
+
+```r
+trip_data
+```
+
+```
+## # A tibble: 2,600 x 7
+##    house_num  site trips income travel_cost travel_cost_other water_clarity
+##        &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;             &lt;dbl&gt;         &lt;dbl&gt;
+##  1         1     1     4 40450.       38.9              16.4          0.506
+##  2         2     1     5 60304.       29.8              37.5          0.506
+##  3         3     1     5 66681.       42.2              67.2          0.506
+##  4         4     1     5 52886.       11.0              51.3          0.506
+##  5         5     1     5 69282.       15.7               7.72         0.506
+##  6         6     1     5 36948.        4.30             48.0          0.506
+##  7         7     1     6 60866.        5.31             91.0          0.506
+##  8         8     1     5 35557.       65.0             161.           0.506
+##  9         9     1     5 64880.       14.5              24.3          0.506
+## 10        10     1     4 38491.       13.6              26.5          0.506
+## # … with 2,590 more rows
+```
+
+---
+
+# First stage estimation
+
+
+```r
+# first stage of multi-site
+site_estimates &lt;- map_dfr(unique(trip_data$site), function(site_in){
+  lm(trips ~ travel_cost + travel_cost_other + income, 
+     trip_data %&gt;% filter(site == site_in)) %&gt;% 
+    broom::tidy() %&gt;% 
+    select(estimate) %&gt;% 
+    mutate(site = site_in) %&gt;% 
+    list() %&gt;% 
+    tibble_row() %&gt;% 
+    unlist() 
+}) %&gt;% 
+  select(1:5) %&gt;% 
+  magrittr::set_colnames(c("intercept", "own_price", "cross_price", "income", "site"))
+```
+
+---
+
+# First stage estimation
+
+
+```r
+site_estimates
+```
+
+```
+## # A tibble: 26 x 5
+##    intercept own_price cross_price    income  site
+##        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+##  1     2.99   -0.0161      0.0106  0.0000321     1
+##  2     2.45   -0.0117      0.0101  0.0000397     2
+##  3     2.37   -0.0197      0.0111  0.0000450     3
+##  4     2.33   -0.0187      0.0119  0.0000438     4
+##  5     2.05   -0.0143      0.0139  0.0000450     5
+##  6    -0.236  -0.00668     0.00972 0.0000321     6
+##  7     2.67   -0.0210      0.0118  0.0000395     7
+##  8    -0.346  -0.00395     0.00987 0.0000324     8
+##  9     2.98   -0.0133      0.0107  0.0000315     9
+## 10    -0.103  -0.00943     0.0105  0.0000302    10
+## # … with 16 more rows
+```
+
+---
+
+# Take estimates, join with water clarity
+
+
+```r
+# merge in water clarity
+estimation_df &lt;- site_estimates %&gt;% 
+  left_join(trip_data %&gt;% distinct(site, water_clarity))
+```
+
+```
+## Joining, by = "site"
+```
+
+```r
+estimation_df
+```
+
+```
+## # A tibble: 26 x 6
+##    intercept own_price cross_price    income  site water_clarity
+##        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;
+##  1     2.99   -0.0161      0.0106  0.0000321     1         0.506
+##  2     2.45   -0.0117      0.0101  0.0000397     2         0.503
+##  3     2.37   -0.0197      0.0111  0.0000450     3         0.515
+##  4     2.33   -0.0187      0.0119  0.0000438     4         0.515
+##  5     2.05   -0.0143      0.0139  0.0000450     5         0.515
+##  6    -0.236  -0.00668     0.00972 0.0000321     6         0.481
+##  7     2.67   -0.0210      0.0118  0.0000395     7         0.539
+##  8    -0.346  -0.00395     0.00987 0.0000324     8         0.482
+##  9     2.98   -0.0133      0.0107  0.0000315     9         0.530
+## 10    -0.103  -0.00943     0.0105  0.0000302    10         0.467
+## # … with 16 more rows
+```
+
+---
+
+# Second stage
+
+
+```r
+# second stage of multi-site
+demand_shifts &lt;- map_dfr(names(estimation_df)[1:4],
+        function(coefficient) {
+          reg_formula &lt;- as.formula(paste0(coefficient, " ~ water_clarity"))
+          lm(reg_formula, estimation_df) %&gt;% 
+            broom::tidy() %&gt;% 
+            mutate(coeff = coefficient) %&gt;% 
+            slice(2)
+        }
+)
+```
+
+---
+
+# Second stage
+
+
+```r
+demand_shifts
+```
+
+```
+## # A tibble: 4 x 6
+##   term           estimate std.error statistic      p.value coeff      
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;      
+## 1 water_clarity 48.0      6.29           7.62 0.0000000733 intercept  
+## 2 water_clarity -0.171    0.0302        -5.67 0.00000770   own_price  
+## 3 water_clarity  0.0241   0.00867        2.78 0.0104       cross_price
+## 4 water_clarity  0.000165 0.0000394      4.18 0.000330     income
+```
+The estimates column tells us how a change in water clarity (from 0 to 100%), shifts or rotates our demand curve
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

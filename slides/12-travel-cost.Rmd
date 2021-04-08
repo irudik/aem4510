@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
+  tidyverse, magrittr, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
 )
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -32,17 +32,24 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 red_pink <- "#e64173"
 blue <- "#3C93DC"
 red <- "#ff0000"
+```
+```{r xaringanExtra, echo = FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::style_panelset(panel_tab_color_active = "red")
+```
+```{r themes}
+red_pink <- "#e64173"
 # A blank theme for ggplot
 theme_empty <- theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee", colour = NA),
-    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
 theme_blank <- theme_minimal() +
@@ -53,17 +60,51 @@ theme_blank <- theme_minimal() +
     axis.title.x = element_blank(), axis.title.y = element_blank(),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee", colour = NA),
-    plot.background = element_rect(fill = "#eeeeee", colour = NA),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_blank(), axis.ticks = element_blank(),
   ) 
+theme_regular <- 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 14),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
+  ) 
 ```
-```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+```{r data}
+# initialize seed and data
+set.seed(1000)
+num_trips <- 100
+trip_data <- expand.grid(
+  house_num = seq(from = 1, to = num_trips),
+  site = 1:26
+)
 
-```
-```{r echo=FALSE}
-xaringanExtra::style_panelset(panel_tab_color_active = "red")
+# make fake dataset
+trip_data <- trip_data %>%
+  as_tibble() %>%
+  mutate(
+    trips = sample(0:8, num_trips * 26, replace = TRUE),
+    income = exp(rnorm(num_trips * 26)) * 3000 + 50000 + rnorm(num_trips * 2) * 15000,
+    income = ifelse(income < 10000, 10000, income),
+    travel_cost = exp(rnorm(num_trips * 26)) * 30,
+    travel_cost_other = exp(rnorm(num_trips * 26)) * 35,
+    trips = round(-.01 * travel_cost + .01 * travel_cost_other + 3 / 100000 * income),
+    water_clarity = runif(num_trips * 26)
+  ) %>%
+  group_by(site) %>%
+  mutate(water_clarity = mean(water_clarity)) %>%
+  ungroup() %>%
+  mutate(trips = case_when(
+    trips <= 0 ~ 0,
+    TRUE ~ trips + 3 * round(water_clarity)
+  ))
 ```
 
 ---
@@ -411,7 +452,7 @@ The line is simply from estimating: $$t_i = \beta_0 + \beta_1 tc_i + \varepsilon
 ggplot(data = df, aes(x = vpp, y = cost)) +
   geom_point(size = 5, color = blue) +
   geom_smooth(formula = y~x, method = "lm", se = F, color = "darkslategray") +
-  theme_empty +
+  theme_regular +
   labs(y = "Cost (tc)", x = "Trips per Person (t)")
 ```
 ]
@@ -433,7 +474,7 @@ df_noisy <- tibble(vpp = 1:12, cost = 80 - 3*vpp + 20*runif(12))
 ggplot(data = df_noisy, aes(x = vpp, y = cost)) +
   geom_point(size = 5, color = blue) +
   geom_smooth(formula = y~x, method = "lm", se = F, color = "darkslategray") +
-  theme_empty +
+  theme_regular +
   labs(y = "Cost", x = "Visits per Person") +
   scale_x_continuous(breaks = scales::pretty_breaks())
 ```
@@ -540,7 +581,7 @@ The multi-site model works as follows
 # Multi-site model
 
 .hi[Step 1:] Do the single-site estimation for each site:
-$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} x_i + \varepsilon_ij$$
+$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} x_i + \varepsilon_{ij}$$
 
 --
 
@@ -615,3 +656,76 @@ ggplot() +
   scale_y_continuous(breaks = 30, labels = expression(tc[i]), limits = c(0, 100))
 ```
 ]
+
+---
+
+# Multi-site example
+
+```{r}
+trip_data
+```
+
+---
+
+# First stage estimation
+
+```{r}
+# first stage of multi-site
+site_estimates <- map_dfr(unique(trip_data$site), function(site_in){
+  lm(trips ~ travel_cost + travel_cost_other + income, 
+     trip_data %>% filter(site == site_in)) %>% 
+    broom::tidy() %>% 
+    select(estimate) %>% 
+    mutate(site = site_in) %>% 
+    list() %>% 
+    tibble_row() %>% 
+    unlist() 
+}) %>% 
+  select(1:5) %>% 
+  magrittr::set_colnames(c("intercept", "own_price", "cross_price", "income", "site"))
+```
+
+---
+
+# First stage estimation
+
+```{r}
+site_estimates
+```
+
+---
+
+# Take estimates, join with water clarity
+
+```{r}
+# merge in water clarity
+estimation_df <- site_estimates %>% 
+  left_join(trip_data %>% distinct(site, water_clarity))
+estimation_df
+```
+
+---
+
+# Second stage
+
+```{r}
+# second stage of multi-site
+demand_shifts <- map_dfr(names(estimation_df)[1:4],
+        function(coefficient) {
+          reg_formula <- as.formula(paste0(coefficient, " ~ water_clarity"))
+          lm(reg_formula, estimation_df) %>% 
+            broom::tidy() %>% 
+            mutate(coeff = coefficient) %>% 
+            slice(2)
+        }
+)
+```
+
+---
+
+# Second stage
+
+```{r}
+demand_shifts
+```
+The estimates column tells us how a change in water clarity (from 0 to 100%), shifts or rotates our demand curve
