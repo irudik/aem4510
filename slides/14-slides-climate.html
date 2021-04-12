@@ -4,15 +4,15 @@
     <title>Lecture 14</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ivan Rudik" />
-    <script src="14-climate_files/header-attrs/header-attrs.js"></script>
-    <link href="14-climate_files/remark-css/default.css" rel="stylesheet" />
-    <link href="14-climate_files/remark-css/metropolis.css" rel="stylesheet" />
-    <link href="14-climate_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="14-climate_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="14-climate_files/tile-view/tile-view.js"></script>
-    <link href="14-climate_files/panelset/panelset.css" rel="stylesheet" />
-    <script src="14-climate_files/panelset/panelset.js"></script>
-    <script src="14-climate_files/xaringanExtra-webcam/webcam.js"></script>
+    <script src="14-slides-climate_files/header-attrs/header-attrs.js"></script>
+    <link href="14-slides-climate_files/remark-css/default.css" rel="stylesheet" />
+    <link href="14-slides-climate_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="14-slides-climate_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="14-slides-climate_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="14-slides-climate_files/tile-view/tile-view.js"></script>
+    <link href="14-slides-climate_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="14-slides-climate_files/panelset/panelset.js"></script>
+    <script src="14-slides-climate_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
@@ -31,6 +31,13 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, data.table
 )
@@ -52,8 +59,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
-## refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
+## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ```r
@@ -522,25 +529,25 @@ All we actually observe is `\(\mathbf{c}_{i\tau}\)` which includes things like
 
 # Example difference
 
-![](14-climate_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](14-slides-climate_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
 
 # Example difference
 
-![](14-climate_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](14-slides-climate_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 
 ---
 
 # Example difference
 
-![](14-climate_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](14-slides-climate_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
 
 # Example difference
 
-![](14-climate_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](14-slides-climate_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1492,18 +1499,18 @@ df
 
 ```
 ## # A tibble: 7,351 x 8
-##    iso   country      year gdp_growth ag_gdp_growth non_ag_gdp_growth precip  temp
-##    &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1 AFG   Afghanistan  2003    0.0408        -0.0127            0.0747   328.  12.7
-##  2 AFG   Afghanistan  2004   -0.0278        -0.290             0.103    276.  13.6
-##  3 AFG   Afghanistan  2005    0.0715         0.129             0.0471   409.  12.5
-##  4 AFG   Afghanistan  2006    0.0235        -0.0830            0.0675   472.  13.0
-##  5 AFG   Afghanistan  2007    0.101          0.109             0.0979   361.  12.9
-##  6 AFG   Afghanistan  2008    0.00989       -0.187             0.0768   360.  13.2
-##  7 AFG   Afghanistan  2009    0.166          0.344             0.107    354.  12.8
-##  8 AFG   Afghanistan  2010    0.0564        -0.0904            0.107    238.  14.2
-##  9 AGO   Angola       1971   NA             NA                NA        979.  21.4
-## 10 AGO   Angola       1972   NA             NA                NA       1019.  21.5
+##    iso   country     year gdp_growth ag_gdp_growth non_ag_gdp_grow… precip  temp
+##    &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 AFG   Afghanist…  2003    0.0408        -0.0127           0.0747   328.  12.7
+##  2 AFG   Afghanist…  2004   -0.0278        -0.290            0.103    276.  13.6
+##  3 AFG   Afghanist…  2005    0.0715         0.129            0.0471   409.  12.5
+##  4 AFG   Afghanist…  2006    0.0235        -0.0830           0.0675   472.  13.0
+##  5 AFG   Afghanist…  2007    0.101          0.109            0.0979   361.  12.9
+##  6 AFG   Afghanist…  2008    0.00989       -0.187            0.0768   360.  13.2
+##  7 AFG   Afghanist…  2009    0.166          0.344            0.107    354.  12.8
+##  8 AFG   Afghanist…  2010    0.0564        -0.0904           0.107    238.  14.2
+##  9 AGO   Angola      1971   NA             NA               NA        979.  21.4
+## 10 AGO   Angola      1972   NA             NA               NA       1019.  21.5
 ## # … with 7,341 more rows
 ```
 
@@ -1629,7 +1636,7 @@ plot &lt;- ggplot(points, aes(x = x, y = y)) +
 Let's plot the response function and see what we've got
 
 .center[
-![](14-climate_files/figure-html/unnamed-chunk-37-1.svg)&lt;!-- --&gt;
+![](14-slides-climate_files/figure-html/unnamed-chunk-37-1.svg)&lt;!-- --&gt;
 ]
 ---
 

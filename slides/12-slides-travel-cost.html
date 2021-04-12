@@ -4,17 +4,17 @@
     <title>Lecture 12</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ivan Rudik" />
-    <script src="12-travel-cost_files/header-attrs/header-attrs.js"></script>
-    <link href="12-travel-cost_files/remark-css/default.css" rel="stylesheet" />
-    <link href="12-travel-cost_files/remark-css/metropolis.css" rel="stylesheet" />
-    <link href="12-travel-cost_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="12-travel-cost_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="12-travel-cost_files/tile-view/tile-view.js"></script>
-    <link href="12-travel-cost_files/panelset/panelset.css" rel="stylesheet" />
-    <script src="12-travel-cost_files/panelset/panelset.js"></script>
-    <script src="12-travel-cost_files/xaringanExtra-webcam/webcam.js"></script>
+    <script src="12-slides-travel-cost_files/header-attrs/header-attrs.js"></script>
+    <link href="12-slides-travel-cost_files/remark-css/default.css" rel="stylesheet" />
+    <link href="12-slides-travel-cost_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="12-slides-travel-cost_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="12-slides-travel-cost_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="12-slides-travel-cost_files/tile-view/tile-view.js"></script>
+    <link href="12-slides-travel-cost_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="12-slides-travel-cost_files/panelset/panelset.js"></script>
+    <script src="12-slides-travel-cost_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
-    <link href="12-travel-cost_files/vembedr/css/vembedr.css" rel="stylesheet" />
+    <link href="12-slides-travel-cost_files/vembedr/css/vembedr.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -32,6 +32,13 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
 pacman::p_load(
   tidyverse, magrittr, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
 )
@@ -56,8 +63,8 @@ red &lt;- "#ff0000"
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
-## refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in
+## xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ```r
@@ -415,7 +422,7 @@ Here's the most basic travel cost model to start
 # Zonal (single-site) model
 
 Here's a simple example of a set of zones 1-5:
-&lt;img src="12-travel-cost_files/figure-html/sample2 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="12-slides-travel-cost_files/figure-html/sample2 scatter-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -425,14 +432,14 @@ Suppose we have the following data:
 
 
 ```
-## # A tibble: 5 x 5
+## [38;5;246m# A tibble: 5 x 5[39m
 ##   zone   dist   pop  cost   vpp
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 A         2 10000    20    15
-## 2 B        30 10000    30    13
-## 3 C        90 20000    65     6
-## 4 D       140 10000    80     3
-## 5 E       150 10000    90     1
+##   [3m[38;5;246m&lt;chr&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m
+## [38;5;250m1[39m A         2 [4m1[24m[4m0[24m000    20    15
+## [38;5;250m2[39m B        30 [4m1[24m[4m0[24m000    30    13
+## [38;5;250m3[39m C        90 [4m2[24m[4m0[24m000    65     6
+## [38;5;250m4[39m D       140 [4m1[24m[4m0[24m000    80     3
+## [38;5;250m5[39m E       150 [4m1[24m[4m0[24m000    90     1
 ```
 
 If we plot cost by visits per person, we have a measure of the demand curve...
@@ -448,7 +455,7 @@ The line is simply from estimating: `$$t_i = \beta_0 + \beta_1 tc_i + \varepsilo
 ]
 
 .pull-right[
-&lt;img src="12-travel-cost_files/figure-html/zonal example-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="12-slides-travel-cost_files/figure-html/zonal example-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -462,7 +469,7 @@ It ignores things like income, other sites, other household characteristics
 ]
 
 .pull-right[
-&lt;img src="12-travel-cost_files/figure-html/zonal example 2-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="12-slides-travel-cost_files/figure-html/zonal example 2-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -607,7 +614,7 @@ Once we estimate demand curves, we can see how welfare changes when we alter qua
 ]
 
 .pull-right[
-&lt;img src="12-travel-cost_files/figure-html/multi site example-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="12-slides-travel-cost_files/figure-html/multi site example-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -620,20 +627,20 @@ trip_data
 ```
 
 ```
-## # A tibble: 2,600 x 7
+## [38;5;246m# A tibble: 2,600 x 7[39m
 ##    house_num  site trips income travel_cost travel_cost_other water_clarity
-##        &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;             &lt;dbl&gt;         &lt;dbl&gt;
-##  1         1     1     4 40450.       38.9              16.4          0.506
-##  2         2     1     5 60304.       29.8              37.5          0.506
-##  3         3     1     5 66681.       42.2              67.2          0.506
-##  4         4     1     5 52886.       11.0              51.3          0.506
-##  5         5     1     5 69282.       15.7               7.72         0.506
-##  6         6     1     5 36948.        4.30             48.0          0.506
-##  7         7     1     6 60866.        5.31             91.0          0.506
-##  8         8     1     5 35557.       65.0             161.           0.506
-##  9         9     1     5 64880.       14.5              24.3          0.506
-## 10        10     1     4 38491.       13.6              26.5          0.506
-## # … with 2,590 more rows
+##        [3m[38;5;246m&lt;int&gt;[39m[23m [3m[38;5;246m&lt;int&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m  [3m[38;5;246m&lt;dbl&gt;[39m[23m       [3m[38;5;246m&lt;dbl&gt;[39m[23m             [3m[38;5;246m&lt;dbl&gt;[39m[23m         [3m[38;5;246m&lt;dbl&gt;[39m[23m
+## [38;5;250m 1[39m         1     1     4 [4m4[24m[4m0[24m450.       38.9              16.4          0.506
+## [38;5;250m 2[39m         2     1     5 [4m6[24m[4m0[24m304.       29.8              37.5          0.506
+## [38;5;250m 3[39m         3     1     5 [4m6[24m[4m6[24m681.       42.2              67.2          0.506
+## [38;5;250m 4[39m         4     1     5 [4m5[24m[4m2[24m886.       11.0              51.3          0.506
+## [38;5;250m 5[39m         5     1     5 [4m6[24m[4m9[24m282.       15.7               7.72         0.506
+## [38;5;250m 6[39m         6     1     5 [4m3[24m[4m6[24m948.        4.30             48.0          0.506
+## [38;5;250m 7[39m         7     1     6 [4m6[24m[4m0[24m866.        5.31             91.0          0.506
+## [38;5;250m 8[39m         8     1     5 [4m3[24m[4m5[24m557.       65.0             161.           0.506
+## [38;5;250m 9[39m         9     1     5 [4m6[24m[4m4[24m880.       14.5              24.3          0.506
+## [38;5;250m10[39m        10     1     4 [4m3[24m[4m8[24m491.       13.6              26.5          0.506
+## [38;5;246m# … with 2,590 more rows[39m
 ```
 
 ---
@@ -667,20 +674,20 @@ site_estimates
 ```
 
 ```
-## # A tibble: 26 x 5
+## [38;5;246m# A tibble: 26 x 5[39m
 ##    intercept own_price cross_price    income  site
-##        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
-##  1     2.99   -0.0161      0.0106  0.0000321     1
-##  2     2.45   -0.0117      0.0101  0.0000397     2
-##  3     2.37   -0.0197      0.0111  0.0000450     3
-##  4     2.33   -0.0187      0.0119  0.0000438     4
-##  5     2.05   -0.0143      0.0139  0.0000450     5
-##  6    -0.236  -0.00668     0.00972 0.0000321     6
-##  7     2.67   -0.0210      0.0118  0.0000395     7
-##  8    -0.346  -0.00395     0.00987 0.0000324     8
-##  9     2.98   -0.0133      0.0107  0.0000315     9
-## 10    -0.103  -0.00943     0.0105  0.0000302    10
-## # … with 16 more rows
+##        [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m       [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m
+## [38;5;250m 1[39m     2.99   -[31m0[39m[31m.[39m[31m0[39m[31m16[4m1[24m[39m      0.010[4m6[24m  0.000[4m0[24m[4m3[24m[4m2[24m1     1
+## [38;5;250m 2[39m     2.45   -[31m0[39m[31m.[39m[31m0[39m[31m11[4m7[24m[39m      0.010[4m1[24m  0.000[4m0[24m[4m3[24m[4m9[24m7     2
+## [38;5;250m 3[39m     2.37   -[31m0[39m[31m.[39m[31m0[39m[31m19[4m7[24m[39m      0.011[4m1[24m  0.000[4m0[24m[4m4[24m[4m5[24m0     3
+## [38;5;250m 4[39m     2.33   -[31m0[39m[31m.[39m[31m0[39m[31m18[4m7[24m[39m      0.011[4m9[24m  0.000[4m0[24m[4m4[24m[4m3[24m8     4
+## [38;5;250m 5[39m     2.05   -[31m0[39m[31m.[39m[31m0[39m[31m14[4m3[24m[39m      0.013[4m9[24m  0.000[4m0[24m[4m4[24m[4m5[24m0     5
+## [38;5;250m 6[39m    -[31m0[39m[31m.[39m[31m236[39m  -[31m0[39m[31m.[39m[31m00[39m[31m6[4m6[24m[4m8[24m[39m     0.009[4m7[24m[4m2[24m 0.000[4m0[24m[4m3[24m[4m2[24m1     6
+## [38;5;250m 7[39m     2.67   -[31m0[39m[31m.[39m[31m0[39m[31m21[4m0[24m[39m      0.011[4m8[24m  0.000[4m0[24m[4m3[24m[4m9[24m5     7
+## [38;5;250m 8[39m    -[31m0[39m[31m.[39m[31m346[39m  -[31m0[39m[31m.[39m[31m00[39m[31m3[4m9[24m[4m5[24m[39m     0.009[4m8[24m[4m7[24m 0.000[4m0[24m[4m3[24m[4m2[24m4     8
+## [38;5;250m 9[39m     2.98   -[31m0[39m[31m.[39m[31m0[39m[31m13[4m3[24m[39m      0.010[4m7[24m  0.000[4m0[24m[4m3[24m[4m1[24m5     9
+## [38;5;250m10[39m    -[31m0[39m[31m.[39m[31m103[39m  -[31m0[39m[31m.[39m[31m00[39m[31m9[4m4[24m[4m3[24m[39m     0.010[4m5[24m  0.000[4m0[24m[4m3[24m[4m0[24m2    10
+## [38;5;246m# … with 16 more rows[39m
 ```
 
 ---
@@ -703,20 +710,20 @@ estimation_df
 ```
 
 ```
-## # A tibble: 26 x 6
+## [38;5;246m# A tibble: 26 x 6[39m
 ##    intercept own_price cross_price    income  site water_clarity
-##        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;
-##  1     2.99   -0.0161      0.0106  0.0000321     1         0.506
-##  2     2.45   -0.0117      0.0101  0.0000397     2         0.503
-##  3     2.37   -0.0197      0.0111  0.0000450     3         0.515
-##  4     2.33   -0.0187      0.0119  0.0000438     4         0.515
-##  5     2.05   -0.0143      0.0139  0.0000450     5         0.515
-##  6    -0.236  -0.00668     0.00972 0.0000321     6         0.481
-##  7     2.67   -0.0210      0.0118  0.0000395     7         0.539
-##  8    -0.346  -0.00395     0.00987 0.0000324     8         0.482
-##  9     2.98   -0.0133      0.0107  0.0000315     9         0.530
-## 10    -0.103  -0.00943     0.0105  0.0000302    10         0.467
-## # … with 16 more rows
+##        [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m       [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m         [3m[38;5;246m&lt;dbl&gt;[39m[23m
+## [38;5;250m 1[39m     2.99   -[31m0[39m[31m.[39m[31m0[39m[31m16[4m1[24m[39m      0.010[4m6[24m  0.000[4m0[24m[4m3[24m[4m2[24m1     1         0.506
+## [38;5;250m 2[39m     2.45   -[31m0[39m[31m.[39m[31m0[39m[31m11[4m7[24m[39m      0.010[4m1[24m  0.000[4m0[24m[4m3[24m[4m9[24m7     2         0.503
+## [38;5;250m 3[39m     2.37   -[31m0[39m[31m.[39m[31m0[39m[31m19[4m7[24m[39m      0.011[4m1[24m  0.000[4m0[24m[4m4[24m[4m5[24m0     3         0.515
+## [38;5;250m 4[39m     2.33   -[31m0[39m[31m.[39m[31m0[39m[31m18[4m7[24m[39m      0.011[4m9[24m  0.000[4m0[24m[4m4[24m[4m3[24m8     4         0.515
+## [38;5;250m 5[39m     2.05   -[31m0[39m[31m.[39m[31m0[39m[31m14[4m3[24m[39m      0.013[4m9[24m  0.000[4m0[24m[4m4[24m[4m5[24m0     5         0.515
+## [38;5;250m 6[39m    -[31m0[39m[31m.[39m[31m236[39m  -[31m0[39m[31m.[39m[31m00[39m[31m6[4m6[24m[4m8[24m[39m     0.009[4m7[24m[4m2[24m 0.000[4m0[24m[4m3[24m[4m2[24m1     6         0.481
+## [38;5;250m 7[39m     2.67   -[31m0[39m[31m.[39m[31m0[39m[31m21[4m0[24m[39m      0.011[4m8[24m  0.000[4m0[24m[4m3[24m[4m9[24m5     7         0.539
+## [38;5;250m 8[39m    -[31m0[39m[31m.[39m[31m346[39m  -[31m0[39m[31m.[39m[31m00[39m[31m3[4m9[24m[4m5[24m[39m     0.009[4m8[24m[4m7[24m 0.000[4m0[24m[4m3[24m[4m2[24m4     8         0.482
+## [38;5;250m 9[39m     2.98   -[31m0[39m[31m.[39m[31m0[39m[31m13[4m3[24m[39m      0.010[4m7[24m  0.000[4m0[24m[4m3[24m[4m1[24m5     9         0.530
+## [38;5;250m10[39m    -[31m0[39m[31m.[39m[31m103[39m  -[31m0[39m[31m.[39m[31m00[39m[31m9[4m4[24m[4m3[24m[39m     0.010[4m5[24m  0.000[4m0[24m[4m3[24m[4m0[24m2    10         0.467
+## [38;5;246m# … with 16 more rows[39m
 ```
 
 ---
@@ -747,13 +754,13 @@ demand_shifts
 ```
 
 ```
-## # A tibble: 4 x 6
+## [38;5;246m# A tibble: 4 x 6[39m
 ##   term           estimate std.error statistic      p.value coeff      
-##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;      
-## 1 water_clarity 48.0      6.29           7.62 0.0000000733 intercept  
-## 2 water_clarity -0.171    0.0302        -5.67 0.00000770   own_price  
-## 3 water_clarity  0.0241   0.00867        2.78 0.0104       cross_price
-## 4 water_clarity  0.000165 0.0000394      4.18 0.000330     income
+##   [3m[38;5;246m&lt;chr&gt;[39m[23m             [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m        [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;chr&gt;[39m[23m      
+## [38;5;250m1[39m water_clarity 48.0      6.29           7.62 0.000[4m0[24m[4m0[24m[4m0[24m073[4m3[24m intercept  
+## [38;5;250m2[39m water_clarity -[31m0[39m[31m.[39m[31m171[39m    0.030[4m2[24m        -[31m5[39m[31m.[39m[31m67[39m 0.000[4m0[24m[4m0[24m[4m7[24m70   own_price  
+## [38;5;250m3[39m water_clarity  0.024[4m1[24m   0.008[4m6[24m[4m7[24m        2.78 0.010[4m4[24m       cross_price
+## [38;5;250m4[39m water_clarity  0.000[4m1[24m[4m6[24m[4m5[24m 0.000[4m0[24m[4m3[24m[4m9[24m4      4.18 0.000[4m3[24m[4m3[24m[4m0[24m     income
 ```
 The estimates column tells us how a change in water clarity (from 0 to 100%), shifts or rotates our demand curve
     </textarea>
