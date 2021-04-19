@@ -263,7 +263,7 @@ The consumer has:
 # Theoretical foundation
 
 This lets us write down the consumer's utility maximization problem:
-$$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wH = cx + z}_{\text{money budget}}, \,\, \underbrace{T = H + L + tx}_{\text{time budget}}$$
+$$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wH = cx + z}_{\text{money budget}}, \,\, \underbrace{T = H + l + tx}_{\text{time budget}}$$
 --
 
 Combine the two constraints to get:
@@ -488,7 +488,7 @@ Based on the estimate model coefficients, construct the (inverse) demand curve
 
 --
 
-.hi[For each zone:] for each zone, predict total visitation given various fees
+.hi[For each zone:] predict total visitation given various fees
 
 --
 
@@ -587,7 +587,11 @@ $$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} x_
 
 .hi[Step 2:] Recover all the $\beta$s from each step 1 regression so that we have a set of J $\beta_{0j}$s for $j=1\dots,J$, $\beta_{1j}$s for $j=1\dots,J$, etc
 
+--
+
 These $\beta$s tell us the slope $(\beta_{1j})$ and intercept $(\beta_{0j}, \beta_{2j}, \beta_{3j})$
+
+--
 
 $\beta_{2j}, \beta_{3j}$ capture how the cost of substitute sites and household characteristics shift demand up and down
 
@@ -595,18 +599,13 @@ $\beta_{2j}, \beta_{3j}$ capture how the cost of substitute sites and household 
 
 # Multi-site model
 
-.hi[Step 3:] Take each set of $J$ coefficients and use them as the dependent variable in a regression on site attributes $z$:
-$$\beta_{0j} = \alpha_{00} + \alpha_{01}z_j + \epsilon_{0j}$$
-$$\beta_{1j} = \alpha_{10} + \alpha_{11}z_j + \epsilon_{1j}$$
-$$\beta_{2j} = \alpha_{20} + \alpha_{21}z_j + \epsilon_{2j}$$
-$$\beta_{3j} = \alpha_{30} + \alpha_{31}z_j + \epsilon_{3j}$$
+.hi[Step 3:] Take each set of $J$ coefficient estimates and use them as the dependent variable in a regression on site attributes $z$:
+$$\hat{\beta}_{0j} = \alpha_{00} + \alpha_{01}z_j + \epsilon_{0j}$$
+$$\hat{\beta}_{1j} = \alpha_{10} + \alpha_{11}z_j + \epsilon_{1j}$$
+$$\hat{\beta}_{2j} = \alpha_{20} + \alpha_{21}z_j + \epsilon_{2j}$$
+$$\hat{\beta}_{3j} = \alpha_{30} + \alpha_{31}z_j + \epsilon_{3j}$$
 
-The $\alpha_{\times1}$s tell us how the demand curve shifts $(\alpha_{00}, \alpha_{02}, \alpha_{03})$ or rotates $(\alpha_{01})$ as we change $z$
-
-
----
-
-# Multi-site model
+The $\alpha_{\times1}$ coefficients tell us how the demand curve shifts $(\alpha_{00}, \alpha_{02}, \alpha_{03})$ or rotates $(\alpha_{01})$ as we change $z$
 
 ---
 
