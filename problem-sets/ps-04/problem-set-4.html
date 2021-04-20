@@ -375,8 +375,8 @@ pre code {
   }
 </style>
 <p>This problem set puts your new regression (<code>lm</code> or <code>fixest/feols</code>) skills to use. If you are unsure of how to do certain pieces of the problem set (e.g. take means of the data), Google and StackExchange are the best resources.</p>
-<div id="nimby-taxation" class="section level1">
-<h1>NIMBY Taxation</h1>
+<div id="nimby-taxation-background" class="section level1">
+<h1>NIMBY Taxation Background</h1>
 <p>This exercise uses data from the application found in “State Taxes and Interstate Hazardous Waste Shipments,” by Arik Levinson (American Economic Review, 89(3)). Levinson studies the shipment of toxic waste between U.S. states. In an attempt to keep waste out, state governments often implement what are commonly known as “NIMBY” (Not In My BackYard) taxes on waste dumping. These taxes may differ depending upon where the waste comes from (i.e., a state typically charges a lower tax for dumping waste produced within its own borders than it charges for waste imported from another state).</p>
 <p>Levinson’s question is whether these taxes work in deterring waste flows. This is an important question in environmental economics because, in addition to functioning as NIMBY taxes, these taxes also behave like Pigouvian taxes – interstate waste flows are a form of emissions whereby polluters in the origin state impose externalities (e.g., risk of leakage into groundwater) on the residents of the state. If waste flows are not responsive to these taxes, we may worry about the ability of Pigouvian policy to address these externalities.</p>
 <p>The problem in determining whether these taxes are effective arises because we (as the economists) do not see everything that makes a state attractive or unattractive as a potential destination for waste. Unobserved state attributes that make some states more appropriate destinations for waste may be correlated with the tax that the state’s legislature sets, i.e. there might be omitted variable bias. To be more precise, state legislatures in states that are good destinations for waste may set higher taxes to deter waste flows. In the end, those states might still receive a higher volume of waste (despite their higher taxes), but a lower volume than they would have received in the absence of those taxes. By failing to adequately control for destination state attributes, we may mistakenly arrive at the result that NIMBY taxes encourage more waste flows.</p>
@@ -461,12 +461,12 @@ ps_dataset</code></pre>
 <li>What is the coefficient on tax?</li>
 <li>What is the elasticity of waste shipment with respect to the tax (i.e. the percent change in shipments given a 1% increase in the tax)?
 <ul>
-<li>Recall regression formulas in R are: <code>lm(dependent variable ~ ind. var. 1 + ind. var. 2 + ..., dataframe)</code></li>
+<li>Recall regression formulas in R are: <code>lm(dependent variable ~ ind. var. 1 + ind. var. 2 + ..., data = dataframe)</code> or <code>feols(dependent variable ~ ind. var. 1 + ind. var. 2 + ..., data = dataframe)</code></li>
 </ul></li>
 </ol></li>
-<li>Repeat 2, but include all the destination state attributes that might help control for the attractiveness of the state to dumpers <span class="math inline">\(dinc_j - dsouth_j\)</span>.</li>
-<li>Repeat 2, but instead include all destination dummy variables <span class="math inline">\(d1_{j} - d48_j\)</span>. These will control for <em>all</em> attributes of the destination states that are not changing over time, that may make them attractive to dumpers.</li>
-<li>Compare and contrast your results for 3b, 4b, 5b. You should have different estimates of the elasticity across the different problems, potentially even with different signs. Why might (not) controlling for variables result in different estimates for the effect of the tax on shipments.</li>
+<li>Repeat 2, but control for (i.e. add them as independent variables) all the destination state attributes that might capture attractiveness of the state to dumpers: <span class="math inline">\(dinc_j - dsouth_j\)</span> above.</li>
+<li>Repeat 2, but instead include all destination dummy variables: <span class="math inline">\(d1_{j} - d48_j\)</span> above. These will control for <em>all</em> attributes of the destination states that are not changing over time, that may make them attractive to dumpers. When you include these dummy variables you no longer will be able to include destination-specific variables like <span class="math inline">\(dinc_j\)</span>.</li>
+<li>Compare and contrast your results for 3b, 4b, 5b. You may have different estimates of the elasticity across the different questions, potentially even with different signs. Explain why controlling for the different sets of variables results in different estimates for the effect of the tax on shipments. Feel free to use examples to explain.</li>
 </ol>
 </div>
 </div>

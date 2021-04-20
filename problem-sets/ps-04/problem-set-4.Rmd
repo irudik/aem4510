@@ -34,7 +34,7 @@ options("tidylog.display" = NULL)
 This problem set puts your new regression (`lm` or `fixest/feols`) skills to use. 
 If you are unsure of how to do certain pieces of the problem set (e.g. take means of the data), Google and StackExchange are the best resources.
 
-# NIMBY Taxation
+# NIMBY Taxation Background
 
 This exercise uses data from the application found in “State Taxes and Interstate Hazardous Waste Shipments,” by Arik Levinson (American Economic Review, 89(3)). Levinson studies the shipment of toxic waste between U.S. states. In an attempt to keep waste out, state governments often implement what are commonly known as “NIMBY” (Not In My BackYard) taxes on waste dumping. These taxes may differ depending upon where the waste comes from (i.e., a state typically charges a lower tax for dumping waste produced within its own borders than it charges for waste imported from another state).
 
@@ -98,7 +98,7 @@ Note the actual variable names in the dataframe do not have the subscripts, I in
 3. Regress the natural log of waste shipments on the tax $tax_{i,j,t}$; distance $dist_{i,j}$ and distance squared $dist2_{i,j}$; all the attributes of the origin state $oinc_i - ogen_i$; the dummy variable for whether they are the same state $samest_{i,j}$; and all the year dummy variables $y90_t - y95_t$.
     a. What is the coefficient on tax?
     b. What is the elasticity of waste shipment with respect to the tax (i.e. the percent change in shipments given a 1% increase in the tax)?
-        - Recall regression formulas in R are: `lm(dependent variable ~ ind. var. 1 + ind. var. 2 + ..., dataframe)`
-4. Repeat 2, but include all the destination state attributes that might help control for the attractiveness of the state to dumpers $dinc_j - dsouth_j$.
-5. Repeat 2, but instead include all destination dummy variables $d1_{j} - d48_j$. These will control for *all* attributes of the destination states that are not changing over time, that may make them attractive to dumpers.
-6. Compare and contrast your results for 3b, 4b, 5b. You should have different estimates of the elasticity across the different problems, potentially even with different signs. Why might (not) controlling for variables result in different estimates for the effect of the tax on shipments.
+        - Recall regression formulas in R are: `lm(dependent variable ~ ind. var. 1 + ind. var. 2 + ..., data = dataframe)` or `feols(dependent variable ~ ind. var. 1 + ind. var. 2 + ..., data = dataframe)`
+4. Repeat 2, but control for (i.e. add them as independent variables) all the destination state attributes that might capture attractiveness of the state to dumpers: $dinc_j - dsouth_j$ above.
+5. Repeat 2, but instead include all destination dummy variables: $d1_{j} - d48_j$ above. These will control for *all* attributes of the destination states that are not changing over time, that may make them attractive to dumpers. When you include these dummy variables you no longer will be able to include destination-specific variables like $dinc_j$.
+6. Compare and contrast your results for 3b, 4b, 5b. You may have different estimates of the elasticity across the different questions, potentially even with different signs. Explain why controlling for the different sets of variables results in different estimates for the effect of the tax on shipments. Feel free to use examples to explain.
