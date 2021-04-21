@@ -31,13 +31,6 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, data.table
 )
@@ -59,8 +52,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
+## refer to the documentation to update your slides.
 ```
 
 ```r
@@ -431,7 +424,6 @@ Climate change will affect a lot of outcomes that are important for economics
 - .hi-blue[Tipping elements:] There are multiple stable states of climate and climate change can lead to a rapid switch from one to another (e.g. permanent ice sheet melt, rainforest dieback, AMOC collapse)
 
 
-
 ---
 
 # What is climate?
@@ -456,7 +448,7 @@ For some interval in time `\(\tau = [\underline{t}, \bar{t})\)` (e.g. a day, mon
 
 --
 
-`\(\mathbf{C}_{i\tau}\)` is a vector is parameters that define the distributions (e.g. mean, variance, kurtosis, etc)
+`\(\mathbf{C}_{i\tau}\)` is a vector is parameters that define the distributions (e.g. mean, variance, etc)
 
 --
 
@@ -474,11 +466,11 @@ The empirical distribution is just the distribution of .hi-red[actual weather]
 
 --
 
-`\(\mathbf{C}_{i\tau}\)` and `\(\mathbf{c}_{i\tau}\)` are .hi-red[not] the same: `\(\mathbf{C}_{i\tau}\)` characterizes the expected distribution of weather, while `\(\mathbf{c}_{i\tau}\)` characterizes the actual distribution of weather
+`\(\mathbf{C}_{i\tau}\)` and `\(\mathbf{c}_{i\tau}\)` are .hi[not] the same: `\(\mathbf{C}_{i\tau}\)` characterizes the expected distribution of weather, while `\(\mathbf{c}_{i\tau}\)` characterizes the actual distribution of weather
 
 --
 
-e.g. `\(\mathbf{C}_{i\tau}\)` is the expected minimum temperature in December, `\(\mathbf{c}_{i\tau}\)` is the actual minimum temperature
+e.g. `\(\mathbf{C}_{i\tau}\)` is the *expected* minimum temperature in December, `\(\mathbf{c}_{i\tau}\)` is the *actual* minimum temperature
 
 ---
 
@@ -514,11 +506,11 @@ All we actually observe is `\(\mathbf{c}_{i\tau}\)` which includes things like
 
 --
 
-- *Population/actual* mean or variance of temperature in January
+- *Expected* average temperature in January
 
 --
 
-- *Population/actual* total rainfall in January
+- *Expected* total rainfall in January
 
 --
 
@@ -554,7 +546,7 @@ All we actually observe is `\(\mathbf{c}_{i\tau}\)` which includes things like
 # Estimating the effect of climate change
 
 Climate can affect social outcomes in two ways:
-1. .hi-red[Direct effect:] The climate during `\(\tau\)` affects the actual weather realizations `\(\mathbf{c}\)` which affects the economy
+1. .hi-red[Direct effect:] The climate affects the actual weather realizations `\(\mathbf{c}\)` which affects the economy
 --
 
 2. .hi-blue[Belief effect:] Beliefs `\(\mathbf{b}\)` about `\(\mathbf{C}\)` can affect decisions and economic outcomes regardless of what `\(\mathbf{c}\)` actually happens
@@ -662,7 +654,7 @@ What do farmland values tell us?
 
 # Mendelsohn, Nordhaus, Shaw (1994)
 
-The value of land is the .hi-blue[present value of the expected stream of profits] that can be obtained from that land
+The value of land is the .hi-blue[present value of the expected stream of profits] that can be obtained from that land (Hedonic argument!)
 
 --
 
@@ -677,7 +669,7 @@ Why focus on agriculture?
 1. Agriculture is expected to be very climate sensitive
 --
 
-2. Lots of good data
+2. Lots of good data (for 1994)
 
 ---
 
@@ -695,7 +687,7 @@ Soil data
 
 # Mendelsohn, Nordhaus, Shaw (1994): Estimation
 
-$$ \text{farmland value}_i = \alpha + \textbf{climate vars}_i' \cdot \mathbf{\beta} + \textbf{controls}_i' \cdot \mathbf{\gamma} + \varepsilon_i $$
+$$ \text{farmland value}_i = \alpha + \mathbf{\beta} \cdot \textbf{climate vars}_i  + \mathbf{\gamma} \cdot  \textbf{controls}_i + \varepsilon_i $$
 
 --
 
@@ -703,7 +695,7 @@ We are interested in `\(\mathbf{\beta}\)` which tells us the .hi-blue[average ma
 
 --
 
-Key assumption for `\(\beta\)` to be estimated correctly:
+Key assumption for `\(\beta\)` to be estimated correctly/unbiased:
 
 --
 
@@ -711,7 +703,7 @@ Key assumption for `\(\beta\)` to be estimated correctly:
 
 --
 
-Climate must be uncorrelated with omitted variables conditional on controls
+Climate must be uncorrelated with omitted variables conditional on controls, .hi[no omitted variable bias]
 
 
 ---
@@ -783,7 +775,7 @@ Remember the .hi-red[key assumption:] climate is uncorrelated with omitted varia
 
 --
 
-This is very unlikely to hold in the cross-section
+This is .hi[very] unlikely to hold in the cross-section
 
 --
 
@@ -807,7 +799,7 @@ Since 1900, correlations between farmland values and soil quality and measures o
 
 --
 
-Indicates that there are other major factors influencing farmland values
+This indicates that there are other major factors influencing farmland values
 
 --
 
@@ -845,15 +837,23 @@ Why is this a problem for estimating the effects of climate change?
 
 People's demand for housing is a function of climate
 
+--
+
 Demand for housing is in `\(\varepsilon_i\)` since it affects farmland values
 
+--
+
 `\(\rightarrow\)` .hi-red[our key assumption is violated]
+
+--
+
+Estimates may be biased up or down depending on how housing demand depends on climate
 
 ---
 
 # The problem with cross-sectional approaches
 
-The big issue with cross-sectional approaches is that there are A LOT of variables we don't have data for
+The big issue with cross-sectional approaches is that there are .hi[A LOT] of time-invariant variables we don't have data for
 
 --
 
@@ -861,7 +861,7 @@ These will be inside `\(\varepsilon_i\)` and many of them may be correlated with
 
 --
 
-It is diffcult to control for lots and lots of variables in the cross-section
+It is difficult to control for lots and lots of variables in the cross-section so this approach has fallen out of favor in recent years
 
 ---
 
@@ -877,10 +877,10 @@ Very hot and very cold temperatures are both bad for mortality, what's the overa
 
 Problems:
 
-- Climate is spatially correlated with economic development: countries in cooler climates are generally richer, have more safety net policies, etc
+Climate is spatially correlated with economic development: countries in cooler climates are generally richer, have more safety net policies, etc
 --
 
-    - This will overstate the effect of climate change on mortality: countries in cooler climates are healthier because they're rich, not just because of the climate
+  - This will overstate the effect of climate change on mortality: countries in cooler climates are healthier because they're rich, not just because of the climate
 
 ---
 
@@ -894,10 +894,10 @@ Problems:
 
 Very hot and very cold temperatures are both bad for mortality, what's the overall effect of climate change?
 
-2. Will not account for adaptation: mortality doesn't capture expected future outcomes like farmland values do, people will migrate, buy air conditioning, etc
+Will not account for adaptation: mortality doesn't capture expected future outcomes like farmland values do, people will migrate, buy air conditioning, etc
 --
 
-    - This will overstate the effect of climate change: we are ignoring the possibility of adaptation
+ - This will overstate the effect of climate change: we are ignoring the possibility of adaptation
 
 ---
 
@@ -907,7 +907,7 @@ How can we find a way to handle all these possible omitted variables?
 
 --
 
-Use .hi[panel data]: data where you have a time series for each person, country, etc over time
+Use .hi[panel data]: data where you have a .hi-blue[time series] of data for each person, country, etc over time
 
 --
 
@@ -915,7 +915,7 @@ Why does this help?
 
 --
 
-Panel data approaches allow you to better control for large sets of variables for which you might not have data
+Having multiple observations of each person/country/etc allows us to better control for large sets of variables for which we might not have data
 
 --
 
@@ -932,7 +932,11 @@ It is the same as before but now we have observations for each county `\(i\)` an
 
 --
 
-We also broke out the .hi-red[entire] set of variables that are specific to each county `\(i\)`, but *do not vary over time*: `\(\text{time invariant vars}_i\)`
+We also broke out the .hi-blue[entire] set of variables that are specific to each county `\(i\)`, but *do not vary over time*: `\(\text{time invariant vars}_i\)`
+
+--
+
+We are going to show how to control for .hi[all] of these in a simple way
 
 ---
 
@@ -1475,7 +1479,8 @@ df &lt;- read_csv("data/14-bhm.csv")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   iso = col_character(),
 ##   country = col_character(),
@@ -1499,18 +1504,18 @@ df
 
 ```
 ## # A tibble: 7,351 x 8
-##    iso   country     year gdp_growth ag_gdp_growth non_ag_gdp_grow… precip  temp
-##    &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1 AFG   Afghanist…  2003    0.0408        -0.0127           0.0747   328.  12.7
-##  2 AFG   Afghanist…  2004   -0.0278        -0.290            0.103    276.  13.6
-##  3 AFG   Afghanist…  2005    0.0715         0.129            0.0471   409.  12.5
-##  4 AFG   Afghanist…  2006    0.0235        -0.0830           0.0675   472.  13.0
-##  5 AFG   Afghanist…  2007    0.101          0.109            0.0979   361.  12.9
-##  6 AFG   Afghanist…  2008    0.00989       -0.187            0.0768   360.  13.2
-##  7 AFG   Afghanist…  2009    0.166          0.344            0.107    354.  12.8
-##  8 AFG   Afghanist…  2010    0.0564        -0.0904           0.107    238.  14.2
-##  9 AGO   Angola      1971   NA             NA               NA        979.  21.4
-## 10 AGO   Angola      1972   NA             NA               NA       1019.  21.5
+##    iso   country      year gdp_growth ag_gdp_growth non_ag_gdp_growth precip  temp
+##    &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 AFG   Afghanistan  2003    0.0408        -0.0127            0.0747   328.  12.7
+##  2 AFG   Afghanistan  2004   -0.0278        -0.290             0.103    276.  13.6
+##  3 AFG   Afghanistan  2005    0.0715         0.129             0.0471   409.  12.5
+##  4 AFG   Afghanistan  2006    0.0235        -0.0830            0.0675   472.  13.0
+##  5 AFG   Afghanistan  2007    0.101          0.109             0.0979   361.  12.9
+##  6 AFG   Afghanistan  2008    0.00989       -0.187             0.0768   360.  13.2
+##  7 AFG   Afghanistan  2009    0.166          0.344             0.107    354.  12.8
+##  8 AFG   Afghanistan  2010    0.0564        -0.0904            0.107    238.  14.2
+##  9 AGO   Angola       1971   NA             NA                NA        979.  21.4
+## 10 AGO   Angola       1972   NA             NA                NA       1019.  21.5
 ## # … with 7,341 more rows
 ```
 
