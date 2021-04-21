@@ -1,0 +1,37 @@
+---
+title: "Climate Change"
+linktitle: "LN14: Climate Change"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Menu
+    weight: 16
+type: docs
+#bibliography: "../../static/bib/references.bib"
+#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
+slides: "14-slides-climate"
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+### Overview
+
+This lecture:
+
+1. Climate science for economists
+2. How do we estimate the effects of climate change?
+    - The Ricardian approach
+    - The weather / two-way fixed effects approach
+3. Integrated assessment modeling
+    - Dynamic Integrated Climate-Economy (DICE) model
+
+### Slides
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
+
+`r blogdown::shortcode("slide-buttons")`
+
