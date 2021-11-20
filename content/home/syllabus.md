@@ -64,10 +64,10 @@ Assignments and grading are [here](/assignments/).
 **Coding:** We will be using [RStudio Cloud](https://rstudio.cloud) for coding. You should not need to install or download anything for what we do in class or for problem sets. If you prefer to do the work on your actual computer install R and RStudio.
 
 **Learning Outcomes:** As a result of participating in class you will be able to:
-  - Understand the design and effect of environmental policy in theory and real-world practice
-      - AEM 5510: Also understand the consequences of environmental policy in second-best environments
-  - Understand how to use survey and revealed preference methods to value the environment
+  - Discuss the design and effect of environmental policy in theory and real-world practice
+      - AEM 5510: Also discuss the consequences of environmental policy in second-best environments
+  - Use survey and revealed preference methods to value the environment
   - Understand how economists measure the impacts of climate change
       - AEM 5510: Also use real world data to measure economic impacts of climate change
-  - Understand how economists measure the economic costs of environmental change such as how air pollution increases mortality 
+  - Explain how economists measure the economic costs of environmental change such as how air pollution increases mortality 
       - AEM 5510: Also use real world data to estimate the costs of environmental change
