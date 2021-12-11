@@ -20,7 +20,7 @@ design:
     text_color_light: true
     
 cta_note:
-  label: AEM 4510/ECON 3865/AEM 5510<br>Spring 2022<br>Dyson School of Applied Economics and Management<br>Cornell University
+  label: AEM 4510/AEM 5510/ECON 3865<br>Spring 2022<br>Dyson School of Applied Economics and Management<br>Cornell University
 ---
 
 The role of the environment in the theory and practice of economics

@@ -85,8 +85,26 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
   - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Concern 50 (2007): 1-500.
 
-### Environmental finance intro: conservation finance, green bonds, green investing, offsets
+### Climate change science
 
+  - Hsiang, Solomon, and Robert E. Kopp. "[An economist's guide to climate change science.](https://www.aeaweb.org/articles?id=10.1257%2Fjep.32.4.3)" Journal of Economic Perspectives 32, no. 4 (2018): 3-32.
+  - Good resource on doing climate-econ research: [ClimateEstimate.net](https://climateestimate.net/getting-started)
+
+### Climate change impacts: agriculture
+
+  - Mendelsohn, Robert, William D. Nordhaus, and Daigee Shaw. ["The impact of global warming on agriculture: a Ricardian analysis."](https://www.jstor.org/stable/pdf/2118029.pdf?casa_token=SgxWWSNDCrkAAAAA:KOQRexQyxDm-upRuB2klSFOhd73U4siWac5HdgYkXIBJbabt4kYXohFXIz0SkusR-F_w_sHb7gfEWYyurJpK0DqPqphPb1zstx2e1drXlUGwRRrC9Nc) American Economic Review (1994): 753-771.
+  - Deschênes, Olivier, and Michael Greenstone. "The economic impacts of climate change: evidence from agricultural output and random fluctuations in weather." American Economic Review 97, no. 1 (2007): 354-385.
+  - *Ortiz‐Bobea, Ariel. ["The role of nonfarm influences in Ricardian estimates of climate change impacts on US agriculture."](https://onlinelibrary.wiley.com/doi/pdf/10.1093/ajae/aaz047?casa_token=BiuedqaJzyEAAAAA:sAN63shhKgC1EzikS__FpU0duPuTy5HF6cNvrMJC9rqgeCngM9hDIv225lGSQpgyG_cYZyUKlf4Y-w) American Journal of Agricultural Economics 102, no. 3 (2020): 934-959.*
+
+### The integrated assessment of climate change
+
+  - Nordhaus, William D. "[Revisiting the social cost of carbon.](https://www.pnas.org/content/114/7/1518.full)" Proceedings of the National Academy of Sciences 114, no. 7 (2017): 1518-1523.
+  - webDICE: http://webdice.rdcep.org/
+  
+
+### Environmental finance intro: conservation finance, green bonds, green investing, ESG, offsets
+  
+  - [Bloomberg: The ESG Mirage](https://www.bloomberg.com/graphics/2021-what-is-esg-investing-msci-ratings-focus-on-corporate-bottom-line/?ai=eyJpc1N1YnNjcmliZWQiOnRydWUsImFydGljbGVSZWFkIjpmYWxzZSwiYXJ0aWNsZUNvdW50IjowLCJ3YWxsSGVpZ2h0IjoxfQ==)
   - Huwyler, Fabian, Jürg Käppeli, and John Tobin. "Conservation finance from niche to mainstream: The building of an institutional asset class." Credit Suisse Group AG and McKinsey Center for Business and Environment (2016).
   - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. Financing the response to climate change: The pricing and ownership of US green bonds. No. w25194. National Bureau of Economic Research, 2018.
   - Heinkel, Robert, Alan Kraus, and Josef Zechner. "The effect of green investment on corporate behavior." Journal of Financial and Quantitative Analysis 36, no. 4 (2001): 431-449.
@@ -104,7 +122,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
   - Baldauf, Markus, Lorenzo Garlappi, and Constantine Yannelis. "Does climate change affect real estate prices? Only if you believe in it." The Review of Financial Studies 33, no. 3 (2020): 1256-1295.
   - Murfin, Justin, and Matthew Spiegel. "Is the risk of sea level rise capitalized in residential real estate?." The Review of Financial Studies 33, no. 3 (2020): 1217-1255.
-  - *Bakkensen, Laura, and Lint Barrage. "Flood Risk Belief Heterogeneity and Coastal Home Price Dynamics: Going Under Water?." The Review of Financial Studies (2021).*
+  - *Bakkensen, Laura, and Lint Barrage. "Flood Risk Belief Heterogeneity and Coastal Home Price Dynamics: Going Under Water?" The Review of Financial Studies (2021).*
   
 ### Environmental finance: public finance
 
@@ -113,66 +131,8 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
   - Jha, Akshaya, Stephen A. Karolyi, and Nicholas Z. Muller. Polluting Public Funds: The Effect of Environmental Regulation on Municipal Bonds. No. w28210. National Bureau of Economic Research, 2020.
   - Goldsmith-Pinkham, Paul S., Matthew Gustafson, Ryan Lewis, and Michael Schwert. "Sea level rise exposure and municipal bond yields." (2021).
 
-### Climate change science
-
-  - Hsiang, Solomon, and Robert E. Kopp. "[An economist's guide to climate change science.](https://www.aeaweb.org/articles?id=10.1257%2Fjep.32.4.3)" Journal of Economic Perspectives 32, no. 4 (2018): 3-32.
-  - Good resource on doing climate-econ research: [ClimateEstimate.net](https://climateestimate.net/getting-started)
-
-### Climate change impacts: agriculture
-
-  - Mendelsohn, Robert, William D. Nordhaus, and Daigee Shaw. ["The impact of global warming on agriculture: a Ricardian analysis."](https://www.jstor.org/stable/pdf/2118029.pdf?casa_token=SgxWWSNDCrkAAAAA:KOQRexQyxDm-upRuB2klSFOhd73U4siWac5HdgYkXIBJbabt4kYXohFXIz0SkusR-F_w_sHb7gfEWYyurJpK0DqPqphPb1zstx2e1drXlUGwRRrC9Nc) American Economic Review (1994): 753-771.
-  - Deschênes, Olivier, and Michael Greenstone. "The economic impacts of climate change: evidence from agricultural output and random fluctuations in weather." American Economic Review 97, no. 1 (2007): 354-385.
-  - *Ortiz‐Bobea, Ariel. ["The role of nonfarm influences in Ricardian estimates of climate change impacts on US agriculture."](https://onlinelibrary.wiley.com/doi/pdf/10.1093/ajae/aaz047?casa_token=BiuedqaJzyEAAAAA:sAN63shhKgC1EzikS__FpU0duPuTy5HF6cNvrMJC9rqgeCngM9hDIv225lGSQpgyG_cYZyUKlf4Y-w) American Journal of Agricultural Economics 102, no. 3 (2020): 934-959.*
-
-### The integrated assessment of climate change
-
-  - Nordhaus, William D. "[Revisiting the social cost of carbon.](https://www.pnas.org/content/114/7/1518.full)" Proceedings of the National Academy of Sciences 114, no. 7 (2017): 1518-1523.
-  - webDICE: http://webdice.rdcep.org/
-
 ### Pollution and health
 
   - Mixtape: [difference-in-differences](https://mixtape.scunning.com/ch8.html)
   - Hollingsworth, Alex, and Ivan Rudik. "[The effect of leaded gasoline on elderly mortality: Evidence from regulatory exemptions.](https://osf.io/preprints/socarxiv/rdy6g/)" American Economic Journal: Economic Policy (2021).
   - *Deryugina, Tatyana, Garth Heutel, Nolan H. Miller, David Molitor, and Julian Reif. "[The mortality and medical costs of air pollution: Evidence from changes in wind direction.](http://www.julianreif.com/research/reif.aer.2019.pollution.pdf)" American Economic Review 109, no. 12 (2019): 4178-4219.*
-
-<!-- ### Big data: Using satellites to measure the environment -->
-
-<!--   - [Resources Radio: Sensing Pollution with Satellites, with RFF's Alan Krupnick and Daniel Sullivan](https://www.resourcesmag.org/resources-radio/resources-radio-sensing-pollution-with-satellites-with-rff039s-alan-krupnick-and-daniel-sullivan/) -->
-<!--   - Donaldson, Dave, and Adam Storeygard. "[The view from above: Applications of satellite data in economics.](https://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.30.4.171)" Journal of Economic Perspectives 30, no. 4 (2016): 171-98. -->
-<!--   - Burgess, Robin, Francisco Costa, and Benjamin A. Olken. "[The Brazilian Amazon’s Double Reversal of Fortune.](https://files.osf.io/v1/resources/67xg5/providers/osfstorage/5d4af97a272b140019eadf58?action=download&direct&version=1)" (2019). -->
-<!--   - *Mixtape: [regression discontinuity](https://mixtape.scunning.com/ch5.html)* -->
-
-<!-- ### Environmental justice -->
-
-<!-- Background:   -->
-
-<!--   - [Resources Radio: The Economics of Environmental Justice, with Samuel Stolper and Catherine Hausman](https://www.resourcesmag.org/resources-radio/economics-environmental-justice-samuel-stolper-and-catherine-hausman/) -->
-<!--   - Banzhaf, Spencer, Lala Ma, and Christopher Timmins. "[Environmental justice: The economics of race, place, and pollution.](https://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.33.1.185)" Journal of Economic Perspectives 33, no. 1 (2019): 185-208. -->
-
-<!-- Research:   -->
-
-<!--   - Hernandez-Cortes, Danae, and Kyle C. Meng. "[Do Environmental Markets Cause Environmental Injustice? Evidence from California’s Carbon Market.](https://www.nber.org/system/files/working_papers/w27205/w27205.pdf)" (2020). -->
-<!--   - *Currie, Janet, John Voorheis, and Reed Walker. "[What caused racial disparities in particulate exposure to fall? New evidence from the Clean Air Act and satellite-based measures of air quality.](https://www.nber.org/system/files/working_papers/w26659/w26659.pdf)" No. w26659. National Bureau of Economic Research, 2020.* -->
-
-<!-- ### The Economics of the Clean Air Act and Clean Water Act -->
-
-<!-- Background: -->
-
-<!--   - [Resources Radio: Lessons from 50 Years of the Clean Air Act, with Maureen Cropper](https://www.resourcesmag.org/resources-radio/lessons-50-years-clean-air-act-maureen-cropper/) -->
-<!--   -  Currie, Janet, and Reed Walker. "[What Do Economists Have to Say about the Clean Air Act 50 Years after the Establishment of the Environmental Protection Agency?](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.3)" Journal of Economic Perspectives 33, no. 4 (2019): 3-26. -->
-<!--   - *Schmalensee, Richard, and Robert N. Stavins. "[Policy Evolution under the Clean Air Act.](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.27)" Journal of Economic Perspectives 33, no. 4 (2019): 27-50.* -->
-<!--   - *Keiser, David A., and Joseph S. Shapiro. "[US Water Pollution Regulation over the Past Half Century: Burning Waters to Crystal Springs?](https://www.aeaweb.org/articles/pdf/doi/10.1257/jep.33.4.51)" Journal of Economic Perspectives 33, no. 4 (2019): 51-75.* -->
-
-<!-- Research: -->
-
-<!--   - Keiser, David A., and Joseph S. Shapiro. "Consequences of the Clean Water Act and the demand for water quality." The Quarterly Journal of Economics 134, no. 1 (2019): 349-396. -->
-
-<!-- ### Perverse incentives and incomplete regulation -->
-
-<!-- Intertemporal leakage -->
-
-<!--   - McDermott, Grant R., Kyle C. Meng, Gavin G. McDonald, and Christopher J. Costello. "[The blue paradox: Preemptive overfishing in marine reserves.](https://www.pnas.org/content/pnas/116/12/5319.full.pdf)" Proceedings of the National Academy of Sciences 116, no. 12 (2019): 5319-5325. -->
-
-<!-- Incomplete monitoring -->
-
-<!--   -  Zou, Eric. "[Unwatched pollution: The effect of intermittent monitoring on air quality.](http://www.eric-zou.com/s/monitor_zou_202004.pdf)" American Economic Review (2021). -->

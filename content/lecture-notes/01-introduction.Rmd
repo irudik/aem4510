@@ -30,4 +30,3 @@ If you use the HTML slides you can navigate with the left and right arrows.
 Pressing 'o' lets you see all the slides.
 
 `r blogdown::shortcode("slide-buttons")`
-
