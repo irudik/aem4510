@@ -105,12 +105,15 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 ### Environmental finance intro: conservation finance, green bonds, green investing, ESG, offsets
   
   - [Bloomberg: The ESG Mirage](https://www.bloomberg.com/graphics/2021-what-is-esg-investing-msci-ratings-focus-on-corporate-bottom-line/?ai=eyJpc1N1YnNjcmliZWQiOnRydWUsImFydGljbGVSZWFkIjpmYWxzZSwiYXJ0aWNsZUNvdW50IjowLCJ3YWxsSGVpZ2h0IjoxfQ==)
+  - [World Bank: What You Need to Know About Green Bonds](https://www.worldbank.org/en/news/feature/2021/12/08/what-you-need-to-know-about-ifc-s-green-bonds)
+  - [World Bank: What You Need to Know About Sustainable Development Bonds](https://www.worldbank.org/en/news/feature/2021/09/28/what-you-need-to-know-about-sustainable-development-bonds)
   - Huwyler, Fabian, Jürg Käppeli, and John Tobin. "Conservation finance from niche to mainstream: The building of an institutional asset class." Credit Suisse Group AG and McKinsey Center for Business and Environment (2016).
   - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. Financing the response to climate change: The pricing and ownership of US green bonds. No. w25194. National Bureau of Economic Research, 2018.
   - Heinkel, Robert, Alan Kraus, and Josef Zechner. "The effect of green investment on corporate behavior." Journal of Financial and Quantitative Analysis 36, no. 4 (2001): 431-449.
 
 ### Environmental finance: climate
 
+  - [State and Trends of Carbon Pricing 2021](https://openknowledge.worldbank.org/bitstream/handle/10986/35620/9781464817281.pdf?sequence=12&isAllowed=y)
   - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
   - Dietz, Simon, Christian Gollier, and Louise Kessler. "The climate beta." Journal of Environmental Economics and Management 87 (2018): 258-274.
   - Painter, Marcus. "An inconvenient cost: The effects of climate change on municipal bonds." Journal of Financial Economics 135, no. 2 (2020): 468-482.
