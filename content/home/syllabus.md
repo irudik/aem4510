@@ -21,13 +21,11 @@ design:
 
 **Professor:** Ivan Rudik (ir229)
 
-**Class location:** Warren Hall 175
+**Class time:** Monday and Wednesday 1:00-2:15 in Warren 175
 
-**Class time:** Monday and Wednesday 1:00-2:15
+**Professor office hours:** Wednesday 2:30-3:30 in Warren 462
 
-**Professor zoom office hours:** Wednesday 2:30-3:30
-
-**TA zoom office hours:**
+**TA office hours:**
 
 Virginia Callison (vwc28): 
 
