@@ -21,17 +21,19 @@ design:
 
 **Professor:** Ivan Rudik (ir229)
 
-**Class location:** Bailey Hall 101
+**Class location:** Warren Hall 175
 
 **Class time:** Monday and Wednesday 1:00-2:15
 
-**Professor zoom office hours:** Tuesday 1:00-1:30, Thursday 1:30-2:00
+**Professor zoom office hours:** Wednesday 2:30-3:30
 
 **TA zoom office hours:**
 
-Diego Cardoso (ds2347): Monday 10:15-11:15
+Virginia Callison (vwc28): 
 
-Lin Yang (ly285): Wednesday 3:00-4:00
+Zhiyun Li (zl547):
+
+Binglin Wang (bw474): 
 
 **Readings:**
 
@@ -57,7 +59,7 @@ Assignments and grading are [here](/assignments/).
 
 **Attendance:** Class attendance is not explicitly required but highly recommended.
 
-**Grade appeals:** If you wish to appeal your grade on an assignment you must bring it to my attention, in writing, within 24 hours of when the assignment is returned.  Grades brought to my attention after this will not be eligible for a grade appeal. I reserve the right to regrade the entire assignment and the new grade will be final.
+**Grade appeals:** If you wish to appeal your grade on an assignment you must bring it to my attention, in writing, within 24 hours of when the assignment is returned.  *Grades brought to my attention after this will not be eligible for a grade appeal.* I reserve the right to regrade the entire assignment and the new grade will be final.
 
 **Integrity of credit:** I expect every student in this course to abide by the Cornell University Code of Academic Integrity. I strongly encourage collaboration in this course, but each student is responsible for making sure that she or he follows the rules laid out in this syllabus, and with those stated in the Code of Academic Integrity. Any student found to have violated the stated policies on problem sets will receive a zero for that assignment, and any student found to have cheated on a paper will receive a zero on that paper. Multiple violations in a semester may result in failure of the course. The Code of Academic Integrity is available for review here: https://cuinfo.cornell.edu/aic.cfm.
 

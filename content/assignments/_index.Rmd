@@ -11,7 +11,7 @@ weight: 1
 
 ## Grading
 
-**10%:** Class participation / activities: this covers being active in class and participating in any in-class exercises
+### Problem sets
 
 **15%:** Theory problem set 1
 
@@ -19,71 +19,24 @@ weight: 1
 
 **15%:** Empirical problem set 1
 
-**15%:** Empirical problem set 2
+**15%:** Empirical problem set 2 
 
-**30%:** Group project paper and presentation
+### Prelims
+
+**20%:** Empirical prelim
+
+**20%:** Theory prelim
 
 ## Assignments
 
 ### Problem sets
 
-You will have 4 problem sets. 2 will focus on the theory of the environment and regulation. 2 will focus on empirical analysis of environmental issues. You may work in groups of up to 3 on problem sets. Problem sets may be turned in late with a penalty of 20% of that homework's grade for each day it is late. Problem sets are due at 11:59PM on Canvas. Turn in one problem set per group with all group members names on it. You may consult with me, Lin, or Diego during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span>
+You will have 4 problem sets. 2 will focus on the theory of the environment and regulation. 2 will focus on empirical analysis of environmental issues. You may work in groups of up to 3 on problem sets. Problem sets may be turned in late with a penalty of 20% of that homework's grade for each day it is late. Problem sets are due at 11:59PM on Canvas. Turn in one problem set per group with all group members names on it. You may consult with me or the TAs during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span>
 
 **Theory problem sets due dates:** March 1, March 28
 
 **Empirical Problem sets due dates:** April 18, May 6
 
+### Prelims 
 
-### Group project paper
-
-You are expected to work on the group project in a group of 4-6 students. You must submit your group roster as an assignment on Canvas by March 25th. If you do not have a particular group that you wish to work with, email **Lin Yang** at least 1 week before the deadline and she will assign you to a project group.
-
-The projects in the first category are literature review type while those in the second category are empirical projects. 
-
-####  Literature Review Projects:
-
-The literature review is a good choice for those who have not taken econometrics and may not have adequate tools to carry out an empirical project (although you can try to learn from other members in the group).  These topics are meant to be suggestive. You can tweak them or find other topics along these lines (for example if you are a major in Chemical Engineering, you can develop your own topic by thinking about how the following topics can be linked to the chemical industry). 
-
--	On the environmental and health effects of Clean Air Act (1970) and Amendments. Alternatively, you can focus on their effects on economic growth (jobs, U.S. competitiveness and outsourcing). 
--	On U.S. SO2 emissions trading program. You can look at its environmental and health benefit of the program, its effect on the electric power sector, or the cost-effectiveness of the program.
--	On renewable energy policies in the U.S. such as Renewable Portfolio Standards in different states and government subsidies for solar, wind, biofuel etc. (you can just focus on one of these policies or if you want to do a more comprehensive review, even better). What are the effects of these policies on different sectors (who benefit or lose from these policies)? What are the effects of these policies on the environment and employment etc.?
--	On U.S. transportation policy such as gasoline taxes and Corporate Average Fuel Economy (CAFE) Standards. What should be the optimal gasoline tax in the U.S.? How does the gasoline tax compare with CAFE standards in addressing externalities associated with gasoline consumption? 
--	On the restructuring (aka deregulation) of U.S. electricity sector. What are the effects of the restructuring on say electricity prices, efficiency of the power plants, and investment decisions?
--	What are the controversies surrounding the Keystone XL pipeline project? What do we know from the literature about the pros and cons of this project? If you were to make a decision on this project, what would you choose and what would be your rationales related to what we learned from this course?
--	What are the impacts of the 2000s fracking revolution in the United States? What does the literature tell us about its economic impacts and environmental impacts. 
-
-Note: if you would like to study a particular environmental or energy policy in another country/region, go for it! One notable example is the Emission Trading System in European Union, which is a cap and trade program on CO2. Again you can look at how successful this program was in bringing down emissions or its effects on different sectors.
-
-#### Empirical projects:
-
-Several projects are provided in the folder including the data set and related questions. We will cover questions and techniques in the 2nd half of the course. These projects are generally about valuing the environment using observed behavior or market data.
-
-
-For the empirical projects, a list of topics and potential data sources are posted on Canvas under the Group Project module. Alternatively, I encourage you to come up with your own topic and collect your own data. One way to do that is to read recent literature from major environmental economic or general economic journal (e.g., Journal of Environmental Economics and Management, Review of Environmental Economics and Policy, American Economic Review, Quarterly Journal of Economics) that discusses a very specific environmental issue with economic consequences.
-
-#### Guidelines for the paper:
-
-The final products will be a paper between 8-15 pages not including references but everything else (12 point font, double spaced, 1 in margins). 
-
-The group paper should have the following five sections:
-
-1. **Summary:** a maximum of 1 page summary of your paper (be sure to include names of all authors)
-2. **Introduction:** Please include the following subsections: (1) What is the issue (define the problem), and (2) why is this issue important? One way to establish your argument in the second subsection is to include quotes from major newspapers or magazines, such as the New York Times or the Wall Street Journal or the Economists, or some quote by some major public figure (politician etc.) that discusses the problem.
-3. **Economic analysis and findings:** For an empirical project, this section should include data and empirical model. For a theoretical paper, it should include a theoretical model or theoretical arguments and derivations. Findings should be presented here.
-4. **Conclusion:** Discuss briefly what lessons we can learn from the study (e.g., policy suggestions).
-5. **References:** List all the references used in your article. These are easy to obtain from Google Scholar.
-
-The paper has to be submitted on Canvas (1 submission per group) no later than 11:59PM on May 25th. In addition to the paper, each team member will anonymously assess the contribution and effort of the other team members. This assessment will factor into your grade.
-
-**Team roster due date:** March 25
-
-**Paper due date:** May 25
-
-**Teammate assessment due date:** May 25
-
-
-### Group project presentation
-
-Along with the final paper your group will need to give a class presentation with 10 minutes for presentation and 2 minutes for Q&A (given the short time window, it isn't necessary for everyone to take part in the presentation). The group presentations will be held during the last 2-3 lectures depending on the number of groups. The grade for the group project will be based on both the presentation and the paper itself.
-
-**Due date:** Last two days of class
+You will have two prelims. One is an in class prelim on the theory of the environment and regulation. One is a take home, group prelim on empirical analyses of environmental issues. You may work in groups of up to 3 on problem sets. The main difference between the empirical prelim and problem sets is you will have 24 hours to complete the prelim. Myself and the TAs will all hold extra office hours during class time the day of the empirical prelim during which you can ask clarifying questions. Turn in one problem set per group with all group members names on it. 
