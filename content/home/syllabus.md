@@ -27,11 +27,11 @@ design:
 
 **TA office hours:**
 
-Virginia Callison (vwc28): 
+Virginia Callison (vwc28): Monday 2:30-3:30
 
-Zhiyun Li (zl547):
+Zhiyun Li (zl547): Friday 12:00-1:00
 
-Binglin Wang (bw474): 
+Binglin Wang (bw474): Tuesday 3:30-4:30
 
 **Readings:**
 
