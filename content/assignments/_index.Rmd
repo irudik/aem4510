@@ -11,6 +11,8 @@ weight: 1
 
 ## Grading
 
+All dates below are tentative and subject to change depending on how fast we move in class, other unforeseen things, etc.
+
 ### Problem sets
 
 **15%:** Theory problem set 1
@@ -23,20 +25,24 @@ weight: 1
 
 ### Prelims
 
-**20%:** Empirical prelim
-
 **20%:** Theory prelim
+
+**20%:** Empirical prelim
 
 ## Assignments
 
 ### Problem sets
 
-You will have 4 problem sets. 2 will focus on the theory of the environment and regulation. 2 will focus on empirical analysis of environmental issues. You may work in groups of up to 3 on problem sets. Problem sets may be turned in late with a penalty of 20% of that homework's grade for each day it is late. Problem sets are due at 11:59PM on Canvas. Turn in one problem set per group with all group members names on it. You may consult with me or the TAs during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span>
+You will have 4 problem sets. 2 will focus on the theory of the environment and regulation. 2 will focus on empirical analysis of environmental issues. You may work in groups of up to 3 on problem sets. Problem sets are due at 11:59PM on Canvas. Problem sets may be turned in late with a penalty of 20% of that homework's grade for each day it is late (even if it is by one minute). Turn in one problem set per group with all group members names on it. You may consult with me or the TAs during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span> 
 
-**Theory problem sets due dates:** March 1, March 28
+**Theory problem sets due dates:** Feb 18, March 11
 
-**Empirical Problem sets due dates:** April 18, May 6
+**Empirical problem sets due dates:** April 1, April 29
 
 ### Prelims 
 
 You will have two prelims. One is an in class prelim on the theory of the environment and regulation. One is a take home, group prelim on empirical analyses of environmental issues. You may work in groups of up to 3 on the empirical prelim. The main difference between the empirical prelim and problem sets is you will have <span style="color:red">**24 hours**</span> to complete the prelim. Myself and the TAs will all hold extra office hours during class time the day of the empirical prelim during which you can ask clarifying questions. Turn in one problem set per group with all group members names on it. 
+
+**Theory prelim:** March 21
+
+**Empirical prelim:** May 9 (all day)
