@@ -98,8 +98,8 @@ ps_points <- tibble(x = c(0, 16.67, 0),
 ggplot() +
   geom_polygon(data = cs_points, aes(x = x, y = y), fill = "red", alpha = 0.2) +
   geom_polygon(data = ps_points, aes(x = x, y = y), fill = "blue", alpha = 0.2) +
-  annotate("text", x = 26, y = 22, label = "PMC", size = 8) +
-  annotate("text", x = 26, y = 7, label = "PMB", size = 8) +
+  annotate("text", x = 26, y = 22, label = "PMC=SMC", size = 8) +
+  annotate("text", x = 27, y = 10, label = "PMB=SMB", size = 8) +
   stat_function(fun = demand, color = "#ca5670", size = 1.5) +
   stat_function(fun = supply, color = "#638ccc", size = 1.5) +
   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33,
@@ -121,7 +121,7 @@ ggplot() +
   scale_x_continuous(labels = expression(Q^'*'), breaks = c(16.67), limits = c(0,30)) +
   scale_y_continuous(labels = expression(P^'*'), breaks = c(13.33), limits = c(0,30)) +
   labs(x = "Quantity",
-       y = "Price")
+       y = "Price") 
 
 ```
 
