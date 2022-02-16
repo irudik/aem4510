@@ -50,7 +50,7 @@ On a piece of paper turn in the following to the professor/market facilitator:
 - Your firm type
 - Your total amount of emissions abated
 - Your total cost of abatement
-
+ 
 ### Tradable Permits
 
 Now your firm is given an initial permit allocation of 1,480 for free. The industry total is 1,480*N permits. For this exercise, a permit price will be called out. For that price, your firm must decide how many permits it wants to hold, and thus how many it wishes to buy or to sell. As soon as you have that figured out, n a piece of paper turn in the following to the professor/market facilitator:
