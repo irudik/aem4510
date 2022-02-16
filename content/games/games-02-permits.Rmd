@@ -1,0 +1,62 @@
+---
+title: "Tradable Permits Game"
+linktitle: "Games 2: Permits"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Menu
+    weight: 102
+type: docs
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+## Getting started
+
+In addition to providing a respite from lectures, the purpose of this exercise is to learn more about the practical process that underlies the path to equilibrium in a tradable permit market. 
+
+## Instructions for the game
+
+There are N firms in the market. Each team (comprised of 4-6 students) will be assigned to represent one of the firms and make decisions on firms’ emission decisions. Members of your team should work together to solve the problems but choose one student as your firm’s reporter. That student will come forward and report information about your firm’s choices and expenditures by typing numbers into the class spread sheet on my Mac as soon as you are ready. The first of the N groups to report in gets N points toward an end-of-class prize, the second group gets N-1 points and so on. However, points will be deducted if your answer is wrong. The group with the most points wins.
+
+## Emissions Trading Background 
+
+We describe firms only by their marginal abatement cost (or marginal benefits of making another unit of emissions). These MAC functions are given by the following equations. The MAC for emissions greater than the initial level is always 0. Firms differ both by amount of emissions they would choose to create in the absence of regulation, and in the marginal cost of cleaning up a unit of emissions. 
+
+<center>
+
+| Firm Type                 |   | MAC in Dollars      |   | Initial Emissions Level |
+|--------------------|:----:|:-------------:|:---:|:---------------:|
+| A                     |   | MAC = 4000 - 2E               |  |12               |
+| B                     |   | MAC = 8000 - 4E              | |10               |
+| C                      |  | MAC = 10000 - 5E             |    |6                |
+| D                      |  | MAC = 4000 - E               |  |4                |
+| E                       | | MAC = 8000 - 2E              |   |2                |
+| F                      |  | MAC = 10000 - 2.5E             |   |1                |
+</center>
+
+On the board I will list how many of each firm type there are.
+
+## Scenarios
+
+### Uniform Emissions Standard
+
+In this scenario, firms are subject to a uniform standard (1,480 tons emissions for each firm, in this example). You should calculate and record the abatement quantity and cost that this standard imposes on your firm.
+
+On a piece of paper turn in the following to the professor/market facilitator:
+
+- Your team name
+- Your firm type
+- Your total amount of emissions abated
+- Your total cost of abatement
+
+### Tradable Permits
+
+Now your firm is given an initial permit allocation of 1,480 for free. The industry total is 1,480*N permits. For this exercise, a permit price will be called out. For that price, your firm must decide how many permits it wants to hold, and thus how many it wishes to buy or to sell. As soon as you have that figured out, n a piece of paper turn in the following to the professor/market facilitator:
+
+- Your team name
+- Your firm type
+- How many permits you want to buy (negative numbers mean you want to sell)
+
+When all reports are in, the professor/market facilitator will figure out total demand and supply and announce if the market is cleared (you should write down total industry demand and supply). If the market is not cleared, a new price will be called out.
