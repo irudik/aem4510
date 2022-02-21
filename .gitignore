@@ -1,4 +1,6 @@
-
+/problem-sets/
+/problem-sets/*
+.DS_Store
 /problem-sets/solutions/*
 /problem-sets/s*
 # History files

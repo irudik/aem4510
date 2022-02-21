@@ -866,6 +866,60 @@ This means that *in practice*, we might expect to get greater emissions reductio
 
 This is one of the key reasons the 1990 CAA amendments were able to be passed
 
+---
+
+# Permit market challenges
+
+.hi-red[How we do initially allocate permits?]
+
+--
+
+.hi-blue[Auction] charge firms for each permit they hold, let price be set by marketplace, revenues can be used to reduce other distortionary taxes, auction price will be the same as a Pigouvian tax
+
+--
+
+.hi-blue[Lottery]: Randomly assign permits
+
+--
+
+.hi-blue[Grandfathering]: give permits to existing firms based on historical emissions
+
+---
+
+# Permit market challenges
+
+.hi-red[How do we set up trading rules?]
+
+--
+
+We can decentralize trading market to cut down on transaction costs
+--
+
+Do trades need to be validated by central authority to ensure permit validity?
+
+
+---
+
+# Permit market challenges
+
+.hi-red[What about transactions costs?]
+
+--
+
+Transactions costs create a wedge that prevents otherwise surplus-increasing trades from being made
+
+--
+
+Examples?
+
+--
+
+Search, information, bargaining, monitoring/enforcement
+
+--
+
+Lots of these costs are fixed, prohibit small trades
+
 
 ---
 
@@ -967,11 +1021,94 @@ Suppose we have the two firms with different MACs and MDs:
 - $MD_1 = 100$
 - $MD_2 = 150$
 
+]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+
+.pull-left[
+![permits heterogeneous damages](`r knitr::fig_chunk("permits-hetero", "png")`)
+]
+
+.pull-right[
+
+Suppose we have the two firms with different MACs and MDs:
+- $MAC_1 = 200-E_1$
+- $MAC_2 = 300-E_2$
+- $MD_1 = 100$
+- $MD_2 = 150$
+
 The efficient emissions allocation is: $E^* = 250: E_1^* = 100, E_2^* = 150$
 
 The regulator sets $\bar{E} = 250$
 
 ]
+
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+.pull-left[
+![permits heterogeneous damages](`r knitr::fig_chunk("permits-hetero", "png")`)
+]
+
+.pull-right[
+
+We can solve for the permit market allocation and price using:
+$MAC_1 = MAC_2$ and $E_1 + E_2 = 250$
+
+These two conditions tell us:
+
+]
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+.pull-left[
+![permits heterogeneous damages](`r knitr::fig_chunk("permits-hetero", "png")`)
+]
+
+.pull-right[
+
+We can solve for the permit market allocation and price using:
+$MAC_1 = MAC_2$ and $E_1 + E_2 = 250$
+
+These two conditions tell us:
+
+$E^p_1 = 75, E^p_2 = 175, p = 125$
+
+but efficiency is at:
+
+]
+
+---
+
+# Permit systems and heterogeneous MDs: graphical
+
+.pull-left[
+![permits heterogeneous damages](`r knitr::fig_chunk("permits-hetero", "png")`)
+]
+
+.pull-right[
+
+We can solve for the permit market allocation and price using:
+$MAC_1 = MAC_2$ and $E_1 + E_2 = 250$
+
+These two conditions tell us:
+
+$E^p_1 = 75, E^p_2 = 175, p = 125$
+
+but efficiency is at:
+
+$E^*_1 = 100, E^*_2 = 150$
+
+]
+
 
 
 ---
@@ -1642,12 +1779,6 @@ To keep things simple lets suppose the firm has constant returns to scale techno
 
 ---
 
-# Output effects
-
-The policy requires the firm
-
----
-
 # The output set up
 
 .pull-left[
@@ -1719,7 +1850,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1,1.5), labels = c(expression(q^'*'), expression(q[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
@@ -1830,7 +1961,7 @@ This might make things more politically difficult to pass
 
 When does C&C / technology standards make sense?
 
-1. If there's a dominant technology where there's cost benefits to coordination or scale economies from production of the technology
+1. If there's a dominant technology where there's benefits to coordination or scale economies from production of the technology
 2. High costs of monitoring/enforcement
 3. High admin costs and little heterogeneity across firms
 
