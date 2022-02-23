@@ -31,13 +31,6 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
@@ -56,8 +49,7 @@ pacman::p_load(
 ```
 
 ```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
+## Warning in library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE, : there is no package called 'tweetrmd'
 ```
 
 ```
@@ -84,8 +76,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -1281,9 +1272,9 @@ From here on we will roll the tax and permit system into 1: they are actually id
 
 |            	| Tax      	| Standard 	| Subsidy 	| Ranking         	|
 |------------	|----------	|----------	|---------	|-----------------	|
-| Firm       	| -(A+B+C) 	| -A       	| B+C-A   	| Sub &gt; Std &gt; Tax 	|
+| Firm       	| -(A+B+C) 	| -A       	| E       	| Sub &gt; Std &gt; Tax 	|
 | Households 	| A+D+E    	| A+D+E    	| A+D+E   	| Indifferent     	|
-| Government 	| B+C      	| 0        	| -(B+C)  	| Tax &gt; Std &gt; Sub 	|
+| Government 	| B+C      	| 0        	| -(E+A)  	| Tax &gt; Std &gt; Sub 	|
 | Total      	| D+E      	| D+E      	| D+E     	|                 	|
 
 The total welfare gain is the same for all policies

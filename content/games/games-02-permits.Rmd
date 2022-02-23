@@ -27,7 +27,7 @@ We describe firms only by their marginal abatement cost (or marginal benefits of
 <center> 
 
 | Firm Type                 |   | MAC in Dollars      |   | Initial Emissions Level |
-|--------------------|:----:|:-------------:|:---:|:---------------:|
+|:--------------------:|:----:|:-------------:|:---:|:---------------:|
 | A                     |   | MAC = 4000 - 2E               |  |2000               |
 | B                     |   | MAC = 8000 - 4E              | |2000               |
 | C                      |  | MAC = 10000 - 5E             |    |2000                |
