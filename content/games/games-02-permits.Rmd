@@ -24,7 +24,7 @@ There are N firms in the market. Each team (comprised of 4-6 students) will be a
 
 We describe firms only by their marginal abatement cost (or marginal benefits of making another unit of emissions). These MAC functions are given by the following equations. The MAC for emissions greater than the initial level is always 0. Firms differ both by amount of emissions they would choose to create in the absence of regulation, and in the marginal cost of cleaning up a unit of emissions. 
 
-<center>
+<center> 
 
 | Firm Type                 |   | MAC in Dollars      |   | Initial Emissions Level |
 |--------------------|:----:|:-------------:|:---:|:---------------:|
