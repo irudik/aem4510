@@ -100,12 +100,12 @@ ggplot() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -278,8 +278,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -348,8 +348,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -420,8 +420,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -588,8 +588,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -660,8 +660,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -824,8 +824,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -1035,7 +1035,7 @@ Flaring of natural gas at oil wells in North Dakota is regulated with an intensi
 
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-flaring1.png")
+knitr::include_graphics("files/05-flaring1.png")
 ```
 </center>
 
@@ -1047,7 +1047,7 @@ Mandates a minimum fraction of gas captured (max fraction of gas flared)
 
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-flaring2.png")
+knitr::include_graphics("files/05-flaring2.png")
 ```
 </center>
 
@@ -1059,7 +1059,7 @@ The regulation pushed flaring rates down
 
 <center>
 ```{r, out.width = "60%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-flaring3.png")
+knitr::include_graphics("files/05-flaring3.png")
 ```
 </center>
 
@@ -1502,25 +1502,5 @@ The solid line shows the firm's choices of $Q_L,Q_H$ as we increase the intensit
 Increasing $\sigma$ pivots the intensity standard counter-clockwise: $Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$
 
 The optimal intensity standard is the one that lets us get on the highest iso-welfare curve, which is at point $C$
-
-]
-
----
-
-# Intensity standards: gas flaring
-
-
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-flaring4.png")
-```
-</center>
-]
-
-.pull-right[
-Moving from a flaring intensity standard to tradable permits or a tax generates massive welfare gains!
-
-A tax that captures the same quantity of gas would have >40% lower cost than the actual intensity standard
 
 ]

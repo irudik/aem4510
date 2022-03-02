@@ -117,12 +117,12 @@ ggplot() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -238,12 +238,12 @@ ggplot() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#eeeeee"),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -321,8 +321,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -403,8 +403,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -437,8 +437,8 @@ mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
 mdh <- function(x) x + 0.5
 mdl <- function(x) x - 1.5
-dwl <- tibble(x = c(21/10, 21/10, 1.5),
-                     y = c(2- 2*21/10/3, 21/10-.5, 1))
+dwl <- tibble(x = c(21/10, 1.5, 1.5),
+                     y = c(2- 2*21/10/3, 0, 1))
 ggplot() +
   geom_polygon(data = dwl, aes(x = x, y = y), fill = "red", alpha = 0.2) +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
@@ -461,8 +461,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -517,12 +517,12 @@ ggplot() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#EEEEEE"),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -581,8 +581,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -659,8 +659,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -724,8 +724,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -788,8 +788,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -913,8 +913,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -1009,8 +1009,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
@@ -1068,8 +1068,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Emissions",
