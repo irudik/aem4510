@@ -873,7 +873,7 @@ Now let's break the tight link between output and emissions by writing down a sl
 
 Here's our model:
 
-- Cobb-Douglas production using labor and emissions as inputs: $L^\alpha E^{1-\alpha}$
+- Cobb-Douglas production using labor and emissions as inputs: $Q = L^\alpha E^{1-\alpha}$
 - The firm pays wages $w$, rental rate $r$ to emissions (capital)
 - The firm receives a price $p$ per unit of output
 - Emissions cause marginal damage $d$
@@ -1114,7 +1114,9 @@ $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q
 
 # Intensity standards: social planner
 
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q_i} + \tau \beta_i \,\,\, i = L,H$$
+$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$
+
+where we let $MC_i = \frac{\partial C_i(Q_i)}{\partial Q_i}$
 
 What is this condition saying?
 
@@ -1143,7 +1145,9 @@ The right hand side is the standard: $\sigma$ is the required emissions intensit
 
 --
 
-For the standard to make any sense it must be: $\beta_L \leq \sigma \leq \beta_H$, otherwise it doesn't do anything $\sigma > \beta_H$ or its unattainable $\sigma < \beta_L$
+For the standard to make any sense it must be: $\beta_L \leq \sigma \leq \beta_H$, 
+--
+otherwise it doesn't do anything $\sigma > \beta_H$ or its unattainable $\sigma < \beta_L$
 
 ---
 
