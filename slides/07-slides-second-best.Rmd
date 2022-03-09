@@ -1266,7 +1266,7 @@ Is the intensity standard efficient?
 # Intensity standards: efficiency
 
 Social welfare is maximized when:
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q_i} + \tau \beta_i \,\,\, i = L,H$$
+$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$
 
 --
 
@@ -1283,7 +1283,7 @@ $\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = p_i$ from household utility maximiza
 # Intensity standards: efficiency
 
 Social efficiency:
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q_i} + \tau \beta_i \,\,\, i = L,H$$
+$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$
 
 Firm choice:
 $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$
