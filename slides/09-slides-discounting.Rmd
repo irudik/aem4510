@@ -196,8 +196,8 @@ ggplot() +
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(),
     panel.grid.minor.y = element_blank(),
-    panel.background = element_rect(fill = "#eeeeee",colour = NA),
-    plot.background = element_rect(fill = "#eeeeee",colour = NA),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
   labs(x = "Years",
@@ -321,7 +321,7 @@ And growth: if someone is richer in 10 years, a dollar is worth more to them tod
 
 # Ramsey Discounting
 
-With a decent amount of math we can show that the discount rate $r$ is composed of three terms:
+With a decent amount of math we can show that the social discount rate $r$ is composed of three terms:
 $$r = \delta + \eta \times g$$
 
 --
@@ -361,7 +361,7 @@ $g$: how rich will we / future generations be compared to today?
 
 $$r = \delta + \eta \times g$$
 
-What this means is that if we have values for $r$, $\eta$, and $g$, we can compute the correct discount rate
+What this means is that if we have values for $r$, $\eta$, and $g$, we can compute the "correct" discount rate
 
 --
 
@@ -420,7 +420,7 @@ What is the right value for $\delta$?
 
 --
 
-Ramsey (1928): placing different weights upon the utility of different generations, as ‘ethically indefensible'
+Ramsey (1928): placing different weights upon the utility of different generations is ‘ethically indefensible'
 
 --
 
@@ -499,7 +499,7 @@ yields a smaller $\delta$ and $r$
 
 .hi[intergenerational inequality] 
 --
-yields a larger $\theta$ and larger $r$ if growth is positive
+yields a larger $\eta$ and larger $r$ if growth is positive
 
 
 ---
