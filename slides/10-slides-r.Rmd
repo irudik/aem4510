@@ -1,6 +1,6 @@
 ---
 title: "Lecture 10"
-subtitle: "R and the tidyverse // regression"
+subtitle: "Base R // Tidyverse // Regression"
 author: Ivan Rudik
 date: AEM 4510
 output:
@@ -23,14 +23,14 @@ pacman::p_load(
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
-    options$echo <- FALSE
+    options$echo = FALSE
   }
 knitr::opts_chunk$set(echo = TRUE, fig.align="center")
   options
 })
-red_pink <- "#e64173"
+red_pink = "#e64173"
 # A blank theme for ggplot
-theme_empty <- theme_minimal() +
+theme_empty = theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
@@ -42,7 +42,7 @@ theme_empty <- theme_minimal() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
-theme_blank <- theme_minimal() +
+theme_blank = theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
@@ -54,7 +54,7 @@ theme_blank <- theme_minimal() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_blank(), axis.ticks = element_blank(),
   ) 
-theme_regular <- 
+theme_regular = 
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -179,85 +179,42 @@ name: r
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
 ---
+class: inverse, center, middle
+name: intro
 
-# What is R?
+# Introduction to base R
 
-What is R?
-
-> R is a language and environment for statistical computing and graphics.
-
-What is RStudio?
-
-> RStudio is an integrated development environment (IDE) for R, a programming language for statistical computing and graphics.
-
---
-
-Basically: R is the coding language, RStudio is the graphical interface
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
 
 ---
 
-# Why are we using R?
+# Basic arithmetic
 
-1. R is free
-
---
-
-2. R is relatively easy to learn (especially with `tidyverse` which we will be using)
-
---
-
-3. R is widely used for statistical analysis and data science in business, economics, natural sciences
-
---
-
-4. R has a large online community for help (e.g. StackOverflow), and lots and lots of packages that help you do your analysis smoothly
-
----
-
-# Let's see what we can do in R
-
-Next let's see how to use R
-
---
-
-First we will start with the basics
-
---
-
-Then we will start doing more complicated exercises that are important for doing data analysis and economics work
-
---
-
-Please follow along in RStudio/RStudio Cloud
-
----
-
-# Arithmetic operations
-
-R can do all the standard arithmetic operations
+R is a powerful calculator and recognizes all of the standard arithmetic operators:
 
 ```{r}
-1+2 ## add
-6-7 ## subtract
-5/2 ## divide
+1+2 # add / subtraction
+5/2 # divide
+2^3 # exponentiate
+2+4*1^3 # standard order of precedence (`*` before `+`, etc.)
 ```
 
 ---
 
-# Logical operations
+# Logic
 
-You also have logical operations
+R also comes equipped with a full set of logical operators and Booleans
 
 ```{r}
 1 > 2
-(1 > 2) | (1 > 0.5) # | is the or operator
-(1 > 2) & (1 > 0.5) # & is the and operator
+(1 > 2) & (1 > 0.5) # "&" is the "and" operator
+(1 > 2) | (1 > 0.5) # "|" is the "or" operator
 ```
 
 ---
 
-# Logical operations
+# Logic
 
 We can negate expressions with: `!`
 
@@ -268,56 +225,73 @@ is.na(1:10)
 !is.na(1:10)
 ```
 
-`NA` means .hi[not available] (i.e. missing)
+`NA` means **not available** (i.e., missing)
+
 ---
 
-# Logical operators
+# Logic
 
-For value matching we use: `%in%`
+For value matching we can use: `%in%`
 
-To see whether an object is contained within (i.e. matches one of) a list of items, use `%in%`.
+To see whether an object is contained within (i.e., matches one of) a list of items, use `%in%`:
 ```{r}
 4 %in% 1:10
 4 %in% 5:10
 ```
 
-This is kind of like an `any` command in other languages
-
 ---
 
-# Logical operators 
+# Logic
 
-To evaluate whether two expressions are equal, we need to use .hi-red[two] equal signs
+To evaluate whether two expressions are equal, we need to use **two** equal signs
 
 ```{r, error=T}
-1 = 1 ## This doesn't work
-1 == 1 ## This does.
-1 != 2 ## Note the single equal sign when combined with a negation.
+1 = 1 # This doesn't work
+1 == 1 # This does.
+1 != 2 # Note the single equal sign when combined with a negation.
 ```
-
 
 ---
 
-# Assignment
+# Logic
 
-In R, we can use either `=` or `<-` to handle assignment<sup>1</sup>
-
-.footnote[
-<sup>1</sup> The `<-` is really a `<` followed by a `-`. It just looks like an arrow because of the font on the slides
-]
+**Evaluation caveat:** What do you think will happen if we evaluate `0.1 + 0.2 == 0.3`?
 
 --
 
-`<-` is normally read aloud as "gets"
+```{r floating1}
+0.1 + 0.2 == 0.3
+```
+Uh-oh! What went wrong here?
 
-You can think of it as a (left-facing) arrow saying .hi[assign in this direction]
+--
+
+**Problem:** Computers represent numbers as binary (i.e., base 2) floating-points. More [here](https://floating-point-gui.de/basic/)
+- Fast and memory efficient, but can lead to unexpected behavior
+- Similar to how standard decimals can't precisely capture certain fractions (e.g., $\frac{1}{3} = 0.3333...$)
+
+--
+
+**Solution:** Use `all.equal()` for evaluating floats (i.e., fractions)
+
+```{r floating2}
+all.equal(0.1 + 0.2, 0.3)
+```
 
 ---
 
 # Assignment
 
+In R, we can use either `<-` or `=` to handle assignment
+
+--
+
+### Assignment with `=`
+
+`<-` is normally read aloud as "gets". You can think of it as a (left-facing) arrow saying *assign in this direction*.
+
 ```{r}
-a <- 10 + 5
+a = 10 + 5
 a
 ```
 
@@ -325,90 +299,131 @@ a
 
 # Assignment
 
-You can also use `=` for assignment
+### Assignment with `=`
+
+You can also use `=` for assignment.
 
 ```{r}
-b = 10 + 10 
+b = 10 + 10
 b
 ```
 
 ---
 
-# Which assignment operator to use?
+# Which assignment operator should you use?
 
-Most R folks prefer `<-` for assignment
+The proper one to use is `<-`, which can be inserted using the keyboard shortcut Alt/Option + -
 
---
+It doesn't really matter for our purposes, other languages use `=`
 
-It doesn't really matter though, other languages strictly use `=`
+I will use `=`
 
---
-
-.hi[Use whatever you prefer, just be consistent]
+**Bottom line:** Use whichever you prefer, just be consistent
 
 ---
 
 # Help
 
-If you are struggling with a (named) function or object in R, simply type `?commandhere`
-  
+For more information on a (named) function or object in R, consult the "help" documentation using `?`
+
+For example:
+
 ```R
-?rowSums 
+?plot 
 ```
 
 ---
 
-# Help 
+# Vignettes
 
-Also try `vignette()` for a more detailed introduction to many packages
+For some packages, `vignette()` will provide a detailed intro
 
-```R
+```{r, eval = FALSE}
 # Try this:
 vignette("dplyr")
 ```
 
+Vignettes are a great way to learn how and when to use a package
+
+---
+
+# Comments
+
+
+Comments in R code are demarcated by `#`
+
+Use comments to document your logic in `.R` scripts and within `.Rmd` code chunks
+
+```{r, eval = FALSE}
+# THIS IS A CODE SECTION ----
+# this is a comment
+vibe = "immaculate" # iykyk
+```
+
 --
 
-Vignettes are a very easy way to learn how and when to use a package
+Comments should be concise and used only when necessary (unlike the comments above)
+
+--
+
+Using at least four trailing dashes (`----`) creates a code section, which simplifies navigation and code folding
+- Also works with trailing equals (`====`) or pound signs (`====`)
+
+--
+
+**Keyboard shortcut:** use `Ctrl/Cmd+Shift+c` in RStudio to (un)comment whole sections of highlighted code
+
+
+---
+class: inverse, center, middle
+name: oop
+
+# Object-oriented programming in R
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
 
 ---
 
 # Object-oriented programming
 
 In R:
-> "Everything is an object and everything has a name."
+
+> **"Everything is an object and everything has a name."**
+
+---
+class: inverse, center, middle
+name: eobject
+
+# "Everything is an object"
+
 
 ---
 
 # What are objects? 
 
-We won't go into details but here are some objects that we'll be working with regularly:
+There are many different *types* (or *classes*) of objects
+
+Here are some objects that we'll be working with regularly:
 - vectors
 - matrices
 - data frames
 - lists
-- etc.
+- functions
 
---
-
-A lot of these are probably familiar if you have coding experience
 
 ---
 
 # Data frames
 
-The most important object we will be working with is the .hi[data frame]
-
---
+The most important object we will be working with is the **data frame**
 
 You can think of it basically as an Excel spreadsheet
 
---
-
-```{r df}
-## Create a small data frame called "df".
-df <- data.frame(x = 1:2, y = 3:4) 
-df
+```{r d}
+# Create a small data frame called "d"
+d = data.frame(x = 1:2, y = 3:4) 
+d
 ```
 
 --
@@ -421,59 +436,164 @@ Each row is an observation telling us the values of both `x` and `y`
 
 ---
 
+# Aside: built-in data frames
+
+Base R and packages have a bunch of built in data frames with special names you can call on
+
+For example we have `cars`:
+
+.pull-left[
+```{r}
+head(cars)
+```
+]
+
+.pull-right[
+```{r plot-cars, fig.width=5, fig.height=4}
+plot(cars)
+```
+]
+
+
+
+---
+
+# Back to objects
+
+Each object class has its own set of rules for determining valid operations
+
+```{r d2}
+# Create a small data frame called "d"
+d = data.frame(x = 1:2, y = 3:4) 
+d
+```
+
+--
+
+At the same time, you can (usually) convert an object from one type to another
+
+```{r mat}
+# Convert it to (i.e., create) a matrix call "mat"
+mat = as.matrix(d)
+mat
+```
+
+---
+
 # Working with multiple objects
 
 In R we can have multiple data frames in memory at once
 
-```{r df2}
-df2 <- data.frame(x = rnorm(10), y = rnorm(10)) # x and y are each 10 normal random numbers
-df # df still exists even though we made df2!
-df2 # here's df2
-```
-
-
----
-
-# Built in dataframes
-
-R (and its packages) also has a bunch of built in dataframes with special names that you can call upon any time, we will be using these for examples
+Even though we just made `mat`, `d` still exists:
 
 ```{r}
-mtcars
+d
 ```
 
 ---
 
-# Built in dataframes
+# Ways to learn about objects
 
-R (and its packages)  also has a bunch of built in dataframes with special names that you can call upon any time, we will be using these for examples
+Printing an object directly in the console is often handy
+- e.g., Type `d` and hit Enter
 
-This one is in the `dplyr` package that we will load later
+--
+
+`View()` is very helpful, and has the same effect as clicking on the object in your RStudio *Environment* pane
+- e.g., Type `View(d)` and hit Enter
+
+--
+
+Use the `str` command to learn about an object's **str**ucture
 
 ```{r}
-starwars
+# d = data.frame(x = 1:2, y = 3:4) # Create a small data frame called "d"
+str(d) # Evaluate its structure
 ```
+
+--
+
+You can also use `class` to get an object's class without all the other details
+
+
+---
+name: global_env
+
+# Global environment
+
+Let's go back to the simple data frame that we created a few slides earlier.
+```{r}
+d
+```
+
+--
+
+Now, let's try to do a logical comparison of these "x" and "y" variables:
+
+```{r, error=T}
+x < y
+```
+
+--
+
+Uh-oh. What went wrong here?
+
+---
+
+# Global environment
+
+The error message provides the answer to our question:
+
+```
+*## Error in eval(predvars, data, env): object 'x' not found
+```
+
+--
+
+R looked in our *Global Environment* and couldn't find `x`
+
+```{r environment, echo=FALSE, out.width='75%'}
+knitr::include_graphics("files/02-environment.png")
+```
+
+--
+
+We have to tell R that `x` and `y` belong to the object `d`
+
+We will come back to this
+
+
+
+---
+class: inverse, center, middle
+name: ename
+
+# "Everything has a name"
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
 
 ---
 
 # Reserved words
 
 R has a bunch of key/reserved words that serve specific functions
+- You can't (re)assign these, even if you wanted to
 
 See [here](http://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html) for a full list, including (but not limited to):
 
 ```R
 if
-else 
+else
 while # looping
-function 
+function
 for # looping
-TRUE 
-FALSE 
+TRUE
+FALSE
 NULL # null/undefined
-Inf # infinity
-NaN # Not a number
-NA # Not available / missing
+Inf #infinity
+NaN # not a number
+NA # not available / missing
 ```
 
 ---
@@ -481,102 +601,150 @@ NA # Not available / missing
 # Semi-reserved words
 
 There are other words that are sort of reserved, in that they have a particular meaning
+- These are named functions or constants (e.g., `pi`) that you can re-assign if you really want to... but that already come with important meanings from base R
 
-The most important one is `c` which binds and concatenates objects together
+The most important example is `c()`, which binds and concatenates objects together
 
 ```{r}
-my_vector <- c(1, 2, 5)
+my_vector = c(1, 2, 5)
 my_vector
 ```
 
-This created a vector/row consisting of 1, 2, 5
+--
+
+What do you think will happen if you type the following?
+
+```{r, eval=FALSE}
+c = 4
+c(1, 2 ,5)
+```
+
+--
+
+```{r, echo=FALSE}
+c = 4
+c(1, 2 ,5)
+```
+
+--
+
+In this case, R is "smart" enough to distinguish between the variable `c` and the built-in function `c()`
+
+---
+
+# Semi-reserved words (cont.)
+
+But R won't always be able to distinguish between conflicting definitions! For example:
+```{r}
+pi
+pi = 2
+pi
+```
+--
+
+**Bottom line:** Don't use (semi-)reserved words!
 
 ---
 
 # Namespace conflicts
 
-Try loading up `dplyr` in RStudio
-```{r, warning = T, tidy = T}
+Try loading the `dplyr` package in RStudio
+```{r, eval=FALSE}
 library(dplyr)
 ```
 
 What warning gets reported?
 
+    The following objects are masked from ‘package:stats’:
+
+        filter, lag
+
+    The following objects are masked from ‘package:base’:
+
+        intersect, setdiff, setequal, union
+
 --
 
-The warning *masked from 'package:X'* is about a .hi-red[namespace conflict]
+The warning *masked from 'package:X'* is about a **namespace conflict**
 
---
-
-`dplyr` and the `stats` package (which gets loaded automatically when you start R) have functions named `filter` and `lag`
+Here, both `dplyr` and the `stats` package (which gets loaded automatically when you start R) have functions named `filter` and `lag`
 
 ---
 
-# Namespace conflicts 
+# Namespace conflicts
 
 Whenever a namespace conflict arises, the most recently loaded package will gain preference
-
---
 
 The `filter()` function now refers specifically to the `dplyr` variant
 
 --
 
-But what if we want the `stats` variant?
-
---
-
-1. Temporarily use `stats::filter()`
-2. Permanently assign `filter <- stats::filter`
+What if we want the `stats` variant?
+1. Use `stats::filter()`
+2. Assign `filter = stats::filter`
 
 ---
 
 # Solving namespace conflicts
 
-Use `package::function()`
+### 1. Use `package::function()`
+
+Explicitly call a conflicted function from a package using the `package::function()` syntax
 
 --
 
-Explicitly call a conflicted function from a package using the `package::function()` syntax:
-```{r}
-stats::filter(1:10, rep(1, 2))
+We can also use `::` to clarify the source of a function or dataset in our code
+
+```{r, eval=FALSE}
+dplyr::starwars # Print the starwars data frame from the dplyr package
+scales::comma(c(1000, 1000000)) # Use the comma function, which comes from the scales package
 ```
+
+--
+
+The `::` syntax also allows us to call functions without loading the package (as long as it is installed)
 
 ---
 
 # Solving namespace conflicts
 
-We can also use `::` for more than just conflicted cases.
+### 2. Assign `function = package::function`
 
---
-
-It can clarify where a function or dataset comes from and make the code clearer:
-```r
-dplyr::starwars ## Print the starwars data frame from the dplyr package
-scales::comma(c(1000, 1000000)) ## Use the comma function, which comes from the scales package
+A more permanent option is to assign a conflicted function name to a particular package
+```{r, eval=F}
+filter = stats::filter # Note the lack of parentheses
+filter = dplyr::filter # Change it back again
 ```
 
---
+???
 
-The `::` syntax also means that we can call functions without loading package first. E.g. As long as `dplyr` is installed on our system, then `dplyr::filter(iris, Species=="virginica")` will work.
-  
+### General advice
+
+I would generally advocate for the temporary `package::function()` solution.
+
+Another good rule of thumb is that you want to load your most important packages last. (e.g., Load the tidyverse after you've already loaded any other packages.)
+
+Other than that, simply pay attention to any warnings when loading a new package and `?` is your friend if you're ever unsure. (e.g., `?filter` will tell you which variant is being used.)
+- In truth, problematic namespace conflicts are rare. But it's good to be aware of them.
+
+
 ---
 
-# Solving namespace conflicts 
+# User-side namespace conflicts
 
-Assign `function <- package::function`
-  
---
+Namespace conflicts don't just arise from loading packages
 
-You can permanently assign a conflicted function name to a particular package
+Users like you and me can (and probably will!) create them through assignment
 
---
 
-This will hold for the remainder of your current R session, or until you change it back:
-```{r, eval = F}
-filter <- stats::filter ## Note the lack of parentheses.
-filter <- dplyr::filter ## Change it back again.
-```
+---
+class: inverse, center, middle
+name: indexing
+
+# Indexing
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
 
 ---
 
@@ -587,11 +755,12 @@ How do we index in R?
 --
 
 We've already seen an example of indexing in the form of R console output:
+
 ```{r}
 1+2
 ```
 
-The `[1]` above denotes the first (and, in this case, only) element of our output
+The `[1]` above denotes the ﬁrst (and, in this case, only) element of our output
 
 --
 
@@ -602,29 +771,28 @@ In this case, a vector of length one equal to the value "3"
 # Indexing
 
 Try the following in your console to see a more explicit example of indexed output:
+
 ```{r}
-rnorm(n = 100, mean = 0, sd = 1) # 100 random variables with mean 0 standard deviation 1
+rnorm(n = 50, mean = 0, sd = 1) # take 50 draws from the standard normal distribution
 ```
+
 
 ---
 
-# Indexing: []
+# Option 1: []
 
-
-We can also use `[]` to index objects that we create in R.
+We can use `[]` to index objects that we create in R
 ```{r}
-a <- 11:20
-a
+a = 1:10
 a[4] ## Get the 4th element of object "a"
 a[c(4, 6)] ## Get the 4th and 6th elements
 ```
 
-
 ---
 
-# Indexing: []
+# Option 1: []
 
-It also works on larger arrays (vectors, matrices, data frames, and lists). For example:
+This also works on larger arrays (vectors, matrices, data frames, and lists)
 ```{r}
 starwars[1, 1] ## Show the cell corresponding to the 1st row & 1st column of the data frame.
 ```
@@ -633,38 +801,48 @@ starwars[1, 1] ## Show the cell corresponding to the 1st row & 1st column of the
 
 What does `starwars[1:3, 1]` give you?
 
----
-
-# Indexing: []
-
-We haven't covered them properly yet (patience), but .hi-blue[lists] are a more complex type of array object in R
-
 --
 
-They can contain a random assortment of objects that don't share the same characteristics
+```{r, echo=FALSE}
+starwars[1:3, 1]
+```
 
---
-
-- e.g. a list can contain a scalar, a string, and a data frame, or even another list
 
 ---
 
-# Indexing: []
+# Option 1: []
 
-The relevance to indexing is that lists require two square brackets `[[]]` to index the parent list item and then the standard `[]` within that parent item:
+We haven't discusssed them yet, but **lists** are a more complex type of array object in R
+
+--
+
+They can contain a collection of objects that don't share the same structure
+
+--
+
+For example, you can have lists containing:
+
+- a scalar, a string, and a data frame
+- a list of data frames
+- a list of lists
+
+---
+
+# Option 1: []
+
+The relevance to indexing is that lists require two square brackets `[[]]` to index the parent list item and then the standard `[]` within that parent item. An example might help to illustrate:
 ```{r my_list, cache=T}
-my_list <- list(
-  a = "hello", 
-  b = c(1,2,3), 
-  c = data.frame(x = 1:5, y = 6:10)
-  )
-my_list[[1]] ## Return the 1st list object
-my_list[[2]][3] ## Return the 3rd element of the 2nd list object
+my_list = list(
+  a = "hello",
+  b = c(1,2,3),
+  c = data.frame(x = 1:5, y = 6:10))
+my_list[[1]] # Return the 1st list object
+my_list[[2]][3] # Return the 3rd element of the 2nd list object
 ```
 
 ---
 
-# Indexing: $
+# Option 2: $
 
 
 Lists provide a nice segue to our other indexing operator: `$`
@@ -677,11 +855,11 @@ my_list
 ---
 count: false
 
-# Indexing: $
+# Option 2: $
 
 
 Lists provide a nice segue to our other indexing operator: `$`.
-- Let's continue with the `my_list` example
+- Let's continue with the `my_list` example from the previous slide
 
 ```{r, eval=F}
 my_list
@@ -690,10 +868,10 @@ my_list
 ```
 *## $a
 ## [1] "hello"
-## 
+##
 *## $b
 ## [1] 1 2 3
-## 
+##
 *## $c
 ##   x  y
 ## 1 1  6
@@ -703,52 +881,72 @@ my_list
 ## 5 5 10
 ```
 
-Notice how our (named) parent list objects are demarcated: "$a", "$b" and "$c".
+Notice how our (named) parent list objects are demarcated: `$a`,`$b` and `$c`
 
 ---
 
-# Indexing: $
+# Option 2: $
 
 We can call these objects directly by name using the dollar sign, e.g.
 ```{r}
 my_list$a ## Return list object "a"
-my_list$b[3] ## Return the 3rd element of list object "b" 
+my_list$b[3] ## Return the 3rd element of list object "b"
 my_list$c$x ## Return column "x" of list object "c"
 ```
 
+???
+
+**Aside:** Typing `View(my_list)` (or, equivalently, clicking on the object in RStudio's environment pane) provides a nice interactive window for exploring the nested structure of lists.
+
 ---
 
-# Indexing: $
+# Option 2: $
 
 The `$` form of indexing also works for other object types
 
 In some cases, you can also combine the two index options:
 ```{r}
-starwars$name[1] # first element of the name column of the starwars data frame
-```
-
----
-
-# Indexing: $
-
-However, note some key differences between the output from this example and that of our previous `starwars[1, 1]` example:
-```{r}
 starwars$name[1]
-starwars[1, 1]
 ```
+
+???
+
+Note some key differences between the output from this example and that of our previous `starwars[1, 1]` example. What are they?
+- Hint: Apart from the visual cues, try wrapping each command in `str()`.
 
 ---
 
-# Removing objects 
+# Option 2: $
 
-Use `rm()` to remove an object or objects from your working environment.
+Finally, `$` provides another way to avoid the "object not found" problem that we ran into earlier
+
+```{r, error=T}
+x < y # Doesn't work
+d$x < d$y # Works!
+```
+
+---
+class: inverse, center, middle
+name: cleaning
+
+# Cleaning up
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# Removing objects
+
+Use `rm()` to remove an object or objects from your working environment
 ```{r}
-a <- "hello"
-b <- "world"
+a = "hello"
+b = "world"
 rm(a, b)
 ```
 
-You can also use `rm(list = ls())` to remove all objects in your working environment (except packages), or just start a new R session instead
+You can use `rm(list = ls())` to remove all objects in your working environment, though this is [frowned upon](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)
+- Better just to start a new R session
 
 ---
 
@@ -830,7 +1028,7 @@ One point of convenience is that there is often a direct correspondence between 
 | `?readr::read_csv`  | `?utils::read.csv` |
 |  `?dplyr::if_else` |  `?base::ifelse` |
 |  `?tibble::tibble` |  `?base::data.frame` |
-  
+
 Tidyverse functions typically have extra features on top of base R
 
 --
@@ -889,9 +1087,9 @@ Data cleaning and wrangling is important and knowing how to do it well is a good
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
-The pipe operator `%>%` lets us perform a sequence of operations in a very nice and tidy way
+The pipe operator `|>` lets us perform a sequence of operations in a very nice and tidy way
 
 --
 
@@ -899,7 +1097,7 @@ Let's consider a fake example to get the idea for why its really beneficial
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 Let's say we wanted to apply a sequence of operations that tells the computer what you did throughout your day:
 
@@ -913,49 +1111,49 @@ Let's say we wanted to apply a sequence of operations that tells the computer wh
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 If you were to code this up in a traditional way it might look one of two ways:
 
 A bunch of lines doing all the different steps
 ```{r, eval = F}
-me <- wake_up(me)
-me <- get_out_of_bed(me)
-me <- comb_hair(me)
-me <- go(me, "downstairs")
-me <- drink(me, "cup")
-me <- grab(me, "hat")
-me <- catch(me, "bus")
+me = wake_up(me)
+me = get_out_of_bed(me)
+me = comb_hair(me)
+me = go(me, "downstairs")
+me = drink(me, "cup")
+me = grab(me, "hat")
+me = catch(me, "bus")
 ```
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 If you were to code this up in a traditional way it might look one of two ways:
 
 Or if you're a little crazy then do it all in one line
 ```{r, eval = F}
-me <- catch(grab(drink(go(comb_hair(get_out_of_bed(wake_up(me))), where = "downstairs"), what = "cup"), what = "hat"), what = "bus")
+me = catch(grab(drink(go(comb_hair(get_out_of_bed(wake_up(me))), where = "downstairs"), what = "cup"), what = "hat"), what = "bus")
 ```
 
 These are kind of tedious or messy and out of the order you'd think
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 With pipes we can do everything at once, but have it be .hi[in order]:
 
 ```{r, eval = F}
-me <- me %>%
-  wake_up() %>%
-  get_out_of_bed() %>% 
-  comb_hair() %>% 
-  go("downstairs") %>%
-  drink("cup") %>% 
-  grab("hat") %>% 
-  catch("bus")
+me = me |>
+  wake_up() |>
+  get_out_of_bed() |>
+  comb_hair() |>
+  go("downstairs") |>
+  drink("cup") |>
+  grab("hat") |>
+  catch("bus") 
 ```
 
 This makes everything .hi[very intuitive] to read and code!
@@ -963,7 +1161,7 @@ This makes everything .hi[very intuitive] to read and code!
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 Here's a real example: suppose we wanted to figure out the average highway miles per gallon of Audi's in the `mpg` dataset:
 ```{r}
@@ -972,7 +1170,7 @@ mpg
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 There's two ways you might do this without taking advantage of pipes:
 
@@ -981,14 +1179,14 @@ There's two ways you might do this without taking advantage of pipes:
 The first is to do it step-by-step, line-by-line which requires a lot of variable assignment
 
 ```{r}
-audis_mpg <- filter(mpg, manufacturer=="audi")
-audis_mpg_grouped <- group_by(filter(mpg, manufacturer=="audi"), model)
+audis_mpg = filter(mpg, manufacturer=="audi")
+audis_mpg_grouped = group_by(filter(mpg, manufacturer=="audi"), model)
 summarise(audis_mpg_grouped, hwy_mean = mean(hwy))
 ```
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
 Next you could do it all in one line which is hard to read
 
@@ -998,12 +1196,12 @@ summarise(group_by(filter(mpg, manufacturer=="audi"), model), hwy_mean = mean(hw
 
 ---
 
-# Pipes: %>%
+# Pipes: |>
 
-Or, you could use .hi-blue[pipes] `%>%`:
+Or, you could use .hi-blue[pipes] `|>`:
 
 ```{r}
-mpg %>% filter(manufacturer=="audi") %>% group_by(model) %>% summarise(hwy_mean = mean(hwy))
+mpg |> filter(manufacturer=="audi") |> group_by(model) |> summarise(hwy_mean = mean(hwy))
 ```
 
 --
@@ -1017,13 +1215,13 @@ It performs the operations from left to right, exactly like you'd think of them:
 
 Pipes are even more readable if we write it over several lines:
 ```{r pipe}
-mpg %>% 
-  filter(manufacturer=="audi") %>% 
-  group_by(model) %>% 
+mpg |>
+  filter(manufacturer=="audi") |>
+  group_by(model) |>
   summarise(hwy_mean = mean(hwy))
 ```
 
-Using vertical space costs nothing and makes for much more readable code 
+Using vertical space costs nothing and makes for much more readable code
 
 ---
 class: inverse, center, middle
@@ -1069,7 +1267,7 @@ Let's practice these commands together using the `starwars` data frame that come
 
 Here's the `starwars` dataset, it has 87 observations of 14 variables
 ```{r starwars}
-starwars 
+starwars
 ```
 
 
@@ -1097,11 +1295,11 @@ e.g. if you want to run your analysis only on low income areas, or if you want t
 
 Here we are subsetting the observations of humans that are at least 190cm
 ```{r filter1}
-starwars %>% 
-  filter( 
-    species == "Human", 
+starwars |>
+  filter(
+    species == "Human",
     height >= 190
-    ) 
+    )
 ```
 
 ---
@@ -1110,7 +1308,7 @@ starwars %>%
 
 You can filter using regular expressions with grep-type commands or the `stringr` package
 ```{r filter2}
-starwars %>% 
+starwars |>
   filter(stringr::str_detect(name, "Skywalker"))
 ```
 
@@ -1122,7 +1320,7 @@ This subsets the observations for individuals whose names contain "Skywalker"
 
 A very common `filter` use case is identifying/removing missing data cases:
 ```{r filter3}
-starwars %>% 
+starwars |>
   filter(is.na(height))
 ```
 
@@ -1132,7 +1330,7 @@ starwars %>%
 
 To remove missing observations, use negation:
 ```{r filter4}
-starwars %>% 
+starwars |>
   filter(!is.na(height))
 ```
 
@@ -1142,7 +1340,7 @@ starwars %>%
 
 `arrange` sorts the data frame based on the variables you supply:
 ```{r arrange1}
-starwars %>% 
+starwars |>
   arrange(birth_year)
 ```
 
@@ -1166,7 +1364,7 @@ This makes it easy to check and see patterns in the data
 
 We can also arrange items in descending order using `arrange(desc())`
 ```{r arrange2}
-starwars %>% 
+starwars |>
   arrange(desc(birth_year))
 ```
 
@@ -1194,28 +1392,28 @@ e.g. if you used an emissions rate and marginal damage per unit of pollution var
 
 Use commas to select multiple columns out of a data frame, deselect a column with "-", select across multiple columns with "first:last":
 ```{r select1}
-starwars %>% 
+starwars |>
   select(name:skin_color, species, -height)
 ```
 
 ---
 
-# 3) dplyr::select 
+# 3) dplyr::select
 
 You can also rename your selected variables in place
 ```{r select2}
-starwars %>%
-  select(alias = name, crib = homeworld) 
+starwars |>
+  select(alias = name, crib = homeworld)
 ```
 
 ---
 
-# 3) dplyr::select 
+# 3) dplyr::select
 
 If you just want to rename columns without subsetting them, you can use `rename`:
 ```{r}
-starwars %>%
-  rename(alias = name, crib = homeworld) 
+starwars |>
+  rename(alias = name, crib = homeworld)
 ```
 
 ---
@@ -1224,7 +1422,7 @@ starwars %>%
 
 The `select(contains(PATTERN))` option provides a nice shortcut in relevant cases.
 ```{r select3}
-starwars %>% 
+starwars |>
   select(name, contains("color"))
 ```
 
@@ -1235,8 +1433,8 @@ starwars %>%
 The `select(..., everything())` option is another useful shortcut if you only want to bring some variable(s) to the "front" of a data frame
 
 ```{r select4}
-starwars %>% 
-  select(species, homeworld, everything()) %>%
+starwars |>
+  select(species, homeworld, everything()) |>
   head(5)
 ```
 
@@ -1247,8 +1445,8 @@ starwars %>%
 You can also use `relocate` to do the same thing
 
 ```{r}
-starwars %>% 
-  relocate(species, homeworld) %>%
+starwars |>
+  relocate(species, homeworld) |>
   head(5)
 ```
 
@@ -1272,21 +1470,21 @@ e.g. if I give you nominal house prices and the rate of house price inflation, y
 
 You can create new columns from scratch as transformations of existing columns:
 ```{r mutate1}
-starwars %>% 
-  select(name, birth_year) %>%
-  mutate(dog_years = birth_year * 7) %>%
+starwars |>
+  select(name, birth_year) |>
+  mutate(dog_years = birth_year * 7) |>
   mutate(comment = paste0(name, " is ", dog_years, " in dog years."))
 ```
 
 ---
 
 
-# 4) dplyr::mutate 
+# 4) dplyr::mutate
 
 *Note:* `mutate` creates variables in order, so you can chain multiple mutates in a single call
 ```{r mutate2}
-starwars %>% 
-  select(name, birth_year) %>%
+starwars |>
+  select(name, birth_year) |>
   mutate(
     dog_years = birth_year * 7, ## Separate with a comma
     comment = paste0(name, " is ", dog_years, " in dog years.")
@@ -1295,26 +1493,26 @@ starwars %>%
 
 ---
 
-# 4) dplyr::mutate 
+# 4) dplyr::mutate
 
 Boolean, logical and conditional operators all work well with `mutate` too:
 ```{r mutate3}
-starwars %>% 
-  select(name, height) %>%
-  filter(name %in% c("Luke Skywalker", "Anakin Skywalker")) %>% 
-  mutate(tall1 = height > 180) %>% # TRUE or FALSE
+starwars |>
+  select(name, height) |>
+  filter(name %in% c("Luke Skywalker", "Anakin Skywalker")) |>
+  mutate(tall1 = height > 180) |> # TRUE or FALSE
   mutate(tall2 = ifelse(height > 180, "Tall", "Short")) ## Same effect, but can choose labels
 ```
 
 ---
 
-# 4) dplyr::mutate 
+# 4) dplyr::mutate
 
 Lastly, combining `mutate` with `across` allows you to easily work on a subset of variables:
 ```{r, mutate4}
-starwars %>% 
-  select(name:eye_color) %>% 
-  mutate(across(where(is.character), toupper)) %>% # Take all character variables, uppercase them
+starwars |>
+  select(name:eye_color) |>
+  mutate(across(where(is.character), toupper)) |> # Take all character variables, uppercase them
   head(5)
 ```
 
@@ -1338,19 +1536,19 @@ e.g. if I gave you a data set of each individual's marginal damage in the US, we
 
 Summarising useful in combination with the `group_by` command
 ```{r summ1}
-starwars %>% 
-  group_by(species, gender) %>% # for each species-gender combo
+starwars |>
+  group_by(species, gender) |> # for each species-gender combo
   summarise(mean_height = mean(height, na.rm = TRUE)) # calculate the mean height
 ```
 
 ---
 
-# 5) dplyr::summarise 
+# 5) dplyr::summarise
 
 Note that including "na.rm = TRUE" is usually a good idea with summarise functions, it keeps NAs from propagating to the end result
 ```{r summ2}
 ## Probably not what we want
-starwars %>% 
+starwars |>
   summarise(mean_height = mean(height))
 ```
 
@@ -1360,9 +1558,9 @@ starwars %>%
 
 We can also use `across` within summarise:
 ```{r, summ4}
-starwars %>% 
-  group_by(species) %>% # for each species
-  summarise(across(where(is.numeric), mean, na.rm = T)) %>% # take the mean of all numeric variables
+starwars |>
+  group_by(species) |> # for each species
+  summarise(across(where(is.numeric), mean, na.rm = T)) |> # take the mean of all numeric variables
   head(5)
 ```
 
@@ -1376,19 +1574,19 @@ starwars %>%
 --
 
 `slice`: Subset rows by position rather than filtering by values
-- E.g. `starwars %>% slice(c(1, 5))`
+- E.g. `starwars |> slice(c(1, 5))`
 
 ---
 
 # Other dplyr goodies
 
 `pull`: Extract a column from as a data frame as a vector or scalar
-- E.g. `starwars %>% filter(gender=="female") %>% pull(height)`
+- E.g. `starwars |> filter(gender=="female") |> pull(height)`
 
 --
 
 `count` and `distinct`: Number and isolate unique observations
-- E.g. `starwars %>% count(species)`, or `starwars %>% distinct(species)`
+- E.g. `starwars |> count(species)`, or `starwars |> distinct(species)`
 
 
 ---
@@ -1459,11 +1657,11 @@ We merge data with [join operations](https://cran.r-project.org/web/packages/dpl
 
 # dplyr::xxxx_join
 
-Lets use the data that comes with the the [nycflights13](http://github.com/hadley/nycflights13) package. 
+Lets use the data that comes with the the [nycflights13](http://github.com/hadley/nycflights13) package.
 
 ```{r}
 library(nycflights13)
-flights 
+flights
 ```
 
 ---
@@ -1484,7 +1682,7 @@ Let's perform a left join on the flights and planes datasets
 --
 
 ```{r join1}
-left_join(flights, planes) %>%
+left_join(flights, planes) |>
   select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, type, model)
 ```
 
@@ -1507,16 +1705,16 @@ Luckily, there's an easy way to avoid this problem: try `?dplyr::join`
 
 ---
 
-# Joining operations 
+# Joining operations
 
-You just need to be more explicit in your join call by using the `by = ` argument 
+You just need to be more explicit in your join call by using the `by = ` argument
 ```{r join2}
 left_join(
   flights,
-  planes %>% rename(year_built = year), ## Not necessary w/ below line, but helpful
+  planes |> rename(year_built = year), ## Not necessary w/ below line, but helpful
   by = "tailnum" ## Be specific about the joining column
-  ) %>%
-  select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, year_built, type, model) %>%
+  ) |>
+  select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, year_built, type, model) |>
   head(3) ## Just to save vertical space on the slide
 ```
 
@@ -1526,10 +1724,10 @@ left_join(
 
 Note what happens if we again specify the join column but don't rename the ambiguous `year`:
 ```{r join3}
-left_join(flights, 
+left_join(flights,
           planes, ## Not renaming "year" to "year_built" this time
-          by = "tailnum") %>%
-  select(contains("year"), month, day, dep_time, arr_time, carrier, flight, tailnum, type, model) %>%
+          by = "tailnum") |>
+  select(contains("year"), month, day, dep_time, arr_time, carrier, flight, tailnum, type, model) |>
   head(3)
 ```
 
@@ -1551,7 +1749,7 @@ name: tidyr
 
 1. `pivot_longer`: Pivot wide data into long format (i.e. "melt", "reshape long")
 
-2. `pivot_wider`: Pivot long data into wide format (i.e. "cast", "reshape wide") 
+2. `pivot_wider`: Pivot long data into wide format (i.e. "cast", "reshape wide")
 
 3. `separate`: Split one column into multiple columns
 
@@ -1560,13 +1758,13 @@ name: tidyr
 --
 
 Let's practice these verbs together in class
-  
+
 ---
 
 # 1) tidyr::pivot_longer
 
 ```{r pivot_longer1a}
-stocks <- data.frame(
+stocks = data.frame(
   time = as.Date('2009-01-01') + 0:1,
   stock_X = rnorm(2, 0, 1),
   stock_Y = rnorm(2, 0, 2),
@@ -1584,7 +1782,7 @@ How do we get this in tidy form?
 # 1) tidyr::pivot_longer
 
 ```{r pivot_longer1b, eval = F}
-stocks %>% pivot_longer(-time, names_to = "stock", values_to = "price")
+stocks |> pivot_longer(-time, names_to = "stock", values_to = "price")
 ```
 
 We need to pivot the stock name variables `X, Y, Z` longer
@@ -1598,7 +1796,7 @@ We need to pivot the stock name variables `X, Y, Z` longer
 # 1) tidyr::pivot_longer
 
 ```{r pivot_longer1c}
-stocks %>% pivot_longer(-time, names_to = "stock", values_to = "price")
+stocks |> pivot_longer(-time, names_to = "stock", values_to = "price")
 ```
 
 ---
@@ -1608,7 +1806,7 @@ stocks %>% pivot_longer(-time, names_to = "stock", values_to = "price")
 Let's quickly save the "tidy" (i.e. long) stocks data frame for use on the next slide
 
 ```{r pivot_longer2}
-tidy_stocks <- stocks %>% 
+tidy_stocks = stocks |>
   pivot_longer(-time, names_to = "stock", values_to = "price")
 ```
 
@@ -1617,8 +1815,8 @@ tidy_stocks <- stocks %>%
 # 2) tidyr::pivot_wider
 
 ```{r pivot_wider1, dependson=tidy_stocks}
-tidy_stocks %>% pivot_wider(names_from = stock, values_from = price)
-tidy_stocks %>% pivot_wider(names_from = time, values_from = price)
+tidy_stocks |> pivot_wider(names_from = stock, values_from = price)
+tidy_stocks |> pivot_wider(names_from = time, values_from = price)
 ```
 
 --
@@ -1629,9 +1827,9 @@ Note that the second example has effectively transposed the data
 # 3) tidyr::separate
 
 ```{r sep1}
-economists <- data.frame(name = c("Adam.Smith", "Paul.Samuelson", "Milton.Friedman"))
+economists = data.frame(name = c("Adam.Smith", "Paul.Samuelson", "Milton.Friedman"))
 economists
-economists %>% separate(name, c("first_name", "last_name")) 
+economists |> separate(name, c("first_name", "last_name"))
 ```
 
 --
@@ -1643,13 +1841,13 @@ This command is pretty smart. But to avoid ambiguity, you can also specify the s
 # 4) tidyr::unite
 
 ```{r unite1a}
-gdp <- data.frame(
+gdp = data.frame(
   yr = rep(2016, times = 4),
   mnth = rep(1, times = 4),
   dy = 1:4,
   gdp = rnorm(4, mean = 100, sd = 2)
   )
-gdp 
+gdp
 ```
 
 ---
@@ -1658,16 +1856,16 @@ gdp
 
 ```{r unite1b}
 ## Combine "yr", "mnth", and "dy" into one "date" column
-gdp %>% unite(date, c("yr", "mnth", "dy"), sep = "-")
+gdp |> unite(date, c("yr", "mnth", "dy"), sep = "-")
 ```
 
 ---
 
-# 4) tidyr::unite 
+# 4) tidyr::unite
 
 Note that `unite` will automatically create a character variable:
 ```{r unite2}
-gdp_u <- gdp %>% unite(date, c("yr", "mnth", "dy"), sep = "-") %>% as_tibble()
+gdp_u = gdp |> unite(date, c("yr", "mnth", "dy"), sep = "-") |> as_tibble()
 gdp_u
 ```
 
@@ -1677,11 +1875,11 @@ If you want to convert it to something else (e.g. date or numeric) then you will
 
 ---
 
-# 4) tidyr::unite 
+# 4) tidyr::unite
 
 ```{r unite3, message=F}
 library(lubridate)
-gdp_u %>% mutate(date = ymd(date))
+gdp_u |> mutate(date = ymd(date))
 ```
 
 
@@ -1814,12 +2012,12 @@ Choosing the $\beta$s in this fashion gives us the best-fit line through the dat
 
 ```{R, gen dataset, include = F, cache = T}
 # Set population and sample sizes
-n_p <- 100
-n_s <- 10
+n_p = 100
+n_s = 10
 # Set the seed
 set.seed(12468)
 # Generate data
-pop_df <- tibble(
+pop_df = tibble(
   i = 3,
   x = rnorm(n_p, mean = 5, sd = 1.5),
   e = rnorm(n_p, mean = 0, sd = 1),
@@ -1831,13 +2029,13 @@ pop_df <- tibble(
   s3 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s)))
 )
 # Regressions
-lm0 <- lm(y ~ x, data = pop_df)
-lm1 <- lm(y ~ x, data = filter(pop_df, s1 == T))
-lm2 <- lm(y ~ x, data = filter(pop_df, s2 == T))
-lm3 <- lm(y ~ x, data = filter(pop_df, s3 == T))
+lm0 = lm(y ~ x, data = pop_df)
+lm1 = lm(y ~ x, data = filter(pop_df, s1 == T))
+lm2 = lm(y ~ x, data = filter(pop_df, s2 == T))
+lm3 = lm(y ~ x, data = filter(pop_df, s3 == T))
 # Simulation
 set.seed(12468)
-sim_df <- lapply(X = 1:1e3, FUN = function(x, size = n_s) {
+sim_df = lapply(X = 1:1e3, FUN = function(x, size = n_s) {
   lm(y ~ x, data = pop_df %>% sample_n(size = size)) %>% tidy()
 }) %>% do.call(rbind, .) %>% as_tibble()
 ```
@@ -1864,10 +2062,10 @@ For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$
 
 ```{R, vs lines 2, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
-y_hat <- function(x, b0, b1) {b0 + b1 * x}
+y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
-b0 <- 6
-b1 <- 0.2
+b0 = 6
+b1 = 0.2
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
 # geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
@@ -1886,10 +2084,10 @@ For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can ca
 
 ```{R, ols vs lines 3, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
-y_hat <- function(x, b0, b1) {b0 + b1 * x}
+y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
-b0 <- 6
-b1 <- 0.2
+b0 = 6
+b1 = 0.2
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
@@ -1908,10 +2106,10 @@ For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can ca
 
 ```{R, ols vs lines 4, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
-y_hat <- function(x, b0, b1) {b0 + b1 * x}
+y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
-b0 <- 3
-b1 <- 0.2
+b0 = 3
+b1 = 0.2
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
@@ -1930,10 +2128,10 @@ For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can ca
 
 ```{R, ols vs lines 5, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
-y_hat <- function(x, b0, b1) {b0 + b1 * x}
+y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
-b0 <- 10
-b1 <- -0.8
+b0 = 10
+b1 = -0.8
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
@@ -1952,10 +2150,10 @@ SSE squares the errors $\left(\sum e_i^2\right)$: bigger errors get bigger penal
 
 ```{R, ols vs lines 6, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
-y_hat <- function(x, b0, b1) {b0 + b1 * x}
+y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
-b0 <- 10
-b1 <- -0.8
+b0 = 10
+b1 = -0.8
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
@@ -1975,10 +2173,10 @@ The OLS estimate is the combination of $\hat{\beta}_0$ and $\hat{\beta}_1$ that 
 
 ```{R, ols vs lines 7, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
-y_hat <- function(x, b0, b1) {b0 + b1 * x}
+y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
-b0 <- lm0$coefficients[1]
-b1 <- lm0$coefficients[2]
+b0 = lm0$coefficients[1]
+b1 = lm0$coefficients[2]
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
@@ -2265,9 +2463,9 @@ Let's repeat this **1,000 times**.
 
 ```{R, simulation scatter, echo = F, dev = "png", dpi = 300, cache = T, fig.height = 3}
 # Reshape sim_df
-line_df <- tibble(
-  intercept = sim_df %>% filter(term != "x") %>% select(estimate) %>% unlist(),
-  slope = sim_df %>% filter(term == "x") %>% select(estimate) %>% unlist()
+line_df = tibble(
+  intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
+  slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
 )
 ggplot() +
 geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.02, color = "darkslategray") +
@@ -2290,9 +2488,9 @@ theme_blank
 .pull-left[
 ```{R, simulation scatter2, echo = F, dev = "png", dpi = 300, cache = T, fig.height = 6, fig.fullwidth = T}
 # Reshape sim_df
-line_df <- tibble(
-  intercept = sim_df %>% filter(term != "x") %>% select(estimate) %>% unlist(),
-  slope = sim_df %>% filter(term == "x") %>% select(estimate) %>% unlist()
+line_df = tibble(
+  intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
+  slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
 )
 ggplot() +
 geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
@@ -2551,7 +2749,7 @@ $$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
 ---
 
 # Using regression packages
- 
+
 Before we begin lets look at the data and see what the relationship looks like:
 .center[
 ```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
@@ -2568,7 +2766,7 @@ Looks like there's an outlier!
 ---
 
 # Using regression packages
- 
+
 What if we plot it in log units?
 .center[
 ```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
@@ -2585,7 +2783,7 @@ That dampens the outlier, the positive association is really clear!
 ---
 
 # Using regression packages
- 
+
 What if we plot it in log units?
 .center[
 ```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
@@ -2637,7 +2835,7 @@ We can clean up the output a bit and get other statistics by piping it to `broom
 
 ```{r}
 # package_name(formula_here, data = dataframe_here)
-lm(mass ~ height, data = starwars) %>%
+lm(mass ~ height, data = starwars) |>
   broom::tidy()
 ```
 
@@ -2649,7 +2847,7 @@ The coefficient estimates are now in column `estimates`, and we have a few other
 
 ```{r, echo = F}
 # package_name(formula_here, data = dataframe_here)
-starwars1 <- lm(mass ~ height, data = starwars) %>%
+starwars1 = lm(mass ~ height, data = starwars) |>
   broom::tidy()
 ```
 
@@ -2698,7 +2896,7 @@ How do we interpret $\beta_0$, the estimate of the *intercept*?
 
 --
 
-Well, it is just the estimated mass, given someone had zero height: 
+Well, it is just the estimated mass, given someone had zero height:
 $$\hat{\beta}_0 = \hat{\beta}_0 + \hat{\beta}_1 \times 0$$
 
 --
@@ -2757,7 +2955,7 @@ Let's run the regression:
 
 ```{r}
 # package_name(formula_here, data = dataframe_here)
-lm(log(mass) ~ log(height), data = starwars) %>%
+lm(log(mass) ~ log(height), data = starwars) |>
   broom::tidy()
 ```
 
@@ -2767,7 +2965,7 @@ lm(log(mass) ~ log(height), data = starwars) %>%
 
 ```{r}
 # package_name(formula_here, data = dataframe_here)
-lm(log(mass) ~ log(height), data = starwars) %>%
+lm(log(mass) ~ log(height), data = starwars) |>
   broom::tidy()
 ```
 

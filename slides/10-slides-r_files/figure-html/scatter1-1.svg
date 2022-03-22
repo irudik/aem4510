@@ -4,18 +4,13 @@
 <clipPath id="clip1">
   <path d="M 8.21875 5.480469 L 282.519531 5.480469 L 282.519531 207.78125 L 8.21875 207.78125 Z M 8.21875 5.480469 "/>
 </clipPath>
-<clipPath id="clip2">
-  <path d="M 8.21875 55 L 282.519531 55 L 282.519531 171 L 8.21875 171 Z M 8.21875 55 "/>
-</clipPath>
 </defs>
-<g id="surface84">
+<g id="surface834">
 <rect x="0" y="0" width="288" height="216" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <rect x="0" y="0" width="288" height="216" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <g clip-path="url(#clip1)" clip-rule="nonzero">
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 8.21875 207.78125 L 282.519531 207.78125 L 282.519531 5.480469 L 8.21875 5.480469 Z M 8.21875 207.78125 "/>
-</g>
-<g clip-path="url(#clip2)" clip-rule="nonzero">
-<path style="fill:none;stroke-width:6.40187;stroke-linecap:butt;stroke-linejoin:round;stroke:rgb(23.529412%,57.647059%,86.27451%);stroke-opacity:1;stroke-miterlimit:10;" d="M 8.21875 167.261719 L 282.519531 58.570312 "/>
+<path style="fill:none;stroke-width:6.40187;stroke-linecap:butt;stroke-linejoin:round;stroke:rgb(23.529412%,57.647059%,86.27451%);stroke-opacity:1;stroke-miterlimit:10;" d="M -266.082031 275.953125 L 556.820312 -50.117188 "/>
 </g>
 <path style="fill-rule:nonzero;fill:rgb(18.431373%,30.980392%,30.980392%);fill-opacity:1;stroke-width:0.708661;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(18.431373%,30.980392%,30.980392%);stroke-opacity:1;stroke-miterlimit:10;" d="M 150.855469 96.800781 C 150.855469 100.53125 147.832031 103.558594 144.101562 103.558594 C 140.371094 103.558594 137.34375 100.53125 137.34375 96.800781 C 137.34375 93.070312 140.371094 90.046875 144.101562 90.046875 C 147.832031 90.046875 150.855469 93.070312 150.855469 96.800781 "/>
 <path style="fill-rule:nonzero;fill:rgb(18.431373%,30.980392%,30.980392%);fill-opacity:1;stroke-width:0.708661;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(18.431373%,30.980392%,30.980392%);stroke-opacity:1;stroke-miterlimit:10;" d="M 87.566406 91.347656 C 87.566406 95.078125 84.539062 98.101562 80.808594 98.101562 C 77.078125 98.101562 74.050781 95.078125 74.050781 91.347656 C 74.050781 87.617188 77.078125 84.589844 80.808594 84.589844 C 84.539062 84.589844 87.566406 87.617188 87.566406 91.347656 "/>

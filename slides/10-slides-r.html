@@ -21,7 +21,7 @@
 class: center, middle, inverse, title-slide
 
 # Lecture 10
-## R and the tidyverse // regression
+## Base R // Tidyverse // Regression
 ### Ivan Rudik
 ### AEM 4510
 
@@ -31,27 +31,20 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
-    options$echo &lt;- FALSE
+    options$echo = FALSE
   }
 knitr::opts_chunk$set(echo = TRUE, fig.align="center")
   options
 })
-red_pink &lt;- "#e64173"
+red_pink = "#e64173"
 # A blank theme for ggplot
-theme_empty &lt;- theme_minimal() +
+theme_empty = theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
@@ -63,7 +56,7 @@ theme_empty &lt;- theme_minimal() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
-theme_blank &lt;- theme_minimal() +
+theme_blank = theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
@@ -75,7 +68,7 @@ theme_blank &lt;- theme_minimal() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_blank(), axis.ticks = element_blank(),
   ) 
-theme_regular &lt;- 
+theme_regular = 
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -97,8 +90,7 @@ theme_regular &lt;-
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -205,67 +197,23 @@ name: r
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
 ---
+class: inverse, center, middle
+name: intro
 
-# What is R?
+# Introduction to base R
 
-What is R?
-
-&gt; R is a language and environment for statistical computing and graphics.
-
-What is RStudio?
-
-&gt; RStudio is an integrated development environment (IDE) for R, a programming language for statistical computing and graphics.
-
---
-
-Basically: R is the coding language, RStudio is the graphical interface
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
 
 ---
 
-# Why are we using R?
+# Basic arithmetic
 
-1. R is free
-
---
-
-2. R is relatively easy to learn (especially with `tidyverse` which we will be using)
-
---
-
-3. R is widely used for statistical analysis and data science in business, economics, natural sciences
-
---
-
-4. R has a large online community for help (e.g. StackOverflow), and lots and lots of packages that help you do your analysis smoothly
-
----
-
-# Let's see what we can do in R
-
-Next let's see how to use R
-
---
-
-First we will start with the basics
-
---
-
-Then we will start doing more complicated exercises that are important for doing data analysis and economics work
-
---
-
-Please follow along in RStudio/RStudio Cloud
-
----
-
-# Arithmetic operations
-
-R can do all the standard arithmetic operations
+R is a powerful calculator and recognizes all of the standard arithmetic operators:
 
 
 ```r
-1+2 ## add
+1+2 # add / subtraction
 ```
 
 ```
@@ -273,26 +221,34 @@ R can do all the standard arithmetic operations
 ```
 
 ```r
-6-7 ## subtract
-```
-
-```
-## [1] -1
-```
-
-```r
-5/2 ## divide
+5/2 # divide
 ```
 
 ```
 ## [1] 2.5
 ```
 
+```r
+2^3 # exponentiate
+```
+
+```
+## [1] 8
+```
+
+```r
+2+4*1^3 # standard order of precedence (`*` before `+`, etc.)
+```
+
+```
+## [1] 6
+```
+
 ---
 
-# Logical operations
+# Logic
 
-You also have logical operations
+R also comes equipped with a full set of logical operators and Booleans
 
 
 ```r
@@ -304,24 +260,24 @@ You also have logical operations
 ```
 
 ```r
-(1 &gt; 2) | (1 &gt; 0.5) # | is the or operator
-```
-
-```
-## [1] TRUE
-```
-
-```r
-(1 &gt; 2) &amp; (1 &gt; 0.5) # &amp; is the and operator
+(1 &gt; 2) &amp; (1 &gt; 0.5) # "&amp;" is the "and" operator
 ```
 
 ```
 ## [1] FALSE
 ```
 
+```r
+(1 &gt; 2) | (1 &gt; 0.5) # "|" is the "or" operator
+```
+
+```
+## [1] TRUE
+```
+
 ---
 
-# Logical operations
+# Logic
 
 We can negate expressions with: `!`
 
@@ -344,14 +300,15 @@ is.na(1:10)
 ##  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 ```
 
-`NA` means .hi[not available] (i.e. missing)
+`NA` means **not available** (i.e., missing)
+
 ---
 
-# Logical operators
+# Logic
 
-For value matching we use: `%in%`
+For value matching we can use: `%in%`
 
-To see whether an object is contained within (i.e. matches one of) a list of items, use `%in%`.
+To see whether an object is contained within (i.e., matches one of) a list of items, use `%in%`:
 
 ```r
 4 %in% 1:10
@@ -369,17 +326,15 @@ To see whether an object is contained within (i.e. matches one of) a list of ite
 ## [1] FALSE
 ```
 
-This is kind of like an `any` command in other languages
-
 ---
 
-# Logical operators 
+# Logic
 
-To evaluate whether two expressions are equal, we need to use .hi-red[two] equal signs
+To evaluate whether two expressions are equal, we need to use **two** equal signs
 
 
 ```r
-1 = 1 ## This doesn't work
+1 = 1 # This doesn't work
 ```
 
 ```
@@ -387,7 +342,7 @@ To evaluate whether two expressions are equal, we need to use .hi-red[two] equal
 ```
 
 ```r
-1 == 1 ## This does.
+1 == 1 # This does.
 ```
 
 ```
@@ -395,37 +350,65 @@ To evaluate whether two expressions are equal, we need to use .hi-red[two] equal
 ```
 
 ```r
-1 != 2 ## Note the single equal sign when combined with a negation.
+1 != 2 # Note the single equal sign when combined with a negation.
 ```
 
 ```
 ## [1] TRUE
 ```
 
-
 ---
 
-# Assignment
+# Logic
 
-In R, we can use either `=` or `&lt;-` to handle assignment&lt;sup&gt;1&lt;/sup&gt;
-
-.footnote[
-&lt;sup&gt;1&lt;/sup&gt; The `&lt;-` is really a `&lt;` followed by a `-`. It just looks like an arrow because of the font on the slides
-]
+**Evaluation caveat:** What do you think will happen if we evaluate `0.1 + 0.2 == 0.3`?
 
 --
 
-`&lt;-` is normally read aloud as "gets"
 
-You can think of it as a (left-facing) arrow saying .hi[assign in this direction]
+```r
+0.1 + 0.2 == 0.3
+```
+
+```
+## [1] FALSE
+```
+Uh-oh! What went wrong here?
+
+--
+
+**Problem:** Computers represent numbers as binary (i.e., base 2) floating-points. More [here](https://floating-point-gui.de/basic/)
+- Fast and memory efficient, but can lead to unexpected behavior
+- Similar to how standard decimals can't precisely capture certain fractions (e.g., `\(\frac{1}{3} = 0.3333...\)`)
+
+--
+
+**Solution:** Use `all.equal()` for evaluating floats (i.e., fractions)
+
+
+```r
+all.equal(0.1 + 0.2, 0.3)
+```
+
+```
+## [1] TRUE
+```
 
 ---
 
 # Assignment
 
+In R, we can use either `&lt;-` or `=` to handle assignment
+
+--
+
+### Assignment with `=`
+
+`&lt;-` is normally read aloud as "gets". You can think of it as a (left-facing) arrow saying *assign in this direction*.
+
 
 ```r
-a &lt;- 10 + 5
+a = 10 + 5
 a
 ```
 
@@ -437,11 +420,13 @@ a
 
 # Assignment
 
-You can also use `=` for assignment
+### Assignment with `=`
+
+You can also use `=` for assignment.
 
 
 ```r
-b = 10 + 10 
+b = 10 + 10
 b
 ```
 
@@ -451,82 +436,123 @@ b
 
 ---
 
-# Which assignment operator to use?
+# Which assignment operator should you use?
 
-Most R folks prefer `&lt;-` for assignment
+The proper one to use is `&lt;-`, which can be inserted using the keyboard shortcut Alt/Option + -
 
---
+It doesn't really matter for our purposes, other languages use `=`
 
-It doesn't really matter though, other languages strictly use `=`
+I will use `=`
 
---
-
-.hi[Use whatever you prefer, just be consistent]
+**Bottom line:** Use whichever you prefer, just be consistent
 
 ---
 
 # Help
 
-If you are struggling with a (named) function or object in R, simply type `?commandhere`
-  
+For more information on a (named) function or object in R, consult the "help" documentation using `?`
+
+For example:
+
 ```R
-?rowSums 
+?plot 
 ```
 
 ---
 
-# Help 
+# Vignettes
 
-Also try `vignette()` for a more detailed introduction to many packages
+For some packages, `vignette()` will provide a detailed intro
 
-```R
+
+```r
 # Try this:
 vignette("dplyr")
 ```
 
+Vignettes are a great way to learn how and when to use a package
+
+---
+
+# Comments
+
+
+Comments in R code are demarcated by `#`
+
+Use comments to document your logic in `.R` scripts and within `.Rmd` code chunks
+
+
+```r
+# THIS IS A CODE SECTION ----
+# this is a comment
+vibe = "immaculate" # iykyk
+```
+
 --
 
-Vignettes are a very easy way to learn how and when to use a package
+Comments should be concise and used only when necessary (unlike the comments above)
+
+--
+
+Using at least four trailing dashes (`----`) creates a code section, which simplifies navigation and code folding
+- Also works with trailing equals (`====`) or pound signs (`====`)
+
+--
+
+**Keyboard shortcut:** use `Ctrl/Cmd+Shift+c` in RStudio to (un)comment whole sections of highlighted code
+
+
+---
+class: inverse, center, middle
+name: oop
+
+# Object-oriented programming in R
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
 
 ---
 
 # Object-oriented programming
 
 In R:
-&gt; "Everything is an object and everything has a name."
+
+&gt; **"Everything is an object and everything has a name."**
+
+---
+class: inverse, center, middle
+name: eobject
+
+# "Everything is an object"
+
 
 ---
 
 # What are objects? 
 
-We won't go into details but here are some objects that we'll be working with regularly:
+There are many different *types* (or *classes*) of objects
+
+Here are some objects that we'll be working with regularly:
 - vectors
 - matrices
 - data frames
 - lists
-- etc.
+- functions
 
---
-
-A lot of these are probably familiar if you have coding experience
 
 ---
 
 # Data frames
 
-The most important object we will be working with is the .hi[data frame]
-
---
+The most important object we will be working with is the **data frame**
 
 You can think of it basically as an Excel spreadsheet
 
---
-
 
 ```r
-## Create a small data frame called "df".
-df &lt;- data.frame(x = 1:2, y = 3:4) 
-df
+# Create a small data frame called "d"
+d = data.frame(x = 1:2, y = 3:4) 
+d
 ```
 
 ```
@@ -545,14 +571,51 @@ Each row is an observation telling us the values of both `x` and `y`
 
 ---
 
-# Working with multiple objects
+# Aside: built-in data frames
 
-In R we can have multiple data frames in memory at once
+Base R and packages have a bunch of built in data frames with special names you can call on
+
+For example we have `cars`:
+
+.pull-left[
+
+```r
+head(cars)
+```
+
+```
+##   speed dist
+## 1     4    2
+## 2     4   10
+## 3     7    4
+## 4     7   22
+## 5     8   16
+## 6     9   10
+```
+]
+
+.pull-right[
+
+```r
+plot(cars)
+```
+
+![](10-slides-r_files/figure-html/plot-cars-1.png)&lt;!-- --&gt;
+]
+
+
+
+---
+
+# Back to objects
+
+Each object class has its own set of rules for determining valid operations
 
 
 ```r
-df2 &lt;- data.frame(x = rnorm(10), y = rnorm(10)) # x and y are each 10 normal random numbers
-df # df still exists even though we made df2!
+# Create a small data frame called "d"
+d = data.frame(x = 1:2, y = 3:4) 
+d
 ```
 
 ```
@@ -561,123 +624,163 @@ df # df still exists even though we made df2!
 ## 2 2 4
 ```
 
-```r
-df2 # here's df2
-```
+--
 
-```
-##             x          y
-## 1   0.5786501 -1.6140798
-## 2  -1.4076998 -0.3240011
-## 3  -0.4169510 -1.1067361
-## 4   0.6445911  1.0095957
-## 5  -0.6486025 -2.0977698
-## 6   0.9523842 -0.6942812
-## 7   1.5468327 -0.3815178
-## 8  -0.0317333  0.2488920
-## 9   0.5216192  0.1123698
-## 10  0.4571979  1.1033745
-```
-
-
----
-
-# Built in dataframes
-
-R (and its packages) also has a bunch of built in dataframes with special names that you can call upon any time, we will be using these for examples
+At the same time, you can (usually) convert an object from one type to another
 
 
 ```r
-mtcars
+# Convert it to (i.e., create) a matrix call "mat"
+mat = as.matrix(d)
+mat
 ```
 
 ```
-##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
-## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
-## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
-## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
-## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
-## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
-## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
-## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
-## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
-## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
-## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
-## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
-## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
-## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
-## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
-## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
-## Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
-## Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
-## AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
-## Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
-## Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
-## Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
-## Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
-## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
-## Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
-## Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
-## Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
-## Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2
+##      x y
+## [1,] 1 3
+## [2,] 2 4
 ```
 
 ---
 
-# Built in dataframes
+# Working with multiple objects
 
-R (and its packages)  also has a bunch of built in dataframes with special names that you can call upon any time, we will be using these for examples
+In R we can have multiple data frames in memory at once
 
-This one is in the `dplyr` package that we will load later
+Even though we just made `mat`, `d` still exists:
 
 
 ```r
-starwars
+d
 ```
 
 ```
-## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu…
-## # … with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+##   x y
+## 1 1 3
+## 2 2 4
 ```
+
+---
+
+# Ways to learn about objects
+
+Printing an object directly in the console is often handy
+- e.g., Type `d` and hit Enter
+
+--
+
+`View()` is very helpful, and has the same effect as clicking on the object in your RStudio *Environment* pane
+- e.g., Type `View(d)` and hit Enter
+
+--
+
+Use the `str` command to learn about an object's **str**ucture
+
+
+```r
+# d = data.frame(x = 1:2, y = 3:4) # Create a small data frame called "d"
+str(d) # Evaluate its structure
+```
+
+```
+## 'data.frame':	2 obs. of  2 variables:
+##  $ x: int  1 2
+##  $ y: int  3 4
+```
+
+--
+
+You can also use `class` to get an object's class without all the other details
+
+
+---
+name: global_env
+
+# Global environment
+
+Let's go back to the simple data frame that we created a few slides earlier.
+
+```r
+d
+```
+
+```
+##   x y
+## 1 1 3
+## 2 2 4
+```
+
+--
+
+Now, let's try to do a logical comparison of these "x" and "y" variables:
+
+
+```r
+x &lt; y
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'x' not found
+```
+
+--
+
+Uh-oh. What went wrong here?
+
+---
+
+# Global environment
+
+The error message provides the answer to our question:
+
+```
+*## Error in eval(predvars, data, env): object 'x' not found
+```
+
+--
+
+R looked in our *Global Environment* and couldn't find `x`
+
+&lt;img src="files/02-environment.png" width="75%" /&gt;
+
+--
+
+We have to tell R that `x` and `y` belong to the object `d`
+
+We will come back to this
+
+
+
+---
+class: inverse, center, middle
+name: ename
+
+# "Everything has a name"
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
 
 ---
 
 # Reserved words
 
 R has a bunch of key/reserved words that serve specific functions
+- You can't (re)assign these, even if you wanted to
 
 See [here](http://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html) for a full list, including (but not limited to):
 
 ```R
 if
-else 
+else
 while # looping
-function 
+function
 for # looping
-TRUE 
-FALSE 
+TRUE
+FALSE
 NULL # null/undefined
-Inf # infinity
-NaN # Not a number
-NA # Not available / missing
+Inf #infinity
+NaN # not a number
+NA # not available / missing
 ```
 
 ---
@@ -685,12 +788,13 @@ NA # Not available / missing
 # Semi-reserved words
 
 There are other words that are sort of reserved, in that they have a particular meaning
+- These are named functions or constants (e.g., `pi`) that you can re-assign if you really want to... but that already come with important meanings from base R
 
-The most important one is `c` which binds and concatenates objects together
+The most important example is `c()`, which binds and concatenates objects together
 
 
 ```r
-my_vector &lt;- c(1, 2, 5)
+my_vector = c(1, 2, 5)
 my_vector
 ```
 
@@ -698,13 +802,58 @@ my_vector
 ## [1] 1 2 5
 ```
 
-This created a vector/row consisting of 1, 2, 5
+--
+
+What do you think will happen if you type the following?
+
+
+```r
+c = 4
+c(1, 2 ,5)
+```
+
+--
+
+
+```
+## [1] 1 2 5
+```
+
+--
+
+In this case, R is "smart" enough to distinguish between the variable `c` and the built-in function `c()`
+
+---
+
+# Semi-reserved words (cont.)
+
+But R won't always be able to distinguish between conflicting definitions! For example:
+
+```r
+pi
+```
+
+```
+## [1] 2
+```
+
+```r
+pi = 2
+pi
+```
+
+```
+## [1] 2
+```
+--
+
+**Bottom line:** Don't use (semi-)reserved words!
 
 ---
 
 # Namespace conflicts
 
-Try loading up `dplyr` in RStudio
+Try loading the `dplyr` package in RStudio
 
 ```r
 library(dplyr)
@@ -712,91 +861,98 @@ library(dplyr)
 
 What warning gets reported?
 
+    The following objects are masked from ‘package:stats’:
+
+        filter, lag
+
+    The following objects are masked from ‘package:base’:
+
+        intersect, setdiff, setequal, union
+
 --
 
-The warning *masked from 'package:X'* is about a .hi-red[namespace conflict]
+The warning *masked from 'package:X'* is about a **namespace conflict**
 
---
-
-`dplyr` and the `stats` package (which gets loaded automatically when you start R) have functions named `filter` and `lag`
+Here, both `dplyr` and the `stats` package (which gets loaded automatically when you start R) have functions named `filter` and `lag`
 
 ---
 
-# Namespace conflicts 
+# Namespace conflicts
 
 Whenever a namespace conflict arises, the most recently loaded package will gain preference
-
---
 
 The `filter()` function now refers specifically to the `dplyr` variant
 
 --
 
-But what if we want the `stats` variant?
-
---
-
-1. Temporarily use `stats::filter()`
-2. Permanently assign `filter &lt;- stats::filter`
+What if we want the `stats` variant?
+1. Use `stats::filter()`
+2. Assign `filter = stats::filter`
 
 ---
 
 # Solving namespace conflicts
 
-Use `package::function()`
+### 1. Use `package::function()`
+
+Explicitly call a conflicted function from a package using the `package::function()` syntax
 
 --
 
-Explicitly call a conflicted function from a package using the `package::function()` syntax:
+We can also use `::` to clarify the source of a function or dataset in our code
+
 
 ```r
-stats::filter(1:10, rep(1, 2))
+dplyr::starwars # Print the starwars data frame from the dplyr package
+scales::comma(c(1000, 1000000)) # Use the comma function, which comes from the scales package
 ```
 
-```
-## Time Series:
-## Start = 1 
-## End = 10 
-## Frequency = 1 
-##  [1]  3  5  7  9 11 13 15 17 19 NA
-```
+--
+
+The `::` syntax also allows us to call functions without loading the package (as long as it is installed)
 
 ---
 
 # Solving namespace conflicts
 
-We can also use `::` for more than just conflicted cases.
+### 2. Assign `function = package::function`
 
---
+A more permanent option is to assign a conflicted function name to a particular package
 
-It can clarify where a function or dataset comes from and make the code clearer:
 ```r
-dplyr::starwars ## Print the starwars data frame from the dplyr package
-scales::comma(c(1000, 1000000)) ## Use the comma function, which comes from the scales package
+filter = stats::filter # Note the lack of parentheses
+filter = dplyr::filter # Change it back again
 ```
 
---
+???
 
-The `::` syntax also means that we can call functions without loading package first. E.g. As long as `dplyr` is installed on our system, then `dplyr::filter(iris, Species=="virginica")` will work.
-  
+### General advice
+
+I would generally advocate for the temporary `package::function()` solution.
+
+Another good rule of thumb is that you want to load your most important packages last. (e.g., Load the tidyverse after you've already loaded any other packages.)
+
+Other than that, simply pay attention to any warnings when loading a new package and `?` is your friend if you're ever unsure. (e.g., `?filter` will tell you which variant is being used.)
+- In truth, problematic namespace conflicts are rare. But it's good to be aware of them.
+
+
 ---
 
-# Solving namespace conflicts 
+# User-side namespace conflicts
 
-Assign `function &lt;- package::function`
-  
---
+Namespace conflicts don't just arise from loading packages
 
-You can permanently assign a conflicted function name to a particular package
+Users like you and me can (and probably will!) create them through assignment
 
---
 
-This will hold for the remainder of your current R session, or until you change it back:
+---
+class: inverse, center, middle
+name: indexing
 
-```r
-filter &lt;- stats::filter ## Note the lack of parentheses.
-filter &lt;- dplyr::filter ## Change it back again.
-```
+# Indexing
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
 
 ---
 
@@ -808,6 +964,7 @@ How do we index in R?
 
 We've already seen an example of indexing in the form of R console output:
 
+
 ```r
 1+2
 ```
@@ -816,7 +973,7 @@ We've already seen an example of indexing in the form of R console output:
 ## [1] 3
 ```
 
-The `[1]` above denotes the first (and, in this case, only) element of our output
+The `[1]` above denotes the ﬁrst (and, in this case, only) element of our output
 
 --
 
@@ -828,55 +985,31 @@ In this case, a vector of length one equal to the value "3"
 
 Try the following in your console to see a more explicit example of indexed output:
 
+
 ```r
-rnorm(n = 100, mean = 0, sd = 1) # 100 random variables with mean 0 standard deviation 1
+rnorm(n = 50, mean = 0, sd = 1) # take 50 draws from the standard normal distribution
 ```
 
 ```
-##   [1]  0.741152726 -0.621512374  0.614430531 -1.597060142 -0.827413858
-##   [6]  0.188059608 -0.477240132  0.577560952 -1.242475272 -0.397778804
-##  [11]  1.333367637 -1.217370845 -0.377711374  0.277570075  0.370972302
-##  [16]  1.339451586  0.299094899 -0.532694816 -1.335713017 -0.436640670
-##  [21]  0.389299278  1.275140373 -0.171119042  0.364108637  0.465118337
-##  [26]  0.963583215 -0.422223322 -0.620372957 -1.187213403 -0.471851878
-##  [31] -0.408225230 -0.980457781  0.529694407  0.761875093 -0.558778031
-##  [36] -0.369469606  0.410449109 -0.882180606 -0.008236139  1.114499653
-##  [41] -0.610815119 -0.531299552  1.145312748  1.873654182 -0.412740225
-##  [46] -0.943130144  0.450400118 -0.113857863  0.677422141 -0.070576647
-##  [51] -0.427594981  0.019316138  0.792716562  0.805441569  0.059050410
-##  [56]  0.001222467  1.473106374 -0.787031290  0.250268809  0.912717975
-##  [61]  1.140759010  0.205465214  0.736815775  1.342569466  0.551068312
-##  [66] -0.005895627  1.481621380 -0.710884190 -0.082754629  0.969757512
-##  [71]  0.977949438 -0.280931698  0.664111694  0.549386331 -2.401957873
-##  [76] -0.970464188  1.330707782 -0.666023042  1.238706183  0.131560970
-##  [81]  0.354201309  0.252941808  0.522067772  2.160598964 -0.321576089
-##  [86] -1.640566372  1.719465151 -0.364624676  0.335233649 -0.555470610
-##  [91] -0.059721452  0.227437162 -0.201373227  0.864136503  0.332484703
-##  [96]  0.015897669 -0.551925209 -1.156451384  0.039910721 -0.251583571
+##  [1] -1.41483518 -1.39591993 -1.02013413 -0.13671991  1.18660542  0.80462978  2.33453926 -1.10420607  1.21568002 -1.13151261 -0.12103046  0.34546620  1.09379966  0.70560678 -0.50982841  0.82786513 -0.12755617 -0.82284974  0.73899620
+## [20] -1.93849098 -0.03876197 -0.07471929  0.55791366 -1.83303264 -0.84005486 -0.33578374 -0.44677895  1.07054240  1.75592590 -0.66583994  1.26048726  0.27863227  1.08555987 -0.19758615 -0.82784541  0.03684417  0.49127734  0.85535554
+## [39] -0.83424336 -1.06534754 -0.41584392 -0.58796263 -1.19953677  0.11288369  1.35528075 -0.09053809  0.36907499  0.64991460 -0.91154457  0.96397401
 ```
+
 
 ---
 
-# Indexing: []
+# Option 1: []
 
-
-We can also use `[]` to index objects that we create in R.
-
-```r
-a &lt;- 11:20
-a
-```
-
-```
-##  [1] 11 12 13 14 15 16 17 18 19 20
-```
+We can use `[]` to index objects that we create in R
 
 ```r
+a = 1:10
 a[4] ## Get the 4th element of object "a"
 ```
 
 ```
-## [1] 14
+## [1] 4
 ```
 
 ```r
@@ -884,22 +1017,21 @@ a[c(4, 6)] ## Get the 4th and 6th elements
 ```
 
 ```
-## [1] 14 16
+## [1] 4 6
 ```
-
 
 ---
 
-# Indexing: []
+# Option 1: []
 
-It also works on larger arrays (vectors, matrices, data frames, and lists). For example:
+This also works on larger arrays (vectors, matrices, data frames, and lists)
 
 ```r
 starwars[1, 1] ## Show the cell corresponding to the 1st row &amp; 1st column of the data frame.
 ```
 
 ```
-## # A tibble: 1 x 1
+## # A tibble: 1 × 1
 ##   name          
 ##   &lt;chr&gt;         
 ## 1 Luke Skywalker
@@ -909,33 +1041,49 @@ starwars[1, 1] ## Show the cell corresponding to the 1st row &amp; 1st column of
 
 What does `starwars[1:3, 1]` give you?
 
+--
+
+
+```
+## # A tibble: 3 × 1
+##   name          
+##   &lt;chr&gt;         
+## 1 Luke Skywalker
+## 2 C-3PO         
+## 3 R2-D2
+```
+
+
 ---
 
-# Indexing: []
+# Option 1: []
 
-We haven't covered them properly yet (patience), but .hi-blue[lists] are a more complex type of array object in R
+We haven't discusssed them yet, but **lists** are a more complex type of array object in R
 
 --
 
-They can contain a random assortment of objects that don't share the same characteristics
+They can contain a collection of objects that don't share the same structure
 
 --
 
-- e.g. a list can contain a scalar, a string, and a data frame, or even another list
+For example, you can have lists containing:
+
+- a scalar, a string, and a data frame
+- a list of data frames
+- a list of lists
 
 ---
 
-# Indexing: []
+# Option 1: []
 
-The relevance to indexing is that lists require two square brackets `[[]]` to index the parent list item and then the standard `[]` within that parent item:
+The relevance to indexing is that lists require two square brackets `[[]]` to index the parent list item and then the standard `[]` within that parent item. An example might help to illustrate:
 
 ```r
-my_list &lt;- list(
-  a = "hello", 
-  b = c(1,2,3), 
-  c = data.frame(x = 1:5, y = 6:10)
-  )
-my_list[[1]] ## Return the 1st list object
+my_list = list(
+  a = "hello",
+  b = c(1,2,3),
+  c = data.frame(x = 1:5, y = 6:10))
+my_list[[1]] # Return the 1st list object
 ```
 
 ```
@@ -943,7 +1091,7 @@ my_list[[1]] ## Return the 1st list object
 ```
 
 ```r
-my_list[[2]][3] ## Return the 3rd element of the 2nd list object
+my_list[[2]][3] # Return the 3rd element of the 2nd list object
 ```
 
 ```
@@ -952,7 +1100,7 @@ my_list[[2]][3] ## Return the 3rd element of the 2nd list object
 
 ---
 
-# Indexing: $
+# Option 2: $
 
 
 Lists provide a nice segue to our other indexing operator: `$`
@@ -982,11 +1130,11 @@ my_list
 ---
 count: false
 
-# Indexing: $
+# Option 2: $
 
 
 Lists provide a nice segue to our other indexing operator: `$`.
-- Let's continue with the `my_list` example
+- Let's continue with the `my_list` example from the previous slide
 
 
 ```r
@@ -996,10 +1144,10 @@ my_list
 ```
 *## $a
 ## [1] "hello"
-## 
+##
 *## $b
 ## [1] 1 2 3
-## 
+##
 *## $c
 ##   x  y
 ## 1 1  6
@@ -1009,11 +1157,11 @@ my_list
 ## 5 5 10
 ```
 
-Notice how our (named) parent list objects are demarcated: "$a", "$b" and "$c".
+Notice how our (named) parent list objects are demarcated: `$a`,`$b` and `$c`
 
 ---
 
-# Indexing: $
+# Option 2: $
 
 We can call these objects directly by name using the dollar sign, e.g.
 
@@ -1026,7 +1174,7 @@ my_list$a ## Return list object "a"
 ```
 
 ```r
-my_list$b[3] ## Return the 3rd element of list object "b" 
+my_list$b[3] ## Return the 3rd element of list object "b"
 ```
 
 ```
@@ -1041,27 +1189,17 @@ my_list$c$x ## Return column "x" of list object "c"
 ## [1] 1 2 3 4 5
 ```
 
+???
+
+**Aside:** Typing `View(my_list)` (or, equivalently, clicking on the object in RStudio's environment pane) provides a nice interactive window for exploring the nested structure of lists.
+
 ---
 
-# Indexing: $
+# Option 2: $
 
 The `$` form of indexing also works for other object types
 
 In some cases, you can also combine the two index options:
-
-```r
-starwars$name[1] # first element of the name column of the starwars data frame
-```
-
-```
-## [1] "Luke Skywalker"
-```
-
----
-
-# Indexing: $
-
-However, note some key differences between the output from this example and that of our previous `starwars[1, 1]` example:
 
 ```r
 starwars$name[1]
@@ -1071,30 +1209,57 @@ starwars$name[1]
 ## [1] "Luke Skywalker"
 ```
 
-```r
-starwars[1, 1]
-```
+???
 
-```
-## # A tibble: 1 x 1
-##   name          
-##   &lt;chr&gt;         
-## 1 Luke Skywalker
-```
+Note some key differences between the output from this example and that of our previous `starwars[1, 1]` example. What are they?
+- Hint: Apart from the visual cues, try wrapping each command in `str()`.
 
 ---
 
-# Removing objects 
+# Option 2: $
 
-Use `rm()` to remove an object or objects from your working environment.
+Finally, `$` provides another way to avoid the "object not found" problem that we ran into earlier
+
 
 ```r
-a &lt;- "hello"
-b &lt;- "world"
+x &lt; y # Doesn't work
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'x' not found
+```
+
+```r
+d$x &lt; d$y # Works!
+```
+
+```
+## [1] TRUE TRUE
+```
+
+---
+class: inverse, center, middle
+name: cleaning
+
+# Cleaning up
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+
+---
+
+# Removing objects
+
+Use `rm()` to remove an object or objects from your working environment
+
+```r
+a = "hello"
+b = "world"
 rm(a, b)
 ```
 
-You can also use `rm(list = ls())` to remove all objects in your working environment (except packages), or just start a new R session instead
+You can use `rm(list = ls())` to remove all objects in your working environment, though this is [frowned upon](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)
+- Better just to start a new R session
 
 ---
 
@@ -1176,7 +1341,7 @@ One point of convenience is that there is often a direct correspondence between 
 | `?readr::read_csv`  | `?utils::read.csv` |
 |  `?dplyr::if_else` |  `?base::ifelse` |
 |  `?tibble::tibble` |  `?base::data.frame` |
-  
+
 Tidyverse functions typically have extra features on top of base R
 
 --
@@ -1212,12 +1377,9 @@ tidyverse_packages()
 ```
 
 ```
-##  [1] "broom"      "cli"        "crayon"     "dbplyr"     "dplyr"     
-##  [6] "forcats"    "ggplot2"    "haven"      "hms"        "httr"      
-## [11] "jsonlite"   "lubridate"  "magrittr"   "modelr"     "pillar"    
-## [16] "purrr"      "readr"      "readxl"     "reprex"     "rlang"     
-## [21] "rstudioapi" "rvest"      "stringr"    "tibble"     "tidyr"     
-## [26] "xml2"       "tidyverse"
+##  [1] "broom"         "cli"           "crayon"        "dbplyr"        "dplyr"         "dtplyr"        "forcats"       "googledrive"   "googlesheets4" "ggplot2"       "haven"         "hms"           "httr"          "jsonlite"     
+## [15] "lubridate"     "magrittr"      "modelr"        "pillar"        "purrr"         "readr"         "readxl"        "reprex"        "rlang"         "rstudioapi"    "rvest"         "stringr"       "tibble"        "tidyr"        
+## [29] "xml2"          "tidyverse"
 ```
 
 e.g. the **lubridate** package is for working with dates and the **rvest** package is for webscraping
@@ -1246,9 +1408,9 @@ Data cleaning and wrangling is important and knowing how to do it well is a good
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
-The pipe operator `%&gt;%` lets us perform a sequence of operations in a very nice and tidy way
+The pipe operator `|&gt;` lets us perform a sequence of operations in a very nice and tidy way
 
 --
 
@@ -1256,7 +1418,7 @@ Let's consider a fake example to get the idea for why its really beneficial
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 Let's say we wanted to apply a sequence of operations that tells the computer what you did throughout your day:
 
@@ -1270,52 +1432,52 @@ Let's say we wanted to apply a sequence of operations that tells the computer wh
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 If you were to code this up in a traditional way it might look one of two ways:
 
 A bunch of lines doing all the different steps
 
 ```r
-me &lt;- wake_up(me)
-me &lt;- get_out_of_bed(me)
-me &lt;- comb_hair(me)
-me &lt;- go(me, "downstairs")
-me &lt;- drink(me, "cup")
-me &lt;- grab(me, "hat")
-me &lt;- catch(me, "bus")
+me = wake_up(me)
+me = get_out_of_bed(me)
+me = comb_hair(me)
+me = go(me, "downstairs")
+me = drink(me, "cup")
+me = grab(me, "hat")
+me = catch(me, "bus")
 ```
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 If you were to code this up in a traditional way it might look one of two ways:
 
 Or if you're a little crazy then do it all in one line
 
 ```r
-me &lt;- catch(grab(drink(go(comb_hair(get_out_of_bed(wake_up(me))), where = "downstairs"), what = "cup"), what = "hat"), what = "bus")
+me = catch(grab(drink(go(comb_hair(get_out_of_bed(wake_up(me))), where = "downstairs"), what = "cup"), what = "hat"), what = "bus")
 ```
 
 These are kind of tedious or messy and out of the order you'd think
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 With pipes we can do everything at once, but have it be .hi[in order]:
 
 
 ```r
-me &lt;- me %&gt;%
-  wake_up() %&gt;%
-  get_out_of_bed() %&gt;% 
-  comb_hair() %&gt;% 
-  go("downstairs") %&gt;%
-  drink("cup") %&gt;% 
-  grab("hat") %&gt;% 
-  catch("bus")
+me = me |&gt;
+  wake_up() |&gt;
+  get_out_of_bed() |&gt;
+  comb_hair() |&gt;
+  go("downstairs") |&gt;
+  drink("cup") |&gt;
+  grab("hat") |&gt;
+  catch("bus") 
 ```
 
 This makes everything .hi[very intuitive] to read and code!
@@ -1323,7 +1485,7 @@ This makes everything .hi[very intuitive] to read and code!
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 Here's a real example: suppose we wanted to figure out the average highway miles per gallon of Audi's in the `mpg` dataset:
 
@@ -1332,25 +1494,25 @@ mpg
 ```
 
 ```
-## # A tibble: 234 x 11
-##    manufacturer model    displ  year   cyl trans   drv     cty   hwy fl    class
-##    &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
-##  1 audi         a4         1.8  1999     4 auto(l… f        18    29 p     comp…
-##  2 audi         a4         1.8  1999     4 manual… f        21    29 p     comp…
-##  3 audi         a4         2    2008     4 manual… f        20    31 p     comp…
-##  4 audi         a4         2    2008     4 auto(a… f        21    30 p     comp…
-##  5 audi         a4         2.8  1999     6 auto(l… f        16    26 p     comp…
-##  6 audi         a4         2.8  1999     6 manual… f        18    26 p     comp…
-##  7 audi         a4         3.1  2008     6 auto(a… f        18    27 p     comp…
-##  8 audi         a4 quat…   1.8  1999     4 manual… 4        18    26 p     comp…
-##  9 audi         a4 quat…   1.8  1999     4 auto(l… 4        16    25 p     comp…
-## 10 audi         a4 quat…   2    2008     4 manual… 4        20    28 p     comp…
+## # A tibble: 234 × 11
+##    manufacturer model      displ  year   cyl trans      drv     cty   hwy fl    class  
+##    &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  
+##  1 audi         a4           1.8  1999     4 auto(l5)   f        18    29 p     compact
+##  2 audi         a4           1.8  1999     4 manual(m5) f        21    29 p     compact
+##  3 audi         a4           2    2008     4 manual(m6) f        20    31 p     compact
+##  4 audi         a4           2    2008     4 auto(av)   f        21    30 p     compact
+##  5 audi         a4           2.8  1999     6 auto(l5)   f        16    26 p     compact
+##  6 audi         a4           2.8  1999     6 manual(m5) f        18    26 p     compact
+##  7 audi         a4           3.1  2008     6 auto(av)   f        18    27 p     compact
+##  8 audi         a4 quattro   1.8  1999     4 manual(m5) 4        18    26 p     compact
+##  9 audi         a4 quattro   1.8  1999     4 auto(l5)   4        16    25 p     compact
+## 10 audi         a4 quattro   2    2008     4 manual(m6) 4        20    28 p     compact
 ## # … with 224 more rows
 ```
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 There's two ways you might do this without taking advantage of pipes:
 
@@ -1360,13 +1522,13 @@ The first is to do it step-by-step, line-by-line which requires a lot of variabl
 
 
 ```r
-audis_mpg &lt;- filter(mpg, manufacturer=="audi")
-audis_mpg_grouped &lt;- group_by(filter(mpg, manufacturer=="audi"), model)
+audis_mpg = filter(mpg, manufacturer=="audi")
+audis_mpg_grouped = group_by(filter(mpg, manufacturer=="audi"), model)
 summarise(audis_mpg_grouped, hwy_mean = mean(hwy))
 ```
 
 ```
-## # A tibble: 3 x 2
+## # A tibble: 3 × 2
 ##   model      hwy_mean
 ##   &lt;chr&gt;         &lt;dbl&gt;
 ## 1 a4             28.3
@@ -1376,7 +1538,7 @@ summarise(audis_mpg_grouped, hwy_mean = mean(hwy))
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
 Next you could do it all in one line which is hard to read
 
@@ -1386,7 +1548,7 @@ summarise(group_by(filter(mpg, manufacturer=="audi"), model), hwy_mean = mean(hw
 ```
 
 ```
-## # A tibble: 3 x 2
+## # A tibble: 3 × 2
 ##   model      hwy_mean
 ##   &lt;chr&gt;         &lt;dbl&gt;
 ## 1 a4             28.3
@@ -1396,17 +1558,17 @@ summarise(group_by(filter(mpg, manufacturer=="audi"), model), hwy_mean = mean(hw
 
 ---
 
-# Pipes: %&gt;%
+# Pipes: |&gt;
 
-Or, you could use .hi-blue[pipes] `%&gt;%`:
+Or, you could use .hi-blue[pipes] `|&gt;`:
 
 
 ```r
-mpg %&gt;% filter(manufacturer=="audi") %&gt;% group_by(model) %&gt;% summarise(hwy_mean = mean(hwy))
+mpg |&gt; filter(manufacturer=="audi") |&gt; group_by(model) |&gt; summarise(hwy_mean = mean(hwy))
 ```
 
 ```
-## # A tibble: 3 x 2
+## # A tibble: 3 × 2
 ##   model      hwy_mean
 ##   &lt;chr&gt;         &lt;dbl&gt;
 ## 1 a4             28.3
@@ -1426,14 +1588,14 @@ It performs the operations from left to right, exactly like you'd think of them:
 Pipes are even more readable if we write it over several lines:
 
 ```r
-mpg %&gt;% 
-  filter(manufacturer=="audi") %&gt;% 
-  group_by(model) %&gt;% 
+mpg |&gt;
+  filter(manufacturer=="audi") |&gt;
+  group_by(model) |&gt;
   summarise(hwy_mean = mean(hwy))
 ```
 
 ```
-## # A tibble: 3 x 2
+## # A tibble: 3 × 2
 ##   model      hwy_mean
 ##   &lt;chr&gt;         &lt;dbl&gt;
 ## 1 a4             28.3
@@ -1441,7 +1603,7 @@ mpg %&gt;%
 ## 3 a6 quattro     24
 ```
 
-Using vertical space costs nothing and makes for much more readable code 
+Using vertical space costs nothing and makes for much more readable code
 
 ---
 class: inverse, center, middle
@@ -1463,7 +1625,7 @@ packageVersion("dplyr")
 ```
 
 ```
-## [1] '1.0.2'
+## [1] '1.0.8'
 ```
 
 ```r
@@ -1496,25 +1658,24 @@ Let's practice these commands together using the `starwars` data frame that come
 Here's the `starwars` dataset, it has 87 observations of 14 variables
 
 ```r
-starwars 
+starwars
 ```
 
 ```
-## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu…
-## # … with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 87 × 14
+##    name               height  mass hair_color    skin_color  eye_color birth_year sex    gender    homeworld species films     vehicles  starships
+##    &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+##  1 Luke Skywalker        172    77 blond         fair        blue            19   male   masculine Tatooine  Human   &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+##  2 C-3PO                 167    75 &lt;NA&gt;          gold        yellow         112   none   masculine Tatooine  Droid   &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  3 R2-D2                  96    32 &lt;NA&gt;          white, blue red             33   none   masculine Naboo     Droid   &lt;chr [7]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  4 Darth Vader           202   136 none          white       yellow          41.9 male   masculine Tatooine  Human   &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+##  5 Leia Organa           150    49 brown         light       brown           19   female feminine  Alderaan  Human   &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  6 Owen Lars             178   120 brown, grey   light       blue            52   male   masculine Tatooine  Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  7 Beru Whitesun lars    165    75 brown         light       blue            47   female feminine  Tatooine  Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  8 R5-D4                  97    32 &lt;NA&gt;          white, red  red             NA   none   masculine Tatooine  Droid   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  9 Biggs Darklighter     183    84 black         light       brown           24   male   masculine Tatooine  Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 10 Obi-Wan Kenobi        182    77 auburn, white fair        blue-gray       57   male   masculine Stewjon   Human   &lt;chr [6]&gt; &lt;chr [1]&gt; &lt;chr [5]&gt;
+## # … with 77 more rows
 ```
 
 
@@ -1543,23 +1704,21 @@ e.g. if you want to run your analysis only on low income areas, or if you want t
 Here we are subsetting the observations of humans that are at least 190cm
 
 ```r
-starwars %&gt;% 
-  filter( 
-    species == "Human", 
+starwars |&gt;
+  filter(
+    species == "Human",
     height &gt;= 190
-    ) 
+    )
 ```
 
 ```
-## # A tibble: 4 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-## 2 Qui-…    193    89 brown      fair       blue            92   male  mascu…
-## 3 Dooku    193    80 white      fair       brown          102   male  mascu…
-## 4 Bail…    191    NA black      tan        brown           67   male  mascu…
-## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-## #   vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 4 × 14
+##   name                height  mass hair_color skin_color eye_color birth_year sex   gender    homeworld species films     vehicles  starships
+##   &lt;chr&gt;                &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+## 1 Darth Vader            202   136 none       white      yellow          41.9 male  masculine Tatooine  Human   &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 2 Qui-Gon Jinn           193    89 brown      fair       blue            92   male  masculine &lt;NA&gt;      Human   &lt;chr [1]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+## 3 Dooku                  193    80 white      fair       brown          102   male  masculine Serenno   Human   &lt;chr [2]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+## 4 Bail Prestor Organa    191    NA black      tan        brown           67   male  masculine Alderaan  Human   &lt;chr [2]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
 ```
 
 ---
@@ -1569,19 +1728,17 @@ starwars %&gt;%
 You can filter using regular expressions with grep-type commands or the `stringr` package
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   filter(stringr::str_detect(name, "Skywalker"))
 ```
 
 ```
-## # A tibble: 3 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-## 2 Anak…    188    84 blond      fair       blue            41.9 male  mascu…
-## 3 Shmi…    163    NA black      fair       brown           72   fema… femin…
-## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-## #   vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 3 × 14
+##   name             height  mass hair_color skin_color eye_color birth_year sex    gender    homeworld species films     vehicles  starships
+##   &lt;chr&gt;             &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+## 1 Luke Skywalker      172    77 blond      fair       blue            19   male   masculine Tatooine  Human   &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+## 2 Anakin Skywalker    188    84 blond      fair       blue            41.9 male   masculine Tatooine  Human   &lt;chr [3]&gt; &lt;chr [2]&gt; &lt;chr [3]&gt;
+## 3 Shmi Skywalker      163    NA black      fair       brown           72   female feminine  Tatooine  Human   &lt;chr [2]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
 ```
 
 This subsets the observations for individuals whose names contain "Skywalker"
@@ -1593,22 +1750,20 @@ This subsets the observations for individuals whose names contain "Skywalker"
 A very common `filter` use case is identifying/removing missing data cases:
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   filter(is.na(height))
 ```
 
 ```
-## # A tibble: 6 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Arve…     NA    NA brown      fair       brown             NA male  mascu…
-## 2 Finn      NA    NA black      dark       dark              NA male  mascu…
-## 3 Rey       NA    NA brown      light      hazel             NA fema… femin…
-## 4 Poe …     NA    NA brown      light      brown             NA male  mascu…
-## 5 BB8       NA    NA none       none       black             NA none  mascu…
-## 6 Capt…     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;  &lt;NA&gt;  
-## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-## #   vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 6 × 14
+##   name           height  mass hair_color skin_color eye_color birth_year sex    gender    homeworld species films     vehicles  starships
+##   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+## 1 Arvel Crynyd       NA    NA brown      fair       brown             NA male   masculine &lt;NA&gt;      Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 2 Finn               NA    NA black      dark       dark              NA male   masculine &lt;NA&gt;      Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 3 Rey                NA    NA brown      light      hazel             NA female feminine  &lt;NA&gt;      Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 4 Poe Dameron        NA    NA brown      light      brown             NA male   masculine &lt;NA&gt;      Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 5 BB8                NA    NA none       none       black             NA none   masculine &lt;NA&gt;      Droid   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 6 Captain Phasma     NA    NA unknown    unknown    unknown           NA &lt;NA&gt;   &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;    &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
 ```
 
 ---
@@ -1618,26 +1773,25 @@ starwars %&gt;%
 To remove missing observations, use negation:
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   filter(!is.na(height))
 ```
 
 ```
-## # A tibble: 81 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu…
-## # … with 71 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 81 × 14
+##    name               height  mass hair_color    skin_color  eye_color birth_year sex    gender    homeworld species films     vehicles  starships
+##    &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+##  1 Luke Skywalker        172    77 blond         fair        blue            19   male   masculine Tatooine  Human   &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+##  2 C-3PO                 167    75 &lt;NA&gt;          gold        yellow         112   none   masculine Tatooine  Droid   &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  3 R2-D2                  96    32 &lt;NA&gt;          white, blue red             33   none   masculine Naboo     Droid   &lt;chr [7]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  4 Darth Vader           202   136 none          white       yellow          41.9 male   masculine Tatooine  Human   &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+##  5 Leia Organa           150    49 brown         light       brown           19   female feminine  Alderaan  Human   &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  6 Owen Lars             178   120 brown, grey   light       blue            52   male   masculine Tatooine  Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  7 Beru Whitesun lars    165    75 brown         light       blue            47   female feminine  Tatooine  Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  8 R5-D4                  97    32 &lt;NA&gt;          white, red  red             NA   none   masculine Tatooine  Droid   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  9 Biggs Darklighter     183    84 black         light       brown           24   male   masculine Tatooine  Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 10 Obi-Wan Kenobi        182    77 auburn, white fair        blue-gray       57   male   masculine Stewjon   Human   &lt;chr [6]&gt; &lt;chr [1]&gt; &lt;chr [5]&gt;
+## # … with 71 more rows
 ```
 
 ---
@@ -1647,26 +1801,25 @@ starwars %&gt;%
 `arrange` sorts the data frame based on the variables you supply:
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   arrange(birth_year)
 ```
 
 ```
-## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Wick…     88  20   brown      brown      brown            8   male  mascu…
-##  2 IG-88    200 140   none       metal      red             15   none  mascu…
-##  3 Luke…    172  77   blond      fair       blue            19   male  mascu…
-##  4 Leia…    150  49   brown      light      brown           19   fema… femin…
-##  5 Wedg…    170  77   brown      fair       hazel           21   male  mascu…
-##  6 Plo …    188  80   none       orange     black           22   male  mascu…
-##  7 Bigg…    183  84   black      light      brown           24   male  mascu…
-##  8 Han …    180  80   brown      fair       brown           29   male  mascu…
-##  9 Land…    177  79   black      dark       brown           31   male  mascu…
-## 10 Boba…    183  78.2 black      fair       brown           31.5 male  mascu…
-## # … with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 87 × 14
+##    name                  height  mass hair_color skin_color eye_color birth_year sex    gender    homeworld species films     vehicles  starships
+##    &lt;chr&gt;                  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+##  1 Wicket Systri Warrick     88  20   brown      brown      brown            8   male   masculine Endor     Ewok    &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  2 IG-88                    200 140   none       metal      red             15   none   masculine &lt;NA&gt;      Droid   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  3 Luke Skywalker           172  77   blond      fair       blue            19   male   masculine Tatooine  Human   &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+##  4 Leia Organa              150  49   brown      light      brown           19   female feminine  Alderaan  Human   &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  5 Wedge Antilles           170  77   brown      fair       hazel           21   male   masculine Corellia  Human   &lt;chr [3]&gt; &lt;chr [1]&gt; &lt;chr [1]&gt;
+##  6 Plo Koon                 188  80   none       orange     black           22   male   masculine Dorin     Kel Dor &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+##  7 Biggs Darklighter        183  84   black      light      brown           24   male   masculine Tatooine  Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+##  8 Han Solo                 180  80   brown      fair       brown           29   male   masculine Corellia  Human   &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [2]&gt;
+##  9 Lando Calrissian         177  79   black      dark       brown           31   male   masculine Socorro   Human   &lt;chr [2]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 10 Boba Fett                183  78.2 black      fair       brown           31.5 male   masculine Kamino    Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## # … with 77 more rows
 ```
 
 ---
@@ -1690,26 +1843,25 @@ This makes it easy to check and see patterns in the data
 We can also arrange items in descending order using `arrange(desc())`
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   arrange(desc(birth_year))
 ```
 
 ```
-## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Yoda      66    17 white      green      brown            896 male  mascu…
-##  2 Jabb…    175  1358 &lt;NA&gt;       green-tan… orange           600 herm… mascu…
-##  3 Chew…    228   112 brown      unknown    blue             200 male  mascu…
-##  4 C-3PO    167    75 &lt;NA&gt;       gold       yellow           112 none  mascu…
-##  5 Dooku    193    80 white      fair       brown            102 male  mascu…
-##  6 Qui-…    193    89 brown      fair       blue              92 male  mascu…
-##  7 Ki-A…    198    82 white      pale       yellow            92 male  mascu…
-##  8 Fini…    170    NA blond      fair       blue              91 male  mascu…
-##  9 Palp…    170    75 grey       pale       yellow            82 male  mascu…
-## 10 Clie…    183    NA brown      fair       blue              82 male  mascu…
-## # … with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 87 × 14
+##    name                  height  mass hair_color skin_color       eye_color birth_year sex            gender    homeworld species        films     vehicles  starships
+##    &lt;chr&gt;                  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;          &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+##  1 Yoda                      66    17 white      green            brown            896 male           masculine &lt;NA&gt;      Yoda's species &lt;chr [5]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  2 Jabba Desilijic Tiure    175  1358 &lt;NA&gt;       green-tan, brown orange           600 hermaphroditic masculine Nal Hutta Hutt           &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  3 Chewbacca                228   112 brown      unknown          blue             200 male           masculine Kashyyyk  Wookiee        &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [2]&gt;
+##  4 C-3PO                    167    75 &lt;NA&gt;       gold             yellow           112 none           masculine Tatooine  Droid          &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  5 Dooku                    193    80 white      fair             brown            102 male           masculine Serenno   Human          &lt;chr [2]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  6 Qui-Gon Jinn             193    89 brown      fair             blue              92 male           masculine &lt;NA&gt;      Human          &lt;chr [1]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  7 Ki-Adi-Mundi             198    82 white      pale             yellow            92 male           masculine Cerea     Cerean         &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  8 Finis Valorum            170    NA blond      fair             blue              91 male           masculine Coruscant Human          &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  9 Palpatine                170    75 grey       pale             yellow            82 male           masculine Naboo     Human          &lt;chr [5]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 10 Cliegg Lars              183    NA brown      fair             blue              82 male           masculine Tatooine  Human          &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## # … with 77 more rows
 ```
 
 ---
@@ -1737,12 +1889,12 @@ e.g. if you used an emissions rate and marginal damage per unit of pollution var
 Use commas to select multiple columns out of a data frame, deselect a column with "-", select across multiple columns with "first:last":
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   select(name:skin_color, species, -height)
 ```
 
 ```
-## # A tibble: 87 x 5
+## # A tibble: 87 × 5
 ##    name                mass hair_color    skin_color  species
 ##    &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;  
 ##  1 Luke Skywalker        77 blond         fair        Human  
@@ -1760,17 +1912,17 @@ starwars %&gt;%
 
 ---
 
-# 3) dplyr::select 
+# 3) dplyr::select
 
 You can also rename your selected variables in place
 
 ```r
-starwars %&gt;%
-  select(alias = name, crib = homeworld) 
+starwars |&gt;
+  select(alias = name, crib = homeworld)
 ```
 
 ```
-## # A tibble: 87 x 2
+## # A tibble: 87 × 2
 ##    alias              crib    
 ##    &lt;chr&gt;              &lt;chr&gt;   
 ##  1 Luke Skywalker     Tatooine
@@ -1788,31 +1940,30 @@ starwars %&gt;%
 
 ---
 
-# 3) dplyr::select 
+# 3) dplyr::select
 
 If you just want to rename columns without subsetting them, you can use `rename`:
 
 ```r
-starwars %&gt;%
-  rename(alias = name, crib = homeworld) 
+starwars |&gt;
+  rename(alias = name, crib = homeworld)
 ```
 
 ```
-## # A tibble: 87 x 14
-##    alias height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu…
-## # … with 77 more rows, and 5 more variables: crib &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 87 × 14
+##    alias              height  mass hair_color    skin_color  eye_color birth_year sex    gender    crib     species films     vehicles  starships
+##    &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+##  1 Luke Skywalker        172    77 blond         fair        blue            19   male   masculine Tatooine Human   &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+##  2 C-3PO                 167    75 &lt;NA&gt;          gold        yellow         112   none   masculine Tatooine Droid   &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  3 R2-D2                  96    32 &lt;NA&gt;          white, blue red             33   none   masculine Naboo    Droid   &lt;chr [7]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  4 Darth Vader           202   136 none          white       yellow          41.9 male   masculine Tatooine Human   &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+##  5 Leia Organa           150    49 brown         light       brown           19   female feminine  Alderaan Human   &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  6 Owen Lars             178   120 brown, grey   light       blue            52   male   masculine Tatooine Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  7 Beru Whitesun lars    165    75 brown         light       blue            47   female feminine  Tatooine Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  8 R5-D4                  97    32 &lt;NA&gt;          white, red  red             NA   none   masculine Tatooine Droid   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  9 Biggs Darklighter     183    84 black         light       brown           24   male   masculine Tatooine Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 10 Obi-Wan Kenobi        182    77 auburn, white fair        blue-gray       57   male   masculine Stewjon  Human   &lt;chr [6]&gt; &lt;chr [1]&gt; &lt;chr [5]&gt;
+## # … with 77 more rows
 ```
 
 ---
@@ -1822,12 +1973,12 @@ starwars %&gt;%
 The `select(contains(PATTERN))` option provides a nice shortcut in relevant cases.
 
 ```r
-starwars %&gt;% 
+starwars |&gt;
   select(name, contains("color"))
 ```
 
 ```
-## # A tibble: 87 x 4
+## # A tibble: 87 × 4
 ##    name               hair_color    skin_color  eye_color
 ##    &lt;chr&gt;              &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;    
 ##  1 Luke Skywalker     blond         fair        blue     
@@ -1851,22 +2002,20 @@ The `select(..., everything())` option is another useful shortcut if you only wa
 
 
 ```r
-starwars %&gt;% 
-  select(species, homeworld, everything()) %&gt;%
+starwars |&gt;
+  select(species, homeworld, everything()) |&gt;
   head(5)
 ```
 
 ```
-## # A tibble: 5 x 14
-##   species homeworld name  height  mass hair_color skin_color eye_color
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
-## 1 Human   Tatooine  Luke…    172    77 blond      fair       blue     
-## 2 Droid   Tatooine  C-3PO    167    75 &lt;NA&gt;       gold       yellow   
-## 3 Droid   Naboo     R2-D2     96    32 &lt;NA&gt;       white, bl… red      
-## 4 Human   Tatooine  Dart…    202   136 none       white      yellow   
-## 5 Human   Alderaan  Leia…    150    49 brown      light      brown    
-## # … with 6 more variables: birth_year &lt;dbl&gt;, sex &lt;chr&gt;, gender &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 5 × 14
+##   species homeworld name           height  mass hair_color skin_color  eye_color birth_year sex    gender    films     vehicles  starships
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+## 1 Human   Tatooine  Luke Skywalker    172    77 blond      fair        blue            19   male   masculine &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+## 2 Droid   Tatooine  C-3PO             167    75 &lt;NA&gt;       gold        yellow         112   none   masculine &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 3 Droid   Naboo     R2-D2              96    32 &lt;NA&gt;       white, blue red             33   none   masculine &lt;chr [7]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 4 Human   Tatooine  Darth Vader       202   136 none       white       yellow          41.9 male   masculine &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 5 Human   Alderaan  Leia Organa       150    49 brown      light       brown           19   female feminine  &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
 ```
 
 ---
@@ -1877,22 +2026,20 @@ You can also use `relocate` to do the same thing
 
 
 ```r
-starwars %&gt;% 
-  relocate(species, homeworld) %&gt;%
+starwars |&gt;
+  relocate(species, homeworld) |&gt;
   head(5)
 ```
 
 ```
-## # A tibble: 5 x 14
-##   species homeworld name  height  mass hair_color skin_color eye_color
-##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
-## 1 Human   Tatooine  Luke…    172    77 blond      fair       blue     
-## 2 Droid   Tatooine  C-3PO    167    75 &lt;NA&gt;       gold       yellow   
-## 3 Droid   Naboo     R2-D2     96    32 &lt;NA&gt;       white, bl… red      
-## 4 Human   Tatooine  Dart…    202   136 none       white      yellow   
-## 5 Human   Alderaan  Leia…    150    49 brown      light      brown    
-## # … with 6 more variables: birth_year &lt;dbl&gt;, sex &lt;chr&gt;, gender &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 5 × 14
+##   species homeworld name           height  mass hair_color skin_color  eye_color birth_year sex    gender    films     vehicles  starships
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+## 1 Human   Tatooine  Luke Skywalker    172    77 blond      fair        blue            19   male   masculine &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+## 2 Droid   Tatooine  C-3PO             167    75 &lt;NA&gt;       gold        yellow         112   none   masculine &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 3 Droid   Naboo     R2-D2              96    32 &lt;NA&gt;       white, blue red             33   none   masculine &lt;chr [7]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+## 4 Human   Tatooine  Darth Vader       202   136 none       white       yellow          41.9 male   masculine &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 5 Human   Alderaan  Leia Organa       150    49 brown      light       brown           19   female feminine  &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
 ```
 
 ---
@@ -1916,39 +2063,39 @@ e.g. if I give you nominal house prices and the rate of house price inflation, y
 You can create new columns from scratch as transformations of existing columns:
 
 ```r
-starwars %&gt;% 
-  select(name, birth_year) %&gt;%
-  mutate(dog_years = birth_year * 7) %&gt;%
+starwars |&gt;
+  select(name, birth_year) |&gt;
+  mutate(dog_years = birth_year * 7) |&gt;
   mutate(comment = paste0(name, " is ", dog_years, " in dog years."))
 ```
 
 ```
-## # A tibble: 87 x 4
-##    name               birth_year dog_years comment                              
-##    &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                
-##  1 Luke Skywalker           19        133  Luke Skywalker is 133 in dog years.  
-##  2 C-3PO                   112        784  C-3PO is 784 in dog years.           
-##  3 R2-D2                    33        231  R2-D2 is 231 in dog years.           
-##  4 Darth Vader              41.9      293. Darth Vader is 293.3 in dog years.   
-##  5 Leia Organa              19        133  Leia Organa is 133 in dog years.     
-##  6 Owen Lars                52        364  Owen Lars is 364 in dog years.       
-##  7 Beru Whitesun lars       47        329  Beru Whitesun lars is 329 in dog yea…
-##  8 R5-D4                    NA         NA  R5-D4 is NA in dog years.            
-##  9 Biggs Darklighter        24        168  Biggs Darklighter is 168 in dog year…
-## 10 Obi-Wan Kenobi           57        399  Obi-Wan Kenobi is 399 in dog years.  
+## # A tibble: 87 × 4
+##    name               birth_year dog_years comment                                
+##    &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                  
+##  1 Luke Skywalker           19        133  Luke Skywalker is 133 in dog years.    
+##  2 C-3PO                   112        784  C-3PO is 784 in dog years.             
+##  3 R2-D2                    33        231  R2-D2 is 231 in dog years.             
+##  4 Darth Vader              41.9      293. Darth Vader is 293.3 in dog years.     
+##  5 Leia Organa              19        133  Leia Organa is 133 in dog years.       
+##  6 Owen Lars                52        364  Owen Lars is 364 in dog years.         
+##  7 Beru Whitesun lars       47        329  Beru Whitesun lars is 329 in dog years.
+##  8 R5-D4                    NA         NA  R5-D4 is NA in dog years.              
+##  9 Biggs Darklighter        24        168  Biggs Darklighter is 168 in dog years. 
+## 10 Obi-Wan Kenobi           57        399  Obi-Wan Kenobi is 399 in dog years.    
 ## # … with 77 more rows
 ```
 
 ---
 
 
-# 4) dplyr::mutate 
+# 4) dplyr::mutate
 
 *Note:* `mutate` creates variables in order, so you can chain multiple mutates in a single call
 
 ```r
-starwars %&gt;% 
-  select(name, birth_year) %&gt;%
+starwars |&gt;
+  select(name, birth_year) |&gt;
   mutate(
     dog_years = birth_year * 7, ## Separate with a comma
     comment = paste0(name, " is ", dog_years, " in dog years.")
@@ -1956,38 +2103,38 @@ starwars %&gt;%
 ```
 
 ```
-## # A tibble: 87 x 4
-##    name               birth_year dog_years comment                              
-##    &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                
-##  1 Luke Skywalker           19        133  Luke Skywalker is 133 in dog years.  
-##  2 C-3PO                   112        784  C-3PO is 784 in dog years.           
-##  3 R2-D2                    33        231  R2-D2 is 231 in dog years.           
-##  4 Darth Vader              41.9      293. Darth Vader is 293.3 in dog years.   
-##  5 Leia Organa              19        133  Leia Organa is 133 in dog years.     
-##  6 Owen Lars                52        364  Owen Lars is 364 in dog years.       
-##  7 Beru Whitesun lars       47        329  Beru Whitesun lars is 329 in dog yea…
-##  8 R5-D4                    NA         NA  R5-D4 is NA in dog years.            
-##  9 Biggs Darklighter        24        168  Biggs Darklighter is 168 in dog year…
-## 10 Obi-Wan Kenobi           57        399  Obi-Wan Kenobi is 399 in dog years.  
+## # A tibble: 87 × 4
+##    name               birth_year dog_years comment                                
+##    &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                  
+##  1 Luke Skywalker           19        133  Luke Skywalker is 133 in dog years.    
+##  2 C-3PO                   112        784  C-3PO is 784 in dog years.             
+##  3 R2-D2                    33        231  R2-D2 is 231 in dog years.             
+##  4 Darth Vader              41.9      293. Darth Vader is 293.3 in dog years.     
+##  5 Leia Organa              19        133  Leia Organa is 133 in dog years.       
+##  6 Owen Lars                52        364  Owen Lars is 364 in dog years.         
+##  7 Beru Whitesun lars       47        329  Beru Whitesun lars is 329 in dog years.
+##  8 R5-D4                    NA         NA  R5-D4 is NA in dog years.              
+##  9 Biggs Darklighter        24        168  Biggs Darklighter is 168 in dog years. 
+## 10 Obi-Wan Kenobi           57        399  Obi-Wan Kenobi is 399 in dog years.    
 ## # … with 77 more rows
 ```
 
 ---
 
-# 4) dplyr::mutate 
+# 4) dplyr::mutate
 
 Boolean, logical and conditional operators all work well with `mutate` too:
 
 ```r
-starwars %&gt;% 
-  select(name, height) %&gt;%
-  filter(name %in% c("Luke Skywalker", "Anakin Skywalker")) %&gt;% 
-  mutate(tall1 = height &gt; 180) %&gt;% # TRUE or FALSE
+starwars |&gt;
+  select(name, height) |&gt;
+  filter(name %in% c("Luke Skywalker", "Anakin Skywalker")) |&gt;
+  mutate(tall1 = height &gt; 180) |&gt; # TRUE or FALSE
   mutate(tall2 = ifelse(height &gt; 180, "Tall", "Short")) ## Same effect, but can choose labels
 ```
 
 ```
-## # A tibble: 2 x 4
+## # A tibble: 2 × 4
 ##   name             height tall1 tall2
 ##   &lt;chr&gt;             &lt;int&gt; &lt;lgl&gt; &lt;chr&gt;
 ## 1 Luke Skywalker      172 FALSE Short
@@ -1996,19 +2143,19 @@ starwars %&gt;%
 
 ---
 
-# 4) dplyr::mutate 
+# 4) dplyr::mutate
 
 Lastly, combining `mutate` with `across` allows you to easily work on a subset of variables:
 
 ```r
-starwars %&gt;% 
-  select(name:eye_color) %&gt;% 
-  mutate(across(where(is.character), toupper)) %&gt;% # Take all character variables, uppercase them
+starwars |&gt;
+  select(name:eye_color) |&gt;
+  mutate(across(where(is.character), toupper)) |&gt; # Take all character variables, uppercase them
   head(5)
 ```
 
 ```
-## # A tibble: 5 x 6
+## # A tibble: 5 × 6
 ##   name           height  mass hair_color skin_color  eye_color
 ##   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    
 ## 1 LUKE SKYWALKER    172    77 BLOND      FAIR        BLUE     
@@ -2039,13 +2186,17 @@ e.g. if I gave you a data set of each individual's marginal damage in the US, we
 Summarising useful in combination with the `group_by` command
 
 ```r
-starwars %&gt;% 
-  group_by(species, gender) %&gt;% # for each species-gender combo
+starwars |&gt;
+  group_by(species, gender) |&gt; # for each species-gender combo
   summarise(mean_height = mean(height, na.rm = TRUE)) # calculate the mean height
 ```
 
 ```
-## # A tibble: 42 x 3
+## `summarise()` has grouped output by 'species'. You can override using the `.groups` argument.
+```
+
+```
+## # A tibble: 42 × 3
 ## # Groups:   species [38]
 ##    species   gender    mean_height
 ##    &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;
@@ -2064,18 +2215,18 @@ starwars %&gt;%
 
 ---
 
-# 5) dplyr::summarise 
+# 5) dplyr::summarise
 
 Note that including "na.rm = TRUE" is usually a good idea with summarise functions, it keeps NAs from propagating to the end result
 
 ```r
 ## Probably not what we want
-starwars %&gt;% 
+starwars |&gt;
   summarise(mean_height = mean(height))
 ```
 
 ```
-## # A tibble: 1 x 1
+## # A tibble: 1 × 1
 ##   mean_height
 ##         &lt;dbl&gt;
 ## 1          NA
@@ -2088,14 +2239,14 @@ starwars %&gt;%
 We can also use `across` within summarise:
 
 ```r
-starwars %&gt;% 
-  group_by(species) %&gt;% # for each species
-  summarise(across(where(is.numeric), mean, na.rm = T)) %&gt;% # take the mean of all numeric variables
+starwars |&gt;
+  group_by(species) |&gt; # for each species
+  summarise(across(where(is.numeric), mean, na.rm = T)) |&gt; # take the mean of all numeric variables
   head(5)
 ```
 
 ```
-## # A tibble: 5 x 4
+## # A tibble: 5 × 4
 ##   species  height  mass birth_year
 ##   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
 ## 1 Aleena       79    15        NaN
@@ -2115,19 +2266,19 @@ starwars %&gt;%
 --
 
 `slice`: Subset rows by position rather than filtering by values
-- E.g. `starwars %&gt;% slice(c(1, 5))`
+- E.g. `starwars |&gt; slice(c(1, 5))`
 
 ---
 
 # Other dplyr goodies
 
 `pull`: Extract a column from as a data frame as a vector or scalar
-- E.g. `starwars %&gt;% filter(gender=="female") %&gt;% pull(height)`
+- E.g. `starwars |&gt; filter(gender=="female") |&gt; pull(height)`
 
 --
 
 `count` and `distinct`: Number and isolate unique observations
-- E.g. `starwars %&gt;% count(species)`, or `starwars %&gt;% distinct(species)`
+- E.g. `starwars |&gt; count(species)`, or `starwars |&gt; distinct(species)`
 
 
 ---
@@ -2198,31 +2349,29 @@ We merge data with [join operations](https://cran.r-project.org/web/packages/dpl
 
 # dplyr::xxxx_join
 
-Lets use the data that comes with the the [nycflights13](http://github.com/hadley/nycflights13) package. 
+Lets use the data that comes with the the [nycflights13](http://github.com/hadley/nycflights13) package.
 
 
 ```r
 library(nycflights13)
-flights 
+flights
 ```
 
 ```
-## # A tibble: 336,776 x 19
-##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
-##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
-##  1  2013     1     1      517            515         2      830            819
-##  2  2013     1     1      533            529         4      850            830
-##  3  2013     1     1      542            540         2      923            850
-##  4  2013     1     1      544            545        -1     1004           1022
-##  5  2013     1     1      554            600        -6      812            837
-##  6  2013     1     1      554            558        -4      740            728
-##  7  2013     1     1      555            600        -5      913            854
-##  8  2013     1     1      557            600        -3      709            723
-##  9  2013     1     1      557            600        -3      838            846
-## 10  2013     1     1      558            600        -2      753            745
-## # … with 336,766 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
-## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
-## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
+## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum origin dest  air_time distance  hour minute time_hour          
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dttm&gt;             
+##  1  2013     1     1      517            515         2      830            819        11 UA        1545 N14228  EWR    IAH        227     1400     5     15 2013-01-01 05:00:00
+##  2  2013     1     1      533            529         4      850            830        20 UA        1714 N24211  LGA    IAH        227     1416     5     29 2013-01-01 05:00:00
+##  3  2013     1     1      542            540         2      923            850        33 AA        1141 N619AA  JFK    MIA        160     1089     5     40 2013-01-01 05:00:00
+##  4  2013     1     1      544            545        -1     1004           1022       -18 B6         725 N804JB  JFK    BQN        183     1576     5     45 2013-01-01 05:00:00
+##  5  2013     1     1      554            600        -6      812            837       -25 DL         461 N668DN  LGA    ATL        116      762     6      0 2013-01-01 06:00:00
+##  6  2013     1     1      554            558        -4      740            728        12 UA        1696 N39463  EWR    ORD        150      719     5     58 2013-01-01 05:00:00
+##  7  2013     1     1      555            600        -5      913            854        19 B6         507 N516JB  EWR    FLL        158     1065     6      0 2013-01-01 06:00:00
+##  8  2013     1     1      557            600        -3      709            723       -14 EV        5708 N829AS  LGA    IAD         53      229     6      0 2013-01-01 06:00:00
+##  9  2013     1     1      557            600        -3      838            846        -8 B6          79 N593JB  JFK    MCO        140      944     6      0 2013-01-01 06:00:00
+## 10  2013     1     1      558            600        -2      753            745         8 AA         301 N3ALAA  LGA    ORD        138      733     6      0 2013-01-01 06:00:00
+## # … with 336,766 more rows
 ```
 
 ---
@@ -2235,19 +2384,19 @@ planes
 ```
 
 ```
-## # A tibble: 3,322 x 9
-##    tailnum  year type          manufacturer   model  engines seats speed engine 
-##    &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;          &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  
-##  1 N10156   2004 Fixed wing m… EMBRAER        EMB-1…       2    55    NA Turbo-…
-##  2 N102UW   1998 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-##  3 N103US   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-##  4 N104UW   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-##  5 N10575   2002 Fixed wing m… EMBRAER        EMB-1…       2    55    NA Turbo-…
-##  6 N105UW   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-##  7 N107US   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-##  8 N108UW   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-##  9 N109UW   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
-## 10 N110UW   1999 Fixed wing m… AIRBUS INDUST… A320-…       2   182    NA Turbo-…
+## # A tibble: 3,322 × 9
+##    tailnum  year type                    manufacturer     model     engines seats speed engine   
+##    &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt;            &lt;chr&gt;       &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    
+##  1 N10156   2004 Fixed wing multi engine EMBRAER          EMB-145XR       2    55    NA Turbo-fan
+##  2 N102UW   1998 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+##  3 N103US   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+##  4 N104UW   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+##  5 N10575   2002 Fixed wing multi engine EMBRAER          EMB-145LR       2    55    NA Turbo-fan
+##  6 N105UW   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+##  7 N107US   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+##  8 N108UW   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+##  9 N109UW   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
+## 10 N110UW   1999 Fixed wing multi engine AIRBUS INDUSTRIE A320-214        2   182    NA Turbo-fan
 ## # … with 3,312 more rows
 ```
 
@@ -2262,7 +2411,7 @@ Let's perform a left join on the flights and planes datasets
 
 
 ```r
-left_join(flights, planes) %&gt;%
+left_join(flights, planes) |&gt;
   select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, type, model)
 ```
 
@@ -2271,7 +2420,7 @@ left_join(flights, planes) %&gt;%
 ```
 
 ```
-## # A tibble: 336,776 x 10
+## # A tibble: 336,776 × 10
 ##     year month   day dep_time arr_time carrier flight tailnum type  model
 ##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
 ##  1  2013     1     1      517      830 UA        1545 N14228  &lt;NA&gt;  &lt;NA&gt; 
@@ -2306,28 +2455,27 @@ Luckily, there's an easy way to avoid this problem: try `?dplyr::join`
 
 ---
 
-# Joining operations 
+# Joining operations
 
-You just need to be more explicit in your join call by using the `by = ` argument 
+You just need to be more explicit in your join call by using the `by = ` argument
 
 ```r
 left_join(
   flights,
-  planes %&gt;% rename(year_built = year), ## Not necessary w/ below line, but helpful
+  planes |&gt; rename(year_built = year), ## Not necessary w/ below line, but helpful
   by = "tailnum" ## Be specific about the joining column
-  ) %&gt;%
-  select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, year_built, type, model) %&gt;%
+  ) |&gt;
+  select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, year_built, type, model) |&gt;
   head(3) ## Just to save vertical space on the slide
 ```
 
 ```
-## # A tibble: 3 x 11
-##    year month   day dep_time arr_time carrier flight tailnum year_built type 
-##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;
-## 1  2013     1     1      517      830 UA        1545 N14228        1999 Fixe…
-## 2  2013     1     1      533      850 UA        1714 N24211        1998 Fixe…
-## 3  2013     1     1      542      923 AA        1141 N619AA        1990 Fixe…
-## # … with 1 more variable: model &lt;chr&gt;
+## # A tibble: 3 × 11
+##    year month   day dep_time arr_time carrier flight tailnum year_built type                    model  
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt;  
+## 1  2013     1     1      517      830 UA        1545 N14228        1999 Fixed wing multi engine 737-824
+## 2  2013     1     1      533      850 UA        1714 N24211        1998 Fixed wing multi engine 737-824
+## 3  2013     1     1      542      923 AA        1141 N619AA        1990 Fixed wing multi engine 757-223
 ```
 
 ---
@@ -2337,20 +2485,20 @@ left_join(
 Note what happens if we again specify the join column but don't rename the ambiguous `year`:
 
 ```r
-left_join(flights, 
+left_join(flights,
           planes, ## Not renaming "year" to "year_built" this time
-          by = "tailnum") %&gt;%
-  select(contains("year"), month, day, dep_time, arr_time, carrier, flight, tailnum, type, model) %&gt;%
+          by = "tailnum") |&gt;
+  select(contains("year"), month, day, dep_time, arr_time, carrier, flight, tailnum, type, model) |&gt;
   head(3)
 ```
 
 ```
-## # A tibble: 3 x 11
-##   year.x year.y month   day dep_time arr_time carrier flight tailnum type  model
-##    &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
-## 1   2013   1999     1     1      517      830 UA        1545 N14228  Fixe… 737-…
-## 2   2013   1998     1     1      533      850 UA        1714 N24211  Fixe… 737-…
-## 3   2013   1990     1     1      542      923 AA        1141 N619AA  Fixe… 757-…
+## # A tibble: 3 × 11
+##   year.x year.y month   day dep_time arr_time carrier flight tailnum type                    model  
+##    &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                   &lt;chr&gt;  
+## 1   2013   1999     1     1      517      830 UA        1545 N14228  Fixed wing multi engine 737-824
+## 2   2013   1998     1     1      533      850 UA        1714 N24211  Fixed wing multi engine 737-824
+## 3   2013   1990     1     1      542      923 AA        1141 N619AA  Fixed wing multi engine 757-223
 ```
 
 --
@@ -2371,7 +2519,7 @@ name: tidyr
 
 1. `pivot_longer`: Pivot wide data into long format (i.e. "melt", "reshape long")
 
-2. `pivot_wider`: Pivot long data into wide format (i.e. "cast", "reshape wide") 
+2. `pivot_wider`: Pivot long data into wide format (i.e. "cast", "reshape wide")
 
 3. `separate`: Split one column into multiple columns
 
@@ -2380,14 +2528,14 @@ name: tidyr
 --
 
 Let's practice these verbs together in class
-  
+
 ---
 
 # 1) tidyr::pivot_longer
 
 
 ```r
-stocks &lt;- data.frame(
+stocks = data.frame(
   time = as.Date('2009-01-01') + 0:1,
   stock_X = rnorm(2, 0, 1),
   stock_Y = rnorm(2, 0, 2),
@@ -2397,9 +2545,9 @@ stocks
 ```
 
 ```
-##         time    stock_X    stock_Y   stock_Z
-## 1 2009-01-01 -0.6933195 -1.2240998  1.226336
-## 2 2009-01-02  0.1454467  0.5956708 -5.546768
+##         time    stock_X   stock_Y  stock_Z
+## 1 2009-01-01 -1.2748637 0.5036504 -7.56014
+## 2 2009-01-02  0.4597851 0.2333985 -2.14677
 ```
 
 We have 4 variables, the date and the stocks
@@ -2412,7 +2560,7 @@ How do we get this in tidy form?
 
 
 ```r
-stocks %&gt;% pivot_longer(-time, names_to = "stock", values_to = "price")
+stocks |&gt; pivot_longer(-time, names_to = "stock", values_to = "price")
 ```
 
 We need to pivot the stock name variables `X, Y, Z` longer
@@ -2427,19 +2575,19 @@ We need to pivot the stock name variables `X, Y, Z` longer
 
 
 ```r
-stocks %&gt;% pivot_longer(-time, names_to = "stock", values_to = "price")
+stocks |&gt; pivot_longer(-time, names_to = "stock", values_to = "price")
 ```
 
 ```
-## # A tibble: 6 x 3
+## # A tibble: 6 × 3
 ##   time       stock    price
 ##   &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;
-## 1 2009-01-01 stock_X -0.693
-## 2 2009-01-01 stock_Y -1.22 
-## 3 2009-01-01 stock_Z  1.23 
-## 4 2009-01-02 stock_X  0.145
-## 5 2009-01-02 stock_Y  0.596
-## 6 2009-01-02 stock_Z -5.55
+## 1 2009-01-01 stock_X -1.27 
+## 2 2009-01-01 stock_Y  0.504
+## 3 2009-01-01 stock_Z -7.56 
+## 4 2009-01-02 stock_X  0.460
+## 5 2009-01-02 stock_Y  0.233
+## 6 2009-01-02 stock_Z -2.15
 ```
 
 ---
@@ -2450,7 +2598,7 @@ Let's quickly save the "tidy" (i.e. long) stocks data frame for use on the next 
 
 
 ```r
-tidy_stocks &lt;- stocks %&gt;% 
+tidy_stocks = stocks |&gt;
   pivot_longer(-time, names_to = "stock", values_to = "price")
 ```
 
@@ -2460,28 +2608,28 @@ tidy_stocks &lt;- stocks %&gt;%
 
 
 ```r
-tidy_stocks %&gt;% pivot_wider(names_from = stock, values_from = price)
+tidy_stocks |&gt; pivot_wider(names_from = stock, values_from = price)
 ```
 
 ```
-## # A tibble: 2 x 4
+## # A tibble: 2 × 4
 ##   time       stock_X stock_Y stock_Z
 ##   &lt;date&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 2009-01-01  -0.693  -1.22     1.23
-## 2 2009-01-02   0.145   0.596   -5.55
+## 1 2009-01-01  -1.27    0.504   -7.56
+## 2 2009-01-02   0.460   0.233   -2.15
 ```
 
 ```r
-tidy_stocks %&gt;% pivot_wider(names_from = time, values_from = price)
+tidy_stocks |&gt; pivot_wider(names_from = time, values_from = price)
 ```
 
 ```
-## # A tibble: 3 x 3
+## # A tibble: 3 × 3
 ##   stock   `2009-01-01` `2009-01-02`
 ##   &lt;chr&gt;          &lt;dbl&gt;        &lt;dbl&gt;
-## 1 stock_X       -0.693        0.145
-## 2 stock_Y       -1.22         0.596
-## 3 stock_Z        1.23        -5.55
+## 1 stock_X       -1.27         0.460
+## 2 stock_Y        0.504        0.233
+## 3 stock_Z       -7.56        -2.15
 ```
 
 --
@@ -2493,7 +2641,7 @@ Note that the second example has effectively transposed the data
 
 
 ```r
-economists &lt;- data.frame(name = c("Adam.Smith", "Paul.Samuelson", "Milton.Friedman"))
+economists = data.frame(name = c("Adam.Smith", "Paul.Samuelson", "Milton.Friedman"))
 economists
 ```
 
@@ -2505,7 +2653,7 @@ economists
 ```
 
 ```r
-economists %&gt;% separate(name, c("first_name", "last_name")) 
+economists |&gt; separate(name, c("first_name", "last_name"))
 ```
 
 ```
@@ -2525,21 +2673,21 @@ This command is pretty smart. But to avoid ambiguity, you can also specify the s
 
 
 ```r
-gdp &lt;- data.frame(
+gdp = data.frame(
   yr = rep(2016, times = 4),
   mnth = rep(1, times = 4),
   dy = 1:4,
   gdp = rnorm(4, mean = 100, sd = 2)
   )
-gdp 
+gdp
 ```
 
 ```
 ##     yr mnth dy       gdp
-## 1 2016    1  1  99.44572
-## 2 2016    1  2  99.13306
-## 3 2016    1  3  99.47836
-## 4 2016    1  4 101.07084
+## 1 2016    1  1 102.16210
+## 2 2016    1  2  98.96899
+## 3 2016    1  3  99.70125
+## 4 2016    1  4 100.25458
 ```
 
 ---
@@ -2549,36 +2697,36 @@ gdp
 
 ```r
 ## Combine "yr", "mnth", and "dy" into one "date" column
-gdp %&gt;% unite(date, c("yr", "mnth", "dy"), sep = "-")
+gdp |&gt; unite(date, c("yr", "mnth", "dy"), sep = "-")
 ```
 
 ```
 ##       date       gdp
-## 1 2016-1-1  99.44572
-## 2 2016-1-2  99.13306
-## 3 2016-1-3  99.47836
-## 4 2016-1-4 101.07084
+## 1 2016-1-1 102.16210
+## 2 2016-1-2  98.96899
+## 3 2016-1-3  99.70125
+## 4 2016-1-4 100.25458
 ```
 
 ---
 
-# 4) tidyr::unite 
+# 4) tidyr::unite
 
 Note that `unite` will automatically create a character variable:
 
 ```r
-gdp_u &lt;- gdp %&gt;% unite(date, c("yr", "mnth", "dy"), sep = "-") %&gt;% as_tibble()
+gdp_u = gdp |&gt; unite(date, c("yr", "mnth", "dy"), sep = "-") |&gt; as_tibble()
 gdp_u
 ```
 
 ```
-## # A tibble: 4 x 2
+## # A tibble: 4 × 2
 ##   date       gdp
 ##   &lt;chr&gt;    &lt;dbl&gt;
-## 1 2016-1-1  99.4
-## 2 2016-1-2  99.1
-## 3 2016-1-3  99.5
-## 4 2016-1-4 101.
+## 1 2016-1-1 102. 
+## 2 2016-1-2  99.0
+## 3 2016-1-3  99.7
+## 4 2016-1-4 100.
 ```
 
 --
@@ -2587,22 +2735,22 @@ If you want to convert it to something else (e.g. date or numeric) then you will
 
 ---
 
-# 4) tidyr::unite 
+# 4) tidyr::unite
 
 
 ```r
 library(lubridate)
-gdp_u %&gt;% mutate(date = ymd(date))
+gdp_u |&gt; mutate(date = ymd(date))
 ```
 
 ```
-## # A tibble: 4 x 2
+## # A tibble: 4 × 2
 ##   date         gdp
 ##   &lt;date&gt;     &lt;dbl&gt;
-## 1 2016-01-01  99.4
-## 2 2016-01-02  99.1
-## 3 2016-01-03  99.5
-## 4 2016-01-04 101.
+## 1 2016-01-01 102. 
+## 2 2016-01-02  99.0
+## 3 2016-01-03  99.7
+## 4 2016-01-04 100.
 ```
 
 
@@ -3245,21 +3393,20 @@ starwars
 ```
 
 ```
-## # A tibble: 87 x 14
-##    name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-##  1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-##  2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-##  3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-##  4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-##  5 Leia…    150    49 brown      light      brown           19   fema… femin…
-##  6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
-##  7 Beru…    165    75 brown      light      blue            47   fema… femin…
-##  8 R5-D4     97    32 &lt;NA&gt;       white, red red             NA   none  mascu…
-##  9 Bigg…    183    84 black      light      brown           24   male  mascu…
-## 10 Obi-…    182    77 auburn, w… fair       blue-gray       57   male  mascu…
-## # … with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 87 × 14
+##    name               height  mass hair_color    skin_color  eye_color birth_year sex    gender    homeworld species films     vehicles  starships
+##    &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;   &lt;list&gt;    &lt;list&gt;    &lt;list&gt;   
+##  1 Luke Skywalker        172    77 blond         fair        blue            19   male   masculine Tatooine  Human   &lt;chr [5]&gt; &lt;chr [2]&gt; &lt;chr [2]&gt;
+##  2 C-3PO                 167    75 &lt;NA&gt;          gold        yellow         112   none   masculine Tatooine  Droid   &lt;chr [6]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  3 R2-D2                  96    32 &lt;NA&gt;          white, blue red             33   none   masculine Naboo     Droid   &lt;chr [7]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  4 Darth Vader           202   136 none          white       yellow          41.9 male   masculine Tatooine  Human   &lt;chr [4]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+##  5 Leia Organa           150    49 brown         light       brown           19   female feminine  Alderaan  Human   &lt;chr [5]&gt; &lt;chr [1]&gt; &lt;chr [0]&gt;
+##  6 Owen Lars             178   120 brown, grey   light       blue            52   male   masculine Tatooine  Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  7 Beru Whitesun lars    165    75 brown         light       blue            47   female feminine  Tatooine  Human   &lt;chr [3]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  8 R5-D4                  97    32 &lt;NA&gt;          white, red  red             NA   none   masculine Tatooine  Droid   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [0]&gt;
+##  9 Biggs Darklighter     183    84 black         light       brown           24   male   masculine Tatooine  Human   &lt;chr [1]&gt; &lt;chr [0]&gt; &lt;chr [1]&gt;
+## 10 Obi-Wan Kenobi        182    77 auburn, white fair        blue-gray       57   male   masculine Stewjon   Human   &lt;chr [6]&gt; &lt;chr [1]&gt; &lt;chr [5]&gt;
+## # … with 77 more rows
 ```
 
 ---
@@ -3272,10 +3419,10 @@ $$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
 ---
 
 # Using regression packages
- 
+
 Before we begin lets look at the data and see what the relationship looks like:
 .center[
-![](10-slides-r_files/figure-html/unnamed-chunk-37-1.svg)&lt;!-- --&gt;
+![](10-slides-r_files/figure-html/unnamed-chunk-46-1.svg)&lt;!-- --&gt;
 ]
 
 Looks like there's an outlier!
@@ -3284,10 +3431,10 @@ Looks like there's an outlier!
 ---
 
 # Using regression packages
- 
+
 What if we plot it in log units?
 .center[
-![](10-slides-r_files/figure-html/unnamed-chunk-38-1.svg)&lt;!-- --&gt;
+![](10-slides-r_files/figure-html/unnamed-chunk-47-1.svg)&lt;!-- --&gt;
 ]
 
 That dampens the outlier, the positive association is really clear!
@@ -3296,10 +3443,10 @@ That dampens the outlier, the positive association is really clear!
 ---
 
 # Using regression packages
- 
+
 What if we plot it in log units?
 .center[
-![](10-slides-r_files/figure-html/unnamed-chunk-39-1.svg)&lt;!-- --&gt;
+![](10-slides-r_files/figure-html/unnamed-chunk-48-1.svg)&lt;!-- --&gt;
 ]
 
 Here's the best fit line, now let's actually estimate `\(\beta_0, \beta_1\)`
@@ -3354,12 +3501,12 @@ We can clean up the output a bit and get other statistics by piping it to `broom
 
 ```r
 # package_name(formula_here, data = dataframe_here)
-lm(mass ~ height, data = starwars) %&gt;%
+lm(mass ~ height, data = starwars) |&gt;
   broom::tidy()
 ```
 
 ```
-## # A tibble: 2 x 5
+## # A tibble: 2 × 5
 ##   term        estimate std.error statistic p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1 (Intercept)  -13.8     111.       -0.124   0.902
@@ -3395,7 +3542,7 @@ Alternatively: smaller values mean it is more likely that we can reject that `\(
 
 
 ```
-## # A tibble: 2 x 5
+## # A tibble: 2 × 5
 ##   term        estimate std.error statistic p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1 (Intercept)  -13.8     111.       -0.124   0.902
@@ -3418,7 +3565,7 @@ This just comes from our previous example where `\(\beta_1 = \frac{\partial mass
 
 
 ```
-## # A tibble: 2 x 5
+## # A tibble: 2 × 5
 ##   term        estimate std.error statistic p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1 (Intercept)  -13.8     111.       -0.124   0.902
@@ -3429,7 +3576,7 @@ How do we interpret `\(\beta_0\)`, the estimate of the *intercept*?
 
 --
 
-Well, it is just the estimated mass, given someone had zero height: 
+Well, it is just the estimated mass, given someone had zero height:
 `$$\hat{\beta}_0 = \hat{\beta}_0 + \hat{\beta}_1 \times 0$$`
 
 --
@@ -3489,12 +3636,12 @@ Let's run the regression:
 
 ```r
 # package_name(formula_here, data = dataframe_here)
-lm(log(mass) ~ log(height), data = starwars) %&gt;%
+lm(log(mass) ~ log(height), data = starwars) |&gt;
   broom::tidy()
 ```
 
 ```
-## # A tibble: 2 x 5
+## # A tibble: 2 × 5
 ##   term        estimate std.error statistic       p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
 ## 1 (Intercept)    -3.84     1.17      -3.27 0.00181      
@@ -3508,12 +3655,12 @@ lm(log(mass) ~ log(height), data = starwars) %&gt;%
 
 ```r
 # package_name(formula_here, data = dataframe_here)
-lm(log(mass) ~ log(height), data = starwars) %&gt;%
+lm(log(mass) ~ log(height), data = starwars) |&gt;
   broom::tidy()
 ```
 
 ```
-## # A tibble: 2 x 5
+## # A tibble: 2 × 5
 ##   term        estimate std.error statistic       p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
 ## 1 (Intercept)    -3.84     1.17      -3.27 0.00181      
