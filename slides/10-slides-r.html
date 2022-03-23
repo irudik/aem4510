@@ -485,21 +485,30 @@ Use comments to document your logic in `.R` scripts and within `.Rmd` code chunk
 ```r
 # THIS IS A CODE SECTION ----
 # this is a comment
-vibe = "immaculate" # iykyk
+cornell = "big red" 
 ```
 
 --
 
 Comments should be concise and used only when necessary (unlike the comments above)
 
---
+---
+
+# Comments
+
+
+```r
+# THIS IS A CODE SECTION ----
+# this is a comment
+cornell = "big red"
+```
 
 Using at least four trailing dashes (`----`) creates a code section, which simplifies navigation and code folding
-- Also works with trailing equals (`====`) or pound signs (`====`)
+- Also works with trailing equals (`====`) or pound signs (`####`)
 
 --
 
-**Keyboard shortcut:** use `Ctrl/Cmd+Shift+c` in RStudio to (un)comment whole sections of highlighted code
+**Keyboard shortcut:** use `Ctrl/Cmd+/` or `Ctrl/Cmd+Shift+C` in RStudio to (un)comment whole sections of highlighted code
 
 
 ---
@@ -624,7 +633,9 @@ d
 ## 2 2 4
 ```
 
---
+---
+
+# Back to objects
 
 At the same time, you can (usually) convert an object from one type to another
 
@@ -672,7 +683,9 @@ Printing an object directly in the console is often handy
 `View()` is very helpful, and has the same effect as clicking on the object in your RStudio *Environment* pane
 - e.g., Type `View(d)` and hit Enter
 
---
+---
+
+# Ways to learn about objects
 
 Use the `str` command to learn about an object's **str**ucture
 
@@ -802,7 +815,9 @@ my_vector
 ## [1] 1 2 5
 ```
 
---
+---
+
+# Semi-reserved words
 
 What do you think will happen if you type the following?
 
@@ -848,101 +863,6 @@ pi
 --
 
 **Bottom line:** Don't use (semi-)reserved words!
-
----
-
-# Namespace conflicts
-
-Try loading the `dplyr` package in RStudio
-
-```r
-library(dplyr)
-```
-
-What warning gets reported?
-
-    The following objects are masked from ‘package:stats’:
-
-        filter, lag
-
-    The following objects are masked from ‘package:base’:
-
-        intersect, setdiff, setequal, union
-
---
-
-The warning *masked from 'package:X'* is about a **namespace conflict**
-
-Here, both `dplyr` and the `stats` package (which gets loaded automatically when you start R) have functions named `filter` and `lag`
-
----
-
-# Namespace conflicts
-
-Whenever a namespace conflict arises, the most recently loaded package will gain preference
-
-The `filter()` function now refers specifically to the `dplyr` variant
-
---
-
-What if we want the `stats` variant?
-1. Use `stats::filter()`
-2. Assign `filter = stats::filter`
-
----
-
-# Solving namespace conflicts
-
-### 1. Use `package::function()`
-
-Explicitly call a conflicted function from a package using the `package::function()` syntax
-
---
-
-We can also use `::` to clarify the source of a function or dataset in our code
-
-
-```r
-dplyr::starwars # Print the starwars data frame from the dplyr package
-scales::comma(c(1000, 1000000)) # Use the comma function, which comes from the scales package
-```
-
---
-
-The `::` syntax also allows us to call functions without loading the package (as long as it is installed)
-
----
-
-# Solving namespace conflicts
-
-### 2. Assign `function = package::function`
-
-A more permanent option is to assign a conflicted function name to a particular package
-
-```r
-filter = stats::filter # Note the lack of parentheses
-filter = dplyr::filter # Change it back again
-```
-
-???
-
-### General advice
-
-I would generally advocate for the temporary `package::function()` solution.
-
-Another good rule of thumb is that you want to load your most important packages last. (e.g., Load the tidyverse after you've already loaded any other packages.)
-
-Other than that, simply pay attention to any warnings when loading a new package and `?` is your friend if you're ever unsure. (e.g., `?filter` will tell you which variant is being used.)
-- In truth, problematic namespace conflicts are rare. But it's good to be aware of them.
-
-
----
-
-# User-side namespace conflicts
-
-Namespace conflicts don't just arise from loading packages
-
-Users like you and me can (and probably will!) create them through assignment
 
 
 ---
@@ -990,10 +910,13 @@ Try the following in your console to see a more explicit example of indexed outp
 rnorm(n = 50, mean = 0, sd = 1) # take 50 draws from the standard normal distribution
 ```
 
+--
+
+
 ```
-##  [1] -1.41483518 -1.39591993 -1.02013413 -0.13671991  1.18660542  0.80462978  2.33453926 -1.10420607  1.21568002 -1.13151261 -0.12103046  0.34546620  1.09379966  0.70560678 -0.50982841  0.82786513 -0.12755617 -0.82284974  0.73899620
-## [20] -1.93849098 -0.03876197 -0.07471929  0.55791366 -1.83303264 -0.84005486 -0.33578374 -0.44677895  1.07054240  1.75592590 -0.66583994  1.26048726  0.27863227  1.08555987 -0.19758615 -0.82784541  0.03684417  0.49127734  0.85535554
-## [39] -0.83424336 -1.06534754 -0.41584392 -0.58796263 -1.19953677  0.11288369  1.35528075 -0.09053809  0.36907499  0.64991460 -0.91154457  0.96397401
+##  [1] -1.41483518 -1.39591993 -1.02013413 -0.13671991  1.18660542  0.80462978  2.33453926 -1.10420607  1.21568002 -1.13151261 -0.12103046  0.34546620  1.09379966  0.70560678 -0.50982841  0.82786513 -0.12755617 -0.82284974  0.73899620 -1.93849098 -0.03876197 -0.07471929
+## [23]  0.55791366 -1.83303264 -0.84005486 -0.33578374 -0.44677895  1.07054240  1.75592590 -0.66583994  1.26048726  0.27863227  1.08555987 -0.19758615 -0.82784541  0.03684417  0.49127734  0.85535554 -0.83424336 -1.06534754 -0.41584392 -0.58796263 -1.19953677  0.11288369
+## [45]  1.35528075 -0.09053809  0.36907499  0.64991460 -0.91154457  0.96397401
 ```
 
 
@@ -1377,9 +1300,8 @@ tidyverse_packages()
 ```
 
 ```
-##  [1] "broom"         "cli"           "crayon"        "dbplyr"        "dplyr"         "dtplyr"        "forcats"       "googledrive"   "googlesheets4" "ggplot2"       "haven"         "hms"           "httr"          "jsonlite"     
-## [15] "lubridate"     "magrittr"      "modelr"        "pillar"        "purrr"         "readr"         "readxl"        "reprex"        "rlang"         "rstudioapi"    "rvest"         "stringr"       "tibble"        "tidyr"        
-## [29] "xml2"          "tidyverse"
+##  [1] "broom"         "cli"           "crayon"        "dbplyr"        "dplyr"         "dtplyr"        "forcats"       "googledrive"   "googlesheets4" "ggplot2"       "haven"         "hms"           "httr"          "jsonlite"      "lubridate"     "magrittr"     
+## [17] "modelr"        "pillar"        "purrr"         "readr"         "readxl"        "reprex"        "rlang"         "rstudioapi"    "rvest"         "stringr"       "tibble"        "tidyr"         "xml2"          "tidyverse"
 ```
 
 e.g. the **lubridate** package is for working with dates and the **rvest** package is for webscraping
@@ -3422,7 +3344,7 @@ $$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
 
 Before we begin lets look at the data and see what the relationship looks like:
 .center[
-![](10-slides-r_files/figure-html/unnamed-chunk-46-1.svg)&lt;!-- --&gt;
+![](10-slides-r_files/figure-html/unnamed-chunk-45-1.svg)&lt;!-- --&gt;
 ]
 
 Looks like there's an outlier!
@@ -3434,7 +3356,7 @@ Looks like there's an outlier!
 
 What if we plot it in log units?
 .center[
-![](10-slides-r_files/figure-html/unnamed-chunk-47-1.svg)&lt;!-- --&gt;
+![](10-slides-r_files/figure-html/unnamed-chunk-46-1.svg)&lt;!-- --&gt;
 ]
 
 That dampens the outlier, the positive association is really clear!
@@ -3446,7 +3368,7 @@ That dampens the outlier, the positive association is really clear!
 
 What if we plot it in log units?
 .center[
-![](10-slides-r_files/figure-html/unnamed-chunk-48-1.svg)&lt;!-- --&gt;
+![](10-slides-r_files/figure-html/unnamed-chunk-47-1.svg)&lt;!-- --&gt;
 ]
 
 Here's the best fit line, now let's actually estimate `\(\beta_0, \beta_1\)`
