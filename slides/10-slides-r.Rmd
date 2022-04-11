@@ -1949,7 +1949,7 @@ pop_df = tibble(
   i = 3,
   x = rnorm(n_p, mean = 5, sd = 1.5),
   e = rnorm(n_p, mean = 0, sd = 1),
-  y = i + 0.5 * x + e,
+  y = i - 0.5 * x + e,
   row = rep(1:sqrt(n_p), times = sqrt(n_p)),
   col = rep(1:sqrt(n_p), each = sqrt(n_p)),
   s1 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
@@ -1972,13 +1972,15 @@ sim_df = lapply(X = 1:1e3, FUN = function(x, size = n_s) {
 
 # Simple example
 
-Suppose we were only looking at GPA and family income I
+Suppose we were only looking at GPA and pollution (lead/Pb):
+
+$$\text{GPA}_i = \beta_0 + \beta_1 P_i + \varepsilon_i $$
 
 ```{R, ols vs lines 1, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -1986,7 +1988,7 @@ count: false
 # Simple example
 
 
-For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$
 
 ```{R, vs lines 2, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
@@ -2000,7 +2002,7 @@ ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2008,7 +2010,7 @@ count: false
 # Simple example
 
 
-For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can calculate errors: $e_i = y_i - \hat{y}_i$
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
 
 ```{R, ols vs lines 3, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
@@ -2022,7 +2024,7 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, a
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2030,7 +2032,7 @@ count: false
 # Simple example
 
 
-For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can calculate errors: $e_i = y_i - \hat{y}_i$
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
 
 ```{R, ols vs lines 4, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
@@ -2044,7 +2046,7 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, a
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2052,7 +2054,7 @@ count: false
 # Simple example
 
 
-For any line $\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)$, we can calculate errors: $e_i = y_i - \hat{y}_i$
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
 
 ```{R, ols vs lines 5, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
 # Define a function
@@ -2066,7 +2068,7 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, a
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2089,7 +2091,7 @@ geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 scale_color_viridis(option = "cividis", direction = -1) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2112,7 +2114,7 @@ geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#ff0000", size = 2, alpha = 0.9) +
 scale_color_viridis(option = "cividis", direction = -1) +
 theme_empty +
-  labs(y = "GPA", x = "Family Income (10,000s of dollars)")
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2152,14 +2154,13 @@ So $\varepsilon_i$ contains all the determinants of GPA that we aren't explicitl
 
 # OLS properties
 
-OLS has one .hi[very] nice property relevant for this class:<sup>1</sup>.footnote[
-<sup>1</sup> The other is that is has the minimum variance of all unbiased estimators but that's not super important for us.
-]
+OLS has one .hi[very] nice property relevant for this class:
 
 --
 
-.hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
-
+<center>
+  .hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
+</center>
 ---
 
 # OLS properties
@@ -2389,7 +2390,7 @@ Let's repeat this **1,000 times**.
 
 # Population *vs.* sample
 
-```{R, simulation scatter, echo = F, dev = "png", dpi = 300, cache = T, fig.height = 3}
+```{R, simulation scatter, echo = F, dev = "png", dpi = 300, cache = F, fig.height = 3}
 # Reshape sim_df
 line_df = tibble(
   intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
@@ -2413,14 +2414,14 @@ theme_blank
 
 ---
 
-.pull-left[
-```{R, simulation scatter2, echo = F, dev = "png", dpi = 300, cache = T, fig.height = 6, fig.fullwidth = T}
+.pull-left[ 
+```{R fig.fullwidth=T, fig.height=6, cache=FALSE, dev="png", dpi=300, echo=F}
 # Reshape sim_df
 line_df = tibble(
   intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
   slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
-)
-ggplot() +
+) 
+ggplot() + 
 geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
 geom_point(data = pop_df, aes(x = x, y = y), size = 6, color = "darkslategray") +
 geom_abline(
@@ -2569,6 +2570,14 @@ Family income *also* matters for GPA, it is in $\varepsilon_i$, so our assumptio
 
 Children from richer families tend to have higher GPAs
 
+--
+
+Why?
+
+--
+
+Access to tutoring, better schools, parental pressure, etc, etc
+
 ---
 
 # Omitted variable bias
@@ -2581,7 +2590,7 @@ This is because our data on lead exposure is also proxying for income (since $\t
 
 --
 
-So $\hat{beta}_1$ will pick up the effect of both!
+So $\hat{\beta}_1$ will pick up the effect of both!
 
 --
 
