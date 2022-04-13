@@ -2846,50 +2846,50 @@ It's kind of a nonsense interpretation here since no one has zero height
 Generally we don't read too much into the intercept terms
 
 ---
-  
-  # Interpreting coefficient estimates
-  
-  Now, what if we changed our model a bit so it was instead:
-  $$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
-  
-  What does $\beta_1$ mean now?
-  
-  --
-  
-  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)}$$
-  
-  --
-  
-  But we can rewrite this as:
-  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
-  
-  ---
-  
-  # Interpreting coefficient estimates
-  
-  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
-  
-  And this is equal to:
-  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{1}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\text{height}_i}{1}$$
-  
-  --
-  
-  And finally:
-  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\text{height}_i}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}$$
-  
-  which is the definition of the elasticity of mass with respect to height
+
+# Interpreting coefficient estimates
+
+Now, what if we changed our model a bit so it was instead:
+$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
+
+What does $\beta_1$ mean now?
+
+--
+
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)}$$
+
+--
+
+But we can rewrite this as:
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
 
 ---
-  
-  # Interpreting coefficient estimates
-  
-  $$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
-  
-  In a *log-log* model, $\beta_1$ tells us the percent change in mass, given a percent change in height
+
+# Interpreting coefficient estimates
+
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
+
+And this is equal to:
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{1}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\text{height}_i}{1}$$
+
+--
+
+And finally:
+$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\text{height}_i}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}$$
+
+which is the definition of the elasticity of mass with respect to height
+
+---
+
+# Interpreting coefficient estimates
+
+$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
+
+In a *log-log* model, $\beta_1$ tells us the percent change in mass, given a percent change in height
 
 --
   
-  Let's run the regression:
+Let's run the regression:
 
 ```{r}
 # package_name(formula_here, data = dataframe_here)
