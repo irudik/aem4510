@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, janitor
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -668,6 +668,7 @@ name: indexing
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
 
+
 ---
 
 # Indexing
@@ -761,9 +762,9 @@ For example, you can have lists containing:
 The relevance to indexing is that lists require two square brackets `[[]]` to index the parent list item and then the standard `[]` within that parent item. An example might help to illustrate:
 ```{r my_list, cache=T}
 my_list = list(
-  a = "hello",
-  b = c(1,2,3),
-  c = data.frame(x = 1:5, y = 6:10))
+a = "hello",
+b = c(1,2,3),
+c = data.frame(x = 1:5, y = 6:10))
 my_list[[1]] # Return the 1st list object
 my_list[[2]][3] # Return the 3rd element of the 2nd list object
 ```
@@ -1022,7 +1023,7 @@ The pipe operator `|>` lets us perform a sequence of operations in a very nice a
 --
 
 Let's consider a fake example to get the idea for why its really beneficial
-
+                                                                                      
 ---
 
 # Pipes: |>
@@ -1075,13 +1076,13 @@ With pipes we can do everything at once, but have it be .hi[in order]:
 
 ```{r, eval = F}
 me = me |>
-  wake_up() |>
-  get_out_of_bed() |>
-  comb_hair() |>
-  go("downstairs") |>
-  drink("cup") |>
-  grab("hat") |>
-  catch("bus") 
+wake_up() |>
+get_out_of_bed() |>
+comb_hair() |>
+go("downstairs") |>
+drink("cup") |>
+grab("hat") |>
+catch("bus") 
 ```
 
 This makes everything .hi[very intuitive] to read and code!
@@ -1144,9 +1145,9 @@ It performs the operations from left to right, exactly like you'd think of them:
 Pipes are even more readable if we write it over several lines:
 ```{r pipe}
 mpg |>
-  filter(manufacturer=="audi") |>
-  group_by(model) |>
-  summarise(hwy_mean = mean(hwy))
+filter(manufacturer=="audi") |>
+group_by(model) |>
+summarise(hwy_mean = mean(hwy))
 ```
 
 Using vertical space costs nothing and makes for much more readable code
@@ -1224,10 +1225,10 @@ e.g. if you want to run your analysis only on low income areas, or if you want t
 Here we are subsetting the observations of humans that are at least 190cm
 ```{r filter1}
 starwars |>
-  filter(
-    species == "Human",
-    height >= 190
-    )
+filter(
+  species == "Human",
+  height >= 190
+)
 ```
 
 ---
@@ -1237,7 +1238,7 @@ starwars |>
 You can filter using regular expressions with grep-type commands or the `stringr` package
 ```{r filter2}
 starwars |>
-  filter(stringr::str_detect(name, "Skywalker"))
+filter(stringr::str_detect(name, "Skywalker"))
 ```
 
 This subsets the observations for individuals whose names contain "Skywalker"
@@ -1249,7 +1250,7 @@ This subsets the observations for individuals whose names contain "Skywalker"
 A very common `filter` use case is identifying/removing missing data cases:
 ```{r filter3}
 starwars |>
-  filter(is.na(height))
+filter(is.na(height))
 ```
 
 ---
@@ -1416,7 +1417,7 @@ starwars |>
   mutate(
     dog_years = birth_year * 7, ## Separate with a comma
     comment = paste0(name, " is ", dog_years, " in dog years.")
-    )
+  )
 ```
 
 ---
@@ -1487,9 +1488,9 @@ starwars |>
 We can also use `across` within summarise:
 ```{r, summ4}
 starwars |>
-  group_by(species) |> # for each species
-  summarise(across(where(is.numeric), mean, na.rm = T)) |> # take the mean of all numeric variables
-  head(5)
+group_by(species) |> # for each species
+summarise(across(where(is.numeric), mean, na.rm = T)) |> # take the mean of all numeric variables
+head(5)
 ```
 
 ---
@@ -1567,12 +1568,12 @@ When we join, we match up the two datasets on the key, and combine them into one
 --
 
 In our housing example, each row of the joined dataset would now tell us the house price, the county its in, and the county's pollution
-
+                                                        
 
 ---
-
+  
 # dplyr::xxxx_join
-
+  
 We merge data with [join operations](https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html):
 - `inner_join(df1, df2)`
 - `left_join(df1, df2)`
@@ -1582,9 +1583,9 @@ We merge data with [join operations](https://cran.r-project.org/web/packages/dpl
 (You can visualize the operations [here](https://r4ds.had.co.nz/relational-data.html))
 
 ---
-
+  
 # dplyr::xxxx_join
-
+  
 Lets use the data that comes with the the [nycflights13](http://github.com/hadley/nycflights13) package.
 
 ```{r}
@@ -1593,35 +1594,35 @@ flights
 ```
 
 ---
-
+  
 # dplyr::xxxx_join
-
+  
 ```{r}
 planes
 ```
 
 ---
-
+  
 # Joining operations
-
+  
 Let's perform a left join on the flights and planes datasets
 - *Note*: I'm going subset columns after the join, but only to keep text on the slide
 
 --
-
+  
 ```{r join1}
 left_join(flights, planes) |>
   select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, type, model)
 ```
 
 ---
-
+  
 # Joining operations
 
 Note that dplyr made a reasonable guess about which columns to join on (i.e. columns that share the same name), and told us what it chose
 ```
 *## Joining, by = c("year", "tailnum")
-```
+  ```
 
 There's an obvious problem here: the variable `year` does not have a consistent meaning across our joining datasets
 
@@ -1632,7 +1633,7 @@ In one it refers to the *year of flight*, in the other it refers to *year of con
 Luckily, there's an easy way to avoid this problem: try `?dplyr::join`
 
 ---
-
+  
 # Joining operations
 
 You just need to be more explicit in your join call by using the `by = ` argument
@@ -1641,7 +1642,7 @@ left_join(
   flights,
   planes |> rename(year_built = year), ## Not necessary w/ below line, but helpful
   by = "tailnum" ## Be specific about the joining column
-  ) |>
+) |>
   select(year, month, day, dep_time, arr_time, carrier, flight, tailnum, year_built, type, model) |>
   head(3) ## Just to save vertical space on the slide
 ```
@@ -1653,10 +1654,10 @@ left_join(
 Note what happens if we again specify the join column but don't rename the ambiguous `year`:
 ```{r join3}
 left_join(flights,
-          planes, ## Not renaming "year" to "year_built" this time
-          by = "tailnum") |>
-  select(contains("year"), month, day, dep_time, arr_time, carrier, flight, tailnum, type, model) |>
-  head(3)
+planes, ## Not renaming "year" to "year_built" this time
+by = "tailnum") |>
+select(contains("year"), month, day, dep_time, arr_time, carrier, flight, tailnum, type, model) |>
+head(3)
 ```
 
 --
@@ -1693,11 +1694,11 @@ Let's practice these verbs together in class
 
 ```{r pivot_longer1a}
 stocks = data.frame(
-  time = as.Date('2009-01-01') + 0:1,
-  stock_X = rnorm(2, 0, 1),
-  stock_Y = rnorm(2, 0, 2),
-  stock_Z = rnorm(2, 0, 4)
-  )
+time = as.Date('2009-01-01') + 0:1,
+stock_X = rnorm(2, 0, 1),
+stock_Y = rnorm(2, 0, 2),
+stock_Z = rnorm(2, 0, 4)
+)
 stocks
 ```
 
@@ -1739,21 +1740,21 @@ tidy_stocks = stocks |>
 ```
 
 ---
-
-# 2) tidyr::pivot_wider
-
+  
+  # 2) tidyr::pivot_wider
+  
 ```{r pivot_wider1, dependson=tidy_stocks}
 tidy_stocks |> pivot_wider(names_from = stock, values_from = price)
 tidy_stocks |> pivot_wider(names_from = time, values_from = price)
 ```
 
 --
-
-Note that the second example has effectively transposed the data
+  
+  Note that the second example has effectively transposed the data
 ---
-
-# 3) tidyr::separate
-
+  
+  # 3) tidyr::separate
+  
 ```{r sep1}
 economists = data.frame(name = c("Adam.Smith", "Paul.Samuelson", "Milton.Friedman"))
 economists
@@ -1761,36 +1762,36 @@ economists |> separate(name, c("first_name", "last_name"))
 ```
 
 --
-
+  
 This command is pretty smart. But to avoid ambiguity, you can also specify the separation character with `separate(..., sep=".")`
 
 ---
-
-# 4) tidyr::unite
-
+  
+  # 4) tidyr::unite
+  
 ```{r unite1a}
 gdp = data.frame(
   yr = rep(2016, times = 4),
   mnth = rep(1, times = 4),
   dy = 1:4,
   gdp = rnorm(4, mean = 100, sd = 2)
-  )
+)
 gdp
 ```
 
 ---
-
-# 4) tidyr::unite
-
+  
+  # 4) tidyr::unite
+  
 ```{r unite1b}
 ## Combine "yr", "mnth", and "dy" into one "date" column
 gdp |> unite(date, c("yr", "mnth", "dy"), sep = "-")
 ```
 
 ---
-
+  
 # 4) tidyr::unite
-
+  
 Note that `unite` will automatically create a character variable:
 ```{r unite2}
 gdp_u = gdp |> unite(date, c("yr", "mnth", "dy"), sep = "-") |> as_tibble()
@@ -1798,7 +1799,7 @@ gdp_u
 ```
 
 --
-
+  
 If you want to convert it to something else (e.g. date or numeric) then you will need to modify it using `mutate`
 
 ---
@@ -1812,7 +1813,7 @@ gdp_u |> mutate(date = ymd(date))
 
 
 ---
-
+  
 class: inverse, center, middle
 name: tidyverse
 
@@ -1946,15 +1947,15 @@ n_s = 10
 set.seed(12468)
 # Generate data
 pop_df = tibble(
-  i = 3,
-  x = rnorm(n_p, mean = 5, sd = 1.5),
-  e = rnorm(n_p, mean = 0, sd = 1),
-  y = i - 0.5 * x + e,
-  row = rep(1:sqrt(n_p), times = sqrt(n_p)),
-  col = rep(1:sqrt(n_p), each = sqrt(n_p)),
-  s1 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
-  s2 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
-  s3 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s)))
+i = 3,
+x = rnorm(n_p, mean = 5, sd = 1.5),
+e = rnorm(n_p, mean = 0, sd = 1),
+y = i - 0.5 * x + e,
+row = rep(1:sqrt(n_p), times = sqrt(n_p)),
+col = rep(1:sqrt(n_p), each = sqrt(n_p)),
+s1 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
+s2 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
+s3 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s)))
 )
 # Regressions
 lm0 = lm(y ~ x, data = pop_df)
@@ -1964,7 +1965,7 @@ lm3 = lm(y ~ x, data = filter(pop_df, s3 == T))
 # Simulation
 set.seed(12468)
 sim_df = lapply(X = 1:1e3, FUN = function(x, size = n_s) {
-  lm(y ~ x, data = pop_df %>% sample_n(size = size)) %>% tidy()
+lm(y ~ x, data = pop_df %>% sample_n(size = size)) %>% tidy()
 }) %>% do.call(rbind, .) %>% as_tibble()
 ```
 
@@ -1980,7 +1981,7 @@ $$\text{GPA}_i = \beta_0 + \beta_1 P_i + \varepsilon_i $$
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2002,7 +2003,7 @@ ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2024,7 +2025,7 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, a
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2046,7 +2047,7 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, a
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2068,7 +2069,7 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, a
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2091,7 +2092,7 @@ geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
 scale_color_viridis(option = "cividis", direction = -1) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2114,7 +2115,7 @@ geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "#ff0000", size = 2, alpha = 0.9) +
 scale_color_viridis(option = "cividis", direction = -1) +
 theme_empty +
-  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
+labs(y = "GPA", x = "Average Annual Lead Exposure (grams)")
 ```
 
 ---
@@ -2159,7 +2160,7 @@ OLS has one .hi[very] nice property relevant for this class:
 --
 
 <center>
-  .hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
+.hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
 </center>
 ---
 
@@ -2205,8 +2206,8 @@ theme_blank
 ```{R, scatter1, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
-  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-  color = "#3C93DC", size = 3
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = "#3C93DC", size = 3
 ) +
 geom_point(color = "darkslategray", size = 6) +
 theme_blank
@@ -2246,13 +2247,13 @@ theme_blank
 ```{R, sample1 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
-  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-  color = red_pink, size = 3, alpha = 0.3
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = red_pink, size = 3, alpha = 0.3
 ) +
 geom_point(aes(shape = s1), color = "darkslategray", size = 6) +
 geom_abline(
-  intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
-  size = 2, linetype = 2, color = "black"
+intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+size = 2, linetype = 2, color = "black"
 ) +
 scale_shape_manual(values = c(1, 19)) +
 theme_blank
@@ -2294,17 +2295,17 @@ theme_blank
 ```{R, sample2 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
-  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-  color = red_pink, size = 3, alpha = 0.3
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = red_pink, size = 3, alpha = 0.3
 ) +
 geom_point(aes(shape = s2), color = "darkslategray", size = 6) +
 geom_abline(
-  intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
-  size = 2, linetype = 2, color = "black", alpha = 0.3
+intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+size = 2, linetype = 2, color = "black", alpha = 0.3
 ) +
 geom_abline(
-  intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
-  size = 2, linetype = 2, color = "black"
+intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
+size = 2, linetype = 2, color = "black"
 ) +
 scale_shape_manual(values = c(1, 19)) +
 theme_blank
@@ -2344,21 +2345,21 @@ theme_blank
 ```{R, sample3 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
-  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-  color = red_pink, size = 3, alpha = 0.3
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = red_pink, size = 3, alpha = 0.3
 ) +
 geom_point(aes(shape = s3), color = "darkslategray", size = 6) +
 geom_abline(
-  intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
-  size = 2, linetype = 2, color = "black", alpha = 0.3
+intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+size = 2, linetype = 2, color = "black", alpha = 0.3
 ) +
 geom_abline(
-  intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
-  size = 2, linetype = 2, color = "black", alpha = 0.3
+intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
+size = 2, linetype = 2, color = "black", alpha = 0.3
 ) +
 geom_abline(
-  intercept = lm3$coefficients[1], slope = lm3$coefficients[2],
-  size = 2, linetype = 2, color = "black"
+intercept = lm3$coefficients[1], slope = lm3$coefficients[2],
+size = 2, linetype = 2, color = "black"
 ) +
 scale_shape_manual(values = c(1, 19)) +
 theme_blank
@@ -2393,8 +2394,8 @@ Let's repeat this **1,000 times**.
 ```{R, simulation scatter, echo = F, dev = "png", dpi = 300, cache = F, fig.height = 3}
 # Reshape sim_df
 line_df = tibble(
-  intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
-  slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
+intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
+slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
 )
 ggplot() +
 geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.02, color = "darkslategray") +
@@ -2415,21 +2416,21 @@ theme_blank
 ---
 
 .pull-left[ 
-```{R fig.fullwidth=T, fig.height=6, cache=FALSE, dev="png", dpi=300, echo=F}
-# Reshape sim_df
-line_df = tibble(
-  intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
-  slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
-) 
-ggplot() + 
-geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
-geom_point(data = pop_df, aes(x = x, y = y), size = 6, color = "darkslategray") +
-geom_abline(
-  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-  color = "#3C93DC", size = 3
-) +
-theme_blank
-```
+  ```{R fig.fullwidth=T, fig.height=6, cache=FALSE, dev="png", dpi=300, echo=F}
+  # Reshape sim_df
+  line_df = tibble(
+    intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
+    slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
+  ) 
+  ggplot() + 
+    geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
+    geom_point(data = pop_df, aes(x = x, y = y), size = 6, color = "darkslategray") +
+    geom_abline(
+      intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+      color = "#3C93DC", size = 3
+    ) +
+    theme_blank
+  ```
 ]
 
 .pull-right[
@@ -2689,12 +2690,12 @@ $$ mass_i = \beta_0 + \beta_1 height_i + \varepsilon_i $$
 
 Before we begin lets look at the data and see what the relationship looks like:
 .center[
-```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
-ggplot(starwars, aes(x = height, y = mass)) +
-  geom_point(size = 3) +
-  theme_regular +
-  labs(y = "Mass (kg)", x = "Height (cm)")
-```
+  ```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
+  ggplot(starwars, aes(x = height, y = mass)) +
+    geom_point(size = 3) +
+    theme_regular +
+    labs(y = "Mass (kg)", x = "Height (cm)")
+  ```
 ]
 
 Looks like there's an outlier!
@@ -2708,9 +2709,9 @@ What if we plot it in log units?
 .center[
 ```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
 ggplot(starwars, aes(x = log(height), y = log(mass))) +
-  geom_point(size = 3) +
-  theme_regular +
-  labs(y = "Log(Mass) (kg)", x = "Log(Height) (cm)")
+geom_point(size = 3) +
+theme_regular +
+labs(y = "Log(Mass) (kg)", x = "Log(Height) (cm)")
 ```
 ]
 
@@ -2725,10 +2726,10 @@ What if we plot it in log units?
 .center[
 ```{r, echo = F, dev = "svg", dpi = 300, cache = T, fig.height = 4, fig.width = 6, warning = F}
 ggplot(starwars, aes(x = log(height), y = log(mass))) +
-  geom_point(size = 3) +
-  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
-  theme_regular +
-  labs(y = "Log(Mass) (kg)", x = "Log(Height) (cm)")
+geom_point(size = 3) +
+geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
+theme_regular +
+labs(y = "Log(Mass) (kg)", x = "Log(Height) (cm)")
 ```
 ]
 
@@ -2773,7 +2774,7 @@ We can clean up the output a bit and get other statistics by piping it to `broom
 ```{r}
 # package_name(formula_here, data = dataframe_here)
 lm(mass ~ height, data = starwars) |>
-  broom::tidy()
+broom::tidy()
 ```
 
 The coefficient estimates are now in column `estimates`, and we have a few other things
@@ -2785,7 +2786,7 @@ The coefficient estimates are now in column `estimates`, and we have a few other
 ```{r, echo = F}
 # package_name(formula_here, data = dataframe_here)
 starwars1 = lm(mass ~ height, data = starwars) |>
-  broom::tidy()
+broom::tidy()
 ```
 
 The first column gives us our estimates: $\hat{\beta_0}, \hat{\beta}_1$
@@ -2801,7 +2802,7 @@ Smaller values generally mean it is more likely that height has an effect on mas
 --
 
 Alternatively: smaller values mean it is more likely that we can reject that $\beta_1 = 0$
-
+  
 
 ---
 
@@ -2845,55 +2846,55 @@ It's kind of a nonsense interpretation here since no one has zero height
 Generally we don't read too much into the intercept terms
 
 ---
-
-# Interpreting coefficient estimates
-
-Now, what if we changed our model a bit so it was instead:
-$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
-
-What does $\beta_1$ mean now?
-
---
-
-$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)}$$
-
---
-
-But we can rewrite this as:
-$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
+  
+  # Interpreting coefficient estimates
+  
+  Now, what if we changed our model a bit so it was instead:
+  $$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
+  
+  What does $\beta_1$ mean now?
+  
+  --
+  
+  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)}$$
+  
+  --
+  
+  But we can rewrite this as:
+  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
+  
+  ---
+  
+  # Interpreting coefficient estimates
+  
+  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
+  
+  And this is equal to:
+  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{1}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\text{height}_i}{1}$$
+  
+  --
+  
+  And finally:
+  $$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\text{height}_i}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}$$
+  
+  which is the definition of the elasticity of mass with respect to height
 
 ---
-
-# Interpreting coefficient estimates
-
-$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\partial \log(\text{mass}_i)}{\partial \text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\partial \text{height}_i}{\partial \log(\text{height}_i)}$$
-
-And this is equal to:
-$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{1}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}\frac{\text{height}_i}{1}$$
-
---
-
-And finally:
-$$\beta_1 = \frac{\partial \log(\text{mass}_i)}{\partial \log(\text{height}_i)} = \frac{\text{height}_i}{\text{mass}_i}\frac{\partial \text{mass}_i}{\partial \text{height}_i}$$
-
-which is the definition of the elasticity of mass with respect to height
-
----
-
-# Interpreting coefficient estimates
-
-$$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
-
-In a *log-log* model, $\beta_1$ tells us the percent change in mass, given a percent change in height
+  
+  # Interpreting coefficient estimates
+  
+  $$\log(\text{mass}_i) = \beta_0 + \beta_1 \log(\text{height}_i) + \varepsilon_i$$
+  
+  In a *log-log* model, $\beta_1$ tells us the percent change in mass, given a percent change in height
 
 --
-
-Let's run the regression:
+  
+  Let's run the regression:
 
 ```{r}
 # package_name(formula_here, data = dataframe_here)
 lm(log(mass) ~ log(height), data = starwars) |>
-  broom::tidy()
+broom::tidy()
 ```
 
 ---
@@ -2903,7 +2904,354 @@ lm(log(mass) ~ log(height), data = starwars) |>
 ```{r}
 # package_name(formula_here, data = dataframe_here)
 lm(log(mass) ~ log(height), data = starwars) |>
-  broom::tidy()
+broom::tidy()
 ```
 
 A 1% increase in height is associated with a 1.58% increase in mass!
+
+
+---
+
+class: inverse, center, middle
+name: r
+
+# Hands-on pollution education example
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# Real pollution education example
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-alex-nascar.png")
+```
+</center>
+
+---
+
+# Real pollution education example
+
+In .hi[3 hours], one NASCAR race emits more lead than a majority of industrial facilities do in an .hi[entire year]
+
+.center[
+```{r, tri histogram, echo = F, dev = "svg", fig.width = 12, fig.height = 5, warning = FALSE, message = FALSE}
+
+tri <- read_csv("data/TRI_2005_US.csv") %>%
+  as_tibble() %>%
+  filter(str_detect(CHEMICAL, "LEAD")) %>%
+  clean_names() %>%
+  mutate(emissions = log10(x5_1_fugitive_air + x5_2_stack_air)) %>%
+  select(emissions) %>%
+  filter(!is.infinite(emissions))
+
+
+ggplot(tri) +
+  geom_histogram(aes(x = emissions), fill = "#3C93DC", color = "#3C93DC", bins = 50) +
+  geom_vline(xintercept = median(tri$emissions), color = "black", linetype = "dotdash", size = 2) +
+  geom_vline(xintercept = 1.53, color = "#ff0000", size = 2) +
+  geom_vline(xintercept = 1.75, color = "#FFAC0F", linetype = "longdash", size = 2) +
+  geom_vline(xintercept = 6.04, color = "#FFAC0F", linetype = "longdash", size = 2) +
+  annotate("text", size = 6, label = "Median Facility", x = -.2, y = 490) +
+  annotate("text", size = 6, label = "1 NASCAR Race", x = .6, y = 590, color = "#ff0000") +
+  annotate("text", size = 6, label = "1 Airport", x = 2.2, y = 590, color = "#FFAC0F") +
+  annotate("text", size = 6, label = "All Airports", x = 5.3, y = 590, color = "#FFAC0F") +
+  theme_regular +
+  labs(x = "Annual Emissions (pounds)",
+       y = "Number of Industrial Facilities") +
+  coord_cartesian(xlim = c(-4, 6.1)) +
+  scale_x_continuous(breaks = c(-4, -2, 0, 2, 4, 6),
+                     labels = c(.0001, .01, 1, 100, 10000, 1000000))
+```
+]
+
+---
+
+# We will look at Florida
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-florida-map.png")
+```
+</center>
+
+---
+
+# All the data are public, you can look at scores yourself!
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-fcat-site.png")
+```
+</center>
+
+---
+
+# Let's look at the data
+
+```{r, warning = F, results = 'hide'}
+nascar_df = read_csv("data/10-florida-nascar.csv") |> 
+  as_tibble() 
+```
+```{r}
+nascar_df
+```
+
+---
+
+# My sister is in these observations!
+
+```{r}
+nascar_df |> # only keep Saturn Elementary School
+  filter(school_name == "SATURN ELEM")
+```
+
+---
+
+# Let's look at the data
+
+```{r, warning = F}
+summary(nascar_df)
+```
+
+---
+
+# The variables
+
+- .hi[zscore]: the school's score for the average student in terms of standard deviations above or below the state-wide average
+- .hi[nascar lead]: lifetime exposure to lead emissions from NASCAR tracks within 50 miles
+- .hi[nascar lead weighted]: same as .hi[nascar lead], but counts emissions closer to the school more
+- .hi[industrial lead]: lead emissions from industrial sources (e.g. factories) within 50 miles
+- .hi[unemp rate]: the school district's unemployment rate
+- .hi[median income]: the school district's median incoe
+- .hi[num students]: the number of students at the school
+- .hi[school id, school name, grade, and year]: self-explanatory
+
+---
+
+# What does the distribution of scores look like?
+
+```{r}
+hist(nascar_df$zscore)
+```
+
+---
+
+# What about exposure to NASCAR lead
+
+.pull-left[
+```{r}
+hist(nascar_df$nascar_lead)
+```
+]
+.pull-right[
+
+`hist(nascar_df$nascar_lead)` generates a histogram for a variable
+
+Most schools have zero exposure
+
+Some have a lot
+
+Units are 10s of kilograms
+
+]
+
+---
+
+# What about exposure to NASCAR lead
+
+.pull-left[
+```{r}
+hist(nascar_df$nascar_lead_weighted)
+```
+]
+.pull-right[
+Most schools have zero exposure
+
+Some have a lot
+]
+
+---
+
+# What is the association between lead and scores?
+
+.pull-left[
+```{r pure_corr, echo = FALSE, fig.show = 'hide', warning = F}
+ggplot(nascar_df, aes(x = nascar_lead_weighted, y = zscore)) +
+  geom_point(size = 1, color = "darkslategray", alpha = 0.25) +
+  geom_smooth(formula = y ~ x + I(x^2), color = red_pink) +
+  theme_regular +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  labs(
+    y = "Test Score (standard deviations)",
+    x = "Lead Exposure\n(tens of weighted kilograms)"
+  )
+``` 
+
+![negatively correlated](`r knitr::fig_chunk("pure_corr", "png")`)
+]
+
+.pull-right[
+Let's look at the pure correlation between test scores and lead
+
+There's a lot of data so it's kind of hard to see but it appears there's a .hi-red[negative] association: lead is bad for test scores
+
+
+]
+
+
+---
+
+# What is the association between lead and scores?
+
+.pull-left[
+```{r binned, echo = FALSE, fig.show = 'hide', warning = F}
+bin_df = nascar_df |>
+  mutate(nascar_lead_weighted = round(nascar_lead_weighted)) %>%
+  group_by(nascar_lead_weighted) |>
+  summarise(
+    mean_score = mean(zscore)
+  ) |>
+  ungroup()
+
+ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_score)) +
+  geom_point(size = 5, color = "darkslategray") +
+  geom_smooth(formula = y ~ x, color = red_pink, method = "lm", se = FALSE) +
+  theme_regular +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  labs(
+    y = "Test Score (standard deviations)",
+    x = "Lead Exposure\n(tens of weighted kilograms)"
+  )
+``` 
+
+![negatively correlated](`r knitr::fig_chunk("binned", "png")`)
+]
+
+.pull-right[
+
+Lets .hi[bin] the data to see the pattern more clearly
+
+All I'm doing is:
+
+- Rounding lead to the nearest integer
+- Taking the average of test scores for that bin
+- Plot the average scores versus rounded lead
+
+
+]
+
+---
+
+# What is the association between lead and scores?
+
+We can get a better sense by running a regression: 
+$$zscore_{sgy} = \beta_0 + \beta_1 nascar_lead_weighted_{sgy}$$ $(s$ is school, $g$ is grade, $y$ is year)
+
+```{r, eval = F}
+lm(zscore ~ nascar_lead_weighted, nascar_df) |>
+  broom::tidy()
+```
+
+The `broom::tidy()` at the end just makes the results look a bit cleaner on the screen
+
+---
+
+# What is the association between lead and scores?
+
+```{r, eval = F}
+lm(zscore ~ nascar_lead_weighted, nascar_df) |>
+  broom::tidy()
+```
+
+```
+## # A tibble: 2 × 5
+##   term                 estimate 
+##   <chr>               <dbl>      
+## 1 (Intercept)           0.002   
+*## 2 nascar_lead_weighted -0.004   
+```
+
+What does this mean?
+
+An additional 10 kg of lead exposure is associated with a school having an average test score 0.004 standard deviations lower
+
+---
+
+# Do we believe this number?
+
+What's a potential issue with just looking at the raw association?
+
+--
+
+Schools near NASCAR tracks are probably a lot different than schools further away
+
+--
+
+We want to control for things that are potentially correlated with both test scores and being close to NASCAR
+
+--
+
+Two broad important things: lead emissions from other sources, socioeconomic status
+
+---
+
+# Do we believe this number?
+
+```{r, eval = F}
+lm(zscore ~ nascar_lead_weighted + industrial_lead + unemp_rate + median_income, nascar_df) |>
+  broom::tidy()
+```
+```
+## # A tibble: 5 × 5
+##   term                      estimate  
+##   <chr>                        <dbl>  
+## 1 (Intercept)          -0.846     
+*## 2 nascar_lead_weighted -0.0008   (versus -0.004 above)
+## 3 industrial_lead      -0.00000006
+## 4 unemp_rate           -0.640    
+## 5 median_income         0.00002
+```
+
+Controlling for other things matters: new estimate is 1/4 the size
+
+---
+
+# Why did this matter?
+
+.pull-left[
+```{r income, echo = FALSE, fig.show = 'hide', warning = F}
+bin_df = nascar_df |>
+  mutate(nascar_lead_weighted = round(nascar_lead_weighted)) %>%
+  group_by(nascar_lead_weighted) |>
+  summarise(
+    mean_income = mean(median_income)
+  ) |>
+  ungroup()
+
+ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_income)) +
+  geom_point(size = 5, color = "darkslategray") +
+  geom_smooth(formula = y ~ x, color = red_pink, method = "lm", se = FALSE) +
+  theme_regular +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  labs(
+    y = "Median Income (thousands of dollars)",
+    x = "Lead Exposure\n(tens of weighted kilograms)"
+  )
+``` 
+
+![negatively correlated](`r knitr::fig_chunk("income", "png")`)
+]
+
+.pull-right[
+Mainly because places with NASCAR tracks tend to be poorer:
+
+```{r}
+lm(median_income ~ nascar_lead_weighted, nascar_df)
+```
+]

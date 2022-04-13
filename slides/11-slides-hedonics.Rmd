@@ -64,7 +64,7 @@ theme_regular <-
   theme_minimal() +
   theme(
     legend.position = "none",
-    title = element_text(size = 14),
+    title = element_text(size = 24),
     axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
     axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
     panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
@@ -75,28 +75,30 @@ theme_regular <-
 ```
 
 ```{r data}
+# makes sure we all use the same 'random' numbers
 set.seed(1000)
-# Number of houses
 
+# Number of houses
 num_houses <- 1000
 
 house_data <- tibble(
   house_num = seq(from = 1, to = num_houses)
 )
 
-house_data <- house_data %>%
-  as_tibble() %>%
+house_data <- house_data |>
+  as_tibble() |>
   mutate(
-    ozone = exp(rnorm(num_houses))*30,
+    ozone = exp(rnorm(num_houses))*15,
     num_bedrooms = sample(1:4, 1000, replace = TRUE),
     num_bathrooms = sample(seq(1, 3, .5), 1000, replace = TRUE),
     sq_feet = exp(rnorm(num_houses))*1000,
     log_price = 12 + .1*num_bedrooms + .08*num_bathrooms + .0001*sq_feet - .005*ozone + rnorm(1000)*.5,
     price = exp(log_price)
-  ) %>% 
+  ) |> 
   filter(sq_feet > 500)
 
-lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %>% broom::tidy()
+lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) |> 
+  broom::tidy()
 ```
 
 ---
@@ -278,11 +280,11 @@ How do we do it?
 
 # Superfund
 
-But the houses surrounding a remediated site trade in the marketplace
+Recognize that the houses surrounding a remediated site trade in the marketplace
 
 --
 
-This provides one of the most simple and straightforward ways in which to look for estimates of the benefits of a Superfund cleanup: through change in property values
+This provides one of the most simple and straightforward ways in which to look for estimates of the benefits of a Superfund cleanup: .hi[through change in property values]
 
 --
 
@@ -340,7 +342,7 @@ Environmental quality (air quality, noise, etc)
 
 # The hedonic model
 
-Property value approaches are often called .hi-blue[hedonics] because they rely on the hedonic model
+Property value approaches are called .hi-blue[hedonics] because they rely on the hedonic economic model
 
 --
 
@@ -377,7 +379,7 @@ $P$ arises in equilibrium from the interaction of all buyers in sellers in the m
 
 --
 
-Here we will assume the supply of houses is fixed in the short run so the price curve arises from buyer behavior
+Here we will assume the supply of houses is fixed in the short run so the price curve arises solely from buyer behavior
 
 ---
 
@@ -389,13 +391,13 @@ Here we will assume the supply of houses is fixed in the short run so the price 
 logx <- function(x) -x^2 + 4*x + 1
 
 ggplot() +
-  stat_function(fun = logx, color = "#000000", size = 1.5, linetype = "solid") +
+  stat_function(fun = logx, color = "darkslategray", size = 1.5, linetype = "solid") +
   theme_regular +
   labs(x = "Quantity of Environmental good (q)",
        y = "Price of Property ($)",
        title = "The Hedonic Price Curve") +
-  scale_x_continuous(limits = c(0,2)) +
-  scale_y_continuous(limits = c(0,6))
+  scale_x_continuous(limits = c(0,2), breaks = scales::pretty_breaks()) +
+  scale_y_continuous(limits = c(0,6), breaks = scales::pretty_breaks())
 
 ```
 ![higher discount rates mean lower value](`r knitr::fig_chunk("price_fct", "png")`)
@@ -406,6 +408,10 @@ ggplot() +
 The hedonic price curve is $P(x,q)$
 
 It's increasing in q (q is good) but at a decreasing rate (decreasing marginal utility)
+
+This is holding $x$ fixed
+
+Analogous to regular demand curves holding income fixed
 
 ]
 
@@ -420,14 +426,14 @@ It's increasing in q (q is good) but at a decreasing rate (decreasing marginal u
 logx <- function(x) x^2 + -4*x + 5
 
 ggplot() +
-  stat_function(fun = logx, color = "#000000", size = 1.5, linetype = "solid") +
+  stat_function(fun = logx, color = "darkslategray", size = 1.5, linetype = "solid") +
   theme_minimal() +
   theme_regular +
   labs(x = "Quantity of Environmental good (q)",
        y = "Implicit Price of q ($)",
        title = "The Implicit Price Curve") +
-  scale_x_continuous(limits = c(0,1.5)) +
-  scale_y_continuous(limits = c(0,6))
+  scale_x_continuous(limits = c(0,1.5), breaks = scales::pretty_breaks()) +
+  scale_y_continuous(limits = c(0,6), breaks = scales::pretty_breaks())
 
 ```
 ![higher discount rates mean lower value](`r knitr::fig_chunk("implicit_price", "png")`)
@@ -459,7 +465,7 @@ knitr::include_graphics("files/11-woburn.png")
 
 # The hedonic model: consumer's choice problem
 
-Households buy a single property given their budget constraint and their preferences
+Households buy a single property given their budget constraint and their preferences for housing characteristics
 
 --
 
@@ -516,7 +522,7 @@ In the model we are thinking of $P(x,q)$ as the annual .hi-blue[rental rate], no
 
 --
 
-This allows us to mesh more cleanly with annual income and view the problem as static rather than dynamic
+This allows us to mesh more cleanly with annual income and view the problem as an annual choice
 
 --
 
@@ -532,6 +538,10 @@ For homeowners we are basically assuming they rent from themselves every year
 
 $$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, s.t. \,\,\,\,\, y = z + P(x,q)$$
 
+Plug in the constraint for $z$ to get:
+
+$$\max_{x,q} U(x,q,\underbrace{y-P(x,q)}_{z};s)$$
+
 --
 
 The FOCs for this problem are:
@@ -539,20 +549,16 @@ The FOCs for this problem are:
 --
 
 \begin{align}
-  {\partial U \over \partial x_j} =& \lambda {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \\
-  {\partial U \over \partial q} =& \lambda {\partial P \over \partial q} \\
-  {\partial U \over \partial z} =& \lambda 
+  {\partial U \over \partial x_j} =& {\partial U \over \partial z} {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \\
+  {\partial U \over \partial q} =& {\partial U \over \partial z} {\partial P \over \partial q}
 \end{align}
-Where $\lambda$ is the Lagrange multiplier  
-Next, combine the last two FOCs
 
 ---
 
 # The hedonic model: consumer's choice problem
 
 \begin{align}
-  {\partial U \over \partial q} =& \lambda {\partial P \over \partial q} \\
-  {\partial U \over \partial z} =& \lambda 
+  {\partial U \over \partial q} = {\partial U \over \partial z} {\partial P \over \partial q}
 \end{align}
 gives us that
 $${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$
@@ -593,7 +599,7 @@ a household equates their MRS between $q$ and $z$ and the marginal implicit cost
 
 --
 
-®emember the MRS tells us how the household trades off $q$ and $z$ while keeping utility constant
+.hi[Recall from intro/intermediate micro:] the MRS tells us how the household trades off $q$ and $z$ while keeping utility constant
 
 ---
 
@@ -601,11 +607,11 @@ a household equates their MRS between $q$ and $z$ and the marginal implicit cost
 
 $${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$
 
-Recall that $z$ is the numeraire good so we can think of it in terms of dollars
+$z$ is the numeraire good so we can think of it in terms of dollars
 
 --
 
-This means that ${\partial U \over \partial q} \big/ {\partial U \over \partial z}$ is the WTP for $q$, the reduction in income needed to compensate for an additional unit of $q$, while maintaining the same level of utility
+.hi[This means that the MRS is the WTP for] $q$: the reduction in income needed to compensate for an additional unit of $q$, while maintaining the same level of utility
 
 --
 
@@ -616,20 +622,36 @@ Knowledge of the hedonic price curve $P$ is enough to tell us about household WT
 
 # The hedonic model: bid functions
 
-Now let's dive deeper by looking at some reference utility level $\bar{u}$:
+Now let's dive deeper by looking at some reference level of utility $\bar{u}$:
 $$U(x,q,z;s) = \bar{u} \tag{indifference curve}$$
 
 --
 
-Next we will define something called a .hi-blue[bid function] $b(x,q,y,s,\bar{u})$ where:
-$$U(x,q,y -b(x,q,y,s,\bar{u}) ;s) = \bar{u}$$
+This equation just defines some indifference curve
+ 
+--
+
+Next we will define something called a .hi[bid function] $b(x,q,y,s,\bar{u})$
+
+---
+
+# The hedonic model: bid functions
+
+The bid function $b(x,q,y,s,\bar{u})$ is the .hi-red[maximum WTP] of the household for:  
+- A house with characteristics $x,q$
+- Given income $y$ and household characteristics $s$
+- That achieves utility $\bar{u}$
 
 --
 
-The bid function $b$ is the maximum amount the household is willing to pay for:  
-- A house with characteristics $x,q$
-- Given income $y$ and household characteristics $s$
-- And achieving utility $\bar{u}$
+Given this definition, 
+--
+and since $P = WTP$ in markets, 
+--
+we can plug $b$ in for the hedonic price function:
+
+$$U(x,q,y -b(x,q,y,s,\bar{u}) ;s) = \bar{u}$$
+
 
 ---
 
@@ -637,7 +659,13 @@ The bid function $b$ is the maximum amount the household is willing to pay for:
 
 $$U(x,q,y -b(x,q,y,s,\bar{u}) ;s) = \bar{u}$$
 
-Differentiate with respect to $q$ to get:
+--
+
+
+Next, differentiate with respect to $q$ to get:
+
+--
+
 $${\partial U \over \partial q} + {\partial U \over \partial z} {\partial b \over \partial q} = 0$$
 
 --
@@ -647,7 +675,7 @@ $${\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial 
 
 --
 
-The maximum WTP is given by the implicit price curve
+We just proved that the maximum WTP for $q$ is given by how housing prices change in $q$
 
 ---
 
@@ -855,7 +883,7 @@ summary(house_data)
 Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
 ```{r, eval = F}
 ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
-  geom_point(size = 3) +                        # plot points
+  geom_point(size = 3, color = "darkslategray") +                        # plot points
   geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
   theme_regular +                               # apply theme
   labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
@@ -870,7 +898,7 @@ Now let's plot the relationship between log house prices and ozone to see what t
 .center[
 ```{r, echo = F, dev = "svg", fig.height = 4.5, fig.width = 6}
 ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
-  geom_point(size = 3) +                        # plot points
+  geom_point(size = 3, color = "darkslategray") +                        # plot points
   geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
   theme_regular +                               # apply theme
   labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
