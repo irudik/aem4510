@@ -288,11 +288,7 @@ This provides one of the most simple and straightforward ways in which to look f
 
 --
 
-Main idea:
-
---
-
-Take two otherwise very similar houses: one in a neighborhood surrounding a site that has been cleaned up and one in a neighborhood surrounding a site that has not
+Main idea: Take two otherwise very similar houses: one in a neighborhood surrounding a site that has been cleaned up and one in a neighborhood surrounding a site that has not
 
 --
 
@@ -342,7 +338,7 @@ Environmental quality (air quality, noise, etc)
 
 # The hedonic model
 
-Property value approaches are called .hi-blue[hedonics] because they rely on the hedonic economic model
+Property value approaches are called .hi-blue[hedonics]
 
 --
 
@@ -357,6 +353,95 @@ This good is characterized by a set of $J$ property characteristics $x$
 
 It is also characterized by an environmental good $q$
 
+--
+
+Lets get some intuition for how housing markets reveal the value of environmental goods
+
+
+---
+
+# Hedonics intuition: L.O. Taylor, 2003
+
+Imagine the following hypothetical scenario in which there are two identical lakes each with 100 identical homes surrounding them
+
+--
+
+All homes are lakefront, and all the characteristics of the homes themselves, the land, and the neighborhoods are identical across the properties
+
+--
+
+At the current equilibrium price of $200,000 per house, all 200 hundred homes on either lake are equally preferred
+
+---
+
+# Hedonics intuition: L.O. Taylor, 2003
+
+Suppose the clarity on one lake, Lake A, for example, is improved
+
+--
+
+This increases the benefit of buying a Lake A home
+
+--
+
+If prices have not changed, consumers would all want to buy lake A houses
+
+--
+
+.hi[In other words:] at current prices, there is excess demand on Lake A
+
+--
+
+Lake A prices .hi-red[increase] to bring the market back into equilibrium
+
+
+---
+
+# Hedonics intuition: L.O. Taylor, 2003
+
+The new equilibrium price difference is the .hi[implicit price] that consumers are willing to pay for that change in water clarity
+
+--
+
+This WTP for water clarity is directly revealed to us through the market prices of the homes
+
+--
+
+If Lake A houses sell for 210,000, while Lake B houses sell for 200,000, the "implicit price" of increased water clarity is 10,000 dollars
+
+--
+
+.hi[Real world considerations:] 
+--
+houses aren't going to be perfectly comparable, etc
+
+--
+
+.hi[Sidebar:] think about US cities in the last 20 years and urban residential prices
+
+
+---
+
+# Housing prices in Ithaca are increasing .hi[fast], why?
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/11-ithaca-housing-prices-1.png")
+```
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/11-ithaca-prices.png")
+```
+</center>
+
+---
+
+# Another Dyson professor's house
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/11-dyson-home.png")
+```
+</center>
 
 ---
 
@@ -367,7 +452,7 @@ The price of a house is determined by a .hi[hedonic price curve] $P(x,q)$
 
 --
 
-$P$ maps characteristics of the house and local environment to the market value of the home
+$P$ tells us the market value of the home based on its characteristics $x$ and local environmental quality $q$
 
 --
 
@@ -394,13 +479,13 @@ ggplot() +
   stat_function(fun = logx, color = "darkslategray", size = 1.5, linetype = "solid") +
   theme_regular +
   labs(x = "Quantity of Environmental good (q)",
-       y = "Price of Property ($)",
+       y = "Price of Property (100,000 $)",
        title = "The Hedonic Price Curve") +
   scale_x_continuous(limits = c(0,2), breaks = scales::pretty_breaks()) +
   scale_y_continuous(limits = c(0,6), breaks = scales::pretty_breaks())
 
 ```
-![higher discount rates mean lower value](`r knitr::fig_chunk("price_fct", "png")`)
+![hedonic price curves slope up at a decreasing rate](`r knitr::fig_chunk("price_fct", "png")`)
 ]
 
 .pull-right[
@@ -447,7 +532,7 @@ It tells us how the price changes in q
 
 It's positive, but downward sloping
 
-Effectively the q demand curve
+This is effectively the environmental good demand curve
 
 ]
 
@@ -470,13 +555,16 @@ Households buy a single property given their budget constraint and their prefere
 --
 
 Here we will assume that households are effectively just choosing $(x,q)$ instead of a specific house with the following objective:
-$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, s.t. \,\,\,\,\, y = z + P(x,q)$$
+
+--
+
+$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, \underbrace{y = z + P(x,q)}_{\text{budget constraint}}$$
 
 --
 
 - $z$ is the numeraire good (spending on other private goods)
 - $y$ is income
-- $s$ is the set of the household's characteristics like family size
+- $s$ is the set of the household's characteristics like family size, ages, etc
 
 
 ---
@@ -491,11 +579,11 @@ Many housing characteristics are discrete (bedrooms, bathrooms, etc)
 
 --
 
-Another is that you just can't purchase some sets of $x$ (i.e. a huge lot in downtown manhattan with a farm)
+Another is that you just can't purchase some sets of $x$ (i.e. a huge lot in downtown Manhattan with a farm)
 
 --
 
-We won't touch on this in class because it's a bit more complicated, but economists know how to deal with these problems
+We won't touch on this in class because it's a lot more complicated, but economists know how to deal with these problems
 
 
 ---
@@ -536,7 +624,7 @@ For homeowners we are basically assuming they rent from themselves every year
 
 # The hedonic model: consumer's choice problem
 
-$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, s.t. \,\,\,\,\, y = z + P(x,q)$$
+$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, y = z + P(x,q)$$
 
 Plug in the constraint for $z$ to get:
 
@@ -549,8 +637,8 @@ The FOCs for this problem are:
 --
 
 \begin{align}
-  {\partial U \over \partial x_j} =& {\partial U \over \partial z} {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \\
-  {\partial U \over \partial q} =& {\partial U \over \partial z} {\partial P \over \partial q}
+  {\partial U \over \partial x_j} =& {\partial U \over \partial z} {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \tag{house characteristics} \\
+  {\partial U \over \partial q} =& {\partial U \over \partial z} {\partial P \over \partial q} \tag{environmental good}
 \end{align}
 
 ---
@@ -617,6 +705,10 @@ $z$ is the numeraire good so we can think of it in terms of dollars
 
 Knowledge of the hedonic price curve $P$ is enough to tell us about household WTP for $q$!
 
+--
+
+How prices change in the environmental good tells us about WTP
+
 
 ---
 
@@ -637,68 +729,26 @@ Next we will define something called a .hi[bid function] $b(x,q,y,s,\bar{u})$
 
 # The hedonic model: bid functions
 
-The bid function $b(x,q,y,s,\bar{u})$ is the .hi-red[maximum WTP] of the household for:  
+The bid function $b(x,q,y,s,\bar{u})$ is the .hi-red[WTP] of the household for:  
 - A house with characteristics $x,q$
 - Given income $y$ and household characteristics $s$
 - That achieves utility $\bar{u}$
 
---
+By definition how WTP changes in q is the q-z MRS:
 
-Given this definition, 
---
-and since $P = WTP$ in markets, 
---
-we can plug $b$ in for the hedonic price function:
-
-$$U(x,q,y -b(x,q,y,s,\bar{u}) ;s) = \bar{u}$$
-
+$${\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
 
 ---
 
 # The hedonic model: deriving MWTP
 
-$$U(x,q,y -b(x,q,y,s,\bar{u}) ;s) = \bar{u}$$
-
---
-
-
-Next, differentiate with respect to $q$ to get:
-
---
-
-$${\partial U \over \partial q} + {\partial U \over \partial z} {\partial b \over \partial q} = 0$$
-
---
-
-We can then rearrange to get:
-$${\partial b \over \partial q}  = {\partial U \over \partial q}\bigg/{\partial U \over \partial z} = {\partial P \over \partial q}$$
-
---
-
-We just proved that the maximum WTP for $q$ is given by how housing prices change in $q$
-
----
-
-# The hedonic model: deriving MWTP
-
-$$\underbrace{\pi^q(x,q,s,\bar{u})}_{\text{marginal WTP for q}} \equiv {\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
+$${\partial b \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z} = {\partial P \over \partial q}$$
 
 By assuming $q$ is a part of a larger bundle of house characteristics, we are able to characterize its demand through its relationship to the housing market
 
 --
 
-We can then use the bid function (which maps into prices) to understand the marginal WTP for $q$
-
-
----
-
-# The hedonic model: deriving MWTP
-
-$$\underbrace{\pi^q(x,q,s,\bar{u})}_{\text{marginal WTP for q}} \equiv {\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
-
---
-
-Our ultimate empirical goal is to estimate $\pi^q(x,q,s,\bar{u})$, which is a kind of demand curve
+Our ultimate empirical goal is to estimate ${\partial b \over \partial q}$, which is a kind of demand curve
 
 --
 
@@ -754,6 +804,8 @@ ggplot() +
 The red line is the hedonic price function
 
 The blue lines are a single household's bid functions at different reference utility levels
+
+Moving to the bottom-right increases utility
 
 ]
 
@@ -852,6 +904,7 @@ But we don’t know the whole marginal WTP schedule for .hi[that person], why?
 Their bid curve is only tangent at that one point, we don't see their whole bid curve, people don't buy 1,000 houses to trace out the whole curve
 
 
+
 ---
 
 # Estimating the effect of ozone
@@ -909,7 +962,10 @@ ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
 
 # Estimating the effect of ozone
 
-Now it's time to do the regression:
+Now it's time to do the regression (try one out):
+
+--
+
 ```{r}
 lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %>% 
   broom::tidy()
@@ -942,19 +998,15 @@ Because of funding limit, cutoff: HRS > 28.5 cleaned up, HRS < 28.5 are not
 
 --
 
-Some houses were treated, others were not
+Cutoff is .hi[arbitrary] (imposed by congressional budget constraints)
 
 --
 
-Cutoff is arbitrary (imposed by congressional budget constraints)
+Places right below 28.5 probably aren't systematically different than those right above 28.5
 
 --
 
-Unobserved differences between treated and untreated sites are likely to be small
-
---
-
-Minimizes any bias with things that might be correlated with clean up
+.hi[Key idea:] Any differences between housing values in these locations is most likely due to Superfund clean up, not other factors
 
 ---
 
@@ -976,7 +1028,7 @@ What do GG 2008 do?
 --
 
 They regress:
-$$\log(\text{2000 median home price})_c = \theta \underbrace{1(\text{cleaned up in 2000})_c}_{\text{= 1 if true, = 0 otherwise}} + \beta X_c + \varepsilon_{c}$$
+$$\log(\text{2000 median home price})_c = \theta \underbrace{1(\text{cleaned up in 2000})_c}_{\text{= 1 if true, = 0 otherwise}} + \beta \underbrace{X_c}_{\text{controls}} + \varepsilon_{c}$$
 
 --
 
@@ -995,6 +1047,8 @@ $-\theta$ is telling us the .hi-red[cost] of a superfund site to households
 knitr::include_graphics("files/11-superfund-results2.png")
 ```
 </center>
+
+Last three columns are the important ones
 
 ---
 
@@ -1067,57 +1121,7 @@ knitr::include_graphics("files/11-zoom-in.png")
 
 ---
 
-# Hedonics closing intuition: L.O. Taylor, 2003
-
-Imagine the following hypothetical scenario in which there are two identical lakes each with 100 identical homes surrounding them
-
---
-
-All homes are lakefront, and all the characteristics of the homes themselves, the land, and the neighborhoods are identical across the properties
-
---
-
-At the current equilibrium price of $200,000 per house, all 200 hundred homes on either lake are equally preferred
-
----
-
-# Hedonics closing intuition: L.O. Taylor, 2003
-
-Now let’s imagine the clarity on one lake, Lake A, for example, is improved
-
---
-
-Now if any home on Lake A were offered at the original equilibrium price of $200,000, consumers would uniformly prefer this house to any house on Lake B
-
---
-
-In other words, at current prices, there would be excess demand on Lake A, and as such the price of these houses must rise to bring the market into equilibrium
-
----
-
-# Hedonics closing intuition: L.O. Taylor, 2003
-
-The price differential that results from a change in water quality at Lake A is the implicit price that consumers are willing to pay for that incremental increase in water clarity
-
---
-
-This willingness to pay for water clarity is directly revealed to us through the market prices of the homes
-
---
-
-If in the new equilibrium houses on Lake A sell for 210,000, while house on Lake B sell for 200,000, the “implicit price” associated with the increased water clarity is 10,000 dollars
-
----
-
 # Value of a statistical life (VSL)
-
-This is a topic that makes non-economists uncomfortable
-
---
-
-But for policy analysis, there is no way around it
-
---
 
 How much should society spend, at the margin, to save a 'statistical life'?
 
@@ -1131,7 +1135,7 @@ VSL reflects willingness to pay for a reduction in the risk of death
 
 --
 
-VSL is more appropriately called the value of mortality risk
+VSL is more appropriately called the .hi[value of mortality risk]
 
 ---
 
@@ -1191,7 +1195,7 @@ Suppose that individuals are willing to adopt a safety procedure, for which they
 
 --
 
-This translates into 2000*0.25=$500 per year
+This translates into 2000 hours per year $\times$ 0.25 dollars per hour = $500 per year
 
 --
 
@@ -1217,7 +1221,7 @@ $$ w_i = \alpha + \beta_1 H_i  + \beta_2  X_i + \beta_3 p_i H_i + \gamma_1 p_i +
 $w$: wage  
 $H$: worker personal characteristics  
 $X$: job characteristics  
-$p$: risk of death at the job  
+$p$: .hi[risk of death at the job]  
 $q$: non-fatal risk at the job  
 $WC$: workers' compensation benefits for injury  
 
@@ -1227,16 +1231,36 @@ ${\partial w \over \partial p}$ is the wage-risk trade off for marginal changes 
 
 # VSL from the hedonic wage function
 
-Suppose the coefficient on mortality risk was 0.4 where wages were in thousands of dollars and risk is deaths per 10,000 (WTP 400 dollars to reduce risk by 1/10,000)
+Suppose:
+
+- Wages were in thousands of dollars
+- Risk is deaths per 10,000 people
+- Coefficient on mortality risk $p$ is $\gamma_1 = 0.4$
 
 --
 
-This means that:
-$$VSL = (0.4 \times 10,000) \times 1000) = 4 \text{ million dollars}$$
+This implies an average WTP (reduced wage) of 
+--
+400 dollars to reduce risk by 1 in 10,000
+
+
+---
+
+# VSL from the hedonic wage function
+
+WTP (reduced wage) of 400 dollars to reduce risk by 1/10,000
 
 --
 
-Suppose a policy reduces mortality risk by 1/10,000 for 60,000 people
+This means that the VSL is:
+
+--
+ 
+$$VSL = \underbrace{(0.4 \times 1000)}_{\substack{\text{WTP to reduce} \\ \text{risk by 1 in 10000}}} \times 10,000)  = 4 \text{ million dollars}$$
+
+--
+
+Suppose a policy reduces mortality risk by 1/10,000 for 60,000 people (saves 6 lives on average)
 
 --
 
