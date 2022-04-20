@@ -17,8 +17,8 @@ output:
 exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(
-  tidyverse, magrittr, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
+pacman::p_load( 
+  tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf
 )
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -717,7 +717,8 @@ demand_shifts <- map_dfr(names(estimation_df)[1:4],
             mutate(coeff = coefficient) %>% 
             slice(2)
         }
-)
+) |> 
+  select(term, estimate, coeff)
 ```
 
 ---
@@ -728,3 +729,295 @@ demand_shifts <- map_dfr(names(estimation_df)[1:4],
 demand_shifts
 ```
 The estimates column tells us how a change in water clarity (from 0 to 100%), shifts or rotates our demand curve
+
+---
+
+# Real world data: central park
+
+Standard travel cost method is costly
+
+--
+
+Need to survey households
+
+--
+
+This takes time and money
+
+--
+
+What alternatives do we have?
+
+---
+
+# Mobility data from cell phones
+
+.hi[Cell phones] track where people live, go, etc
+
+--
+
+We can use these data to do the travel cost method
+
+--
+
+Same data used by NYT, WaPo, etc for COVID analysis of restaurants, etc
+
+--
+
+Here we will be looking at visits to central park
+
+---
+
+# Mobility data from cell phones
+
+```{r, message = FALSE}
+central_park_data = read_csv("data/12-central-park-phone-data.csv")
+central_park_data
+```
+
+---
+
+# Real world data: central park
+
+The dataframe tells us for each .hi[census block group (CBG)] (600-3000 person locations):
+  - visits per month to a particular location in central park by all cell phones in the CBG
+  - how far the CBG is from the central park location (time and distance)
+  - The median income of the CBG
+  - The median age of the CBG
+  
+```{r, message = FALSE, echo = FALSE}
+central_park_data
+```
+
+---
+
+# Visits by where people live
+
+```{r, echo = FALSE, message = FALSE, fig.align = "center"}
+
+# download block groups geometries from the US Census (the map)
+block_groups_df = map_dfr(state.abb[c(32)], block_groups) |>
+  select(visitor_cbgs = GEOID) |> 
+  st_transform(5070) |> 
+  filter(substr(visitor_cbgs, 1, 2) != "02" & substr(visitor_cbgs, 1, 2) != "15") |>
+  mutate(visitor_cbgs = as.numeric(visitor_cbgs))
+
+# state and county outlines (the map)
+county_sdf <- st_as_sf(map("county", plot = FALSE, fill = TRUE)) |> 
+  st_transform(5070) |>
+  # only keep new york counties
+  filter(substr(ID, 1, 5) == "new y") |>
+  # only keep 4 NYC counties near central park
+  filter(
+      str_detect(ID, "bronx") |
+      str_detect(ID, "new york, new york") |
+      str_detect(ID, "kings") |
+      str_detect(ID, "queens")
+      )
+
+# make the visit data for plotting
+map_plot = central_park_data |> 
+  group_by(visitor_cbgs) |> 
+  summarise(visits = sum(visits, na.rm = T)) |> 
+  inner_join(block_groups_df)
+
+# make the park location
+park_location = central_park_data |> 
+  as_tibble() |> 
+  select(latitude, longitude) |> 
+  distinct() |> 
+  filter(longitude > -140) |> 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |> 
+  st_transform(5070)
+
+# make the map
+ggplot() +
+  # plot the county boundaries
+  geom_sf(data = county_sdf, 
+          col = "#888888", 
+          size = 0.2, 
+          fill = "transparent") +
+  # plot the visit data
+  geom_sf(data = map_plot, 
+          size = 0.05,
+          aes(fill = visits, geometry = geometry)) +
+  # plot the locations in the park that 'count' visits
+  # geom_sf(data = park_location,
+  #         size = 3,
+  #         shape = 4,
+  #         color = "red",
+  #         aes(geometry = geometry)) +
+  scale_fill_viridis_c(option = "magma", trans = "log10", breaks = c(1, 10, 100, 1000, 10000)) +
+  theme_minimal() + 
+  theme(axis.title = element_text(size = 1, color = "#FFFFFF"), 
+        panel.grid = element_blank(),
+        axis.text = element_text(size = 1, color = "#FFFFFF"),
+        legend.position = c(.55, .95),
+        legend.direction = "horizontal",
+        legend.spacing.x = unit(-.05, 'cm'),
+        legend.key.width = unit(3, "cm"),
+        legend.key.height = unit(1, "cm"),
+        legend.text = element_text(size = 18),
+        legend.title = element_text(size = 18)) + 
+  guides(fill = 
+           guide_legend(
+             nrow = 1,
+             label.position = "bottom",
+             title = "Visits   "
+           )
+  ) 
+```
+
+---
+
+# Travel cost estimation with cell data
+
+
+We don't have the exact cost of households going to central park, but we have variables that are a good proxy
+
+--
+
+Estimate a simple travel cost model, what does it tell you (tip: use `feols` instead of `lm`)
+
+--
+
+```{r}
+central_park_demand = feols(
+  log(visits) ~ log(travel_distance_km), 
+  central_park_data
+  ) |>
+  tidy() |>
+  select(term, estimate)
+```
+
+---
+
+# Travel cost estimation with cell data
+
+Regression: `log(visits) ~ log(travel_distance_km)`
+
+```{r}
+central_park_demand
+```
+
+What do the estimates mean?
+
+---
+
+# Visualizing the relationship
+
+.pull-left[
+```{r, echo = FALSE, message = FALSE}
+df <- central_park_data |> 
+  as_tibble() |> 
+  mutate(dist_deciles = ntile(travel_distance_km, 20)) |> 
+  group_by(dist_deciles) |> 
+  summarise(mean_dist = log(mean(travel_distance_km, na.rm = T)),
+            visits = log(mean(visits, na.rm = T)) )
+
+ggplot(data = df, aes(x = mean_dist, y = visits)) +
+  geom_point(size = 2) +
+  geom_smooth(formula = "y~x", method = "lm", se = F) +
+  theme_regular +
+  labs(x = "log(travel distance)",
+       y = "log(visits)") +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  scale_y_continuous(breaks = scales::pretty_breaks())
+```
+]
+
+.pull-right[
+The number of visits decreases in distance
+
+The slope is the elasticity (-0.0593)
+
+A 1 percent increase in distance decreases visits by 0.0593 percent
+
+]
+
+---
+
+# The elasticity and omitted variables
+
+Other things probably affect how far someone lives from central park and how often they visit central park
+
+--
+
+Ideas?
+
+--
+
+New regression controlling for these factors:
+
+```{r}
+central_park_demand = feols(
+  log(visits) ~ log(travel_distance_km) + log(median_income) + log(median_age), 
+  central_park_data
+  ) |>
+  tidy() |>
+  select(term, estimate)
+```
+
+
+---
+
+# The elasticity and omitted variables
+
+```{r, eval = F}
+central_park_demand
+```
+```
+## # A tibble: 4 × 2
+##   term                    estimate
+##   <chr>                      <dbl>
+## 1 (Intercept)               0.578 
+*## 2 log(travel_distance_km)  -0.0252 versus -0.593
+## 3 log(median_income)        0.0858
+## 4 log(median_age)           0.134
+```
+
+The elasticity dropped by two-thirds!
+
+--
+
+Why?
+
+---
+
+# The elasticity and omitted variables
+
+Rich people go to central park more than poorer people
+
+Older people go to central park more than younger people
+
+Where do richer older people tend to live?
+
+
+---
+
+# The elasticity and omitted variables
+
+```{r, message = FALSE}
+feols(log(travel_distance_km) ~ log(median_income), central_park_data) |> tidy()
+feols(log(travel_distance_km) ~ log(median_age), central_park_data) |> tidy()
+```
+
+Richer and older people live closer to central park
+
+---
+
+# The elasticity and omitted variables
+
+Why does this matter?
+
+--
+
+Rich people can afford to live in Manhattan and they also like parks a lot
+
+--
+
+Ignoring this makes it seem like the average person visits a lot less if they live further away
+
+--
+
+But it is just the fact that poorer households tend to live in the outer boroughs of New York and likely cannot afford as many trips as richer households

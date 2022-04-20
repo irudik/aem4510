@@ -32,15 +32,8 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
-pacman::p_load(
-  tidyverse, magrittr, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
+pacman::p_load( 
+  tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf
 )
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -63,8 +56,8 @@ red &lt;- "#ff0000"
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation
+## to update your slides.
 ```
 
 ```r
@@ -157,14 +150,11 @@ name: background
 
 # Should we separate the Great Lakes and Mississippi?
 
-
-```{=html}
-&lt;div class="vembedr" align="center"&gt;
-&lt;div&gt;
-&lt;iframe src="https://www.youtube.com/embed/lIRXDDG6yB8" width="533" height="300" frameborder="0" allowfullscreen=""&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-```
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/lIRXDDG6yB8" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
 
 ---
 
@@ -435,7 +425,7 @@ Suppose we have the following data:
 
 
 ```
-## # A tibble: 5 x 5
+## # A tibble: 5 × 5
 ##   zone   dist   pop  cost   vpp
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 A         2 10000    20    15
@@ -629,7 +619,7 @@ trip_data
 ```
 
 ```
-## # A tibble: 2,600 x 7
+## # A tibble: 2,600 × 7
 ##    house_num  site trips income travel_cost travel_cost_other water_clarity
 ##        &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;             &lt;dbl&gt;         &lt;dbl&gt;
 ##  1         1     1     4 40450.       38.9              16.4          0.506
@@ -676,7 +666,7 @@ site_estimates
 ```
 
 ```
-## # A tibble: 26 x 5
+## # A tibble: 26 × 5
 ##    intercept own_price cross_price    income  site
 ##        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
 ##  1     2.99   -0.0161      0.0106  0.0000321     1
@@ -712,7 +702,7 @@ estimation_df
 ```
 
 ```
-## # A tibble: 26 x 6
+## # A tibble: 26 × 6
 ##    intercept own_price cross_price    income  site water_clarity
 ##        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;
 ##  1     2.99   -0.0161      0.0106  0.0000321     1         0.506
@@ -743,7 +733,8 @@ demand_shifts &lt;- map_dfr(names(estimation_df)[1:4],
             mutate(coeff = coefficient) %&gt;% 
             slice(2)
         }
-)
+) |&gt; 
+  select(term, estimate, coeff)
 ```
 
 ---
@@ -756,15 +747,290 @@ demand_shifts
 ```
 
 ```
-## # A tibble: 4 x 6
-##   term           estimate std.error statistic      p.value coeff      
-##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;      
-## 1 water_clarity 48.0      6.29           7.62 0.0000000733 intercept  
-## 2 water_clarity -0.171    0.0302        -5.67 0.00000770   own_price  
-## 3 water_clarity  0.0241   0.00867        2.78 0.0104       cross_price
-## 4 water_clarity  0.000165 0.0000394      4.18 0.000330     income
+## # A tibble: 4 × 3
+##   term           estimate coeff      
+##   &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;      
+## 1 water_clarity 48.0      intercept  
+## 2 water_clarity -0.171    own_price  
+## 3 water_clarity  0.0241   cross_price
+## 4 water_clarity  0.000165 income
 ```
 The estimates column tells us how a change in water clarity (from 0 to 100%), shifts or rotates our demand curve
+
+---
+
+# Real world data: central park
+
+Standard travel cost method is costly
+
+--
+
+Need to survey households
+
+--
+
+This takes time and money
+
+--
+
+What alternatives do we have?
+
+---
+
+# Mobility data from cell phones
+
+.hi[Cell phones] track where people live, go, etc
+
+--
+
+We can use these data to do the travel cost method
+
+--
+
+Same data used by NYT, WaPo, etc for COVID analysis of restaurants, etc
+
+--
+
+Here we will be looking at visits to central park
+
+---
+
+# Mobility data from cell phones
+
+
+```r
+central_park_data = read_csv("data/12-central-park-phone-data.csv")
+central_park_data
+```
+
+```
+## # A tibble: 22,972 × 13
+##    visitor_cbgs  year month location_name       latitude longitude scaled_visits visits travel_distance… travel_time_min… visits_per_pers…
+##           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+##  1 340030032003  2018     8 Harlem Meer             40.8     -74.0          34.8      4             22.9             29.3           0.0286
+##  2 340030032003  2018     8 Harlem Meer             40.8     -74.0          69.5      8             22.9             29.3           0.0571
+##  3 340030032003  2018     8 Harlem Meer             40.8     -74.0          34.8      4             22.9             29.3           0.0286
+##  4 340030034011  2018    11 Diana Ross Playgro…     40.8     -74.0          59.8      5             25.3             29.4           0.0510
+##  5 340030034011  2019     8 Diana Ross Playgro…     40.8     -74.0          46        4             25.3             29.4           0.0392
+##  6 340030034011  2019    11 Central Park            40.8     -74.0          92.9      8             25.3             29.4           0.0792
+##  7 340030034023  2018     9 East 72nd Street P…     40.8     -74.0         257.      16             22.4             25.9           0.143 
+##  8 340030035002  2018     3 East 72nd Street P…     40.8     -74.0         184.      20             22.2             28.4           0.0873
+##  9 340030035002  2019     5 Cherry Hill Founta…     40.8     -74.0          38.4      4             22.2             28.4           0.0183
+## 10 340030040022  2018     1 Central Park            40.8     -74.0         110.       8             21.1             23.6           0.0748
+## # … with 22,962 more rows, and 2 more variables: median_age &lt;dbl&gt;, median_income &lt;dbl&gt;
+```
+
+---
+
+# Real world data: central park
+
+The dataframe tells us for each .hi[census block group (CBG)] (600-3000 person locations):
+  - visits per month to a particular location in central park by all cell phones in the CBG
+  - how far the CBG is from the central park location (time and distance)
+  - The median income of the CBG
+  - The median age of the CBG
+  
+
+```
+## # A tibble: 22,972 × 13
+##    visitor_cbgs  year month location_name       latitude longitude scaled_visits visits travel_distance… travel_time_min… visits_per_pers…
+##           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+##  1 340030032003  2018     8 Harlem Meer             40.8     -74.0          34.8      4             22.9             29.3           0.0286
+##  2 340030032003  2018     8 Harlem Meer             40.8     -74.0          69.5      8             22.9             29.3           0.0571
+##  3 340030032003  2018     8 Harlem Meer             40.8     -74.0          34.8      4             22.9             29.3           0.0286
+##  4 340030034011  2018    11 Diana Ross Playgro…     40.8     -74.0          59.8      5             25.3             29.4           0.0510
+##  5 340030034011  2019     8 Diana Ross Playgro…     40.8     -74.0          46        4             25.3             29.4           0.0392
+##  6 340030034011  2019    11 Central Park            40.8     -74.0          92.9      8             25.3             29.4           0.0792
+##  7 340030034023  2018     9 East 72nd Street P…     40.8     -74.0         257.      16             22.4             25.9           0.143 
+##  8 340030035002  2018     3 East 72nd Street P…     40.8     -74.0         184.      20             22.2             28.4           0.0873
+##  9 340030035002  2019     5 Cherry Hill Founta…     40.8     -74.0          38.4      4             22.2             28.4           0.0183
+## 10 340030040022  2018     1 Central Park            40.8     -74.0         110.       8             21.1             23.6           0.0748
+## # … with 22,962 more rows, and 2 more variables: median_age &lt;dbl&gt;, median_income &lt;dbl&gt;
+```
+
+---
+
+# Visits by where people live
+
+&lt;img src="12-slides-travel-cost_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Travel cost estimation with cell data
+
+
+We don't have the exact cost of households going to central park, but we have variables that are a good proxy
+
+--
+
+Estimate a simple travel cost model, what does it tell you (tip: use `feols` instead of `lm`)
+
+--
+
+
+```r
+central_park_demand = feols(
+  log(visits) ~ log(travel_distance_km), 
+  central_park_data
+  ) |&gt;
+  tidy() |&gt;
+  select(term, estimate)
+```
+
+```
+## NOTE: 237 observations removed because of infinite values (RHS: 237).
+```
+
+---
+
+# Travel cost estimation with cell data
+
+Regression: `log(visits) ~ log(travel_distance_km)`
+
+
+```r
+central_park_demand
+```
+
+```
+## # A tibble: 2 × 2
+##   term                    estimate
+##   &lt;chr&gt;                      &lt;dbl&gt;
+## 1 (Intercept)               2.10  
+## 2 log(travel_distance_km)  -0.0593
+```
+
+What do the estimates mean?
+
+---
+
+# Visualizing the relationship
+
+.pull-left[
+![](12-slides-travel-cost_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+The number of visits decreases in distance
+
+The slope is the elasticity (-0.0593)
+
+A 1 percent increase in distance decreases visits by 0.0593 percent
+
+]
+
+---
+
+# The elasticity and omitted variables
+
+Other things probably affect how far someone lives from central park and how often they visit central park
+
+--
+
+Ideas?
+
+--
+
+New regression controlling for these factors:
+
+
+```r
+central_park_demand = feols(
+  log(visits) ~ log(travel_distance_km) + log(median_income) + log(median_age), 
+  central_park_data
+  ) |&gt;
+  tidy() |&gt;
+  select(term, estimate)
+```
+
+```
+## NOTE: 2,036 observations removed because of NA and infinite values (RHS: 2,036).
+```
+
+
+---
+
+# The elasticity and omitted variables
+
+
+```r
+central_park_demand
+```
+```
+## # A tibble: 4 × 2
+##   term                    estimate
+##   &lt;chr&gt;                      &lt;dbl&gt;
+## 1 (Intercept)               0.578 
+*## 2 log(travel_distance_km)  -0.0252 versus -0.593
+## 3 log(median_income)        0.0858
+## 4 log(median_age)           0.134
+```
+
+The elasticity dropped by two-thirds!
+
+--
+
+Why?
+
+---
+
+# The elasticity and omitted variables
+
+Rich people go to central park more than poorer people
+
+Older people go to central park more than younger people
+
+Where do richer older people tend to live?
+
+
+---
+
+# The elasticity and omitted variables
+
+
+```r
+feols(log(travel_distance_km) ~ log(median_income), central_park_data) |&gt; tidy()
+```
+
+```
+## # A tibble: 2 × 5
+##   term               estimate std.error statistic p.value
+##   &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)           7.65    0.0942       81.2       0
+## 2 log(median_income)   -0.520   0.00831     -62.6       0
+```
+
+```r
+feols(log(travel_distance_km) ~ log(median_age), central_park_data) |&gt; tidy()
+```
+
+```
+## # A tibble: 2 × 5
+##   term            estimate std.error statistic p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)         5.95    0.0913      65.1       0
+## 2 log(median_age)    -1.15    0.0250     -46.2       0
+```
+
+Richer and older people live closer to central park
+
+---
+
+# The elasticity and omitted variables
+
+Why does this matter?
+
+--
+
+Rich people can afford to live in Manhattan and they also like parks a lot
+
+--
+
+Ignoring this makes it seem like the average person visits a lot less if they live further away
+
+--
+
+But it is just the fact that poorer households tend to live in the outer boroughs of New York and likely cannot afford as many trips as richer households
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
