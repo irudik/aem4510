@@ -1214,7 +1214,7 @@ VSL = $500*10,000 = 5 million dollars
 # Estimating a hedonic wage function
 
 We can estimate a .hi[hedonic wage function:]
-$$ w_i = \alpha + \beta_1 H_i  + \beta_2  X_i + \beta_3 p_i H_i + \gamma_1 p_i + \gamma_2 q_i + \gamma_3 q_i WC_i + \varepsilon_i$$
+$$ w_i = \alpha + \beta_1 H_i  + \beta_2  X_i + \gamma_1 p_i + \gamma_2 q_i + \gamma_3 WC_i + \varepsilon_i$$
 
 --
 
