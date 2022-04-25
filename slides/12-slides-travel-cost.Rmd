@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load( 
-  tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf
+  tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf, vembedr
 )
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -379,7 +379,7 @@ Here's the most basic travel cost model to start
 
 --
 
-- Collect relevant socioeconomic data $(x_i)$ such as income and education for each distance zone
+- Collect relevant socioeconomic data $(s_i)$ such as income and education for each distance zone
 
 --
 
@@ -387,7 +387,7 @@ Here's the most basic travel cost model to start
 
 --
 
-- $t_i = g(tc_i + fee; tc_{si}, x_i) + \varepsilon_i$ where $g$ can be linear
+- $t_i = g(tc_i + fee; tc_{si}, s_i) + \varepsilon_i$ where $g$ can be linear
 
 ---
 
@@ -581,7 +581,7 @@ The multi-site model works as follows
 # Multi-site model
 
 .hi[Step 1:] Do the single-site estimation for each site:
-$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} x_i + \varepsilon_{ij}$$
+$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} s_i + \varepsilon_{ij}$$
 
 --
 
@@ -593,7 +593,7 @@ These $\beta$s tell us the slope $(\beta_{1j})$ and intercept $(\beta_{0j}, \bet
 
 --
 
-$\beta_{2j}, \beta_{3j}$ capture how the cost of substitute sites and household characteristics shift demand up and down
+$\beta_{2j}, \beta_{3j}$ capture how the cost of substitute sites and household characteristics: they shift demand up and down
 
 ---
 
