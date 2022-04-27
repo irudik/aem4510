@@ -752,25 +752,18 @@ Is weather random from our (the economist's) perspective?
 
 --
 
-Sort of: Randomness comes from weather being a random variable drawn from `\(\psi(C_{it})\)`
-
+Sort of
 --
 
 `\(i\)`: We know Ithaca's generally cold in January and warm in July
 
 --
 
-But in Ithaca in January, *there's some randomness in how cold it is, given the climate `\(C_{it}\)`*
-
----
-
-# Alternative explanation for FE in climate economics
-
-`\(t\)`: We know the climate is generally getting warmer across the earth
+But in Ithaca in January, *there's some randomness in how cold it is on any given day relative to long-run average January temperature*
 
 --
 
-But in any given year, *there's some randomness in global temperature, given the climate `\(C_{it}\)`*
+This long-run average temperature/weather is what we call the .hi[climate]: `\(C_{it}\)`
 
 ---
 
@@ -788,17 +781,17 @@ We might think these are as good as random
 
 --
 
-When farmers decide to plant in spring, they can't predict deviations from average weather during the growing season
+When farmers decide to plant in spring, they can't predict deviations from average weather during the summer growing season for any day
 
 --
 
-They appear to be effectively random
+The deviations from average are effectively random from the farmer's perspective
 
 ---
 
 # Weather vs climate
 
-If weather is random, then we can estimate the .hi-blue[marginal effect of weather] `\(c_{it}\)`
+If weather is random, then we can estimate the .hi-blue[marginal effect of weather]
 
 --
 
@@ -806,7 +799,7 @@ Does this help us understand the marginal effect of climate `\(C_{it}\)`?
 
 --
 
-A reasonable guess is that the effect of weather provides an upper bound on the effect of climate change
+One reasonable guess is that the effect of weather provides an upper bound on the effect of climate change
 
 --
 
@@ -816,7 +809,7 @@ Why?
 
 # Weather vs climate
 
-Climate change is a long-run phenomenon: in the long-run we can adapt
+Climate change is a long-run phenomenon: in the long-run we might have more ways to adapt
 
 --
 
@@ -829,6 +822,10 @@ These actions aren't possible on a day to day basis
 --
 
 Estimating the effect of weather is useful then, it tells us how bad climate change might be
+
+--
+
+.hi[Note:] we did see an example earlier for why the bias might go the other way
 
 ---
 
@@ -846,7 +843,8 @@ Why profits?
 
 --
 
-Because farmland values shouldn't change in response to random annual weather shocks (since they're random and transient, not permanent changes)
+Because farmland values shouldn't change in response to random annual weather shocks
+  - Since they're random and transient, not permanent changes, they won't have lasting effects on land values
 
 
 ---
@@ -1194,144 +1192,145 @@ Let's plot the response function and see what we've got
 .center[
 ![](14-slides-climate_files/figure-html/unnamed-chunk-23-1.svg)&lt;!-- --&gt;
 ]
----
 
-# Identifying climate from weather
+&lt;!-- --- --&gt;
 
-Are there cases where the effect of a change in weather tells us the effect of a change in climate?
+&lt;!-- # Identifying climate from weather --&gt;
 
---
+&lt;!-- Are there cases where the effect of a change in weather tells us the effect of a change in climate? --&gt;
 
-Recall, climate affects outcomes through two channels:
+&lt;!-- -- --&gt;
 
---
+&lt;!-- Recall, climate affects outcomes through two channels: --&gt;
 
-1. .hi-red[Direct effect:] The climate during `\(\tau\)` affects the actual weather realizations `\(\mathbf{c}\)` which affects the economy
-2. .hi-blue[Belief effect:] Beliefs `\(\mathbf{b}\)` about `\(\mathbf{C}\)` can affect decisions and economic outcomes regardless of what `\(\mathbf{c}\)` actually happens
+&lt;!-- -- --&gt;
 
----
+&lt;!-- 1. .hi-red[Direct effect:] The climate during `\(\tau\)` affects the actual weather realizations `\(\mathbf{c}\)` which affects the economy --&gt;
+&lt;!-- 2. .hi-blue[Belief effect:] Beliefs `\(\mathbf{b}\)` about `\(\mathbf{C}\)` can affect decisions and economic outcomes regardless of what `\(\mathbf{c}\)` actually happens --&gt;
 
-# Identifying climate from weather
+&lt;!-- --- --&gt;
 
-If there are situations where belief effects are approximately zero,  
-then marginal effect of weather `\(=\)` marginal effect of climate
+&lt;!-- # Identifying climate from weather --&gt;
 
---
+&lt;!-- If there are situations where belief effects are approximately zero,   --&gt;
+&lt;!-- then marginal effect of weather `\(=\)` marginal effect of climate --&gt;
 
-Suppose we're considering a farmer who's maximizing profit:
+&lt;!-- -- --&gt;
 
---
+&lt;!-- Suppose we're considering a farmer who's maximizing profit: --&gt;
 
-`$$\pi_t(x_t; C_t) = \max_{x_t} \mathbb{E}_t \left\{ p^o_t [\alpha(C_{t}) \, x_t(C_t)] - p^i_t x_t(C_t)^2/2  \right\}$$`
+&lt;!-- -- --&gt;
 
-where `\(\pi_t(x_t; C_t)\)` is maximized expected profit, `\(x_t(C_t)\)` is how many acre are planted as a function of the expected climate, `\(p^o_t\)` is the output price, `\(p^i_t\)` is the input price, and `\(\alpha(C_{t})\)` is how climate affects output
+&lt;!-- `$$\pi_t(x_t; C_t) = \max_{x_t} \mathbb{E}_t \left\{ p^o_t [\alpha(C_{t}) \, x_t(C_t)] - p^i_t x_t(C_t)^2/2  \right\}$$` --&gt;
 
----
+&lt;!-- where `\(\pi_t(x_t; C_t)\)` is maximized expected profit, `\(x_t(C_t)\)` is how many acre are planted as a function of the expected climate, `\(p^o_t\)` is the output price, `\(p^i_t\)` is the input price, and `\(\alpha(C_{t})\)` is how climate affects output --&gt;
 
-# Identifying climate from weather
+&lt;!-- --- --&gt;
 
-Suppose we're considering a farmer who's maximizing profit:
-`$$\pi_t(x_t; C_t) = \max_{x_t} \mathbb{E}_t \left\{ p^o_t [\alpha(C_{t}) \, x_t(C_t)] - p^i_t x_t(C_t)^2/2  \right\}$$`
+&lt;!-- # Identifying climate from weather --&gt;
 
---
+&lt;!-- Suppose we're considering a farmer who's maximizing profit: --&gt;
+&lt;!-- `$$\pi_t(x_t; C_t) = \max_{x_t} \mathbb{E}_t \left\{ p^o_t [\alpha(C_{t}) \, x_t(C_t)] - p^i_t x_t(C_t)^2/2  \right\}$$` --&gt;
 
-Let `\(x^*_t(C_t)\)` be the optimal choice of `\(x_t\)` given some climate `\(C_t\)` (i.e. the solution to the maximization problem)
+&lt;!-- -- --&gt;
 
---
+&lt;!-- Let `\(x^*_t(C_t)\)` be the optimal choice of `\(x_t\)` given some climate `\(C_t\)` (i.e. the solution to the maximization problem) --&gt;
 
-We can re-write the problem as:
-`$$\pi_t(x^*_t; C_t) = \mathbb{E}_t \left\{ p^o_t [\alpha(C_{t}) \, x_t^*(C_t)] - p^i_t x_t^*(C_t)^2/2  \right\}$$`
+&lt;!-- -- --&gt;
 
---
+&lt;!-- We can re-write the problem as: --&gt;
+&lt;!-- `$$\pi_t(x^*_t; C_t) = \mathbb{E}_t \left\{ p^o_t [\alpha(C_{t}) \, x_t^*(C_t)] - p^i_t x_t^*(C_t)^2/2  \right\}$$` --&gt;
 
-Now differentiate with respect to `\(C_t\)`
+&lt;!-- -- --&gt;
 
----
+&lt;!-- Now differentiate with respect to `\(C_t\)` --&gt;
 
-# Identifying climate from weather
+&lt;!-- --- --&gt;
 
-Differentiate with respect to `\(C_t\)`:
-`$$\frac{d \pi_t}{d C_t} =
-\mathbb{E}_t \left\{p^o_t \left[\frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) + \alpha(C_{t}) \frac{d x_t^*(C_t)}{d C_t}\right] - p^i_t x_t^*(C_t) \frac{d x_t^*(C_t)}{d C_t}  \right\}$$`
+&lt;!-- # Identifying climate from weather --&gt;
 
---
+&lt;!-- Differentiate with respect to `\(C_t\)`: --&gt;
+&lt;!-- $$\frac{d \pi_t}{d C_t} = --&gt;
+&lt;!-- \mathbb{E}_t \left\{p^o_t \left[\frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) + \alpha(C_{t}) \frac{d x_t^*(C_t)}{d C_t}\right] - p^i_t x_t^*(C_t) \frac{d x_t^*(C_t)}{d C_t}  \right\}$$ --&gt;
 
-Collect terms into direct effects and belief effects:
+&lt;!-- -- --&gt;
 
---
+&lt;!-- Collect terms into direct effects and belief effects: --&gt;
 
-`$$\frac{d \pi_t}{d C_t} =
-\mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) +
-\left[ p^o_t \alpha(C_{t}) - p^i_t x_t^*(C_t) \right] \frac{d x_t^*(C_t)}{d C_t}  \right\}$$`
+&lt;!-- -- --&gt;
 
---
+&lt;!-- $$\frac{d \pi_t}{d C_t} = --&gt;
+&lt;!-- \mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) + --&gt;
+&lt;!-- \left[ p^o_t \alpha(C_{t}) - p^i_t x_t^*(C_t) \right] \frac{d x_t^*(C_t)}{d C_t}  \right\}$$ --&gt;
 
-The first term is the .hi-red[direct effect] while the second is the .hi-blue[belief effect]
+&lt;!-- -- --&gt;
 
----
+&lt;!-- The first term is the .hi-red[direct effect] while the second is the .hi-blue[belief effect] --&gt;
 
-# Identifying climate from weather
+&lt;!-- --- --&gt;
 
-What does the firm's profit-max FOCs tell us about the direct effect?
+&lt;!-- # Identifying climate from weather --&gt;
 
---
+&lt;!-- What does the firm's profit-max FOCs tell us about the direct effect? --&gt;
 
-From the firm's profit maximization problem, 
-`$$\left[ p^o_t \alpha(C_{t}) - p^i_t x_t^*(C_t) \right] = \frac{d\pi(x_t)}{dx} = 0 \text{ at } x^*_t$$`
+&lt;!-- -- --&gt;
 
---
+&lt;!-- From the firm's profit maximization problem,  --&gt;
+&lt;!-- `$$\left[ p^o_t \alpha(C_{t}) - p^i_t x_t^*(C_t) \right] = \frac{d\pi(x_t)}{dx} = 0 \text{ at } x^*_t$$` --&gt;
 
-This gives us that
-`\begin{align}
-  \frac{d \pi_t}{d C_t} =&amp;
-  \mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) +
-  \left[ p^o_t \alpha(C_{t}) - p^i_t x_t^*(C_t) \right] \frac{d x_t^*(C_t)}{d C_t}  \right\}
-   \notag\\
-  =&amp;\mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) \right\} \notag
-\end{align}`
+&lt;!-- -- --&gt;
 
----
+&lt;!-- This gives us that --&gt;
+&lt;!-- \begin{align} --&gt;
+&lt;!--   \frac{d \pi_t}{d C_t} =&amp; --&gt;
+&lt;!--   \mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) + --&gt;
+&lt;!--   \left[ p^o_t \alpha(C_{t}) - p^i_t x_t^*(C_t) \right] \frac{d x_t^*(C_t)}{d C_t}  \right\} --&gt;
+&lt;!--    \notag\\ --&gt;
+&lt;!--   =&amp;\mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) \right\} \notag --&gt;
+&lt;!-- \end{align} --&gt;
 
-# Identifying climate from weather
+&lt;!-- --- --&gt;
 
-`\begin{align}
-  \frac{d \pi_t}{d C_t} = \mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) \right\} \notag
-\end{align}`
+&lt;!-- # Identifying climate from weather --&gt;
 
-All that's left is the .hi-red[direct effect!]
+&lt;!-- \begin{align} --&gt;
+&lt;!--   \frac{d \pi_t}{d C_t} = \mathbb{E}_t \left\{p^o_t \frac{d\alpha(C_{t})}{d C_t} \, x_t^*(C_t) \right\} \notag --&gt;
+&lt;!-- \end{align} --&gt;
 
---
+&lt;!-- All that's left is the .hi-red[direct effect!] --&gt;
 
-This is an application of the **Envelope Theorem**
+&lt;!-- -- --&gt;
 
---
+&lt;!-- This is an application of the **Envelope Theorem** --&gt;
 
-Envelope Theorem:
-&gt; The marginal effect of a parameter (climate) on an optimized objective (profit) is only composed of its direct effect and not secondary effects through changes in choice variables (belief effect)
+&lt;!-- -- --&gt;
 
----
+&lt;!-- Envelope Theorem: --&gt;
+&lt;!-- &gt; The marginal effect of a parameter (climate) on an optimized objective (profit) is only composed of its direct effect and not secondary effects through changes in choice variables (belief effect) --&gt;
 
-# Envelope theorem
+&lt;!-- --- --&gt;
 
-Why is the envelope theorem useful?
+&lt;!-- # Envelope theorem --&gt;
 
---
+&lt;!-- Why is the envelope theorem useful? --&gt;
 
-The direct effect of climate is .hi[just the effect of weather]
+&lt;!-- -- --&gt;
 
---
+&lt;!-- The direct effect of climate is .hi[just the effect of weather] --&gt;
 
-For outcomes that are optimized objectives, the marginal effect of weather is equivalent to the marginal effect of climate!
+&lt;!-- -- --&gt;
 
---
+&lt;!-- For outcomes that are optimized objectives, the marginal effect of weather is equivalent to the marginal effect of climate! --&gt;
 
-This helps us better pin down the effects of climate change on a subset of interesting outcomes on which we may have data:
+&lt;!-- -- --&gt;
 
---
+&lt;!-- This helps us better pin down the effects of climate change on a subset of interesting outcomes on which we may have data: --&gt;
 
-1. Firm profits
-2. Ag land values (discounted stream of profits)
-4. Income
+&lt;!-- -- --&gt;
+
+&lt;!-- 1. Firm profits --&gt;
+&lt;!-- 2. Ag land values (discounted stream of profits) --&gt;
+&lt;!-- 4. Income --&gt;
 
 ---
 
