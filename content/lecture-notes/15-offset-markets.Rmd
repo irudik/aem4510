@@ -1,6 +1,6 @@
 ---
-title: "Environmental Finance"
-linktitle: "LN15: Environmental Finance"
+title: "Offset Markets"
+linktitle: "LN15: Offset Markets"
 date: "`r format(Sys.time())`"
 menu:
   content:
@@ -9,7 +9,7 @@ menu:
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "15-slides-finance"
+slides: "15-slides-offsets"
 output:
   blogdown::html_page:
     toc: false
@@ -21,7 +21,7 @@ This lecture:
 
 TBD
 
-### Slides
+### Slides 
 
 Slides are below. 
 The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.

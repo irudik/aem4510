@@ -101,38 +101,44 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
   - Nordhaus, William D. "[Revisiting the social cost of carbon.](https://www.pnas.org/content/114/7/1518.full)" Proceedings of the National Academy of Sciences 114, no. 7 (2017): 1518-1523.
   - webDICE: http://webdice.rdcep.org/
   
-
-### Environmental finance intro: conservation finance, green bonds, green investing, ESG, offsets
   
-  - [Bloomberg: The ESG Mirage](https://www.bloomberg.com/graphics/2021-what-is-esg-investing-msci-ratings-focus-on-corporate-bottom-line/?ai=eyJpc1N1YnNjcmliZWQiOnRydWUsImFydGljbGVSZWFkIjpmYWxzZSwiYXJ0aWNsZUNvdW50IjowLCJ3YWxsSGVpZ2h0IjoxfQ==)
-  - [World Bank: What You Need to Know About Green Bonds](https://www.worldbank.org/en/news/feature/2021/12/08/what-you-need-to-know-about-ifc-s-green-bonds)
-  - [World Bank: What You Need to Know About Sustainable Development Bonds](https://www.worldbank.org/en/news/feature/2021/09/28/what-you-need-to-know-about-sustainable-development-bonds)
-  - Huwyler, Fabian, Jürg Käppeli, and John Tobin. "Conservation finance from niche to mainstream: The building of an institutional asset class." Credit Suisse Group AG and McKinsey Center for Business and Environment (2016).
-  - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. Financing the response to climate change: The pricing and ownership of US green bonds. No. w25194. National Bureau of Economic Research, 2018.
-  - Heinkel, Robert, Alan Kraus, and Josef Zechner. "The effect of green investment on corporate behavior." Journal of Financial and Quantitative Analysis 36, no. 4 (2001): 431-449.
+### Offset markets
 
-### Environmental finance: climate
+- Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
+- Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
 
-  - [State and Trends of Carbon Pricing 2021](https://openknowledge.worldbank.org/bitstream/handle/10986/35620/9781464817281.pdf?sequence=12&isAllowed=y)
-  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
-  - Dietz, Simon, Christian Gollier, and Louise Kessler. "The climate beta." Journal of Environmental Economics and Management 87 (2018): 258-274.
-  - Painter, Marcus. "An inconvenient cost: The effects of climate change on municipal bonds." Journal of Financial Economics 135, no. 2 (2020): 468-482.
-  - Ilhan, Emirhan, Zacharias Sautner, and Grigory Vilkov. "Carbon tail risk." The Review of Financial Studies 34, no. 3 (2021): 1540-1571.
-  - *Kossoy, Alexandre. State and trends of carbon pricing 2015. World Bank Publications, 2015.*
-  - *Calel, Raphael, Jonathan Colmer, Antoine Dechezlepretre, Matthieu Glachant. Do Carbon Offsets Offset Carbon? (2021).*
 
-### Environmental finance: real estate  
+<!-- ### Environmental finance intro: conservation finance, green bonds, green investing, ESG, offsets -->
 
-  - Baldauf, Markus, Lorenzo Garlappi, and Constantine Yannelis. "Does climate change affect real estate prices? Only if you believe in it." The Review of Financial Studies 33, no. 3 (2020): 1256-1295.
-  - Murfin, Justin, and Matthew Spiegel. "Is the risk of sea level rise capitalized in residential real estate?." The Review of Financial Studies 33, no. 3 (2020): 1217-1255.
-  - *Bakkensen, Laura, and Lint Barrage. "Flood Risk Belief Heterogeneity and Coastal Home Price Dynamics: Going Under Water?" The Review of Financial Studies (2021).*
-  
-### Environmental finance: public finance
+<!--   - [Bloomberg: The ESG Mirage](https://www.bloomberg.com/graphics/2021-what-is-esg-investing-msci-ratings-focus-on-corporate-bottom-line/?ai=eyJpc1N1YnNjcmliZWQiOnRydWUsImFydGljbGVSZWFkIjpmYWxzZSwiYXJ0aWNsZUNvdW50IjowLCJ3YWxsSGVpZ2h0IjoxfQ==) -->
+<!--   - [World Bank: What You Need to Know About Green Bonds](https://www.worldbank.org/en/news/feature/2021/12/08/what-you-need-to-know-about-ifc-s-green-bonds) -->
+<!--   - [World Bank: What You Need to Know About Sustainable Development Bonds](https://www.worldbank.org/en/news/feature/2021/09/28/what-you-need-to-know-about-sustainable-development-bonds) -->
+<!--   - Huwyler, Fabian, Jürg Käppeli, and John Tobin. "Conservation finance from niche to mainstream: The building of an institutional asset class." Credit Suisse Group AG and McKinsey Center for Business and Environment (2016). -->
+<!--   - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. Financing the response to climate change: The pricing and ownership of US green bonds. No. w25194. National Bureau of Economic Research, 2018. -->
+<!--   - Heinkel, Robert, Alan Kraus, and Josef Zechner. "The effect of green investment on corporate behavior." Journal of Financial and Quantitative Analysis 36, no. 4 (2001): 431-449. -->
 
-  - Jerch, Rhiannon, Matthew E. Kahn, and Gary C. Lin. Local Public Finance Dynamics and Hurricane Shocks. No. w28050. National Bureau of Economic Research, 2020.
-  - Deryugina, Tatyana. "The fiscal cost of hurricanes: Disaster aid versus social insurance." American Economic Journal: Economic Policy 9, no. 3 (2017): 168-98.
-  - Jha, Akshaya, Stephen A. Karolyi, and Nicholas Z. Muller. Polluting Public Funds: The Effect of Environmental Regulation on Municipal Bonds. No. w28210. National Bureau of Economic Research, 2020.
-  - Goldsmith-Pinkham, Paul S., Matthew Gustafson, Ryan Lewis, and Michael Schwert. "Sea level rise exposure and municipal bond yields." (2021).
+<!-- ### Environmental finance: climate -->
+
+<!--   - [State and Trends of Carbon Pricing 2021](https://openknowledge.worldbank.org/bitstream/handle/10986/35620/9781464817281.pdf?sequence=12&isAllowed=y) -->
+<!--   - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/) -->
+<!--   - Dietz, Simon, Christian Gollier, and Louise Kessler. "The climate beta." Journal of Environmental Economics and Management 87 (2018): 258-274. -->
+<!--   - Painter, Marcus. "An inconvenient cost: The effects of climate change on municipal bonds." Journal of Financial Economics 135, no. 2 (2020): 468-482. -->
+<!--   - Ilhan, Emirhan, Zacharias Sautner, and Grigory Vilkov. "Carbon tail risk." The Review of Financial Studies 34, no. 3 (2021): 1540-1571. -->
+<!--   - *Kossoy, Alexandre. State and trends of carbon pricing 2015. World Bank Publications, 2015.* -->
+<!--   - *Calel, Raphael, Jonathan Colmer, Antoine Dechezlepretre, Matthieu Glachant. Do Carbon Offsets Offset Carbon? (2021).* -->
+
+<!-- ### Environmental finance: real estate   -->
+
+<!--   - Baldauf, Markus, Lorenzo Garlappi, and Constantine Yannelis. "Does climate change affect real estate prices? Only if you believe in it." The Review of Financial Studies 33, no. 3 (2020): 1256-1295. -->
+<!--   - Murfin, Justin, and Matthew Spiegel. "Is the risk of sea level rise capitalized in residential real estate?." The Review of Financial Studies 33, no. 3 (2020): 1217-1255. -->
+<!--   - *Bakkensen, Laura, and Lint Barrage. "Flood Risk Belief Heterogeneity and Coastal Home Price Dynamics: Going Under Water?" The Review of Financial Studies (2021).* -->
+
+<!-- ### Environmental finance: public finance -->
+
+<!--   - Jerch, Rhiannon, Matthew E. Kahn, and Gary C. Lin. Local Public Finance Dynamics and Hurricane Shocks. No. w28050. National Bureau of Economic Research, 2020. -->
+<!--   - Deryugina, Tatyana. "The fiscal cost of hurricanes: Disaster aid versus social insurance." American Economic Journal: Economic Policy 9, no. 3 (2017): 168-98. -->
+<!--   - Jha, Akshaya, Stephen A. Karolyi, and Nicholas Z. Muller. Polluting Public Funds: The Effect of Environmental Regulation on Municipal Bonds. No. w28210. National Bureau of Economic Research, 2020. -->
+<!--   - Goldsmith-Pinkham, Paul S., Matthew Gustafson, Ryan Lewis, and Michael Schwert. "Sea level rise exposure and municipal bond yields." (2021). -->
 
 ### Pollution and health
 
