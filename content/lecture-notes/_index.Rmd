@@ -85,22 +85,22 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
   - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Concern 50 (2007): 1-500.
 
-### Climate change science
+<!-- ### Climate change science -->
 
-  - Hsiang, Solomon, and Robert E. Kopp. "[An economist's guide to climate change science.](https://www.aeaweb.org/articles?id=10.1257%2Fjep.32.4.3)" Journal of Economic Perspectives 32, no. 4 (2018): 3-32.
-  - Good resource on doing climate-econ research: [ClimateEstimate.net](https://climateestimate.net/getting-started)
+<!--   - Hsiang, Solomon, and Robert E. Kopp. "[An economist's guide to climate change science.](https://www.aeaweb.org/articles?id=10.1257%2Fjep.32.4.3)" Journal of Economic Perspectives 32, no. 4 (2018): 3-32. -->
+<!--   - Good resource on doing climate-econ research: [ClimateEstimate.net](https://climateestimate.net/getting-started) -->
 
-### Climate change impacts: agriculture
+<!-- ### Climate change impacts: agriculture -->
 
-  - Mendelsohn, Robert, William D. Nordhaus, and Daigee Shaw. ["The impact of global warming on agriculture: a Ricardian analysis."](https://www.jstor.org/stable/pdf/2118029.pdf?casa_token=SgxWWSNDCrkAAAAA:KOQRexQyxDm-upRuB2klSFOhd73U4siWac5HdgYkXIBJbabt4kYXohFXIz0SkusR-F_w_sHb7gfEWYyurJpK0DqPqphPb1zstx2e1drXlUGwRRrC9Nc) American Economic Review (1994): 753-771.
-  - Deschênes, Olivier, and Michael Greenstone. "The economic impacts of climate change: evidence from agricultural output and random fluctuations in weather." American Economic Review 97, no. 1 (2007): 354-385.
-  - *Ortiz‐Bobea, Ariel. ["The role of nonfarm influences in Ricardian estimates of climate change impacts on US agriculture."](https://onlinelibrary.wiley.com/doi/pdf/10.1093/ajae/aaz047?casa_token=BiuedqaJzyEAAAAA:sAN63shhKgC1EzikS__FpU0duPuTy5HF6cNvrMJC9rqgeCngM9hDIv225lGSQpgyG_cYZyUKlf4Y-w) American Journal of Agricultural Economics 102, no. 3 (2020): 934-959.*
+<!--   - Mendelsohn, Robert, William D. Nordhaus, and Daigee Shaw. ["The impact of global warming on agriculture: a Ricardian analysis."](https://www.jstor.org/stable/pdf/2118029.pdf?casa_token=SgxWWSNDCrkAAAAA:KOQRexQyxDm-upRuB2klSFOhd73U4siWac5HdgYkXIBJbabt4kYXohFXIz0SkusR-F_w_sHb7gfEWYyurJpK0DqPqphPb1zstx2e1drXlUGwRRrC9Nc) American Economic Review (1994): 753-771. -->
+<!--   - Deschênes, Olivier, and Michael Greenstone. "The economic impacts of climate change: evidence from agricultural output and random fluctuations in weather." American Economic Review 97, no. 1 (2007): 354-385. -->
+<!--   - *Ortiz‐Bobea, Ariel. ["The role of nonfarm influences in Ricardian estimates of climate change impacts on US agriculture."](https://onlinelibrary.wiley.com/doi/pdf/10.1093/ajae/aaz047?casa_token=BiuedqaJzyEAAAAA:sAN63shhKgC1EzikS__FpU0duPuTy5HF6cNvrMJC9rqgeCngM9hDIv225lGSQpgyG_cYZyUKlf4Y-w) American Journal of Agricultural Economics 102, no. 3 (2020): 934-959.* -->
 
-### The integrated assessment of climate change
+<!-- ### The integrated assessment of climate change -->
 
-  - Nordhaus, William D. "[Revisiting the social cost of carbon.](https://www.pnas.org/content/114/7/1518.full)" Proceedings of the National Academy of Sciences 114, no. 7 (2017): 1518-1523.
-  - webDICE: http://webdice.rdcep.org/
-  
+<!--   - Nordhaus, William D. "[Revisiting the social cost of carbon.](https://www.pnas.org/content/114/7/1518.full)" Proceedings of the National Academy of Sciences 114, no. 7 (2017): 1518-1523. -->
+<!--   - webDICE: http://webdice.rdcep.org/ -->
+
   
 ### Offset markets
 
@@ -140,8 +140,8 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 <!--   - Jha, Akshaya, Stephen A. Karolyi, and Nicholas Z. Muller. Polluting Public Funds: The Effect of Environmental Regulation on Municipal Bonds. No. w28210. National Bureau of Economic Research, 2020. -->
 <!--   - Goldsmith-Pinkham, Paul S., Matthew Gustafson, Ryan Lewis, and Michael Schwert. "Sea level rise exposure and municipal bond yields." (2021). -->
 
-### Pollution and health
+<!-- ### Pollution and health -->
 
-  - Mixtape: [difference-in-differences](https://mixtape.scunning.com/ch8.html)
-  - Hollingsworth, Alex, and Ivan Rudik. "[The effect of leaded gasoline on elderly mortality: Evidence from regulatory exemptions.](https://osf.io/preprints/socarxiv/rdy6g/)" American Economic Journal: Economic Policy (2021).
-  - *Deryugina, Tatyana, Garth Heutel, Nolan H. Miller, David Molitor, and Julian Reif. "[The mortality and medical costs of air pollution: Evidence from changes in wind direction.](http://www.julianreif.com/research/reif.aer.2019.pollution.pdf)" American Economic Review 109, no. 12 (2019): 4178-4219.*
+<!--   - Mixtape: [difference-in-differences](https://mixtape.scunning.com/ch8.html) -->
+<!--   - Hollingsworth, Alex, and Ivan Rudik. "[The effect of leaded gasoline on elderly mortality: Evidence from regulatory exemptions.](https://osf.io/preprints/socarxiv/rdy6g/)" American Economic Journal: Economic Policy (2021). -->
+<!--   - *Deryugina, Tatyana, Garth Heutel, Nolan H. Miller, David Molitor, and Julian Reif. "[The mortality and medical costs of air pollution: Evidence from changes in wind direction.](http://www.julianreif.com/research/reif.aer.2019.pollution.pdf)" American Economic Review 109, no. 12 (2019): 4178-4219.* -->
