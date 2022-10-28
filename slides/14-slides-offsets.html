@@ -35,17 +35,10 @@ class: center, middle, inverse, title-slide
 
 ---
 
-exclude: true
+exclude: true 
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork
 )
@@ -67,8 +60,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0.
+## Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -674,9 +667,17 @@ name: in-practice
 
 The .hi[Clean Development Mechanism (CDM)] is the largest carbon offset program on the planet
   - Established in 1997 under Kyoto Protocol
-  - Let developed countries meet Kyoto targets by developing or financing emission reduction projects in developing countries
+  - Lets developed countries meet Kyoto targets by developing or financing emission reduction projects in developing countries
 
 --
+
+CDM is projected to issue 12 billion offsets by 2030
+   - Equivalent to current emissions of US and Europe combined
+
+
+---
+
+# The Clean Development Mechanism (CDM)
 
 How does it work?
 
@@ -686,9 +687,170 @@ UN issues .hi[certified emissions reductions (CER)] credits to approved projects
   - One CER (offset) is one avoided ton of CO&lt;sub&gt;2&lt;/sub&gt;
   - CERs can then be sold to developed country firms
   
+--
+
+Projects are evaluated for .hi[additionality] by national governments and the CDM executive board
+
+--
+
+How does this evaluation work?
+
 ---
 
-# The Clean Development Mechanism (CDM)
+# Evaluating CDM additionality: wind projects
+
+For renewables the evaluation goes like this:
+
+1. Calculate internal rate of return with and without CER credit revenues
+--
+
+2. If IRR with CER revenues `\(&gt;\)` some benchmark rate .hi[and] IRR without CER revenues `\(&lt;\)` that benchmark rate then the project is deemed .hi[additional]
+--
+
+3. CER revenues are calculated (typically) using a weighted-average of emissions per unit of electricity in the region
+  - Implicitly assuming that the new project is replacing the same amount of average local generating capacity (business as usual emissions)
+  
+--
+
+Let's think through potential issues with this approach to evaluating additionality
+
+
+---
+
+# Evaluating CDM additionality: wind projects
+
+What are some potential issues?
+  - i.e. why might this lead us to misclassify projects as additional or not
+  
+--
+
+Evaluating IRRs is hard!
+--
+
+  - Need to make subjective judgments on future revenues
+--
+
+  - Developers often don't provide data to defend their calculations
+  
+--
+  
+  
+---
+
+# Evaluating CDM additionality: wind projects
+
+What are some potential issues?
+  - i.e. why might this lead us to misclassify projects as additional or not
+  
+--
+
+It is making big assumptions about the emissions being displaced
+--
+
+  - Is the average power plant the one being displaced by the new project today?
+--
+
+  - Should we expect emissions to be the same in the future?
+  
+
+Let's see how well the CDM worked in India: Calel et al. (2022)
+
+---
+
+# Evaluating CDM additionality: wind projects
+
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-cdm-trends.png" width="575px" /&gt;
+&lt;/div&gt; 
+
+Half of projects generated CERs (~50 million total expected CERs)
+
+20x'ed the size of India's wind capacity
+
+Wind is an area where CDM was expected to work well
+  - Easy target: Chinese/Russian firms manufactured HFC-23 just to destroy it to get CERs
+  
+  
+---
+
+# Evaluating CDM additionality: wind projects
+
+Calel et al. do not try to find all non-additional / inframarginal projects
+
+They do something much easier: 
+--
+look for what they call blatantly inframarginal projects (.hi[BLIMPS])
+
+--
+
+These are projects that are obviously not additional based on observable data
+
+---
+
+# Evaluating CDM additionality: wind projects
+
+.hi[Main idea:]
+
+Suppose there are two wind projects `\(X\)` and `\(Y\)` and `\(Y\)` has a bigger expected return than `\(X\)`
+
+--
+
+If `\(X\)` is built without any CER revenues, then `\(Y\)` must not be additional
+
+--
+
+What they do is go through each CDM project and try to find a clearly "better" project that was built without any CER payments
+  - "Better" is bigger, and windier, and closer to a connection point
+  
+---
+
+# India is BLIMP-city (i.e. SUPER not additional)
+
+&lt;img src="files/15-blimps.png" width="1200px" /&gt;
+
+
+Half of the projects, capacity, and offsets in India are BLIMPs
+
+---
+
+# How bad is it?
+
+The CDM approach for determining additionality seems to be poor
+
+Half the emissions reductions were from projects that were more profitable than existing non-CDM projects: they were going to be built even without the CDM
+
+--
+
+Lets compare this against a lottery: randomly assigning CDM-approved status, holding fixed the total number of CDM projects
+
+--
+
+This is a conservative benchmark, isn't even trying to target additional projects
+
+
+---
+
+# How bad is it? Bad
+
+.center[
+&lt;img src="files/15-blimp-lottery.png" width="800px" /&gt;
+]
+
+87% of the time a lottery generates fewer BLIMP projects
+
+99% of the time the lottery subsidizes less BLIMP capacity and CERs
+
+
+
+---
+
+# CDM takeaways
+
+The current way we do CDM in India is not good
+  - 653 out of 666 proposed projects were approved for CDM
+  
+We need to be very thoughtful about how we allocate valuable funding if we want it to have a real impact
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
