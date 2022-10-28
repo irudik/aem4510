@@ -1,5 +1,5 @@
 ---
-title: "Lecture 15"
+title: "Lecture 14"
 subtitle: "Offset Markets"
 author: Ivan Rudik
 date: AEM 4510
@@ -109,7 +109,7 @@ This can reduce costs since it doesn't really matter *where* we reduce carbon em
 
 <div style= "float:right;position: relative;">
 ```{r, out.width = "575px", echo = FALSE}
-knitr::include_graphics("files/15-offset-market-size.png")
+knitr::include_graphics("files/14-offset-market-size.png")
 ```
 </div> 
 
@@ -148,7 +148,7 @@ The avoided emissions from burned trees (1) or absorbed carbon (2) are the .hi[c
 
 .center[
 ```{r, out.width = "70%", fig.pos="l", echo = FALSE}
-knitr::include_graphics("files/15-how-many-trees.png")
+knitr::include_graphics("files/14-how-many-trees.png")
 ```
 ]
 
@@ -1016,7 +1016,7 @@ Let's see how well the CDM worked in India: Calel et al. (2022)
 
 <div style= "float:right;position: relative;">
 ```{r, out.width = "575px", echo = FALSE}
-knitr::include_graphics("files/15-cdm-trends.png")
+knitr::include_graphics("files/14-cdm-trends.png")
 ```
 </div> 
 
@@ -1064,7 +1064,7 @@ What they do is go through each CDM project and try to find a clearly "better" p
 # India is BLIMP-city (i.e. SUPER not additional)
 
 ```{r, out.width = "1200px", echo = FALSE}
-knitr::include_graphics("files/15-blimps.png")
+knitr::include_graphics("files/14-blimps.png")
 ```
 
 
@@ -1093,7 +1093,7 @@ This is a conservative benchmark, isn't even trying to target additional project
 
 .center[
 ```{r, out.width = "800px", echo = FALSE}
-knitr::include_graphics("files/15-blimp-lottery.png")
+knitr::include_graphics("files/14-blimp-lottery.png")
 ```
 ]
 
