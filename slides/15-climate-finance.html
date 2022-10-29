@@ -39,6 +39,13 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork
 )
@@ -60,8 +67,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0.
-## Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
+## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
 ```
 
 ---
@@ -70,6 +77,232 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 
 1. Quick overview on financial instruments
 2. What can they tell us about climate change?
+
+
+---
+
+class: inverse, center, middle
+name: overview
+
+# Quick overview on financial instruments
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# The idea behind this part of class
+
+The two pieces of the formula for the first half of class are .hi-blue[MAC] and .hi[MD]
+
+--
+
+If we know both of these quantities we have a good sense of what we should be doing about climate change
+
+--
+
+Measuring MAC and MD can be quite hard (think about why)
+
+--
+
+What we will see is financial markets contain the information we need to learn about MAC and MD
+  - Stock markets and prediction markets: MAC
+  - Options and bond markets: MD
+  
+---
+
+# Prediction markets
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-predict-it.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+Prediction markets are where traders bet on binary outcomes
+
+--
+
+Will Republicans win the senate?
+
+--
+
+How does it work?
+
+---
+
+# Prediction markets
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-predict-it.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+You can buy a share (asset) for whether the event will happen or not happen
+
+--
+
+The price of this share is:
+ - 72c for Republicans winning
+ - 32c for Democrats winning
+
+
+---
+
+# Prediction markets
+
+After the election:
+  - The shares for the winning side pay off $1 each
+  - The shares for the losing side are worth $0
+  
+What does the prediction market tell us?
+
+--
+
+Let's think about the economics of the market
+
+--
+
+Let:
+  - The cost of a share be `\(c\)` dollars
+  - Your belief about the probability of an event happening be `\(p\)` percent
+  
+
+---
+
+# Prediction markets
+
+Based on your beliefs about the event, your expected profit from buying a share is: `\([p \times 1 + (1-p) \times 0] - c\)`
+
+--
+
+You make a profit if `\(p &gt; c\)`, you make a loss if `\(p &lt; c\)`
+
+--
+
+Suppose `\(p &gt; c\)`, what happens?
+
+--
+
+You expect a profit, you start buying shares...
+
+--
+
+This drives up the price `\(c\)`
+
+--
+
+This is true as long as `\(p &gt; c\)`
+
+
+---
+
+# Prediction markets
+
+
+Suppose `\(p &lt; c\)`, what happens?
+
+--
+
+You expect a loss, you start selling your existing shares...
+
+--
+
+This drives down the price `\(c\)`
+
+--
+
+This is true as long as `\(p &lt; c\)`
+
+--
+
+Individual profit motives always drive `\(c\)` toward `\(p\)`
+
+--
+
+.hi[The price of the share tells us the market's expectation about the probability of the event!]
+
+
+---
+
+# Bonds
+
+.hi[Bonds:] what are they?
+
+--
+
+&gt; [Wiki] A bond is a type of security under which the issuer (debtor) owes the holder (creditor) a debt, and is obliged – depending on the terms – to repay the principal (i.e. amount borrowed) of the bond at the maturity date as well as interest (called the coupon) over a specified amount of time. 
+
+--
+
+A bond is basically a loan with a defined term/maturity
+
+--
+
+Bonds are assets, can be traded on secondary markets
+
+---
+
+# Bonds
+
+Why do bonds exist?
+
+--
+
+Bonds are a way to raise money:
+  - At time `\(t\)`, issue bonds with maturity `\(T\)`
+  - Get money from creditors
+  - Pay back interest/coupon over time between `\(t\)` and `\(T\)`
+  - Pay back principal at some future date `\(t+T\)`
+  
+--
+
+We will focus on .hi[municipal bonds (munis)] for pricing climate risk, why?
+
+
+---
+
+# Municipal Bonds
+
+Why munis for pricing climate risk?
+
+--
+
+Suppose Starbucks has coffee packaging plants in Miami
+
+--
+
+Miami is expecting disastrous sea level rise, what can Starbucks do to manage it?
+
+--
+
+Move its plants somewhere else away from the ocean
+
+--
+
+The city of Miami does not have the same option: it bears the full potential cost of sea level rise
+
+
+---
+
+# Municipal Bonds
+
+How do munis work?
+
+--
+
+Local governments issue munis for financing public projects (roads, infrastructure, etc)
+
+--
+
+Debt is typically paid back in a pre-specified way
+  - .hi[General obligation bonds:] paid using tax revenue
+  - .hi[Revenue bonds:] project-specific revenue (e.g. parking garage revenues)
+  
+--
+
+General obligation bonds are typically less risky
+
+
+---
+
+# Municipal Bonds
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
