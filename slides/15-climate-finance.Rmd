@@ -66,13 +66,14 @@ If we know both of these quantities we have a good sense of what we should be do
 
 --
 
-Measuring MAC and MD can be quite hard (think about why)
+Measuring abatement costs and damages can be super hard (think about why)
+  - e.g. early 2022 vs late 2022 expected cost of Russian gas restrictions
 
 --
 
-What we will see is financial markets contain the information we need to learn about MAC and MD
+What we will see is financial markets contain the information we need
   - Stock markets and prediction markets: MAC
-  - Options and bond markets: MD
+  - Bond markets: MD
   
 ---
 
@@ -228,7 +229,7 @@ We will focus on .hi[municipal bonds (munis)] for pricing climate risk, why?
 
 ---
 
-# Municipal Bonds
+# Municipal bonds
 
 Why munis for pricing climate risk?
 
@@ -251,7 +252,7 @@ The city of Miami does not have the same option: it bears the full potential cos
 
 ---
 
-# Municipal Bonds
+# Municipal bonds
 
 How do munis work?
 
@@ -269,7 +270,107 @@ Debt is typically paid back in a pre-specified way
 
 General obligation bonds are typically less risky
 
+---
+
+# Municipal bonds
+
+How do bonds work?
+
+--
+
+They have some .hi[face value] $FV$, the price paid when the bond matures
+
+--
+
+They pay out a .hi[coupon] (assume annually) $C$
+
+--
+
+They trade on the bond market at some .hi[price] $P$ which will depend on:
+  - The face value
+  - The coupon
+  - When the bond matures
+  - *Other underlying economic conditions*
+  
 
 ---
 
-# Municipal Bonds
+# Municipal bonds
+
+We can define the .hi[yield to maturity] $y$ as:
+$$P = \left[\sum_{t=1}^T \frac{C}{(1+y)^t}\right] + \frac{FV}{(1+y)^T}$$
+
+$y$ is the effective interest rate the investor is getting on a price $P$ bond
+
+--
+
+Given some price $P$, a higher yield $y$ means that the flow of coupons $C$ or face value $FV$ must be higher
+
+--
+
+Given some coupon $C$ and face value $FV$, a higher yield $y$ means a lower price $P$
+
+  
+---
+
+# Municipal bonds
+
+Why would future climate risk be capitalized into munis? Examples for why?
+
+--
+
+1. If climate change (e.g. sea level rise) destroys infrastructure, raises municipal costs, raises risk of bankruptcy and non-payment of the bond
+2. If climate change induces people to leave, this shrinks the tax base, makes it more difficult for the municipality to pay back the bond, raises risk of non-payment
+
+--
+
+Factors like these should be priced into the bond if traders understand climate risk
+
+---
+
+# Municipal bonds
+
+Let's work with a simple one-period zero coupon example: $C=0$, $T=1$, $FV = 105$:
+$$P = \frac{105}{(1+y)^1}$$
+
+Suppose there is no climate change and the market yield is 5%, the price of the muni is:
+
+--
+
+$$P = \frac{105}{1+.05} = 100$$
+---
+
+# Municipal bonds
+
+Now suppose we are considering the same muni, but there is a 7% chance that the city will be destroyed by sea level rise before next year
+  - Additional 7% chance that the bond will not be paid
+  
+To bear this additional risk, traders will demand a higher yield (lower price)
+  
+---
+
+# Municipal bonds 
+  
+We can solve for the new price:
+$$P = \frac{105}{1+.05} \times \underbrace{(1 - .07)}_{1/(1+.075)} = \frac{105}{1+.05} \times \frac{1}{1+.075}=93$$
+and the associated yield:
+\begin{align}
+  \frac{1}{1+y} &= \frac{1}{1+.05} \times (1 - .07) = \frac{.93}{1.05} \\
+  \Rightarrow y &= \frac{1.05}{.93} - 1 = .129
+\end{align}
+
+---
+
+# Municipal bonds 
+
+The additional 7% climate risk:
+- Decreased the price by 7% from 100 to 93
+- Increased the yield by 7.9 percentage points from 5% to 12.9%
+
+--
+
+As climate risk rises, traders demand greater yields to offset the chances of non-payment
+
+--
+
+We can measure the financial risks of climate change by looking at how places with different climate risk have munis with different yields
