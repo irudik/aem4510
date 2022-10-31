@@ -14,8 +14,8 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 ### Introduction to environmental economics
 
  - KO Chapters 1 and 4
- - Fullerton, Don, and Robert Stavins. "How economists see the environment." Nature 395, no. 6701 (1998): 433-434.
- - Banzhaf, H. Spencer. "The environmental turn in natural resource economics: John Krutilla and “Conservation Reconsidered”." Journal of the History of Economic Thought 41, no. 1 (2019): 27-46.
+ - Fullerton, Don, and Robert Stavins. "[How economists see the environment.](https://www-nature-com.proxy.library.cornell.edu/articles/26606)" Nature 395, no. 6701 (1998): 433-434.
+ - Krutilla, John V. "[Conservation reconsidered.](https://www.jstor.org/stable/pdf/1815368.pdf)" The American Economic Review 57, no. 4 (1967): 777-786.
 
 ### Market failures: Public goods and externalities
 
@@ -26,6 +26,8 @@ Each section is approximately 1-2 days of class. Readings without links can be o
   - KO Chapter 5
 
 ### Coase theorem
+
+  - Coase, Ronald Harry. "[The problem of social cost.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/674872)" The journal of Law and Economics 3 (1960): 1-44.
 
 ### Policy: Standards
 
@@ -39,7 +41,7 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 
   - [Resources Radio: A Status Report on Global Emissions Trading, with Stephanie La Hoz Theuer](https://www.resourcesmag.org/resources-radio/status-report-global-emissions-trading-stephanie-la-hoz-theuer/)
   - KO Chapters 8 and 9, 10
-  - *Muller, Nicholas Z., and Robert Mendelsohn. "Efficient pollution regulation: getting the prices right." American Economic Review 99, no. 5 (2009): 1714-39.*
+  - *Muller, Nicholas Z., and Robert Mendelsohn. "[Efficient pollution regulation: getting the prices right.](https://www-aeaweb-org.proxy.library.cornell.edu/articles?id=10.1257/aer.99.5.1714)" American Economic Review 99, no. 5 (2009): 1714-39.*
 
 ### Tradable permits and policy comparisons
 
@@ -49,28 +51,22 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 
 ### Distortions and second-best policies
 
-  - Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "Greenhouse gas reductions under low carbon fuel standards?." American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.
+  - Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.
   - *Cardoso, Diego S. "Optimal carbon taxation under oligopoly: An application to commercial aviation." (2020).*
 
 ### Policy under uncertainty
 
   - KO Chapters 8
-  - *Weitzman, Martin L. "Prices vs. quantities." The Review of Economic Studies 41, no. 4 (1974): 477-491.*
-
 
 ### Discounting
 
-  - Giglio, Stefano, Matteo Maggiori, Johannes Stroebel, and Andreas Weber. "[Climate change and long-run discount rates: Evidence from real estate.](http://pages.stern.nyu.edu/~jstroebe/PDF/GMRSW_Climate.pdf)" Review of Financial Studies, (Forthcoming).
+  - Giglio, Stefano, Matteo Maggiori, Krishna Rao, Johannes Stroebel, and Andreas Weber. "[Climate change and long-run discount rates: Evidence from real estate.](https://academic-oup-com.proxy.library.cornell.edu/rfs/article/34/8/3527/6187965)" The Review of Financial Studies 34, no. 8 (2021): 3527-3571.
 
 ### R and the tidyverse, regression review
 
 We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 
   - Mixtape: [properties of regression](https://mixtape.scunning.com/probability-and-regression.html), *[directed acyclical graphs](https://mixtape.scunning.com/dag.html), [potential outcomes causal model](https://mixtape.scunning.com/potential-outcomes.html)*
-
-### R and the tidyverse, regression review
-
-### R and the tidyverse, regression review
 
   
 ### Non-market valuation: Hedonics
@@ -84,6 +80,23 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 ### Non-market valuation: Contingent valuation
 
   - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Concern 50 (2007): 1-500.
+
+### Offset markets
+
+- Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
+- Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
+
+### Climate finance
+
+  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
+  - Meng, Kyle C. "[Using a free permit rule to forecast the marginal abatement cost of proposed climate policy.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2780263)" American Economic Review 107, no. 3 (2017): 748-84.
+  - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
+
+### Green instruments and ESG
+  - Flammer, Caroline. "[Green bonds: effectiveness and implications for public policy.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/706794)" Environmental and Energy Policy and the Economy 1, no. 1 (2020): 95-128.
+  - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).
+
+
 
 <!-- ### Climate change science -->
 
@@ -102,18 +115,6 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 <!--   - webDICE: http://webdice.rdcep.org/ -->
 
   
-### Offset markets
-
-- Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
-- Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
-
-### Climate finance
-
-  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
-  - Meng, Kyle C. "[Using a free permit rule to forecast the marginal abatement cost of proposed climate policy.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2780263)" American Economic Review 107, no. 3 (2017): 748-84.
-  - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
-  - Ilhan, Emirhan, Zacharias Sautner, and Grigory Vilkov. "[Carbon tail risk.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3324476)" The Review of Financial Studies 34, no. 3 (2021): 1540-1571.
-
 
 <!-- ### Environmental finance intro: conservation finance, green bonds, green investing, ESG, offsets -->
 
@@ -121,7 +122,7 @@ We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
 <!--   - [World Bank: What You Need to Know About Green Bonds](https://www.worldbank.org/en/news/feature/2021/12/08/what-you-need-to-know-about-ifc-s-green-bonds) -->
 <!--   - [World Bank: What You Need to Know About Sustainable Development Bonds](https://www.worldbank.org/en/news/feature/2021/09/28/what-you-need-to-know-about-sustainable-development-bonds) -->
 <!--   - Huwyler, Fabian, Jürg Käppeli, and John Tobin. "Conservation finance from niche to mainstream: The building of an institutional asset class." Credit Suisse Group AG and McKinsey Center for Business and Environment (2016). -->
-<!--   - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. Financing the response to climate change: The pricing and ownership of US green bonds. No. w25194. National Bureau of Economic Research, 2018. -->
+
 <!--   - Heinkel, Robert, Alan Kraus, and Josef Zechner. "The effect of green investment on corporate behavior." Journal of Financial and Quantitative Analysis 36, no. 4 (2001): 431-449. -->
 
 <!-- ### Environmental finance: public finance -->

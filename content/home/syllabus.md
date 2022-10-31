@@ -27,11 +27,11 @@ design:
 
 **TA office hours:**
 
-Virginia Callison (vwc28): Monday 2:30-3:30 in Warren B05
+Name Here (zyx): Monday 2:30-3:30 in Warren B05
 
-Zhiyun Li (zl547): Friday 12:00-1:00 in Warren B05
+Name Here (zyx): Friday 12:00-1:00 in Warren B05
 
-Binglin Wang (bw474): Tuesday 3:30-4:30 in Warren B05
+Name Here (zyx): Tuesday 3:30-4:30 in Warren B05
 
 **Readings:**
 
@@ -47,7 +47,7 @@ Binglin Wang (bw474): Tuesday 3:30-4:30 in Warren B05
 
 ## Schedule, Readings, and Lecture Notes
 
-The schedule, readings, and lecture notes are [here](/lecture-notes/).
+The schedule, readings, and lecture notes are [here](/lecture-notes/). All listed readings are required and expected to be done prior to class.
 
 ## Assignments and Due Dates
 
@@ -61,7 +61,7 @@ Assignments and grading are [here](/assignments/).
 
 **Integrity of credit:** I expect every student in this course to abide by the Cornell University Code of Academic Integrity. I strongly encourage collaboration in this course, but each student is responsible for making sure that she or he follows the rules laid out in this syllabus, and with those stated in the Code of Academic Integrity. Any student found to have violated the stated policies on problem sets will receive a zero for that assignment, and any student found to have cheated on a paper will receive a zero on that paper. Multiple violations in a semester may result in failure of the course. The Code of Academic Integrity is available for review here: https://cuinfo.cornell.edu/aic.cfm.
 
-**Coding:** We will be using [RStudio Cloud](https://rstudio.cloud) for coding. You should not need to install or download anything for what we do in class or for problem sets. If you prefer to do the work on your actual computer install R and RStudio.
+<!-- **Coding:** We will be using [RStudio Cloud](https://rstudio.cloud) for coding. You should not need to install or download anything for what we do in class or for problem sets. If you prefer to do the work on your actual computer install R and RStudio.  -->
 
 **Learning Outcomes:** As a result of participating in class you will be able to:
   - Discuss the design and effect of environmental policy in theory and real-world practice

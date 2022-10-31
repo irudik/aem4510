@@ -374,3 +374,104 @@ As climate risk rises, traders demand greater yields to offset the chances of no
 --
 
 We can measure the financial risks of climate change by looking at how places with different climate risk have munis with different yields
+
+
+---
+
+# Municipal bonds and sea level rise
+
+Painter (2020) looks at how sea level rise (SLR) risk affects bond yields
+  - Also looks at other things outside what we're doing in class
+  
+--
+
+How should SLR affect bond yields of different maturities?
+
+--
+
+SLR is a slow phenomenon, will start mattering sometime between 2030-2100
+--
+
+  - non-existent in the short run: short-term bonds shouldn't be affected
+--
+
+  - only shows up in the long run: long-run bonds should be affected if investors care
+  
+---
+
+# Municipal bonds and sea level rise
+
+.center[
+```{r, out.width = "800px", echo = FALSE}
+knitr::include_graphics("files/15-climate-risk-table.png")
+```
+]
+
+Where is the climate risk?
+
+---
+
+# Municipal bonds and sea level rise
+
+.center[
+```{r, out.width = "800px", echo = FALSE}
+knitr::include_graphics("files/15-raw-bond-data.png")
+```
+]
+
+What does the raw data say about climate/SLR exposed and non-exposed munis?
+
+--
+
+Climate bonds are 8 basis points more expensive to offer
+
+11 basis points higher yield
+
+
+---
+
+# Yield
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "700px", echo = FALSE}
+knitr::include_graphics("files/15-yield-results.png")
+```
+</div> 
+
+Areas at risk for SLR must offer greater yields
+
+---
+
+# Gross spread
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "700px", echo = FALSE}
+knitr::include_graphics("files/15-gross-spread-results.png")
+```
+</div> 
+
+They have higher gross spreads (higher underwriter search costs)
+
+---
+
+# Maturities
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "700px", echo = FALSE}
+knitr::include_graphics("files/15-maturity-results.png")
+```
+</div> 
+
+Effect is larger for longer-maturity bonds
+
+---
+
+# Credit ratings
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "700px", echo = FALSE}
+knitr::include_graphics("files/15-maturity-results.png")
+```
+</div> 
+
+SLR matters for lower credit rating bonds
