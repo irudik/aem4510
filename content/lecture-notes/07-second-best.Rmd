@@ -4,7 +4,7 @@ linktitle: "LN07: Distortions/Second-Best"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 9
 type: docs
 #bibliography: "../../static/bib/references.bib"

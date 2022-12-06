@@ -1,10 +1,10 @@
 ---
-title: Assignments
+title: Assignments and Grading
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
-    weight: 2
+    parent: 
+    weight: 1
 type: docs
 weight: 1
 ---

@@ -4,11 +4,9 @@ linktitle: "LN01: Intro to Enviro Econ"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 3
 type: docs
-#bibliography: "../../static/bib/references.bib"
-#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
 slides: "01-slides-intro"
 output:
   blogdown::html_page:

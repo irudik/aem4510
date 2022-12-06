@@ -1,18 +1,18 @@
 ---
 title: "Green Instruments and ESG"
-linktitle: "LN16: Green Instruments and ESG"
+linktitle: "LN15: Green Instruments and ESG"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 18
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "16-slides-green-instruments"
+slides: "15-slides-green-instruments"
 output:
   blogdown::html_page:
-    toc: false
+    toc: false 
 ---
 
 ### Overview

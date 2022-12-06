@@ -3,10 +3,9 @@ title: Games
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: 
     weight: 3
 type: docs
-weight: 1
 ---
 
 [Coase Theorem Game](/games/games-01-coase/): How do property rights and transaction costs matter for achieving efficient outcomes with externalities and no government intervention?

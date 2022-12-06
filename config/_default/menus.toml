@@ -4,7 +4,7 @@
 #   The weight parameter defines the order that the links will appear in.
   
 [[main]]
-  name = "Schedule and Lecture Notes"
+  name = "Schedule, Lecture Notes, and Readings"
   url = "lecture-notes"
   weight = 1
   
@@ -18,10 +18,10 @@
   url = "games"
   weight = 3
   
-[[main]]
-  name = "rstudio.cloud"
-  url = "https://rstudio.cloud"
-  weight = 4
+# [[main]]
+#   name = "rstudio.cloud"
+#   url = "https://rstudio.cloud"
+#   weight = 4
 
 
 # Link to a PDF of your resume/CV from the menu.

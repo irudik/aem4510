@@ -1,15 +1,15 @@
 ---
-title: "Climate Finance"
-linktitle: "LN15: Climate Finance"
+title: "Hedonic Valuation"
+linktitle: "LN10: Hedonic Valuation"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
-    weight: 17
+    parent: Schedule, Lecture Notes, and Readings
+    weight: 13
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "15-slides-climate-finance"
+slides: "10-slides-hedonics"
 output:
   blogdown::html_page:
     toc: false
@@ -19,10 +19,11 @@ output:
 
 This lecture:
 
-1. Quick overview on financial instruments
-2. What can they tell us about climate change?
+1. What can we use to infer the demand for environmental goods?
+2. What do housing prices tell us?
+3. When do changes in house prices give us welfare measures
 
-### Slides 
+### Slides
 
 Slides are below. 
 The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.

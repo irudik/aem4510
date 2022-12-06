@@ -4,8 +4,8 @@ linktitle: "Games 2: Permits"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
-    weight: 102
+    parent: Games
+    weight: 2
 type: docs
 output:
   blogdown::html_page:

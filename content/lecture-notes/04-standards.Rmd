@@ -4,7 +4,7 @@ linktitle: "LN04: Standards"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 6
 type: docs
 #bibliography: "../../static/bib/references.bib"

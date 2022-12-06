@@ -4,8 +4,8 @@ linktitle: "Games 1: Coase"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
-    weight: 101
+    parent: Games
+    weight: 1
 type: docs
 output:
   blogdown::html_page:

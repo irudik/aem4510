@@ -4,7 +4,7 @@ linktitle: "LN08: Uncertainty"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 10
 type: docs
 #bibliography: "../../static/bib/references.bib"

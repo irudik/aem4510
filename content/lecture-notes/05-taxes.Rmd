@@ -4,7 +4,7 @@ linktitle: "LN05: Taxes and Subsidies"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 7
 type: docs
 #bibliography: "../../static/bib/references.bib"

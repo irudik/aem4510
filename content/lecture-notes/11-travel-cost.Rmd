@@ -1,15 +1,15 @@
 ---
-title: "Offset Markets"
-linktitle: "LN14: Offset Markets"
+title: "Travel Cost Method"
+linktitle: "LN11: Travel Cost"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
-    weight: 16
+    parent: Schedule, Lecture Notes, and Readings
+    weight: 14
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "14-slides-offsets"
+slides: "11-slides-travel-cost"
 output:
   blogdown::html_page:
     toc: false
@@ -19,11 +19,9 @@ output:
 
 This lecture:
 
-1. What are offsets?
-2. What issues might they have?
-3. How do they work in practice?
+1. How do we estimate the value of recreational goods?
 
-### Slides 
+### Slides
 
 Slides are below. 
 The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.

@@ -1,9 +1,9 @@
 ---
-title: Schedule and Readings
+title: Schedule, Lecture Notes, and Readings
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: 
     weight: 2
 type: docs
 weight: 1
@@ -13,88 +13,97 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 
 ### Introduction to environmental economics
 
- - KO Chapters 1 and 4
- - Fullerton, Don, and Robert Stavins. "[How economists see the environment.](https://www-nature-com.proxy.library.cornell.edu/articles/26606)" Nature 395, no. 6701 (1998): 433-434.
- - Krutilla, John V. "[Conservation reconsidered.](https://www.jstor.org/stable/pdf/1815368.pdf)" The American Economic Review 57, no. 4 (1967): 777-786.
+  - [Lecture notes](01-introduction)
+  - KO Chapters 1 and 4
+  - Fullerton, Don, and Robert Stavins. "[How economists see the environment.](https://www-nature-com.proxy.library.cornell.edu/articles/26606)" Nature 395, no. 6701 (1998): 433-434.
+  - Krutilla, John V. "[Conservation reconsidered.](https://www.jstor.org/stable/pdf/1815368.pdf)" The American Economic Review 57, no. 4 (1967): 777-786.
 
 ### Market failures: Public goods and externalities
 
- - KO Chapter 5
-
-### Market failures: Public goods and externalities
-
+  - [Lecture notes](02-market-failures)
   - KO Chapter 5
 
 ### Coase theorem
 
-  - Coase, Ronald Harry. "[The problem of social cost.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/674872)" The journal of Law and Economics 3 (1960): 1-44.
+  - [Lecture notes](03-coase)
+  - Coase, Ronald Harry. "[The problem of social cost.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/674872)" The Journal of Law and Economics 3 (1960): 1-44.
+  
+### In class Coasean bargaining game
 
 ### Policy: Standards
 
+  - [Lecture notes](04-standards)
   - KO Chapters 8 and 9
 
 ### Taxes and Subsidies
 
+  - [Lecture notes](05-taxes)
   - KO Chapters 8 and 9
 
 ### Tradable permits
 
+  - [Lecture notes](06-permits)
   - [Resources Radio: A Status Report on Global Emissions Trading, with Stephanie La Hoz Theuer](https://www.resourcesmag.org/resources-radio/status-report-global-emissions-trading-stephanie-la-hoz-theuer/)
   - KO Chapters 8 and 9, 10
   - *Muller, Nicholas Z., and Robert Mendelsohn. "[Efficient pollution regulation: getting the prices right.](https://www-aeaweb-org.proxy.library.cornell.edu/articles?id=10.1257/aer.99.5.1714)" American Economic Review 99, no. 5 (2009): 1714-39.*
-
-### Tradable permits and policy comparisons
-
-  - KO Chapters 8 and 9, 10
   
 ### In class emissions trading game (with prizes!)
 
 ### Distortions and second-best policies
 
+  - [Lecture notes](07-second-best)
   - Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.
-  - *Cardoso, Diego S. "Optimal carbon taxation under oligopoly: An application to commercial aviation." (2020).*
 
 ### Policy under uncertainty
 
+  - [Lecture notes](08-uncertainty)
   - KO Chapters 8
 
 ### Discounting
 
-  - Giglio, Stefano, Matteo Maggiori, Krishna Rao, Johannes Stroebel, and Andreas Weber. "[Climate change and long-run discount rates: Evidence from real estate.](https://academic-oup-com.proxy.library.cornell.edu/rfs/article/34/8/3527/6187965)" The Review of Financial Studies 34, no. 8 (2021): 3527-3571.
+  - [Lecture notes](09-discounting)
+  - *Giglio, Stefano, Matteo Maggiori, Krishna Rao, Johannes Stroebel, and Andreas Weber. "[Climate change and long-run discount rates: Evidence from real estate.](https://academic-oup-com.proxy.library.cornell.edu/rfs/article/34/8/3527/6187965)" The Review of Financial Studies 34, no. 8 (2021): 3527-3571.*
 
-### R and the tidyverse, regression review
+<!-- ### R and the tidyverse, regression review -->
 
-We will be using [RStudio Cloud](https://rstudio.cloud/) for computing.
+<!-- We will be using [RStudio Cloud](https://rstudio.cloud/) for computing. -->
 
-  - Mixtape: [properties of regression](https://mixtape.scunning.com/probability-and-regression.html), *[directed acyclical graphs](https://mixtape.scunning.com/dag.html), [potential outcomes causal model](https://mixtape.scunning.com/potential-outcomes.html)*
+<!--   - Mixtape: [properties of regression](https://mixtape.scunning.com/probability-and-regression.html), *[directed acyclical graphs](https://mixtape.scunning.com/dag.html), [potential outcomes causal model](https://mixtape.scunning.com/potential-outcomes.html)* -->
 
-  
+
 ### Non-market valuation: Hedonics
 
+  - [Lecture notes](10-hedonics)
   - Chay, Kenneth Y., and Michael Greenstone. ["Does air quality matter? Evidence from the housing market."](https://epic.uchicago.edu/wp-content/uploads/2019/08/427462.pdf) Journal of political Economy 113, no. 2 (2005): 376-424.
 
 ### Non-market valuation: Travel cost
 
+  - [Lecture notes](11-travel-cost)
   - [King and Marzotta](http://www.ecosystemvaluation.org/travel_costs.htm)
 
 ### Non-market valuation: Contingent valuation
 
+  - [Lecture notes](12-contingent-valuation)
   - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Concern 50 (2007): 1-500.
 
 ### Offset markets
 
-- Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
-- Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
+  - [Lecture notes](13-offset-markets)
+  - Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
+  - Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
 
 ### Climate finance
 
+  - [Lecture notes](14-climate-finance)
   - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
-  - Meng, Kyle C. "[Using a free permit rule to forecast the marginal abatement cost of proposed climate policy.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2780263)" American Economic Review 107, no. 3 (2017): 748-84.
   - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
+  - *Meng, Kyle C. "[Using a free permit rule to forecast the marginal abatement cost of proposed climate policy.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2780263)" American Economic Review 107, no. 3 (2017): 748-84.*
 
 ### Green instruments and ESG
+
+  - [Lecture notes](15-green-instruments)
   - Flammer, Caroline. "[Green bonds: effectiveness and implications for public policy.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/706794)" Environmental and Energy Policy and the Economy 1, no. 1 (2020): 95-128.
-  - Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).
+  - *Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).*
 
 
 

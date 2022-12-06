@@ -4,7 +4,7 @@ linktitle: "LN03: Coase"
 date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: Menu
+    parent: Schedule, Lecture Notes, and Readings
     weight: 5
 type: docs
 #bibliography: "../../static/bib/references.bib"
