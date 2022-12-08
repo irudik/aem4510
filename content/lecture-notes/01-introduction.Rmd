@@ -5,7 +5,7 @@ date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Schedule, Lecture Notes, and Readings
-    weight: 3
+    weight: 1
 type: docs
 slides: "01-slides-intro"
 output:

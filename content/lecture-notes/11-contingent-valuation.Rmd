@@ -1,0 +1,33 @@
+---
+title: "Contingent Valuation Method"
+linktitle: "LN11: Contingent Valuation"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Schedule, Lecture Notes, and Readings
+    weight: 11
+type: docs
+#bibliography: "../../static/bib/references.bib"
+#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
+slides: "11-slides-contingent-valuation"
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+### Overview
+
+This lecture:
+
+1. How do stated preference methods differ from revealed preference methods?
+2. How do we do contingent valuation?
+
+### Slides
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
+
+`r blogdown::shortcode("slide-buttons")`
+

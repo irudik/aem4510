@@ -6,7 +6,6 @@ menu:
     parent: 
     weight: 1
 type: docs
-weight: 1
 ---
 
 ## Grading

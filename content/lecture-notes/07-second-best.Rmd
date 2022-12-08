@@ -5,7 +5,7 @@ date: "`r format(Sys.time())`"
 menu:
   content:
     parent: Schedule, Lecture Notes, and Readings
-    weight: 9
+    weight: 7
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"

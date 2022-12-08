@@ -6,7 +6,6 @@ menu:
     parent: 
     weight: 2
 type: docs
-weight: 1
 ---
 
 Each section is approximately 1-2 days of class. Readings without links can be obtained through the Cornell library website. <span style="color:red">**Required readings for students enrolled at the 5000 level are in *italics*.** </span>
@@ -71,40 +70,50 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 <!--   - Mixtape: [properties of regression](https://mixtape.scunning.com/probability-and-regression.html), *[directed acyclical graphs](https://mixtape.scunning.com/dag.html), [potential outcomes causal model](https://mixtape.scunning.com/potential-outcomes.html)* -->
 
 
-### Non-market valuation: Hedonics
-
-  - [Lecture notes](10-hedonics)
-  - Chay, Kenneth Y., and Michael Greenstone. ["Does air quality matter? Evidence from the housing market."](https://epic.uchicago.edu/wp-content/uploads/2019/08/427462.pdf) Journal of political Economy 113, no. 2 (2005): 376-424.
-
 ### Non-market valuation: Travel cost
 
-  - [Lecture notes](11-travel-cost)
+  - [Lecture notes](10-travel-cost)
   - [King and Marzotta](http://www.ecosystemvaluation.org/travel_costs.htm)
 
 ### Non-market valuation: Contingent valuation
 
-  - [Lecture notes](12-contingent-valuation)
-  - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Concern 50 (2007): 1-500.
+  - [Lecture notes](11-contingent-valuation)
+  - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Resources 50 (2007): 1-14.
+  
+  
+### The environment and real estate markets
 
+  - [Lecture notes](12-hedonics)
+  - Chay, Kenneth Y., and Michael Greenstone. ["Does air quality matter? Evidence from the housing market."](https://epic.uchicago.edu/wp-content/uploads/2019/08/427462.pdf) Journal of political Economy 113, no. 2 (2005): 376-424.
+  - Bernstein, Asaf, Matthew T. Gustafson, and Ryan Lewis. "[Disaster on the horizon: The price effect of sea level rise.](https://discovery.ebsco.com/linkprocessor/plink?id=b2f8348a-8a0a-3b1b-8ea2-6714078cf5ed)" Journal of Financial Economics 134, no. 2 (2019): 253-272.
+
+
+### Climate risk and financial instruments
+
+  - [Lecture notes](13-climate-finance)
+  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
+  - Schlenker, Wolfram, and Charles A. Taylor. "[Market expectations of a warming climate.](https://www.sciencedirect.com/science/article/am/pii/S0304405X21001495)" Journal of Financial Economics 142, no. 2 (2021): 627-640.
+  - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
+  
 ### Offset markets
 
-  - [Lecture notes](13-offset-markets)
+  - [Lecture notes](14-offset-markets)
+  - Heal, Geoffrey. "[The Economics of Carbon Accounting and Carbon Offsets."](https://www.nber.org/system/files/working_papers/w30649/w30649.pdf) (2022).
   - Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
   - Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
 
-### Climate finance
-
-  - [Lecture notes](14-climate-finance)
-  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
-  - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
-  - *Meng, Kyle C. "[Using a free permit rule to forecast the marginal abatement cost of proposed climate policy.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2780263)" American Economic Review 107, no. 3 (2017): 748-84.*
-
-### Green instruments and ESG
+  
+### Green instruments
 
   - [Lecture notes](15-green-instruments)
   - Flammer, Caroline. "[Green bonds: effectiveness and implications for public policy.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/706794)" Environmental and Energy Policy and the Economy 1, no. 1 (2020): 95-128.
   - *Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).*
 
+  
+### Corporate Governance
+
+  - [Lecture notes](16-corporate-governance)
+  - XYZ
 
 
 <!-- ### Climate change science -->

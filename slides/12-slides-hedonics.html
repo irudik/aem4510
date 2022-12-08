@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 12</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="12-slides-hedonics_files/header-attrs/header-attrs.js"></script>
+    <link href="12-slides-hedonics_files/remark-css/default.css" rel="stylesheet" />
+    <link href="12-slides-hedonics_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="12-slides-hedonics_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="12-slides-hedonics_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="12-slides-hedonics_files/tile-view/tile-view.js"></script>
+    <link href="12-slides-hedonics_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="12-slides-hedonics_files/panelset/panelset.js"></script>
+    <script src="12-slides-hedonics_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="12-slides-hedonics_files/vembedr/css/vembedr.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 12
+]
+.subtitle[
+## Hedonics and Real Estate Markets
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+```
+
+```
+## Installing package into '/opt/homebrew/lib/R/4.2/site-library'
+## (as 'lib' is unspecified)
+```
+
+```
+## Warning: package 'tweetrmd' is not available for this version of R
+## 
+## A version of this package for your version of R might be available elsewhere,
+## see the ideas at
+## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
+```
+
+```
+## Warning in p_install(package, character.only = TRUE, ...):
+```
+
+```
+## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
+## logical.return = TRUE, : there is no package called 'tweetrmd'
+```
+
+```
+## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
+## tweetrmd
+```
+
+```r
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
+## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+```
+
+```r
+red_pink &lt;- "#e64173"
+# A blank theme for ggplot
+theme_empty &lt;- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black"), axis.ticks = element_line(),
+  )
+theme_blank &lt;- theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_blank(), axis.text.y = element_blank(),
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
+theme_regular &lt;- 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
+  ) 
+```
+
+
+```r
+# makes sure we all use the same 'random' numbers
+set.seed(1000)
+
+# Number of houses
+num_houses &lt;- 1000
+
+house_data &lt;- tibble(
+  house_num = seq(from = 1, to = num_houses)
+)
+
+house_data &lt;- house_data |&gt;
+  as_tibble() |&gt;
+  mutate(
+    ozone = exp(rnorm(num_houses))*15,
+    num_bedrooms = sample(1:4, 1000, replace = TRUE),
+    num_bathrooms = sample(seq(1, 3, .5), 1000, replace = TRUE),
+    sq_feet = exp(rnorm(num_houses))*1000,
+    log_price = 12 + .1*num_bedrooms + .08*num_bathrooms + .0001*sq_feet - .005*ozone + rnorm(1000)*.5,
+    price = exp(log_price)
+  ) |&gt; 
+  filter(sq_feet &gt; 500)
+
+lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) |&gt; 
+  broom::tidy()
+```
+
+```
+## # A tibble: 5 × 5
+##   term            estimate  std.error statistic  p.value
+##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   11.7       0.0722        163.   0       
+## 2 num_bedrooms   0.136     0.0163          8.39 2.45e-16
+## 3 num_bathrooms  0.161     0.0256          6.29 5.54e-10
+## 4 sq_feet        0.0000971 0.00000900     10.8  2.46e-25
+## 5 ozone         -0.00432   0.000767       -5.63 2.52e- 8
+```
+
+---
+
+# Roadmap
+
+- What can we use to infer the demand for environmental goods?
+- What do housing prices tell us?
+- When do changes in house prices give us welfare measures
+
+---
+
+class: inverse, center, middle
+name: hedonics
+
+# Hedonic valuation
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+
+---
+
+# Revealed preference approaches
+
+There is no clear way to .hi[directly] value changes in quantities of environmental goods
+
+--
+
+Why?
+
+--
+
+There aren't any markets for them!
+
+--
+
+Is there a way we can reveal the value of these goods?
+
+---
+
+# Revealed preference approaches
+
+One way to circumvent this problem is to look at private goods that interact with the environmental good
+
+--
+
+If there are changes in the environmental good, 
+--
+holding everything else fixed, 
+--
+that should be reflected in *some way* in changes in the price of the related private good
+
+--
+
+This change in price can tell us something about how people value the change in the environmental good
+
+---
+
+# Revealed preference approaches: example
+
+There is no market for orcas
+
+--
+
+Suppose there's a massive decline in orcas off the Washington coast, what happens?
+
+--
+
+We will likely see demand for sightseeing tours go down (MB of these tours went down!)
+
+--
+
+This drops the price of tours
+
+--
+
+A non-market good had an effect on a market price
+
+--
+
+What does this price change mean?
+
+---
+
+# Hedonics: Property value models
+
+Common market goods to use for revealed preference valuation are .hi-blue[properties]
+
+--
+
+When people buy a home they are purchasing a bundle of goods:
+  - Rooms
+  - Bathrooms
+  - School quality
+  - .hi[Environmental quality]
+
+--
+
+Homes located in pristine areas are likely to be more valuable than identical homes located near toxic facilities
+
+---
+
+# Hedonics: Property value models
+
+Real estate is virtually ideal for measuring environmental changes
+
+--
+
+Real estate markets are often competitive and thick
+
+--
+
+Property purchases are large and consequential: buyers and sellers are likely to be well-informed
+
+--
+
+It is uncontroversial that property values should reflect local attributes
+
+--
+
+e.g. homes in better school districts are typically more expensive
+
+---
+
+class: inverse, center, middle
+name: superfund
+
+# BCA of Superfund
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Superfund
+
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/Kjobz14i8kM" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+
+
+---
+
+# Superfund
+
+Congress passes Comprehensive Environmental Response, Compensation, and Liability Act (“Superfund”) in 1980
+
+--
+
+Located and analyzed hazardous waste sites nation-wide
+
+--
+
+Since then, the EPA has identified more than 47,000 hazardous waste sites that potentially require some sort of cleanup action
+
+--
+
+By 2005: $35 billion in federal funding has been spent at roughly 800 sites
+
+---
+
+# Superfund
+
+.hi[Superfund site cleanups are not cheap]
+
+--
+
+Even before the budget crisis in Washington, there were many calls for an evaluation of the costs and the benefits of the program 
+
+--
+
+The costs requiring a careful accounting of all the resources that go into a cleanup, and the benefits necessitating a .hi[non-market valuation] exercise: superfund cleanups do not trade in the marketplace
+
+--
+
+How do we do it?
+
+---
+
+# Superfund
+
+Recognize that the houses surrounding a remediated site trade in the marketplace
+
+--
+
+This provides one of the most simple and straightforward ways in which to look for estimates of the benefits of a Superfund cleanup: .hi[through change in property values]
+
+--
+
+Main idea: Take two otherwise very similar houses: one in a neighborhood surrounding a site that has been cleaned up and one in a neighborhood surrounding a site that has not
+
+--
+
+How do their prices differ?
+
+---
+
+# The hedonic method
+
+The hedonic pricing approach derives from the characteristics theory of value first proposed by Lancaster (1966)
+
+--
+
+This seeks to explain the value of a commodity as a bundle of valuable characteristics
+
+--
+
+One or more of these characteristics may be environmental
+
+--
+
+Ridker and Henning (1967) first applied method to environmental valuation in a study of the effect of air pollution on property values in St. Louis
+
+--
+
+It motivated the conceptual model of Rosen (1974) of how we might use hedonic prices to estimate peoples’ values for site-specific amenities
+
+---
+
+# The hedonic method
+
+What might housing prices depend on?
+
+--
+
+Site characteristics (parcel size, bedrooms, etc)
+
+--
+
+Neighboorhood characteristics (school district, crime, public transit, etc)
+
+--
+
+Environmental quality (air quality, noise, etc)
+
+---
+
+# The hedonic model
+
+Property value approaches are called .hi-blue[hedonics]
+
+--
+
+Suppose that we have some quality-differentiated good (i.e. a home)
+
+--
+
+This good is characterized by a set of `\(J\)` property characteristics `\(x\)`
+  - parcel size, school quality, bedrooms, etc
+  
+--
+
+It is also characterized by an environmental good `\(q\)`
+
+--
+
+Lets get some intuition for how housing markets reveal the value of environmental goods
+
+
+---
+
+# Hedonics intuition: L.O. Taylor, 2003
+
+Imagine the following hypothetical scenario in which there are two identical lakes each with 100 identical homes surrounding them
+
+--
+
+All homes are lakefront, and all the characteristics of the homes themselves, the land, and the neighborhoods are identical across the properties
+
+--
+
+At the current equilibrium price of $200,000 per house, all 200 hundred homes on either lake are equally preferred
+
+---
+
+# Hedonics intuition: L.O. Taylor, 2003
+
+Suppose the clarity on one lake, Lake A, for example, is improved
+
+--
+
+This increases the benefit of buying a Lake A home
+
+--
+
+If prices have not changed, consumers would all want to buy lake A houses
+
+--
+
+.hi[In other words:] at current prices, there is excess demand on Lake A
+
+--
+
+Lake A prices .hi-red[increase] to bring the market back into equilibrium
+
+
+---
+
+# Hedonics intuition: L.O. Taylor, 2003
+
+The new equilibrium price difference is the .hi[implicit price] that consumers are willing to pay for that change in water clarity
+
+--
+
+This WTP for water clarity is directly revealed to us through the market prices of the homes
+
+--
+
+If Lake A houses sell for 210,000, while Lake B houses sell for 200,000, the "implicit price" of increased water clarity is 10,000 dollars
+
+--
+
+.hi[Real world considerations:] 
+--
+houses aren't going to be perfectly comparable, etc
+
+--
+
+.hi[Sidebar:] think about US cities in the last 20 years and urban residential prices
+
+
+---
+
+# Housing prices in Ithaca are increasing .hi[fast], why?
+
+&lt;center&gt;
+&lt;img src="files/11-ithaca-housing-prices-1.png" width="80%" /&gt;
+&lt;img src="files/11-ithaca-prices.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Another Dyson professor's house
+
+&lt;center&gt;
+&lt;img src="files/11-dyson-home.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# The hedonic model
+
+The price of a house is determined by a .hi[hedonic price curve] `\(P(x,q)\)`
+
+
+--
+
+`\(P\)` tells us the market value of the home based on its characteristics `\(x\)` and local environmental quality `\(q\)`
+
+--
+
+For a particular house `\(k\)` its price is `\(p_k = P(x_k,q_k)\)`
+
+--
+
+`\(P\)` arises in equilibrium from the interaction of all buyers in sellers in the market
+
+--
+
+Here we will assume the supply of houses is fixed in the short run so the price curve arises solely from buyer behavior
+
+---
+
+# The hedonic model: the price curve
+
+
+.pull-left[
+
+![hedonic price curves slope up at a decreasing rate](12-slides-hedonics_files/figure-html/price_fct-1.png)
+]
+
+.pull-right[
+
+The hedonic price curve is `\(P(x,q)\)`
+
+It's increasing in q (q is good) but at a decreasing rate (decreasing marginal utility)
+
+This is holding `\(x\)` fixed
+
+Analogous to regular demand curves holding income fixed
+
+]
+
+
+---
+
+# The hedonic model: the price curve
+
+
+.pull-left[
+
+![higher discount rates mean lower value](12-slides-hedonics_files/figure-html/implicit_price-1.png)
+]
+
+.pull-right[
+
+The implicit price curve for q is `\({\partial P(x,q) \over \partial q}\)`
+
+It tells us how the price changes in q
+
+It's positive, but downward sloping
+
+This is effectively the environmental good demand curve
+
+]
+
+---
+
+# Price curve example
+
+&lt;center&gt;
+&lt;img src="files/11-woburn.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# The hedonic model: consumer's choice problem
+
+Households buy a single property given their budget constraint and their preferences for housing characteristics
+
+--
+
+Here we will assume that households are effectively just choosing `\((x,q)\)` instead of a specific house with the following objective:
+
+--
+
+`$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, \underbrace{y = z + P(x,q)}_{\text{budget constraint}}$$`
+
+--
+
+- `\(z\)` is the numeraire good (spending on other private goods)
+- `\(y\)` is income
+- `\(s\)` is the set of the household's characteristics like family size, ages, etc
+
+
+---
+
+# Unrealistic pieces of the model
+
+One unrealistic part of this model is that we are assuming household characteristics are continuous
+
+--
+
+Many housing characteristics are discrete (bedrooms, bathrooms, etc)
+
+--
+
+Another is that you just can't purchase some sets of `\(x\)` (i.e. a huge lot in downtown Manhattan with a farm)
+
+--
+
+We won't touch on this in class because it's a lot more complicated, but economists know how to deal with these problems
+
+
+---
+
+# Choosing q
+
+Another thing to note: the consumer *chooses* `\(q\)`
+
+--
+
+The idea is that mobile households can move to get their desired level of the environmental good
+
+--
+
+We are thus also implicitly assuming `\(q\)` varies across space so that households can sort into areas they prefer
+  - q is really picking up .hi[local] environmental goods
+  
+
+---
+
+# What is `\(P(x,q)\)`
+
+In the model we are thinking of `\(P(x,q)\)` as the annual .hi-blue[rental rate], not the purchase price
+
+--
+
+This allows us to mesh more cleanly with annual income and view the problem as an annual choice
+
+--
+
+This clearly works well for renting households
+
+--
+
+For homeowners we are basically assuming they rent from themselves every year
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, y = z + P(x,q)$$`
+
+Plug in the constraint for `\(z\)` to get:
+
+`$$\max_{x,q} U(x,q,\underbrace{y-P(x,q)}_{z};s)$$`
+
+--
+
+The FOCs for this problem are:
+
+--
+
+`\begin{align}
+  {\partial U \over \partial x_j} =&amp; {\partial U \over \partial z} {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \tag{house characteristics} \\
+  {\partial U \over \partial q} =&amp; {\partial U \over \partial z} {\partial P \over \partial q} \tag{environmental good}
+\end{align}`
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`\begin{align}
+  {\partial U \over \partial q} = {\partial U \over \partial z} {\partial P \over \partial q}
+\end{align}`
+gives us that
+`$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
+
+--
+
+What does this mean?
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$`
+
+
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$`
+
+At a utility-maximizing choice, 
+--
+a household equates their MRS between `\(q\)` and `\(z\)` and the marginal implicit cost of `\(q\)`
+
+--
+
+.hi[Recall from intro/intermediate micro:] the MRS tells us how the household trades off `\(q\)` and `\(z\)` while keeping utility constant
+
+---
+
+# The hedonic model: consumer's choice problem
+
+`$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
+
+`\(z\)` is the numeraire good so we can think of it in terms of dollars
+
+--
+
+.hi[This means that the MRS is the WTP for] `\(q\)`: the reduction in income needed to compensate for an additional unit of `\(q\)`, while maintaining the same level of utility
+
+--
+
+Knowledge of the hedonic price curve `\(P\)` is enough to tell us about household WTP for `\(q\)`!
+
+--
+
+How prices change in the environmental good tells us about WTP
+
+
+---
+
+# The hedonic model: bid functions
+
+Now let's dive deeper by looking at some reference level of utility `\(\bar{u}\)`:
+`$$U(x,q,z;s) = \bar{u} \tag{indifference curve}$$`
+
+--
+
+This equation just defines some indifference curve
+ 
+--
+
+Next we will define something called a .hi[bid function] `\(b(x,q,y,s,\bar{u})\)`
+
+---
+
+# The hedonic model: bid functions
+
+The bid function `\(b(x,q,y,s,\bar{u})\)` is the .hi-red[WTP] of the household for:  
+- A house with characteristics `\(x,q\)`
+- Given income `\(y\)` and household characteristics `\(s\)`
+- That achieves utility `\(\bar{u}\)`
+
+By definition how WTP changes in q is the q-z MRS:
+
+`$${\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$`
+
+---
+
+# The hedonic model: deriving MWTP
+
+`$${\partial b \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z} = {\partial P \over \partial q}$$`
+
+By assuming `\(q\)` is a part of a larger bundle of house characteristics, we are able to characterize its demand through its relationship to the housing market
+
+--
+
+Our ultimate empirical goal is to estimate `\({\partial b \over \partial q}\)`, which is a kind of demand curve
+
+--
+
+It's called a .hi-blue[Hicksian] demand curve, whereas our regular demand curves are .hi-red[Marshallian]
+
+
+---
+
+# The hedonic model: deriving MWTP
+
+The difference is that with .hi-red[Marshallian] demand curves, we are holding .hi-red[income] constant on the curve, income changes are demand shifters, utility changes as you move along the curve
+
+--
+
+With .hi-blue[Hicksian] demand curves, we are holding .hi-blue[utility] constant, income can change along the curve, utility changes are demand shifters
+
+
+
+---
+
+# Bid functions and housing prices
+
+
+
+.pull-left[
+
+The red line is the hedonic price function
+
+The blue lines are a single household's bid functions at different reference utility levels
+
+Moving to the bottom-right increases utility
+
+]
+
+.pull-right[
+
+![bid function is tangent to hedonic price function](12-slides-hedonics_files/figure-html/bid_functions_1-1.png)
+
+]
+
+
+---
+
+# Bid functions and housing prices
+
+.pull-left[
+
+Optimal choice is where the household's bid function is tangent to the hedonic price schedule: `\(a\)`
+
+This gives us an observed consumption level `\(q_0\)`, observed price `\(P(x,q_0)\)`, and realized utility `\(u^0\)`
+
+Different households will have different tangency points, different `\(q\)` and `\(P(x,q)\)`
+
+]
+
+.pull-right[
+
+![bid function is tangent to hedonic price function](12-slides-hedonics_files/figure-html/bid_functions_1-1.png)
+
+]
+
+
+---
+
+# Bid functions and housing prices
+
+.pull-left[
+
+The hedonic price function is the .hi[upper envelope] of all the bid functions
+
+i.e. all the bid functions are tangent to it
+
+The other piece of the story is we need the landlord problem
+
+It's almost identical to the buyer, but replace utility with profit
+
+]
+
+.pull-right[
+
+
+![bid function is tangent to hedonic price function](12-slides-hedonics_files/figure-html/bid_functions_2-1.png)
+
+]
+
+---
+
+# Hedonic price curve and willingness to pay
+
+The hedonic price curve shows how a house varies with attributes (such as air quality)
+
+--
+
+The slope gives the marginal price of the attributes
+
+--
+
+At a given point on the curve, the slope also gives the marginal WTP of the consumer who purchase that level of attributes
+
+--
+
+But we don’t know the whole marginal WTP schedule for .hi[that person], why?
+
+--
+
+Their bid curve is only tangent at that one point, we don't see their whole bid curve, people don't buy 1,000 houses to trace out the whole curve
+
+
+
+---
+
+# Estimating the effect of ozone
+
+Let's work through an example where we estimate the effect of ozone
+
+You have a dataframe `house_data` available on RStudio Cloud:
+
+```r
+house_data
+```
+
+```
+## # A tibble: 757 × 7
+##    house_num ozone num_bedrooms num_bathrooms sq_feet log_price   price
+##        &lt;int&gt; &lt;dbl&gt;        &lt;int&gt;         &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1         1  9.60            4           3      577.      12.7 341991.
+##  2         2  4.49            4           3     1111.      12.7 334851.
+##  3         3 15.6             4           1      820.      12.0 159567.
+##  4         6 10.2             3           2      886.      12.7 325459.
+##  5         8 30.8             4           3     4909.      12.9 399579.
+##  6         9 14.7             2           1.5    798.      11.9 152339.
+##  7        10  3.80            4           1.5    946.      12.5 278165.
+##  8        11  5.62            4           1     1912.      12.2 206147.
+##  9        12  8.62            3           1.5    720.      12.3 226051.
+## 10        13 16.9             1           1     2057.      12.9 384760.
+## # … with 747 more rows
+```
+
+---
+
+# Estimating the effect of ozone
+
+We want to understand the effect of ozone on housing prices: how much does a unit increase in ozone cost?
+
+--
+
+Let's take a look at the summary statistics of our dataset first:
+
+```r
+summary(house_data)
+```
+
+```
+##    house_num          ozone           num_bedrooms  num_bathrooms  
+##  Min.   :   1.0   Min.   :  0.8242   Min.   :1.00   Min.   :1.000  
+##  1st Qu.: 245.0   1st Qu.:  7.9529   1st Qu.:1.00   1st Qu.:1.500  
+##  Median : 491.0   Median : 15.3680   Median :2.00   Median :2.000  
+##  Mean   : 494.4   Mean   : 23.1940   Mean   :2.49   Mean   :1.977  
+##  3rd Qu.: 745.0   3rd Qu.: 28.6273   3rd Qu.:4.00   3rd Qu.:2.500  
+##  Max.   :1000.0   Max.   :192.8742   Max.   :4.00   Max.   :3.000  
+##     sq_feet          log_price         price        
+##  Min.   :  501.4   Min.   :10.47   Min.   :  35320  
+##  1st Qu.:  892.3   1st Qu.:12.10   1st Qu.: 179545  
+##  Median : 1395.0   Median :12.49   Median : 266053  
+##  Mean   : 2055.0   Mean   :12.51   Mean   : 323005  
+##  3rd Qu.: 2415.5   3rd Qu.:12.92   3rd Qu.: 406492  
+##  Max.   :21001.0   Max.   :14.49   Max.   :1967869
+```
+
+---
+
+# Estimating the effect of ozone
+
+Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
+
+```r
+ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
+  geom_point(size = 3, color = "darkslategray") +                        # plot points
+  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
+  theme_regular +                               # apply theme
+  labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
+```
+
+---
+
+# Estimating the effect of ozone
+
+Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
+
+.center[
+![](12-slides-hedonics_files/figure-html/unnamed-chunk-9-1.svg)&lt;!-- --&gt;
+]
+
+---
+
+# Estimating the effect of ozone
+
+Now it's time to do the regression (try one out):
+
+--
+
+
+```r
+lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %&gt;% 
+  broom::tidy()
+```
+
+```
+## # A tibble: 5 × 5
+##   term            estimate  std.error statistic  p.value
+##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   11.7       0.0722        163.   0       
+## 2 num_bedrooms   0.136     0.0163          8.39 2.45e-16
+## 3 num_bathrooms  0.161     0.0256          6.29 5.54e-10
+## 4 sq_feet        0.0000971 0.00000900     10.8  2.46e-25
+## 5 ozone         -0.00432   0.000767       -5.63 2.52e- 8
+```
+A 1 unit increase in ozone decreases housing values by 0.466%!
+
+---
+
+# Housing prices and superfund clean up
+
+Greenstone, Michael, and Justin Gallagher (2008). “Does Hazardous Waste Matter? Evidence from the Housing Market and the Superfund Program.” Quarterly Journal of Economics 
+
+--
+
+.hi[Main question:] How does superfund site clean up affects the housing price in the adjacent areas? 
+
+--
+
+.hi[How they do it:] Compare housing market outcomes in the areas surrounding the first 400 hazardous sites chosen for Superfund clean-ups to the areas surrounding the 290 sites that narrowly missed qualifying for these clean-ups
+
+---
+
+# Housing prices and superfund clean up
+
+Each site is given a Hazardous Ranking System (HRS) Score (0-100)
+
+--
+
+Because of funding limit, cutoff: HRS &gt; 28.5 cleaned up, HRS &lt; 28.5 are not
+
+--
+
+Cutoff is .hi[arbitrary] (imposed by congressional budget constraints)
+
+--
+
+Places right below 28.5 probably aren't systematically different than those right above 28.5
+
+--
+
+.hi[Key idea:] Any differences between housing values in these locations is most likely due to Superfund clean up, not other factors
+
+---
+
+# Superfund location
+
+&lt;center&gt;
+&lt;img src="files/11-superfund-location.png" width="50%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+# Regression
+
+What do GG 2008 do?
+
+--
+
+They regress:
+`$$\log(\text{2000 median home price})_c = \theta \underbrace{1(\text{cleaned up in 2000})_c}_{\text{= 1 if true, = 0 otherwise}} + \beta \underbrace{X_c}_{\text{controls}} + \varepsilon_{c}$$`
+
+--
+
+They are interested in `\(\theta\)` which tells us the percent change in a census tract median home price if it was cleaned up
+
+--
+
+`\(-\theta\)` is telling us the .hi-red[cost] of a superfund site to households
+
+---
+
+# Superfund results: "quasi-experimental"
+
+&lt;center&gt;
+&lt;img src="files/11-superfund-results2.png" width="80%" /&gt;
+&lt;/center&gt;
+
+Last three columns are the important ones
+
+---
+
+# Superfund results
+
+Superfund cleanups had .hi[economically and statistically insignificant effects] on property values, rental rates, housing supply, population, who lives near the site
+
+--
+
+Suggests the mean benefits of Superfund cleanup are small
+
+--
+
+Some recent and more granular studies (Timmins and Gamper) dispute these findings: http://www.nber.org/papers/w16655.pdf 
+
+--
+
+Why does granularity matter?
+
+---
+
+# Superfund: zoom in
+
+
+.pull-left[
+
+Superfund sites are a localized disamenity
+
+Previous attempts to value cleanup looked at changes in census tract median housing values and found no impacts
+
+Need to look .hi[within] census tracts
+
+]
+
+.pull-right[
+
+&lt;center&gt;
+&lt;img src="files/11-zoom-in.png" width="100%" /&gt;
+&lt;/center&gt;
+
+]
+
+
+---
+
+# Superfund: zoom in
+
+
+.pull-left[
+
+Consider changes in other percentiles of within-tract house value distribution:
+
+*deletion of a site raises tract-level housing values by 18.2% at the 10th percentile, 15.4% at the median, and 11.4% at the 60th percentile*
+
+
+]
+
+.pull-right[
+
+&lt;center&gt;
+&lt;img src="files/11-zoom-in.png" width="100%" /&gt;
+&lt;/center&gt;
+
+]
+
+
+---
+
+# Value of a statistical life (VSL)
+
+How much should society spend, at the margin, to save a 'statistical life'?
+
+--
+
+A statistical life is a probabilistic concept
+
+--
+
+VSL reflects willingness to pay for a reduction in the risk of death
+
+--
+
+VSL is more appropriately called the .hi[value of mortality risk]
+
+---
+
+# Value of a statistical life (VSL)
+
+How do you get a credible estimate of the VSL?
+
+--
+
+People can't just .hi[tell] you it
+
+--
+
+But we can observe it from behavior
+
+--
+
+How?
+
+--
+
+See tradeoffs people make between cost and safety
+
+---
+
+# Value of a statistical life (VSL)
+
+Some examples:
+
+--
+
+Driving speed
+
+--
+
+Vehicle choice
+
+--
+
+Wage-risk relationship
+
+--
+
+There's lots of studies, and lots of different answers
+
+---
+
+# VSL
+
+&gt; EPA recommends that the central estimate of $7.4 million ($2006), updated to the year of the analysis, be used in all benefits analyses that seek to quantify mortality risk reduction benefits regardless of the age, income, or other population characteristics of the affected population until revised guidance becomes available
+
+---
+
+# VSL thought experiment
+
+Suppose that individuals are willing to adopt a safety procedure, for which they have to give up 25 cents per hour, to reduce risk of on-the-job fatality by 1 in 10,000 (annual risk)
+
+--
+
+This translates into 2000 hours per year `\(\times\)` 0.25 dollars per hour = $500 per year
+
+--
+
+Consider 10,000 independent workers
+
+--
+
+This procedure would result in one fewer person dying on average
+
+--
+
+VSL = $500*10,000 = 5 million dollars
+
+---
+
+# Estimating a hedonic wage function
+
+We can estimate a .hi[hedonic wage function:]
+$$ w_i = \alpha + \beta_1 H_i  + \beta_2  X_i + \gamma_1 p_i + \gamma_2 q_i + \gamma_3 WC_i + \varepsilon_i$$
+
+--
+
+`\(w\)`: wage  
+`\(H\)`: worker personal characteristics  
+`\(X\)`: job characteristics  
+`\(p\)`: .hi[risk of death at the job]  
+`\(q\)`: non-fatal risk at the job  
+`\(WC\)`: workers' compensation benefits for injury  
+
+`\({\partial w \over \partial p}\)` is the wage-risk trade off for marginal changes in risk
+
+---
+
+# VSL from the hedonic wage function
+
+Suppose:
+
+- Wages were in thousands of dollars
+- Risk is deaths per 10,000 people
+- Coefficient on mortality risk `\(p\)` is `\(\gamma_1 = 0.4\)`
+
+--
+
+This implies an average WTP (reduced wage) of 
+--
+400 dollars to reduce risk by 1 in 10,000
+
+
+---
+
+# VSL from the hedonic wage function
+
+WTP (reduced wage) of 400 dollars to reduce risk by 1/10,000
+
+--
+
+This means that the VSL is:
+
+--
+ 
+`$$VSL = \underbrace{(0.4 \times 1000)}_{\substack{\text{WTP to reduce} \\ \text{risk by 1 in 10000}}} \times 10,000)  = 4 \text{ million dollars}$$`
+
+--
+
+Suppose a policy reduces mortality risk by 1/10,000 for 60,000 people (saves 6 lives on average)
+
+--
+
+This policy has a value of:
+$$ 400*60,000 = 24  \text{ million dollars}$$
+
+---
+
+# VSL estimates
+
+&lt;center&gt;
+&lt;img src="files/11-vsl-estimates.png" width="50%" /&gt;
+&lt;/center&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
