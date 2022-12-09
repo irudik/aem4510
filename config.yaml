@@ -2,7 +2,7 @@ theme: starter-academic
 title: AEM 4510
 font: lato
 baseurl: ''
-copyright: 'Ivan Rudik'
+copyright: ''
 enableGitInfo: no
 defaultContentLanguage: en
 hasCJKLanguage: no

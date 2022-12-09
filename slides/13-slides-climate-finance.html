@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 13</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="13-slides-climate-finance_files/header-attrs/header-attrs.js"></script>
+    <link href="13-slides-climate-finance_files/remark-css/default.css" rel="stylesheet" />
+    <link href="13-slides-climate-finance_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="13-slides-climate-finance_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="13-slides-climate-finance_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="13-slides-climate-finance_files/tile-view/tile-view.js"></script>
+    <link href="13-slides-climate-finance_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="13-slides-climate-finance_files/panelset/panelset.js"></script>
+    <script src="13-slides-climate-finance_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 13
+]
+.subtitle[
+## Climate Risk and Financial Instruments
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true 
+
+```r
+if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
+## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. Quick overview on financial instruments
+2. What can they tell us about climate change?
+
+
+---
+
+class: inverse, center, middle
+name: overview
+
+# Quick overview on financial instruments
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# The idea behind this part of class
+
+The two pieces of the formula for the first half of class are .hi-blue[MAC] and .hi[MD]
+
+--
+
+If we know both of these quantities we have a good sense of what we should be doing about climate change
+
+--
+
+Measuring abatement costs and damages can be super hard (think about why)
+  - e.g. early 2022 vs late 2022 expected cost of Russian gas restrictions
+
+--
+
+What we will see is financial markets contain the information we need, here we will look at:
+  - Stock markets and prediction markets: MAC
+  - Bond markets: MD
+  
+    
+---
+
+# Betting on the weather
+
+The purpose of this lecture is to see whether financial markets price climate risk
+
+--
+
+Our first step: prove to ourselves that traders even recognize climate change
+
+--
+
+How?
+
+--
+
+Studying the market for weather derivatives
+  
+---
+
+# Prediction markets
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-predict-it.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+Prediction markets are where traders bet on binary outcomes
+
+--
+
+Will Republicans win the senate?
+
+--
+
+How does it work?
+
+---
+
+# Prediction markets
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-predict-it.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+You can buy a share (asset) for whether the event will happen or not happen
+
+--
+
+The price of this share is:
+ - 72c for Republicans winning
+ - 32c for Democrats winning
+
+
+---
+
+# Prediction markets
+
+After the election:
+  - The shares for the winning side pay off $1 each
+  - The shares for the losing side are worth $0
+  
+What does the prediction market tell us?
+
+--
+
+Let's think about the economics of the market
+
+--
+
+Let:
+  - The cost of a share be `\(c\)` dollars
+  - Your belief about the probability of an event happening be `\(p\)` percent
+  
+
+---
+
+# Prediction markets
+
+Based on your beliefs about the event, your expected profit from buying a share is: `\([p \times 1 + (1-p) \times 0] - c\)`
+
+--
+
+You make a profit if `\(p &gt; c\)`, you make a loss if `\(p &lt; c\)`
+
+--
+
+Suppose `\(p &gt; c\)`, what happens?
+
+--
+
+You expect a profit, you start buying shares...
+
+--
+
+This drives up the price `\(c\)`
+
+--
+
+This is true as long as `\(p &gt; c\)`
+
+
+---
+
+# Prediction markets
+
+
+Suppose `\(p &lt; c\)`, what happens?
+
+--
+
+You expect a loss, you start selling your existing shares...
+
+--
+
+This drives down the price `\(c\)`
+
+--
+
+This is true as long as `\(p &lt; c\)`
+
+--
+
+Individual profit motives always drive `\(c\)` toward `\(p\)`
+
+--
+
+.hi[The price of the share tells us the market's expectation about the probability of the event!]
+
+
+---
+
+# Bonds
+
+.hi[Bonds:] what are they?
+
+--
+
+&gt; [Wiki] A bond is a type of security under which the issuer (debtor) owes the holder (creditor) a debt, and is obliged – depending on the terms – to repay the principal (i.e. amount borrowed) of the bond at the maturity date as well as interest (called the coupon) over a specified amount of time. 
+
+--
+
+A bond is basically a loan with a defined term/maturity
+
+--
+
+Bonds are assets, can be traded on secondary markets
+
+---
+
+# Bonds
+
+Why do bonds exist?
+
+--
+
+Bonds are a way to raise money:
+  - At time `\(t\)`, issue bonds with maturity `\(T\)`
+  - Get money from creditors
+  - Pay back interest/coupon over time between `\(t\)` and `\(T\)`
+  - Pay back principal at some future date `\(t+T\)`
+  
+--
+
+We will focus on .hi[municipal bonds (munis)] for pricing climate risk, why?
+
+
+---
+
+# Municipal bonds
+
+Why munis for pricing climate risk?
+
+--
+
+Suppose Starbucks has coffee packaging plants in Miami
+
+--
+
+Miami is expecting disastrous sea level rise, what can Starbucks do to manage it?
+
+--
+
+Move its plants somewhere else away from the ocean
+
+--
+
+The city of Miami does not have the same option: it bears the full potential cost of sea level rise
+
+
+---
+
+# Municipal bonds
+
+How do munis work?
+
+--
+
+Local governments issue munis for financing public projects (roads, infrastructure, etc)
+
+--
+
+Debt is typically paid back in a pre-specified way
+  - .hi[General obligation bonds:] paid using tax revenue
+  - .hi[Revenue bonds:] project-specific revenue (e.g. parking garage revenues)
+  
+--
+
+General obligation bonds are typically less risky
+
+---
+
+# Municipal bonds
+
+How do bonds work?
+
+--
+
+They have some .hi[face value] `\(FV\)`, the price paid when the bond matures
+
+--
+
+They pay out a .hi[coupon] (assume annually) `\(C\)`
+
+--
+
+They trade on the bond market at some .hi[price] `\(P\)` which will depend on:
+  - The face value
+  - The coupon
+  - When the bond matures
+  - *Other underlying economic conditions*
+  
+
+---
+
+# Municipal bonds
+
+We can define the .hi[yield to maturity] `\(y\)` as:
+`$$P = \left[\sum_{t=1}^T \frac{C}{(1+y)^t}\right] + \frac{FV}{(1+y)^T}$$`
+
+`\(y\)` is the effective interest rate the investor is getting on a price `\(P\)` bond
+
+--
+
+Given some price `\(P\)`, a higher yield `\(y\)` means that the flow of coupons `\(C\)` or face value `\(FV\)` must be higher
+
+--
+
+Given some coupon `\(C\)` and face value `\(FV\)`, a higher yield `\(y\)` means a lower price `\(P\)`
+
+  
+---
+
+# Municipal bonds
+
+Why would future climate risk be capitalized into munis? Examples for why?
+
+--
+
+1. If climate change (e.g. sea level rise) destroys infrastructure, raises municipal costs, raises risk of bankruptcy and non-payment of the bond
+--
+
+2. If climate change induces people to leave, this shrinks the tax base, makes it more difficult for the municipality to pay back the bond, raises risk of non-payment
+
+--
+
+Factors like these should be priced into the bond if traders understand climate risk
+
+---
+
+# Municipal bonds
+
+Let's work with a simple one-period zero coupon example: `\(C=0\)`, `\(T=1\)`, `\(FV = 105\)`:
+`$$P = \frac{105}{(1+y)^1}$$`
+
+Suppose there is no climate change and the market yield is 5%, the price of the muni is:
+
+--
+
+`$$P = \frac{105}{1+.05} = 100$$`
+---
+
+# Municipal bonds
+
+Now suppose we are considering the same muni, but there is a 7% chance that the city will be destroyed by sea level rise before next year
+  - Additional 7% chance that the bond will not be paid
+  
+To bear this additional risk, traders will demand a higher yield (lower price)
+  
+---
+
+# Municipal bonds 
+  
+We can solve for the new price:
+`$$P = \frac{105}{1+.05} \times \underbrace{(1 - .07)}_{1/(1+.075)} = \frac{105}{1+.05} \times \frac{1}{1+.075}=93$$`
+and the associated yield:
+`\begin{align}
+  \frac{1}{1+y} &amp;= \frac{1}{1+.05} \times (1 - .07) = \frac{.93}{1.05} \\
+  \Rightarrow y &amp;= \frac{1.05}{.93} - 1 = .129
+\end{align}`
+
+---
+
+# Municipal bonds 
+
+The additional 7% climate risk:
+- Decreased the price by 7% from 100 to 93
+- Increased the yield by 7.9 percentage points from 5% to 12.9%
+
+--
+
+As climate risk rises, traders demand greater yields to offset the chances of non-payment
+
+--
+
+We can measure the financial risks of climate change by looking at how places with different climate risk have munis with different yields
+
+
+---
+
+# Municipal bonds and sea level rise
+
+Painter (2020) looks at how sea level rise (SLR) risk affects bond yields
+  - Also looks at other things outside what we're doing in class
+  
+--
+
+How should SLR affect bond yields of different maturities?
+
+--
+
+SLR is a slow phenomenon, will matter increasingly over the next century
+--
+
+  - non-existent in the short run: short-term bonds shouldn't be affected
+--
+
+  - only shows up in the long run: long-run bonds should be affected if investors care
+  
+---
+
+# Municipal bonds and sea level rise
+
+.center[
+&lt;img src="files/15-climate-risk-table.png" width="800px" /&gt;
+]
+
+Climate risk: expected percent loss of city GDP
+
+Where is the climate risk?
+
+---
+
+# Municipal bonds and sea level rise
+
+.center[
+&lt;img src="files/15-raw-bond-data.png" width="800px" /&gt;
+]
+
+What does the raw data say about climate/SLR exposed and non-exposed munis?
+
+--
+
+Climate(-exposed) bonds are 8 basis points more expensive to offer
+
+11 basis points higher yield
+
+
+---
+
+# Yield
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-yield-results.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+Comparing munis offered in the same state and year, controlling for other factors:
+
+.hi[Areas at risk for SLR must offer greater yields by 16pp]
+
+---
+
+# Gross spread
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-gross-spread-results.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+They have higher gross spreads (higher underwriter search costs): 10-15bp higher for long-term bonds
+
+---
+
+# Maturities
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-maturity-results.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+Effect is larger for longer-maturity bonds: bonds maturing 
+
+---
+
+# Credit ratings
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/15-credit-rating.png" width="700px" /&gt;
+&lt;/div&gt; 
+
+SLR matters most for bonds with lower ratings:
+
+Non-high grade munis costs are 50bp higher with higher climate risk
+
+
+---
+
+# What does this all mean?
+
+We've seen that places more exposed to SLR:
+- Must offer higher yields on long-term bonds, with yields increasing in time to maturing
+- Incur higher gross spreads
+- Must offer even higher yields if they do not have a high credit rating
+
+--
+
+Think about the long-run equilibrium of economic activity, where people live, etc
+
+--
+
+What does this suggest will happen?
+
+
+---
+
+# What does this all mean?
+
+1. Capital is becoming more expensive in SLR-exposed cities
+--
+
+2. These cities will be less able to fund public projects (e.g. parks), making them less desirable
+--
+
+3. Marginal households who value these projects move elsewhere
+--
+
+4. Tax base shrinks `\(\rightarrow\)` feedback loop
+
+--
+
+Does this tell the whole story?
+
+---
+
+# What does this all mean?
+
+Alternatively:
+
+1. Capital is becoming more expensive in SLR-exposed cities
+--
+
+2. These cities will be less able to fund public projects (e.g. parks), making them less desirable
+--
+
+3. City funds adaptation projects (e.g. sea walls) to reduce exposure, decreasing yields and capital costs
+
+--
+
+In both cases, muni markets serve an important function for directing resources and people to the most productive areas
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

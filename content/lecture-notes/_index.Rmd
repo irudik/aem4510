@@ -8,7 +8,7 @@ menu:
 type: docs
 ---
 
-Each section is approximately 1-2 days of class. Readings without links can be obtained through the Cornell library website. <span style="color:red">**Required readings for students enrolled at the 5000 level are in *italics*.** </span>
+Each section is approximately 1-2 days of class. Readings without links can be obtained through the Cornell library website. <span style="color:#CF4446">**Required readings for students enrolled at the 5000 level are in *italics*.** </span>
 
 ### Introduction to environmental economics
 

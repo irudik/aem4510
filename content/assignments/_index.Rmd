@@ -12,11 +12,13 @@ type: docs
 
 **10 Online Quizzes (20%):** 2% each
 
-**3 Problem sets (30%):** 10% each
+**3 Problem sets (30%):** 10% each 
 
 **3 Prelims (40%):** 20% on your highest-scoring prelim, 15% on your second-highest-scoring, 5% on your lowest-scoring
 
 **1 Final Project (10%)** 5% paper, 3% presentation, 2% team evaluation
+
+**Final course letter grades:** A (93%–100%), A- (90%–92%), B+ (87%–89%), B (83%–86%), B- (80%–82%), C+ (77%–79%), C (73%–76%), C- (70%–72%), D+ (67%–69%), D (63%–66%), D- (60%-62%), F (below 60%)
 
 ## Online Quizzes
 
@@ -26,7 +28,7 @@ You will have 10 online quizzes, one per week where we don't have a prelim. You 
 
 - They are due on these Thursdays: Jan 26, Feb 2, Feb 9, Feb 23, Mar 2, Mar 9, Mar 16, Mar 30, Apr 13, Apr 20.
 - They will be available on Canvas from 12:00AM-11:59PM, you can choose when to complete the quiz during the day.
-- <span style="color:blue">No</span> late quiz submissions will be accepted.
+- <span style="color:#3C93DC">No</span> late quiz submissions will be accepted.
 
 **Who can I work with?** 
 
@@ -34,13 +36,13 @@ You will have 10 online quizzes, one per week where we don't have a prelim. You 
 
 ## Problem sets
 
-You will have 3 problem sets, 1 due before each prelim. You may consult with me or the TAs during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span> 
+You will have 3 problem sets, 1 due before each prelim. You may consult with me or the TAs during office hours. <span style="color:#CF4446">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span> 
 
 **When are they due?** 
 
 - Tentative problem set due dates: XYZ
 - Problem sets are due on 11:59PM on the listed due date.
-- <span style="color:blue">No</span> late problem sets will be accepted.
+- <span style="color:#3C93DC">No</span> late problem sets will be accepted.
 
 **Who can I work with, how do I submit them?** 
 
@@ -69,7 +71,7 @@ For your final project you will write a 5 page essay on an environmental policy 
 - Analyze its effectiveness in the real world.
 - Propose how to improve it and convincingly describe why your proposal is an improvement.
 
-<span style="color:red">**Students taking the class at the 5000 level will write a more in-depth, 8 page essay.**</span> 
+<span style="color:#CF4446">**Students taking the class at the 5000 level will write a more in-depth, 8 page essay.**</span> 
 
 ### Presentation
 During the last days of class, teams will present their work. For each topic, 1 team will be responsible for each of the following:
@@ -83,7 +85,7 @@ Presentations will be short: 5-10 minutes and about 5 slides.
 **When are the papers due?** 
 
 - Tentative paper due date: May 16 11:59PM.
-- <span style="color:blue">No</span> late papers will be accepted.
+- <span style="color:#3C93DC">No</span> late papers will be accepted.
 
 **When are the presentations?** 
 

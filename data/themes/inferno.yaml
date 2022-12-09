@@ -12,7 +12,7 @@ link_hover: "#3C93DC"
 menu_primary: "#fff"
 menu_text: "#000000"
 menu_hover: "#2e678c"
-menu_text_active: "#3C93DC"
+menu_text_active: "#CF4446"
 menu_title: "#494949"
 
 # Home sections
