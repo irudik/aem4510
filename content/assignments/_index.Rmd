@@ -10,15 +10,31 @@ type: docs
 
 ## Grading
 
-**5 Problem sets (50%):** 12.5% each, lowest-scoring problem set dropped
+**10 Online Quizzes (20%):** 2% each
 
-**2 Prelims (35%):** 20% on your highest-scoring prelim, 15% on your lowest-scoring prelim
+**3 Problem sets (30%):** 10% each
 
-**1 Final project (15%)**
+**3 Prelims (40%):** 20% on your highest-scoring prelim, 15% on your second-highest-scoring, 5% on your lowest-scoring
+
+**1 Final Project (10%)** 5% paper, 3% presentation, 2% team evaluation
+
+## Online Quizzes
+
+You will have 10 online quizzes, one per week where we don't have a prelim. You may not consult with me or the TAs during office hours.
+
+**When are they due?** 
+
+- They are due on these Thursdays: Jan 26, Feb 2, Feb 9, Feb 23, Mar 2, Mar 9, Mar 16, Mar 30, Apr 13, Apr 20.
+- They will be available on Canvas from 12:00AM-11:59PM, you can choose when to complete the quiz during the day.
+- <span style="color:blue">No</span> late quiz submissions will be accepted.
+
+**Who can I work with?** 
+
+- You are expected to work alone.
 
 ## Problem sets
 
-You will have 5 problem sets. You may consult with me or the TAs during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span> 
+You will have 3 problem sets, 1 due before each prelim. You may consult with me or the TAs during office hours. <span style="color:red">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span> 
 
 **When are they due?** 
 
@@ -28,20 +44,57 @@ You will have 5 problem sets. You may consult with me or the TAs during office h
 
 **Who can I work with, how do I submit them?** 
 
-- You may work in groups of up to 3 on problem sets. 
-- On Canvas, submit one problem set per group with all group members names on it.
-- If you are doing the problem set on pen and paper you **must** scan and convert it into a pdf using something like [Adobe Scan](https://www.adobe.com/acrobat/mobile/scanner-app.html). Pictures will not be accepted.
+- You may work in teams of up to 3 on problem sets. 
+- On Canvas, submit one problem set per team with all group members names on it.
+- If you are doing the problem set on pen and paper you **must** scan and convert it into a pdf using something like [Adobe Scan](https://www.adobe.com/acrobat/mobile/scanner-app.html). Pictures will not be accepted and will receive a zero.
 
 ## Prelims 
 
 **When are the prelims?**
 
-- Tentative prelim dates: March 21, May 9 (all day)
-- The prelims are in class during our regular class time
+- Tentative prelim dates: Feb 15, Mar 22, April 26.
+- The prelims are in class during our regular class time.
 
 **What do the prelims cover?**
 
-- The first will largely cover sections [01](/lecture-notes/01-introduction) to [09](/lecture-notes/09-discounting/), the second will cover the rest of the course. 
+- All material prior to the prelim date. They will focus on new content since the previous prelim, but you are still responsible for knowing all prior course material.
 - The prelims will have questions based on the slides and readings assigned.
 
 ## Final project 
+
+### Essay
+For your final project you will write a 5 page essay on an environmental policy or an environmental financial instrument. Up to three teams of students can work on the same topic. Detailed instructions will be circulated later in class. The high-level idea is that you will:
+
+- Describe the background of the policy/instrument, its objective, and how it achieves it.
+- Analyze its effectiveness in the real world.
+- Propose how to improve it and convincingly describe why your proposal is an improvement.
+
+<span style="color:red">**Students taking the class at the 5000 level will write a more in-depth, 8 page essay.**</span> 
+
+### Presentation
+During the last days of class, teams will present their work. For each topic, 1 team will be responsible for each of the following:
+
+- Presenting the background and objectives of the policy/instrument.
+- Presenting a case for why the policy/instrument is successful and an important tool.
+- Presenting a case for why the policy/instrument falls short of proponent's stated goals.
+
+Presentations will be short: 5-10 minutes and about 5 slides.
+
+**When are the papers due?** 
+
+- Tentative paper due date: May 16 11:59PM.
+- <span style="color:blue">No</span> late papers will be accepted.
+
+**When are the presentations?** 
+
+- Presentations will be during the last three days of class. Presentation days will be randomly assigned and we will have teams presenting the same topic all on the same day.
+- You must show up for your presentation.
+
+**Who can I work with, how do I submit them?** 
+
+- You may work in teams of up to 4 on the final project.
+- On Canvas, submit one paper per group (as a pdf) with all group members names on it.
+
+**What is the team evaluation?**
+
+You will be asked to anonymously grade the contribution of your teammates to disincentivize free-riding.
