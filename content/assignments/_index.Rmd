@@ -14,9 +14,9 @@ type: docs
 
 **3 Problem sets (30%):** 10% each 
 
-**3 Prelims (40%):** 20% on your highest-scoring prelim, 15% on your second-highest-scoring, 5% on your lowest-scoring
+**3 Prelims (40%):** 15% on your two highest-scoring prelims, 10% on your lowest-scoring prelim
 
-**1 Final Project (10%)** 5% paper, 3% presentation, 2% team evaluation
+**1 Final Project (10%)** 5% paper, 2% presentation, 3% team evaluation
 
 **Final course letter grades:** A (93%–100%), A- (90%–92%), B+ (87%–89%), B (83%–86%), B- (80%–82%), C+ (77%–79%), C (73%–76%), C- (70%–72%), D+ (67%–69%), D (63%–66%), D- (60%-62%), F (below 60%)
 
@@ -36,12 +36,12 @@ You will have 10 online quizzes, one per week where we don't have a prelim. You 
 
 ## Problem sets
 
-You will have 3 problem sets, 1 due before each prelim. You may consult with me or the TAs during office hours. <span style="color:#CF4446">**Students taking the class at the 5000 level will have extra problems in each problem set.**</span> 
+You will have 3 problem sets, 1 due before each prelim. You may consult with me or the TAs during office hours. <span style="color:#CF4446">**Students taking the class at the 5000 level may have extra problems in some problem sets.**</span> 
 
 **When are they due?** 
 
-- Tentative problem set due dates: XYZ
-- Problem sets are due on 11:59PM on the listed due date.
+- Tentative problem set due dates: Feb 6, Mar 13, Apr 17.
+- Problem sets are due on 11:59PM on the listed due date. You have unlimited submissions before the deadline.
 - <span style="color:#3C93DC">No</span> late problem sets will be accepted.
 
 **Who can I work with, how do I submit them?** 
@@ -49,6 +49,8 @@ You will have 3 problem sets, 1 due before each prelim. You may consult with me 
 - You may work in teams of up to 3 on problem sets. 
 - On Canvas, submit one problem set per team with all group members names on it.
 - If you are doing the problem set on pen and paper you **must** scan and convert it into a pdf using something like [Adobe Scan](https://www.adobe.com/acrobat/mobile/scanner-app.html). Pictures will not be accepted and will receive a zero.
+- It is your responsibility to submit the correct file. Unreadable or corrupted files will not be accepted. Your final submission prior to the deadline is what will be graded.
+
 
 ## Prelims 
 
@@ -99,4 +101,4 @@ Presentations will be short: 5-10 minutes and about 5 slides.
 
 **What is the team evaluation?**
 
-You will be asked to anonymously grade the contribution of your teammates to disincentivize free-riding.
+Each person's contribution will be anonymously graded by the rest of the team.
