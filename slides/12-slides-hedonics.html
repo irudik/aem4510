@@ -40,13 +40,6 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
@@ -70,8 +63,8 @@ pacman::p_load(
 ```
 
 ```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
+## Warning in library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE, : there is no package
+## called 'tweetrmd'
 ```
 
 ```
@@ -97,8 +90,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed
-## in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer
+## to the documentation to update your slides.
 ```
 
 ```r
@@ -142,52 +135,14 @@ theme_regular &lt;-
   ) 
 ```
 
-
-```r
-# makes sure we all use the same 'random' numbers
-set.seed(1000)
-
-# Number of houses
-num_houses &lt;- 1000
-
-house_data &lt;- tibble(
-  house_num = seq(from = 1, to = num_houses)
-)
-
-house_data &lt;- house_data |&gt;
-  as_tibble() |&gt;
-  mutate(
-    ozone = exp(rnorm(num_houses))*15,
-    num_bedrooms = sample(1:4, 1000, replace = TRUE),
-    num_bathrooms = sample(seq(1, 3, .5), 1000, replace = TRUE),
-    sq_feet = exp(rnorm(num_houses))*1000,
-    log_price = 12 + .1*num_bedrooms + .08*num_bathrooms + .0001*sq_feet - .005*ozone + rnorm(1000)*.5,
-    price = exp(log_price)
-  ) |&gt; 
-  filter(sq_feet &gt; 500)
-
-lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) |&gt; 
-  broom::tidy()
-```
-
-```
-## # A tibble: 5 × 5
-##   term            estimate  std.error statistic  p.value
-##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   11.7       0.0722        163.   0       
-## 2 num_bedrooms   0.136     0.0163          8.39 2.45e-16
-## 3 num_bathrooms  0.161     0.0256          6.29 5.54e-10
-## 4 sq_feet        0.0000971 0.00000900     10.8  2.46e-25
-## 5 ozone         -0.00432   0.000767       -5.63 2.52e- 8
-```
-
 ---
 
 # Roadmap
 
 - What can we use to infer the demand for environmental goods?
 - What do housing prices tell us?
-- When do changes in house prices give us welfare measures
+- What is the demand for hazardous waste? (Greenstone and Gallagher, 2008)
+- What is the demand for sea level rise? (Bernstein, et al. 2019)
 
 ---
 
@@ -751,270 +706,7 @@ a household equates their MRS between `\(q\)` and `\(z\)` and the marginal impli
 
 --
 
-Knowledge of the hedonic price curve `\(P\)` is enough to tell us about household WTP for `\(q\)`!
-
---
-
-How prices change in the environmental good tells us about WTP
-
-
----
-
-# The hedonic model: bid functions
-
-Now let's dive deeper by looking at some reference level of utility `\(\bar{u}\)`:
-`$$U(x,q,z;s) = \bar{u} \tag{indifference curve}$$`
-
---
-
-This equation just defines some indifference curve
- 
---
-
-Next we will define something called a .hi[bid function] `\(b(x,q,y,s,\bar{u})\)`
-
----
-
-# The hedonic model: bid functions
-
-The bid function `\(b(x,q,y,s,\bar{u})\)` is the .hi-red[WTP] of the household for:  
-- A house with characteristics `\(x,q\)`
-- Given income `\(y\)` and household characteristics `\(s\)`
-- That achieves utility `\(\bar{u}\)`
-
-By definition how WTP changes in q is the q-z MRS:
-
-`$${\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$`
-
----
-
-# The hedonic model: deriving MWTP
-
-`$${\partial b \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z} = {\partial P \over \partial q}$$`
-
-By assuming `\(q\)` is a part of a larger bundle of house characteristics, we are able to characterize its demand through its relationship to the housing market
-
---
-
-Our ultimate empirical goal is to estimate `\({\partial b \over \partial q}\)`, which is a kind of demand curve
-
---
-
-It's called a .hi-blue[Hicksian] demand curve, whereas our regular demand curves are .hi-red[Marshallian]
-
-
----
-
-# The hedonic model: deriving MWTP
-
-The difference is that with .hi-red[Marshallian] demand curves, we are holding .hi-red[income] constant on the curve, income changes are demand shifters, utility changes as you move along the curve
-
---
-
-With .hi-blue[Hicksian] demand curves, we are holding .hi-blue[utility] constant, income can change along the curve, utility changes are demand shifters
-
-
-
----
-
-# Bid functions and housing prices
-
-
-
-.pull-left[
-
-The red line is the hedonic price function
-
-The blue lines are a single household's bid functions at different reference utility levels
-
-Moving to the bottom-right increases utility
-
-]
-
-.pull-right[
-
-![bid function is tangent to hedonic price function](12-slides-hedonics_files/figure-html/bid_functions_1-1.png)
-
-]
-
-
----
-
-# Bid functions and housing prices
-
-.pull-left[
-
-Optimal choice is where the household's bid function is tangent to the hedonic price schedule: `\(a\)`
-
-This gives us an observed consumption level `\(q_0\)`, observed price `\(P(x,q_0)\)`, and realized utility `\(u^0\)`
-
-Different households will have different tangency points, different `\(q\)` and `\(P(x,q)\)`
-
-]
-
-.pull-right[
-
-![bid function is tangent to hedonic price function](12-slides-hedonics_files/figure-html/bid_functions_1-1.png)
-
-]
-
-
----
-
-# Bid functions and housing prices
-
-.pull-left[
-
-The hedonic price function is the .hi[upper envelope] of all the bid functions
-
-i.e. all the bid functions are tangent to it
-
-The other piece of the story is we need the landlord problem
-
-It's almost identical to the buyer, but replace utility with profit
-
-]
-
-.pull-right[
-
-
-![bid function is tangent to hedonic price function](12-slides-hedonics_files/figure-html/bid_functions_2-1.png)
-
-]
-
----
-
-# Hedonic price curve and willingness to pay
-
-The hedonic price curve shows how a house varies with attributes (such as air quality)
-
---
-
-The slope gives the marginal price of the attributes
-
---
-
-At a given point on the curve, the slope also gives the marginal WTP of the consumer who purchase that level of attributes
-
---
-
-But we don’t know the whole marginal WTP schedule for .hi[that person], why?
-
---
-
-Their bid curve is only tangent at that one point, we don't see their whole bid curve, people don't buy 1,000 houses to trace out the whole curve
-
-
-
----
-
-# Estimating the effect of ozone
-
-Let's work through an example where we estimate the effect of ozone
-
-You have a dataframe `house_data` available on RStudio Cloud:
-
-```r
-house_data
-```
-
-```
-## # A tibble: 757 × 7
-##    house_num ozone num_bedrooms num_bathrooms sq_feet log_price   price
-##        &lt;int&gt; &lt;dbl&gt;        &lt;int&gt;         &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-##  1         1  9.60            4           3      577.      12.7 341991.
-##  2         2  4.49            4           3     1111.      12.7 334851.
-##  3         3 15.6             4           1      820.      12.0 159567.
-##  4         6 10.2             3           2      886.      12.7 325459.
-##  5         8 30.8             4           3     4909.      12.9 399579.
-##  6         9 14.7             2           1.5    798.      11.9 152339.
-##  7        10  3.80            4           1.5    946.      12.5 278165.
-##  8        11  5.62            4           1     1912.      12.2 206147.
-##  9        12  8.62            3           1.5    720.      12.3 226051.
-## 10        13 16.9             1           1     2057.      12.9 384760.
-## # … with 747 more rows
-```
-
----
-
-# Estimating the effect of ozone
-
-We want to understand the effect of ozone on housing prices: how much does a unit increase in ozone cost?
-
---
-
-Let's take a look at the summary statistics of our dataset first:
-
-```r
-summary(house_data)
-```
-
-```
-##    house_num          ozone           num_bedrooms  num_bathrooms  
-##  Min.   :   1.0   Min.   :  0.8242   Min.   :1.00   Min.   :1.000  
-##  1st Qu.: 245.0   1st Qu.:  7.9529   1st Qu.:1.00   1st Qu.:1.500  
-##  Median : 491.0   Median : 15.3680   Median :2.00   Median :2.000  
-##  Mean   : 494.4   Mean   : 23.1940   Mean   :2.49   Mean   :1.977  
-##  3rd Qu.: 745.0   3rd Qu.: 28.6273   3rd Qu.:4.00   3rd Qu.:2.500  
-##  Max.   :1000.0   Max.   :192.8742   Max.   :4.00   Max.   :3.000  
-##     sq_feet          log_price         price        
-##  Min.   :  501.4   Min.   :10.47   Min.   :  35320  
-##  1st Qu.:  892.3   1st Qu.:12.10   1st Qu.: 179545  
-##  Median : 1395.0   Median :12.49   Median : 266053  
-##  Mean   : 2055.0   Mean   :12.51   Mean   : 323005  
-##  3rd Qu.: 2415.5   3rd Qu.:12.92   3rd Qu.: 406492  
-##  Max.   :21001.0   Max.   :14.49   Max.   :1967869
-```
-
----
-
-# Estimating the effect of ozone
-
-Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
-
-```r
-ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
-  geom_point(size = 3, color = "darkslategray") +                        # plot points
-  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
-  theme_regular +                               # apply theme
-  labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
-```
-
----
-
-# Estimating the effect of ozone
-
-Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
-
-.center[
-![](12-slides-hedonics_files/figure-html/unnamed-chunk-9-1.svg)&lt;!-- --&gt;
-]
-
----
-
-# Estimating the effect of ozone
-
-Now it's time to do the regression (try one out):
-
---
-
-
-```r
-lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %&gt;% 
-  broom::tidy()
-```
-
-```
-## # A tibble: 5 × 5
-##   term            estimate  std.error statistic  p.value
-##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   11.7       0.0722        163.   0       
-## 2 num_bedrooms   0.136     0.0163          8.39 2.45e-16
-## 3 num_bathrooms  0.161     0.0256          6.29 5.54e-10
-## 4 sq_feet        0.0000971 0.00000900     10.8  2.46e-25
-## 5 ozone         -0.00432   0.000767       -5.63 2.52e- 8
-```
-A 1 unit increase in ozone decreases housing values by 0.466%!
+How prices change in the environmental good, holding all else constant, tells us about WTP
 
 ---
 
@@ -1153,6 +845,189 @@ Consider changes in other percentiles of within-tract house value distribution:
 &lt;/center&gt;
 
 ]
+
+---
+
+# Sea level rise
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-nyc.jpg" width="600px" /&gt;
+&lt;/div&gt; 
+
+Sea level rise (SLR) is a long run phenomenon
+
+Not .hi[a lot] of flooding now, but by 2050 sizable portions of NYC will be flooded
+
+By 2100 average SLR will be over 2 feet
+
+--
+
+.hi[Question:] should sea level rise be capitalized into housing prices?
+
+---
+
+# Sea level rise
+
+.hi[Question:] should sea level rise be capitalized into housing prices?
+
+SLR does not affect current homeowners (much), should it still affect prices?
+
+--
+
+.hi[Yes,] why?
+
+--
+
+Let's work through the logical steps
+
+---
+
+# Sea level rise
+
+1. SLR is bad and imposes extra costs (flooding damage, needing to evacuate, etc)
+--
+
+2. SLR doesn't affect current buyers, but will affect future buyers of the property
+--
+
+3. Future buyers are not willing to pay as much for the house because of the extra costs
+--
+
+4. Current buyers will not be able to resell it for as much in the future
+--
+
+5. Current buyers are not willing to pay as much because the future resale value goes down
+
+--
+
+Effects decades in the future can affect current prices
+
+
+---
+
+# Sea level rise
+
+Here's an alternative way to think about it: property as an investment
+
+--
+
+Houses are kind of like annuities:
+  - Pay an upfront cost (mortgage)
+  - Get a future stream of revenues (rental payments from renters)
+  
+--
+
+The price of an annuity should be equal to the present value of the stream of payments (minus upkeep costs)
+  - Think about why this must be true
+
+---
+
+# Sea level rise
+
+The price of a house is the present value of the stream of profit: rental payments minus upkeep costs
+
+--
+
+If SLR reduces future demand for rentals (decreases rental payments) or increases upkeep costs (e.g. more maintenance of the house), future rental profit goes down
+
+--
+
+Similar to annuities, this should decrease the price of the house
+
+---
+
+# Sea level rise: where is it happening?
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-exposure.png" width="600px" /&gt;
+&lt;/div&gt; 
+
+The map shows the share of houses sold between 2007-2017 that would be flooded with 6 feet of SLR
+
+--
+
+Lots of houses in the Southeast are exposed!
+
+
+---
+
+# Sea level rise and housing prices
+
+Bernstein, Gustafson, and Lewis (BGL) (2019) estimate how expected SLR affects current housing prices
+
+--
+
+How do they do it?
+
+--
+
+Use a regression model to compare houses exposed to different amounts of SLR, but controlling for (i.e. have the exact same):
+  - Distance to the coast
+  - Zipcode
+  - Property characteristics (bedrooms, bathrooms, square footage, etc)
+  - Month of sale
+
+
+---
+
+# Sea level rise: where is it happening?
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-chesepeake.png" width="600px" /&gt;
+&lt;/div&gt; 
+BGL are *basically* computing the difference in house prices between two houses that are identical, in the same place, but one happened to be at higher elevation
+
+This zipcode is only 92 square miles, and between 3 and 20 feet of elevation
+
+---
+
+# Sea level rise: what is the effect?
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-housing-prices.png" width="600px" /&gt;
+&lt;/div&gt; 
+
+Houses that would be under water with 1 foot of SLR sell .hi[15 percent] cheaper than the exact same house that is not SLR-exposed
+
+The discount for houses exposed to 6 feet of SLR is only 5%
+
+
+---
+
+# Sea level rise: what is the effect?
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-dynamics.png" width="600px" /&gt;
+&lt;/div&gt; 
+
+The discount from SLR (&gt;6 feet) is getting .hi[bigger] over time
+
+--
+
+Why might this be?
+
+--
+
+SLR projections may be updated over time and more dire
+
+--
+
+Buyers may be becoming more informed about SLR
+
+
+---
+
+# Sea level rise: what about rents?
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-rental-effects.png" width="400px" /&gt;
+&lt;/div&gt; 
+
+SLR isn't happening until far into the future so it shouldn't affect rents .hi[today]
+
+--
+
+BGL estimate how future SLR affects current rents and finds very small effects like we'd expect: discounts of 1.4% or smaller
 
 
 ---

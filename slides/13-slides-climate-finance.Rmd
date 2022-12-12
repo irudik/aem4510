@@ -1444,8 +1444,12 @@ Using the listed decline in emissions and a 5% interest rate gives us these MACs
 
 In 2010 MACs were...quite low!
 
-At most $18/tCO_2$, about 1/10th the current best estimate of MD
+At most $18/tCO_2$, about 1/10 the current best estimate of MD, 1/3 the best estimate in 2010
 
 --
 
 What does this imply about WM?
+
+--
+
+If MAC < MD, then the cap is .hi[below] the socially efficient level

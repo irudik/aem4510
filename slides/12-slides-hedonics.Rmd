@@ -74,40 +74,14 @@ theme_regular <-
   ) 
 ```
 
-```{r data}
-# makes sure we all use the same 'random' numbers
-set.seed(1000)
-
-# Number of houses
-num_houses <- 1000
-
-house_data <- tibble(
-  house_num = seq(from = 1, to = num_houses)
-)
-
-house_data <- house_data |>
-  as_tibble() |>
-  mutate(
-    ozone = exp(rnorm(num_houses))*15,
-    num_bedrooms = sample(1:4, 1000, replace = TRUE),
-    num_bathrooms = sample(seq(1, 3, .5), 1000, replace = TRUE),
-    sq_feet = exp(rnorm(num_houses))*1000,
-    log_price = 12 + .1*num_bedrooms + .08*num_bathrooms + .0001*sq_feet - .005*ozone + rnorm(1000)*.5,
-    price = exp(log_price)
-  ) |> 
-  filter(sq_feet > 500)
-
-lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) |> 
-  broom::tidy()
-```
-
 ---
 
 # Roadmap
 
 - What can we use to infer the demand for environmental goods?
 - What do housing prices tell us?
-- When do changes in house prices give us welfare measures
+- What is the demand for hazardous waste? (Greenstone and Gallagher, 2008)
+- What is the demand for sea level rise? (Bernstein, et al. 2019)
 
 ---
 
@@ -703,274 +677,7 @@ $z$ is the numeraire good so we can think of it in terms of dollars
 
 --
 
-Knowledge of the hedonic price curve $P$ is enough to tell us about household WTP for $q$!
-
---
-
-How prices change in the environmental good tells us about WTP
-
-
----
-
-# The hedonic model: bid functions
-
-Now let's dive deeper by looking at some reference level of utility $\bar{u}$:
-$$U(x,q,z;s) = \bar{u} \tag{indifference curve}$$
-
---
-
-This equation just defines some indifference curve
- 
---
-
-Next we will define something called a .hi[bid function] $b(x,q,y,s,\bar{u})$
-
----
-
-# The hedonic model: bid functions
-
-The bid function $b(x,q,y,s,\bar{u})$ is the .hi-red[WTP] of the household for:  
-- A house with characteristics $x,q$
-- Given income $y$ and household characteristics $s$
-- That achieves utility $\bar{u}$
-
-By definition how WTP changes in q is the q-z MRS:
-
-$${\partial b \over \partial q} = {\partial P \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z}$$
-
----
-
-# The hedonic model: deriving MWTP
-
-$${\partial b \over \partial q} = {\partial U \over \partial q}\bigg/{\partial U \over \partial z} = {\partial P \over \partial q}$$
-
-By assuming $q$ is a part of a larger bundle of house characteristics, we are able to characterize its demand through its relationship to the housing market
-
---
-
-Our ultimate empirical goal is to estimate ${\partial b \over \partial q}$, which is a kind of demand curve
-
---
-
-It's called a .hi-blue[Hicksian] demand curve, whereas our regular demand curves are .hi-red[Marshallian]
-
-
----
-
-# The hedonic model: deriving MWTP
-
-The difference is that with .hi-red[Marshallian] demand curves, we are holding .hi-red[income] constant on the curve, income changes are demand shifters, utility changes as you move along the curve
-
---
-
-With .hi-blue[Hicksian] demand curves, we are holding .hi-blue[utility] constant, income can change along the curve, utility changes are demand shifters
-
-
-
----
-
-# Bid functions and housing prices
-
-```{r bid_functions_1, echo = FALSE, fig.show = 'hide', warning = F}
-bid1 <- function(x) -x^2/2*1.2 + 5*x + 3
-bid2 <- function(x) -x^2/2*1.2 + 5*x
-bid3 <- function(x) -x^2/2*1.2 + 5*x - 3
-hedonic_p <- function(x) -x^2/2.2 + 4.25*x + 1
-ggplot() +
-  stat_function(fun = bid1, color = "#638ccc", size = 1.0, linetype = "longdash") +
-  stat_function(fun = bid2, color = "#638ccc", size = 1.0, linetype = "longdash") +
-  stat_function(fun = bid3, color = "#638ccc", size = 1.0, linetype = "longdash") +
-  stat_function(fun = hedonic_p, color = "#ca5670", size = 1.0) +
-    annotate("segment", x = 2.75, xend = 2.75, y = 0, yend = 9.2,
-           linetype = "dotted", size = 1, color = "grey55") +
-    annotate("segment", x = 0, xend = 2.75, y = 9.2, yend = 9.2,
-           linetype = "dotted", size = 1, color = "grey55") +
-  annotate("text", size = 6, label = expression(b(x,q,y,s, u^2)), x = 3.25, y = 14, color = "#638ccc") +
-  annotate("text", size = 6, label = "P(x,q)", x = 3.25, y = 11, color = "#ca5670") +
-  annotate("text", size = 6, label = expression(b(x,q,y,s, u^1)), x = 3.25, y = 5, color = "638ccc") +
-  annotate("text", size = 6, label = expression(b(x,q,y,s, u^0)), x = 3.25, y = 8.5, color = "#638ccc") +
-  annotate("text", size = 6, label = "a", x = 2.6, y = 8, color = "black") +
-  theme_regular +
-  scale_x_continuous(expand = c(0, 0), limits = c(0, 4), breaks = c(2.75), labels = expression(q[0])) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 15), breaks = c(9.2), labels = expression(P(x,q[0]))) +
-  labs(x = "q",
-       y = "$",
-       title = "Hedonic price function\nand bid functions")
-  
-```
-
-.pull-left[
-
-The red line is the hedonic price function
-
-The blue lines are a single household's bid functions at different reference utility levels
-
-Moving to the bottom-right increases utility
-
-]
-
-.pull-right[
-
-![bid function is tangent to hedonic price function](`r knitr::fig_chunk("bid_functions_1", "png")`)
-
-]
-
-
----
-
-# Bid functions and housing prices
-
-.pull-left[
-
-Optimal choice is where the household's bid function is tangent to the hedonic price schedule: $a$
-
-This gives us an observed consumption level $q_0$, observed price $P(x,q_0)$, and realized utility $u^0$
-
-Different households will have different tangency points, different $q$ and $P(x,q)$
-
-]
-
-.pull-right[
-
-![bid function is tangent to hedonic price function](`r knitr::fig_chunk("bid_functions_1", "png")`)
-
-]
-
-
----
-
-# Bid functions and housing prices
-
-.pull-left[
-
-The hedonic price function is the .hi[upper envelope] of all the bid functions
-
-i.e. all the bid functions are tangent to it
-
-The other piece of the story is we need the landlord problem
-
-It's almost identical to the buyer, but replace utility with profit
-
-]
-
-.pull-right[
-
-```{r bid_functions_2, echo = FALSE, fig.show = 'hide', warning = F}
-bid1 <- function(x) -x^2/2*1.2 + 4*x + 1
-bid2 <- function(x) -x^2/2*1.2 + 5*x
-bid3 <- function(x) -x^2/2*1.45 + 6*x - 2
-hedonic_p <- function(x) -x^2/2.2 + 4.25*x + 1
-ggplot() +
-  stat_function(fun = bid1, color = "forestgreen", size = 1.0, linetype = "longdash") +
-  stat_function(fun = bid2, color = "#638ccc", size = 1.0, linetype = "longdash") +
-  stat_function(fun = bid3, color = "black", size = 1.0, linetype = "longdash") +
-  stat_function(fun = hedonic_p, color = "#ca5670", size = 1.0) +
-  annotate("text", size = 6, label = "P(x,q)", x = 3.25, y = 11, color = "#ca5670") +
-  annotate("text", size = 6, label = expression(b[1](x,q,y,s, u)), x = 3.25, y = 7, color = "forestgreen") +
-  annotate("text", size = 6, label = expression(b[2](x,q,y,s, u)), x = 3.25, y = 8.5, color = "#638ccc") +
-  annotate("text", size = 6, label = expression(b[3](x,q,y,s, u)), x = 1.75, y = 3, color = "black") +
-  theme_regular +
-  scale_x_continuous(expand = c(0, 0), limits = c(0, 4), breaks = c(2.75), labels = expression(q[0])) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 15), breaks = c(9.2), labels = expression(P(x,q[0]))) +
-  labs(x = "q",
-       y = "$",
-       title = "Hedonic price curve\nand bid functions")
-  
-```
-![bid function is tangent to hedonic price function](`r knitr::fig_chunk("bid_functions_2", "png")`)
-
-]
-
----
-
-# Hedonic price curve and willingness to pay
-
-The hedonic price curve shows how a house varies with attributes (such as air quality)
-
---
-
-The slope gives the marginal price of the attributes
-
---
-
-At a given point on the curve, the slope also gives the marginal WTP of the consumer who purchase that level of attributes
-
---
-
-But we don’t know the whole marginal WTP schedule for .hi[that person], why?
-
---
-
-Their bid curve is only tangent at that one point, we don't see their whole bid curve, people don't buy 1,000 houses to trace out the whole curve
-
-
-
----
-
-# Estimating the effect of ozone
-
-Let's work through an example where we estimate the effect of ozone
-
-You have a dataframe `house_data` available on RStudio Cloud:
-```{r}
-house_data
-```
-
----
-
-# Estimating the effect of ozone
-
-We want to understand the effect of ozone on housing prices: how much does a unit increase in ozone cost?
-
---
-
-Let's take a look at the summary statistics of our dataset first:
-```{r}
-summary(house_data)
-```
-
----
-
-# Estimating the effect of ozone
-
-Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
-```{r, eval = F}
-ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
-  geom_point(size = 3, color = "darkslategray") +                        # plot points
-  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
-  theme_regular +                               # apply theme
-  labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
-```
-
----
-
-# Estimating the effect of ozone
-
-Now let's plot the relationship between log house prices and ozone to see what the data actually look like:
-
-.center[
-```{r, echo = F, dev = "svg", fig.height = 4.5, fig.width = 6}
-ggplot(house_data, aes(x = ozone, y = log_price)) +   # start plot
-  geom_point(size = 3, color = "darkslategray") +                        # plot points
-  geom_smooth(formula = y ~ x, se = F, method = "lm", size = 2, color = red_pink) +
-  theme_regular +                               # apply theme
-  labs(x = "Ozone (ppb)", y = "Log Price ($)")      # assign labels
-```
-]
-
----
-
-# Estimating the effect of ozone
-
-Now it's time to do the regression (try one out):
-
---
-
-```{r}
-lm(log_price ~ num_bedrooms + num_bathrooms + sq_feet + ozone, house_data) %>% 
-  broom::tidy()
-```
-A 1 unit increase in ozone decreases housing values by 0.466%!
+How prices change in the environmental good, holding all else constant, tells us about WTP
 
 ---
 
@@ -1117,6 +824,201 @@ knitr::include_graphics("files/11-zoom-in.png")
 </center>
 
 ]
+
+---
+
+# Sea level rise
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "600px", echo = FALSE}
+knitr::include_graphics("files/11-slr-nyc.jpg")
+```
+</div> 
+
+Sea level rise (SLR) is a long run phenomenon
+
+Not .hi[a lot] of flooding now, but by 2050 sizable portions of NYC will be flooded
+
+By 2100 average SLR will be over 2 feet
+
+--
+
+.hi[Question:] should sea level rise be capitalized into housing prices?
+
+---
+
+# Sea level rise
+
+.hi[Question:] should sea level rise be capitalized into housing prices?
+
+SLR does not affect current homeowners (much), should it still affect prices?
+
+--
+
+.hi[Yes,] why?
+
+--
+
+Let's work through the logical steps
+
+---
+
+# Sea level rise
+
+1. SLR is bad and imposes extra costs (flooding damage, needing to evacuate, etc)
+--
+
+2. SLR doesn't affect current buyers, but will affect future buyers of the property
+--
+
+3. Future buyers are not willing to pay as much for the house because of the extra costs
+--
+
+4. Current buyers will not be able to resell it for as much in the future
+--
+
+5. Current buyers are not willing to pay as much because the future resale value goes down
+
+--
+
+Effects decades in the future can affect current prices
+
+
+---
+
+# Sea level rise
+
+Here's an alternative way to think about it: property as an investment
+
+--
+
+Houses are kind of like annuities:
+  - Pay an upfront cost (mortgage)
+  - Get a future stream of revenues (rental payments from renters)
+  
+--
+
+The price of an annuity should be equal to the present value of the stream of payments (minus upkeep costs)
+  - Think about why this must be true
+
+---
+
+# Sea level rise
+
+The price of a house is the present value of the stream of profit: rental payments minus upkeep costs
+
+--
+
+If SLR reduces future demand for rentals (decreases rental payments) or increases upkeep costs (e.g. more maintenance of the house), future rental profit goes down
+
+--
+
+Similar to annuities, this should decrease the price of the house
+
+---
+
+# Sea level rise: where is it happening?
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "600px", echo = FALSE}
+knitr::include_graphics("files/11-slr-exposure.png")
+```
+</div> 
+
+The map shows the share of houses sold between 2007-2017 that would be flooded with 6 feet of SLR
+
+--
+
+Lots of houses in the Southeast are exposed!
+
+
+---
+
+# Sea level rise and housing prices
+
+Bernstein, Gustafson, and Lewis (BGL) (2019) estimate how expected SLR affects current housing prices
+
+--
+
+How do they do it?
+
+--
+
+Use a regression model to compare houses exposed to different amounts of SLR, but controlling for (i.e. have the exact same):
+  - Distance to the coast
+  - Zipcode
+  - Property characteristics (bedrooms, bathrooms, square footage, etc)
+  - Month of sale
+
+
+---
+
+# Sea level rise: where is it happening?
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "600px", echo = FALSE}
+knitr::include_graphics("files/11-slr-chesepeake.png")
+```
+</div> 
+BGL are *basically* computing the difference in house prices between two houses that are identical, in the same place, but one happened to be at higher elevation
+
+This zipcode is only 92 square miles, and between 3 and 20 feet of elevation
+
+---
+
+# Sea level rise: what is the effect?
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "600px", echo = FALSE}
+knitr::include_graphics("files/11-slr-housing-prices.png")
+```
+</div> 
+
+Houses that would be under water with 1 foot of SLR sell .hi[15 percent] cheaper than the exact same house that is not SLR-exposed
+
+The discount for houses exposed to 6 feet of SLR is only 5%
+
+
+---
+
+# Sea level rise: what is the effect?
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "600px", echo = FALSE}
+knitr::include_graphics("files/11-slr-dynamics.png")
+```
+</div> 
+
+The discount from SLR (>6 feet) is getting .hi[bigger] over time
+
+--
+
+Why might this be?
+
+--
+
+SLR projections may be updated over time and more dire
+
+--
+
+Buyers may be becoming more informed about SLR
+
+
+---
+
+# Sea level rise: what about rents?
+
+<div style= "float:right;position: relative;">
+```{r, out.width = "400px", echo = FALSE}
+knitr::include_graphics("files/11-rental-effects.png")
+```
+</div> 
+
+SLR isn't happening until far into the future so it shouldn't affect rents .hi[today]
+
+--
+
+BGL estimate how future SLR affects current rents and finds very small effects like we'd expect: discounts of 1.4% or smaller
 
 
 ---
