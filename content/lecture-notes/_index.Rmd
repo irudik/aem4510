@@ -8,14 +8,14 @@ menu:
 type: docs
 ---
 
-Each section is approximately 1-2 days of class. Readings without links can be obtained through the Cornell library website. <span style="color:#CF4446">**Required readings for students enrolled at the 5000 level are in *italics*.** </span>
+Each section is approximately 1-2 days of class. KO denotes readings from the Keohane and Olmstead book. Any readings without links can be obtained through the Cornell library website. <span style="color:#CF4446">**Required readings for students enrolled at the 5000 level are in *italics*.** </span>
 
 ### Introduction to environmental economics
 
   - [Lecture notes](01-introduction)
   - KO Chapters 1 and 4
   - Fullerton, Don, and Robert Stavins. "[How economists see the environment.](https://www-nature-com.proxy.library.cornell.edu/articles/26606)" Nature 395, no. 6701 (1998): 433-434.
-  - Krutilla, John V. "[Conservation reconsidered.](https://www.jstor.org/stable/pdf/1815368.pdf)" The American Economic Review 57, no. 4 (1967): 777-786.
+  - *Krutilla, John V. "[Conservation reconsidered.](https://www.jstor.org/stable/pdf/1815368.pdf)" The American Economic Review 57, no. 4 (1967): 777-786.*
 
 ### Market failures: Public goods and externalities
 
@@ -25,7 +25,7 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 ### Coase theorem
 
   - [Lecture notes](03-coase)
-  - Coase, Ronald Harry. "[The problem of social cost.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/674872)" The Journal of Law and Economics 3 (1960): 1-44.
+  - *Coase, Ronald. "[The problem of social cost.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/674872)" The Journal of Law and Economics 3 (1960): 1-44.*
   
 ### In class Coasean bargaining game
 
@@ -51,7 +51,7 @@ Each section is approximately 1-2 days of class. Readings without links can be o
 ### Distortions and second-best policies
 
   - [Lecture notes](07-second-best)
-  - Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.
+  - *Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.*
 
 ### Policy under uncertainty
 
