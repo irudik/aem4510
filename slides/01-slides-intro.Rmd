@@ -41,9 +41,20 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 
 # Roadmap
 
+- Course set up and SDS testing program
 - What is environmental economics?
 - What are the goals for this class?
 - Microeconomics recap
+
+---
+
+class: inverse, center, middle
+name: course_set_up
+
+# Course set up and SDS testing program
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
 
 ---
 

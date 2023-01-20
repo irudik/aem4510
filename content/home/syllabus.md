@@ -78,3 +78,15 @@ Info on assignments and grading are [here](/assignments/). The actual assignment
   - Explain how financial instruments tell us information about the environment
       - AEM 5510: Also explain how green financial instruments work
   - Explain how economists measure the economic costs of environmental change
+
+
+**Students with Disabilities:** Your access in this course is very important to me.  In order to have adequate time to arrange your approved accommodation, you must request your accommodation letter no later than February 8. If you become registered with SDS after February 8, you must request your accommodation letter at least 7 days prior to the date of your exam.
+Once SDS approves your accommodation letter, it will be emailed to both you and me. 
+For students with testing accommodations, this course is participating in the SDS Alternative Testing Program for the Spring 2023 semester. If you have an approved testing accommodation, you must request it for this course and complete an Exam Request Form for each exam in this course via the SDS student portal by February 8th. Failure to do so may result in the inability to use your accommodation. 
+
+Additionally, be aware of the following:
+- Students are expected to start their accommodated exam at the same time as the main exam. Students with extended time accommodations who have a course immediately following this class will be scheduled for 8 a.m. and/or 5 p.m. on the same day. 
+- All exam logistics will be communicated to you from SDS (look out for emails from sds@accessiblelearning.mail.cornell.edu). Please note that confirmation about the exact time and room location for your accommodated exam will be communicated to you closer to the exam date (no later than 48 hours prior). Please do not contact me with questions about exam logistics, as I will not be able to answer them. All details are being managed by SDS; therefore, questions should be sent to sds-testing@cornell.edu.
+- Coordination of make-up exams (i.e., for students who have been granted prior permission by me to take the exam on a day other than the scheduled date of the main exam) will be handled by Virginia. The SDS Alternative Testing Program will not be involved in the logistics for any make-up exams. If you miss your scheduled accommodated exam, you should notify me, not SDS. 
+
+For students with other academic accommodations (not testing-related), please follow up with me to discuss the necessary logistics of your accommodation(s).
