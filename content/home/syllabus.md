@@ -29,7 +29,7 @@ design:
 
 **Professor office hours (both sections):**
 
-- Tuesday 1:30-3:00 in Warren 462
+- Tuesday 2:00-3:00 in Warren 462
 
 **TA office hours (both sections):**
 
