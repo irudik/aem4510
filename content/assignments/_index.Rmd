@@ -10,9 +10,9 @@ type: docs
 
 ## Grading
 
-**10 Online Quizzes (20%):** 2% each
+**10 Online Quizzes (20%):** 2% each, lowest 2 quizzes are replaced with your highest 2 quizzes 
 
-**3 Problem sets (30%):** 10% each 
+**3 Problem sets (30%):** 15% on your highest-scoring, 10% on your second-highest-scoring, 5% on your lowest-scoring
 
 **3 Prelims (40%):** 15% on your two highest-scoring prelims, 10% on your lowest-scoring prelim
 
@@ -26,7 +26,7 @@ You will have 10 online quizzes, one per week where we don't have a prelim. You 
 
 **When are they due?** 
 
-- They are due on these Thursdays: Jan 26, Feb 2, Feb 9, Feb 23, Mar 2, Mar 9, Mar 16, Mar 30, Apr 13, Apr 20.
+- They are due on these Thursdays at 11:59PM: Jan 26, Feb 2, Feb 9, Feb 23, Mar 2, Mar 9, Mar 16, Mar 30, Apr 13, Apr 20.
 - <span style="color:#3C93DC">No</span> late quiz submissions will be accepted.
 
 **Who can I work with?** 
