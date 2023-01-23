@@ -12,7 +12,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       ratio: '16:9'
-
+ 
 ---
 exclude: true
 ```{r setup}
@@ -89,7 +89,7 @@ name: course_set_up
 
 .hi[3 Prelims (15%, 15%, 10%):] test your understanding of key concepts (solo)
   - Feb 15, Mar 22, Apr 26
-  - .hi[SDS:] This class is in the Alternative Test Program, if approved for exam accommodations, you must request your exam accommodation(s) for this course and fill out an exam request form for each exam in this course via the SDS student portal by February 8th
+  - .hi[SDS:] This class is in the Alternative Test Program, if approved for exam accommodations, you must request your exam accommodation(s) for this course and fill out an exam request form for each exam in this course via the SDS student portal by February 8th 
 
 .hi[1 Final Project (5% paper, 2% presentation, 3% team eval):] put your understanding of key concepts to work on real world issues (teams of 3)
   - Presentations last 3ish days of class, paper due May 16 during finals week
@@ -736,7 +736,7 @@ Are (competitive) markets efficient?
 
 --
 
-Under some assumptions, yes: the .hi[First Welfare Theorem] tells us that any competitive equilibrium is Pareto efficient
+Under some assumptions, yes, the .hi[First Welfare Theorem] tells us that any competitive equilibrium is .hi[Pareto] efficient
 
 --
 
@@ -751,6 +751,8 @@ Under these assumptions competitive markets also maximize social welfare
 # Under what assumptions are markets efficient?
 
 What are the underlying assumptions for market efficiency?
+
+--
 
 1. Perfect competition
 2. Perfect information
@@ -769,7 +771,9 @@ They drive a wedge between private and social marginal cost, or private and soci
 
 # The key departures in environmental economics
 
-In enviro econ, the key departure from the standard perfect market is the introduction of externalities and non-rival and non-excludable goods:
+In enviro econ, the key departures from the standard perfect market are 
+--
+externalities and non-rival and non-excludable goods:
 
 --
 
@@ -790,7 +794,9 @@ In enviro econ, the key departure from the standard perfect market is the introd
 
 # Imperfect information
 
-We will also discuss .hi[imperfect information]: when economic actors are uncertainty about the prices or quality of a good
+We will also discuss .hi[imperfect information]: 
+--
+when economic actors are uncertainty about the prices or quality of a good
 
 --
 
