@@ -55,9 +55,62 @@ name: what_is_enviro
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
 
+<!-- --- -->
+
+<!-- # The ideal world: mathematical -->
+
+<!-- In the best case scenario, a market equilibrium leads to the efficient allocation -->
+
+<!-- -- -->
+
+<!-- Example: bread -->
+
+<!-- -- -->
+
+<!-- Household gets utility $U(B,C)$ from consuming bread $B$ and electricity $C$ -->
+
+<!-- -- -->
+
+<!-- Price of bread is $p_b$, price of electricity is $p_e$, household has a budget $Y$ -->
+
+<!-- -- -->
+
+<!-- Household solves: -->
+<!-- \begin{align} -->
+<!--   &\max_{B,E} U(B,E) \quad \text{subject to: } \quad p_b B + p_e E = Y \\ -->
+<!--   &\max_{B} U\left(B,\frac{Y - p_b B}{p_e}\right) -->
+<!-- \end{align} -->
+
+<!-- --- -->
+
+<!-- # The ideal world: mathematical -->
+
+<!-- \begin{align} -->
+<!--   \max_{B} U\left(B,\frac{Y - p_b B}{p_e}\right) -->
+<!-- \end{align} -->
+
+<!-- The first-order condition gives us what defines the utility maximizing choice of bread: -->
+<!-- $$\frac{\partial U\left(B,\frac{Y - p_b B}{p_e}\right)}{\partial B} + \frac{\partial U\left(B,\frac{Y - p_b B}{p_e}\right)}{\partial E}\left(- \frac{p_b}{p_e} \right) = 0$$ -->
+
+<!-- $$\frac{\partial U\left(B,\frac{Y - p_b B}{p_e}\right)}{\partial B} \Bigg/\frac{\partial U\left(B,\frac{Y - p_b B}{p_e}\right)}{\partial E}= \frac{p_b}{p_e}$$ -->
+
+<!-- --- -->
+
+<!-- # The ideal world: mathematical -->
+
+
+<!-- $$\frac{\partial U\left(B,\frac{Y - p_b B}{p_c}\right)}{\partial B} \Bigg/\frac{\partial U\left(B,\frac{Y - p_b B}{p_c}\right)}{\partial C}= \frac{p_b}{p_c}$$ -->
+<!-- .hi[Left hand side:] marginal rate of substitution (slope of indifference curve between bread and electricity) -->
+
+<!-- .hi[Right hand side:] relative prices (slope of budget constraint) -->
+
+<!-- -- -->
+
+<!-- Households consume the bundle of goods that makes their indifference curve tangent to the budget constraint -->
+
 ---
 
-# The ideal world
+# The ideal world: graphical
 
 In the best case scenario, a market equilibrium leads to the efficient allocation
 
@@ -248,12 +301,20 @@ E.g. at Wegmans or Agway you will not find some important goods on sale:
 
 --
 
-The central problem is that there are goods that are .hi-red[not priced],  
-why is this a problem?
+The central problem is that there are goods that are .hi-red[not priced], why is this a problem?
 
 --
 
-Markets rely on prices to reflect value and have people make good decisions
+Markets rely on prices to signal the social value of goods
+
+---
+
+# No markets lead to issues in the Southwest
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/yRUs_gLgpx4") %>%
+  use_align("center")
+```
 
 
 ---
