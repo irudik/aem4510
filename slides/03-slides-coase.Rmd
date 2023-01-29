@@ -18,7 +18,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, tweetrmd, vembedr
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -116,7 +116,7 @@ If there are:
 
 1. No wealth effects on demand
 2. No transactions costs
-3. Well-defined property rights
+3. Well-defined and enforceable property rights
 
 then:
 
@@ -127,6 +127,19 @@ the most efficient or optimal economic activity will occur regardless of who hol
 --
 
 The right to pollute (a resource) will end up in the hands who value it most through negotiation
+
+
+---
+
+# Property rights
+
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/fe05EYFlMLk") %>%
+  use_align("center")
+```
+
+Property rights are only as good as prevailing norms or enforcement
 
 ---
 
