@@ -671,7 +671,7 @@ It's optimal choice of $N$ (and therefore $\theta$) is given by the first-order 
 
 --
 
-$$B'(E) = MC \leftrightarrow MB(E) = MC$$
+$$B'(N) = MC \leftrightarrow MB(N) = MC$$
 which matches our condition for efficiency in noise
 
 --
@@ -772,7 +772,7 @@ First term is the avoided noise costs, second term is the payment, third term is
 --
 
 The doctor's problem gives us the first-order condition:
-$$MC = B'(E) \equiv MC = MB$$
+$$MC = B'(N) \equiv MC = MB$$
 
 ---
 
