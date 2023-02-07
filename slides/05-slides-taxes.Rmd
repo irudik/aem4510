@@ -58,6 +58,15 @@ name: taxes
 
 # Emission taxes
 
+```{r, echo = FALSE}
+embed_url("https://youtu.be/SXAjk3lYNV0") %>%
+  use_align("center")
+```
+
+---
+
+# Emission taxes
+
 The main tax we will focus on is an .hi[emission tax]
 
 --
@@ -276,7 +285,7 @@ name: subsidies
 
 # Abatement subsidies
 
-What is the socially abatement subsidy $s$?
+What is the socially optimal abatement subsidy $s$?
 
 --
 
@@ -296,8 +305,8 @@ First lets set up the firm problem: they want to minimize the cost of satisfying
 # Abatement subsidies: firm
 
 The firm's problem is then:
-$$ \min_E C(E) - s(-E)$$
-where we are substituting in $-E$ for $A$
+$$ \min_E C(E) - s(E_0-E)$$
+where we are substituting in $E_0-E$ for $A$
 
 --
 
@@ -446,6 +455,15 @@ knitr::include_graphics("files/05-bakken.png")
 knitr::include_graphics("files/05-bakken.png")
 ```
 </center>
+
+---
+
+# Emission taxes
+
+```{r, echo = FALSE}
+embed_url("https://youtu.be/kiiLzsleuwU") %>%
+  use_align("center")
+```
 
 ---
 
