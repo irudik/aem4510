@@ -37,7 +37,7 @@ design:
 
 - Mike Huang (jh2737): Friday 10:00-11:00 in Warren 370
 
-- Tianzi Liu (tl567): Thursday 2:00-3:00 in Warren 370
+- Tianzi Liu (tl567): Thursday 5:30-6:30 in Warren 370
 
 - Toni Marcheva (asm395): Wednesday 10:00-11:00 in Warren 370
 
