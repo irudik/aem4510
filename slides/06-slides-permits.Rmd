@@ -84,14 +84,14 @@ md <- function(x) 1
 ggplot() +
   annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
   annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
-  annotate("text", x = 1.25, y = 2.5, label = "MD", size = 8) +
+  annotate("text", x = 2.5, y = .9, label = "MD", size = 8) +
   stat_function(fun = mac2, color = "#000000", size = 1.5) +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
            linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 2, xend = 2, y = 0, yend = .99,
-           linetype = "dashed", size = 1.5, color = "#000000") +
+           linetype = "dashed", size = 1.5, color = "grey50") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -141,7 +141,7 @@ md <- function(x) 1
 ggplot() +
   annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
   annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
-  annotate("text", x = 1.25, y = 2.5, label = "MD", size = 8) +
+  annotate("text", x = 2.5, y = .9, label = "MD", size = 8) +
   stat_function(fun = mac2, color = "#000000", size = 1.5) +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
@@ -149,7 +149,7 @@ ggplot() +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
            linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 2, xend = 2, y = 0, yend = .99,
-           linetype = "dashed", size = 1.5, color = "#000000") +
+           linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 0, xend = 3, y = 1.05, yend = 1.05,
            linetype = "longdash", size = 1.5, color = "red") +
   theme_minimal() +
@@ -176,9 +176,9 @@ ggplot() +
 
 .pull-right[
 
-Regulating multiple heterogeneous firms with a tax is easy:
+Regulating multiple heterogeneous firms with a tax can be easy:
 
-Since firms select MAC = $\tau$, as long as we set $\tau = MD$ we can achieve the efficient outcome (MAC = MD) without knowing anything about the firms!
+If MD is constant, then since firms select MAC = $\tau$, as long as we set $\tau = MD$, we can achieve the efficient outcome (MAC = MD) without knowing anything about the firms!
 
 ]
 
@@ -209,6 +209,8 @@ Write down the regulator's problem
 
 $$\min_{E_1,E_2} C_1(E_1) + C_2(E_2) \,\,\,\, \text{subject to:} \, E_1 + E_2 = \bar{E}$$
 
+--
+
 Solve the constraint for $E_2 = \bar{E} - E_1$ so we have a simpler problem:
 $$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$
 
@@ -228,7 +230,7 @@ The marginal abatement costs across the sources must be equal at the cost-effect
 
 --
 
-This is often called the .hi-blue[equimarginal principle]
+This is called the .hi-blue[equimarginal principle]
 
 ---
 
@@ -399,7 +401,7 @@ ggplot() +
 
 .pull-right[
 
-Suppose we want to limit to $\bar{E}$ total emissions so each firm gets $\bar{E}/2$ permits
+Suppose we want to limit to $\bar{E}$ total emissions so each firm gets $\bar{E}/2$ permits, but cant trade them
 
 .hi[This can't be efficient] (i.e. maximize social welfare given some MD curve)
 
@@ -412,22 +414,22 @@ Suppose we want to limit to $\bar{E}$ total emissions so each firm gets $\bar{E}
 # Tradable permits: cost-effectiveness
 
 For cost-effectiveness, we need total costs to be minimized for achieving a given level of emissions:
-$$\min_{E_1, E_2} C(E_1) + C(E_2) \,\,\, \text{subject to: } E_1 + E_2 = \bar{E}$$
+$$\min_{E_1, E_2} C_1(E_1) + C_2(E_2) \,\,\, \text{subject to: } E_1 + E_2 = \bar{E}$$
 
 This is the same problem as:
-$$\min_{E_1, E_2} C(E_1) + C(\bar{E} - E_1)$$
+$$\min_{E_1, E_2} C_1(E_1) + C_2(\bar{E} - E_1)$$
 
 which has a solution where:
-$$-C'(E_1^*) = -C'(\bar{E} - E^*_1)$$
+$$-C_1'(E_1^*) = -C_2'(\bar{E} - E^*_1)$$
 
 ---
 
 # Tradable permits: cost-effectiveness
 
 Cost-effectiveness requires:
-$$-C'(E_1^*) = -C'(\bar{E} - E^*_1) \leftrightarrow MAC_1 = MAC_2$$
+$$-C_1'(E_1^*) = -C_2'(\bar{E} - E^*_1) \leftrightarrow MAC_1 = MAC_2$$
 
-That marginal abatement costs are equal across all 
+That marginal abatement costs are equal across all emitters
 
 --
 
@@ -684,7 +686,7 @@ Firm 1 can abate 1 more unit at cost equal to the red point (0.83)
 
 .pull-right[
 
-Firm 2 can buy the right to emit 1 unit of pollution from firm 1 for anywhere between 1.25-0.83=.42 and .hi[both will be better off]
+Firm 2 can buy the right to emit 1 unit of pollution from firm 1 for anywhere between 1.25 and 0.83 and .hi[both will be better off] [very Coasean!]
 
 These trades can be done until the MACs are equal at a value of 1
 
@@ -723,7 +725,7 @@ Suppose there is a permit price $p$ in the competitive tradable permit market
 
 --
 
-Firms are price-takers
+Firms are price-takers in the permit market
 
 --
 
@@ -874,7 +876,7 @@ This is one of the key reasons the 1990 CAA amendments were able to be passed
 
 --
 
-.hi-blue[Auction] charge firms for each permit they hold, let price be set by marketplace, revenues can be used to reduce other distortionary taxes, auction price will be the same as a Pigouvian tax
+.hi-blue[Auction] charge firms for each permit they hold, let price be set by marketplace, revenues can be used in other ways by the government, auction price will be the same as a Pigouvian tax
 
 --
 
@@ -893,6 +895,7 @@ This is one of the key reasons the 1990 CAA amendments were able to be passed
 --
 
 We can decentralize trading market to cut down on transaction costs
+
 --
 
 Do trades need to be validated by central authority to ensure permit validity?
@@ -1743,7 +1746,7 @@ From here on we will roll the tax and permit system into 1: they are actually id
 
 .pull-right[
 
-|            	| Tax      	| Standard 	| Subsidy 	| Ranking         	|
+|            	| Tax/Permits      	| Standard 	| Subsidy 	| Ranking         	|
 |------------	|----------	|----------	|---------	|-----------------	|
 | Firm       	| -(A+B+C) 	| -A       	| E       	| Sub > Std > Tax 	|
 | Households 	| A+D+E    	| A+D+E    	| A+D+E   	| Indifferent     	|
