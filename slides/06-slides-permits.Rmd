@@ -217,14 +217,14 @@ $$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$
 --
 
 Take the first-order condition to find what is necessary for a cost minimum:
-$$\frac{dC_1(E_1)}{d E_1} + \frac{dC_2(\bar{E} - E_1)}{d E_1} \times (-1) = 0$$
+$$C'_1(E_1) + C'_2(\bar{E} - E_1) \times (-1) = 0$$
 
 ---
 
 # Optimal policy with multiple firms
 
 This gives us:
-$$\underbrace{-\frac{dC_1(E_1)}{d E_1}}_{\text{MAC}_1} = \underbrace{-\frac{dC_2(\bar{E} - E_1)}{d E_1}}_{\text{MAC}_2}$$
+$$\underbrace{-C'_1(E_1)}_{\text{MAC}_1} = \underbrace{-C'_2(\overbrace{\bar{E} - E_1}^{E_2})}_{\text{MAC}_2}$$
 
 The marginal abatement costs across the sources must be equal at the cost-effective pollution level
 
@@ -813,32 +813,28 @@ To keep things simple suppose MD is constant and the same across all firms: $MD 
 
 --
 
-If we set $\bar{E}$ such that the equilibrium permit price $p = d$, then we also have efficiency
+If we can set $\bar{E}$ such that the equilibrium permit price $p = d$, then we also have efficiency
 
 
---
+<!-- --- -->
 
-Let's see why
+<!-- # Tradable permits: efficiency -->
 
----
+<!-- Suppose we set $\bar{E}$ to be the sum of the efficient level of emissions across all firms $\sum_i E^*_i$, where $E^*_i$ is where $MAC_i = d$ -->
 
-# Tradable permits: efficiency
+<!-- -- -->
 
-Suppose we set $\bar{E}$ to be the sum of the efficient level of emissions across all firms $\sum_i E^*_i$, where $E^*_i$ is where $MAC_i = d$
+<!-- Firms will trade until their MACs are all equal -->
 
---
+<!-- -- -->
 
-Firms will trade until their MACs are all equal
+<!-- Since there's only $\bar{E} = E^*$ permits, we already know MACs are equal at $\{E^*_1, \dots, E^*_N\}$ where $\sum_i E^*_i = E^*_i$  -->
 
---
+<!-- This is where their MACs all equal $d$ and each other -->
 
-Since there's only $\bar{E} = E^*$ permits, we already know MACs are equal at $\{E^*_1, \dots, E^*_N\}$ where $\sum_i E^*_i = E^*_i$ 
+<!-- -- -->
 
-This is where their MACs all equal $d$ and each other
-
---
-
-We also know in the permit market equilibrium we have $MAC = p$, so this means that we must have $p = d = MD$!
+<!-- We also know in the permit market equilibrium we have $MAC = p$, so this means that we must have $p = d = MD$! -->
 
 ---
 
