@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 08</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="08-slides-uncertainty_files/header-attrs/header-attrs.js"></script>
+    <link href="08-slides-uncertainty_files/remark-css/default.css" rel="stylesheet" />
+    <link href="08-slides-uncertainty_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="08-slides-uncertainty_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="08-slides-uncertainty_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="08-slides-uncertainty_files/tile-view/tile-view.js"></script>
+    <link href="08-slides-uncertainty_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="08-slides-uncertainty_files/panelset/panelset.js"></script>
+    <script src="08-slides-uncertainty_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="08-slides-uncertainty_files/vembedr/css/vembedr.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 08
+]
+.subtitle[
+## Policymaking Under Uncertainty
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
+## documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. What role does uncertainty play in economic analysis of the environment?
+2. What are the implications of uncertainty for policy choice and welfare?
+
+
+---
+
+class: inverse, center, middle
+name: tradable permits
+
+# Uncertainty and the environment
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Learning about arctic sea ice
+
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/MicU8h4-kNw" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+
+---
+
+# Uncertainty and risk
+
+.hi[Risk] refers to situations where the classification of states, events or alternatives is objective and known, and their probabilities can be objectively determined
+
+.hi[Uncertainty] arises from "the impossibility of exhaustive classification of states": nature/economy can be so complex that all possible states are simply not known
+
+---
+
+# Uncertainty and risk
+
+Uncertainty can factor into environmental policy-making in a number of ways:
+--
+
+- Scientific (uncertainty in MD)
+--
+
+- Strategic (uncertainty about MAC)
+--
+
+- Dynamic (uncertainty about what MD will be in the future)
+--
+
+
+The type of uncertainty can have implications for instrument choice
+
+
+---
+
+# Policy under uncertainty
+
+.pull-left[
+
+
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/perfect_info-1.png)
+]
+
+.pull-right[
+
+With .hi[perfect information] we can achieve the efficient outcome using either a tax `\(\tau\)` or an emission standard `\(\bar{E} = E^*\)`
+
+Will this hold true even with uncertainty about MD or MAC?
+
+]
+
+
+---
+
+# Scientific uncertainty
+
+It is very likely that we don’t know much about how damaging a particular pollutant is&lt;sup&gt;1&lt;/sup&gt;
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt;This is even ignoring the fact that we probably don't even know the slope of the marginal damage curve.
+]
+
+--
+
+What are the actual health risks?
+
+--
+
+Who are affected?
+
+--
+
+Given risks and affected groups, how do we value lives/health?
+
+--
+
+How do we value threatened environmental amenities?
+
+---
+
+# Climate change
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/08-climate-sens.png" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+These are our best estimates of the distribution of the .hi[equilibrium climate sensitivity:] how much the earth warms on average if we double CO&lt;sub&gt;2&lt;/sub&gt; concentrations
+
+Uncertainty in ECS means we are uncertain about the true costs of emitting a ton of CO&lt;sub&gt;2&lt;/sub&gt; (i.e. the social cost of CO&lt;sub&gt;2&lt;/sub&gt;)
+
+]
+
+
+---
+
+# Climate change
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/08-damages.png" width="100%" /&gt;
+&lt;/center&gt;
+Rudik (2020)
+
+]
+
+.pull-right[
+There's also uncertainty over how costly a given amount of warming will be
+- How bad is 1 degree of warming for agricultural yields?
+
+These are distributions of damages to global GDP at given levels of warming
+
+]
+
+---
+
+# Policy under scientific uncertainty
+
+.pull-left[
+
+
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/science_uncertain-1.png)
+]
+
+.pull-right[
+
+If we are uncertain about MD how should we set policy?
+
+Suppose we have a best estimate, `\(MD_e\)`
+
+
+Unfortunately our estimate was wrong, and the true MD curve is given by `\(MD_h\)` or `\(MD_l\)`
+
+Let's say the actual MD is `\(MD_l\)`, what happens under our policies?
+
+]
+
+
+---
+
+# Policy under scientific uncertainty
+
+.pull-left[
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/science_uncertain-1.png)
+]
+
+.pull-right[
+
+First: what tax and standard does the regulator set?
+
+]
+
+
+
+---
+
+# Policy under scientific uncertainty
+
+.pull-left[
+
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/science_uncertain2-1.png)
+]
+
+.pull-right[
+
+First: what tax and standard does the regulator set?
+
+The regulator selects a standard where she thinks MAC = MD: E&lt;sub&gt;e&lt;/sub&gt;
+
+The regulator selects a tax where she thinks MAC = MD: `\(\tau\)`&lt;sub&gt;e&lt;/sub&gt;
+
+With these two policies in place, what does the firm do?
+
+]
+
+
+---
+
+# Policy under scientific uncertainty
+
+.pull-left[
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/science_uncertain2-1.png)
+]
+
+.pull-right[
+
+The firm emits at E&lt;sub&gt;e&lt;/sub&gt; under both the tax and standard
+
+We get the same outcome
+
+Is there any deadweight loss?
+
+If so, how much?
+
+]
+
+
+---
+
+# Policy under scientific uncertainty
+
+.pull-left[
+
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/science_uncertain3-1.png)
+]
+
+.pull-right[
+
+We actually want to be at E&lt;sup&gt;*&lt;/sup&gt;
+
+We are emitting too little because we overestimated damages
+
+What is the DWL associated with under-emission?
+
+]
+
+
+---
+
+# Policy under scientific uncertainty
+
+.pull-left[
+
+![taxes and standards both work efficiently with perfect info](08-slides-uncertainty_files/figure-html/science_uncertain4-1.png)
+]
+
+.pull-right[
+
+DWL comes from abatement costs in excess of the avoided damages
+
+This is the area in red
+
+With uncertain MD, we do not get the efficient outcome!
+
+Will the story be any different if the true MD was instead MD&lt;sub&gt;h&lt;/sub&gt;?
+
+]
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain-1.png)
+]
+
+.pull-right[
+
+Now what if we have .hi[strategic uncertainty:] the regulator does not know the firms' MAC curves
+
+The regulator thinks the MAC is MAC&lt;sub&gt;e&lt;/sub&gt; but it may be MAC&lt;sub&gt;h&lt;/sub&gt; or MAC&lt;sub&gt;l&lt;/sub&gt;
+
+Suppose the true MAC is MAC&lt;sub&gt;h&lt;/sub&gt;
+
+]
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain2-1.png)
+]
+
+.pull-right[
+
+The regulator again sets a standard of E&lt;sub&gt;e&lt;/sub&gt; and a tax of `\(\tau_e\)`
+
+We know the efficient level of emissions is E&lt;sup&gt;*&lt;/sup&gt;
+
+What level of emissions do we actually get?
+
+]
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain2-1.png)
+]
+
+.pull-right[
+
+Under a standard we get E&lt;sub&gt;e&lt;/sub&gt;
+
+
+]
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain3-1.png)
+]
+
+.pull-right[
+
+Under a standard we get E&lt;sub&gt;e&lt;/sub&gt;
+
+Under a tax we get `\(E_\tau\)`
+
+Since we get different levels of emissions under the two policies, they may give us different levels of deadweight loss
+
+Let's see..
+
+]
+
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain4-1.png)
+]
+
+.pull-right[
+
+The DWL under a standard is given by the .hi-red[red] area
+
+This is caused by .hi[too little emissions]
+
+]
+
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain5-1.png)
+]
+
+.pull-right[
+
+The DWL under a standard is given by the .hi-red[red] area
+
+This is caused by .hi[too little emissions]
+
+The DWL under a tax is given by the .hi-blue[blue] area
+
+This is caused by .hi[too many emissions]
+
+]
+
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain5-1.png)
+]
+
+.pull-right[
+
+The DWLs are similar-ish in size
+
+Why do we get the DWLs?
+
+
+
+]
+
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain5-1.png)
+]
+
+.pull-right[
+
+.hi[Standard:] we under estimated the MAC and thought it'd be cheaper to abate than it actually was, so we set too stringent of a standard
+
+.hi[Tax:] we under estimated the MAC and thought it'd be cheaper to abate than it actually was, so we set too low of a tax
+
+The same error leads to different qualitative outcomes
+
+]
+
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_uncertain5-1.png)
+]
+
+.pull-right[
+
+Which policy performs better depends on the relative slopes of the MAC and MD curves
+
+Now consider an example where the MD curve is relatively .hi[steep]
+
+Try to solve for the policy choices and DWLs yourself
+
+]
+
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_steep-1.png)
+]
+
+.pull-right[
+
+If the MD curve is relatively steep a standard performs better, the .hi-red[red] DWL is smaller than the .hi-blue[blue] DWL
+
+Why?
+
+Taxes allow firms to choose the quantity
+
+If the MD is relatively steep, an error in the quantity of emissions is very costly
+
+]
+
+
+---
+
+# Steep MDs
+
+A steep MD means the marginal external cost of emissions increases rapidly
+
+--
+
+Any examples?
+
+--
+
+One would be if there exist .hi[tipping points] in the climate system:
+- Melt-back of Arctic summer sea ice
+- Evidence that this is happening even without much additional warming
+- Sea ice reflects light and cools polar regions
+- This has big effects on air and ocean circulation
+
+Collapse of Greenland ice sheet: could lead to a 7m rise in sea level
+
+
+---
+
+# Tipping points
+
+Collapse of western Antarctic ice sheet
+- Immediate risk of sea level rise
+
+--
+
+Die-back of Amazonian rainforest
+- Species loss
+- Effects on rainfall patterns in other parts of the world
+
+--
+
+Collapse of W. African monsoon season and many others
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_flat-1.png)
+]
+
+.pull-right[
+
+Now what if MD is very flat?
+
+Solve for the regulator's chosen policies and their associated DWL
+]
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_flat2-1.png)
+]
+
+.pull-right[
+
+If the MD curve is relatively flat a tax performs better, the .hi-blue[blue] DWL is smaller than the .hi-red[red] DWL
+
+Why?
+
+]
+
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+![taxes and standards work differently if MACs are uncertain](08-slides-uncertainty_files/figure-html/strategy_flat2-1.png)
+]
+
+.pull-right[
+
+Marginal damages are relatively constant no matter the quantity while abatement costs can change rapidly
+
+It's valuable to let the firm flexibly choose abatement
+
+Taxes impose a constant incentive on the firm, closer representation of the MD
+
+
+]
+
+---
+
+# Dynamic uncertainty
+
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/08-tax.png" width="100%" /&gt;
+Optimal carbon tax = MD
+&lt;/center&gt;
+]
+
+.pull-right[
+Current MD may be zero, but future MD could be very high
+
+
+e.g. greenhouse gases
+
+
+1 ton emitted today is not as costly as 1 ton emitted tomorrow for a lot of reasons
+
+]
+
+
+---
+
+# The Manne-Richel model
+
+Two periods (current and future)
+
+--
+
+Two possible states of nature in the future (“good” with probability (1-p) and “bad” with probability p)
+
+--
+
+The bad state is the climate is .hi[very] sensitive to greenhouse gases, good state is the climate is not very sensitive (climate change is fake news!)
+
+--
+
+Each state requires different abatement to avoid climate catastrophe
+
+| State 	| Probability 	| Cumulative Abatement Required 	|
+|-------	|:-------------:	|:-------------------------------:	|
+| Good  	| 1-p         	| 0                             	|
+| Bad   	| p           	| 1                             	|
+
+---
+
+# The Manne-Richel model
+
+Greenhouse gases are stock pollutants
+
+--
+
+Since greenhouse gases are very long-lived, abatement activity is cumulative (i.e. doing abatement activity today is as good as doing abatement activity in the future)
+
+--
+
+a&lt;sub&gt;1&lt;/sub&gt;: current abatement  
+
+a&lt;sub&gt;2&lt;/sub&gt;: future abatement  
+
+a&lt;sub&gt;1&lt;/sub&gt;+a&lt;sub&gt;2&lt;/sub&gt;: aggregate abatement
+
+---
+
+# The Manne-Richel model
+
+If we do a&lt;sub&gt;1&lt;/sub&gt; units of abatement today in the future we need to do:
+
+--
+
+1 - a&lt;sub&gt;1&lt;/sub&gt; units with probability p (bad state)
+
+--
+
+0 with probability 1-p (good state)
+
+--
+
+Suppose abatement cost is given by: `\(C(a) = 0.5 a^2\)`
+
+--
+
+What is the regulator's problem?
+
+---
+
+# The Manne-Richel model
+
+`$$\min_{a_1} E[TC] = \underbrace{\frac{1}{2}a_1^2}_{\text{current cost}} + (1-p)\times \underbrace{0}_{\text{good state cost}} + p \times \underbrace{\frac{1}{2}(1-a_1)^2}_{\text{bad state cost}}$$`
+
+--
+
+The first-order condition is:
+`$$\frac{d E[TC]}{da_1} = a^*_1 - p(1-a^*_1) = 0$$`
+
+--
+
+This gives us that:
+`$$a^*_1 = \frac{p}{1+p}$$`
+
+---
+
+# The Manne-Richel model
+
+`$$a^*_1 = \frac{p}{1+p}$$`
+
+If there is any chance of a bad state (p &gt; 0), it is optimal to do *some* abatement today
+
+--
+
+If a bad state is guaranteed (p = 1), we want `\(a^*_1 = 1/2, a^*_2 = 1/2\)`
+
+--
+
+You can think about this as basically buying insurance
+
+---
+
+# The Manne-Richel model
+
+It makes sense to do some abatement today, even if we are not sure there will be bad climate change, because the MAC is cheap for the first few units
+
+--
+
+In marginal terms: we want to equate the MAC today with the *expected* MAC in the future so that on average, we can't reallocate abatement and be better off
+
+--
+
+`$$a^*_1 = p(1-a^*_1)$$`
+
+--
+
+Now, what are some complications of this simple model?
+
+---
+
+# The Manne-Richel model
+
+Abatement tech can improve: 
+
+- future MAC different than current MAC
+- future MAC might depend on current abatement (learning by doing)
+
+
+---
+
+# The Manne-Richel model
+
+Discounting: how should we weigh future costs and benefits?
+
+- Does this matter whether the future is the same generation or unborn generations?
+- Does it matter how wealthy we think people are?
+
+---
+
+# The Manne-Richel model
+
+Alternative decision frameworks:
+
+- We just minimized expected total cost
+- We could instead do .hi[minimax regret:] minimize the cost of the worst-case outcome
+- We could use the .hi[precautionary principle:] use whatever is necessary to avoid irreversible damage
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
