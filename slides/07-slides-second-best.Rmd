@@ -65,7 +65,7 @@ Lets consider two extreme cases to understand whether and how market power matte
 
 --
 
-In both cases we assume that:
+In both cases we will assume that:
 
 1. Marginal costs of production are constant $MC$
 2. The marginal damage from a unit of output is constant giving us constant social marginal costs $SMC = MC + MD$
@@ -257,14 +257,14 @@ ggplot() +
   stat_function(fun = mc1, color = "#ca5670", size = 1.5) +
   stat_function(fun = d, color = "#638ccc", size = 1.5) +
   stat_function(fun = mr, color = "darkslateblue", size = 1.5) +
-  annotate("segment", x = 1.5/2, xend = 1.5/2, y = 0, yend = 2.5-1.5/2,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 0, xend = 1.5/2, y = 2.5-1.5/2, yend = 2.5-1.5/2,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 0, xend = 1/2, y = 2.5-1/2, yend = 2.5-1/2,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1/2, xend = 1/2, y = 0, yend = 2.5-1/2,
-           linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("segment", x = 1.5/2, xend = 1.5/2, y = 0, yend = 2.5-1.5/2,
+  #          linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("segment", x = 0, xend = 1.5/2, y = 2.5-1.5/2, yend = 2.5-1.5/2,
+  #          linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("segment", x = 0, xend = 1/2, y = 2.5-1/2, yend = 2.5-1/2,
+  #          linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("segment", x = 1/2, xend = 1/2, y = 0, yend = 2.5-1/2,
+  #          linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 1, xend = 1, y = 0, yend = 1.5,
            linetype = "dashed", size = 1.5, color = "grey50") +
   # annotate("text", x = 0.5, y = 1.25, label = "A", size = 8, color = "black") +
@@ -284,8 +284,8 @@ ggplot() +
   ) +
   labs(x = "Emissions",
        y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(.5, 1, 1.5/2), labels = c(expression(q^tau), expression(q^'*'), expression(q^m))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1), labels = c(expression(q^'*'))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5), labels = c(expression(p^'*')))
 
 ```
 
@@ -331,10 +331,10 @@ ggplot() +
            linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 0, xend = 1.5/2, y = 2.5-1.5/2, yend = 2.5-1.5/2,
            linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 0, xend = 1/2, y = 2.5-1/2, yend = 2.5-1/2,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1/2, xend = 1/2, y = 0, yend = 2.5-1/2,
-           linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("segment", x = 0, xend = 1/2, y = 2.5-1/2, yend = 2.5-1/2,
+  #          linetype = "dashed", size = 1.5, color = "grey50") +
+  # annotate("segment", x = 1/2, xend = 1/2, y = 0, yend = 2.5-1/2,
+  #          linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 1, xend = 1, y = 0, yend = 1.5,
            linetype = "dashed", size = 1.5, color = "grey50") +
   # annotate("text", x = 0.5, y = 1.25, label = "A", size = 8, color = "black") +
@@ -354,8 +354,8 @@ ggplot() +
   ) +
   labs(x = "Emissions",
        y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(.5, 1, 1.5/2), labels = c(expression(q^tau), expression(q^'*'), expression(q^m))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1, 1.5/2), labels = c(expression(q^'*'), expression(q^m))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5, 2.5-1.5/2), labels = c(expression(p^'*'), expression(p^m)))
 
 ```
 ![perfect competition](`r knitr::fig_chunk("monopoly2", "png")`)
@@ -861,9 +861,9 @@ If we tax output equal to MD we can achieve the socially optimal allocation $q^*
 
 .pull-right[
 
-An output tax can be efficient, if we assume that emissions are proportional to output
+An output tax can be efficient, .hi[if we assume that emissions are proportional to output]
 
-Now let's break the tight link between output and emissions by writing down a slightly more complicated model where the firm chooses emissions and output separately
+Now let's break the link between output and emissions by writing down a slightly more complicated model where the firm chooses emissions and output separately
 
 ]
 
@@ -874,7 +874,7 @@ Now let's break the tight link between output and emissions by writing down a sl
 Here's our model:
 
 - Cobb-Douglas production using labor and emissions as inputs: $Q = L^\alpha E^{1-\alpha}$
-- The firm pays wages $w$, rental rate $r$ to emissions (capital)
+- The firm pays wages $w$ to labor, rental rate $r$ to emissions (capital)
 - The firm receives a price $p$ per unit of output
 - Emissions cause marginal damage $d$
 
@@ -891,7 +891,7 @@ What does an output tax $\tau_o$ do versus a regular emission tax $\tau_e$?
 
 # Output taxes, part two
 
-The regulator's problem is:
+The regulator wants the firm to internalize its social costs:
 $$\max_{L,E} p\,L^\alpha E^{1-\alpha} - wL - rE - dE$$
 
 --
@@ -922,7 +922,7 @@ The firm equates the MR and MC of each input
 
 --
 
-The output tax penalizes the use of clean labor despite it not causing any externalities at a marginal rate of: $\tau_o L^{\alpha-1} E^{1-\alpha}$, this is .hi-red[not efficient]
+The output tax penalizes the use of clean labor (despite it not causing any externalities) at a marginal rate of: $\tau_o L^{\alpha-1} E^{1-\alpha}$, this is .hi-red[not efficient]
 
 ---
 
@@ -959,552 +959,497 @@ If emissions can be chosen separately from outcome by the firm, this is no longe
 In this case an output tax incorrectly taxes our clean inputs
 
 
----
+<!-- --- -->
 
-# Intensity standards
+<!-- # Intensity standards -->
 
-One of the most commonly used regulations for environmental problems is the .hi[intensity standard]
+<!-- One of the most commonly used regulations for environmental problems is the .hi[intensity standard] -->
 
---
+<!-- -- -->
 
-Intensity standards regulate the intensity of something
+<!-- Intensity standards regulate the intensity of something -->
 
---
+<!-- -- -->
 
-E.g.
+<!-- E.g. -->
 
---
+<!-- -- -->
 
-Intensity of emissions in output
+<!-- Intensity of emissions in output -->
 
---
+<!-- -- -->
 
-Intensity of clean electricity sources in the total electricity portfolio
+<!-- Intensity of clean electricity sources in the total electricity portfolio -->
 
---
+<!-- -- -->
 
-Intensity of ethanol in the fuel supply
+<!-- Intensity of ethanol in the fuel supply -->
 
----
+<!-- --- -->
 
-# Intensity standards: RPS
+<!-- # Intensity standards: RPS -->
 
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-rps.png")
-```
-</center>
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-rps.png") -->
+<!-- ``` -->
+<!-- </center> -->
 
----
+<!-- --- -->
 
-# Intensity standards: RPS
+<!-- # Intensity standards: RPS -->
 
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-rps2.png")
-```
-</center>
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-rps2.png") -->
+<!-- ``` -->
+<!-- </center> -->
 
----
 
-# Intensity standards: RPS
+<!-- --- -->
 
-<center>
-```{r, out.width = "50%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-rps3.png")
-```
-</center>
+<!-- # Intensity standards -->
 
----
 
-# Intensity standards: RPS
+<!-- Consider a case where we have a good with two types: -->
 
-RPSs combine intensity standards and tradable credit markets (Holt, 2014)
-<center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-rps4.png")
-```
-</center>
+<!-- - a high type $H$ that results in a high level of emissions -->
+<!-- - a low type $L$ that results in a low level of emissions -->
 
+<!-- -- -->
 
----
+<!-- The emission rate per unit of output for each is $\beta_H$ and $\beta_L$ -->
 
-# Intensity standards: gas flaring
+<!-- -- -->
 
-Flaring of natural gas at oil wells in North Dakota is regulated with an intensity standard
+<!-- The marginal damage from emissions is $d$ -->
 
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-flaring1.png")
-```
-</center>
+<!-- -- -->
 
----
+<!-- The cost function to produce each type of output is $C_H(Q_H)$ and $C_L(Q_L)$ -->
 
-# Intensity standards: gas flaring
+<!-- -- -->
 
-Mandates a minimum fraction of gas captured (max fraction of gas flared)
+<!-- The social benefit of consuming the goods is given by a social utility function $U(Q_H,Q_L)$ -->
 
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-flaring2.png")
-```
-</center>
+<!-- --- -->
 
----
+<!-- # Intensity standards: social planner -->
 
-# Intensity standards: gas flaring
+<!-- That's our set up! -->
 
-The regulation pushed flaring rates down
+<!-- -- -->
 
-<center>
-```{r, out.width = "60%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-flaring3.png")
-```
-</center>
+<!-- The social planner's problem is: -->
+<!-- $$\max_{Q_H,Q_L} U(Q_H,Q_L) - \underbrace{(C_H(Q_H) + C_L(Q_L))}_{\text{private cost}} - \underbrace{\tau(\beta_H Q_H + \beta_L Q_L)}_{\text{external cost}}$$ -->
 
----
+<!-- -- -->
 
-# Intensity standards
+<!-- Maximize the social utility of the good, minus the private and external costs -->
 
+<!-- -- -->
 
-Consider a case where we have a good with two types:
+<!-- The first-order conditions tell us how social welfare is maximized: -->
+<!-- $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q_i} + \tau \beta_i \,\,\, i = L,H$$ -->
 
-- a high type $H$ that results in a high level of emissions
-- a low type $L$ that results in a low level of emissions
+<!-- --- -->
 
---
+<!-- # Intensity standards: social planner -->
 
-The emission rate per unit of output for each is $\beta_H$ and $\beta_L$
+<!-- $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$ -->
 
---
+<!-- where we label marginal cost $MC_i = \frac{\partial C_i(Q_i)}{\partial Q_i}$ -->
 
-The marginal damage from emissions is $d$
+<!-- What is this condition saying? -->
 
---
+<!-- -- -->
 
-The cost function to produce each type of output is $C_H(Q_H)$ and $C_L(Q_L)$
+<!-- The marginal benefit of producing the good must equal the private marginal cost of production, plus the marginal damages -->
 
---
+<!-- -- -->
 
-The social benefit of consuming the goods is  
-given by a social utility function $U(Q_H,Q_L)$
+<!-- Now what if we try to address the pollution externality with an intensity standard: a cap on the emissions per unit of output? -->
 
----
+<!-- --- -->
 
-# Intensity standards: social planner
+<!-- # Intensity standards: social planner -->
 
-That's our set up!
+<!-- An emission standard might look something like this: -->
+<!-- $$\frac{\overbrace{\beta_H Q_H + \beta_L Q_L}^{\text{total emissions}}}{\underbrace{Q_H+Q_L}_{\text{total output}}} = \sigma$$ -->
 
---
+<!-- -- -->
 
-The social planner's problem is:
-$$\max_{Q_H,Q_L} U(Q_H,Q_L) - C_H(Q_H) - C_L(Q_L) - \tau(\beta_H Q_H + \beta_L Q_L)$$
+<!-- The left hand side is emissions (top) per unit of total output (bottom) -->
 
---
+<!-- -- -->
 
-Maximize the social utility of the good, minus the private and external costs
+<!-- The right hand side is the standard: $\sigma$ is the required emissions intensity -->
 
---
+<!-- -- -->
 
-The first-order conditions tell us how social welfare is maximized:
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q_i} + \tau \beta_i \,\,\, i = L,H$$
+<!-- For the standard to make any sense it must be: $\beta_L \leq \sigma \leq \beta_H$,  -->
+<!-- -- -->
+<!-- otherwise it doesn't do anything $\sigma > \beta_H$ or its unattainable $\sigma < \beta_L$ -->
 
----
+<!-- --- -->
 
-# Intensity standards: social planner
+<!-- # Intensity standards: firm -->
 
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$
+<!-- Now how does the firm respond to an intensity standard? -->
 
-where we let $MC_i = \frac{\partial C_i(Q_i)}{\partial Q_i}$
+<!-- -- -->
 
-What is this condition saying?
+<!-- Suppose there are prices $p_H$ and $p_L$ for each type of the good -->
 
---
+<!-- -- -->
 
-The marginal benefit of producing the good must equal the private marginal cost of production, plus the marginal damages
+<!-- The firm's maximizes profit subject to the intensity standard: -->
 
---
+<!-- -- -->
 
-Now what if we try to address the pollution externality with an intensity standard: a cap on the emissions per unit of output?
+<!-- $$\max_{Q_H,Q_L} \pi(Q_H,Q_L) = p_H Q_H + p_L Q_L - C_H(Q_H) - C_L(Q_L) \,\,\, \\ -->
+<!-- \text{subject to: } \frac{\beta_H Q_H + \beta_L Q_L}{Q_H+Q_L} = \sigma$$ -->
 
----
 
-# Intensity standards: social planner
+<!-- --- -->
 
-An emission standard might look something like this:
-$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H+Q_L} = \sigma$$
+<!-- # Intensity standards: firm -->
 
---
+<!-- Notice that we can solve the intensity standard constraint for $Q_H$: -->
+<!-- $$Q_H = \frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L$$ -->
 
-The left hand side is emissions (top) per unit of total output (bottom)
+<!-- -- -->
 
---
+<!-- We can plug it into the firm's profit function to get rid of one of the output variables: -->
+<!-- $$\max_{Q_L} p_H \frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L + p_L Q_L - C_H\left(\frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L\right) - C_L(Q_L)$$ -->
 
-The right hand side is the standard: $\sigma$ is the required emissions intensity
+<!-- -- -->
 
---
+<!-- Next, the first-order condition for a maximum -->
 
-For the standard to make any sense it must be: $\beta_L \leq \sigma \leq \beta_H$, 
---
-otherwise it doesn't do anything $\sigma > \beta_H$ or its unattainable $\sigma < \beta_L$
+<!-- --- -->
 
----
+<!-- # Intensity standards: firm -->
 
-# Intensity standards: firm
+<!-- The first-order condition is: -->
+<!-- $$p_H \frac{\sigma - \beta_L}{\beta_H - \sigma} + p_L = \frac{\sigma - \beta_L}{\beta_H - \sigma} MC_H + MC_L$$ -->
 
-Now how does the firm respond to an intensity standard?
+<!-- which is equivalent to: -->
+<!-- $$\frac{p_L - MC_L}{\beta_L - \sigma} = \frac{p_H - MC_H}{\beta_H - \sigma}$$ -->
 
---
+<!-- -- -->
 
-Suppose there are prices $p_H$ and $p_L$ for each type of the good
+<!-- To get to the final part of the intuition let: -->
+<!-- $$\lambda \equiv (p_i - MC_i) / (\beta_i-\sigma)$$ -->
 
---
+<!-- --- -->
 
-The firm's problem is:
-$$\max_{Q_H,Q_L} \pi(Q_H,Q_L) = p_H Q_H + p_L Q_L - C_H(Q_H) - C_L(Q_L) \,\,\, \\
-\text{subject to: } \frac{\beta_H Q_H + \beta_L Q_L}{Q_H+Q_L} = \sigma$$
+<!-- # Intensity standards: firm -->
 
+<!-- $$\lambda \equiv (p_i - MC_i) / (\beta_i-\sigma)$$ -->
 
----
+<!-- This lets us write the $Q_L$ FOC as: -->
+<!-- $$p_L = MC_L(Q_L) + \lambda(\beta_L-\sigma)$$ -->
 
-# Intensity standards: firm
+<!-- and it turns out if we instead framed the problem instead of $Q_H$ we'd get the same FOC: -->
+<!-- $$p_H = MC_H(Q_H) + \lambda(\beta_H-\sigma)$$ -->
 
-Notice that we can solve the intensity standard constraint for $Q_H$:
-$$Q_H = \frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L$$
+<!-- -- -->
 
---
+<!-- What are these FOCs telling us about the firm's problem: -->
+<!-- $$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$ -->
 
-We can plug it into the firm's profit function to get rid of one of the output variables:
-$$\max_{Q_L} p_H \frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L + p_L Q_L - C_H\left(\frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L\right) - C_L(Q_L)$$
+<!-- --- -->
 
---
+<!-- # Intensity standards: firm -->
 
-Next, the first-order condition for a maximum
+<!-- The firm equates marginal revenue $p_i$ and total marginal cost for each type $i$ -->
 
----
+<!-- -- -->
 
-# Intensity standards: firm
+<!-- The marginal cost is composed of two pieces: -->
 
-The first-order condition is:
-$$p_H \frac{\sigma - \beta_L}{\beta_H - \sigma} + p_L = \frac{\sigma - \beta_L}{\beta_H - \sigma} MC_H + MC_L$$
+<!-- 1. The actual marginal cost of production $MC_i$ -->
+<!-- 2. The .hi[implicit] marginal cost imposed by the regulation: $\lambda(\beta_i-\sigma)$ -->
 
-which is equivalent to:
-$$\frac{p_L - MC_L}{\beta_L - \sigma} = \frac{p_H - MC_H}{\beta_H - \sigma}$$
+<!-- -- -->
 
---
+<!-- The regulation forces the firm to choose an allocation that is away from its unconstrained optimum, 2. is what picks up this economic force -->
 
-To get to the final part of the intuition let:
-$$\lambda \equiv (p_i - MC_i) / (\beta_i-\sigma)$$
+<!-- -- -->
 
----
+<!-- What is the sign of $\lambda(\beta_i-\sigma)$? -->
 
-# Intensity standards: firm
+<!-- --- -->
 
-$$\lambda \equiv (p_i - MC_i) / (\beta_i-\sigma)$$
+<!-- # Intensity standards: firm -->
 
-This lets us write the $Q_L$ FOC as:
-$$p_L = MC_L(Q_L) + \lambda(\beta_L-\sigma)$$
+<!-- What is the sign of $\lambda(\beta_i-\sigma)$? -->
 
-and it turns out if we instead framed the problem instead of $Q_H$ we'd get the same FOC:
-$$p_H = MC_H(Q_H) + \lambda(\beta_H-\sigma)$$
+<!-- -- -->
 
---
+<!-- Recall: $\beta_L \leq \sigma \leq \beta_H$ -->
 
-What are these FOCs telling us about the firm's problem:
-$$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$
+<!-- -- -->
 
----
+<!-- $\lambda(\beta_i-\sigma) \geq 0$ for $i = H$, $\lambda(\beta_i-\sigma) \leq 0$ for $i = L$ -->
 
-# Intensity standards: firm
+<!-- -- -->
 
-The firm equates marginal revenue $p_i$ and total marginal cost for each type $i$
+<!-- The regulation is acting like an implicit marginal .hi-red[tax] on the high emission good, and an implicit .hi-blue[subsidy] on the low emission good! -->
 
---
+<!-- -- -->
 
-The marginal cost is composed of two pieces:
+<!-- The intensity standard aims to shift production from high emission intensity to low emission intensity goods -->
 
-1. The actual marginal cost of production $MC_i$
-2. The .hi[implicit] marginal cost imposed by the regulation: $\lambda(\beta_i-\sigma)$
+<!-- -- -->
 
---
+<!-- Is the intensity standard efficient? -->
 
-The regulation forces the firm to choose an allocation that is away from its unconstrained optimum, 2. is what picks up this economic force
+<!-- --- -->
 
---
+<!-- # Intensity standards: efficiency -->
 
-What is the sign of $\lambda(\beta_i-\sigma)$?
+<!-- Social welfare is maximized when: -->
+<!-- $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$ -->
 
----
+<!-- -- -->
 
-# Intensity standards: firm
+<!-- The firm maximizes profit under the intensity standard at: -->
+<!-- $$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$ -->
 
-What is the sign of $\lambda(\beta_i-\sigma)$?
+<!-- $\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = p_i$ from household utility maximization<sup>1</sup> -->
+<!-- .footnote[ -->
+<!-- <sup>1</sup>Prices reflect the marginal value of consumption. -->
+<!-- ] -->
 
---
+<!-- --- -->
 
-Recall: $\beta_L \leq \sigma \leq \beta_H$
+<!-- # Intensity standards: efficiency -->
 
---
+<!-- Social efficiency: -->
+<!-- $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$ -->
 
-$\lambda(\beta_i-\sigma) \geq 0$ for $i = H$, $\lambda(\beta_i-\sigma) \leq 0$ for $i = L$
+<!-- Firm choice: -->
+<!-- $$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$ -->
 
---
+<!-- -- -->
 
-The regulation is acting like an implicit marginal .hi-red[tax] on the high emission good, and an implicit .hi-blue[subsidy] on the low emission good!
+<!-- These conditions show us that an intensity standard is .hi[not] efficient -->
 
---
+<!-- -- -->
 
-The intensity standard aims to shift production from high emission intensity to low emission intensity goods
+<!-- Why? -->
 
---
+<!-- --- -->
 
-Is the intensity standard efficient?
+<!-- # Intensity standards: efficiency -->
 
----
+<!-- At a social optimum, we want to .hi[tax] both $L$ and $H$ goods because they are both polluting -->
 
-# Intensity standards: efficiency
+<!-- -- -->
 
-Social welfare is maximized when:
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$
+<!-- But the intensity standard .hi[subsidizes] $L$ -->
 
---
+<!-- -- -->
 
-The firm maximizes profit under the intensity standard at:
-$$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$
+<!-- The intensity standard cannot reach the efficient allocation because it is subsidizing a good that produces a negative externality<sup>1</sup> -->
+<!-- .footnote[ -->
+<!-- <sup>1</sup>Technically it can in the specific case when the $L$ type good does not emit any pollution, $\beta_L = 0$, but in general this won't be true. -->
+<!-- ] -->
 
-$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = p_i$ from household utility maximization<sup>1</sup>
-.footnote[
-<sup>1</sup>Prices reflect the marginal value of consumption.
-]
+<!-- -- -->
 
----
+<!-- We call policies that can't achieve the social optimum .hi[second-best] -->
 
-# Intensity standards: efficiency
 
-Social efficiency:
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$
+<!-- --- -->
 
-Firm choice:
-$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$
+<!-- # Intensity standards: graphical -->
 
---
+<!-- Now lets look at intensity standards graphically -->
 
-These conditions show us that an intensity standard is .hi[not] efficient
+<!-- A few things you'll need to know: -->
 
---
+<!-- 1. .hi[Iso-profit curves:] ovals that tell us the combinations of $Q_H,Q_L$ that achieve the same profit -->
+<!-- 2. .hi[Iso-welfare curves:] ovals that tell us the combinations of $Q_H,Q_L$ that achieve the same social welfare -->
 
-Why?
+<!-- --- -->
 
----
+<!-- # Intensity standards: graphical -->
 
-# Intensity standards: efficiency
+<!-- These are like indifference curves for consumers, but are ovals instead of convex curves -->
 
-At a social optimum, we want to .hi[tax] both $L$ and $H$ goods because they are both polluting
+<!-- Why ovals? -->
 
---
+<!-- -- -->
 
-But the intensity standard .hi[subsidizes] $L$
+<!-- Producing too much can decrease profit and/or welfare so eventually profit starts falling -->
 
---
+<!-- With consumption, more is always better so increasing consumption always moves onto higher ICs -->
 
-The intensity standard cannot reach the efficient allocation because it is subsidizing a good that produces a negative externality<sup>1</sup>
-.footnote[
-<sup>1</sup>Technically it can in the specific case when the $L$ type good does not emit any pollution, $\beta_L = 0$, but in general this won't be true.
-]
+<!-- --- -->
 
---
+<!-- # Intensity standards: what happens? -->
 
-We call policies that can't achieve the social optimum .hi[second-best]
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard3.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
+<!-- .pull-right[ -->
+<!-- The circles are iso-private welfare (iso-profit) curves -->
 
----
+<!-- A is where profit is maximized for the firm -->
 
-# Intensity standards: graphical
+<!-- The line $Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$ tells us which combos of $Q_L,Q_H$ satisfy the intensity standard -->
 
-Now lets look at intensity standards graphically
+<!-- Holland, Hughes, and Knittel (2010) -->
+<!-- ] -->
 
-A few things you'll need to know:
 
-1. .hi[Iso-profit curves:] ovals that tell us the combinations of $Q_H,Q_L$ that achieve the same profit
-2. .hi[Iso-welfare curves:] ovals that tell us the combinations of $Q_H,Q_L$ that achieve the same social welfare
+<!-- --- -->
 
----
+<!-- # Intensity standards: what happens? -->
 
-# Intensity standards: graphical
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard3.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
-These are like indifference curves for consumers, but are ovals instead of convex curves
+<!-- .pull-right[ -->
+<!-- The intensity standard forces the firm to produce on the line -->
 
-Why ovals?
+<!-- The highest iso-profit curve it can achieve is at point C -->
 
---
+<!-- This is more $Q_L$ and less $Q_H$ than is optimal, consistent with the subsidy/tax combination implicit in the policy -->
+<!-- ] -->
 
-Producing too much can decrease profit and/or welfare so eventually profit starts falling
+<!-- --- -->
 
-With consumption, more is always better so increasing consumption always moves onto higher ICs
+<!-- # Intensity standards: perverse incentives -->
 
----
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
-# Intensity standards: what happens?
+<!-- .pull-right[ -->
+<!-- Intensity standards can actually backfire and increase emissions -->
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard3.png")
-```
-</center>
-]
+<!-- How? -->
+<!-- ] -->
 
-.pull-right[
-The circles are iso-private welfare (iso-profit) curves
+<!-- --- -->
 
-A is where profit is maximized for the firm
+<!-- # Intensity standards: perverse incentives -->
 
-The line $Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$ tells us which combos of $Q_L,Q_H$ satisfy the intensity standard
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
-Holland, Hughes, and Knittel (2010)
-]
+<!-- .pull-right[ -->
+<!-- $\beta_H Q_H + \beta_L Q_L = K$ is the line showing all combinations of $Q_L,Q_H$ that generate $K$ units of emissions -->
 
+<!-- K crosses through point $A$ which is the unregulated profit-maximizing choice by the firm -->
 
----
+<!-- Anything to the top right of the line is .hi-red[more emissions] -->
+<!-- ] -->
 
-# Intensity standards: what happens?
+<!-- --- -->
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard3.png")
-```
-</center>
-]
+<!-- # Intensity standards: perverse incentives -->
 
-.pull-right[
-The intensity standard forces the firm to produce on the line
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
-The highest iso-profit curve it can achieve is at point C
+<!-- .pull-right[ -->
+<!-- The regulation induces the firm to move to point $C$ -->
 
-This is more $Q_L$ and less $Q_H$ than is optimal, consistent with the subsidy/tax combination implicit in the policy
-]
+<!-- This is slightly less $Q_H$, but .hi[a lot] more $Q_L$ -->
 
----
+<!-- The increase in emissions from $Q_L$ is more than the decrease from the lowering of $Q_H$ -->
 
-# Intensity standards: perverse incentives
+<!-- Overall emissions went up! -->
+<!-- ] -->
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard2.png")
-```
-</center>
-]
 
-.pull-right[
-Intensity standards can actually backfire and increase emissions
+<!-- --- -->
 
-How?
-]
+<!-- # Intensity standards: perverse incentives -->
 
----
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
-# Intensity standards: perverse incentives
+<!-- .pull-right[ -->
+<!-- This perverse outcome was possible because production of the $L$ type was very elastic while the $H$ type was inelastic -->
+<!-- ] -->
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard2.png")
-```
-</center>
-]
 
-.pull-right[
-$\beta_H Q_H + \beta_L Q_L = K$ is the line showing all combinations of $Q_L,Q_H$ that generate $K$ units of emissions
+<!-- --- -->
 
-K crosses through point $A$ which is the unregulated profit-maximizing choice by the firm
+<!-- # Intensity standards: second-best -->
 
-Anything to the top right of the line is .hi-red[more emissions]
-]
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard1.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
----
+<!-- .pull-right[ -->
+<!-- What is the best intensity standard? -->
 
-# Intensity standards: perverse incentives
+<!-- The dashed ovals are the iso-profit curves -->
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard2.png")
-```
-</center>
-]
+<!-- The solid ovals are the iso-welfare curves -->
 
-.pull-right[
-The regulation induces the firm to move to point $C$
+<!-- Welfare is maximized at point B -->
 
-This is slightly less $Q_H$, but .hi[a lot] more $Q_L$
+<!-- Profit is maximized at point A -->
+<!-- ] -->
 
-The increase in emissions from $Q_L$ is more than the decrease from the lowering of $Q_H$
+<!-- --- -->
 
-Overall emissions went up!
-]
+<!-- # Intensity standards: second-best -->
 
+<!-- .pull-left[ -->
+<!-- <center> -->
+<!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
+<!-- knitr::include_graphics("files/06-int-standard1.png") -->
+<!-- ``` -->
+<!-- </center> -->
+<!-- ] -->
 
----
+<!-- .pull-right[ -->
+<!-- The solid line shows the firm's choices of $Q_L,Q_H$ as we increase the intensity standard $\sigma$ -->
 
-# Intensity standards: perverse incentives
+<!-- Increasing $\sigma$ pivots the intensity standard counter-clockwise: $Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$ -->
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard2.png")
-```
-</center>
-]
+<!-- The optimal intensity standard is the one that lets us get on the highest iso-welfare curve, which is at point $C$ -->
 
-.pull-right[
-This perverse outcome was possible because production of the $L$ type was very elastic while the $H$ type was inelastic
-]
-
-
----
-
-# Intensity standards: second-best
-
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard1.png")
-```
-</center>
-]
-
-.pull-right[
-What is the best intensity standard?
-
-The dashed ovals are the iso-profit curves
-
-The solid ovals are the iso-welfare curves
-
-Welfare is maximized at point B
-
-Profit is maximized at point A
-]
-
----
-
-# Intensity standards: second-best
-
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-int-standard1.png")
-```
-</center>
-]
-
-.pull-right[
-The solid line shows the firm's choices of $Q_L,Q_H$ as we increase the intensity standard $\sigma$
-
-Increasing $\sigma$ pivots the intensity standard counter-clockwise: $Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$
-
-The optimal intensity standard is the one that lets us get on the highest iso-welfare curve, which is at point $C$
-
-]
+<!-- ] -->

@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 07</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="07-slides-second-best_files/header-attrs/header-attrs.js"></script>
+    <link href="07-slides-second-best_files/remark-css/default.css" rel="stylesheet" />
+    <link href="07-slides-second-best_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="07-slides-second-best_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="07-slides-second-best_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="07-slides-second-best_files/tile-view/tile-view.js"></script>
+    <link href="07-slides-second-best_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="07-slides-second-best_files/panelset/panelset.js"></script>
+    <script src="07-slides-second-best_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 07
+]
+.subtitle[
+## Multiple Market Failures and Second-Best Policies
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. What happens when we have another distortion like market power?
+3. How do second-best policies like output taxes or intensity standards work?
+
+
+---
+
+class: inverse, center, middle
+name: tradable permits
+
+# Market power and pollution
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Market power
+
+Lets consider two extreme cases to understand whether and how market power matters
+
+1. Perfect competition
+2. Monopoly
+
+--
+
+In both cases we will assume that:
+
+1. Marginal costs of production are constant `\(MC\)`
+2. The marginal damage from a unit of output is constant giving us constant social marginal costs `\(SMC = MC + MD\)`
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+
+
+
+![perfect competition](07-slides-second-best_files/figure-html/perf-comp-1.png)
+]
+
+.pull-right[
+
+The effect of moving from `\(q_0 \rightarrow q^*\)` using a tax equal to marginal damage (SMC - MC):
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](07-slides-second-best_files/figure-html/perf-comp-1.png)
+]
+
+.pull-right[
+
+The effect of moving from `\(q_0 \rightarrow q^*\)` using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](07-slides-second-best_files/figure-html/perf-comp-1.png)
+]
+
+.pull-right[
+
+The effect of moving from `\(q_0 \rightarrow q^*\)` using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+Avoided damages: B+C
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](07-slides-second-best_files/figure-html/perf-comp-1.png)
+]
+
+.pull-right[
+
+The effect of moving from `\(q_0 \rightarrow q^*\)` using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+Avoided damages: B+C
+
+Tax revenue: A
+
+]
+
+
+---
+
+# Perfect competition
+
+
+.pull-left[
+![perfect competition](07-slides-second-best_files/figure-html/perf-comp-1.png)
+]
+
+.pull-right[
+
+The effect of moving from `\(q_0 \rightarrow q^*\)` using a tax equal to marginal damage (SMC - MC):
+
+Loss in CS: -(A+B)
+
+Avoided damages: B+C
+
+Tax revenue: A
+
+.hi-blue[Net gain: -(A+B) + (B+C) + A = C]
+
+]
+
+---
+
+# Monopoly
+
+Now consider a monopolist with the same marginal cost and marginal damage structure
+
+--
+
+What is the difference with a monopolist?
+
+--
+
+The monopolist can set the price
+
+--
+
+This means that the MR curve lies beneath the demand curve
+
+--
+
+Why?
+
+--
+
+The monopolist accounts for how additional output lowers the market price on inframarginal units
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+
+
+
+![perfect competition](07-slides-second-best_files/figure-html/monopoly-1.png)
+]
+
+.pull-right[
+
+The socially efficient allocation is where social marginal cost is equal to the social marginal benefit
+
+This is where SMC crosses the demand curve: `\((q^*,p^*)\)`
+
+What is the welfare outcome under the unregulated monopolist outcome?
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+
+![perfect competition](07-slides-second-best_files/figure-html/monopoly2-1.png)
+]
+
+.pull-right[
+
+In the absence of regulation, the monopolist maximizes profit where MR = MC: `\((q^m, p^m)\)`
+
+This results in deadweight loss equal to the .hi-red[red] area
+
+Now what happens if we set a Pigouvian tax equal to marginal damage?
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/monopoly3-1.png)
+]
+
+.pull-right[
+
+The Pigouvian tax restricts output even more, adding deadweight loss equal to the .hi-blue[blue] area on top of the deadweight loss in the .hi-red[red] area
+
+The tax actually made us worse off by the blue area!
+
+Why?
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly3-1.png)
+]
+
+.pull-right[
+
+We now have two distortions:
+
+1. Market power
+2. Pollution externality
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly3-1.png)
+]
+
+.pull-right[
+
+We now have two distortions:
+
+1. Market power
+2. Pollution externality
+
+With market power, the unregulated equilibrium quantity is .hi[too low]
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly3-1.png)
+]
+
+.pull-right[
+
+We now have two distortions:
+
+1. Market power
+2. Pollution externality
+
+With market power, the unregulated equilibrium quantity is .hi[too low]
+
+With a pollution externality, the unregulated equilibrium quantity is .hi[too high]
+
+]
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly3-1.png)
+]
+
+.pull-right[
+
+They have opposing forces on quantities, so the market failures offset each other (partially)
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly3-1.png)
+]
+
+.pull-right[
+
+They have opposing forces on quantities, so the market failures offset each other (partially)
+
+This means that if we fully correct the pollution externality, we no longer get the off-setting benefit and have the full welfare cost of market power
+
+]
+
+---
+
+# Monopoly
+
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/monopoly4-1.png)
+]
+
+.pull-right[
+
+What is the actual optimal thing to do here?
+
+]
+
+
+---
+
+# Monopoly
+
+
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/monopoly5-1.png)
+]
+
+.pull-right[
+
+What is the actual optimal thing to do here?
+
+.hi[subsidize output] at rate `\(s\)` so `\(MC - s\)` crosses `\(MR\)` at `\(q^*\)`
+
+]
+
+
+---
+
+# Monopoly
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly5-1.png)
+]
+
+.pull-right[
+
+What is the actual optimal thing to do here?
+
+.hi[subsidize output] at rate `\(s\)` so `\(MC - s\)` crosses `\(MR\)` at `\(q^*\)`
+
+In this example, the market power externality dominates the pollution externality: we need to increase output
+
+]
+
+
+---
+
+# Monopoly
+
+What did we learn?
+
+--
+
+With multiple market failures we don't necessarily want to .hi[fully] correct for a single market failure
+
+--
+
+In this example we actually wanted to do the .hi-red[opposite] of what you likely thought
+
+--
+
+You can always draw this example in a different way where you should tax output
+
+--
+
+You just need marginal damages to be sufficiently large relative to the market power effect on quantity
+
+---
+
+# Monopoly: more generally
+
+So this was a .hi[special case]: we assumed the marginal damage from production was constant
+
+--
+
+If we generalize this so that the emission and output decisions are separate, we still have the two opposing market failures&lt;sup&gt;1&lt;/sup&gt;
+.footnote[
+&lt;sup&gt;1&lt;/sup&gt; The key thing here is that emissions are no longer a single function of output like `\(E = f(q)\)`. This means we can no longer write MD as a function of output `\(q\)`.
+]
+
+--
+
+What changes is we can no longer fix them both with just a pollution tax/subsidy
+
+---
+
+# Monopoly: more generally
+
+Typically we must follow the .hi[Tinbergen rule:] you need as many policy instruments as you have market failures to achieve the efficient outcome
+
+--
+
+What does that mean here?
+
+--
+
+We need:
+
+1. Pollution tax
+--
+
+2. Output subsidy
+
+The tax incentivizes abatement, the subsidy incentivizes production
+
+
+---
+
+# Output taxes
+
+Sometimes emission taxes and abatement subsidies are difficult to administer because monitoring is hard
+
+--
+
+What can we do instead?
+
+--
+
+We can tax the output of the production process
+
+--
+
+e.g. tax on electricity, cement
+
+--
+
+Will this be efficient?
+
+--
+
+If so, what assumptions do we need about the production process?
+
+
+---
+
+# Output taxes
+
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/output-1.png)
+]
+
+.pull-right[
+
+Assume emissions are proportional to output
+
+And MD is constant
+
+The firm chooses to produce/emit at `\(q^u\)` in the unregulated equilibrium
+
+If we tax output equal to MD we can achieve the socially optimal allocation `\(q^*\)`
+
+]
+
+
+---
+
+# Output taxes
+
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/output-1.png)
+]
+
+.pull-right[
+
+An output tax can be efficient, .hi[if we assume that emissions are proportional to output]
+
+Now let's break the link between output and emissions by writing down a slightly more complicated model where the firm chooses emissions and output separately
+
+]
+
+---
+
+# Output taxes, part two
+
+Here's our model:
+
+- Cobb-Douglas production using labor and emissions as inputs: `\(Q = L^\alpha E^{1-\alpha}\)`
+- The firm pays wages `\(w\)` to labor, rental rate `\(r\)` to emissions (capital)
+- The firm receives a price `\(p\)` per unit of output
+- Emissions cause marginal damage `\(d\)`
+
+--
+
+The firm can increase output without more emissions by increasing `\(L\)`
+
+--
+
+What does an output tax `\(\tau_o\)` do versus a regular emission tax `\(\tau_e\)`?
+
+
+---
+
+# Output taxes, part two
+
+The regulator wants the firm to internalize its social costs:
+`$$\max_{L,E} p\,L^\alpha E^{1-\alpha} - wL - rE - dE$$`
+
+--
+
+The first-order conditions for a socially efficient allocation of `\(L\)` and `\(E\)` are:
+`$$\underbrace{\alpha p L^{\alpha-1} E^{1-\alpha}}_{\text{MR}} = \underbrace{w}_{\text{MC}} \qquad \underbrace{(1-\alpha) p L^{\alpha} E^{-\alpha}}_{\text{MR}} = \underbrace{r + d}_{\text{MC}}$$`
+
+--
+
+The for a social optimum we want to equate the MR (left hand side) with the SMC (right hand side) for both inputs
+
+
+---
+
+# Output taxes, part two
+
+The firm's problem for the output tax is:
+`$$\max_{L,E} (p-\tau_o)L^\alpha E^{1-\alpha} - wL - rE$$`
+
+--
+
+The firm's profit-maximizing choices are given by the first-order conditions:
+`$$\alpha(p-\tau_o)L^{\alpha-1} E^{1-\alpha} = w \qquad (1-\alpha)(p-\tau_o)L^{\alpha} E^{-\alpha} = r$$`
+
+--
+
+The firm equates the MR and MC of each input
+
+--
+
+The output tax penalizes the use of clean labor (despite it not causing any externalities) at a marginal rate of: `\(\tau_o L^{\alpha-1} E^{1-\alpha}\)`, this is .hi-red[not efficient]
+
+---
+
+# Output taxes, part two
+
+How does this compare to a pure emission tax?
+
+--
+
+The firm's problem when facing an emission tax is:
+`$$\max_{L,E} pL^\alpha E^{1-\alpha} - wL - (r+\tau_e)E$$`
+--
+
+The firm's profit-maximizing choices are given by the first-order conditions:
+`$$\alpha(p)L^{\alpha-1} E^{1-\alpha} = w \qquad (1-\alpha) p L^{\alpha} E^{-\alpha} = r + \tau_e$$`
+
+--
+
+A tax of `\(\tau_e = d\)` can achieve the efficient allocation!
+
+
+---
+
+# Output taxes takeaways
+
+If emissions are perfectly determined by output, we can use output taxes to achieve the efficient outcome
+
+--
+
+If emissions can be chosen separately from outcome by the firm, this is no longer true
+
+--
+
+In this case an output tax incorrectly taxes our clean inputs
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards --&gt;
+
+&lt;!-- One of the most commonly used regulations for environmental problems is the .hi[intensity standard] --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Intensity standards regulate the intensity of something --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- E.g. --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Intensity of emissions in output --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Intensity of clean electricity sources in the total electricity portfolio --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Intensity of ethanol in the fuel supply --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: RPS --&gt;
+
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-rps.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: RPS --&gt;
+
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-rps2.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards --&gt;
+
+
+&lt;!-- Consider a case where we have a good with two types: --&gt;
+
+&lt;!-- - a high type `\(H\)` that results in a high level of emissions --&gt;
+&lt;!-- - a low type `\(L\)` that results in a low level of emissions --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The emission rate per unit of output for each is `\(\beta_H\)` and `\(\beta_L\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The marginal damage from emissions is `\(d\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The cost function to produce each type of output is `\(C_H(Q_H)\)` and `\(C_L(Q_L)\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The social benefit of consuming the goods is given by a social utility function `\(U(Q_H,Q_L)\)` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: social planner --&gt;
+
+&lt;!-- That's our set up! --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The social planner's problem is: --&gt;
+&lt;!-- `$$\max_{Q_H,Q_L} U(Q_H,Q_L) - \underbrace{(C_H(Q_H) + C_L(Q_L))}_{\text{private cost}} - \underbrace{\tau(\beta_H Q_H + \beta_L Q_L)}_{\text{external cost}}$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Maximize the social utility of the good, minus the private and external costs --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The first-order conditions tell us how social welfare is maximized: --&gt;
+&lt;!-- `$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = \frac{\partial C_i(Q_i)}{\partial Q_i} + \tau \beta_i \,\,\, i = L,H$$` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: social planner --&gt;
+
+&lt;!-- `$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$` --&gt;
+
+&lt;!-- where we label marginal cost `\(MC_i = \frac{\partial C_i(Q_i)}{\partial Q_i}\)` --&gt;
+
+&lt;!-- What is this condition saying? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The marginal benefit of producing the good must equal the private marginal cost of production, plus the marginal damages --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Now what if we try to address the pollution externality with an intensity standard: a cap on the emissions per unit of output? --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: social planner --&gt;
+
+&lt;!-- An emission standard might look something like this: --&gt;
+&lt;!-- `$$\frac{\overbrace{\beta_H Q_H + \beta_L Q_L}^{\text{total emissions}}}{\underbrace{Q_H+Q_L}_{\text{total output}}} = \sigma$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The left hand side is emissions (top) per unit of total output (bottom) --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The right hand side is the standard: `\(\sigma\)` is the required emissions intensity --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- For the standard to make any sense it must be: `\(\beta_L \leq \sigma \leq \beta_H\)`,  --&gt;
+&lt;!-- -- --&gt;
+&lt;!-- otherwise it doesn't do anything `\(\sigma &gt; \beta_H\)` or its unattainable `\(\sigma &lt; \beta_L\)` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: firm --&gt;
+
+&lt;!-- Now how does the firm respond to an intensity standard? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Suppose there are prices `\(p_H\)` and `\(p_L\)` for each type of the good --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The firm's maximizes profit subject to the intensity standard: --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- $$\max_{Q_H,Q_L} \pi(Q_H,Q_L) = p_H Q_H + p_L Q_L - C_H(Q_H) - C_L(Q_L) \,\,\, \\ --&gt;
+&lt;!-- \text{subject to: } \frac{\beta_H Q_H + \beta_L Q_L}{Q_H+Q_L} = \sigma$$ --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: firm --&gt;
+
+&lt;!-- Notice that we can solve the intensity standard constraint for `\(Q_H\)`: --&gt;
+&lt;!-- `$$Q_H = \frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- We can plug it into the firm's profit function to get rid of one of the output variables: --&gt;
+&lt;!-- `$$\max_{Q_L} p_H \frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L + p_L Q_L - C_H\left(\frac{\sigma - \beta_L}{\beta_H - \sigma}Q_L\right) - C_L(Q_L)$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Next, the first-order condition for a maximum --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: firm --&gt;
+
+&lt;!-- The first-order condition is: --&gt;
+&lt;!-- `$$p_H \frac{\sigma - \beta_L}{\beta_H - \sigma} + p_L = \frac{\sigma - \beta_L}{\beta_H - \sigma} MC_H + MC_L$$` --&gt;
+
+&lt;!-- which is equivalent to: --&gt;
+&lt;!-- `$$\frac{p_L - MC_L}{\beta_L - \sigma} = \frac{p_H - MC_H}{\beta_H - \sigma}$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- To get to the final part of the intuition let: --&gt;
+&lt;!-- `$$\lambda \equiv (p_i - MC_i) / (\beta_i-\sigma)$$` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: firm --&gt;
+
+&lt;!-- `$$\lambda \equiv (p_i - MC_i) / (\beta_i-\sigma)$$` --&gt;
+
+&lt;!-- This lets us write the `\(Q_L\)` FOC as: --&gt;
+&lt;!-- `$$p_L = MC_L(Q_L) + \lambda(\beta_L-\sigma)$$` --&gt;
+
+&lt;!-- and it turns out if we instead framed the problem instead of `\(Q_H\)` we'd get the same FOC: --&gt;
+&lt;!-- `$$p_H = MC_H(Q_H) + \lambda(\beta_H-\sigma)$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- What are these FOCs telling us about the firm's problem: --&gt;
+&lt;!-- `$$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: firm --&gt;
+
+&lt;!-- The firm equates marginal revenue `\(p_i\)` and total marginal cost for each type `\(i\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The marginal cost is composed of two pieces: --&gt;
+
+&lt;!-- 1. The actual marginal cost of production `\(MC_i\)` --&gt;
+&lt;!-- 2. The .hi[implicit] marginal cost imposed by the regulation: `\(\lambda(\beta_i-\sigma)\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The regulation forces the firm to choose an allocation that is away from its unconstrained optimum, 2. is what picks up this economic force --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- What is the sign of `\(\lambda(\beta_i-\sigma)\)`? --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: firm --&gt;
+
+&lt;!-- What is the sign of `\(\lambda(\beta_i-\sigma)\)`? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Recall: `\(\beta_L \leq \sigma \leq \beta_H\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- `\(\lambda(\beta_i-\sigma) \geq 0\)` for `\(i = H\)`, `\(\lambda(\beta_i-\sigma) \leq 0\)` for `\(i = L\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The regulation is acting like an implicit marginal .hi-red[tax] on the high emission good, and an implicit .hi-blue[subsidy] on the low emission good! --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The intensity standard aims to shift production from high emission intensity to low emission intensity goods --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Is the intensity standard efficient? --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: efficiency --&gt;
+
+&lt;!-- Social welfare is maximized when: --&gt;
+&lt;!-- `$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The firm maximizes profit under the intensity standard at: --&gt;
+&lt;!-- `$$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$` --&gt;
+
+&lt;!-- `\(\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = p_i\)` from household utility maximization&lt;sup&gt;1&lt;/sup&gt; --&gt;
+&lt;!-- .footnote[ --&gt;
+&lt;!-- &lt;sup&gt;1&lt;/sup&gt;Prices reflect the marginal value of consumption. --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: efficiency --&gt;
+
+&lt;!-- Social efficiency: --&gt;
+&lt;!-- `$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i + \tau \beta_i \,\,\, i = L,H$$` --&gt;
+
+&lt;!-- Firm choice: --&gt;
+&lt;!-- `$$\frac{\partial U(Q_H,Q_L)}{\partial Q_i} = MC_i(Q_i) + \lambda(\beta_i-\sigma) \,\,\, i=L,H$$` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- These conditions show us that an intensity standard is .hi[not] efficient --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Why? --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: efficiency --&gt;
+
+&lt;!-- At a social optimum, we want to .hi[tax] both `\(L\)` and `\(H\)` goods because they are both polluting --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- But the intensity standard .hi[subsidizes] `\(L\)` --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- The intensity standard cannot reach the efficient allocation because it is subsidizing a good that produces a negative externality&lt;sup&gt;1&lt;/sup&gt; --&gt;
+&lt;!-- .footnote[ --&gt;
+&lt;!-- &lt;sup&gt;1&lt;/sup&gt;Technically it can in the specific case when the `\(L\)` type good does not emit any pollution, `\(\beta_L = 0\)`, but in general this won't be true. --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- We call policies that can't achieve the social optimum .hi[second-best] --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: graphical --&gt;
+
+&lt;!-- Now lets look at intensity standards graphically --&gt;
+
+&lt;!-- A few things you'll need to know: --&gt;
+
+&lt;!-- 1. .hi[Iso-profit curves:] ovals that tell us the combinations of `\(Q_H,Q_L\)` that achieve the same profit --&gt;
+&lt;!-- 2. .hi[Iso-welfare curves:] ovals that tell us the combinations of `\(Q_H,Q_L\)` that achieve the same social welfare --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: graphical --&gt;
+
+&lt;!-- These are like indifference curves for consumers, but are ovals instead of convex curves --&gt;
+
+&lt;!-- Why ovals? --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- Producing too much can decrease profit and/or welfare so eventually profit starts falling --&gt;
+
+&lt;!-- With consumption, more is always better so increasing consumption always moves onto higher ICs --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: what happens? --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard3.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- The circles are iso-private welfare (iso-profit) curves --&gt;
+
+&lt;!-- A is where profit is maximized for the firm --&gt;
+
+&lt;!-- The line `\(Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H\)` tells us which combos of `\(Q_L,Q_H\)` satisfy the intensity standard --&gt;
+
+&lt;!-- Holland, Hughes, and Knittel (2010) --&gt;
+&lt;!-- ] --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: what happens? --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard3.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- The intensity standard forces the firm to produce on the line --&gt;
+
+&lt;!-- The highest iso-profit curve it can achieve is at point C --&gt;
+
+&lt;!-- This is more `\(Q_L\)` and less `\(Q_H\)` than is optimal, consistent with the subsidy/tax combination implicit in the policy --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: perverse incentives --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- Intensity standards can actually backfire and increase emissions --&gt;
+
+&lt;!-- How? --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: perverse incentives --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- `\(\beta_H Q_H + \beta_L Q_L = K\)` is the line showing all combinations of `\(Q_L,Q_H\)` that generate `\(K\)` units of emissions --&gt;
+
+&lt;!-- K crosses through point `\(A\)` which is the unregulated profit-maximizing choice by the firm --&gt;
+
+&lt;!-- Anything to the top right of the line is .hi-red[more emissions] --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: perverse incentives --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- The regulation induces the firm to move to point `\(C\)` --&gt;
+
+&lt;!-- This is slightly less `\(Q_H\)`, but .hi[a lot] more `\(Q_L\)` --&gt;
+
+&lt;!-- The increase in emissions from `\(Q_L\)` is more than the decrease from the lowering of `\(Q_H\)` --&gt;
+
+&lt;!-- Overall emissions went up! --&gt;
+&lt;!-- ] --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: perverse incentives --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- This perverse outcome was possible because production of the `\(L\)` type was very elastic while the `\(H\)` type was inelastic --&gt;
+&lt;!-- ] --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: second-best --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard1.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- What is the best intensity standard? --&gt;
+
+&lt;!-- The dashed ovals are the iso-profit curves --&gt;
+
+&lt;!-- The solid ovals are the iso-welfare curves --&gt;
+
+&lt;!-- Welfare is maximized at point B --&gt;
+
+&lt;!-- Profit is maximized at point A --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- # Intensity standards: second-best --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- &lt;center&gt; --&gt;
+&lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
+&lt;!-- knitr::include_graphics("files/06-int-standard1.png") --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- &lt;/center&gt; --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- The solid line shows the firm's choices of `\(Q_L,Q_H\)` as we increase the intensity standard `\(\sigma\)` --&gt;
+
+&lt;!-- Increasing `\(\sigma\)` pivots the intensity standard counter-clockwise: `\(Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H\)` --&gt;
+
+&lt;!-- The optimal intensity standard is the one that lets us get on the highest iso-welfare curve, which is at point `\(C\)` --&gt;
+
+&lt;!-- ] --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
