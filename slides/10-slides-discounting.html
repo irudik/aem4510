@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 09</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="10-slides-discounting_files/header-attrs/header-attrs.js"></script>
+    <link href="10-slides-discounting_files/remark-css/default.css" rel="stylesheet" />
+    <link href="10-slides-discounting_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="10-slides-discounting_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="10-slides-discounting_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="10-slides-discounting_files/tile-view/tile-view.js"></script>
+    <link href="10-slides-discounting_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="10-slides-discounting_files/panelset/panelset.js"></script>
+    <script src="10-slides-discounting_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 09
+]
+.subtitle[
+## Discounting and Cost Benefit Analysis
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+```
+
+---
+
+# Roadmap
+
+1. What is discounting?
+2. What determines the discount rate?
+3. What are the implications of discounting on computing the costs and benefits of policies?
+
+
+---
+
+class: inverse, center, middle
+name: tradable permits
+
+# Discounting
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+At the end of the century we will have much more hot days in some places
+&lt;center&gt;
+&lt;img src="files/09-climate-change.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+At the end of the century we will have much fewer freezing days in others
+
+&lt;center&gt;
+&lt;img src="files/09-climate-change2.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+This has massive implications for mortality
+&lt;center&gt;
+&lt;img src="files/09-climate-damage.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting
+
+Some places are expecting to have huge gains in GDP from mortality risk
+
+--
+
+Others are expecting to have huge losses
+
+--
+
+This is all happening in 60-80 years
+
+--
+
+How do we compare these costs and benefits to those incurred today?
+
+--
+
+We use a .hi[discount rate:] a value that tells us how much future dollars are worth in today's terms
+
+---
+
+# A simple example
+
+Let `\(r\)` be the discount rate, so `\(\beta = {1 \over 1+r}\)` is the discount factor
+
+Suppose we are considering two different projects that have costs and benefits that accrue differently over time
+
+| Year | Project A Cost | Project A Benefit | Project B Cost | Project B Benefit |
+|------|----------------|------------------|----------------|------------------|
+| 0    | 10000          | 0                | 6000           | 0                |
+| 1    | 1000           | 4000             | 0              | 1000             |
+| 2    | 0              | 4000             | 0              | 3000             |
+| 3    | 0              | 4000             | 0              | 3000             |
+
+Project A has higher costs and benefits in nominal terms
+
+---
+
+# A simple example
+
+| Year | Project A Cost | Project A Benefit | Project B Cost | Project B Benefit |
+|------|----------------|------------------|----------------|------------------|
+| 0    | 10000          | 0                | 6000           | 0                |
+| 1    | 1000           | 4000             | 0              | 1000             |
+| 2    | 0              | 4000             | 0              | 3000             |
+| 3    | 0              | 4000             | 0              | 3000             |
+
+**Project A:**
+
+`\(PV_A = \frac{4000}{1.05^1} + \frac{4000}{1.05^2} + \frac{4000}{1.05^3} - \frac{10000}{1.05^0} - \frac{1000}{1.05^1} = 1791.76\)`
+
+**Project B:**
+
+`\(PV_B = \frac{1000}{1.05^1} + \frac{3000}{1.05^2} + \frac{3000}{1.05^3} - \frac{6000}{1.05^0} = 1648.09\)`
+
+---
+
+# What if the discount rate was 3%?
+
+| Year | Project A Cost | Project A Benefit | Project B Cost | Project B Benefit |
+|------|----------------|------------------|----------------|------------------|
+| 0    | 10000          | 0                | 6000           | 0                |
+| 1    | 1000           | 4000             | 0              | 1000             |
+| 2    | 0              | 4000             | 0              | 3000             |
+| 3    | 0              | 4000             | 0              | 3000             |
+
+**Project A:**
+
+`\(PV_A = \frac{4000}{1.03^1} + \frac{4000}{1.03^2} + \frac{4000}{1.03^3} - \frac{10000}{1.03^0} - \frac{1000}{1.03^1} = 2262.35\)`
+
+**Project B:**
+
+`\(PV_B = \frac{1000}{1.03^1} + \frac{3000}{1.03^2} + \frac{3000}{1.03^3} - \frac{6000}{1.03^0} = 2144.69\)`
+
+---
+
+# Discounting
+
+Discounting results in us placing less value on costs and benefits that accrue in the future 
+
+A dollar 1 year from now is worth `\(\beta = \frac{1}{1+r}\)` dollars today
+
+The timing of costs and benefits of projects can then sway which project has greater present value
+
+---
+
+# Return to Manne-Richels
+
+We ignored the idea of discounting in our discussion of the Manne-Richels model
+
+
+--
+
+Our new problem with discounting is then:
+
+--
+
+`$$\min_{a_1} E[TC] = \underbrace{\frac{1}{2}a_1^2}_{\text{current cost}} + \beta\left[(1-p)\times \underbrace{0}_{\text{good state cost}} + p \times \underbrace{\frac{1}{2}(1-a_1)^2}_{\text{bad state cost}}\right]$$`
+
+---
+
+# Return to Manne-Richels
+
+The first-order condition is:
+`$$\frac{d E[TC]}{da_1} = a^*_1 - \beta p(1-a^*_1) = 0$$`
+
+--
+
+This gives us that:
+`$$a^*_1 = \frac{\beta p}{1+\beta p}$$`
+
+--
+
+How does discounting affect our decisionmaking?
+
+
+---
+
+# Discounting and decisionmaking
+
+`$$a^*_1 = \frac{\beta p}{1+\beta p}$$`
+
+--
+
+First, notice as `\(r \rightarrow \infty\)` we have `\(\beta = {1 \over 1 + r} \rightarrow 0\)`, we put less and less weight on the future
+
+--
+
+This means we do less abatement today in period 1!
+
+--
+
+That's intuitive, let's see what discount actually looks like graphically
+
+--
+
+What is the value of a future payment of $100?
+
+---
+
+# PV of $100
+
+.pull-left[
+
+![higher discount rates mean lower value](10-slides-discounting_files/figure-html/discounting-1.png)
+]
+
+.pull-right[
+Higher discount rates place less value on future benefits
+
+Things &gt; 30 years in the future have basically no value with a 10% discount rate
+
+At a 1% discount rate we value things 100 years in the future at almost half their value today
+]
+
+---
+
+# Discounting
+
+Why does this matter?
+
+--
+
+Lots of things (like climate change) have costs or benefits that occur .hi[far] in the future
+
+--
+
+e.g. the benefits of taking action against climate change will be mostly borne by future generations, decades from now
+
+--
+
+Depending on our choice of discount rate these costs and benefits can be substantial or trivial
+
+---
+
+# Discounting
+
+1 million in damages in 200 years at a discount rate of r = 2% is worth 19,053 today
+
+--
+
+1 million in damages in 200 years at a discount rate of r = 8% is worth only 21 cents today
+
+--
+
+5 orders of magnitude difference!
+
+--
+
+This makes the choice of the discount rate one of the most important (and contentious) things about climate change policy
+
+---
+
+# Discounting: how do we choose?
+
+How do we choose the discount rate?
+
+--
+
+.hi[Option 1:] take the market rate
+
+--
+
+This is just the real interest paid on certain investments
+
+--
+
+In a perfect market equilibrium, it is the productivity of capital
+
+--
+
+Why might this not be the rate we want to choose as a regulator?
+
+
+---
+
+# Discounting: how do we choose?
+
+Issues with market rates:
+
+--
+
+Market rates don't reflect externalities
+
+--
+
+Super-responsibility of government: the government represents future generations as well as current generations (only current ones are represented in the market)
+
+--
+
+Dual-role of individuals: in political roles, people are more concerned about future generations than in their day-to-day behavior which determines the market rate
+
+---
+
+# Discounting: how do we choose?
+
+.hi[Option 2:] social discounting
+
+--
+
+With social discounting with determine the discount rate from economic and ethical considerations
+
+--
+
+Why should we discount the future?
+
+--
+
+First, time: people are impatient
+
+--
+
+And growth: if someone is richer in 10 years, a dollar is worth more to them today than in 10 years in utility terms 
+
+
+---
+
+# Ramsey Discounting
+
+With a decent amount of math we can show that the social discount rate `\(r\)` is composed of three terms:
+`$$r = \delta + \eta \times g$$`
+
+--
+
+`\(\delta\)` is called the .hi[pure rate of time preference] or .hi[utility discount rate]: how much do we value future *utility*
+
+--
+
+`\(\eta\)` is the .hi[elasticity of marginal utility]: how quickly does marginal utility (benefit) decline in consumption?
+
+--
+
+`\(g\)` is the .hi[growth rate]: how fast does consumption grow over time?
+
+---
+
+# Ramsey Discounting
+
+Here's some alternative descriptions of how to think about these terms:
+
+--
+
+`\(\delta\)`: how much is 1 util tomorrow worth today?
+
+--
+
+`\(\eta\)`: how much do we value poorer vs richer times/generations? Bigger `\(\eta\)` `\(\rightarrow\)` more averse to inequality over time
+- `\(\eta = - {U''(X)X \over U'(X)}\)`, how many percent does MU change if consumption changes by 1%
+
+--
+
+`\(g\)`: how rich will we / future generations be compared to today?
+
+---
+
+# Ramsey Discounting
+
+`$$r = \delta + \eta \times g$$`
+
+What this means is that if we have values for `\(r\)`, `\(\eta\)`, and `\(g\)`, we can compute the "correct" discount rate
+
+--
+
+How do we get values for these terms?
+
+--
+
+Two common approaches: descriptive and prescriptive
+
+
+---
+
+# Ramsey Discounting: the descriptive approach
+
+The descriptive approach aims to calibrate the discount rate to the real world
+
+--
+
+We can observe `\(g\)` in the data / forecasts
+
+--
+
+We can sometimes estimate `\(\eta\)` from observed behavior over time
+
+--
+
+Once we pick a `\(\delta\)` we have our discount rate `\(r\)`
+
+--
+
+The descriptive approach generally chooses `\(\delta\)` so `\(r\)` matches market rates
+
+---
+
+# Ramsey Discounting: the prescriptive approach
+
+First we decide on the 'correct' level of `\(\delta\)` and `\(\eta\)`
+
+--
+
+Then we observe `\(g\)` in the data / forecasts
+
+--
+
+That gives us `\(r\)`
+
+---
+
+# What's the utility discount rate?
+
+Both approaches depend on us choosing `\(\delta\)`
+
+--
+
+What is the right value for `\(\delta\)`?
+
+--
+
+Ramsey (1928): placing different weights upon the utility of different generations is ‘ethically indefensible'
+
+--
+
+Harrod (1948): discounting utility represented a 'polite expression for rapacity and the conquest of reason by passion'
+
+--
+
+The above arguments are ethical arguments, so are typically used by those favoring the prescriptive approach
+
+
+---
+
+# What's the discount rate? Descriptive
+
+The descriptive approach often results in `\(\delta\)` being between 2-3% from reverse engineering the observed market rates
+
+--
+
+`\(\eta\)` is then often engineered to be between 1 and 4
+
+--
+
+`\(g\)` is observed and generally between 1 and 3%
+
+--
+
+Thus the discount rate usually lies between 2 and 7%
+
+--
+
+Quick example: `\(\delta = 2\%, \eta = 2, g = 2\% \rightarrow r = 6\%\)`
+
+---
+
+# What's the discount rate? Prescriptive
+
+The prescriptive approach often results in `\(\delta\)` being zero or nearly zero for the ethical reasons described above
+
+---
+
+# What's the discount rate? Prescriptive
+
+Choosing `\(\eta\)` also conveys ethical choices: how do we weigh the distribution of consumption across generations
+
+--
+
+Recall: `\(r = \delta + \eta g\)`
+
+--
+
+- `\(\eta = 0\)`: consumption in the future doesn't change our willingness to save/invest today (r is independent of g)
+
+--
+
+- `\(\eta\)` is large: if there is positive growth, we are .hi[less] likely to invest in the future (future generations will be rich anyway)
+
+--
+
+- `\(\eta\)` is large: if there is negative growth, we are .hi[more] likely to invest in the future (future generations will be poorer than today)
+
+---
+
+# Distributive justice
+
+Rawl's theory of justice applied here would set `\(\delta = 0\)` and `\(\eta = \infty\)`: fairness for all
+
+--
+
+More egalitarian perspectives with respect to:
+
+.hi[time] 
+--
+yields a smaller `\(\delta\)` and `\(r\)`
+
+--
+
+.hi[intergenerational inequality] 
+--
+yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
+
+
+---
+
+# What do the experts think? Weitzman (2001)
+
+&lt;center&gt;
+&lt;img src="files/09-discount-rate-survey.png" width="80%" /&gt;
+&lt;/center&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

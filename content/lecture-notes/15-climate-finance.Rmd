@@ -1,0 +1,33 @@
+---
+title: "Climate Risk and Financial Instruments"
+linktitle: "LN15: Climate Risk and Financial Instruments"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Schedule, Lecture Notes, and Readings
+    weight: 15
+type: docs
+#bibliography: "../../static/bib/references.bib"
+#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
+slides: "15-slides-climate-finance"
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+### Overview
+
+This lecture:
+
+1. Quick overview on financial instruments
+2. What can they tell us about climate change and climate risk?
+
+### Slides 
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
+
+`r blogdown::shortcode("slide-buttons")`
+

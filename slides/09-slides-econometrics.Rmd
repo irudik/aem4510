@@ -1,0 +1,1205 @@
+---
+title: "Lecture 09"
+subtitle: "OLS // Regression"
+author: Ivan Rudik
+date: AEM 4510
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+
+---
+exclude: true
+```{r setup}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, janitor
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo = FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+red_pink = "#e64173"
+# A blank theme for ggplot
+theme_empty = theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black"), axis.ticks = element_line(),
+  )
+theme_blank = theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_blank(), axis.text.y = element_blank(),
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
+theme_regular = 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 14),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
+  ) 
+nascar_df = read_csv("data/10-florida-nascar.csv") |> 
+  as_tibble() 
+```
+```{r xaringanExtra, echo = FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+
+```
+```{r echo=FALSE}
+xaringanExtra::style_panelset(panel_tab_color_active = "red")
+```
+
+
+---
+
+# Roadmap
+
+- Intro to regression and ordinary least squares
+
+---
+  
+class: inverse, center, middle
+name: tidyverse
+
+# Regression and ordinary least squares
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Why?
+
+Let's start with a few .hi[basic, general questions]
+
+--
+
+1. What is the goal of econometrics?
+
+2. Why do economists (or other people) study or use econometrics?
+
+--
+
+.hi[One simple answer:] Learn about the world using data
+
+
+---
+
+# Why? Example
+
+GPA is an output from endowments (ability), and hours studied (inputs), and pollution exposure (externality)
+
+--
+
+One might hypothesize a model:
+$\text{GPA}=f(I, P, \text{SAT}, H)$
+
+where $H$ is hours studied, $P$ is pollution exposure, $\text{SAT}$ is SAT score and $\text{I}$ is family income
+
+--
+
+We expect that GPA will rise with some variables, and decrease with others
+
+--
+
+But who needs to _expect_?
+
+--
+
+We can test these hypotheses .hi[using a regression model]
+
+---
+
+# How?
+
+We can write down a linear regression model of the relationship between GPA and (H, P, SAT, PCT):
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+--
+
+The left hand side of the equals sign is our .hi-blue[dependent variable] GPA
+
+--
+
+The right hand side of the equals sign contains all of our .hi-red[independent variables] (I, P, SAT, H), and an error term $\varepsilon_i$ (described later)
+
+--
+
+The subscript $i$ means that the variable contains the value for some person $i$ in our dataset where $i = 1,\dots,N$
+
+---
+
+# How?
+
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+We are interested in how pollution P affects GPA
+
+--
+
+This is given by $\beta_2$
+
+--
+
+Notice that $\beta_2 = \frac{\partial\text{GPA}_i}{\partial\text{P}_i}$
+
+--
+
+$\beta_2$ tells us how GPA changes, given a 1 unit increase in pollution!
+
+--
+
+Our goal will be to estimate $\beta_2$, we denote estimates with hats: $\hat{\beta}_2$
+
+
+---
+
+# How?
+
+How do we estimate $\beta_2$?
+
+--
+
+First, suppose we have a set of estimates for all of our $\beta$s, then we can *estimate* the GPA $(\widehat{GPA}_i)$ for any given person based on just (I, P, SAT, H):
+$$\widehat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 I_i + \hat{\beta}_2 P_i + \hat{\beta}_3 \text{SAT}_i + \hat{\beta}_4 H_i$$
+
+---
+
+# How?
+
+We estimate the $\beta$s with .hi[linear regression], specifically ordinary least squares
+
+.hi[Ordinary least squares:] choose all the $\beta$s so that the sum of squared errors between the *real* GPAs and model-estimated GPAs are minimized:
+$$SSE = \sum_{i=1}^N (GPA_i - \widehat{GPA}_i)^2$$
+
+--
+
+Choosing the $\beta$s in this fashion gives us the best-fit line through the data
+
+---
+
+# How?
+
+
+```{R, gen dataset, include = F, cache = T}
+# Set population and sample sizes
+n_p = 100
+n_s = 10
+# Set the seed
+set.seed(12468)
+# Generate data
+pop_df = tibble(
+i = 3,
+x = rnorm(n_p, mean = 5, sd = 1.5),
+e = rnorm(n_p, mean = 0, sd = 1),
+y = i - 0.5 * x + e,
+row = rep(1:sqrt(n_p), times = sqrt(n_p)),
+col = rep(1:sqrt(n_p), each = sqrt(n_p)),
+s1 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
+s2 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s))),
+s3 = sample(x = c(rep(T, n_s), rep(F, n_p - n_s)))
+)
+# Regressions
+lm0 = lm(y ~ x, data = pop_df)
+lm1 = lm(y ~ x, data = filter(pop_df, s1 == T))
+lm2 = lm(y ~ x, data = filter(pop_df, s2 == T))
+lm3 = lm(y ~ x, data = filter(pop_df, s3 == T))
+# Simulation
+set.seed(12468)
+sim_df = lapply(X = 1:1e3, FUN = function(x, size = n_s) {
+lm(y ~ x, data = pop_df %>% sample_n(size = size)) %>% tidy()
+}) %>% do.call(rbind, .) %>% as_tibble()
+```
+
+---
+
+# Simple example
+
+Suppose we were only looking at GPA and pollution (lead/Pb):
+
+$$\text{GPA}_i = \beta_0 + \beta_1 P_i + \varepsilon_i $$
+
+```{R, ols vs lines 1, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$
+
+```{R, vs lines 2, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat = function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 = 1
+b1 = 0.4
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  # geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
+
+```{R, ols vs lines 3, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat = function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 = 1
+b1 = 0.4
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
+
+```{R, ols vs lines 4, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat = function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 = 3
+b1 = 0.2
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+count: false
+# Simple example
+
+
+For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
+
+```{R, ols vs lines 5, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat = function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 = 2
+b1 = -0.8
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+count: false
+# Simple example
+
+
+SSE squares the errors $\left(\sum e_i^2\right)$: bigger errors get bigger penalties
+
+```{R, ols vs lines 6, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat = function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 = 2
+b1 = -0.8
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  scale_color_viridis(option = "cividis", direction = -1) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+count: false
+# Simple example
+
+
+The OLS estimate is the combination of $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize SSE
+
+```{R, ols vs lines 7, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+# Define a function
+y_hat = function(x, b0, b1) {b0 + b1 * x}
+# Define line's parameters
+b0 = lm0$coefficients[1]
+b1 = lm0$coefficients[2]
+# The plot
+ggplot(data = pop_df, aes(x = x, y = y)) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
+  geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#ff0000", size = 2, alpha = 0.9) +
+  scale_color_viridis(option = "cividis", direction = -1) +
+  theme_empty +
+  labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+---
+
+# OLS error term
+
+So OLS is just the best-fit line through your data
+
+--
+
+Remember: for any given $i$, we won't have that $GPA_i = \widehat{GPA}_i$, there's always some error
+
+--
+
+Why?
+
+--
+
+Our model isn't perfect, the people in our dataset (i.e. our sample) may not perfectly match up to the entire population of people
+
+---
+
+# OLS error term
+
+There's .hi[a lot] of other stuff that determines GPAs!
+
+--
+
+We jam all that stuff into error term $\varepsilon_i$:
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+--
+
+So $\varepsilon_i$ contains all the determinants of GPA that we aren't explicitly addressing in our model like:
+
+- Home environment
+- Time studying
+
+--
+
+It is just a "catch-all", we don't actually know or see $\varepsilon_i$
+
+---
+
+# OLS properties
+
+OLS has one .hi[very] nice property relevant for this class:
+
+--
+
+<center>
+.hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
+</center>
+---
+
+# OLS properties
+
+.hi-blue[Unbiasedness:] $E[\hat{\beta}] = \beta$
+
+On average, our estimate $\hat{\beta}$ exactly equals the .hi[true] $\beta$
+
+--
+
+The key is .hi-red[on average:] we are estimating our model using only some sample of the data
+
+--
+
+The estimated $\beta$ won't exactly be right for the entire population, but on average, we expect it to match
+
+--
+
+Let's see in an example where we only have a subsample of the full population of data
+
+---
+
+# OLS properties
+
+
+.pull-left[
+
+```{R, pop1, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col)) +
+geom_point(color = "darkslategray", size = 10) +
+theme_blank
+```
+
+.center[**Population**]
+
+]
+
+--
+
+.pull-right[
+
+```{R, scatter1, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = "#3C93DC", size = 3
+) +
+geom_point(color = "darkslategray", size = 6) +
+theme_blank
+```
+
+.center[**Population relationship**]
+
+$$ y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i $$
+
+$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+
+
+]
+
+---
+
+.pull-left[
+
+
+```{R, sample1, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col, shape = s1)) +
+geom_point(color = "darkslategray", size = 10) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[**Sample 1:** 10 random individuals]
+
+
+]
+
+--
+
+.pull-right[
+
+
+```{R, sample1 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = red_pink, size = 3, alpha = 0.3
+) +
+geom_point(aes(shape = s1), color = "darkslategray", size = 6) +
+geom_abline(
+intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+size = 2, linetype = 2, color = "black"
+) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+
+.center[
+
+**Population relationship**
+<br>
+$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+
+**Sample relationship**
+<br>
+$\hat{y}_i = `r round(lm1$coefficients[1], 2)` + `r round(lm1$coefficients[2], 2)` x_i$
+
+]
+
+]
+
+---
+count: false
+
+.pull-left[
+
+```{R, sample2, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col, shape = s2)) +
+geom_point(color = "darkslategray", size = 10) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[**Sample 2:** 10 random individuals]
+
+]
+
+.pull-right[
+
+```{R, sample2 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = red_pink, size = 3, alpha = 0.3
+) +
+geom_point(aes(shape = s2), color = "darkslategray", size = 6) +
+geom_abline(
+intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+size = 2, linetype = 2, color = "black", alpha = 0.3
+) +
+geom_abline(
+intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
+size = 2, linetype = 2, color = "black"
+) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[
+
+**Population relationship**
+<br>
+$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+
+**Sample relationship**
+<br>
+$\hat{y}_i = `r round(lm2$coefficients[1], 2)` + `r round(lm2$coefficients[2], 2)` x_i$
+
+]
+
+]
+---
+count: false
+
+.pull-left[
+
+```{R, sample3, echo = F, fig.width = 4, fig.height = 4, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = row, y = col, shape = s3)) +
+geom_point(color = "darkslategray", size = 10) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[**Sample 3:** 10 random individuals]
+
+]
+
+.pull-right[
+
+```{R, sample3 scatter, echo = F, fig.width = 4, fig.height = 3, fig.align = 'center', dev = "svg"}
+ggplot(data = pop_df, aes(x = x, y = y)) +
+geom_abline(
+intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+color = red_pink, size = 3, alpha = 0.3
+) +
+geom_point(aes(shape = s3), color = "darkslategray", size = 6) +
+geom_abline(
+intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
+size = 2, linetype = 2, color = "black", alpha = 0.3
+) +
+geom_abline(
+intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
+size = 2, linetype = 2, color = "black", alpha = 0.3
+) +
+geom_abline(
+intercept = lm3$coefficients[1], slope = lm3$coefficients[2],
+size = 2, linetype = 2, color = "black"
+) +
+scale_shape_manual(values = c(1, 19)) +
+theme_blank
+```
+
+.center[
+
+**Population relationship**
+<br>
+$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+
+**Sample relationship**
+<br>
+$\hat{y}_i = `r round(lm3$coefficients[1], 2)` + `r round(lm3$coefficients[2], 2)` x_i$
+
+]
+
+]
+
+---
+layout: false
+class: clear, middle
+
+Let's repeat this **1,000 times**.
+
+(This exercise is called a (Monte Carlo) simulation.)
+
+---
+
+# Population *vs.* sample
+
+```{R, simulation scatter, echo = F, dev = "png", dpi = 300, cache = F, fig.height = 3}
+# Reshape sim_df
+line_df = tibble(
+intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
+slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
+)
+ggplot() +
+geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.02, color = "darkslategray") +
+geom_point(data = pop_df, aes(x = x, y = y), size = 3, color = "darkslategray") +
+geom_abline(
+  intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+  color = "#3C93DC", size = 1.5
+) +
+theme_blank
+```
+
+---
+
+# Population *vs.* sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+---
+
+.pull-left[ 
+  ```{R fig.fullwidth=T, fig.height=6, cache=FALSE, dev="png", dpi=300, echo=F}
+  # Reshape sim_df
+  line_df = tibble(
+    intercept = sim_df |> filter(term != "x") |> select(estimate) |> unlist(),
+    slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
+  ) 
+  ggplot() + 
+    geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
+    geom_point(data = pop_df, aes(x = x, y = y), size = 6, color = "darkslategray") +
+    geom_abline(
+      intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
+      color = "#3C93DC", size = 3
+    ) +
+    theme_blank
+  ```
+]
+
+.pull-right[
+
+On .hi-blue[average], our regression lines match the population line very nicely
+
+However, .hi[individual lines] (samples) can really miss the mark
+
+]
+
+---
+
+# Population *vs.* sample
+
+**Answer:** Uncertainty/randomness matters!
+
+--
+
+$\hat{\beta}$ itself is will depend on the sample of data we have
+
+--
+
+When we take a sample and run a regression, we don't know if it's a 'good' sample ( $\hat{\beta}$ is close to $\beta$) or a 'bad sample' (our sample differs greatly from the population)
+
+---
+
+# Unbiasedness
+
+For OLS to be unbiased and give us, on average, the causal effect of some X on some Y we need a few assumptions to hold
+
+--
+
+Whether or not these assumptions are true is why you often hear *correlation is not causation*
+
+--
+
+If we want some $\hat{\beta}_1$ on a variable $x$ to be unbiased we $x$ to be .hi[uncorrelated] with the error term:
+$$E[x \varepsilon] = 0 \quad \leftrightarrow \quad \text{correlation}(x,\varepsilon) = 0$$
+
+---
+
+# Unbiasedness
+
+The variable you are interested in .hi[cannot] be correlated with the error term
+
+--
+
+What does this mean in words?
+
+--
+
+The error term contains all variables that determine $y$, but we *omitted* from our model
+
+--
+
+We are assuming that our variable of interest, x, is not correlated with any of these omitted variable
+
+--
+
+If x is correlated with any of them, then we will have something called .hi[omitted variable bias]
+
+---
+
+# Omitted variable bias
+
+Here's an intuitive example
+
+--
+
+Suppose we wanted to understand the effect of lead exposure $P$ on GPAs
+
+--
+
+lead harm's children's brain development, especially before age 6
+
+--
+
+We should expect early-life lead exposure to reduce future GPAs
+
+---
+
+# Omitted variable bias
+
+Our model might look like:
+$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \varepsilon_i$$
+
+--
+
+We want to know $\beta_1$
+
+--
+
+What would happen if we took a sample of *real world data* and used OLS to estimate $\hat{\beta}_1$?
+
+---
+
+# Omitted variable bias
+
+We would have omitted variable bias
+
+--
+
+Why? What are some examples?
+
+--
+
+.hi[Who] is more likely to be exposed to lead?
+
+--
+
+Poorer families likely have more lead exposure, why?
+
+--
+
+Richer families can move away, pay to replace lead paint, lead pipes, etc
+
+--
+
+This means lead exposure is correlated with lower income
+
+---
+
+# Omitted variable bias
+
+Why does this correlation cause us problems?
+
+--
+
+Family income *also* matters for GPA, it is in $\varepsilon_i$, so our assumption that $\text{correlation}(x,\varepsilon) = 0$ is violated
+
+--
+
+Children from richer families tend to have higher GPAs
+
+--
+
+Why?
+
+--
+
+Access to tutoring, better schools, parental pressure, etc, etc
+
+---
+
+# Omitted variable bias
+
+If we just look at the effect of lead exposure on GPAs without addressing its correlation with income, lead exposure will look worse than it actually is
+
+--
+
+This is because our data on lead exposure is also proxying for income (since $\text{correlation}(x,\varepsilon) = 0$ )
+
+--
+
+So $\hat{\beta}_1$ will pick up the effect of both!
+
+--
+
+Our estimate $\hat{\beta}_1$ is .hi[biased] and overstates the negative effects of lead
+
+---
+
+# Omitted variable bias
+
+How do we fix this bias?
+
+--
+
+Make income not omitted: control for it in our model
+
+--
+
+If we have data on family income $I$ we can instead write our model as:
+$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \beta_2 \text{I}_i + \varepsilon_i$$
+
+$I$ is no longer omitted
+
+--
+
+Independent variables in our model that we include to address bias are called .hi[controls]
+
+---
+
+class: inverse, center, middle
+name: r
+
+# Hands-on pollution education example
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+
+---
+
+# Real pollution education example
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-alex-nascar.png")
+```
+</center>
+
+---
+
+# Real pollution education example
+
+In .hi[3 hours], one NASCAR race emits more lead than a majority of industrial facilities do in an .hi[entire year]
+
+.center[
+```{r, tri histogram, echo = F, dev = "svg", fig.width = 12, fig.height = 5, warning = FALSE, message = FALSE}
+
+tri <- read_csv("data/TRI_2005_US.csv") %>%
+  as_tibble() %>%
+  filter(str_detect(CHEMICAL, "LEAD")) %>%
+  clean_names() %>%
+  mutate(emissions = log10(x5_1_fugitive_air + x5_2_stack_air)) %>%
+  select(emissions) %>%
+  filter(!is.infinite(emissions))
+
+
+ggplot(tri) +
+  geom_histogram(aes(x = emissions), fill = "#3C93DC", color = "#3C93DC", bins = 50) +
+  geom_vline(xintercept = median(tri$emissions), color = "black", linetype = "dotdash", size = 2) +
+  geom_vline(xintercept = 1.53, color = "#ff0000", size = 2) +
+  geom_vline(xintercept = 1.75, color = "#FFAC0F", linetype = "longdash", size = 2) +
+  geom_vline(xintercept = 6.04, color = "#FFAC0F", linetype = "longdash", size = 2) +
+  annotate("text", size = 6, label = "Median Facility", x = -.2, y = 490) +
+  annotate("text", size = 6, label = "1 NASCAR Race", x = .6, y = 590, color = "#ff0000") +
+  annotate("text", size = 6, label = "1 Airport", x = 2.2, y = 590, color = "#FFAC0F") +
+  annotate("text", size = 6, label = "All Airports", x = 5.3, y = 590, color = "#FFAC0F") +
+  theme_regular +
+  labs(x = "Annual Emissions (pounds)",
+       y = "Number of Industrial Facilities") +
+  coord_cartesian(xlim = c(-4, 6.1)) +
+  scale_x_continuous(breaks = c(-4, -2, 0, 2, 4, 6),
+                     labels = c(.0001, .01, 1, 100, 10000, 1000000))
+```
+]
+
+---
+
+# We will look at Florida
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-florida-map.png")
+```
+</center>
+
+---
+
+# All the data are public, you can look at scores yourself!
+
+<center>
+```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-fcat-site.png")
+```
+</center>
+
+---
+
+# Let's look at the data
+
+```{r}
+nascar_df
+```
+
+---
+
+# My sister is in these observations!
+
+```{r}
+nascar_df |> # only keep Saturn Elementary School
+  filter(school_name == "SATURN ELEM")
+```
+
+---
+
+# Let's look at the data
+
+```{r, warning = F, echo = F}
+summary(nascar_df |> select(school_id, zscore, nascar_lead, industrial_lead, median_income, num_students))
+```
+
+---
+
+# The variables
+
+- .hi[zscore]: the school's score for the average student in terms of standard deviations above or below the state-wide average
+- .hi[nascar lead]: lifetime exposure to lead emissions from NASCAR tracks within 50 miles
+- .hi[industrial lead]: lead emissions from industrial sources (e.g. factories) within 50 miles
+- .hi[median income]: the school district's median incoe
+- .hi[num students]: the number of students at the school
+- .hi[school id, school name, grade, and year]: self-explanatory
+
+---
+
+# What does the distribution of scores look like?
+
+```{r, echo = FALSE, fig.align = 'center'}
+hist(nascar_df$zscore)
+```
+
+---
+
+# What about exposure to NASCAR lead
+
+.pull-left[
+```{r, echo = FALSE, fig.align = 'center'}
+hist(nascar_df$nascar_lead)
+```
+]
+.pull-right[
+
+Most schools have zero exposure
+
+Some have a lot
+
+Units are 10s of kilograms
+
+]
+
+---
+
+# What is the association between lead and scores?
+
+.pull-left[
+```{r pure_corr, echo = FALSE, fig.show = 'hide', warning = F}
+ggplot(nascar_df, aes(x = nascar_lead_weighted, y = zscore)) +
+  geom_point(size = 1, color = "darkslategray", alpha = 0.25) +
+  geom_smooth(formula = y ~ x, color = red_pink, method = 'lm', size = 2) +
+  theme_regular +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  labs(
+    y = "Test Score (standard deviations)",
+    x = "Lead Exposure\n(tens of weighted kilograms)"
+  )
+``` 
+
+![negatively correlated](`r knitr::fig_chunk("pure_corr", "png")`)
+]
+
+.pull-right[
+Let's look at the pure correlation between test scores and lead
+
+There's a lot of data so it's kind of hard to see but it appears there's a .hi-red[negative] association: lead is bad for test scores
+
+
+]
+
+
+---
+
+# What is the association between lead and scores?
+
+.pull-left[
+```{r binned, echo = FALSE, fig.show = 'hide', warning = F}
+bin_df = nascar_df |>
+  mutate(nascar_lead_weighted = round(nascar_lead_weighted)) %>%
+  group_by(nascar_lead_weighted) |>
+  summarise(
+    mean_score = mean(zscore)
+  ) |>
+  ungroup()
+
+ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_score)) +
+  geom_point(size = 5, color = "darkslategray") +
+  geom_smooth(formula = y ~ x, color = red_pink, method = "lm", se = FALSE) +
+  theme_regular +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  labs(
+    y = "Test Score (standard deviations)",
+    x = "Lead Exposure\n(tens of weighted kilograms)"
+  )
+``` 
+
+![negatively correlated](`r knitr::fig_chunk("binned", "png")`)
+]
+
+.pull-right[
+
+Lets .hi[bin] the data to see the pattern more clearly
+
+All I'm doing is:
+
+- Rounding lead to the nearest integer
+- Taking the average of test scores for that bin
+- Plot the average scores versus rounded lead
+
+
+]
+
+---
+
+# What is the association between lead and scores?
+
+We can get a better sense by running a regression: 
+$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy}$$ $(s$ is school, $g$ is grade, $y$ is year)
+
+---
+
+# What is the association between lead and scores?
+
+```{r, eval = F, echo = F}
+lm(zscore ~ nascar_lead_weighted, nascar_df) |>
+  broom::tidy()
+```
+
+```
+## Estimation Results
+##   parameter                      estimate   
+## 1 beta_0 (Intercept)             0.002   
+*## 2 beta_1 nascar_lead_weighted   -0.004   
+```
+
+What does this mean?
+
+An additional 10 kg of lead exposure is associated with a school having an average test score 0.004 standard deviations lower
+
+---
+
+# Do we believe this number?
+
+What's a potential issue with just looking at the raw association?
+
+--
+
+Schools near NASCAR tracks are probably a lot different than schools further away
+
+--
+
+We want to control for things that are potentially correlated with both test scores and being close to NASCAR
+
+--
+
+Two broad important things: lead emissions from other sources, socioeconomic status
+
+---
+
+# Do we believe this number?
+
+$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy} + \beta_2 other\_lead_{sgy}  + \beta_3 income_{sgy}$$
+
+
+```
+## Estimation results
+##   parameter                      estimate  
+## 1 beta_0 (Intercept)             -0.846     
+*## 2 beta_1 nascar_lead_weighted   -0.0008   (versus -0.004 above)
+## 3 beta_2 other_lead             -0.00000006 (other lead = bad!)
+## 4 beta_3 income                  0.00002 (rich family = good!)
+```
+
+Controlling for other things matters: new estimate is 1/4 the size
+
+---
+
+# Why did this matter?
+
+.pull-left[
+```{r income, echo = FALSE, fig.show = 'hide', warning = F}
+bin_df = nascar_df |>
+  mutate(nascar_lead_weighted = round(nascar_lead_weighted)) %>%
+  group_by(nascar_lead_weighted) |>
+  summarise(
+    mean_income = mean(median_income)
+  ) |>
+  ungroup()
+
+ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_income)) +
+  geom_point(size = 5, color = "darkslategray") +
+  geom_smooth(formula = y ~ x, color = red_pink, method = "lm", se = FALSE) +
+  theme_regular +
+  scale_y_continuous(breaks = scales::pretty_breaks()) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  labs(
+    y = "Median Income (thousands of dollars)",
+    x = "Lead Exposure\n(tens of weighted kilograms)"
+  )
+``` 
+
+![negatively correlated](`r knitr::fig_chunk("income", "png")`)
+]
+
+.pull-right[
+Mainly because places with NASCAR tracks tend to be poorer
+
+]

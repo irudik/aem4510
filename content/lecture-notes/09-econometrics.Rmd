@@ -1,0 +1,32 @@
+---
+title: "Econometrics"
+linktitle: "LN09: Econometrics"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Schedule, Lecture Notes, and Readings
+    weight: 9
+type: docs
+#bibliography: "../../static/bib/references.bib"
+#csl: "../../static/bib/chicago-syllabus-no-bib.csl"
+slides: "09-slides-econometrics"
+output:
+  blogdown::html_page:
+    toc: false
+---
+  
+### Overview
+
+This lecture:
+
+1. Econometrics review
+
+### Slides
+
+Slides are below. 
+The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing 'o' lets you see all the slides.
+
+`r blogdown::shortcode("slide-buttons")`
+

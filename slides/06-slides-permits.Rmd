@@ -1859,8 +1859,6 @@ ggplot() +
 ![base set up](`r knitr::fig_chunk("output2", "png")`)
 ]
 
-]
-
 ---
 
 # The output results

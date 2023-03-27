@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 09</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="09-slides-econometrics_files/header-attrs/header-attrs.js"></script>
+    <link href="09-slides-econometrics_files/remark-css/default.css" rel="stylesheet" />
+    <link href="09-slides-econometrics_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="09-slides-econometrics_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="09-slides-econometrics_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="09-slides-econometrics_files/tile-view/tile-view.js"></script>
+    <link href="09-slides-econometrics_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="09-slides-econometrics_files/panelset/panelset.js"></script>
+    <script src="09-slides-econometrics_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 09
+]
+.subtitle[
+## OLS // Regression
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true
+
+```r
+if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, janitor
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo = FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+red_pink = "#e64173"
+# A blank theme for ggplot
+theme_empty = theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black"), axis.ticks = element_line(),
+  )
+theme_blank = theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_blank(), axis.text.y = element_blank(),
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_blank(), axis.ticks = element_blank(),
+  ) 
+theme_regular = 
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 14),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(), axis.ticks = element_line(),  axis.line = element_line(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA)
+  ) 
+nascar_df = read_csv("data/10-florida-nascar.csv") |&gt; 
+  as_tibble() 
+```
+
+```
+## Rows: 68858 Columns: 12
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr  (1): school_name
+## dbl (11): school_id, grade, year, zscore, nascar_lead, nascar_lead_weighted, years_leaded, industrial_lead, median_incom...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+
+```
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
+## documentation to update your slides.
+```
+
+
+---
+
+# Roadmap
+
+- Intro to regression and ordinary least squares
+
+---
+  
+class: inverse, center, middle
+name: tidyverse
+
+# Regression and ordinary least squares
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Why?
+
+Let's start with a few .hi[basic, general questions]
+
+--
+
+1. What is the goal of econometrics?
+
+2. Why do economists (or other people) study or use econometrics?
+
+--
+
+.hi[One simple answer:] Learn about the world using data
+
+
+---
+
+# Why? Example
+
+GPA is an output from endowments (ability), and hours studied (inputs), and pollution exposure (externality)
+
+--
+
+One might hypothesize a model:
+`\(\text{GPA}=f(I, P, \text{SAT}, H)\)`
+
+where `\(H\)` is hours studied, `\(P\)` is pollution exposure, `\(\text{SAT}\)` is SAT score and `\(\text{I}\)` is family income
+
+--
+
+We expect that GPA will rise with some variables, and decrease with others
+
+--
+
+But who needs to _expect_?
+
+--
+
+We can test these hypotheses .hi[using a regression model]
+
+---
+
+# How?
+
+We can write down a linear regression model of the relationship between GPA and (H, P, SAT, PCT):
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+--
+
+The left hand side of the equals sign is our .hi-blue[dependent variable] GPA
+
+--
+
+The right hand side of the equals sign contains all of our .hi-red[independent variables] (I, P, SAT, H), and an error term `\(\varepsilon_i\)` (described later)
+
+--
+
+The subscript `\(i\)` means that the variable contains the value for some person `\(i\)` in our dataset where `\(i = 1,\dots,N\)`
+
+---
+
+# How?
+
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+We are interested in how pollution P affects GPA
+
+--
+
+This is given by `\(\beta_2\)`
+
+--
+
+Notice that `\(\beta_2 = \frac{\partial\text{GPA}_i}{\partial\text{P}_i}\)`
+
+--
+
+`\(\beta_2\)` tells us how GPA changes, given a 1 unit increase in pollution!
+
+--
+
+Our goal will be to estimate `\(\beta_2\)`, we denote estimates with hats: `\(\hat{\beta}_2\)`
+
+
+---
+
+# How?
+
+How do we estimate `\(\beta_2\)`?
+
+--
+
+First, suppose we have a set of estimates for all of our `\(\beta\)`s, then we can *estimate* the GPA `\((\widehat{GPA}_i)\)` for any given person based on just (I, P, SAT, H):
+`$$\widehat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 I_i + \hat{\beta}_2 P_i + \hat{\beta}_3 \text{SAT}_i + \hat{\beta}_4 H_i$$`
+
+---
+
+# How?
+
+We estimate the `\(\beta\)`s with .hi[linear regression], specifically ordinary least squares
+
+.hi[Ordinary least squares:] choose all the `\(\beta\)`s so that the sum of squared errors between the *real* GPAs and model-estimated GPAs are minimized:
+`$$SSE = \sum_{i=1}^N (GPA_i - \widehat{GPA}_i)^2$$`
+
+--
+
+Choosing the `\(\beta\)`s in this fashion gives us the best-fit line through the data
+
+---
+
+# How?
+
+
+
+
+---
+
+# Simple example
+
+Suppose we were only looking at GPA and pollution (lead/Pb):
+
+$$\text{GPA}_i = \beta_0 + \beta_1 P_i + \varepsilon_i $$
+
+![](09-slides-econometrics_files/figure-html/ols vs lines 1-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`
+
+
+```
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+```
+
+![](09-slides-econometrics_files/figure-html/vs lines 2-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`, we calculate errors: `\(e_i = GPA_i - \hat{GPA}_i\)`
+
+![](09-slides-econometrics_files/figure-html/ols vs lines 3-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`, we calculate errors: `\(e_i = GPA_i - \hat{GPA}_i\)`
+
+![](09-slides-econometrics_files/figure-html/ols vs lines 4-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`, we calculate errors: `\(e_i = GPA_i - \hat{GPA}_i\)`
+
+![](09-slides-econometrics_files/figure-html/ols vs lines 5-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+SSE squares the errors `\(\left(\sum e_i^2\right)\)`: bigger errors get bigger penalties
+
+![](09-slides-econometrics_files/figure-html/ols vs lines 6-1.svg)&lt;!-- --&gt;
+
+---
+count: false
+# Simple example
+
+
+The OLS estimate is the combination of `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` that minimize SSE
+
+![](09-slides-econometrics_files/figure-html/ols vs lines 7-1.svg)&lt;!-- --&gt;
+
+---
+
+# OLS error term
+
+So OLS is just the best-fit line through your data
+
+--
+
+Remember: for any given `\(i\)`, we won't have that `\(GPA_i = \widehat{GPA}_i\)`, there's always some error
+
+--
+
+Why?
+
+--
+
+Our model isn't perfect, the people in our dataset (i.e. our sample) may not perfectly match up to the entire population of people
+
+---
+
+# OLS error term
+
+There's .hi[a lot] of other stuff that determines GPAs!
+
+--
+
+We jam all that stuff into error term `\(\varepsilon_i\)`:
+$$ \text{GPA}_i = \beta_0 + \beta_1 I_i + \beta_2 P_i + \beta_3 \text{SAT}_i + \beta_4 H_i + \varepsilon_i $$
+
+--
+
+So `\(\varepsilon_i\)` contains all the determinants of GPA that we aren't explicitly addressing in our model like:
+
+- Home environment
+- Time studying
+
+--
+
+It is just a "catch-all", we don't actually know or see `\(\varepsilon_i\)`
+
+---
+
+# OLS properties
+
+OLS has one .hi[very] nice property relevant for this class:
+
+--
+
+&lt;center&gt;
+.hi-blue[Unbiasedness:] `\(E[\hat{\beta}] = \beta\)`
+&lt;/center&gt;
+---
+
+# OLS properties
+
+.hi-blue[Unbiasedness:] `\(E[\hat{\beta}] = \beta\)`
+
+On average, our estimate `\(\hat{\beta}\)` exactly equals the .hi[true] `\(\beta\)`
+
+--
+
+The key is .hi-red[on average:] we are estimating our model using only some sample of the data
+
+--
+
+The estimated `\(\beta\)` won't exactly be right for the entire population, but on average, we expect it to match
+
+--
+
+Let's see in an example where we only have a subsample of the full population of data
+
+---
+
+# OLS properties
+
+
+.pull-left[
+
+&lt;img src="09-slides-econometrics_files/figure-html/pop1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Population**]
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="09-slides-econometrics_files/figure-html/scatter1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Population relationship**]
+
+$$ y_i = 2.53 + -0.43 x_i + u_i $$
+
+$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+
+
+]
+
+---
+
+.pull-left[
+
+
+&lt;img src="09-slides-econometrics_files/figure-html/sample1-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 1:** 10 random individuals]
+
+
+]
+
+--
+
+.pull-right[
+
+
+&lt;img src="09-slides-econometrics_files/figure-html/sample1 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(y_i = 2.53 + -0.43 x_i + u_i\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{y}_i = 0.72 + -0.19 x_i\)`
+
+]
+
+]
+
+---
+count: false
+
+.pull-left[
+
+&lt;img src="09-slides-econometrics_files/figure-html/sample2-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 2:** 10 random individuals]
+
+]
+
+.pull-right[
+
+&lt;img src="09-slides-econometrics_files/figure-html/sample2 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(y_i = 2.53 + -0.43 x_i + u_i\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{y}_i = 2.82 + -0.47 x_i\)`
+
+]
+
+]
+---
+count: false
+
+.pull-left[
+
+&lt;img src="09-slides-econometrics_files/figure-html/sample3-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[**Sample 3:** 10 random individuals]
+
+]
+
+.pull-right[
+
+&lt;img src="09-slides-econometrics_files/figure-html/sample3 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+**Population relationship**
+&lt;br&gt;
+`\(y_i = 2.53 + -0.43 x_i + u_i\)`
+
+**Sample relationship**
+&lt;br&gt;
+`\(\hat{y}_i = 2.32 + -0.44 x_i\)`
+
+]
+
+]
+
+---
+layout: false
+class: clear, middle
+
+Let's repeat this **1,000 times**.
+
+(This exercise is called a (Monte Carlo) simulation.)
+
+---
+
+# Population *vs.* sample
+
+![](09-slides-econometrics_files/figure-html/simulation scatter-1.png)&lt;!-- --&gt;
+
+---
+
+# Population *vs.* sample
+
+**Question:** Why do we care about *population vs. sample*?
+
+---
+
+.pull-left[ 
+  ![](09-slides-econometrics_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+On .hi-blue[average], our regression lines match the population line very nicely
+
+However, .hi[individual lines] (samples) can really miss the mark
+
+]
+
+---
+
+# Population *vs.* sample
+
+**Answer:** Uncertainty/randomness matters!
+
+--
+
+`\(\hat{\beta}\)` itself is will depend on the sample of data we have
+
+--
+
+When we take a sample and run a regression, we don't know if it's a 'good' sample ( `\(\hat{\beta}\)` is close to `\(\beta\)`) or a 'bad sample' (our sample differs greatly from the population)
+
+---
+
+# Unbiasedness
+
+For OLS to be unbiased and give us, on average, the causal effect of some X on some Y we need a few assumptions to hold
+
+--
+
+Whether or not these assumptions are true is why you often hear *correlation is not causation*
+
+--
+
+If we want some `\(\hat{\beta}_1\)` on a variable `\(x\)` to be unbiased we `\(x\)` to be .hi[uncorrelated] with the error term:
+`$$E[x \varepsilon] = 0 \quad \leftrightarrow \quad \text{correlation}(x,\varepsilon) = 0$$`
+
+---
+
+# Unbiasedness
+
+The variable you are interested in .hi[cannot] be correlated with the error term
+
+--
+
+What does this mean in words?
+
+--
+
+The error term contains all variables that determine `\(y\)`, but we *omitted* from our model
+
+--
+
+We are assuming that our variable of interest, x, is not correlated with any of these omitted variable
+
+--
+
+If x is correlated with any of them, then we will have something called .hi[omitted variable bias]
+
+---
+
+# Omitted variable bias
+
+Here's an intuitive example
+
+--
+
+Suppose we wanted to understand the effect of lead exposure `\(P\)` on GPAs
+
+--
+
+lead harm's children's brain development, especially before age 6
+
+--
+
+We should expect early-life lead exposure to reduce future GPAs
+
+---
+
+# Omitted variable bias
+
+Our model might look like:
+`$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \varepsilon_i$$`
+
+--
+
+We want to know `\(\beta_1\)`
+
+--
+
+What would happen if we took a sample of *real world data* and used OLS to estimate `\(\hat{\beta}_1\)`?
+
+---
+
+# Omitted variable bias
+
+We would have omitted variable bias
+
+--
+
+Why? What are some examples?
+
+--
+
+.hi[Who] is more likely to be exposed to lead?
+
+--
+
+Poorer families likely have more lead exposure, why?
+
+--
+
+Richer families can move away, pay to replace lead paint, lead pipes, etc
+
+--
+
+This means lead exposure is correlated with lower income
+
+---
+
+# Omitted variable bias
+
+Why does this correlation cause us problems?
+
+--
+
+Family income *also* matters for GPA, it is in `\(\varepsilon_i\)`, so our assumption that `\(\text{correlation}(x,\varepsilon) = 0\)` is violated
+
+--
+
+Children from richer families tend to have higher GPAs
+
+--
+
+Why?
+
+--
+
+Access to tutoring, better schools, parental pressure, etc, etc
+
+---
+
+# Omitted variable bias
+
+If we just look at the effect of lead exposure on GPAs without addressing its correlation with income, lead exposure will look worse than it actually is
+
+--
+
+This is because our data on lead exposure is also proxying for income (since `\(\text{correlation}(x,\varepsilon) = 0\)` )
+
+--
+
+So `\(\hat{\beta}_1\)` will pick up the effect of both!
+
+--
+
+Our estimate `\(\hat{\beta}_1\)` is .hi[biased] and overstates the negative effects of lead
+
+---
+
+# Omitted variable bias
+
+How do we fix this bias?
+
+--
+
+Make income not omitted: control for it in our model
+
+--
+
+If we have data on family income `\(I\)` we can instead write our model as:
+`$$\text{GPA}_i = \beta_0 + \beta_1 \text{P}_i + \beta_2 \text{I}_i + \varepsilon_i$$`
+
+`\(I\)` is no longer omitted
+
+--
+
+Independent variables in our model that we include to address bias are called .hi[controls]
+
+---
+
+class: inverse, center, middle
+name: r
+
+# Hands-on pollution education example
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+
+---
+
+# Real pollution education example
+
+&lt;center&gt;
+&lt;img src="files/10-alex-nascar.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Real pollution education example
+
+In .hi[3 hours], one NASCAR race emits more lead than a majority of industrial facilities do in an .hi[entire year]
+
+.center[
+![](09-slides-econometrics_files/figure-html/tri histogram-1.svg)&lt;!-- --&gt;
+]
+
+---
+
+# We will look at Florida
+
+&lt;center&gt;
+&lt;img src="files/10-florida-map.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# All the data are public, you can look at scores yourself!
+
+&lt;center&gt;
+&lt;img src="files/10-fcat-site.png" width="80%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Let's look at the data
+
+
+```r
+nascar_df
+```
+
+```
+## # A tibble: 68,858 × 12
+##    school_id school_name   grade  year zscore nascar_lead nascar_lead_weighted years_leaded indust…¹ media…² unemp…³ num_s…⁴
+##        &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;                &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1        56 HAMILTON ELEM     3  2003 -0.186        72.2                 2.53            8  822328.   49267    0.05     112
+##  2        56 HAMILTON ELEM     4  2003  0.101        80.4                 2.81            8  822639.   49267    0.05     117
+##  3        56 HAMILTON ELEM     5  2003 -0.206        88.0                 3.08            8  822909.   49267    0.05     120
+##  4        56 HAMILTON ELEM     3  2004 -0.686        74.0                 2.59            8  967077.   50842    0.04     131
+##  5        56 HAMILTON ELEM     4  2004 -0.633        82.4                 2.88            8  967352.   50842    0.04     105
+##  6        56 HAMILTON ELEM     5  2004  0.352        90.5                 3.17            8  967663.   50842    0.04     109
+##  7        56 HAMILTON ELEM     3  2005 -1.14         77.0                 2.69            8 1061570.   52390    0.03     110
+##  8        56 HAMILTON ELEM     4  2005 -0.649        84.7                 2.97            8 1062071.   52390    0.03     137
+##  9        56 HAMILTON ELEM     5  2005 -0.336        92.0                 3.26            8 1062346.   52390    0.03      97
+## 10        56 HAMILTON ELEM     3  2006 -0.333        79.9                 2.80            8 1164072.   56655    0.02     133
+## # … with 68,848 more rows, and abbreviated variable names ¹​industrial_lead, ²​median_income, ³​unemp_rate, ⁴​num_students
+```
+
+---
+
+# My sister is in these observations!
+
+
+```r
+nascar_df |&gt; # only keep Saturn Elementary School
+  filter(school_name == "SATURN ELEM")
+```
+
+```
+## # A tibble: 21 × 12
+##    school_id school_name grade  year  zscore nascar_lead nascar_lead_weighted years_leaded industr…¹ media…² unemp…³ num_s…⁴
+##        &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;                &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1      2067 SATURN ELEM     3  2003  0.105            0                    0            0   823844.   42192    0.05      96
+##  2      2067 SATURN ELEM     4  2003 -0.0633           0                    0            0   824155.   42192    0.05     105
+##  3      2067 SATURN ELEM     5  2003  0.163            0                    0            0   824425.   42192    0.05     107
+##  4      2067 SATURN ELEM     3  2004  0.655            0                    0            0   967646.   44248    0.04      89
+##  5      2067 SATURN ELEM     4  2004  0.586            0                    0            0   967921.   44248    0.04      84
+##  6      2067 SATURN ELEM     5  2004  0.679            0                    0            0   968232.   44248    0.04      87
+##  7      2067 SATURN ELEM     3  2005  1.03             0                    0            0  1059953.   43403    0.03      99
+##  8      2067 SATURN ELEM     4  2005  0.131            0                    0            0  1060454.   43403    0.03      96
+##  9      2067 SATURN ELEM     5  2005  0.696            0                    0            0  1060729.   43403    0.03      82
+## 10      2067 SATURN ELEM     3  2006  0.599            0                    0            0  1161336.   46415    0.03      99
+## # … with 11 more rows, and abbreviated variable names ¹​industrial_lead, ²​median_income, ³​unemp_rate, ⁴​num_students
+```
+
+---
+
+# Let's look at the data
+
+
+```
+##    school_id        zscore           nascar_lead    industrial_lead   median_income    num_students  
+##  Min.   :   3   Min.   :-6.765987   Min.   : 0.00   Min.   :      0   Min.   :25201   Min.   : 10.0  
+##  1st Qu.: 961   1st Qu.:-0.630857   1st Qu.: 0.00   1st Qu.: 300489   1st Qu.:41184   1st Qu.: 72.0  
+##  Median :1811   Median : 0.012807   Median : 0.00   Median : 562856   Median :44635   Median :100.0  
+##  Mean   :1832   Mean   : 0.000358   Mean   :12.88   Mean   :1197073   Mean   :44712   Mean   :102.5  
+##  3rd Qu.:2702   3rd Qu.: 0.661761   3rd Qu.:16.38   3rd Qu.:2040709   3rd Qu.:48772   3rd Qu.:130.0  
+##  Max.   :4110   Max.   : 4.884255   Max.   :92.02   Max.   :6454837   Max.   :67238   Max.   :447.0
+```
+
+---
+
+# The variables
+
+- .hi[zscore]: the school's score for the average student in terms of standard deviations above or below the state-wide average
+- .hi[nascar lead]: lifetime exposure to lead emissions from NASCAR tracks within 50 miles
+- .hi[industrial lead]: lead emissions from industrial sources (e.g. factories) within 50 miles
+- .hi[median income]: the school district's median incoe
+- .hi[num students]: the number of students at the school
+- .hi[school id, school name, grade, and year]: self-explanatory
+
+---
+
+# What does the distribution of scores look like?
+
+&lt;img src="09-slides-econometrics_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# What about exposure to NASCAR lead
+
+.pull-left[
+&lt;img src="09-slides-econometrics_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+Most schools have zero exposure
+
+Some have a lot
+
+Units are 10s of kilograms
+
+]
+
+---
+
+# What is the association between lead and scores?
+
+.pull-left[
+
+
+![negatively correlated](09-slides-econometrics_files/figure-html/pure_corr-1.png)
+]
+
+.pull-right[
+Let's look at the pure correlation between test scores and lead
+
+There's a lot of data so it's kind of hard to see but it appears there's a .hi-red[negative] association: lead is bad for test scores
+
+
+]
+
+
+---
+
+# What is the association between lead and scores?
+
+.pull-left[
+
+
+![negatively correlated](09-slides-econometrics_files/figure-html/binned-1.png)
+]
+
+.pull-right[
+
+Lets .hi[bin] the data to see the pattern more clearly
+
+All I'm doing is:
+
+- Rounding lead to the nearest integer
+- Taking the average of test scores for that bin
+- Plot the average scores versus rounded lead
+
+
+]
+
+---
+
+# What is the association between lead and scores?
+
+We can get a better sense by running a regression: 
+`$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy}$$` `\((s\)` is school, `\(g\)` is grade, `\(y\)` is year)
+
+---
+
+# What is the association between lead and scores?
+
+
+
+```
+## Estimation Results
+##   parameter                      estimate   
+## 1 beta_0 (Intercept)             0.002   
+*## 2 beta_1 nascar_lead_weighted   -0.004   
+```
+
+What does this mean?
+
+An additional 10 kg of lead exposure is associated with a school having an average test score 0.004 standard deviations lower
+
+---
+
+# Do we believe this number?
+
+What's a potential issue with just looking at the raw association?
+
+--
+
+Schools near NASCAR tracks are probably a lot different than schools further away
+
+--
+
+We want to control for things that are potentially correlated with both test scores and being close to NASCAR
+
+--
+
+Two broad important things: lead emissions from other sources, socioeconomic status
+
+---
+
+# Do we believe this number?
+
+`$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy} + \beta_2 other\_lead_{sgy}  + \beta_3 income_{sgy}$$`
+
+
+```
+## Estimation results
+##   parameter                      estimate  
+## 1 beta_0 (Intercept)             -0.846     
+*## 2 beta_1 nascar_lead_weighted   -0.0008   (versus -0.004 above)
+## 3 beta_2 other_lead             -0.00000006 (other lead = bad!)
+## 4 beta_3 income                  0.00002 (rich family = good!)
+```
+
+Controlling for other things matters: new estimate is 1/4 the size
+
+---
+
+# Why did this matter?
+
+.pull-left[
+
+
+![negatively correlated](09-slides-econometrics_files/figure-html/income-1.png)
+]
+
+.pull-right[
+Mainly because places with NASCAR tracks tend to be poorer
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
