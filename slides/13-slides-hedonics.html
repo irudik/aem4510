@@ -1,21 +1,44 @@
----
-title: "Lecture 13"
-subtitle: "Hedonics and Real Estate Markets"
-author: Ivan Rudik
-date: AEM 4510
-output:
-  xaringan::moon_reader:
-    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
-    # self_contained: true
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
-      ratio: '16:9'
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 13</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="13-slides-hedonics_files/header-attrs/header-attrs.js"></script>
+    <link href="13-slides-hedonics_files/remark-css/default.css" rel="stylesheet" />
+    <link href="13-slides-hedonics_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="13-slides-hedonics_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="13-slides-hedonics_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="13-slides-hedonics_files/tile-view/tile-view.js"></script>
+    <link href="13-slides-hedonics_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="13-slides-hedonics_files/panelset/panelset.js"></script>
+    <script src="13-slides-hedonics_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="13-slides-hedonics_files/vembedr/css/vembedr.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 13
+]
+.subtitle[
+## Hedonics and Real Estate Markets
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
 
 ---
+
 exclude: true
-```{r setup}
+
+```r
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
@@ -23,20 +46,28 @@ pacman::p_load(
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
-    options$echo <- FALSE
+    options$echo &lt;- FALSE
   }
 knitr::opts_chunk$set(echo = TRUE, fig.align="center")
   options
 })
 ```
-```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
-xaringanExtra::style_panelset(panel_tab_color_active = "red")
+
 ```
-```{r themes}
-red_pink <- "#e64173"
+## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please refer to the
+## documentation to update your slides.
+```
+
+```r
+red_pink &lt;- "#e64173"
 # A blank theme for ggplot
-theme_empty <- theme_minimal() +
+theme_empty &lt;- theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
@@ -48,7 +79,7 @@ theme_empty <- theme_minimal() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black"), axis.ticks = element_line(),
   )
-theme_blank <- theme_minimal() +
+theme_blank &lt;- theme_minimal() +
   theme(
     legend.position = "none",
     title = element_text(size = 24),
@@ -60,7 +91,7 @@ theme_blank <- theme_minimal() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_blank(), axis.ticks = element_blank(),
   ) 
-theme_regular <- 
+theme_regular &lt;- 
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -90,7 +121,7 @@ name: hedonics
 
 # Hedonic valuation
 
-<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
 
 ---
@@ -202,16 +233,17 @@ name: superfund
 
 # BCA of Superfund
 
-<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
 ---
 
 # Superfund
 
-```{r, echo = FALSE}
-embed_url("https://youtu.be/Kjobz14i8kM") %>%
-  use_align("center")
-```
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/Kjobz14i8kM" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
 
 
 ---
@@ -320,12 +352,12 @@ Suppose that we have some quality-differentiated good (i.e. a home)
 
 --
 
-This good is characterized by a set of $J$ property characteristics $x$
+This good is characterized by a set of `\(J\)` property characteristics `\(x\)`
   - parcel size, school quality, bedrooms, etc
   
 --
 
-It is also characterized by an environmental good $q$
+It is also characterized by an environmental good `\(q\)`
 
 --
 
@@ -398,43 +430,37 @@ houses aren't going to be perfectly comparable, etc
 
 # Housing prices in Ithaca are increasing .hi[fast], why?
 
-<center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-ithaca-housing-prices-1.png")
-```
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-ithaca-prices.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-ithaca-housing-prices-1.png" width="80%" /&gt;
+&lt;img src="files/11-ithaca-prices.png" width="80%" /&gt;
+&lt;/center&gt;
 
 ---
 
 # Another Dyson professor's house
 
-<center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-dyson-home.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-dyson-home.png" width="80%" /&gt;
+&lt;/center&gt;
 
 ---
 
 # The hedonic model
 
-The price of a house is determined by a .hi[hedonic price curve] $P(x,q)$
+The price of a house is determined by a .hi[hedonic price curve] `\(P(x,q)\)`
 
 
 --
 
-$P$ tells us the market value of the home based on its characteristics $x$ and local environmental quality $q$
+`\(P\)` tells us the market value of the home based on its characteristics `\(x\)` and local environmental quality `\(q\)`
 
 --
 
-For a particular house $k$ its price is $p_k = P(x_k,q_k)$
+For a particular house `\(k\)` its price is `\(p_k = P(x_k,q_k)\)`
 
 --
 
-$P$ arises in equilibrium from the interaction of all buyers in sellers in the market
+`\(P\)` arises in equilibrium from the interaction of all buyers in sellers in the market
 
 --
 
@@ -446,29 +472,17 @@ Here we will assume the supply of houses is fixed in the short run so the price 
 
 
 .pull-left[
-```{r price_fct, echo = FALSE, fig.show = 'hide', warning = F}
-logx <- function(x) -x^2 + 4*x + 1
 
-ggplot() +
-  stat_function(fun = logx, color = "darkslategray", size = 1.5, linetype = "solid") +
-  theme_regular +
-  labs(x = "Quantity of Environmental good (q)",
-       y = "Price of Property (100,000 $)",
-       title = "The Hedonic Price Curve") +
-  scale_x_continuous(limits = c(0,2), breaks = scales::pretty_breaks()) +
-  scale_y_continuous(limits = c(0,6), breaks = scales::pretty_breaks())
-
-```
-![hedonic price curves slope up at a decreasing rate](`r knitr::fig_chunk("price_fct", "png")`)
+![hedonic price curves slope up at a decreasing rate](13-slides-hedonics_files/figure-html/price_fct-1.png)
 ]
 
 .pull-right[
 
-The hedonic price curve is $P(x,q)$
+The hedonic price curve is `\(P(x,q)\)`
 
 It's increasing in q (q is good) but at a decreasing rate (decreasing marginal utility)
 
-This is holding $x$ fixed
+This is holding `\(x\)` fixed
 
 Analogous to regular demand curves holding income fixed
 
@@ -481,26 +495,13 @@ Analogous to regular demand curves holding income fixed
 
 
 .pull-left[
-```{r implicit_price, echo = FALSE, fig.show = 'hide', warning = F}
-logx <- function(x) x^2 + -4*x + 5
 
-ggplot() +
-  stat_function(fun = logx, color = "darkslategray", size = 1.5, linetype = "solid") +
-  theme_minimal() +
-  theme_regular +
-  labs(x = "Quantity of Environmental good (q)",
-       y = "Implicit Price of q ($)",
-       title = "The Implicit Price Curve") +
-  scale_x_continuous(limits = c(0,1.5), breaks = scales::pretty_breaks()) +
-  scale_y_continuous(limits = c(0,6), breaks = scales::pretty_breaks())
-
-```
-![higher discount rates mean lower value](`r knitr::fig_chunk("implicit_price", "png")`)
+![higher discount rates mean lower value](13-slides-hedonics_files/figure-html/implicit_price-1.png)
 ]
 
 .pull-right[
 
-The implicit price curve for q is ${\partial P(x,q) \over \partial q}$
+The implicit price curve for q is `\({\partial P(x,q) \over \partial q}\)`
 
 It tells us how the price changes in q
 
@@ -514,11 +515,9 @@ This is effectively the environmental good demand curve
 
 # Price curve example
 
-<center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-woburn.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-woburn.png" width="80%" /&gt;
+&lt;/center&gt;
 
 ---
 
@@ -528,17 +527,17 @@ Households buy a single property given their budget constraint and their prefere
 
 --
 
-Here we will assume that households are effectively just choosing $(x,q)$ instead of a specific house with the following objective:
+Here we will assume that households are effectively just choosing `\((x,q)\)` instead of a specific house with the following objective:
 
 --
 
-$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, \underbrace{y = z + P(x,q)}_{\text{budget constraint}}$$
+`$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, \underbrace{y = z + P(x,q)}_{\text{budget constraint}}$$`
 
 --
 
-- $z$ is the numeraire good (spending on other private goods)
-- $y$ is income
-- $s$ is the set of the household's characteristics like family size, ages, etc
+- `\(z\)` is the numeraire good (spending on other private goods)
+- `\(y\)` is income
+- `\(s\)` is the set of the household's characteristics like family size, ages, etc
 
 
 ---
@@ -553,7 +552,7 @@ Many housing characteristics are discrete (bedrooms, bathrooms, etc)
 
 --
 
-Another is that you just can't purchase some sets of $x$ (i.e. a huge lot in downtown Manhattan with a farm)
+Another is that you just can't purchase some sets of `\(x\)` (i.e. a huge lot in downtown Manhattan with a farm)
 
 --
 
@@ -564,7 +563,7 @@ We won't touch on this in class because it's a lot more complicated, but economi
 
 # Choosing q
 
-Another thing to note: the consumer *chooses* $q$
+Another thing to note: the consumer *chooses* `\(q\)`
 
 --
 
@@ -572,15 +571,15 @@ The idea is that mobile households can move to get their desired level of the en
 
 --
 
-We are thus also implicitly assuming $q$ varies across space so that households can sort into areas they prefer
+We are thus also implicitly assuming `\(q\)` varies across space so that households can sort into areas they prefer
   - q is really picking up .hi[local] environmental goods
   
 
 ---
 
-# What is $P(x,q)$
+# What is `\(P(x,q)\)`
 
-In the model we are thinking of $P(x,q)$ as the annual .hi-blue[rental rate], not the purchase price
+In the model we are thinking of `\(P(x,q)\)` as the annual .hi-blue[rental rate], not the purchase price
 
 --
 
@@ -598,11 +597,11 @@ For homeowners we are basically assuming they rent from themselves every year
 
 # The hedonic model: consumer's choice problem
 
-$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, y = z + P(x,q)$$
+`$$\max_{x,q,z} U(x,q,z;s) \,\,\,\,\, \text{subject to:} \,\,\,\,\, y = z + P(x,q)$$`
 
-Plug in the constraint for $z$ to get:
+Plug in the constraint for `\(z\)` to get:
 
-$$\max_{x,q} U(x,q,\underbrace{y-P(x,q)}_{z};s)$$
+`$$\max_{x,q} U(x,q,\underbrace{y-P(x,q)}_{z};s)$$`
 
 --
 
@@ -610,20 +609,20 @@ The FOCs for this problem are:
 
 --
 
-\begin{align}
-  {\partial U \over \partial x_j} =& {\partial U \over \partial z} {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \tag{house characteristics} \\
-  {\partial U \over \partial q} =& {\partial U \over \partial z} {\partial P \over \partial q} \tag{environmental good}
-\end{align}
+`\begin{align}
+  {\partial U \over \partial x_j} =&amp; {\partial U \over \partial z} {\partial P \over \partial x_j} \,\,\, j=1,\dots,J \tag{house characteristics} \\
+  {\partial U \over \partial q} =&amp; {\partial U \over \partial z} {\partial P \over \partial q} \tag{environmental good}
+\end{align}`
 
 ---
 
 # The hedonic model: consumer's choice problem
 
-\begin{align}
+`\begin{align}
   {\partial U \over \partial q} = {\partial U \over \partial z} {\partial P \over \partial q}
-\end{align}
+\end{align}`
 gives us that
-$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$
+`$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
 
 --
 
@@ -633,19 +632,19 @@ What does this mean?
 
 # The hedonic model: consumer's choice problem
 
-$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$
+`$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
 
 ---
 
 # The hedonic model: consumer's choice problem
 
-$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$
+`$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
 
 ---
 
 # The hedonic model: consumer's choice problem
 
-$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$
+`$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$`
 
 
 
@@ -653,27 +652,27 @@ $$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \unde
 
 # The hedonic model: consumer's choice problem
 
-$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$
+`$$\underbrace{{\partial P \over \partial q}}_{\text{implicit cost of q}} = \underbrace{{\partial U \over \partial q} \bigg/ {\partial U \over \partial z}}_{\text{q-z MRS}}$$`
 
 At a utility-maximizing choice, 
 --
-a household equates their MRS between $q$ and $z$ and the marginal implicit cost of $q$
+a household equates their MRS between `\(q\)` and `\(z\)` and the marginal implicit cost of `\(q\)`
 
 --
 
-.hi[Recall from intro/intermediate micro:] the MRS tells us how the household trades off $q$ and $z$ while keeping utility constant
+.hi[Recall from intro/intermediate micro:] the MRS tells us how the household trades off `\(q\)` and `\(z\)` while keeping utility constant
 
 ---
 
 # The hedonic model: consumer's choice problem
 
-$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$
+`$${\partial P \over \partial q} = {\partial U \over \partial q} \bigg/ {\partial U \over \partial z}$$`
 
-$z$ is the numeraire good so we can think of it in terms of dollars
+`\(z\)` is the numeraire good so we can think of it in terms of dollars
 
 --
 
-.hi[This means that the MRS is the WTP for] $q$: the reduction in income needed to compensate for an additional unit of $q$, while maintaining the same level of utility
+.hi[This means that the MRS is the WTP for] `\(q\)`: the reduction in income needed to compensate for an additional unit of `\(q\)`, while maintaining the same level of utility
 
 --
 
@@ -701,7 +700,7 @@ Each site is given a Hazardous Ranking System (HRS) Score (0-100)
 
 --
 
-Because of funding limit, cutoff: HRS > 28.5 cleaned up, HRS < 28.5 are not
+Because of funding limit, cutoff: HRS &gt; 28.5 cleaned up, HRS &lt; 28.5 are not
 
 --
 
@@ -719,11 +718,9 @@ Places right below 28.5 probably aren't systematically different than those righ
 
 # Superfund location
 
-<center>
-```{r, out.width = "50%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-superfund-location.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-superfund-location.png" width="50%" /&gt;
+&lt;/center&gt;
 
 
 ---
@@ -735,25 +732,23 @@ What do GG 2008 do?
 --
 
 They regress:
-$$\log(\text{2000 median home price})_c = \theta \underbrace{1(\text{cleaned up in 2000})_c}_{\text{= 1 if true, = 0 otherwise}} + \beta \underbrace{X_c}_{\text{controls}} + \varepsilon_{c}$$
+`$$\log(\text{2000 median home price})_c = \theta \underbrace{1(\text{cleaned up in 2000})_c}_{\text{= 1 if true, = 0 otherwise}} + \beta \underbrace{X_c}_{\text{controls}} + \varepsilon_{c}$$`
 
 --
 
-They are interested in $\theta$ which tells us the percent change in a census tract median home price if it was cleaned up
+They are interested in `\(\theta\)` which tells us the percent change in a census tract median home price if it was cleaned up
 
 --
 
-$-\theta$ is telling us the .hi-red[cost] of a superfund site to households
+`\(-\theta\)` is telling us the .hi-red[cost] of a superfund site to households
 
 ---
 
 # Superfund results: "quasi-experimental"
 
-<center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-superfund-results2.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-superfund-results2.png" width="80%" /&gt;
+&lt;/center&gt;
 
 Last three columns are the important ones
 
@@ -792,11 +787,9 @@ Need to look .hi[within] census tracts
 
 .pull-right[
 
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-zoom-in.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-zoom-in.png" width="100%" /&gt;
+&lt;/center&gt;
 
 ]
 
@@ -817,11 +810,9 @@ Consider changes in other percentiles of within-tract house value distribution:
 
 .pull-right[
 
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-zoom-in.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-zoom-in.png" width="100%" /&gt;
+&lt;/center&gt;
 
 ]
 
@@ -829,11 +820,9 @@ knitr::include_graphics("files/11-zoom-in.png")
 
 # Sea level rise
 
-<div style= "float:right;position: relative;">
-```{r, out.width = "600px", echo = FALSE}
-knitr::include_graphics("files/11-slr-nyc.jpg")
-```
-</div> 
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-nyc.jpg" width="600px" /&gt;
+&lt;/div&gt; 
 
 Sea level rise (SLR) is a long run phenomenon
 
@@ -919,11 +908,9 @@ Similar to annuities, this should decrease the price of the house
 
 # Sea level rise: where is it happening?
 
-<div style= "float:right;position: relative;">
-```{r, out.width = "600px", echo = FALSE}
-knitr::include_graphics("files/11-slr-exposure.png")
-```
-</div> 
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-exposure.png" width="600px" /&gt;
+&lt;/div&gt; 
 
 The map shows the share of houses sold between 2007-2017 that would be flooded with 6 feet of SLR
 
@@ -955,11 +942,9 @@ Use a regression model to compare houses exposed to different amounts of SLR, bu
 
 # Sea level rise: where is it happening?
 
-<div style= "float:right;position: relative;">
-```{r, out.width = "600px", echo = FALSE}
-knitr::include_graphics("files/11-slr-chesepeake.png")
-```
-</div> 
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-chesepeake.png" width="600px" /&gt;
+&lt;/div&gt; 
 BGL are *basically* computing the difference in house prices between two houses that are identical, in the same place, but one happened to be at higher elevation
 
 This zipcode is only 92 square miles, and between 3 and 20 feet of elevation
@@ -968,11 +953,9 @@ This zipcode is only 92 square miles, and between 3 and 20 feet of elevation
 
 # Sea level rise: what is the effect?
 
-<div style= "float:right;position: relative;">
-```{r, out.width = "600px", echo = FALSE}
-knitr::include_graphics("files/11-slr-housing-prices.png")
-```
-</div> 
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-housing-prices.png" width="600px" /&gt;
+&lt;/div&gt; 
 
 Houses that would be under water with 1 foot of SLR sell .hi[15 percent] cheaper than the exact same house that is not SLR-exposed
 
@@ -983,13 +966,11 @@ The discount for houses exposed to 6 feet of SLR is only 5%
 
 # Sea level rise: what is the effect?
 
-<div style= "float:right;position: relative;">
-```{r, out.width = "600px", echo = FALSE}
-knitr::include_graphics("files/11-slr-dynamics.png")
-```
-</div> 
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-slr-dynamics.png" width="600px" /&gt;
+&lt;/div&gt; 
 
-The discount from SLR (>6 feet) is getting .hi[bigger] over time
+The discount from SLR (&gt;6 feet) is getting .hi[bigger] over time
 
 --
 
@@ -1008,11 +989,9 @@ Buyers may be becoming more informed about SLR
 
 # Sea level rise: what about rents?
 
-<div style= "float:right;position: relative;">
-```{r, out.width = "400px", echo = FALSE}
-knitr::include_graphics("files/11-rental-effects.png")
-```
-</div> 
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/11-rental-effects.png" width="400px" /&gt;
+&lt;/div&gt; 
 
 SLR isn't happening until far into the future so it shouldn't affect rents .hi[today]
 
@@ -1087,7 +1066,7 @@ There's lots of studies, and lots of different answers
 
 # VSL
 
-> EPA recommends that the central estimate of $7.4 million ($2006), updated to the year of the analysis, be used in all benefits analyses that seek to quantify mortality risk reduction benefits regardless of the age, income, or other population characteristics of the affected population until revised guidance becomes available
+&gt; EPA recommends that the central estimate of $7.4 million ($2006), updated to the year of the analysis, be used in all benefits analyses that seek to quantify mortality risk reduction benefits regardless of the age, income, or other population characteristics of the affected population until revised guidance becomes available
 
 ---
 
@@ -1097,7 +1076,7 @@ Suppose that individuals are willing to adopt a safety procedure, for which they
 
 --
 
-This translates into 2000 hours per year $\times$ 0.25 dollars per hour = $500 per year
+This translates into 2000 hours per year `\(\times\)` 0.25 dollars per hour = $500 per year
 
 --
 
@@ -1120,14 +1099,14 @@ $$ w_i = \alpha + \beta_1 H_i  + \beta_2  X_i + \gamma_1 p_i + \gamma_2 q_i + \g
 
 --
 
-$w$: wage  
-$H$: worker personal characteristics  
-$X$: job characteristics  
-$p$: .hi[risk of death at the job]  
-$q$: non-fatal risk at the job  
-$WC$: workers' compensation benefits for injury  
+`\(w\)`: wage  
+`\(H\)`: worker personal characteristics  
+`\(X\)`: job characteristics  
+`\(p\)`: .hi[risk of death at the job]  
+`\(q\)`: non-fatal risk at the job  
+`\(WC\)`: workers' compensation benefits for injury  
 
-${\partial w \over \partial p}$ is the wage-risk trade off for marginal changes in risk
+`\({\partial w \over \partial p}\)` is the wage-risk trade off for marginal changes in risk
 
 ---
 
@@ -1137,7 +1116,7 @@ Suppose:
 
 - Wages were in thousands of dollars
 - Risk is deaths per 10,000 people
-- Coefficient on mortality risk $p$ is $\gamma_1 = 0.4$
+- Coefficient on mortality risk `\(p\)` is `\(\gamma_1 = 0.4\)`
 
 --
 
@@ -1158,7 +1137,7 @@ This means that the VSL is:
 
 --
  
-$$VSL = \underbrace{(0.4 \times 1000)}_{\substack{\text{WTP to reduce} \\ \text{risk by 1 in 10000}}} \times 10,000)  = 4 \text{ million dollars}$$
+`$$VSL = \underbrace{(0.4 \times 1000)}_{\substack{\text{WTP to reduce} \\ \text{risk by 1 in 10000}}} \times 10,000)  = 4 \text{ million dollars}$$`
 
 --
 
@@ -1173,8 +1152,143 @@ $$ 400*60,000 = 24  \text{ million dollars}$$
 
 # VSL estimates
 
-<center>
-```{r, out.width = "50%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/11-vsl-estimates.png")
-```
-</center>
+&lt;center&gt;
+&lt;img src="files/11-vsl-estimates.png" width="50%" /&gt;
+&lt;/center&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -266,19 +266,19 @@ This lets us write down the consumer's utility maximization problem:
 $$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wH = cx + z}_{\text{money budget}}, \,\, \underbrace{T = H + l + tx}_{\text{time budget}}$$
 --
 
-Combine the two constraints to get:
+Multiply the time budget by $w$ and substitute the money budget in:
 
 --
 
-$$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wT = z + (c+wt)x + wl}_{\text{combined money/time budget}}$$
+$$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wT = (c+wt)x +z + wl}_{\text{combined money/time budget}}$$
 
-Where now we have one constraint in dollar terms
+Where now we have one constraint on the dollar value of time
 
 ---
 
 # Theoretical foundation
 
-$$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wT = z + (c+wt)x + wl}_{\text{combined money/time budget}}$$
+$$\max_{x,z,l} U(x,z,l,q) \,\,\,\, \text{subject to: }\,\,\, \underbrace{wT = (c+wt)x + z + wl}_{\text{combined money/time budget}}$$
 $wT$ is the consumer's .hi[full income], their money value of total time budget
 
 $c+wt$ is the consumer's .hi[full price], their total cost to reach the site
@@ -313,10 +313,14 @@ Solve the constraint for $z$ and substitute into the utility function...
 
 $$\max_{x,l} U\left(x,Y-px-wl,l,q\right)$$
 
+Choose trips $x$ and leisure $l$, this implies an amount of money left over
+
 --
 
 This has first-order conditions:
 $$[x] \,\,\, U_x - pU_z = 0 \rightarrow \frac{U_x}{U_z} = p$$
+
+--
 
 and
 $$[l] \,\,\, -wU_z + U_l = 0 \rightarrow \frac{U_l}{U_z} = w$$
@@ -605,7 +609,7 @@ The multi-site model works as follows
 # Multi-site model
 
 .hi[Step 1:] Do the single-site estimation for each site:
-$$T_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} s_i + \varepsilon_{ij}$$
+$$t_{ij} = \beta_{0j} + \beta_{1j} tc_{ij} + \beta_{2j} tc_{sij} + \beta_{3j} s_i + \varepsilon_{ij}$$
 
 --
 
@@ -617,7 +621,7 @@ These $\beta$s tell us the slope $(\beta_{1j})$ and intercept $(\beta_{0j}, \bet
 
 --
 
-$\beta_{2j}, \beta_{3j}$ capture how the cost of substitute sites and household characteristics: they shift demand up and down
+$\beta_{2j}, \beta_{3j}$ capture how the cost of substitute sites and household characteristics matter: they shift demand up and down
 
 ---
 
@@ -629,7 +633,7 @@ $$\hat{\beta}_{1j} = \alpha_{10} + \alpha_{11}z_j + \epsilon_{1j}$$
 $$\hat{\beta}_{2j} = \alpha_{20} + \alpha_{21}z_j + \epsilon_{2j}$$
 $$\hat{\beta}_{3j} = \alpha_{30} + \alpha_{31}z_j + \epsilon_{3j}$$
 
-The $\alpha_{\times1}$ coefficients tell us how the demand curve shifts $(\alpha_{00}, \alpha_{02}, \alpha_{03})$ or rotates $(\alpha_{01})$ as we change $z$
+The $\alpha_{\times1}$ coefficients tell us how the demand curve shifts $(\alpha_{00}, \alpha_{02}, \alpha_{03})$ or rotates $(\alpha_{01})$ as we change site attribute $z$
 
 ---
 
@@ -692,7 +696,7 @@ trip_data
 
 # First stage estimation
 
-```{r}
+```{r, results = 'hide', echo = FALSE}
 # first stage of multi-site
 site_estimates <- map_dfr(unique(trip_data$site), function(site_in){
   lm(trips ~ travel_cost + travel_cost_other + income, 
@@ -708,30 +712,20 @@ site_estimates <- map_dfr(unique(trip_data$site), function(site_in){
   magrittr::set_colnames(c("intercept", "own_price", "cross_price", "income", "site"))
 ```
 
----
-
-# First stage estimation
-
-```{r}
+```{r, echo = FALSE}
 site_estimates
-```
-
----
-
-# Take estimates, join with water clarity
-
-```{r}
-# merge in water clarity
-estimation_df <- site_estimates %>% 
-  left_join(trip_data %>% distinct(site, water_clarity))
-estimation_df
 ```
 
 ---
 
 # Second stage
 
-```{r}
+```{r, results = 'hide', echo = FALSE}
+# merge in water clarity
+estimation_df <- site_estimates %>% 
+  left_join(trip_data %>% distinct(site, water_clarity))
+estimation_df
+
 # second stage of multi-site
 demand_shifts <- map_dfr(names(estimation_df)[1:4],
         function(coefficient) {
@@ -745,14 +739,12 @@ demand_shifts <- map_dfr(names(estimation_df)[1:4],
   select(term, estimate, coeff)
 ```
 
----
-
-# Second stage
-
-```{r}
+```{r, echo = FALSE}
 demand_shifts
 ```
 The estimates column tells us how a change in water clarity (from 0 to 100%), shifts or rotates our demand curve
+
+Clearer water $\rightarrow$ more demand, more responsive to price, attracts higher-income people more
 
 ---
 
@@ -794,7 +786,7 @@ Here we will be looking at visits to central park
 
 # Mobility data from cell phones
 
-```{r, message = FALSE}
+```{r, message = FALSE, echo = FALSE}
 central_park_data = read_csv("data/12-central-park-phone-data.csv")
 central_park_data
 ```
@@ -803,7 +795,7 @@ central_park_data
 
 # Real world data: central park
 
-The dataframe tells us for each .hi[census block group (CBG)] (600-3000 person locations):
+The data tells us for each .hi[census block group (CBG)] (600-3000 person locations):
   - visits per month to a particular location in central park by all cell phones in the CBG
   - how far the CBG is from the central park location (time and distance)
   - The median income of the CBG
@@ -896,16 +888,13 @@ ggplot() +
 
 # Travel cost estimation with cell data
 
-
 We don't have the exact cost of households going to central park, but we have variables that are a good proxy
 
---
 
-Estimate a simple travel cost model, what does it tell you (tip: use `feols` instead of `lm`)
+Regression: $log(visits) = \beta_0 + \beta_1 log(travel\_distance\_km)$
 
---
 
-```{r}
+```{r, echo = FALSE, results = 'hide'}
 central_park_demand = feols(
   log(visits) ~ log(travel_distance_km), 
   central_park_data
@@ -913,12 +902,6 @@ central_park_demand = feols(
   tidy() |>
   select(term, estimate)
 ```
-
----
-
-# Travel cost estimation with cell data
-
-Regression: `log(visits) ~ log(travel_distance_km)`
 
 ```{r}
 central_park_demand
@@ -973,7 +956,13 @@ Ideas?
 
 New regression controlling for these factors:
 
-```{r}
+$$log(visits) = \beta_0 + \beta_1 log(travel\_distance\_km) + \\ \beta_2 log(median\_income) + \beta_3 log(median\_age)$$
+
+---
+
+# The elasticity and omitted variables
+
+```{r, results = 'hide', echo = FALSE}
 central_park_demand = feols(
   log(visits) ~ log(travel_distance_km) + log(median_income) + log(median_age), 
   central_park_data
@@ -982,14 +971,6 @@ central_park_demand = feols(
   select(term, estimate)
 ```
 
-
----
-
-# The elasticity and omitted variables
-
-```{r, eval = F}
-central_park_demand
-```
 ```
 ## # A tibble: 4 × 2
 ##   term                    estimate
@@ -1021,8 +1002,15 @@ Where do richer older people tend to live?
 
 # The elasticity and omitted variables
 
-```{r, message = FALSE}
+$$log(travel\_distance\_km) = \beta_0 + \beta_1 log(median\_income)$$
+```{r, message = FALSE, echo = FALSE}
 feols(log(travel_distance_km) ~ log(median_income), central_park_data) |> tidy()
+```
+
+$$log(travel\_distance\_km) = \beta_0 + \beta_1 log(median\_age)$$
+
+
+```{r, message = FALSE, echo = FALSE}
 feols(log(travel_distance_km) ~ log(median_age), central_park_data) |> tidy()
 ```
 
