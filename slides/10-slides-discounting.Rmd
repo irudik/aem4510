@@ -566,10 +566,350 @@ yields a larger $\eta$ and larger $r$ if growth is positive
 
 ---
 
-# What do the experts think? Weitzman (2001)
+# What do the experts think? Drupp et al. (2018)
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/09-discount-rate-survey.png")
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-experts-1.png")
 ```
 </center>
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+ 
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-experts-2.png")
+```
+</center>
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-experts-3.png")
+```
+</center>
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-experts-4.png")
+```
+</center>
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-experts-5.png")
+```
+</center>
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-experts-6.png")
+```
+</center>
+
+---
+
+# Discount rates are being significantly revised
+
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-discounting-1.png")
+```
+</center>
+
+---
+
+# Discount rates are being significantly revised
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-discounting-2.png")
+```
+</center>
+
+---
+
+# Discount rates are being significantly revised
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-discounting-3.png")
+```
+</center>
+
+
+---
+
+# Discount rates are being significantly revised
+
+<center>
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-discounting-4.png")
+```
+</center>
+
+---
+
+# Discount rates in the (very) long run
+
+How should we think about discounting in the .hi[very] long run?
+
+--
+
+100, 100, 300 years into the future when we expect climate change impacts to be their worst?
+
+--
+
+Giglo, Maggiori, and Stroebel (2015) come up with a clever way to think about discount rates in the far future: looking at UK and Singaporean housing markets
+
+---
+
+# Discount rates in the (very) long run
+
+In the UK and Singapore, properties are acquired via .hi[leasehold] or .hi[freehold]
+
+--
+
+- .hi[Leasehold:] temporary, pre-paid, tradable ownership contracts with maturities of 99-999 years, one it expires, you lose the property
+
+--
+
+- .hi[Freeholds:] same, but **perpetual** ownership, you never lose the property
+
+--
+
+Imagine there are two properties A and B, identical in every way except A is a leasehold with 500 years left until maturity and B is a freehold
+
+---
+
+# Property prices, what do they tell us?
+
+Suppose we observe A selling for 900,000 dollars and B selling for 1,000,000 dollars
+
+What do these prices mean? What value do they capture?
+
+--
+
+Let's think about a simple example: imagine you are a real estate investor deciding on purchasing a property to add to your rental portfolio in a competitive property market
+
+
+---
+
+# Property prices, what do they tell us?
+
+A property makes sense to buy if its cost is less than its benefits
+
+--
+
+The benefit of the property is the present value of the sum of future rental payments
+
+--
+
+Suppose buyers were competing for a property that has a present value future rental stream of $900,000, what market price would we expect someone to pay for this?
+
+--
+
+.hi[$900,000!] investors will compete, bidding higher and higher prices until it reaches the benefits of owning the property (same logic as why prices are the MB of other goods)
+
+---
+
+# Discount rates in the (very) long run
+
+The price of a house tells us the present value of the future stream of rental payments!
+
+--
+
+Now let's go back to the original example:
+
+--
+
+Suppose we observe A selling for 900,000 dollars and B selling for 1,000,000 dollars
+
+What does the price difference between the two properties tell us?
+
+---
+
+# Discount rates in the (very) long run
+
+
+Both properties are identical until year 500 when .hi-blue[poof], you no longer own property A but you still own property B
+
+--
+
+The difference in prices is telling us the present value of property B rental payments starting .hi[500 years from now]
+
+--
+
+The prices tell us about how the market discounts cash flows very, very far in the future, outside anyone's expected lifespan
+
+---
+
+# Why do discount rates change over time?
+
+Discount rates for cash flows this year versus 500 years in the future may be different for a lot of reasons
+
+--
+
+- .hi[Changes in growth:] if growth slows down, discount rates fall
+    - The future is getting richer slower, so the future's marginal value of a dollar is higher than if growth did not slow
+    
+--
+
+- .hi[Uncertainty:] if we are uncertain about future economic conditions determining the discount rate, the discount rate we should use is lower than the average (expected) discount rate
+
+---
+
+# Why do discount rates change over time?
+
+Let's get a sense of how uncertainty over the proper discount rate matters
+
+--
+
+Suppose climate change is going to impose 1 trillion dollars of costs in 100 years
+
+--
+
+Suppose the pure rate of time preference $\delta = 1%$, and the elasticity of marginal utility $\eta = 1$ so that the discount rate $r = 1% + 1 \times g$
+
+--
+
+We think that in 100 years growth will either be 0% or 6%, each with 50% chance
+
+--
+
+What are the current expected costs of the damage?
+
+---
+
+# Why do discount rates change over time?
+
+The current expected costs are just the costs averaged over either of the potential real discount rates:
+
+$$\frac{1}{2} \frac{\$1 \text{ trillion}}{1.01^{100}} + \frac{1}{2} \frac{\$1 \text{ trillion}}{1.07^{100}} = \$185 \text{ billion}$$
+
+--
+
+Now lets compute the value of the damages if we used the expected discount rate, the average of the two: 4%
+
+$$\frac{\$1 \text{trillion}}{1.04^{100}} = \$20 \text{ billion}$$
+
+---
+
+# Why do discount rates change over time?
+
+The expected discount rate of 4% generated costs that were 10 times smaller than the actual costs!
+
+This means that the expected discount rate is too high compared to the actual discount rate we should be using if we are uncertain about future discount rates
+
+--
+
+What discount rate should we use?
+
+--
+
+$$\frac{\$1 \text{ trillion}}{(1+r)^{100}} = \$185 \text{ billion} \qquad \rightarrow r = .017=1.7\%$$
+
+---
+
+# Why do discount rates change over time?
+
+If we expected the future discount rate to be either 1% or 7%, the proper discount rate to use was actually 1.7%, .hi[not] the average 4%!
+
+--
+
+1.7% is called the .hi[certainty-equivalent] discount rate: the certain discount rate that delivers the same present value as the possible set of uncertain rates (1% and 7%)
+
+--
+
+.hi[Main takeaway:] Uncertainty about the future economic conditions governing the discount rate makes the discount rate we should be using lower than expected
+
+---
+
+# Discount rates in the (very) long run: United Kingdom
+
+.pull-left[
+
+What are these long run discount rate?
+
+In the UK:
+
+- leases expiring with 100 years cost 17% less than a freehold
+- leases expiring 150-300 years from now cost 5% less
+
+Implies a discount rate of about .hi[2.6%]
+
+]
+
+.pull-right[
+```{r, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-long-run-discount-1.png")
+```
+]
+
+---
+
+# Discount rates in the (very) long run: Singapore
+
+.pull-left[
+
+What are these long run discount rate?
+
+In Singapore:
+
+- leases expiring with 70 years cost 40% less than a freehold
+- leases expiring 95-99 years from now cost 15% less
+
+Implies a discount rate of about .hi[2.6%]
+
+]
+
+.pull-right[
+```{r, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-long-run-discount-2.png")
+```
+]
+
+
+---
+
+# Discount rates on rental payments
+
+We can check the validity of these estimates by seeing whether .hi[rental payments] depend on the length remaining of the contract
+
+--
+
+There's no reason the rent you pay for your house should depend on how much longer the owner has property rights
+
+---
+
+# Discount rates on rental payments
+
+.pull-left[
+
+Rental rates (mostly) do not depend on the remaining lease time!
+
+]
+
+.pull-right[
+```{r, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/10-long-run-discount-3.png")
+```
+]
