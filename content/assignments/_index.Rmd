@@ -43,7 +43,7 @@ You will have 3 problem sets, 1 due before each prelim. You may consult with me 
  
 **When are they due?** 
 
-- Tentative problem set due dates: Feb 6, Mar 13, Apr 17.
+- Problem set due dates: Feb 6, Mar 13, Apr 28.
 - Problem sets are due on 11:59PM on the listed due date. You have unlimited submissions before the deadline.
 - <span style="color:#3C93DC">No</span> late problem sets will be accepted.
 
@@ -62,7 +62,7 @@ You will have 3 problem sets, 1 due before each prelim. You may consult with me 
 
 **When are the prelims?**
 
-- Tentative prelim dates: Feb 15, Mar 22, April 26.
+- Prelim dates: Feb 15, Mar 22, May 8.
 - The prelims are in class during our regular class time.
 
 **What do the prelims cover?**
@@ -78,6 +78,7 @@ You will have 3 problem sets, 1 due before each prelim. You may consult with me 
 ## Final project 
 
 ### Essay
+
 For your final project you will write a 5 page essay on an environmental policy or an environmental financial instrument. Up to three teams of students can work on the same topic. Detailed instructions will be circulated later in class. The high-level idea is that you will:
 
 - Describe the background of the policy/instrument, its objective, and how it achieves it.
@@ -87,13 +88,8 @@ For your final project you will write a 5 page essay on an environmental policy 
 <span style="color:#CF4446">**Students taking the class at the 5000 level will write a more in-depth, 8 page essay.**</span> 
 
 ### Presentation
-During the last days of class, teams will present their work. For each topic, 1 team will be responsible for each of the following:
 
-- Presenting the background and objectives of the policy/instrument.
-- Presenting a case for why the policy/instrument is successful and an important tool.
-- Presenting a case for why the policy/instrument falls short of proponent's stated goals.
-
-Presentations will be short: 5-10 minutes and about 5 slides.
+Teams will present their work in a submitted zoom video. See the instructions in the assignment.
 
 **When are the papers due?** 
 
