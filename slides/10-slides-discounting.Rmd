@@ -364,7 +364,7 @@ Dual-role of individuals: in political roles, people are more concerned about fu
 
 --
 
-With social discounting with determine the discount rate from economic and ethical considerations
+With social discounting we determine the discount rate from economic and ethical considerations
 
 --
 
@@ -372,18 +372,18 @@ Why should we discount the future?
 
 --
 
-First, time: people are impatient
+First, .hi[time]: people are impatient
 
 --
 
-And growth: if someone is richer in 10 years, a dollar is worth more to them today than in 10 years in utility terms 
+And .hi[growth/inequality]: all else equal, if someone is richer in 10 years, a dollar is worth more to them today than in 10 years (in utility terms)
 
 
 ---
 
 # Ramsey Discounting
 
-With a decent amount of math we can show that the social discount rate $r$ is composed of three terms:
+With a decent amount of math we can write the social discount rate $r$ as a function of three terms:
 $$r = \delta + \eta \times g$$
 
 --
@@ -392,7 +392,7 @@ $\delta$ is called the .hi[pure rate of time preference] or .hi[utility discount
 
 --
 
-$\eta$ is the .hi[elasticity of marginal utility]: how quickly does marginal utility (benefit) decline in consumption?
+$\eta$ is the .hi[elasticity of marginal utility]: how quickly does marginal utility (benefit) decline in consumption (how severe are diminishing marginal returns)?
 
 --
 
@@ -411,7 +411,7 @@ $\delta$: how much is 1 util tomorrow worth today?
 --
 
 $\eta$: how much do we value poorer vs richer times/generations? Bigger $\eta$ $\rightarrow$ more averse to inequality over time
-- $\eta = - {U''(X)X \over U'(X)}$, how many percent does MU change if consumption changes by 1%
+- $\eta = - \frac{\partial U'(X)}{\partial X}{X \over U'(X)} =  - U''(X){X \over U'(X)}$, by how many percent does marginal utility $U'(X)$ change if consumption changes by 1%
 
 --
 
@@ -423,7 +423,7 @@ $g$: how rich will we / future generations be compared to today?
 
 $$r = \delta + \eta \times g$$
 
-What this means is that if we have values for $r$, $\eta$, and $g$, we can compute the "correct" discount rate
+What this means is that if we have values for $r$, $\eta$, and $g$, we can compute the "correct" discount rate from a social perspective
 
 --
 
@@ -456,6 +456,10 @@ Once we pick a $\delta$ we have our discount rate $r$
 
 The descriptive approach generally chooses $\delta$ so $r$ matches market rates
 
+--
+
+Most philosophers and economists would probably not prescribe the descriptive approach
+
 ---
 
 # Ramsey Discounting: the prescriptive approach
@@ -478,7 +482,7 @@ Both approaches depend on us choosing $\delta$
 
 --
 
-What is the right value for $\delta$?
+What is the right value for $\delta$? This is a philosophical question.
 
 --
 
@@ -527,8 +531,6 @@ The prescriptive approach often results in $\delta$ being zero or nearly zero fo
 
 Choosing $\eta$ also conveys ethical choices: how do we weigh the distribution of consumption across generations
 
---
-
 Recall: $r = \delta + \eta g$
 
 --
@@ -547,7 +549,7 @@ Recall: $r = \delta + \eta g$
 
 # Distributive justice
 
-Rawl's theory of justice applied here would set $\delta = 0$ and $\eta = \infty$: fairness for all
+Rawls' theory of justice applied here would set $\delta = 0$ and $\eta = \infty$: fairness for all
 
 --
 
@@ -688,19 +690,18 @@ In the UK and Singapore, properties are acquired via .hi[leasehold] or .hi[freeh
 
 --
 
-- .hi[Leasehold:] temporary, pre-paid, tradable ownership contracts with maturities of 99-999 years, one it expires, you lose the property
+- .hi[Leasehold:] temporary, pre-paid, tradable ownership contracts with maturities of 99-999 years, once it expires, you lose the property
 
 --
 
 - .hi[Freeholds:] same, but **perpetual** ownership, you never lose the property
-
---
-
-Imagine there are two properties A and B, identical in every way except A is a leasehold with 500 years left until maturity and B is a freehold
+    - Similar to how things work in the US
 
 ---
 
 # Property prices, what do they tell us?
+
+Imagine there are two properties A and B, identical in every way except A is a leasehold with 500 years left until maturity and B is a freehold
 
 Suppose we observe A selling for 900,000 dollars and B selling for 1,000,000 dollars
 
@@ -708,8 +709,7 @@ What do these prices mean? What value do they capture?
 
 --
 
-Let's think about a simple example: imagine you are a real estate investor deciding on purchasing a property to add to your rental portfolio in a competitive property market
-
+Let's think about a simple example: you are a real estate investor deciding on purchasing a property to add to your rental portfolio in a competitive property market
 
 ---
 
@@ -719,7 +719,7 @@ A property makes sense to buy if its cost is less than its benefits
 
 --
 
-The benefit of the property is the present value of the sum of future rental payments
+The benefit of the property is the present value of the sum of future rental payments (technically minus maintenance costs and taxes)
 
 --
 
@@ -727,7 +727,7 @@ Suppose buyers were competing for a property that has a present value future ren
 
 --
 
-.hi[$900,000!] investors will compete, bidding higher and higher prices until it reaches the benefits of owning the property (same logic as why prices are the MB of other goods)
+.hi[$900,000!] investors will compete, bidding higher and higher prices until it reaches the benefits of owning the property (same logic as why prices are the MB of regular goods in competitive markets)
 
 ---
 
@@ -750,7 +750,9 @@ What does the price difference between the two properties tell us?
 # Discount rates in the (very) long run
 
 
-Both properties are identical until year 500 when .hi-blue[poof], you no longer own property A but you still own property B
+Both properties are identical until year 500 when .hi-blue[poof],
+--
+you no longer own property A but you still own property B
 
 --
 
@@ -768,12 +770,12 @@ Discount rates for cash flows this year versus 500 years in the future may be di
 
 --
 
-- .hi[Changes in growth:] if growth slows down, discount rates fall
+- .hi[Changes in growth:] if growth slows down (e.g. from climate change), discount rates fall
     - The future is getting richer slower, so the future's marginal value of a dollar is higher than if growth did not slow
     
 --
 
-- .hi[Uncertainty:] if we are uncertain about future economic conditions determining the discount rate, the discount rate we should use is lower than the average (expected) discount rate
+- .hi[Uncertainty:] if we are uncertain about future economic conditions determining the discount rate (e.g. climate change), the discount rate we should use is lower than the average (expected) discount rate
 
 ---
 
@@ -783,7 +785,7 @@ Let's get a sense of how uncertainty over the proper discount rate matters
 
 --
 
-Suppose climate change is going to impose 1 trillion dollars of costs in 100 years
+Suppose a hypothetical public transit project is going to impose 1 trillion dollars of costs in 100 years
 
 --
 
@@ -791,11 +793,11 @@ Suppose the pure rate of time preference $\delta = 1%$, and the elasticity of ma
 
 --
 
-We think that in 100 years growth will either be 0% or 6%, each with 50% chance
+We think that in 100 years economic growth will either be 0% or 6%, each with 50% chance, (because we are uncertain about the extent of climate change)
 
 --
 
-What are the current expected costs of the damage?
+What are the current expected costs of the project?
 
 ---
 
@@ -851,7 +853,7 @@ What are these long run discount rate?
 
 In the UK:
 
-- leases expiring with 100 years cost 17% less than a freehold
+- leases expiring within 100 years cost 17% less than a freehold
 - leases expiring 150-300 years from now cost 5% less
 
 Implies a discount rate of about .hi[2.6%]
@@ -874,7 +876,7 @@ What are these long run discount rate?
 
 In Singapore:
 
-- leases expiring with 70 years cost 40% less than a freehold
+- leases expiring within 70 years cost 40% less than a freehold
 - leases expiring 95-99 years from now cost 15% less
 
 Implies a discount rate of about .hi[2.6%]
@@ -896,7 +898,7 @@ We can check the validity of these estimates by seeing whether .hi[rental paymen
 
 --
 
-There's no reason the rent you pay for your house should depend on how much longer the owner has property rights
+There's no reason the rent you pay for your house should depend on how much longer the owner has property rights if your lease is short
 
 ---
 
