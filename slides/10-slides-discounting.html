@@ -39,6 +39,13 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
@@ -60,8 +67,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in
-## xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
+## refer to the documentation to update your slides.
 ```
 
 ---
@@ -162,11 +169,11 @@ Project A has higher costs and benefits in nominal terms
 
 **Project A:**
 
-`\(PV_A = \frac{4000}{1.05^1} + \frac{4000}{1.05^2} + \frac{4000}{1.05^3} - \frac{10000}{1.05^0} - \frac{1000}{1.05^1} = 1791.76\)`
+`\(PV_A = \frac{4000}{1.05^1} + \frac{4000}{1.05^2} + \frac{4000}{1.05^3} - \frac{10000}{1.05^0} - \frac{1000}{1.05^1} = -59.39\)`
 
 **Project B:**
 
-`\(PV_B = \frac{1000}{1.05^1} + \frac{3000}{1.05^2} + \frac{3000}{1.05^3} - \frac{6000}{1.05^0} = 1648.09\)`
+`\(PV_B = \frac{1000}{1.05^1} + \frac{3000}{1.05^2} + \frac{3000}{1.05^3} - \frac{6000}{1.05^0} = 264.98\)`
 
 ---
 
@@ -181,11 +188,11 @@ Project A has higher costs and benefits in nominal terms
 
 **Project A:**
 
-`\(PV_A = \frac{4000}{1.03^1} + \frac{4000}{1.03^2} + \frac{4000}{1.03^3} - \frac{10000}{1.03^0} - \frac{1000}{1.03^1} = 2262.35\)`
+`\(PV_A = \frac{4000}{1.03^1} + \frac{4000}{1.03^2} + \frac{4000}{1.03^3} - \frac{10000}{1.03^0} - \frac{1000}{1.03^1} = 343.57\)`
 
 **Project B:**
 
-`\(PV_B = \frac{1000}{1.03^1} + \frac{3000}{1.03^2} + \frac{3000}{1.03^3} - \frac{6000}{1.03^0} = 2144.69\)`
+`\(PV_B = \frac{1000}{1.03^1} + \frac{3000}{1.03^2} + \frac{3000}{1.03^3} - \frac{6000}{1.03^0} = 544.09\)`
 
 ---
 
