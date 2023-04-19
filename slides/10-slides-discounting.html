@@ -39,13 +39,6 @@ exclude: true
 
 ```r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-```r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
@@ -695,11 +688,13 @@ A property makes sense to buy if its cost is less than its benefits
 
 --
 
-The benefit of the property is the present value of the sum of future rental payments (technically minus maintenance costs and taxes)
+Houses are kind of like annuities:
+  - Pay an upfront cost (mortgage)
+  - Get a future stream of revenues (rental payments from renters)
 
 --
 
-Suppose buyers were competing for a property that has a present value future rental stream of $900,000, what market price would we expect someone to pay for this?
+Suppose buyers were competing for a property that has a net present value of $900,000, what market price would we expect someone to pay for this?
 
 --
 

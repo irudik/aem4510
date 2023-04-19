@@ -755,13 +755,13 @@ knitr::include_graphics("files/11-superfund-results2.png")
 ```
 </center>
 
-Last three columns are the important ones
+Top row of the last three columns are the important ones
 
 ---
 
 # Superfund results
 
-Superfund cleanups had .hi[economically and statistically insignificant effects] on property values, rental rates, housing supply, population, who lives near the site
+Superfund cleanups had .hi[economically and statistically insignificant effects] on property values, rental rates, housing supply, population, who lives near the site: 0.7-2.7% depending on the model
 
 --
 
