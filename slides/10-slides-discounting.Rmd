@@ -791,7 +791,7 @@ Suppose a hypothetical public transit project is going to impose 1 trillion doll
 
 --
 
-Suppose the pure rate of time preference $\delta = 1%$, and the elasticity of marginal utility $\eta = 1$ so that the discount rate $r = 1% + 1 \times g$
+Suppose the pure rate of time preference $\delta = 1\%$, and the elasticity of marginal utility $\eta = 1$ so that the discount rate $r = 1\% + 1 \times g$
 
 --
 

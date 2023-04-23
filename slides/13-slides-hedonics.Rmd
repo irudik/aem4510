@@ -677,7 +677,47 @@ $z$ is the numeraire good so we can think of it in terms of dollars
 
 --
 
-How prices change in the environmental good, holding all else constant, tells us about WTP
+How prices change in the environmental good, *holding all else constant*, tells us about WTP
+
+---
+
+# The hedonic model in practice
+
+What if all else isn't constant?
+
+--
+
+e.g. what if air quality improved in Syracuse because we are in a recession?
+
+- Recessions make air quality better and prices higher (polluters aren't producing as much because demand is low)
+- But recessions also decrease demand for houses and make prices lower (people are unemployed)
+
+--
+
+If we see higher home prices as air quality improves (but we ignore the recession), then we are under-valuing air quality
+
+--
+
+The housing prices went up .hi[despite] the recession!
+
+---
+
+# The hedonic model in practice
+
+How do we get around this?
+
+Find a control city (e.g. Ithaca): houses that were also hit by the recession but .hi[didn't] have an air quality improvement (why? maybe no polluters near by)
+
+--
+
+The change in prices of Ithaca houses tells us the impact of the recession, if we subtract it from the change in prices of Syracuse homes we get the effect of air quality alone!
+
+- Syracuse price change - ithaca price change = air quality effect
+- (air quality effect + recession effect) - (recession effect) = air quality effect
+
+--
+
+Subtract this change from the
 
 ---
 
