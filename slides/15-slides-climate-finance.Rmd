@@ -1,5 +1,5 @@
 ---
-title: "Lecture 13"
+title: "Lecture 15"
 subtitle: "Climate Risk and Financial Instruments"
 author: Ivan Rudik
 date: AEM 4510
@@ -101,13 +101,13 @@ CME offers contracts based on weather indices in 13 cities (mostly US)
 
 
 Winter contracts are based on .hi[heating degree days (HDD)]
-- HDD = max(0, $65^\circ$F - daily average temperature)
+- HDD = max(0, $65^\circ$F - daily average temperature): how much colder than 65
 
 
 --
 
 Summer contracts are based on .hi[cooling degree days (CDD)]
-- HDD = max(0, daily average temperature - $65^\circ$F)
+- CDD = max(0, daily average temperature - $65^\circ$F): how much warmer than 65
   
 --
 
@@ -122,7 +122,7 @@ How do the contracts work?
 
 --
 
-The contracts are bought and sold like regular assets, but the settlement price is explicted based on the realized HDD/CDD
+The contracts are bought and sold like regular assets, but the settlement price is explicitly based on the realized HDD/CDD
 
 --
 
@@ -131,8 +131,8 @@ CME contracts work where the settlement price is: 20 $\times$ CDD/HDD
 --
 
 Example:
- - If July CDD contract is trading at 300 CDDs, the contract costs $20 \times 300 = 600$
- - If realized July CDDs are 330, the trader profits: $20 \times (330 - 300) = 600$
+ - If the July CDD contract is trading at 300 CDDs, the contract costs $20 \times 300 = 600$
+ - If actual July CDDs are 330, a buy-side trader profits: $20 \times (330 - 300) = 600$
 
     
 ---
@@ -172,6 +172,7 @@ This bet pays off when natural gas revenues are low and helps manage risk
 --
 
 Example:
+
 - The winter HDD contract is trading at 1250
 - At 1250 HDDs, NYSEG expects to generate $80 million in profit
 - An increase in HDDs of 1 increases profits by $80,000
@@ -182,17 +183,18 @@ Example:
 # Betting on the weather
 
 Example:
+
 - The winter HDD contract is trading at 1250
 - At 1250 HDDs, NYSEG expects to generate $80 million in profit
 - An increase in HDDs of 1 increases profits by $80,000
 
 --
 
-If NYSEG sells $Y$ winter HDD contracts, and the realized winter HDD is $HDD_{real}$:
-- Its futures market profits are: $Y \times 20 \times (1250 - HDD_{real})$
-- Its natural gas profits are: $80,000,000 - 80,000 \times (1250 - HDD_{real})$
+If NYSEG sells $Y$ winter HDD contracts, and the realized winter HDD is $HDD_{actual}$:
+- Its futures market profits are: $Y \times 20 \times (1250 - HDD_{actual})$
+- Its natural gas profits are: $80,000,000 - 80,000 \times (1250 - HDD_{actual})$
 
-Futures profits down in $HDD_{real}$, natural gas profits go up
+Futures profits down in $HDD_{actual}$, natural gas profits go up
 
 
 ---
@@ -212,7 +214,7 @@ Eliminate risk by setting sum of futures market profit and HDD-related natural g
 
 --
 
-$$Y \times 20 \times (1250 - HDD_{real}) + 80,000 \times (1250 - HDD_{real}) = 0$$
+$$Y \times 20 \times (1250 - HDD_{actual}) + 80,000 \times (1250 - HDD_{actual}) = 0$$
 
 $$Y = 40,000 \,\, \text{contracts}$$
 
@@ -282,9 +284,9 @@ knitr::include_graphics("files/15-forecast-skill.webp")
 ```
 </div> 
 
-Forecasts >10 days out have little skill $\rightarrow$ little value
+Forecasts >10 days out have little skill $\rightarrow$ little information value
 
-Forecasts 1-3 days out have near-perfect skill, their information is probably already capitalized by prior forecasts
+Forecasts 1-3 days out have near-perfect skill, their information is probably already capitalized by prior forecasts 5-7 days ago
 
 
 
@@ -487,7 +489,7 @@ If so the .hi[total capitalization] of a 1 CDD anomaly should add up to 1
 
 --
 
-The sum of the values of the black line at each $\tau$ equals 1 if the market is pricing correctly
+The sum (integral) of the values of the black line over all $\tau$ equals 1 if the market is pricing correctly
 
 ---
 
@@ -580,10 +582,6 @@ name: overview
 --
 
 > [Wiki] A bond is a type of security under which the issuer (debtor) owes the holder (creditor) a debt, and is obliged – depending on the terms – to repay the principal (i.e. amount borrowed) of the bond at the maturity date as well as interest (called the coupon) over a specified amount of time. 
-
---
-
-A bond is basically a loan with a defined term/maturity
 
 --
 
