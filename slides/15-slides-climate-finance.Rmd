@@ -131,7 +131,7 @@ CME contracts work where the settlement price is: 20 $\times$ CDD/HDD
 --
 
 Example:
- - If the July CDD contract is trading at 300 CDDs, the contract costs $20 \times 300 = 600$
+ - If the July CDD contract is trading at 300 CDDs, the contract costs $20 \times 300 = 6000$
  - If actual July CDDs are 330, a buy-side trader profits: $20 \times (330 - 300) = 600$
 
     
@@ -192,7 +192,7 @@ Example:
 
 If NYSEG sells $Y$ winter HDD contracts, and the realized winter HDD is $HDD_{actual}$:
 - Its futures market profits are: $Y \times 20 \times (1250 - HDD_{actual})$
-- Its natural gas profits are: $80,000,000 - 80,000 \times (1250 - HDD_{actual})$
+- Its natural gas profits are: $80,000,000 + 80,000 \times (HDD_{actual} - 1250)$
 
 Futures profits down in $HDD_{actual}$, natural gas profits go up
 
@@ -214,9 +214,9 @@ Eliminate risk by setting sum of futures market profit and HDD-related natural g
 
 --
 
-$$Y \times 20 \times (1250 - HDD_{actual}) + 80,000 \times (1250 - HDD_{actual}) = 0$$
+$$Y \times 20 \times (1250 - HDD_{actual}) + 80,000 \times (HDD_{actual} - 1250) = 0$$
 
-$$Y = 40,000 \,\, \text{contracts}$$
+$$Y = 4,000 \,\, \text{contracts}$$
 
 
 ---
