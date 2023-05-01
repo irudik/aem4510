@@ -60,8 +60,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in
-## xaringanExtra 0.1.0. Please refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
+## refer to the documentation to update your slides.
 ```
 
 ---
@@ -1271,11 +1271,11 @@ Let's write down a simple model of stock returns and firm value to see how
 --
 
 - `\(P_t:\)` probability of WM passing
-- `\(V^{WM}_{i}:\)` the value of firm `\(i\)` on day `\(t\)` if WM .hi[passes]
-- `\(V^{-}_{i}:\)` the value of firm `\(i\)` on day `\(t\)` if WM .hi[does not pass]
-- `\(V_{i}:\)` the expected value of firm `\(i\)` on day `\(t\)` based on the probability of WM passing:
-  - `\(V_{i} = P_t \times V^{WM}_{i} + (1 - P_t) \times V^{-}_{i}\)`
-  - `\(V_{i}\)` is the prediction market weighted average
+- `\(V^{WM}_{i,t}:\)` the value of firm `\(i\)` on day `\(t\)` if WM .hi[passes]
+- `\(V^{-}_{i,t}:\)` the value of firm `\(i\)` on day `\(t\)` if WM .hi[does not pass]
+- `\(V_{i,t}:\)` the expected value of firm `\(i\)` on day `\(t\)` based on the probability of WM passing:
+  - `\(V_{i,t} = P_t \times V^{WM}_{i,t} + (1 - P_t) \times V^{-}_{i,t}\)`
+  - `\(V_{i,t}\)` is the prediction market weighted average
   
 To keep it simple, assume nothing else is changing besides WM probabilities
 
@@ -1284,11 +1284,11 @@ To keep it simple, assume nothing else is changing besides WM probabilities
 
 # Equity markets
 
-`$$V_{i} = P_t \times V^{WM}_{i} + (1 - P_t) \times V^{-}_{i}$$`
+`$$V_{i,t} = P_t \times V^{WM}_{i,t} + (1 - P_t) \times V^{-}_{i,t}$$`
 
 --
 
-Define `\(E^{WM}_i\)` as the percentage effect of WM on firm value: `\(E^{WM}_i = \frac{V^{WM}_{i} - V^{-}_{i}}{V^{-}_{i}}\)`
+Define `\(E^{WM}_i\)` as the percentage effect of WM on firm value: `\(E^{WM}_i = \frac{V^{WM}_{i,t} - V^{-}_{i,t}}{V^{-}_{i,t}}\)`
 
 `\(E^{WM}_i\)` tells us how much firm value changed as a result of WM going into effect
 
@@ -1296,24 +1296,24 @@ Define `\(E^{WM}_i\)` as the percentage effect of WM on firm value: `\(E^{WM}_i 
 
 Rewrite `\(V_{i}\)` in terms of `\(E^{WM}_i\)`:
 
-`$$V_{i} = V^{-}_{i} \times (1 + P_t \, E^{WM}_i)$$`
+`$$V_{i,t} = V^{-}_{i,t} \times (1 + P_t \, E^{WM}_i)$$`
 
-The firm value on day `\(t\)` is the value of the firm if WM doesn't pass `\((V^{-}_{i})\)`, but scaled up by the effect of WM `\((E^{WM}_i)\)` times the chances WM passes `\((P_t)\)`
+The firm value on day `\(t\)` is the value of the firm if WM doesn't pass `\((V^{-}_{i,t})\)`, but scaled up by the effect of WM `\((E^{WM}_i)\)` times the chances WM passes `\((P_t)\)`
 
 
 ---
 
 # Equity markets
 
-`$$V_{i} = V^{-}_{i} \times (1 + P_t \, E^{WM}_i)$$`
+`$$V_{i,t} = V^{-}_{i,t} \times (1 + P_t \, E^{WM}_i)$$`
 
 .hi[Stock returns] `\(r_{i,t}\)` are the change in log firm value: 
-`$$r_{i,t} = \ln V_{i} - \ln V_{i} = \ln \frac{V_{i}}{V_{i}}$$`
+`$$r_{i,t} = \ln V_{i,t} - \ln V_{i,t-1} = \ln \frac{V_{i,t}}{V_{i,t-1}}$$`
 
 We can write this as:
 
 
-`$$r_{i,t} = \ln \frac{V^{-}_{i} \times (1 + P_t \, E^{WM}_i)}{V^{-}_{i} \times (1 + P_{t-1} \, E^{WM}_i)}$$`
+`$$r_{i,t} = \ln \frac{V^{-}_{i,t} \times (1 + P_t \, E^{WM}_i)}{V^{-}_{i,t-1} \times (1 + P_{t-1} \, E^{WM}_i)}$$`
 
 
 ---
@@ -1321,10 +1321,10 @@ We can write this as:
 # Equity markets
 
 `\begin{align}
-  r_{i,t} &amp;= \ln \frac{V^{-}_{i} \times (1 + P_t \, E^{WM}_i)}{V^{-}_{i} \times (1 + P_{t-1} \, E^{WM}_i)} \\
-  r_{i,t} &amp;= \ln \frac{V^{-}_{i}}{V^{-}_{i}} \ln \frac{(1 + P_t \, E^{WM}_i)}{(1 + P_{t-1} \, E^{WM}_i)} \\
-  r_{i,t} &amp;= \ln \frac{V^{-}_{i}}{V^{-}_{i}} \times \left[ \overbrace{\underbrace{\ln (1 + P_t \, E^{WM}_i)}_{\approx P_t \, E^{WM}_i}}^{\ln (1+x) \approx x} - \overbrace{\underbrace{\ln (1 + P_{t-1} \, E^{WM}_i)}_{\approx P_{t-1} \, E^{WM}_i}}^{\ln (1+x) \approx x} \right] \\
-  r_{i,t} &amp;= P_{t} E^{WM}_i - P_{t-1} E^{WM}_i + \underbrace{\ln \frac{V^{-}_{i}}{V^{-}_{i}}}_{\ln 1 = 0}
+  r_{i,t} &amp;= \ln \frac{V^{-}_{i,t} \times (1 + P_t \, E^{WM}_i)}{V^{-}_{i,t-1} \times (1 + P_{t-1} \, E^{WM}_i)} \\
+  r_{i,t} &amp;= \ln \frac{V^{-}_{i,t}}{V^{-}_{i,t-1}} \ln \frac{(1 + P_t \, E^{WM}_i)}{(1 + P_{t-1} \, E^{WM}_i)} \\
+  r_{i,t} &amp;= \ln \frac{V^{-}_{i,t}}{V^{-}_{i,t-1}} \times \left[ \overbrace{\underbrace{\ln (1 + P_t \, E^{WM}_i)}_{\approx P_t \, E^{WM}_i}}^{\ln (1+x) \approx x} - \overbrace{\underbrace{\ln (1 + P_{t-1} \, E^{WM}_i)}_{\approx P_{t-1} \, E^{WM}_i}}^{\ln (1+x) \approx x} \right] \\
+  r_{i,t} &amp;= P_{t} E^{WM}_i - P_{t-1} E^{WM}_i + \underbrace{\ln \frac{V^{-}_{i,t}}{V^{-}_{i,t-1}}}_{\substack{\ln 1 = 0 \\ \text{if not changing}}}
 \end{align}`
 
 ---
