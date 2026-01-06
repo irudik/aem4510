@@ -43,3 +43,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Slide build artifacts
+slides/*_files/
+
+# macOS
+**/.DS_Store

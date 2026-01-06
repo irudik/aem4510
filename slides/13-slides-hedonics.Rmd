@@ -13,6 +13,8 @@ output:
       countIncrementalSlides: false
       ratio: '16:9'
 
+<!-- Auto-rebuild: ls slides/13-slides-hedonics.Rmd | entr -c Rscript -e "rmarkdown::render('slides/13-slides-hedonics.Rmd')" -->
+
 ---
 exclude: true
 ```{r setup}

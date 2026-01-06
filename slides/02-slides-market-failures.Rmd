@@ -13,6 +13,8 @@ output:
       countIncrementalSlides: false
       ratio: '16:9'
 
+<!-- Auto-rebuild: ls slides/02-slides-market-failures.Rmd | entr -c Rscript -e "rmarkdown::render('slides/02-slides-market-failures.Rmd')" -->
+
 ---
 exclude: true
 ```{r setup}

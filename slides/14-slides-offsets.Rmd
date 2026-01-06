@@ -13,8 +13,10 @@ output:
       countIncrementalSlides: false
       ratio: '16:9'
 
+<!-- Auto-rebuild: ls slides/14-slides-offsets.Rmd | entr -c Rscript -e "rmarkdown::render('slides/14-slides-offsets.Rmd')" -->
+
 ---
-exclude: true 
+exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(

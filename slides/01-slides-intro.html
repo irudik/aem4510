@@ -38,7 +38,7 @@ class: center, middle, inverse, title-slide
 
 exclude: true
 
-```r
+``` r
 if (!require("pacman")) install.packages("pacman")
 ```
 
@@ -46,9 +46,9 @@ if (!require("pacman")) install.packages("pacman")
 ## Loading required package: pacman
 ```
 
-```r
+``` r
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, vembedr
 )
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -62,21 +62,26 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = "center", dpi = 500, fig.width = 
 
 
 ```
-## Warning: 'xaringanExtra::style_panelset' is deprecated.
+## Warning in xaringanExtra::style_panelset(panel_tab_color_active = "red"): 'xaringanExtra::style_panelset' is deprecated.
 ## Use 'style_panelset_tabs' instead.
 ## See help("Deprecated")
 ```
 
 ```
-## Warning in style_panelset_tabs(...): The arguments to `syle_panelset()` changed in xaringanExtra 0.1.0. Please
-## refer to the documentation to update your slides.
+## Warning in style_panelset_tabs(...): The argument names of `style_panelset()`
+## changed in xaringanExtra 0.1.0. Please refer to the documentation to update to
+## the latest names.
+```
+
+```
+## NULL
 ```
 
 ---
 
 # Roadmap
 
-- Course set up and SDS testing program
+- Course set up
 - What is environmental economics?
 - What are the goals for this class?
 - Microeconomics recap
@@ -86,7 +91,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = "center", dpi = 500, fig.width = 
 class: inverse, center, middle
 name: course_set_up
 
-# Course set up and SDS testing program
+# Course set up 
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -96,9 +101,9 @@ name: course_set_up
 
 .hi[Professor:] Ivan Rudik
 
-.hi[TAs:] Virginia Callison, Mike Huang, Tianzi Liu, Toni Marcheva
+.hi[TAs:] Chrisma D'Souza, Nathan Bol, Becca Ford
 
-.hi[Office hours:] every day of the week (see syllabus for time and location)
+.hi[Office hours:] see canvas
 
 .hi[Readings:] Markets and the Environment by Keohane and Olmstead, papers available through the course website or library
 
@@ -111,16 +116,16 @@ name: course_set_up
 
 # AEM 4510 / AEM 5510 / ECON 3865: Grading
 
-.hi[10 Online Quizzes (2%):] canvas-based, simple questions (solo)
-  - Lowest two scores are replaced with the highest two scores (effectively two free drops)
-  - On Thursdays where there is no prelim that week, you have all day to start/finish
+.hi[5 prelims (20% each):] canvas-based, simple questions (solo)
+  - 5 in class prelims + final: lowest score is dropped
+  - Prelims will be a combination of multiple choice, short answer, graphical, and simple mathematical questions that will not require a calculator
 
 .hi[3 Problem Sets (15%, 10%, 5%):] mix of quantitative and conceptual problems to give you practice in learning key concepts (teams of 3)
-  - 1 before each prelim: Feb 6, Mar 13, Apr 17
+  - 1 before each prelim: Feb 6, Mar 13, Apr 17 
 
 ---
 
-# AEM 4510 / AEM 5510 / ECON 3865: Grading
+# AEM 4510 / AEM 5510 / ECON 3865: Grading 
 
 .hi[3 Prelims (15%, 15%, 10%):] test your understanding of key concepts (solo)
   - Feb 15, Mar 22, Apr 26
@@ -134,11 +139,11 @@ name: course_set_up
 
 # AEM 4510 / AEM 5510 / ECON 3865: Content
 
-.hi[Weeks 1-6ish:] the economics of environmental regulation
+.hi[Weeks 1-7ish:] the economics of environmental regulation
   - More theoretical, graphical
   - Taxes, cap and trade, regulating monopolies, etc
   
-.hi[Weeks 6-13ish:] using markets (real and financial) to tell us about the environment
+.hi[Weeks 7-14ish:] using markets (real and financial) to tell us about the environment
   - Some theory, also real world analyses and data
   - valuing recreation, housing markets, bond markets, green instruments
   
@@ -222,7 +227,7 @@ Whether investment tax credits for wind power are cost-effective
 # How do people respond to info?
 
 .pull-left[
-![](01-slides-intro_files/figure-html/sequoia-tweet-1.png)&lt;!-- --&gt;
+&lt;img src="files/01-sequoia-tweet.png" width="200px" /&gt;
 ]
 
 .pull-right[
@@ -753,10 +758,10 @@ E.g.
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

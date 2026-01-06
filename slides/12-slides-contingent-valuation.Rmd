@@ -13,6 +13,8 @@ output:
       countIncrementalSlides: false
       ratio: '16:9'
 
+<!-- Auto-rebuild: ls slides/12-slides-contingent-valuation.Rmd | entr -c Rscript -e "rmarkdown::render('slides/12-slides-contingent-valuation.Rmd')" -->
+
 ---
 exclude: true
 ```{r setup}
