@@ -79,6 +79,3 @@ related:
 module:
   imports:
     - path: github.com/wowchemy/wowchemy-hugo-modules/wowchemy
-  replacements:
-    - github.com/wowchemy/wowchemy-hugo-modules/wowchemy -> themes/github.com/wowchemy/wowchemy-hugo-modules/wowchemy
-    - github.com/wowchemy/wowchemy-hugo-modules/netlify-cms-academic -> themes/github.com/wowchemy/wowchemy-hugo-modules/netlify-cms-academic
