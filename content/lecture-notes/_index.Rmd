@@ -53,19 +53,24 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
   - [Lecture notes](07-second-best)
   - *Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.*
 
+### Carbon Tariffs
+
+  - [Lecture notes](08-carbon-tariffs)
+  - Brunel, Claire, and Arik Levinson. "[Carbon Tariffs 101.](https://www.nber.org/system/files/working_papers/w33024/w33024.pdf)" NBER Working Paper No. 33024 (2024).
+
 ### Policy under uncertainty
 
-  - [Lecture notes](08-uncertainty)
+  - [Lecture notes](09-uncertainty)
   - KO Chapters 8
   
 ### Econometrics review
 
-  - [Lecture notes](09-econometrics)
+  - [Lecture notes](10-econometrics)
   - [Mixtape Chapter 2](https://mixtape.scunning.com/02-probability_and_regression#ordinary-least-squares)
 
 ### Discounting
 
-  - [Lecture notes](10-discounting)
+  - [Lecture notes](11-discounting)
   - *[Giglio, Stefano, Matteo Maggiori, and Johannes Stroebel. "Very long-run discount rates." The Quarterly Journal of Economics 130, no. 1 (2015): 1-53.](https://search.ebscohost.com/login.aspx?direct=true&db=bah&AN=101480957&site=ehost-live)" The Review of Financial Studies 34, no. 8 (2021): 3527-3571.*
 
 <!-- ### R and the tidyverse, regression review -->
@@ -77,25 +82,25 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
 
 ### Non-market valuation: Travel cost
 
-  - [Lecture notes](11-travel-cost)
+  - [Lecture notes](12-travel-cost)
   - [King and Marzotta](http://www.ecosystemvaluation.org/travel_costs.htm)
 
 ### Non-market valuation: Contingent valuation
 
-  - [Lecture notes](12-contingent-valuation)
+  - [Lecture notes](13-contingent-valuation)
   - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Resources 50 (2007): 1-14.
   
 ### In class hedonics game
   
 ### The environment and real estate markets
 
-  - [Lecture notes](13-hedonics)
+  - [Lecture notes](14-hedonics)
   - Greenstone, Michael, and Justin Gallagher. "[Does hazardous waste matter? Evidence from the housing market and the superfund program.](https://search.ebscohost.com/login.aspx?direct=true&db=bah&AN=33227874&site=ehost-live)" The Quarterly Journal of Economics 123, no. 3 (2008): 951-1003.
   - Bernstein, Asaf, Matthew T. Gustafson, and Ryan Lewis. "[Disaster on the horizon: The price effect of sea level rise.](https://discovery.ebsco.com/linkprocessor/plink?id=b2f8348a-8a0a-3b1b-8ea2-6714078cf5ed)" Journal of Financial Economics 134, no. 2 (2019): 253-272.
 
 ### Offset markets
 
-  - [Lecture notes](14-offset-markets)
+  - [Lecture notes](15-offset-markets)
   - Aldy, Joseph E., and Zachery Halem. "[The Evolving Role of Greenhouse Gas Emission Offsets in Combating Climate Change.](https://media.rff.org/documents/WP_22-17.pdf)" (2022).
   - Calel, Raphael, Jonathan Colmer, Antoine Dechezleprêtre, and Matthieu Glachant. "[Do carbon offsets offset carbon?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3950103)" (2021).
 
@@ -103,21 +108,21 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
 
 ### Climate risk and financial instruments
 
-  - [Lecture notes](15-climate-finance)
+  - [Lecture notes](16-climate-finance)
   - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
   - Schlenker, Wolfram, and Charles A. Taylor. "[Market expectations of a warming climate.](https://www.sciencedirect.com/science/article/am/pii/S0304405X21001495)" Journal of Financial Economics 142, no. 2 (2021): 627-640.
   - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
   
 ### Green instruments
 
-  - [Lecture notes](16-green-instruments)
+  - [Lecture notes](17-green-instruments)
   - Flammer, Caroline. "[Green bonds: effectiveness and implications for public policy.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/706794)" Environmental and Energy Policy and the Economy 1, no. 1 (2020): 95-128.
   - *Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).*
 
   
 ### Corporate Governance
 
-  - [Lecture notes](17-corporate-governance)
+  - [Lecture notes](18-corporate-governance)
   - XYZ
 
 

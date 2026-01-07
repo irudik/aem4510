@@ -1,0 +1,18 @@
+{
+  "name": "AEM 4510",
+  "short_name": "AEM 4510",
+  "lang": "en-us",
+  "theme_color": "#CF4446",
+  "background_color": "#CF4446",
+  "icons": [{
+    "src": "/images/icon_hu_ac2c19e6e038de20.png",
+    "sizes": "192x192",
+    "type": "image/png"
+    }, {
+    "src": "/images/icon_hu_6ea865157fdf300e.png",
+    "sizes": "512x512",
+    "type": "image/png"
+     }],
+  "display": "standalone",
+  "start_url": "/?utm_source=web_app_manifest"
+}

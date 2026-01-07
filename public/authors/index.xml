@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Authors | AEM 4510</title>
+    <link>//localhost:1313/authors/</link>
+      <atom:link href="//localhost:1313/authors/index.xml" rel="self" type="application/rss+xml" />
+    <description>Authors</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language>
+    <image>
+      <url>//localhost:1313/images/icon_hu_6ea865157fdf300e.png</url>
+      <title>Authors</title>
+      <link>//localhost:1313/authors/</link>
+    </image>
+    
+  </channel>
+</rss>

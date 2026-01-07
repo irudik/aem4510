@@ -993,7 +993,7 @@ In this case an output tax incorrectly taxes our clean inputs
 
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-rps.png") -->
+<!-- knitr::include_graphics("files/07-rps.png") -->
 <!-- ``` -->
 <!-- </center> -->
 
@@ -1003,7 +1003,7 @@ In this case an output tax incorrectly taxes our clean inputs
 
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-rps2.png") -->
+<!-- knitr::include_graphics("files/07-rps2.png") -->
 <!-- ``` -->
 <!-- </center> -->
 
@@ -1297,7 +1297,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard3.png") -->
+<!-- knitr::include_graphics("files/07-int-standard3.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1320,7 +1320,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard3.png") -->
+<!-- knitr::include_graphics("files/07-int-standard3.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1340,7 +1340,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- knitr::include_graphics("files/07-int-standard2.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1358,7 +1358,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- knitr::include_graphics("files/07-int-standard2.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1378,7 +1378,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- knitr::include_graphics("files/07-int-standard2.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1401,7 +1401,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard2.png") -->
+<!-- knitr::include_graphics("files/07-int-standard2.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1418,7 +1418,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard1.png") -->
+<!-- knitr::include_graphics("files/07-int-standard1.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->
@@ -1442,7 +1442,7 @@ In this case an output tax incorrectly taxes our clean inputs
 <!-- .pull-left[ -->
 <!-- <center> -->
 <!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} -->
-<!-- knitr::include_graphics("files/06-int-standard1.png") -->
+<!-- knitr::include_graphics("files/07-int-standard1.png") -->
 <!-- ``` -->
 <!-- </center> -->
 <!-- ] -->

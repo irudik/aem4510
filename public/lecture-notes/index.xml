@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AEM 4510</title>
+    <link>//localhost:1313/lecture-notes/</link>
+      <atom:link href="//localhost:1313/lecture-notes/index.xml" rel="self" type="application/rss+xml" />
+    <description>AEM 4510</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language>
+    <image>
+      <url>//localhost:1313/images/icon_hu_6ea865157fdf300e.png</url>
+      <title>AEM 4510</title>
+      <link>//localhost:1313/lecture-notes/</link>
+    </image>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/01-introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/01-introduction/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Introduces environmental economics&lt;/li&gt;
+&lt;li&gt;Reviews some core micro concepts we will need for later&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/02-market-failures/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/02-market-failures/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are market failures?&lt;/li&gt;
+&lt;li&gt;When do they happen?&lt;/li&gt;
+&lt;li&gt;What are the consequences?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/03-coase/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/03-coase/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Can we achieve the efficient outcome without government intervention?&lt;/li&gt;
+&lt;li&gt;What does the Coase theorem say?&lt;/li&gt;
+&lt;li&gt;What are the limits to Coasean bargaining?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/04-standards/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/04-standards/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do we model our problems going forward?&lt;/li&gt;
+&lt;li&gt;What are the different kinds of standards in theory and the real world?&lt;/li&gt;
+&lt;li&gt;What happens under a standard?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/05-taxes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/05-taxes/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are the different kinds of price instruments in theory and the real world?&lt;/li&gt;
+&lt;li&gt;What happens under a tax?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/06-permits/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/06-permits/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do tradable permit systems work in theory and in the real world?&lt;/li&gt;
+&lt;li&gt;What happens under a tradable permit system?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/07-second-best/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/07-second-best/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What happens when we have another distortion like market power?&lt;/li&gt;
+&lt;li&gt;What happens when we introduce other issues like fixed costs?&lt;/li&gt;
+&lt;li&gt;How do second-best policies like intensity standards work?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/08-carbon-tariffs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/08-carbon-tariffs/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are carbon tariffs?&lt;/li&gt;
+&lt;li&gt;Basic trade theory: supply, demand, and tariffs&lt;/li&gt;
+&lt;li&gt;Adding pollution externalities to trade&lt;/li&gt;
+&lt;li&gt;Unilateral carbon taxes and leakage&lt;/li&gt;
+&lt;li&gt;Carbon tariffs to prevent leakage&lt;/li&gt;
+&lt;li&gt;Carbon tariffs alone&lt;/li&gt;
+&lt;li&gt;World carbon taxes&lt;/li&gt;
+&lt;li&gt;Different pollution intensities across countries&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/09-uncertainty/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/09-uncertainty/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What role does uncertainty play in economic analysis of the environment?&lt;/li&gt;
+&lt;li&gt;What are the implications of uncertainty for policy choice and welfare?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/10-econometrics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/10-econometrics/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Econometrics review&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/11-discounting/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/11-discounting/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What is discounting?&lt;/li&gt;
+&lt;li&gt;What determines the discount rate?&lt;/li&gt;
+&lt;li&gt;What are the implications of discounting on computing the costs and benefits of policies?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/12-travel-cost/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/12-travel-cost/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do we estimate the value of recreational goods?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/13-contingent-valuation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/13-contingent-valuation/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do stated preference methods differ from revealed preference methods?&lt;/li&gt;
+&lt;li&gt;How do we do contingent valuation?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/14-hedonics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/14-hedonics/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What can we use to infer the demand for environmental goods?&lt;/li&gt;
+&lt;li&gt;What do housing prices tell us?&lt;/li&gt;
+&lt;li&gt;When do changes in house prices give us welfare measures&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/15-offset-markets/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/15-offset-markets/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are offsets?&lt;/li&gt;
+&lt;li&gt;What issues might they have?&lt;/li&gt;
+&lt;li&gt;How do they work in practice?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/16-climate-finance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/16-climate-finance/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Quick overview on financial instruments&lt;/li&gt;
+&lt;li&gt;What can they tell us about climate change and climate risk?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/17-green-instruments/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/17-green-instruments/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are some recent green instruments?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/18-corporate-governance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/18-corporate-governance/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;XYZ&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

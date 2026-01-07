@@ -20,5 +20,5 @@ design:
     text_color_light: true
     
 cta_note:
-  label: AEM 4510 - AEM 5510 - ECON 3865<br>Spring 2023
+  label: AEM 4510 - AEM 5510 - ECON 3865<br>Spring 2026
 ---

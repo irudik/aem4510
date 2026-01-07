@@ -1,0 +1,6 @@
+/*! Wowchemy v5.0.0-beta.1 | https://wowchemy.com/ */
+/*! Copyright 2016-present George Cushen (https://georgecushen.com/) */
+/*! License: https://github.com/wowchemy/wowchemy-hugo-modules/blob/master/LICENSE.md */
+
+;
+(()=>{var t,n,e=document.body;function s(){return parseInt(localStorage.getItem("wcTheme")||2)}function o(){return Boolean(window.wc.darkLightEnabled)}function i(){if(!o())return{isDarkTheme:window.wc.isSiteThemeDark,themeMode:window.wc.isSiteThemeDark?1:0};let n=s(),t;switch(n){case 0:t=!1;break;case 1:t=!0;break;default:window.matchMedia("(prefers-color-scheme: dark)").matches?t=!0:window.matchMedia("(prefers-color-scheme: light)").matches?t=!1:t=window.wc.isSiteThemeDark;break}return t&&!e.classList.contains("dark")?(console.debug("Applying Wowchemy dark theme"),document.body.classList.add("dark")):e.classList.contains("dark")&&(console.debug("Applying Wowchemy light theme"),document.body.classList.remove("dark")),{isDarkTheme:t,themeMode:n}}t=!1,n=!1,window.wc={darkLightEnabled:t,isSiteThemeDark:n},i()})()

@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AEM 4510</title>
+    <link>//localhost:1313/</link>
+      <atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <description>AEM 4510</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Wed, 19 Apr 2023 12:57:37 +0000</lastBuildDate>
+    <image>
+      <url>//localhost:1313/images/icon_hu_6ea865157fdf300e.png</url>
+      <title>AEM 4510</title>
+      <link>//localhost:1313/</link>
+    </image>
+    
+    <item>
+      <title>Tradable Permits Game</title>
+      <link>//localhost:1313/games/games-02-permits/</link>
+      <pubDate>Tue, 06 Dec 2022 16:34:02 +0000</pubDate>
+      <guid>//localhost:1313/games/games-02-permits/</guid>
+      <description>
+
+
+&lt;div id=&#34;getting-started&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Getting started&lt;/h2&gt;
+&lt;p&gt;In addition to providing a respite from lectures, the purpose of this exercise is to learn more about the practical process that underlies the path to equilibrium in a tradable permit market.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;instructions-for-the-game&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Instructions for the game&lt;/h2&gt;
+&lt;p&gt;There are N firms in the market. Each team (comprised of 4-6 students) will be assigned to represent one of the firms and make decisions on firms’ emission decisions. Members of your team should work together to solve the problems but choose one student as your firm’s reporter. That student will come forward and report information about your firm’s choices and expenditures by typing numbers into the class spread sheet on my Mac as soon as you are ready. The first of the N groups to report in gets N points toward an end-of-class prize, the second group gets N-1 points and so on. However, points will be deducted if your answer is wrong. The group with the most points wins.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;emissions-trading-background&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Emissions Trading Background&lt;/h2&gt;
+&lt;p&gt;We describe firms only by their marginal abatement cost (or marginal benefits of making another unit of emissions). These MAC functions are given by the following equations. The MAC for emissions greater than the initial level is always 0. Firms differ both by amount of emissions they would choose to create in the absence of regulation, and in the marginal cost of cleaning up a unit of emissions.&lt;/p&gt;
+&lt;center&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;33%&#34; /&gt;
+&lt;col width=&#34;9%&#34; /&gt;
+&lt;col width=&#34;23%&#34; /&gt;
+&lt;col width=&#34;7%&#34; /&gt;
+&lt;col width=&#34;26%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;center&#34;&gt;Firm Type&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;MAC in Dollars&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Initial Emissions Level&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;MAC = 4000 - 2E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;MAC = 8000 - 4E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;C&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;MAC = 10000 - 5E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;D&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;MAC = 4000 - E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;MAC = 8000 - 2E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;F&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;MAC = 10000 - 2.5E&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4000&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/center&gt;
+&lt;p&gt;On the board I will list how many of each firm type there are.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;scenarios&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Scenarios&lt;/h2&gt;
+&lt;div id=&#34;uniform-emissions-standard&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Uniform Emissions Standard&lt;/h3&gt;
+&lt;p&gt;In this scenario, firms are subject to a uniform standard (1,480 tons emissions for each firm, in this example). You should calculate and record the abatement quantity and cost that this standard imposes on your firm.&lt;/p&gt;
+&lt;p&gt;On a piece of paper turn in the following to the professor/market facilitator:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Your team name&lt;/li&gt;
+&lt;li&gt;Your firm type&lt;/li&gt;
+&lt;li&gt;Your total amount of emissions abated&lt;/li&gt;
+&lt;li&gt;Your total cost of abatement&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;tradable-permits&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Tradable Permits&lt;/h3&gt;
+&lt;p&gt;Now your firm is given an initial permit allocation of 1,480 for free. The industry total is 1,480*N permits. For this exercise, a permit price will be called out. For that price, your firm must decide how many permits it wants to hold, and thus how many it wishes to buy or to sell. As soon as you have that figured out, n a piece of paper turn in the following to the professor/market facilitator:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Your team name&lt;/li&gt;
+&lt;li&gt;Your firm type&lt;/li&gt;
+&lt;li&gt;How many permits you want to buy (negative numbers mean you want to sell)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When all reports are in, the professor/market facilitator will figure out total demand and supply and announce if the market is cleared (you should write down total industry demand and supply). If the market is not cleared, a new price will be called out.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Coase Theorem Game</title>
+      <link>//localhost:1313/games/games-01-coase/</link>
+      <pubDate>Tue, 06 Dec 2022 16:33:52 +0000</pubDate>
+      <guid>//localhost:1313/games/games-01-coase/</guid>
+      <description>
+
+
+&lt;div id=&#34;getting-started&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Getting started&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Pair up with a fellow student.&lt;/li&gt;
+&lt;li&gt;The person whose last name that comes first in alphabetical order is Player A in this game. The other person is Player B.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;context&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Context&lt;/h2&gt;
+&lt;p&gt;There are only two stakeholders at the margins of a lake, both want to maximize their individual payoffs:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Player A: a chemical plant&lt;/li&gt;
+&lt;li&gt;Player B: a water sports equipment rental company&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Players’ payoffs vary based on the amount of chemical residuals the plant emits (in hundred gallons/month). Their payoff schedules (in hundred thousand dollars/month) are:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;center&#34;&gt;Emissions&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Player A payoff&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Player B payoff&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;6&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;3&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;6&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;9&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;5&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;10&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;center&#34;&gt;6&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;11&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div id=&#34;round-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Round 1&lt;/h3&gt;
+&lt;p&gt;The chemical plant (player A) is the controller and owns the property rights on the lake.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Player A will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.&lt;/li&gt;
+&lt;li&gt;Player B can attempt to influence A’s decision by offering to pay part of all of their earnings to the controller.&lt;/li&gt;
+&lt;li&gt;Once players achieve an agreement, take note of the resulting level of emissions and players’ payoffs accounting for any payments made to the other player.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;round-2&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Round 2&lt;/h3&gt;
+&lt;p&gt;The water sports company (player B) is the controller and owns the property rights on the lake.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Player B will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.&lt;/li&gt;
+&lt;li&gt;Player A can attempt to influence B’s decision by offering to pay part of all of their earnings to the controller.&lt;/li&gt;
+&lt;li&gt;Once players achieve an agreement, take note of the resulting level of emissions and players’ payoffs accounting for any payments made to the other player.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;round-3&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Round 3&lt;/h3&gt;
+&lt;p&gt;The water sports company (player B) remains as the the controller and owns the property rights on the lake. However, now any agreements on payments must be enforced with a legal agreement that costs $5 (hundred thousand) in fees.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Player B will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.&lt;/li&gt;
+&lt;li&gt;Player A can attempt to influence B’s decision by offering to pay part of all of their earnings to the controller. Players must also agree on how the costs with legal fees are going to be shared between them.&lt;/li&gt;
+&lt;li&gt;Once players achieve an agreement, take note of the resulting level of emissions and players’ payoffs accounting for any payments made to the other player and fees paid.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/01-introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/01-introduction/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Introduces environmental economics&lt;/li&gt;
+&lt;li&gt;Reviews some core micro concepts we will need for later&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/02-market-failures/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/02-market-failures/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are market failures?&lt;/li&gt;
+&lt;li&gt;When do they happen?&lt;/li&gt;
+&lt;li&gt;What are the consequences?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/03-coase/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/03-coase/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Can we achieve the efficient outcome without government intervention?&lt;/li&gt;
+&lt;li&gt;What does the Coase theorem say?&lt;/li&gt;
+&lt;li&gt;What are the limits to Coasean bargaining?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/04-standards/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/04-standards/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do we model our problems going forward?&lt;/li&gt;
+&lt;li&gt;What are the different kinds of standards in theory and the real world?&lt;/li&gt;
+&lt;li&gt;What happens under a standard?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/05-taxes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/05-taxes/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are the different kinds of price instruments in theory and the real world?&lt;/li&gt;
+&lt;li&gt;What happens under a tax?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/06-permits/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/06-permits/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do tradable permit systems work in theory and in the real world?&lt;/li&gt;
+&lt;li&gt;What happens under a tradable permit system?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/07-second-best/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/07-second-best/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What happens when we have another distortion like market power?&lt;/li&gt;
+&lt;li&gt;What happens when we introduce other issues like fixed costs?&lt;/li&gt;
+&lt;li&gt;How do second-best policies like intensity standards work?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/08-carbon-tariffs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/08-carbon-tariffs/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are carbon tariffs?&lt;/li&gt;
+&lt;li&gt;Basic trade theory: supply, demand, and tariffs&lt;/li&gt;
+&lt;li&gt;Adding pollution externalities to trade&lt;/li&gt;
+&lt;li&gt;Unilateral carbon taxes and leakage&lt;/li&gt;
+&lt;li&gt;Carbon tariffs to prevent leakage&lt;/li&gt;
+&lt;li&gt;Carbon tariffs alone&lt;/li&gt;
+&lt;li&gt;World carbon taxes&lt;/li&gt;
+&lt;li&gt;Different pollution intensities across countries&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/09-uncertainty/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/09-uncertainty/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What role does uncertainty play in economic analysis of the environment?&lt;/li&gt;
+&lt;li&gt;What are the implications of uncertainty for policy choice and welfare?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/10-econometrics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/10-econometrics/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Econometrics review&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/11-discounting/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/11-discounting/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture answers:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What is discounting?&lt;/li&gt;
+&lt;li&gt;What determines the discount rate?&lt;/li&gt;
+&lt;li&gt;What are the implications of discounting on computing the costs and benefits of policies?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/12-travel-cost/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/12-travel-cost/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do we estimate the value of recreational goods?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/13-contingent-valuation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/13-contingent-valuation/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How do stated preference methods differ from revealed preference methods?&lt;/li&gt;
+&lt;li&gt;How do we do contingent valuation?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/14-hedonics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/14-hedonics/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What can we use to infer the demand for environmental goods?&lt;/li&gt;
+&lt;li&gt;What do housing prices tell us?&lt;/li&gt;
+&lt;li&gt;When do changes in house prices give us welfare measures&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/15-offset-markets/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/15-offset-markets/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are offsets?&lt;/li&gt;
+&lt;li&gt;What issues might they have?&lt;/li&gt;
+&lt;li&gt;How do they work in practice?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/16-climate-finance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/16-climate-finance/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Quick overview on financial instruments&lt;/li&gt;
+&lt;li&gt;What can they tell us about climate change and climate risk?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/17-green-instruments/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/17-green-instruments/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;What are some recent green instruments?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/lecture-notes/18-corporate-governance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/lecture-notes/18-corporate-governance/</guid>
+      <description>
+
+&lt;div id=&#34;overview&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overview&lt;/h3&gt;
+&lt;p&gt;This lecture:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;XYZ&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;slides&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Slides&lt;/h3&gt;
+&lt;p&gt;Slides are below.
+The HTML slides will open in your browser and you might need to install the &lt;a href=&#34;https://fonts.google.com/specimen/Lato&#34;&gt;Lato&lt;/a&gt; font for it to look like it does in class.
+If you use the HTML slides you can navigate with the left and right arrows.
+Pressing ‘o’ lets you see all the slides.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

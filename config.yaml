@@ -3,15 +3,16 @@ title: AEM 4510
 font: lato
 baseurl: ''
 copyright: ''
-enableGitInfo: no
+enableGitInfo: false
 defaultContentLanguage: en
-hasCJKLanguage: no
-defaultContentLanguageInSubdir: no
-removePathAccents: yes
+hasCJKLanguage: false
+defaultContentLanguageInSubdir: false
+removePathAccents: true
 summaryLength: 30
-paginate: 10
-enableEmoji: yes
-enableRobotsTXT: yes
+pagination:
+  pagerSize: 10
+enableEmoji: true
+enableRobotsTXT: true
 footnotereturnlinkcontents: <sup>^</sup>
 ignoreFiles:
   - \.ipynb$
@@ -45,9 +46,9 @@ markup:
   defaultMarkdownHandler: goldmark
   goldmark:
     renderer:
-      unsafe: yes
+      unsafe: true
   highlight:
-    codeFences: no
+    codeFences: false
   tableOfContents:
     endLevel: 3
     startLevel: 2
@@ -61,7 +62,7 @@ taxonomies:
   publication_type: publication_types
   tag: tags
 related:
-  includeNewer: yes
+  includeNewer: true
   indices:
     - name: title
       weight: 60
@@ -74,7 +75,10 @@ related:
     - name: authors
       weight: 20
   threshold: 80
-  toLower: yes
+  toLower: true
 module:
   imports:
     - path: github.com/wowchemy/wowchemy-hugo-modules/wowchemy
+  replacements:
+    - github.com/wowchemy/wowchemy-hugo-modules/wowchemy -> /Users/ir229/Desktop/git/aem4510/themes/github.com/wowchemy/wowchemy-hugo-modules/wowchemy
+    - github.com/wowchemy/wowchemy-hugo-modules/netlify-cms-academic -> /Users/ir229/Desktop/git/aem4510/themes/github.com/wowchemy/wowchemy-hugo-modules/netlify-cms-academic

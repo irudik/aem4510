@@ -14,7 +14,7 @@ output:
       ratio: '16:9'
 
 <!-- Auto-rebuild: ls slides/01-slides-intro.Rmd | entr -c Rscript -e "rmarkdown::render('slides/01-slides-intro.Rmd')" -->
-
+  
 ---
 exclude: true
 ```{r setup}

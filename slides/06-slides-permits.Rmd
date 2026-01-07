@@ -319,7 +319,7 @@ Phase II (2000+):
 
 <center>
 ```{r, out.width = "40%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-cnp1.png")
+knitr::include_graphics("files/06-cnp1.png")
 ```
 </center>
 
@@ -329,7 +329,7 @@ knitr::include_graphics("files/05-cnp1.png")
 
 <center>
 ```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-cnp2.png")
+knitr::include_graphics("files/06-cnp2.png")
 ```
 </center>
 
@@ -339,7 +339,7 @@ knitr::include_graphics("files/05-cnp2.png")
 
 <center>
 ```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-arp1.png")
+knitr::include_graphics("files/06-arp1.png")
 ```
 </center>
 
@@ -349,7 +349,7 @@ knitr::include_graphics("files/05-arp1.png")
 
 <center>
 ```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-arp2.png")
+knitr::include_graphics("files/06-arp2.png")
 ```
 </center>
 
@@ -359,7 +359,7 @@ knitr::include_graphics("files/05-arp2.png")
 
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-arp3.png")
+knitr::include_graphics("files/06-arp3.png")
 ```
 </center>
 
@@ -1438,7 +1438,7 @@ Below are estimates of efficient trading ratios for the Acid Rain Program
 
 <center>
 ```{r, out.width = "80%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-trading-ratios.png")
+knitr::include_graphics("files/06-trading-ratios.png")
 ```
 </center>
 
@@ -1452,7 +1452,7 @@ Trading ratios are required because damages are heterogeneous across space
 
 <center>
 ```{r, out.width = "60%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-damages.png")
+knitr::include_graphics("files/06-damages.png")
 ```
 </center>
 
@@ -1466,7 +1466,7 @@ The Acid Rain Program .hi-red[increased] damages in the eastern US
 
 <center>
 ```{r, out.width = "50%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-arp4.png")
+knitr::include_graphics("files/06-arp4.png")
 ```
 </center>
 
@@ -1488,7 +1488,7 @@ Chan et al. (2018) JEEM:
 
 <center>
 ```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-arp5.jpg")
+knitr::include_graphics("files/06-arp5.jpg")
 ```
 </center>
 
@@ -1544,7 +1544,7 @@ $39,000 per ton of NOx in 2000
 .pull-left[
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-reclaim1.png")
+knitr::include_graphics("files/06-reclaim1.png")
 ```
 </center>
 ]
@@ -1579,7 +1579,7 @@ Tradble permit systems are increasingly common:
 
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-rggi1.png")
+knitr::include_graphics("files/06-rggi1.png")
 ```
 </center>
 
@@ -1589,7 +1589,7 @@ knitr::include_graphics("files/05-rggi1.png")
 
 <center>
 ```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-rggi2.png")
+knitr::include_graphics("files/06-rggi2.png")
 ```
 </center>
 
@@ -1599,7 +1599,7 @@ knitr::include_graphics("files/05-rggi2.png")
 
 <center>
 ```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-ab32.png")
+knitr::include_graphics("files/06-ab32.png")
 ```
 </center>
 
@@ -1609,7 +1609,7 @@ knitr::include_graphics("files/05-ab32.png")
 
 <center>
 ```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-eu-ets.png")
+knitr::include_graphics("files/06-eu-ets.png")
 ```
 </center>
 
@@ -1619,7 +1619,7 @@ knitr::include_graphics("files/05-eu-ets.png")
 
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/05-china.png")
+knitr::include_graphics("files/06-china.png")
 ```
 </center>
 
