@@ -47,5 +47,8 @@ vignettes/*.pdf
 # Slide build artifacts
 slides/*_files/
 
+# Hugo build output
+public/
+
 # macOS
 **/.DS_Store

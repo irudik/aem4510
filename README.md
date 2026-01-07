@@ -1,75 +1,149 @@
-<!--<p align="center"><a href="https://wowchemy.com" target="_blank" rel="noopener"><img src="https://wowchemy.com/img/logo_200px.png" alt="Wowchemy Website Builder"></a></p>-->
+# AEM 4510 Course Website
 
-# [Wowchemy](https://wowchemy.com): the website builder for [Hugo](https://gohugo.io)
+This repository contains the course website for AEM 4510, built with [Hugo](https://gohugo.io/) and the [Wowchemy Academic](https://wowchemy.com/) theme.
 
-### The Page Builder to Easily Create Professional Websites ✏️ 📰 🚀
+## Local Development
 
-**Create _any_ kind of website for free with Wowchemy. Write using Markdown, Jupyter, or RStudio. Choose a beautiful template, color theme, and font. Build anything with the Page Builder - over 50 _widgets_, _themes_, and _language packs_ included!**
+### Prerequisites
 
-[Check out the latest **demos**](https://wowchemy.com/templates/) of what you'll get in less than 10 minutes, or [view the **showcase**](https://wowchemy.com/user-stories/) of personal, project, and business sites.
+- [Hugo](https://gohugo.io/installation/) (extended version, 0.139.0 or later)
+- [R](https://www.r-project.org/) with the following packages:
+  - `rmarkdown`
+  - `blogdown`
 
-- 👉 [**Get Started**](https://wowchemy.com/docs/install/)
-- 📚 [View the **documentation**](https://wowchemy.com/docs/)
-- 💬 [Chat with the **Wowchemy community**](https://discord.gg/z8wNYzb) or [**Hugo community**](https://discourse.gohugo.io)
-- 🐦 Twitter: [@wowchemy](https://twitter.com/wowchemy) [@GeorgeCushen](https://twitter.com/GeorgeCushen) [#MadeWithWowchemy](https://twitter.com/search?q=(%23MadeWithWowchemy%20OR%20%23MadeWithAcademic)&src=typed_query)
-- 💡 [Request a **feature** or report a **bug** for _Wowchemy_](https://github.com/wowchemy/wowchemy-hugo-modules/issues)
-- ⬆️ **Updating Wowchemy?** View the [Update Guide](https://wowchemy.com/docs/update/) and [Release Notes](https://wowchemy.com/updates/)
+### Running the Site Locally
 
-## Crowd-funded open-source software
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/irudik/aem4510.git
+   cd aem4510
+   ```
 
-To help us develop this template and software sustainably under the MIT license, we ask all individuals and businesses that use it to help support its ongoing maintenance and development via sponsorship.
+2. Start the Hugo development server:
+   ```bash
+   hugo server
+   ```
 
-### [❤️ Click here to unlock rewards with sponsorship](https://wowchemy.com/plans/)
+3. Open http://localhost:1313 in your browser
 
-## Ecosystem
+The site will automatically reload when you make changes to content files.
 
-* **[Hugo Academic CLI](https://github.com/wowchemy/hugo-academic-cli/):** Automatically import academic publications from BibTeX
-* **[Hugo Assistant](https://github.com/sourcethemes/hugo-assistant):** Scripts to help migrate content to new versions of Hugo
+### Rendering R Markdown Lecture Notes
 
-## Features
+The lecture notes in `content/lecture-notes/` are written as `.Rmd` files. To render them to HTML:
 
-[![Screenshot](https://raw.githubusercontent.com/wowchemy/wowchemy-hugo-modules/master/academic.png)](https://wowchemy.com)
+```bash
+Rscript -e "
+library(rmarkdown)
+library(blogdown)
 
-**Key features:**
+rmd_files = list.files('content/lecture-notes', pattern = '\\\\.Rmd$', full.names = TRUE)
 
-- **Page builder** - Create *anything* with [**widgets**](https://wowchemy.com/docs/page-builder/) and [**elements**](https://wowchemy.com/docs/writing-markdown-latex/)
-- **Edit any type of content** - Blog posts, publications, talks, slides, projects, and more!
-- **Create content** in [**Markdown**](https://wowchemy.com/docs/writing-markdown-latex/), [**Jupyter**](https://wowchemy.com/docs/import/jupyter/), or [**RStudio**](https://wowchemy.com/docs/install-locally/)
-- **Plugin System** - Fully customizable [**color** and **font themes**](https://wowchemy.com/templates/)
-- **Display Code and Math** - Code highlighting and [LaTeX math](https://en.wikibooks.org/wiki/LaTeX/Mathematics) supported
-- **Integrations** - [Google Analytics](https://analytics.google.com), [Disqus commenting](https://disqus.com), Maps, Contact Forms, and more!
-- **Beautiful Site** - Simple and refreshing one page design
-- **Industry-Leading SEO** - Help get your website found on search engines and social media
-- **Media Galleries** - Display your images and videos with captions in a customizable gallery
-- **Mobile Friendly** - Look amazing on every screen with a mobile friendly version of your site
-- **Multi-language** - 15+ language packs including English, 中文, and Português
-- **Multi-user** - Each author gets their own profile page
-- **Privacy Pack** - Assists with GDPR
-- **Stand Out** - Bring your site to life with animation, parallax backgrounds, and scroll effects
-- **One-Click Deployment** - No servers. No databases. Only files.
+for (rmd_file in rmd_files) {
+  html_file = sub('\\\\.Rmd$', '.html', rmd_file)
 
-## Themes
+  # Read the Rmd file and extract YAML frontmatter
+  lines = readLines(rmd_file)
+  yaml_start = which(lines == '---')[1]
+  yaml_end = which(lines == '---')[2]
+  yaml_content = lines[yaml_start:yaml_end]
 
-Wowchemy comes with **automatic day (light) and night (dark) mode** built-in. Alternatively, click the moon icon in the top right of one of the [Demos](https://wowchemy.com/templates/) to set your preferred mode!
+  # Render the Rmd to HTML
+  rmarkdown::render(rmd_file, output_format = 'html_document', output_file = basename(html_file), quiet = TRUE)
 
-Choose a stunning theme for your site and [customize it](https://wowchemy.com/docs/customization/#custom-theme) to your liking:
+  # Read rendered HTML and extract body content
+  html_lines = readLines(html_file)
+  body_start = grep('<body>', html_lines)[1]
+  body_end = grep('</body>', html_lines)[1]
 
-[![Themes](https://raw.githubusercontent.com/wowchemy/wowchemy-hugo-modules/master/themes.png)](https://wowchemy.com/templates/)
+  if (!is.na(body_start) && !is.na(body_end)) {
+    body_content = html_lines[(body_start + 1):(body_end - 1)]
+    body_content = body_content[!grepl('class=\"container-fluid main-container\"', body_content)]
+    body_content = body_content[body_content != '</div>'][1:(length(body_content) - 1)]
+  } else {
+    body_content = html_lines
+  }
 
-[Browse more templates and themes...](https://wowchemy.com/templates/)
+  # Write final HTML with YAML frontmatter preserved
+  final_content = c(yaml_content, '', body_content)
+  writeLines(final_content, html_file)
 
-## The Future of Technical Content Writing
+  message('Rendered: ', basename(rmd_file))
+}
+"
+```
 
-[![Writing technical content](https://wowchemy.com/img/docs/writing-technical-content.gif)](https://academic-demo.netlify.app/post/writing-technical-content/)
+Alternatively, render a single file:
 
-## Join the community
+```bash
+Rscript -e "rmarkdown::render('content/lecture-notes/01-introduction.Rmd')"
+```
 
-Feel free to *star* the project on [Github](https://github.com/wowchemy/wowchemy-hugo-modules), [join the community](https://discord.gg/z8wNYzb) on Discord, and follow [@wowchemy](https://twitter.com/wowchemy) on Twitter to be the first to hear about new features.
+Note: After rendering, you may need to manually ensure the YAML frontmatter is preserved in the output HTML file for Hugo to process it correctly.
 
-## License
+### Rendering Slides
 
-Copyright 2016-present [George Cushen](https://georgecushen.com).
+Slides are in `slides/` and use [xaringan](https://github.com/yihui/xaringan). To render slides to HTML:
 
-Released under the [MIT](https://github.com/wowchemy/wowchemy-hugo-modules/blob/master/LICENSE.md) license.
+```bash
+Rscript -e "rmarkdown::render('slides/01-slides-intro.Rmd')"
+```
 
-[![Analytics](https://ga-beacon.appspot.com/UA-78646709-2/wowchemy-hugo-modules/readme?pixel)](https://github.com/igrigorik/ga-beacon)
+To generate PDF versions of slides, use the `slides/make-pdf.R` script with [pagedown](https://github.com/rstudio/pagedown).
+
+## Deployment
+
+The site is automatically deployed via [Netlify](https://www.netlify.com/).
+
+### How it works
+
+1. Push changes to the `main` branch on GitHub
+2. Netlify automatically detects the push and rebuilds the site
+3. The site is published at the configured domain
+
+### Important Notes
+
+- The `public/` directory is ignored and not tracked in git. Netlify builds the site from source.
+- Make sure to render `.Rmd` files to `.html` before pushing if you've made changes to lecture notes.
+- The Hugo version used by Netlify is specified in `netlify.toml`.
+
+### Manual Deployment
+
+If you need to manually trigger a deployment:
+
+1. Go to the Netlify dashboard
+2. Navigate to the site's Deploys section
+3. Click "Trigger deploy" > "Deploy site"
+
+## Project Structure
+
+```
+.
+├── config.yaml          # Main Hugo configuration
+├── content/             # Site content
+│   ├── home/            # Homepage widgets
+│   ├── lecture-notes/   # Lecture notes (Rmd and HTML)
+│   ├── assignments/     # Assignment pages
+│   └── games/           # In-class games
+├── slides/              # Xaringan slide decks
+├── static/              # Static assets (images, PDFs, etc.)
+├── themes/              # Hugo themes (Wowchemy)
+└── netlify.toml         # Netlify deployment configuration
+```
+
+## Troubleshooting
+
+### Hugo version errors
+Make sure you're using Hugo extended version 0.139.0 or later. Check your version with:
+```bash
+hugo version
+```
+
+### R Markdown rendering issues
+Ensure you have the required R packages installed:
+```r
+install.packages(c("rmarkdown", "blogdown", "xaringan"))
+```
+
+### Missing fonts in slides
+Some slides use the [Lato](https://fonts.google.com/specimen/Lato) font. Install it locally or view slides in a browser with internet access.
