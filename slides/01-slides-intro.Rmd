@@ -2,7 +2,7 @@
 title: "Lecture 01"
 subtitle: "Introduction to Environmental Economics"
 author: Ivan Rudik
-date: AEM 4510
+date: AEM 4510 / AEM 5510 / ECON 3865
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -59,7 +59,7 @@ name: course_set_up
 
 ---
 
-# AEM 4510 / AEM 5510 / ECON 3865: Basics
+# Basics
 
 .hi[Professor:] Ivan Rudik
 
@@ -71,50 +71,68 @@ name: course_set_up
 
 .hi[Prereqs:] MATH 1110, and either AEM 2600 or ECON 3030
 
-.hi[Course website:] [https://aem4510.ivanrudik.com](https://aem4510.ivanrudik.com)
-
-
 ---
 
-# AEM 4510 / AEM 5510 / ECON 3865: Grading
+# Grading
 
-.hi[5 prelims (20% each):] canvas-based, simple questions (solo)
-  - 5 in class prelims + final: lowest score is dropped
+.hi[4 prelims (20% each):] 
+  - Feb 12, Mar 17, Apr 14, May 5
   - Prelims will be a combination of multiple choice, short answer, graphical, and simple mathematical questions that will not require a calculator
-
-.hi[3 Problem Sets (15%, 10%, 5%):] mix of quantitative and conceptual problems to give you practice in learning key concepts (teams of 3)
-  - 1 before each prelim: Feb 6, Mar 13, Apr 17 
-
----
-
-# AEM 4510 / AEM 5510 / ECON 3865: Grading 
-
-.hi[3 Prelims (15%, 15%, 10%):] test your understanding of key concepts (solo)
-  - Feb 15, Mar 22, Apr 26
   - .hi[SDS:] This class is in the Alternative Test Program, if approved for exam accommodations, you must request your exam accommodation(s) for this course and fill out an exam request form for each exam in this course via the SDS student portal by February 8th 
+  - No makeup prelims: if you miss a prelim, it's weight is equally distributed to your other prelims
 
-.hi[1 Final Project (5% paper, 2% presentation, 3% team eval):] put your understanding of key concepts to work on real world issues (teams of 3)
-  - Presentations last 3ish days of class, paper due May 16 during finals week
-  
+
+---
+
+# Grading
+.hi[4 Problem Sets (5% each):] mix of quantitative and conceptual problems to give you practice in learning key concepts (teams of 3)
+  - 1 before each prelim: Feb 10, Mar 12, Apr 9, Apr 30
+  - Solutions posted immediately after the deadline
+  - No late submissions
   
 ---
 
-# AEM 4510 / AEM 5510 / ECON 3865: Content
+# Content
 
 .hi[Weeks 1-7ish:] the economics of environmental regulation
   - More theoretical, graphical
-  - Taxes, cap and trade, regulating monopolies, etc
+  - Taxes, cap and trade, regulating monopolies, tariffing other countries, etc
   
-.hi[Weeks 7-14ish:] using markets (real and financial) to tell us about the environment
+.hi[Weeks 7-14ish:] using markets (real and financial) to learn about the environment
   - Some theory, also real world analyses and data
   - valuing recreation, housing markets, bond markets, green instruments
   
-  
+
 ---
 
-# AEM 4510 / AEM 5510 / ECON 3865: Last words
+# In class
 
-This was just an overview, syllabus on canvas and course website has a lot more details about specific requirements
+No recording or sharing of materials outside class: Each person in this class is expected to respect the principles of academic freedom for instructors and classmates and will maintain the privacy of the classroom environment, as outlined in Cornell's Code of Academic Integrity.
+
+No use of electronics in class: the use of laptops, tablets, phones, or other electronics in class is prohibited. Notes must be taken on paper.
+
+---
+
+# Why no electronics?
+
+The reason for no electronics is pedagogical: .hi-blue[to improve learning in the course.] 
+
+Laptop or tablet use in class (even just for notes) is associated with decreased learning and lower test scores in a variety of settings
+
+
+.footnote[
+Sana, F., Weston, T., & Cepeda, N. (2013). *Computers & Education*, 62, 24-31.; 
+Mueller, P. & Oppenheimer, D. (2014). *Psychological Science*, 25(6), 1159-1168.; 
+Carter, S. P., Greenberg, K., & Walker, M. S. (2017). *Economics of Education Review*, 56, 118-132.
+] 
+
+I post slides after we finish each section so you will not miss any content
+
+---
+
+# Last words
+
+This was just an overview, canvas has a lot more details about specific requirements
 
 
 --
@@ -191,7 +209,7 @@ knitr::include_graphics("files/01-pollution.jpg")
 # How do people respond to info?
 
 .pull-left[
-```{r sequoia-tweet, out.width = "200px", echo = FALSE, fig.pos="c"}
+```{r sequoia-tweet, out.width = "400px", echo = FALSE, fig.pos="c"}
 knitr::include_graphics("files/01-sequoia-tweet.png")
 ```
 ]
@@ -222,8 +240,8 @@ knitr::include_graphics("files/01-temp-anomaly.png")
 
 # Climate change
 
-```{r, echo = FALSE}
-embed_url("https://youtu.be/c8vLVrxWIpg") %>%
+```{r, echo = FALSE} 
+embed_url("https://www.youtube.com/watch?v=c8vLVrxWIpg") |>
   use_align("center")
 ```
 

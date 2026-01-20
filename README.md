@@ -19,9 +19,9 @@ This repository contains the course website for AEM 4510, built with [Hugo](http
    cd aem4510
    ```
 
-2. Start the Hugo development server:
+2. Start the development server:
    ```bash
-   hugo server
+   Rscript -e "blogdown::serve_site()"
    ```
 
 3. Open http://localhost:1313 in your browser

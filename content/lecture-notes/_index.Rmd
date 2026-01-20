@@ -53,7 +53,7 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
   - [Lecture notes](07-second-best)
   - *Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.*
 
-### Carbon Tariffs
+### Climate Policy and Trade:Carbon Tariffs
 
   - [Lecture notes](08-carbon-tariffs)
   - Brunel, Claire, and Arik Levinson. "[Carbon Tariffs 101.](https://www.nber.org/system/files/working_papers/w33024/w33024.pdf)" NBER Working Paper No. 33024 (2024).
@@ -120,11 +120,11 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
   - *Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).*
 
   
-### Corporate Governance
+<!-- ### Corporate Governance
 
   - [Lecture notes](18-corporate-governance)
   - XYZ
-
+ -->
 
 <!-- ### Climate change science -->
 
