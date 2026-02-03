@@ -14,7 +14,6 @@
     <script src="05-slides-taxes_files/panelset/panelset.js"></script>
     <script src="05-slides-taxes_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
-    <link href="05-slides-taxes_files/vembedr/css/vembedr.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -48,7 +47,7 @@ if (!require("pacman")) install.packages("pacman")
 
 ``` r
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
@@ -86,6 +85,7 @@ pacman::p_load(
 ```
 
 ``` r
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -134,11 +134,7 @@ name: taxes
 
 # Emission taxes
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/SXAjk3lYNV0" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-emission-taxes-intro.mp4" type="video/mp4"></video>
 
 ---
 
@@ -439,6 +435,126 @@ It is as if the government claimed the property rights to the air on behalf of t
 
 ---
 
+class: inverse, center, middle
+name: congestion
+
+# Congestion Pricing
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Congestion pricing
+
+.hi[Congestion pricing] is a Pigouvian tax on driving in high-traffic areas
+
+--
+
+Drivers impose external costs on others:
+- Traffic delays
+- Air pollution
+- Noise
+- Accident risk
+
+--
+
+A toll internalizes these externalities by making drivers pay the social cost of their trips
+
+---
+
+# NYC congestion pricing
+
+In January 2025, NYC became the first US city to implement congestion pricing
+
+--
+
+.hi[How it works:]
+- $9 toll for cars entering Manhattan south of 60th Street (peak hours)
+- $2.25 for motorcycles, $14.40 for small trucks, $21.60 for large trucks
+- Off-peak and overnight discounts
+- Exemptions for emergency vehicles, buses, residents below income threshold
+
+---
+
+# NYC congestion pricing
+
+.hi[Goals:]
+- Reduce traffic by 10-15%
+- Raise $1 billion annually for MTA public transit improvements
+- Faster bus and emergency vehicle travel times
+- Improved air quality in Manhattan
+
+---
+
+# NYC congestion pricing explained
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-nyc-congestion-explained.mp4" type="video/mp4"></video>
+
+---
+
+# NYC congestion pricing: one year later
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-nyc-congestion-one-year.mp4" type="video/mp4"></video>
+
+---
+
+# Taxes don't always go smoothly
+
+Pigouvian taxes are economically efficient, but can face .hi[political backlash]
+
+--
+
+In 2018, France proposed a fuel tax increase to reduce carbon emissions
+- 6.5 cents/liter on diesel
+- 2.9 cents/liter on gasoline
+
+--
+
+The response: .hi-red[Yellow Vest protests] (Gilets Jaunes)
+
+---
+
+# France's Yellow Vest protests
+
+.hi[What happened:]
+- 300,000+ protesters across France
+- Blocked roads, occupied roundabouts
+- Violent clashes in Paris
+- 10 deaths, thousands injured over months of protests
+
+--
+
+.hi[Why?]
+- Rural and suburban households depend on cars
+- Tax seen as burden on working class while wealthy unaffected
+- "End of the world vs end of the month"
+
+---
+
+# France's Yellow Vest protests
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-france-yellow-vests.mp4" type="video/mp4"></video>
+
+---
+
+# Lessons for environmental taxes
+
+The Yellow Vests show that .hi[distributional concerns matter]
+
+--
+
+Successful environmental taxes often include:
+- Revenue recycling to affected households
+- Exemptions for low-income groups
+- Gradual phase-in periods
+- Clear communication of benefits
+
+--
+
+NYC's congestion pricing includes income-based exemptions for this reason
+
+---
+
 # Taxes vs Standards
 &lt;center&gt;
 &lt;img src="files/05-bakken.png" width="80%" /&gt;
@@ -456,11 +572,7 @@ It is as if the government claimed the property rights to the air on behalf of t
 
 # Emission taxes
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/kiiLzsleuwU" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-emission-taxes-2.mp4" type="video/mp4"></video>
 
 ---
 

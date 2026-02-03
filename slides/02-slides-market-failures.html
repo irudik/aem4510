@@ -14,7 +14,6 @@
     <script src="02-slides-market-failures_files/panelset/panelset.js"></script>
     <script src="02-slides-market-failures_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
-    <link href="02-slides-market-failures_files/vembedr/css/vembedr.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -48,7 +47,7 @@ if (!require("pacman")) install.packages("pacman")
 
 ``` r
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
@@ -86,6 +85,7 @@ pacman::p_load(
 ```
 
 ``` r
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -352,12 +352,13 @@ Markets rely on prices to signal the social value of goods
 
 # No markets lead to issues in the Southwest
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/yRUs_gLgpx4" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-southwest-water.mp4" type="video/mp4"></video>
 
+---
+
+# No markets lead to issues in Arizona
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-arizona-water.mp4" type="video/mp4"></video>
 
 ---
 
@@ -434,11 +435,7 @@ Used to treat lice
 
 # The birth of the environmental movement
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/kwb6OvvxMjg" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="800" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-env-movement-birth.mp4" type="video/mp4"></video>
 
 
 ---
@@ -653,11 +650,7 @@ The private actors are not accounting for the .hi[external costs] they are impos
 
 # Estimating marginal damages with EZ-Pass
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/JLHXYTbSQZY" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-ezpass-damages.mp4" type="video/mp4"></video>
 
 ---
 
@@ -883,21 +876,13 @@ The private actors are not accounting for the social benefits they are imposing 
 
 # COVID and positive externalities
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/17lldWWxYC0" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-covid-externalities-1.mp4" type="video/mp4"></video>
 
 ---
 
 # COVID and positive externalities
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/4vcdJ2Zsc8U" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-covid-externalities-2.mp4" type="video/mp4"></video>
 
 ---
 
@@ -1292,7 +1277,7 @@ Externalities and public goods/bads often exhibit many of the same features
 
 Both are subject to the .hi[Free-Rider Problem]
 
-&gt; A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them[1] or under-pay
+&gt; A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them or under-pay
 
 e.g.
 
@@ -1443,6 +1428,8 @@ Each has a different marginal benefit for water depth:
 - Hikers: MB = 6-Q
 - MC of provision: MC = Q
 
+We assume MB can't go negative
+
 ]
 
 
@@ -1478,7 +1465,7 @@ At each Q, sum the MBs
 
 Why is the aggregate demand curve kinked?
 
-Because at each quantity/depth, only certain groups are willing to use the river
+Because at each quantity/depth, only certain groups are willing to pay
 
 Kinks are at the dotted lines, where PMBs hit zero
 
@@ -1499,7 +1486,7 @@ At quantities &gt; 10, only boaters are willing to pay
 
 At quantities &gt; 6 and &lt;= 10, only boaters and anglers are willing to pay
 
-At quantities =&lt; 6 all groups are willing to pay to use the river
+At quantities =&lt; 6 all groups are willing to pay
 
 ]
 
@@ -1577,7 +1564,7 @@ If the government is able to provide the good, how does it finance the cost rais
 
 # Public goods financing
 
-It charges each group a share of this price
+It can charge each group a constant share of this price
 
 --
 

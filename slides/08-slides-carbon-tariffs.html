@@ -49,6 +49,7 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -105,6 +106,18 @@ name: overview
 Carbon tariffs are tariffs imposed on imports based on their .hi[carbon content]
 
 --
+
+Why would we want carbon tariffs?
+
+---
+
+# Understanding border carbon adjustments
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/08-carbon-tariffs-bca-explained.mp4" type="video/mp4"></video>
+
+---
+
+# Carbon tariffs
 
 Why would we want carbon tariffs?
 

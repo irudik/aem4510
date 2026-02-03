@@ -47,7 +47,7 @@ if (!require("pacman")) install.packages("pacman")
 
 ``` r
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
@@ -85,6 +85,7 @@ pacman::p_load(
 ```
 
 ``` r
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -324,7 +325,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/05-cnp1.png" width="40%" /&gt;
+&lt;img src="files/06-cnp1.png" width="40%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -332,7 +333,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/05-cnp2.png" width="70%" /&gt;
+&lt;img src="files/06-cnp2.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -340,7 +341,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/05-arp1.png" width="80%" /&gt;
+&lt;img src="files/06-arp1.png" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -348,7 +349,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/05-arp2.png" width="80%" /&gt;
+&lt;img src="files/06-arp2.png" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -356,7 +357,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/05-arp3.png" width="100%" /&gt;
+&lt;img src="files/06-arp3.png" width="100%" /&gt;
 &lt;/center&gt;
 
 
@@ -1052,7 +1053,7 @@ Another way is .hi[zonal trading]: firms can only trade in similar MD areas
 Below are estimates of efficient trading ratios for the Acid Rain Program
 
 &lt;center&gt;
-&lt;img src="files/05-trading-ratios.png" width="80%" /&gt;
+&lt;img src="files/06-trading-ratios.png" width="80%" /&gt;
 &lt;/center&gt;
 
 Muller and Mendelsohn (2009)
@@ -1064,7 +1065,7 @@ Muller and Mendelsohn (2009)
 Trading ratios are required because damages are heterogeneous across space
 
 &lt;center&gt;
-&lt;img src="files/05-damages.png" width="60%" /&gt;
+&lt;img src="files/06-damages.png" width="60%" /&gt;
 &lt;/center&gt;
 
 Muller and Mendelsohn (2009)
@@ -1076,7 +1077,7 @@ Muller and Mendelsohn (2009)
 The Acid Rain Program .hi-red[increased] damages in the eastern US
 
 &lt;center&gt;
-&lt;img src="files/05-arp4.png" width="50%" /&gt;
+&lt;img src="files/06-arp4.png" width="50%" /&gt;
 &lt;/center&gt;
 
 Chan et al. (2018)
@@ -1096,7 +1097,7 @@ Chan et al. (2018) JEEM:
 .hi-red[Redder:] trading lead to greater emissions vs no trading
 
 &lt;center&gt;
-&lt;img src="files/05-arp5.jpg" width="70%" /&gt;
+&lt;img src="files/06-arp5.jpg" width="70%" /&gt;
 &lt;/center&gt;
 
 
@@ -1150,7 +1151,7 @@ $39,000 per ton of NOx in 2000
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/05-reclaim1.png" width="100%" /&gt;
+&lt;img src="files/06-reclaim1.png" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1183,7 +1184,7 @@ Tradble permit systems are increasingly common:
 # RGGI
 
 &lt;center&gt;
-&lt;img src="files/05-rggi1.png" width="100%" /&gt;
+&lt;img src="files/06-rggi1.png" width="100%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1191,7 +1192,7 @@ Tradble permit systems are increasingly common:
 # RGGI
 
 &lt;center&gt;
-&lt;img src="files/05-rggi2.png" width="70%" /&gt;
+&lt;img src="files/06-rggi2.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1199,7 +1200,7 @@ Tradble permit systems are increasingly common:
 # AB32
 
 &lt;center&gt;
-&lt;img src="files/05-ab32.png" width="70%" /&gt;
+&lt;img src="files/06-ab32.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1207,7 +1208,7 @@ Tradble permit systems are increasingly common:
 # EU-ETS
 
 &lt;center&gt;
-&lt;img src="files/05-eu-ets.png" width="70%" /&gt;
+&lt;img src="files/06-eu-ets.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1215,7 +1216,7 @@ Tradble permit systems are increasingly common:
 # AB32
 
 &lt;center&gt;
-&lt;img src="files/05-china.png" width="100%" /&gt;
+&lt;img src="files/06-china.png" width="100%" /&gt;
 &lt;/center&gt;
 
 
@@ -1516,6 +1517,12 @@ Once a firm meets a standard, there's no additional incentive beyond reducing ab
 Taxes and subsidies give the firm extra benefits for further reductions
 
 ]
+
+---
+
+# How do carbon markets work?
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/06-permits-cap-and-trade.mp4" type="video/mp4"></video>
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

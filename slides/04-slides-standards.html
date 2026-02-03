@@ -14,7 +14,6 @@
     <script src="04-slides-standards_files/panelset/panelset.js"></script>
     <script src="04-slides-standards_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
-    <link href="04-slides-standards_files/vembedr/css/vembedr.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -48,7 +47,7 @@ if (!require("pacman")) install.packages("pacman")
 
 ``` r
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
@@ -86,6 +85,7 @@ pacman::p_load(
 ```
 
 ``` r
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -150,7 +150,7 @@ Next we will look at command and control and emission standard regulations
 # Pigouvian policy: Arthur Pigou
 
 .pull-left[
-&lt;img src="files/03-pigou.png" width="100%" /&gt;
+&lt;img src="files/04-pigou.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -163,7 +163,7 @@ Pigou is responsible for the famous distinction between private and  social marg
 # Working example: pollution from coal
 
 .pull-left[
-&lt;img src="files/03-coal1.jpg" width="100%" /&gt;
+&lt;img src="files/04-coal1.jpg" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -177,11 +177,7 @@ Coal power is one of the largest sources of several of the most harmful air poll
 
 # Coal power: air pollutants
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/dlXptCSsdkQ" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-coal-pollutants.mp4" type="video/mp4"></video>
 
 ---
 
@@ -228,19 +224,19 @@ Typical plant with control equipment (e.g. baghouses) emits just a few tons a ye
 
 # Costs of particulate matter
 
-&lt;img src="files/03-pm1.png" width="80%" /&gt;
+&lt;img src="files/04-pm1.png" width="80%" /&gt;
 
 ---
 
 # Costs of particulate matter
 
-&lt;img src="files/03-pm2.png" width="80%" /&gt;
+&lt;img src="files/04-pm2.png" width="80%" /&gt;
 
 ---
 
 # Costs of particulate matter
 
-&lt;img src="files/03-pm3.png" width="80%" /&gt;
+&lt;img src="files/04-pm3.png" width="80%" /&gt;
 
 ---
 
@@ -262,18 +258,14 @@ Activated carbon injection technology can reduce mercury  emissions by up to 90 
 
 # Coal power: air pollutants 
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/xajjmbJrfEM" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-coal-pollution-news.mp4" type="video/mp4"></video>
 
 ---
 
 # Coal and health in 1800s Britain
 
 .pull-left[
-&lt;img src="files/03-coal-health.png" width="60%" /&gt;
+&lt;img src="files/04-coal-health.png" width="60%" /&gt;
 
 
 ]
@@ -290,11 +282,7 @@ Beach and Hanlon (2018)
 
 # Coal going forward
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/yRcshaSK46M" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-coal-future.mp4" type="video/mp4"></video>
 
 ---
 
@@ -622,7 +610,7 @@ If you're interested in doing cool real world policy work on the environment, RF
 
 Half of the environmental economists at Dyson have current/prior affiliations with RFF
 
-&lt;img src="files/03-rff1.png" width="50%" /&gt;
+&lt;img src="files/04-rff1.png" width="50%" /&gt;
 
 ---
 
@@ -645,7 +633,7 @@ What are some CC policy examples?
 # Command and control
 
 .pull-left[
-&lt;img src="files/03-cc-distortion.png" width="100%" /&gt;
+&lt;img src="files/04-cc-distortion.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -659,7 +647,7 @@ They also have significant costs in that they lead to distortions
 # Command and control
 
 .pull-left[
-&lt;img src="files/03-cc-distortion.png" width="100%" /&gt;
+&lt;img src="files/04-cc-distortion.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -673,7 +661,7 @@ Ideally, if we want to reduce sulfur dioxide emissions, we would like coal plant
 
 # Command and control
 
-&lt;img src="files/03-byrd-legislation.png" width="100%" /&gt;
+&lt;img src="files/04-byrd-legislation.png" width="100%" /&gt;
 
 Senator Byrd from WV single-handledly blocked legislation for sulfur regulations and pushed for scrubber mandates so that high-sulfur WV coal could compete with low-sulfur WY coal
 
@@ -917,7 +905,7 @@ Currently, Tier 3 standards are being phased in
 # Tailpipe emission standards
 
 &lt;center&gt;
-&lt;img src="files/03-tailpipe.png" width="70%" /&gt;
+&lt;img src="files/04-tailpipe.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -925,8 +913,67 @@ Currently, Tier 3 standards are being phased in
 # Tailpipe emission standards
 
 &lt;center&gt;
-&lt;img src="files/03-tailpipe2.png" width="90%" /&gt;
+&lt;img src="files/04-tailpipe2.png" width="90%" /&gt;
 &lt;/center&gt;
+
+---
+
+class: inverse, center, middle
+name: california-ev
+
+# California's EV Mandate
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# California's Advanced Clean Cars II
+
+In 2022, California adopted the .hi[Advanced Clean Cars II] regulation
+
+--
+
+.hi[The standard:]
+- 35% of new car sales must be zero-emission vehicles by 2026
+- 68% by 2030
+- 100% by 2035 (complete ban on new gas car sales)
+
+--
+
+First state to mandate a complete phase-out of internal combustion engines
+
+--
+
+17 other states have adopted or are considering similar rules under Clean Air Act Section 177
+
+---
+
+# California's EV mandate
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-california-ev-mandate.mp4" type="video/mp4"></video>
+
+---
+
+# Senate blocks California's waiver
+
+In March 2025, the US Senate voted to block California's EV mandate
+
+--
+
+.hi[How it happened:]
+- EPA grants California a "waiver" to set stricter emissions standards than federal rules
+- Congress used the Congressional Review Act to overturn the waiver
+- Senate voted 51-46 to block California's authority
+
+---
+
+# Senate blocks California's waiver
+
+.hi[Implications:]
+- California cannot enforce its 2035 gas car ban
+- Other states that adopted California's rules are also affected
+- Sets precedent for federal preemption of state environmental standards
+- Automakers face regulatory uncertainty after investing billions in EV production
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
