@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -106,8 +107,7 @@ Do we actually .hi[NEED] government intervention?
 
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/pKJiXZKIh_U") %>%
-  use_align("center")
+local_video("videos/03-coase-ronald-coase.mp4")
 ```
 
 ---
@@ -124,7 +124,7 @@ then:
 
 --
 
-the most efficient or optimal economic activity will occur regardless of who holds the property rights
+the socially efficient or optimal economic activity will occur regardless of who holds the property rights
 
 --
 
@@ -137,8 +137,7 @@ The right to pollute (a resource) will end up in the hands who value it most thr
 
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/fe05EYFlMLk") %>%
-  use_align("center")
+local_video("videos/03-coase-property-rights.mp4")
 ```
 
 Property rights are only as good as prevailing norms or enforcement
@@ -585,13 +584,12 @@ If the doctor has property rights, the confectioner can pay the doctor > 250 but
 
 # Coase Caveats
 
-Coasean bargaining does not always work
+Coasean bargaining does not always work like you think
 
 There are two key pieces we need to have satisfied:
 
 1. No Transactions costs
-2. No income effects
-
+2. No wealth/income effects
 
 ---
 
@@ -665,11 +663,11 @@ This means we can write the confectioner's total profit as:
 
 $$\pi(N) = B(N) - MC \times N - tr$$
 
-Where $B(N)$ is the benefits to the confectioner of noise (area under the MB curve)
+Where $B(N)$ is the benefits to the confectioner of noise (area under MB)
 
 --
 
-It's optimal choice of $N$ (and therefore $\theta$) is given by the first-order condition:
+It's optimal choice of $N$ (and $\theta$) is given by the first-order condition:
 
 --
 
@@ -808,6 +806,43 @@ Why?
 --
 
 In cases where the gains from bargaining are small, transactions costs may exceed the benefits and prohibit bargaining from occurring
+
+
+---
+
+# Coase Caveats: Wealth effects
+
+Changing the initial endowment can change our outcome if wealth changes the doctor's preferences for noise
+
+--
+
+The property right is valuable: the owner is richer even before trading
+
+Quiet makes the doctor more productive: owning the property right raised his wealth before negotiating
+
+--
+
+With diminishing marginal utility of wealth, extra dollar matters less:
+  - If the doctor owns quiet, he requires a larger payment to accept noise 
+  - If he does not own quiet, he is not willing to pay as much to reduce the noise
+
+
+---
+
+# Coase Caveats: Wealth effects
+
+Suppose the confectioner gains $90 from noise
+
+When the doctor owns the right to quiet he is wealthier and values the noise at $100, but when the doctor does not own the right to quiet he is poorer and values the noise at $80
+
+
+- Doctor owns quiet (wealthier): WTA to accept noise = $100 $\rightarrow$ no trade $\rightarrow$ quiet
+- Confectioner owns noise (doctor poorer): WTP for quiet = $80 $\rightarrow$ no trade $\rightarrow$ noise
+
+--
+
+Different initial rights $\rightarrow$ different final allocation
+
 
 
 ---

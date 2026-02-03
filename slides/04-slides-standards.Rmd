@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -107,9 +108,8 @@ Coal power is one of the largest sources of several of the most harmful air poll
 
 # Coal power: air pollutants
 
-```{r, out.width = "100%", echo = FALSE}
-embed_url("https://youtu.be/dlXptCSsdkQ") %>%
-  use_align("center")
+```{r, echo = FALSE}
+local_video("videos/04-standards-coal-pollutants.mp4")
 ```
 
 ---
@@ -197,9 +197,8 @@ Activated carbon injection technology can reduce mercury  emissions by up to 90 
 
 # Coal power: air pollutants 
 
-```{r, echo = F}
-embed_url("https://youtu.be/xajjmbJrfEM") %>%
-  use_align("center")
+```{r, echo = FALSE}
+local_video("videos/04-standards-coal-pollution-news.mp4")
 ```
 
 ---
@@ -226,9 +225,8 @@ Beach and Hanlon (2018)
 
 # Coal going forward
 
-```{r, echo = F}
-embed_url("https://youtu.be/yRcshaSK46M") %>%
-  use_align("center")
+```{r, echo = FALSE}
+local_video("videos/04-standards-coal-future.mp4")
 ```
 
 ---
@@ -1076,3 +1074,64 @@ knitr::include_graphics("files/04-tailpipe.png")
 knitr::include_graphics("files/04-tailpipe2.png")
 ```
 </center>
+
+---
+
+class: inverse, center, middle
+name: california-ev
+
+# California's EV Mandate
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# California's Advanced Clean Cars II
+
+In 2022, California adopted the .hi[Advanced Clean Cars II] regulation
+
+--
+
+.hi[The standard:]
+- 35% of new car sales must be zero-emission vehicles by 2026
+- 68% by 2030
+- 100% by 2035 (complete ban on new gas car sales)
+
+--
+
+First state to mandate a complete phase-out of internal combustion engines
+
+--
+
+17 other states have adopted or are considering similar rules under Clean Air Act Section 177
+
+---
+
+# California's EV mandate
+
+```{r, echo = FALSE}
+local_video("videos/04-standards-california-ev-mandate.mp4")
+```
+
+---
+
+# Senate blocks California's waiver
+
+In March 2025, the US Senate voted to block California's EV mandate
+
+--
+
+.hi[How it happened:]
+- EPA grants California a "waiver" to set stricter emissions standards than federal rules
+- Congress used the Congressional Review Act to overturn the waiver
+- Senate voted 51-46 to block California's authority
+
+---
+
+# Senate blocks California's waiver
+
+.hi[Implications:]
+- California cannot enforce its 2035 gas car ban
+- Other states that adopted California's rules are also affected
+- Sets precedent for federal preemption of state environmental standards
+- Automakers face regulatory uncertainty after investing billions in EV production

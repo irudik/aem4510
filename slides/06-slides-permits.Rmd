@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -2062,3 +2063,11 @@ Once a firm meets a standard, there's no additional incentive beyond reducing ab
 Taxes and subsidies give the firm extra benefits for further reductions
 
 ]
+
+---
+
+# How do carbon markets work?
+
+```{r, echo = FALSE}
+local_video("videos/06-permits-cap-and-trade.mp4")
+```

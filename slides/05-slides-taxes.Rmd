@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -61,8 +62,7 @@ name: taxes
 # Emission taxes
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/SXAjk3lYNV0") %>%
-  use_align("center")
+local_video("videos/05-taxes-emission-taxes-intro.mp4")
 ```
 
 ---
@@ -441,6 +441,132 @@ It is as if the government claimed the property rights to the air on behalf of t
 
 ---
 
+class: inverse, center, middle
+name: congestion
+
+# Congestion Pricing
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Congestion pricing
+
+.hi[Congestion pricing] is a Pigouvian tax on driving in high-traffic areas
+
+--
+
+Drivers impose external costs on others:
+- Traffic delays
+- Air pollution
+- Noise
+- Accident risk
+
+--
+
+A toll internalizes these externalities by making drivers pay the social cost of their trips
+
+---
+
+# NYC congestion pricing
+
+In January 2025, NYC became the first US city to implement congestion pricing
+
+--
+
+.hi[How it works:]
+- $9 toll for cars entering Manhattan south of 60th Street (peak hours)
+- $2.25 for motorcycles, $14.40 for small trucks, $21.60 for large trucks
+- Off-peak and overnight discounts
+- Exemptions for emergency vehicles, buses, residents below income threshold
+
+---
+
+# NYC congestion pricing
+
+.hi[Goals:]
+- Reduce traffic by 10-15%
+- Raise $1 billion annually for MTA public transit improvements
+- Faster bus and emergency vehicle travel times
+- Improved air quality in Manhattan
+
+---
+
+# NYC congestion pricing explained
+
+```{r, echo = FALSE}
+local_video("videos/05-taxes-nyc-congestion-explained.mp4")
+```
+
+---
+
+# NYC congestion pricing: one year later
+
+```{r, echo = FALSE}
+local_video("videos/05-taxes-nyc-congestion-one-year.mp4")
+```
+
+---
+
+# Taxes don't always go smoothly
+
+Pigouvian taxes are economically efficient, but can face .hi[political backlash]
+
+--
+
+In 2018, France proposed a fuel tax increase to reduce carbon emissions
+- 6.5 cents/liter on diesel
+- 2.9 cents/liter on gasoline
+
+--
+
+The response: .hi-red[Yellow Vest protests] (Gilets Jaunes)
+
+---
+
+# France's Yellow Vest protests
+
+.hi[What happened:]
+- 300,000+ protesters across France
+- Blocked roads, occupied roundabouts
+- Violent clashes in Paris
+- 10 deaths, thousands injured over months of protests
+
+--
+
+.hi[Why?]
+- Rural and suburban households depend on cars
+- Tax seen as burden on working class while wealthy unaffected
+- "End of the world vs end of the month"
+
+---
+
+# France's Yellow Vest protests
+
+```{r, echo = FALSE}
+local_video("videos/05-taxes-france-yellow-vests.mp4")
+```
+
+---
+
+# Lessons for environmental taxes
+
+The Yellow Vests show that .hi[distributional concerns matter]
+
+--
+
+Successful environmental taxes often include:
+- Revenue recycling to affected households
+- Exemptions for low-income groups
+- Gradual phase-in periods
+- Clear communication of benefits
+
+--
+
+NYC's congestion pricing includes income-based exemptions for this reason
+
+---
+
 # Taxes vs Standards
 <center>
 ```{r, out.width = "80%", fig.pos="c", echo = FALSE}
@@ -463,8 +589,7 @@ knitr::include_graphics("files/05-bakken.png")
 # Emission taxes
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/kiiLzsleuwU") %>%
-  use_align("center")
+local_video("videos/05-taxes-emission-taxes-2.mp4")
 ```
 
 ---

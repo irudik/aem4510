@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -60,9 +61,8 @@ name: tradable permits
 
 # Learning about arctic sea ice
 
-```{r, out.width = "100%", echo = FALSE}
-embed_url("https://youtu.be/MicU8h4-kNw") %>%
-  use_align("center")
+```{r, echo = FALSE}
+local_video("videos/09-uncertainty-arctic-sea-ice.mp4")
 ```
 
 ---

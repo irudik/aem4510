@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -314,10 +315,16 @@ Markets rely on prices to signal the social value of goods
 # No markets lead to issues in the Southwest
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/yRUs_gLgpx4") %>%
-  use_align("center")
+local_video("videos/02-market-failures-southwest-water.mp4")
 ```
 
+---
+
+# No markets lead to issues in Arizona
+
+```{r, echo = FALSE}
+local_video("videos/02-market-failures-arizona-water.mp4")
+```
 
 ---
 
@@ -401,8 +408,7 @@ knitr::include_graphics("files/02-ddt2.png")
 # The birth of the environmental movement
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/kwb6OvvxMjg") %>%
-  use_align("center")
+local_video("videos/02-market-failures-env-movement-birth.mp4", width = 800)
 ```
 
 
@@ -732,8 +738,7 @@ The private actors are not accounting for the .hi[external costs] they are impos
 # Estimating marginal damages with EZ-Pass
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/JLHXYTbSQZY") %>%
-  use_align("center")
+local_video("videos/02-market-failures-ezpass-damages.mp4")
 ```
 
 ---
@@ -1070,8 +1075,7 @@ The private actors are not accounting for the social benefits they are imposing 
 # COVID and positive externalities
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/17lldWWxYC0") %>%
-  use_align("center")
+local_video("videos/02-market-failures-covid-externalities-1.mp4")
 ```
 
 ---
@@ -1079,8 +1083,7 @@ embed_url("https://youtu.be/17lldWWxYC0") %>%
 # COVID and positive externalities
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/4vcdJ2Zsc8U") %>%
-  use_align("center")
+local_video("videos/02-market-failures-covid-externalities-2.mp4")
 ```
 
 ---
@@ -1506,7 +1509,7 @@ Externalities and public goods/bads often exhibit many of the same features
 
 Both are subject to the .hi[Free-Rider Problem]
 
-> A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them[1] or under-pay
+> A type of market failure that occurs when those who benefit from resources, public goods (such as public roads or hospitals), or services of a communal nature do not pay for them or under-pay
 
 e.g.
 
@@ -1696,6 +1699,8 @@ Each has a different marginal benefit for water depth:
 - Hikers: MB = 6-Q
 - MC of provision: MC = Q
 
+We assume MB can't go negative
+
 ]
 
 
@@ -1773,7 +1778,7 @@ At each Q, sum the MBs
 
 Why is the aggregate demand curve kinked?
 
-Because at each quantity/depth, only certain groups are willing to use the river
+Because at each quantity/depth, only certain groups are willing to pay
 
 Kinks are at the dotted lines, where PMBs hit zero
 
@@ -1794,7 +1799,7 @@ At quantities > 10, only boaters are willing to pay
 
 At quantities > 6 and <= 10, only boaters and anglers are willing to pay
 
-At quantities =< 6 all groups are willing to pay to use the river
+At quantities =< 6 all groups are willing to pay
 
 ]
 
@@ -1912,7 +1917,7 @@ If the government is able to provide the good, how does it finance the cost rais
 
 # Public goods financing
 
-It charges each group a share of this price
+It can charge each group a constant share of this price
 
 --
 

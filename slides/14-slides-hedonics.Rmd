@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -211,8 +212,7 @@ name: superfund
 # Superfund
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/Kjobz14i8kM") %>%
-  use_align("center")
+local_video("videos/14-hedonics-superfund.mp4")
 ```
 
 

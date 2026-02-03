@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork
 )
+source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -240,9 +241,8 @@ knitr::include_graphics("files/01-temp-anomaly.png")
 
 # Climate change
 
-```{r, echo = FALSE} 
-embed_url("https://www.youtube.com/watch?v=c8vLVrxWIpg") |>
-  use_align("center")
+```{r, echo = FALSE}
+local_video("videos/01-intro-climate-change.mp4")
 ```
 
 
@@ -375,8 +375,7 @@ Is Intro to Micro applicable everywhere?
 --
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/9qjvwQrZmpk") %>%
-  use_align("center")
+local_video("videos/01-intro-micro-applicable.mp4")
 ```
 
 ---
@@ -388,8 +387,7 @@ How do we solve some problems in practice?
 --
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/QwgximJ9vPk") %>%
-  use_align("center")
+local_video("videos/01-intro-creating-markets.mp4")
 ```
 
 ---
@@ -854,7 +852,6 @@ E.g.
 # Ecological wealth
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/1yzmOrcLIPo") %>%
-  use_align("center")
+local_video("videos/01-intro-ecological-wealth.mp4")
 ```
 

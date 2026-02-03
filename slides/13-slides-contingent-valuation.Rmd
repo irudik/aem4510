@@ -20,8 +20,9 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis
 )
+source("R/video_helpers.R")
 set.seed(1)
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -169,8 +170,7 @@ CVM has had a lot of impact on policy:
 1989: Exxon Valdez oil spill — non-use value losses estimated by CV method to exceed $2.2 billion; Exxon launches research & campaign to discredit CV 
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/YPAH8XUEMY4") %>%
-  use_align("center")
+local_video("videos/13-cv-exxon-valdez.mp4")
 ```
 
 ---

@@ -19,9 +19,10 @@ output:
 exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load( 
-  tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf, vembedr
+pacman::p_load(
+  tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf
 )
+source("R/video_helpers.R")
 set.seed(1)
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -129,8 +130,7 @@ name: background
 # Should we separate the Great Lakes and Mississippi?
 
 ```{r, echo = FALSE}
-embed_url("https://youtu.be/lIRXDDG6yB8") %>%
-  use_align("center")
+local_video("videos/12-travel-cost-great-lakes-carp.mp4")
 ```
 
 ---
