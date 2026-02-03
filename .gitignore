@@ -47,6 +47,9 @@ vignettes/*.pdf
 # Slide build artifacts
 slides/*_files/
 
+# Local video files (download with slides/scripts/download_videos.sh)
+slides/videos/*.mp4
+
 # Hugo build output
 public/
 

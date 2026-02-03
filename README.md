@@ -89,6 +89,14 @@ Slides are in `slides/` and use [xaringan](https://github.com/yihui/xaringan). T
 Rscript -e "rmarkdown::render('slides/01-slides-intro.Rmd')"
 ```
 
+To view rendered slides locally (recommended for embedded media like YouTube), serve the `slides/` directory over HTTP:
+
+```bash
+Rscript -e "servr::httw('slides')"
+```
+
+Then open `http://127.0.0.1:4321/01-slides-intro.html` (or the slide file you rendered).
+
 To generate PDF versions of slides, use the `slides/make-pdf.R` script with [pagedown](https://github.com/rstudio/pagedown).
 
 ## Deployment
@@ -147,3 +155,70 @@ install.packages(c("rmarkdown", "blogdown", "xaringan"))
 
 ### Missing fonts in slides
 Some slides use the [Lato](https://fonts.google.com/specimen/Lato) font. Install it locally or view slides in a browser with internet access.
+
+## Offline Video Playback
+
+Slides use locally-hosted MP4 files instead of YouTube embeds for reliable offline playback in classrooms.
+
+### Prerequisites
+
+Install video download tools (one-time):
+```bash
+brew install yt-dlp ffmpeg
+```
+
+### Downloading Videos
+
+Download all videos listed in the manifest:
+```bash
+cd slides/scripts && ./download_videos.sh
+```
+
+The script skips already-downloaded files, so it's safe to re-run.
+
+### Adding a New Video
+
+1. **Add entry to `slides/video_manifest.csv`:**
+   ```csv
+   VIDEO_ID,NN-descriptive-name.mp4,NN-slides-name.Rmd,LINE,Description
+   ```
+   - `VIDEO_ID`: The YouTube video ID (from `youtube.com/watch?v=VIDEO_ID`)
+   - Filename: Use format `NN-topic-description.mp4` matching slide file number
+   - LINE: Approximate line number in the Rmd (for reference)
+
+2. **Update the Rmd slide file:**
+
+   In the setup chunk, ensure you have:
+   ```r
+   source("R/video_helpers.R")
+   ```
+
+   Where you want the video, add:
+   ```r
+   ```{r, echo = FALSE}
+   local_video("videos/NN-descriptive-name.mp4")
+   ```
+   ```
+
+3. **Download the new video:**
+   ```bash
+   cd slides/scripts && ./download_videos.sh
+   ```
+
+4. **Test:** Knit the slide deck and verify playback works offline.
+
+### Validating Videos
+
+Check that all videos in the manifest exist:
+```r
+setwd("slides")
+source("R/video_helpers.R")
+validate_videos()
+```
+
+### File Locations
+
+- `slides/video_manifest.csv` - Master list of all videos
+- `slides/videos/` - Downloaded MP4 files (git-ignored)
+- `slides/scripts/download_videos.sh` - Download script
+- `slides/R/video_helpers.R` - `local_video()` and `validate_videos()` functions
