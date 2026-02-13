@@ -55,3 +55,9 @@ public/
 
 # macOS
 **/.DS_Store
+
+# Netlify local state
+.netlify/
+
+# Node dependencies
+node_modules/
