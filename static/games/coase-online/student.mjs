@@ -151,6 +151,20 @@ function bindDraftInput(session, inputId, fieldName) {
   });
 }
 
+function bindEnterToSubmit(formId) {
+  const form = document.getElementById(formId);
+  form?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey) {
+      return;
+    }
+    if (event.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+    event.preventDefault();
+    form.requestSubmit();
+  });
+}
+
 function formatColumnLabel(columnName) {
   const acronymTokens = new Set(["id"]);
   const spacedText = String(columnName)
@@ -453,6 +467,7 @@ function renderStageForm(state) {
 
   fillSubmissionInputs(session, draft, ownSubmission, phase);
   document.getElementById("round-form")?.addEventListener("submit", submitRoundForm);
+  bindEnterToSubmit("round-form");
 }
 
 async function refreshState() {
@@ -507,6 +522,7 @@ async function joinPlayer() {
 joinButton.addEventListener("click", joinPlayer);
 playerNameInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     joinPlayer();
   }
 });

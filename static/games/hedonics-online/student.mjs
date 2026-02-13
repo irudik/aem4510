@@ -160,6 +160,20 @@ function bindDraftInput(session, inputId, fieldName) {
   });
 }
 
+function bindEnterToSubmit(formId) {
+  const form = document.getElementById(formId);
+  form?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey) {
+      return;
+    }
+    if (event.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+    event.preventDefault();
+    form.requestSubmit();
+  });
+}
+
 function submissionAttemptSummary(submission) {
   const attemptsUsed = Math.max(
     0,
@@ -472,6 +486,7 @@ function renderStageForm(state) {
 
   populateHouseInputs(session, draft, submission);
   document.getElementById("round-form")?.addEventListener("submit", submitRoundForm);
+  bindEnterToSubmit("round-form");
 }
 
 function renderReveal(revealState) {
@@ -540,6 +555,7 @@ async function joinTeam() {
 joinButton.addEventListener("click", joinTeam);
 teamNameInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     joinTeam();
   }
 });

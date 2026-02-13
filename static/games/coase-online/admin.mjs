@@ -391,12 +391,28 @@ async function applyPhaseUpdate() {
   }
 }
 
+function bindEnterAction(elements, action) {
+  for (const element of elements) {
+    element?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") {
+        return;
+      }
+      event.preventDefault();
+      action();
+    });
+  }
+}
+
 loginButton.addEventListener("click", adminLogin);
 logoutButton.addEventListener("click", adminLogout);
 createSessionButton.addEventListener("click", createSession);
 startGameButton.addEventListener("click", startGame);
 applyPhaseButton.addEventListener("click", applyPhaseUpdate);
 refreshButton.addEventListener("click", fetchAdminState);
+
+bindEnterAction([adminEmailInput, adminPasswordInput], adminLogin);
+bindEnterAction([sessionNameInput, expectedPlayerCountInput], createSession);
+bindEnterAction([phaseInput], applyPhaseUpdate);
 
 if (getAdminToken()) {
   fetchAdminState();

@@ -153,6 +153,20 @@ function bindDraftInputs(session, fieldBindings) {
   }
 }
 
+function bindEnterToSubmit(formId) {
+  const form = document.getElementById(formId);
+  form?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey) {
+      return;
+    }
+    if (event.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+    event.preventDefault();
+    form.requestSubmit();
+  });
+}
+
 function macEquation(intercept, slope) {
   return `MAC = ${formatNumber(intercept, 0)} - ${formatNumber(slope, 2)} × E`;
 }
@@ -467,6 +481,7 @@ function renderStageForm(session, submissions) {
     `;
 
     document.getElementById("uniform-form")?.addEventListener("submit", submitUniformForm);
+    bindEnterToSubmit("uniform-form");
     bindDraftInputs(session, [
       ["uniform-emissions", "submitted_emissions"],
       ["uniform-abatement", "submitted_abatement"],
@@ -511,6 +526,7 @@ function renderStageForm(session, submissions) {
     `;
 
     document.getElementById("price-form")?.addEventListener("submit", submitCalledPriceForm);
+    bindEnterToSubmit("price-form");
     bindDraftInputs(session, [["price-abatement", "submitted_abatement"]]);
     return;
   }
@@ -555,6 +571,7 @@ function renderStageForm(session, submissions) {
     `;
 
     document.getElementById("md-form")?.addEventListener("submit", submitMdForm);
+    bindEnterToSubmit("md-form");
     bindDraftInputs(session, [
       ["md-efficient-emissions", "submitted_efficient_emissions"],
       ["md-industry-cap", "submitted_industry_cap"],
@@ -628,6 +645,7 @@ async function joinTeam() {
 joinButton.addEventListener("click", joinTeam);
 teamNameInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     joinTeam();
   }
 });

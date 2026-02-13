@@ -445,12 +445,36 @@ function exportSnapshot() {
   setStatus(phaseStatus, "good", `Exported ${rows.length} team rows to ${filename}.`);
 }
 
+function bindEnterAction(elements, action) {
+  for (const element of elements) {
+    element?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") {
+        return;
+      }
+      event.preventDefault();
+      action();
+    });
+  }
+}
+
 loginButton.addEventListener("click", adminLogin);
 logoutButton.addEventListener("click", adminLogout);
 createSessionButton.addEventListener("click", createSession);
 applyPhaseButton.addEventListener("click", applyPhaseUpdate);
 refreshButton.addEventListener("click", fetchAdminState);
 exportButton.addEventListener("click", exportSnapshot);
+
+bindEnterAction([adminEmailInput, adminPasswordInput], adminLogin);
+bindEnterAction(
+  [
+    sessionNameInput,
+    expectedTeamCountInput,
+    scoringRankPointsInput,
+    wrongAnswerDeductionInput,
+  ],
+  createSession,
+);
+bindEnterAction([phaseInput], applyPhaseUpdate);
 
 if (getAdminToken()) {
   fetchAdminState();
