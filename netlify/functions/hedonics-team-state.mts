@@ -5,7 +5,9 @@ import {
   getTeamByJoinToken,
   getTeamsForSession,
   isRoundPhase,
+  publicRoundContext,
   revealStateForCurrentPhase,
+  sanitizeSubmissionForTeam,
 } from "./_lib/hedonics_game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
 
@@ -41,6 +43,7 @@ export default async function hedonicsTeamState(req) {
     const currentSubmission = isRoundPhase(phase)
       ? (submissions ?? []).find((row) => String(row.team_id) === String(team.id) && String(row.round_key) === phase) ?? null
       : null;
+    const roundContext = publicRoundContext(phase);
 
     const leaderboardSummary = computeLeaderboard(session, teams, submissions);
     const revealState = revealStateForCurrentPhase(session, teams, submissions);
@@ -63,7 +66,8 @@ export default async function hedonicsTeamState(req) {
         alpha_eq: team.alpha_eq,
         beta_sq: team.beta_sq,
       },
-      submission: currentSubmission,
+      round_context: roundContext,
+      submission: sanitizeSubmissionForTeam(currentSubmission),
       reveal_state: revealState,
       scoring: {
         rank_points: leaderboardSummary.scoring_rank_points,

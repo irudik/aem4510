@@ -59,6 +59,43 @@ export function isRoundPhase(phase) {
 }
 
 /**
+ * @param {string | null | undefined} phase
+ */
+export function publicRoundContext(phase) {
+  if (!isRoundPhase(phase)) {
+    return null;
+  }
+
+  const market = expectedMarketForRound(String(phase));
+  return {
+    round_key: market.round_key,
+    round_label: market.round_label,
+    preference_mode: market.preference_mode,
+    eq_by_location: market.eq_by_location,
+    sq_by_location: market.sq_by_location,
+    supply_rule: "Location A price is fixed at 0. Locations B-F have price equal to number of houses.",
+    total_houses: market.total_houses,
+  };
+}
+
+/**
+ * @param {string | null | undefined} phase
+ */
+export function adminRoundContext(phase) {
+  const publicContext = publicRoundContext(phase);
+  if (!publicContext) {
+    return null;
+  }
+
+  const market = expectedMarketForRound(String(phase));
+  return {
+    ...publicContext,
+    equilibrium_houses: market.equilibrium_houses,
+    equilibrium_prices: market.equilibrium_prices,
+  };
+}
+
+/**
  * @param {number | null | undefined} priorIncorrectAttempts
  * @param {boolean} isCorrect
  */
@@ -483,6 +520,53 @@ export function canonicalHousesObject(submittedHouses) {
   }
 
   throw new Error("submitted_houses must be an array or object keyed by A-F");
+}
+
+/**
+ * Remove expected-answer fields until a submission is resolved by correctness or lock.
+ * @param {Record<string, unknown> | null | undefined} submission
+ */
+export function sanitizeSubmissionForTeam(submission) {
+  if (!submission) {
+    return null;
+  }
+
+  const incorrectAttempts = Number(submission.incorrect_attempts ?? 0);
+  const isCorrect = Boolean(submission.is_correct);
+  const isLocked = Boolean(submission.is_locked);
+  const resolved = isCorrect || isLocked;
+
+  const sanitized = {
+    id: submission.id ?? null,
+    session_id: submission.session_id ?? null,
+    team_id: submission.team_id ?? null,
+    round_key: submission.round_key ?? null,
+    submitted_houses: submission.submitted_houses ?? null,
+    submitted_best_location: submission.submitted_best_location ?? null,
+    submitted_best_utility: submission.submitted_best_utility ?? null,
+    houses_correct: submission.houses_correct ?? null,
+    best_location_correct: submission.best_location_correct ?? null,
+    best_utility_correct: submission.best_utility_correct ?? null,
+    is_correct: isCorrect,
+    incorrect_attempts: Math.min(MAX_INCORRECT_SUBMISSIONS, Math.max(0, incorrectAttempts)),
+    is_locked: isLocked,
+    submitted_at: submission.submitted_at ?? null,
+    updated_at: submission.updated_at ?? null,
+  };
+
+  if (resolved) {
+    return {
+      ...sanitized,
+      expected_houses: submission.expected_houses ?? null,
+      expected_prices: submission.expected_prices ?? null,
+      expected_best_locations: submission.expected_best_locations ?? null,
+      expected_best_utility: submission.expected_best_utility ?? null,
+      expected_wtp: submission.expected_wtp ?? null,
+      expected_utility: submission.expected_utility ?? null,
+    };
+  }
+
+  return sanitized;
 }
 
 /**

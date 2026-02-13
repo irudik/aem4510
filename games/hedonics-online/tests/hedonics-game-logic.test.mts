@@ -7,8 +7,10 @@ import {
   nextAttemptState,
   parseScoringRankPoints,
   phaseTeamRows,
+  publicRoundContext,
   resolutionSummaryForRound,
   revealStateForCurrentPhase,
+  sanitizeSubmissionForTeam,
   isRoundPhase,
 } from "../../../netlify/functions/_lib/hedonics_game_service.mts";
 
@@ -50,6 +52,8 @@ test("phase helper and scoring parser defaults", () => {
   assert.equal(isRoundPhase("setup"), false);
   assert.deepEqual(parseScoringRankPoints(undefined), [10, 7, 5, 3, 1]);
   assert.deepEqual(parseScoringRankPoints("9,4,1"), [9, 4, 1]);
+  assert.equal(publicRoundContext("round2").eq_by_location.C, 2);
+  assert.equal(publicRoundContext("setup"), null);
 });
 
 test("attempt policy locks on third incorrect submission", () => {
@@ -165,4 +169,42 @@ test("round reveal state appears only when all joined teams are resolved", () =>
   assert.equal(reveal.all_teams_resolved, true);
   assert.equal(reveal.all_teams_correct, false);
   assert.equal(reveal.revealed_market.equilibrium_prices.F, 15);
+});
+
+test("team submission sanitizer hides expected answers before resolution", () => {
+  const unresolved = sanitizeSubmissionForTeam({
+    id: "x",
+    session_id: "s",
+    team_id: "t",
+    round_key: "round1",
+    submitted_houses: { A: 1, B: 2, C: 3, D: 4, E: 5, F: 60 },
+    submitted_best_location: "A",
+    submitted_best_utility: 0,
+    houses_correct: false,
+    best_location_correct: false,
+    best_utility_correct: false,
+    is_correct: false,
+    incorrect_attempts: 1,
+    is_locked: false,
+    expected_houses: { A: 30, B: 3, C: 6, D: 9, E: 12, F: 15 },
+  });
+  assert.equal("expected_houses" in unresolved, false);
+
+  const resolved = sanitizeSubmissionForTeam({
+    id: "x",
+    session_id: "s",
+    team_id: "t",
+    round_key: "round1",
+    submitted_houses: { A: 30, B: 3, C: 6, D: 9, E: 12, F: 15 },
+    submitted_best_location: "F",
+    submitted_best_utility: 0,
+    houses_correct: true,
+    best_location_correct: true,
+    best_utility_correct: true,
+    is_correct: true,
+    incorrect_attempts: 0,
+    is_locked: false,
+    expected_houses: { A: 30, B: 3, C: 6, D: 9, E: 12, F: 15 },
+  });
+  assert.equal(resolved.expected_houses.F, 15);
 });

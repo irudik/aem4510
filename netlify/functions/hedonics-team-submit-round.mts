@@ -147,7 +147,7 @@ export default async function hedonicsTeamSubmitRound(req) {
     return jsonResponse(200, {
       is_correct: evaluated.checks.is_correct,
       checks: evaluated.checks,
-      expected: evaluated.expected,
+      expected: attemptState.is_locked || evaluated.checks.is_correct ? evaluated.expected : null,
       incorrect_attempts: attemptState.incorrect_attempts,
       attempts_remaining: attemptState.attempts_remaining,
       submission_locked: attemptState.is_locked,

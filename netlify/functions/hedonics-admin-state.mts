@@ -1,4 +1,5 @@
 import {
+  adminRoundContext,
   computeLeaderboard,
   correctCountsByRound,
   getActiveSession,
@@ -32,6 +33,7 @@ export default async function hedonicsAdminState(req) {
     const leaderboardSummary = computeLeaderboard(session, teams, submissions);
     const phaseRows = phaseTeamRows(session, teams, submissions);
     const revealState = revealStateForCurrentPhase(session, teams, submissions);
+    const roundContext = adminRoundContext(session.current_phase);
 
     return jsonResponse(200, {
       session,
@@ -39,6 +41,7 @@ export default async function hedonicsAdminState(req) {
       submissions,
       phase_team_rows: phaseRows,
       reveal_state: revealState,
+      round_context: roundContext,
       scoring: {
         rank_points: leaderboardSummary.scoring_rank_points,
         wrong_deduction: leaderboardSummary.scoring_wrong_deduction,
