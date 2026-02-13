@@ -6,6 +6,8 @@ import {
   evaluateUniformSubmission,
   evaluateCalledPriceSubmission,
   evaluateMdSubmission,
+  nextAttemptState,
+  MAX_INCORRECT_SUBMISSIONS,
 } from "../../../netlify/functions/_lib/game_service.mts";
 
 const singleTeam = {
@@ -61,6 +63,28 @@ test("MD submission check evaluates team and industry targets", () => {
   assert.equal(wrongCap.checks.is_correct, false);
 });
 
+test("attempt policy locks on third incorrect and preserves attempts on correct", () => {
+  const firstWrong = nextAttemptState(0, false);
+  assert.equal(firstWrong.incorrect_attempts, 1);
+  assert.equal(firstWrong.attempts_remaining, 2);
+  assert.equal(firstWrong.is_locked, false);
+
+  const secondWrong = nextAttemptState(1, false);
+  assert.equal(secondWrong.incorrect_attempts, 2);
+  assert.equal(secondWrong.attempts_remaining, 1);
+  assert.equal(secondWrong.is_locked, false);
+
+  const thirdWrong = nextAttemptState(2, false);
+  assert.equal(thirdWrong.incorrect_attempts, MAX_INCORRECT_SUBMISSIONS);
+  assert.equal(thirdWrong.attempts_remaining, 0);
+  assert.equal(thirdWrong.is_locked, true);
+
+  const correctAfterWrong = nextAttemptState(2, true);
+  assert.equal(correctAfterWrong.incorrect_attempts, 2);
+  assert.equal(correctAfterWrong.attempts_remaining, 1);
+  assert.equal(correctAfterWrong.is_locked, false);
+});
+
 test("phase team rows expose uniform expected and submitted values", () => {
   const session = {
     current_phase: "uniform",
@@ -75,6 +99,8 @@ test("phase team rows expose uniform expected and submitted values", () => {
         submitted_emissions: 1480,
         submitted_abatement: 520,
         submitted_abatement_cost: 270400,
+        incorrect_attempts: 1,
+        is_locked: false,
         is_correct: true,
       },
     ],
@@ -90,6 +116,9 @@ test("phase team rows expose uniform expected and submitted values", () => {
   assert.equal(rows[0].standard_abatement, 520);
   assert.equal(rows[0].standard_abatement_cost, 270400);
   assert.equal(rows[0].submitted_emissions, 1480);
+  assert.equal(rows[0].incorrect_attempts, 1);
+  assert.equal(rows[0].attempts_remaining, 2);
+  assert.equal(rows[0].submission_locked, false);
   assert.equal(rows[0].submission_correct, true);
 });
 
@@ -107,6 +136,8 @@ test("phase team rows expose called-price expected and submitted values", () => 
         team_id: "A",
         called_price: 3000,
         submitted_abatement: 1500,
+        incorrect_attempts: 3,
+        is_locked: true,
         is_correct: true,
       },
     ],
@@ -120,6 +151,9 @@ test("phase team rows expose called-price expected and submitted values", () => 
   assert.equal(rows[0].optimal_abatement, 1500);
   assert.equal(rows[0].optimal_emissions, 500);
   assert.equal(rows[0].submitted_abatement, 1500);
+  assert.equal(rows[0].incorrect_attempts, 3);
+  assert.equal(rows[0].attempts_remaining, 0);
+  assert.equal(rows[0].submission_locked, true);
   assert.equal(rows[0].submission_correct, true);
 });
 
@@ -139,6 +173,8 @@ test("phase team rows expose md expected and submitted values", () => {
         md_constant: 3500,
         submitted_efficient_emissions: 250,
         submitted_industry_cap: 8025,
+        incorrect_attempts: 0,
+        is_locked: false,
         is_correct: true,
       },
     ],
@@ -150,5 +186,8 @@ test("phase team rows expose md expected and submitted values", () => {
   assert.equal(rows[0].efficient_emissions, 250);
   assert.equal(rows[0].efficient_industry_cap, 8025);
   assert.equal(rows[0].submitted_efficient_emissions, 250);
+  assert.equal(rows[0].incorrect_attempts, 0);
+  assert.equal(rows[0].attempts_remaining, 3);
+  assert.equal(rows[0].submission_locked, false);
   assert.equal(rows[0].submission_correct, true);
 });

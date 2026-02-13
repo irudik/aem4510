@@ -14,6 +14,28 @@ import { fetchSupabaseAuthUser, supabaseRequest } from "./supabase_rest.mts";
 
 export const TON_TOLERANCE = 1;
 export const COST_TOLERANCE = 100;
+export const MAX_INCORRECT_SUBMISSIONS = 3;
+
+/**
+ * Increment/decode incorrect-attempt counters for stage submissions.
+ * @param {number | null | undefined} priorIncorrectAttempts
+ * @param {boolean} isCorrect
+ */
+export function nextAttemptState(priorIncorrectAttempts, isCorrect) {
+  const priorAttemptsRaw = Number(priorIncorrectAttempts ?? 0);
+  const priorAttempts =
+    Number.isFinite(priorAttemptsRaw) && priorAttemptsRaw >= 0
+      ? Math.min(MAX_INCORRECT_SUBMISSIONS, Math.floor(priorAttemptsRaw))
+      : 0;
+  const incorrectAttempts = isCorrect ? priorAttempts : Math.min(MAX_INCORRECT_SUBMISSIONS, priorAttempts + 1);
+  const isLocked = !isCorrect && incorrectAttempts >= MAX_INCORRECT_SUBMISSIONS;
+
+  return {
+    incorrect_attempts: incorrectAttempts,
+    attempts_remaining: Math.max(0, MAX_INCORRECT_SUBMISSIONS - incorrectAttempts),
+    is_locked: isLocked,
+  };
+}
 
 /**
  * @param {string} teamName
@@ -337,6 +359,9 @@ export function phaseTeamRows(session, teams, submissions) {
         submitted_emissions: submission?.submitted_emissions ?? null,
         submitted_abatement: submission?.submitted_abatement ?? null,
         submitted_abatement_cost: submission?.submitted_abatement_cost ?? null,
+        incorrect_attempts: Number(submission?.incorrect_attempts ?? 0),
+        attempts_remaining: Math.max(0, MAX_INCORRECT_SUBMISSIONS - Number(submission?.incorrect_attempts ?? 0)),
+        submission_locked: Boolean(submission?.is_locked ?? false),
         submission_correct: submission?.is_correct ?? null,
       };
     });
@@ -365,6 +390,9 @@ export function phaseTeamRows(session, teams, submissions) {
         permit_revenue: expected.permit_revenue,
         net_cost: expected.net_cost,
         submitted_abatement: submission?.submitted_abatement ?? null,
+        incorrect_attempts: Number(submission?.incorrect_attempts ?? 0),
+        attempts_remaining: Math.max(0, MAX_INCORRECT_SUBMISSIONS - Number(submission?.incorrect_attempts ?? 0)),
+        submission_locked: Boolean(submission?.is_locked ?? false),
         submission_correct: submission?.is_correct ?? null,
       };
     });
@@ -394,6 +422,9 @@ export function phaseTeamRows(session, teams, submissions) {
         efficient_industry_cap: capResult.efficient_cap,
         submitted_efficient_emissions: submission?.submitted_efficient_emissions ?? null,
         submitted_industry_cap: submission?.submitted_industry_cap ?? null,
+        incorrect_attempts: Number(submission?.incorrect_attempts ?? 0),
+        attempts_remaining: Math.max(0, MAX_INCORRECT_SUBMISSIONS - Number(submission?.incorrect_attempts ?? 0)),
+        submission_locked: Boolean(submission?.is_locked ?? false),
         submission_correct: submission?.is_correct ?? null,
       };
     });

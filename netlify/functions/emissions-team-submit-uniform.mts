@@ -1,7 +1,9 @@
 import {
+  MAX_INCORRECT_SUBMISSIONS,
   evaluateUniformSubmission,
   getActiveSession,
   getTeamByJoinToken,
+  nextAttemptState,
 } from "./_lib/game_service.mts";
 import { jsonResponse, readJsonBody } from "./_lib/http.mts";
 import { supabaseRequest } from "./_lib/supabase_rest.mts";
@@ -46,11 +48,53 @@ export default async function emissionsTeamSubmitUniform(req) {
       return jsonResponse(400, { error: "submitted_abatement_cost must be nonnegative" });
     }
 
+    const existingRows = await supabaseRequest("/rest/v1/uniform_submissions", {
+      method: "GET",
+      queryParams: {
+        select: "*",
+        session_id: `eq.${session.id}`,
+        team_id: `eq.${team.id}`,
+        limit: 1,
+      },
+      useServiceRole: true,
+    });
+    const existing = existingRows[0] ?? null;
+    const existingIncorrectAttempts = Number(existing?.incorrect_attempts ?? 0);
+    const existingLocked =
+      Boolean(existing?.is_locked) ||
+      (!Boolean(existing?.is_correct) && existingIncorrectAttempts >= MAX_INCORRECT_SUBMISSIONS);
+
+    if (existing?.is_correct || existingLocked) {
+      return jsonResponse(200, {
+        is_correct: Boolean(existing?.is_correct),
+        checks: {
+          emissions_correct: Boolean(existing?.emissions_correct),
+          abatement_correct: Boolean(existing?.abatement_correct),
+          cost_correct: Boolean(existing?.cost_correct),
+          is_correct: Boolean(existing?.is_correct),
+        },
+        expected: {
+          final_emissions: Number(existing?.expected_emissions ?? 0),
+          abatement: Number(existing?.expected_abatement ?? 0),
+          abatement_cost: Number(existing?.expected_abatement_cost ?? 0),
+        },
+        incorrect_attempts: Math.min(MAX_INCORRECT_SUBMISSIONS, Math.max(0, existingIncorrectAttempts)),
+        attempts_remaining: Math.max(
+          0,
+          MAX_INCORRECT_SUBMISSIONS - Math.min(MAX_INCORRECT_SUBMISSIONS, Math.max(0, existingIncorrectAttempts)),
+        ),
+        submission_locked: existingLocked,
+        submission_resolved: true,
+        reveal_answers: existingLocked,
+      });
+    }
+
     const evaluated = evaluateUniformSubmission(team, Number(session.common_permit_allocation), {
       submitted_emissions: submittedEmissions,
       submitted_abatement: submittedAbatement,
       submitted_abatement_cost: submittedCost,
     });
+    const attemptState = nextAttemptState(existing?.incorrect_attempts, evaluated.checks.is_correct);
 
     const rowPayload = {
       session_id: session.id,
@@ -65,6 +109,8 @@ export default async function emissionsTeamSubmitUniform(req) {
       abatement_correct: evaluated.checks.abatement_correct,
       cost_correct: evaluated.checks.cost_correct,
       is_correct: evaluated.checks.is_correct,
+      incorrect_attempts: attemptState.incorrect_attempts,
+      is_locked: attemptState.is_locked,
     };
 
     await supabaseRequest("/rest/v1/uniform_submissions", {
@@ -81,6 +127,11 @@ export default async function emissionsTeamSubmitUniform(req) {
       is_correct: evaluated.checks.is_correct,
       checks: evaluated.checks,
       expected: evaluated.expected,
+      incorrect_attempts: attemptState.incorrect_attempts,
+      attempts_remaining: attemptState.attempts_remaining,
+      submission_locked: attemptState.is_locked,
+      submission_resolved: Boolean(evaluated.checks.is_correct || attemptState.is_locked),
+      reveal_answers: attemptState.is_locked,
     });
   } catch (error) {
     return jsonResponse(400, { error: error.message });

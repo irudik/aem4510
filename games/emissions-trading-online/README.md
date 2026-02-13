@@ -14,11 +14,14 @@ Online multiplayer classroom implementation of the AEM 4510 emissions-trading ga
   - Netlify Functions under `/api/emissions-trading/*`
 - Database schema:
   - `games/emissions-trading-online/supabase/001_online_game_schema.sql`
+  - `games/emissions-trading-online/supabase/002_submission_attempt_caps.sql`
 
 ## One-Time Setup Checklist
 
 1. Create Supabase project and enable email/password auth.
-2. Apply migration in `games/emissions-trading-online/supabase/001_online_game_schema.sql`.
+2. Apply migrations in order:
+   - `games/emissions-trading-online/supabase/001_online_game_schema.sql`
+   - `games/emissions-trading-online/supabase/002_submission_attempt_caps.sql`
 3. Add your instructor auth user id to `public.admin_users`.
 4. Set Netlify environment variables:
    - `SUPABASE_URL`
@@ -46,7 +49,8 @@ Online multiplayer classroom implementation of the AEM 4510 emissions-trading ga
 
 The app reveals market excess demand only when:
 - Number of joined teams equals `expected_team_count`, and
-- Every joined team is correct for the active called price.
+- Every joined team is resolved for the active called price
+  (`is_correct = true` or max incorrect attempts reached).
 
 If excess demand does not reveal, first check team count and correctness in admin tables.
 
@@ -56,7 +60,8 @@ If excess demand does not reveal, first check team count and correctness in admi
 2. Enter team name and join.
 3. Keep page open; it polls stage updates.
 4. Submit answers when stage is open.
-5. If incorrect, revise and resubmit until accepted.
+5. Each phase allows up to 3 incorrect submissions.
+6. After 3 incorrect submissions in a phase, submissions lock and the app reveals the correct answers for that phase.
 
 ## Data Export
 

@@ -24,6 +24,7 @@ const stageStatus = document.getElementById("stage-status");
 const stageFormContainer = document.getElementById("stage-form-container");
 const revealCard = document.getElementById("reveal-card");
 const revealText = document.getElementById("reveal-text");
+const MAX_INCORRECT_SUBMISSIONS = 3;
 
 /** @type {number | null} */
 let refreshTimer = null;
@@ -42,6 +43,65 @@ function clearJoinToken() {
 
 function macEquation(intercept, slope) {
   return `MAC = ${formatNumber(intercept, 0)} - ${formatNumber(slope, 2)} × E`;
+}
+
+function submissionAttemptSummary(submission) {
+  const attemptsUsed = Math.max(
+    0,
+    Math.min(MAX_INCORRECT_SUBMISSIONS, Number(submission?.incorrect_attempts ?? 0)),
+  );
+  const attemptsRemaining = Math.max(0, MAX_INCORRECT_SUBMISSIONS - attemptsUsed);
+  const submissionLocked = Boolean(submission?.is_locked);
+  const submissionCorrect = Boolean(submission?.is_correct);
+
+  return {
+    attempts_used: attemptsUsed,
+    attempts_remaining: attemptsRemaining,
+    submission_locked: submissionLocked,
+    submission_correct: submissionCorrect,
+    submission_resolved: submissionLocked || submissionCorrect,
+  };
+}
+
+function attemptNote(submission) {
+  const summary = submissionAttemptSummary(submission);
+  return `<p><small class="note">Incorrect attempts used: ${summary.attempts_used} of ${MAX_INCORRECT_SUBMISSIONS}. Remaining: ${summary.attempts_remaining}.</small></p>`;
+}
+
+function uniformRevealTable(submission) {
+  return `
+    <table>
+      <thead><tr><th>Correct Value</th><th>Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Final Emissions</td><td>${formatNumber(submission?.expected_emissions, 2)}</td></tr>
+        <tr><td>Abatement</td><td>${formatNumber(submission?.expected_abatement, 2)}</td></tr>
+        <tr><td>Abatement Cost</td><td>${formatNumber(submission?.expected_abatement_cost, 2)}</td></tr>
+      </tbody>
+    </table>
+  `;
+}
+
+function calledPriceRevealTable(submission) {
+  return `
+    <table>
+      <thead><tr><th>Correct Value</th><th>Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Optimal Abatement</td><td>${formatNumber(submission?.expected_abatement, 2)}</td></tr>
+      </tbody>
+    </table>
+  `;
+}
+
+function mdRevealTable(submission) {
+  return `
+    <table>
+      <thead><tr><th>Correct Value</th><th>Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Efficient Emissions (Your Team)</td><td>${formatNumber(submission?.expected_efficient_emissions, 2)}</td></tr>
+        <tr><td>Efficient Industry Cap</td><td>${formatNumber(submission?.expected_industry_cap, 2)}</td></tr>
+      </tbody>
+    </table>
+  `;
 }
 
 function renderTeamCard(session, team) {
@@ -89,8 +149,18 @@ async function submitUniformForm(event) {
 
     if (response.is_correct) {
       setStatus(stageStatus, "good", "Correct. Your uniform-standard submission is accepted.");
+    } else if (response.submission_locked) {
+      setStatus(
+        stageStatus,
+        "warn",
+        "Maximum incorrect submissions reached for this phase. Correct answers are now shown below.",
+      );
     } else {
-      setStatus(stageStatus, "warn", "Not correct yet. Revise using your MAC and standard level.");
+      setStatus(
+        stageStatus,
+        "warn",
+        `Not correct yet. Revise using your MAC and standard level. Attempts remaining: ${response.attempts_remaining}.`,
+      );
     }
 
     await refreshState();
@@ -117,15 +187,25 @@ async function submitCalledPriceForm(event) {
 
     if (response.is_correct) {
       setStatus(stageStatus, "good", "Correct. Your called-price abatement is accepted.");
+    } else if (response.submission_locked) {
+      setStatus(
+        stageStatus,
+        "warn",
+        "Maximum incorrect submissions reached for this phase. Correct answers are now shown below.",
+      );
     } else {
-      setStatus(stageStatus, "warn", "Not correct yet. Recompute your optimal abatement at this price.");
+      setStatus(
+        stageStatus,
+        "warn",
+        `Not correct yet. Recompute your optimal abatement at this price. Attempts remaining: ${response.attempts_remaining}.`,
+      );
     }
 
-    if (response.all_teams_correct && response.called_price_excess_demand !== null) {
+    if (response.all_teams_resolved && response.called_price_excess_demand !== null) {
       setStatus(
         stageStatus,
         "good",
-        `All teams are correct. Market excess demand: ${formatNumber(response.called_price_excess_demand, 2)} permits.`,
+        `All teams are resolved. Market excess demand: ${formatNumber(response.called_price_excess_demand, 2)} permits.`,
       );
     }
 
@@ -154,8 +234,18 @@ async function submitMdForm(event) {
 
     if (response.is_correct) {
       setStatus(stageStatus, "good", "Correct. Your MD-stage submission is accepted.");
+    } else if (response.submission_locked) {
+      setStatus(
+        stageStatus,
+        "warn",
+        "Maximum incorrect submissions reached for this phase. Correct answers are now shown below.",
+      );
     } else {
-      setStatus(stageStatus, "warn", "Not correct yet. Re-check your efficient emissions and industry cap.");
+      setStatus(
+        stageStatus,
+        "warn",
+        `Not correct yet. Re-check your efficient emissions and industry cap. Attempts remaining: ${response.attempts_remaining}.`,
+      );
     }
 
     await refreshState();
@@ -188,7 +278,25 @@ function renderStageForm(session, submissions) {
 
   if (phase === "uniform") {
     const prior = submissions.uniform;
+    const summary = submissionAttemptSummary(prior);
+    if (summary.submission_locked) {
+      stageFormContainer.innerHTML = `
+        <p><small class="note">You used all ${MAX_INCORRECT_SUBMISSIONS} incorrect attempts in this phase. Submissions are now closed.</small></p>
+        ${uniformRevealTable(prior)}
+      `;
+      return;
+    }
+
+    if (summary.submission_correct) {
+      stageFormContainer.innerHTML = `
+        <p><small class="note">Your uniform-standard submission is accepted for this phase.</small></p>
+        ${uniformRevealTable(prior)}
+      `;
+      return;
+    }
+
     stageFormContainer.innerHTML = `
+      ${attemptNote(prior)}
       <form id="uniform-form" class="grid">
         <div>
           <label for="uniform-emissions">Final Emissions</label>
@@ -214,7 +322,25 @@ function renderStageForm(session, submissions) {
 
   if (phase === "called_price") {
     const prior = submissions.called_price;
+    const summary = submissionAttemptSummary(prior);
+    if (summary.submission_locked) {
+      stageFormContainer.innerHTML = `
+        <p><small class="note">You used all ${MAX_INCORRECT_SUBMISSIONS} incorrect attempts in this phase. Submissions are now closed.</small></p>
+        ${calledPriceRevealTable(prior)}
+      `;
+      return;
+    }
+
+    if (summary.submission_correct) {
+      stageFormContainer.innerHTML = `
+        <p><small class="note">Your called-price submission is accepted for this phase.</small></p>
+        ${calledPriceRevealTable(prior)}
+      `;
+      return;
+    }
+
     stageFormContainer.innerHTML = `
+      ${attemptNote(prior)}
       <form id="price-form">
         <div>
           <label for="price-abatement">Chosen Abatement</label>
@@ -232,7 +358,25 @@ function renderStageForm(session, submissions) {
 
   if (phase === "md") {
     const prior = submissions.md;
+    const summary = submissionAttemptSummary(prior);
+    if (summary.submission_locked) {
+      stageFormContainer.innerHTML = `
+        <p><small class="note">You used all ${MAX_INCORRECT_SUBMISSIONS} incorrect attempts in this phase. Submissions are now closed.</small></p>
+        ${mdRevealTable(prior)}
+      `;
+      return;
+    }
+
+    if (summary.submission_correct) {
+      stageFormContainer.innerHTML = `
+        <p><small class="note">Your MD-stage submission is accepted for this phase.</small></p>
+        ${mdRevealTable(prior)}
+      `;
+      return;
+    }
+
     stageFormContainer.innerHTML = `
+      ${attemptNote(prior)}
       <form id="md-form" class="grid">
         <div>
           <label for="md-efficient-emissions">Efficient Emissions (Your Team)</label>
@@ -262,7 +406,7 @@ function renderReveal(session) {
   }
 
   revealCard.classList.remove("hidden");
-  revealText.textContent = `All teams are correct. Market excess demand at called price is ${formatNumber(session.called_price_excess_demand, 2)} permits.`;
+  revealText.textContent = `All teams are resolved. Market excess demand at called price is ${formatNumber(session.called_price_excess_demand, 2)} permits.`;
 }
 
 async function refreshState() {
