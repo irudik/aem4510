@@ -1,0 +1,280 @@
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --ink: #17212f;
+  --muted: #5d6d83;
+  --line: #d8e0ec;
+  --accent: #0d5bd7;
+  --accent-soft: #e7efff;
+  --good: #1f7a35;
+  --warn: #b76a06;
+  --bad: #b01b2f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #f7f9fd 0%, #edf2fa 100%);
+  color: var(--ink);
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.6rem 0;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 1.7rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+p,
+li {
+  line-height: 1.45;
+}
+
+a {
+  color: var(--accent);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 3px 14px rgba(16, 44, 84, 0.06);
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.split-grid > .card {
+  margin-bottom: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.9rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--ink);
+}
+
+input,
+select,
+button,
+textarea {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid #b8c7da;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Hide default spinner controls on numeric inputs for cleaner classroom entry fields. */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+button {
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+button.secondary {
+  background: var(--accent-soft);
+  border-color: #cad8f6;
+  color: #123d8f;
+}
+
+button.danger {
+  background: #ffe8eb;
+  border-color: #f5b8c0;
+  color: #8e1022;
+}
+
+.status {
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.status.good {
+  color: var(--good);
+  background: #e8f7eb;
+  border-color: #b9e4c2;
+}
+
+.status.warn {
+  color: var(--warn);
+  background: #fff5e6;
+  border-color: #f2d8b0;
+}
+
+.status.bad {
+  color: var(--bad);
+  background: #ffecee;
+  border-color: #f3c4cc;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0.35rem 0.8rem;
+  font-size: 0.95rem;
+}
+
+.kv dt {
+  color: var(--muted);
+}
+
+.kv dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  border: 1px solid #d5deeb;
+  padding: 0.42rem 0.48rem;
+  text-align: right;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+th {
+  background: #f2f6fd;
+}
+
+tr.leaderboard-you td {
+  background: #eef4ff;
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #edf1f8;
+  color: #38506f;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.called-price-callout {
+  margin: 0.35rem 0 0.2rem;
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #0d5bd7;
+}
+
+.phase {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+small.note {
+  color: var(--muted);
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  main {
+    padding: 0.8rem;
+  }
+
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kv {
+    grid-template-columns: 1fr;
+  }
+
+  .called-price-callout {
+    font-size: 1.5rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .row > * {
+    flex: 1 1 100%;
+  }
+}

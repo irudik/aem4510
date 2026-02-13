@@ -14,51 +14,55 @@ output:
 
 ## Getting started
 
-* Pair up with a fellow student.
-* The person whose last name that comes first in alphabetical order is Player A in this game. The other person is Player B.
+This exercise teaches how property rights and transaction costs affect bargaining outcomes with externalities.
 
+## Online game links
 
-## Context
+- Student login: [Coase Student Portal](/games/coase-online/student.html)
+- Admin login (instructor): [Coase Admin Dashboard](/games/coase-online/admin.html)
 
-There are only two stakeholders at the margins of a lake, both want to maximize their individual payoffs:
+## How we will play
 
-* Player A: a chemical plant
-* Player B: a water sports equipment rental company
+- Each student joins the Student Portal with a player name.
+- The instructor creates a live session and starts random pairing.
+- If the number of students is odd, one student is paired with an admin proxy.
+- Pairs bargain over emissions and transfers, then submit agreed outcomes in each round.
 
-Players' payoffs vary based on the amount of chemical residuals the plant emits (in hundred gallons/month). Their payoff schedules (in hundred thousand dollars/month) are:
+## Payoff schedule
 
-| Emissions               | Player A payoff | Player B payoff |
-|:-----------------------:|:---------------:|:---------------:|
-| 0                       |0                |12               |
-| 1                       |4                |10               |
-| 2                       |6                |6                |
-| 3                       |6                |4                |
-| 4                       |9                |2                |
-| 5                       |10               |1                |
-| 6                       |11               |0                |
+Payoffs are in hundred thousand dollars per month and emissions are in hundred gallons per month.
 
-### Round 1
+| Emissions | Player A payoff | Player B payoff |
+|:---------:|:---------------:|:---------------:|
+| 0         | 0               | 12              |
+| 1         | 4               | 10              |
+| 2         | 6               | 6               |
+| 3         | 6               | 4               |
+| 4         | 9               | 2               |
+| 5         | 10              | 1               |
+| 6         | 11              | 0               |
 
-The chemical plant (player A) is the controller and owns the property rights on the lake. 
+## Round 1
 
-1. Player A will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.
-2. Player B can attempt to influence A's decision by offering to pay part of all of their earnings to the controller.
-3. Once players achieve an agreement, take note of the resulting level of emissions and players' payoffs accounting for any payments made to the other player.
+- Controller: Player A.
+- Player B may offer a payment to Player A (noncontroller to controller).
+- Pair submits agreed emissions and payment.
 
-### Round 2
+## Round 2
 
-The water sports company (player B) is the controller and owns the property rights on the lake. 
+- Controller: Player B.
+- Player A may offer a payment to Player B (noncontroller to controller).
+- Pair submits agreed emissions and payment.
 
-1. Player B will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.
-2. Player A can attempt to influence B's decision by offering to pay part of all of their earnings to the controller.
-3. Once players achieve an agreement, take note of the resulting level of emissions and players' payoffs accounting for any payments made to the other player.
+## Round 3
 
-### Round 3
+- Controller: Player B.
+- Same bargaining as Round 2, but any positive transfer requires legal agreement costs of 5.
+- Pair must choose how much of the legal cost is paid by Player A (0 to 5), with the rest paid by Player B.
+- Pair submits agreed emissions, payment, and legal-cost split.
 
-The water sports company (player B) remains as the the controller and owns the property rights on the lake. However, now any agreements on payments must be enforced with a legal agreement that costs $5 (hundred thousand) in fees.
+## Notes for students
 
-1. Player B will unilaterally choose the level of emissions (one that maximizes its payoff) and announce it.
-2. Player A can attempt to influence B's decision by offering to pay part of all of their earnings to the controller. Players must also agree on how the costs with legal fees are going to be shared between them.
-3. Once players achieve an agreement, take note of the resulting level of emissions and players' payoffs accounting for any payments made to the other player and fees paid.
-
-
+- Keep your student page open; it updates as the instructor changes phases.
+- For regular pairs, both players must submit matching values for a round to resolve.
+- For admin-proxy pairs, only the student submission is required.

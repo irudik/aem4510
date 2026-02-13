@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard | Coase Game</title>
+    <link rel="stylesheet" href="/games/coase-online/app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h1>Admin Dashboard</h1>
+          <a href="/games/coase-online/index.html">Home</a>
+        </div>
+        <p>Instructor controls for session setup, random pairing, and round transitions.</p>
+      </section>
+
+      <section id="login-card" class="card">
+        <h2>Admin Login</h2>
+        <div class="grid">
+          <div>
+            <label for="admin-email">Email</label>
+            <input id="admin-email" type="email" autocomplete="username" />
+          </div>
+          <div>
+            <label for="admin-password">Password</label>
+            <input id="admin-password" type="password" autocomplete="current-password" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 0.6rem">
+          <button id="login-btn" class="primary" type="button">Log In</button>
+          <button id="logout-btn" class="secondary" type="button">Log Out</button>
+        </div>
+        <div id="login-status" class="status hidden"></div>
+      </section>
+
+      <section id="admin-panel" class="hidden">
+        <section class="card">
+          <h2>Create / Reset Session</h2>
+          <div class="grid">
+            <div>
+              <label for="session-name">Session Name</label>
+              <input id="session-name" type="text" value="AEM 4510 Coase Session" />
+            </div>
+            <div>
+              <label for="expected-player-count">Expected Player Count</label>
+              <input id="expected-player-count" type="number" min="1" step="1" value="20" />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 0.6rem">
+            <button id="create-session-btn" class="primary" type="button">Create New Active Session</button>
+            <button id="start-game-btn" class="secondary" type="button">Start Game and Random Pairing</button>
+          </div>
+          <div id="session-status" class="status hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>Phase Controls</h2>
+          <div class="grid">
+            <div>
+              <label for="set-phase">Phase</label>
+              <select id="set-phase">
+                <option value="setup">Setup</option>
+                <option value="round1">Round 1</option>
+                <option value="round2">Round 2</option>
+                <option value="round3">Round 3</option>
+                <option value="complete">Complete</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 0.6rem">
+            <button id="apply-phase-btn" class="primary" type="button">Apply Phase Update</button>
+            <button id="refresh-admin-btn" class="secondary" type="button">Refresh Dashboard</button>
+          </div>
+          <div id="phase-status" class="status hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>Live Session Summary</h2>
+          <dl class="kv" id="session-kv"></dl>
+        </section>
+
+        <section class="card">
+          <h2>Current Round Context</h2>
+          <div id="round-context" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Current Round Pair Status</h2>
+          <div id="pair-status-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Pair Assignments</h2>
+          <div id="pairs-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Players</h2>
+          <div id="players-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Round Submissions</h2>
+          <div id="submissions-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Round Outcomes</h2>
+          <div id="outcomes-table" class="table-wrap"></div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/games/coase-online/admin.mjs"></script>
+  </body>
+</html>
