@@ -66,6 +66,14 @@ If excess demand does not reveal, first check team count and correctness in admi
 5. Each phase allows up to 3 incorrect submissions.
 6. After 3 incorrect submissions in a phase, submissions lock and the app reveals the correct answers for that phase.
 
+## Student UI Behavior
+
+- Called price appears as a large callout:
+  - `Permit Price: $...`
+- Student answer drafts persist locally while the page auto-refreshes every 5 seconds.
+  - Drafts clear when the phase is resolved (correct or locked), or when the team token is reset.
+- Student leaderboard shows rank, team name, and points.
+
 ## Data Export
 
 Admin dashboard `Download CSV Snapshot` exports per-team state and submission status for the active session.
@@ -103,3 +111,5 @@ The local run requires the same three Supabase environment variables.
   - Confirm authenticated user id exists in `public.admin_users`.
 - Students cannot submit:
   - Confirm the current phase is set to the matching stage in admin.
+- Called-price excess demand stays hidden:
+  - Confirm at least one team has joined and every joined team has a resolved submission (`is_correct` or `is_locked`) for the active called price.
