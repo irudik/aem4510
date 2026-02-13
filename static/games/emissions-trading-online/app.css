@@ -111,6 +111,18 @@ textarea {
   background: #fff;
 }
 
+/* Hide default spinner controls on numeric inputs for cleaner classroom entry fields. */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 button {
   padding: 0.55rem 0.8rem;
   border-radius: 8px;
