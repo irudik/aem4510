@@ -255,7 +255,6 @@ function renderLeaderboard(rows, ownTeamId) {
       return `
         <tr class="${highlightClass}">
           <td>${row.rank}</td>
-          <td>${row.team_letter ?? ""}</td>
           <td>${row.team_name ?? ""}</td>
           <td>${formatNumber(row.total_points, 2)}</td>
         </tr>
@@ -268,7 +267,6 @@ function renderLeaderboard(rows, ownTeamId) {
       <thead>
         <tr>
           <th>Rank</th>
-          <th>Team</th>
           <th>Name</th>
           <th>Points</th>
         </tr>

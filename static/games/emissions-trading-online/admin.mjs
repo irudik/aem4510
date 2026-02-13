@@ -237,7 +237,6 @@ function renderAllTables(state) {
   }));
   const leaderboardRows = (state.leaderboard ?? []).map((row) => ({
     rank: row.rank,
-    team_letter: row.team_letter,
     team_name: row.team_name,
     total_points: formatNumber(row.total_points, 2),
     correct_points: formatNumber(row.correct_points, 2),
