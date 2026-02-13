@@ -3,6 +3,7 @@ import {
   getActiveSession,
   getTeamsForSession,
   marketEquilibriumSummary,
+  phaseTeamRows,
   requireAdminUser,
 } from "./_lib/game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
@@ -66,6 +67,11 @@ export default async function emissionsAdminState(req) {
       session.called_price !== null && session.called_price !== undefined && teams.length > 0
         ? calledPriceSummary(Number(session.called_price), teams)
         : null;
+    const phaseRows = phaseTeamRows(session, teams, {
+      uniform: uniformSubmissions,
+      called_price: calledPriceSubmissions,
+      md: mdSubmissions,
+    });
 
     return jsonResponse(200, {
       session,
@@ -77,6 +83,7 @@ export default async function emissionsAdminState(req) {
       },
       market_summary: marketSummary,
       called_price_summary: calledSummary,
+      phase_team_rows: phaseRows,
       progress: {
         team_count: teams.length,
         expected_team_count: session.expected_team_count,

@@ -269,6 +269,138 @@ export function marketEquilibriumSummary(teams) {
 }
 
 /**
+ * Build an instructor-facing team table for the current phase.
+ * @param {Record<string, unknown>} session
+ * @param {Array<Record<string, unknown>>} teams
+ * @param {{uniform: Array<Record<string, unknown>>, called_price: Array<Record<string, unknown>>, md: Array<Record<string, unknown>>}} submissions
+ */
+export function phaseTeamRows(session, teams, submissions) {
+  if (!Array.isArray(teams) || teams.length === 0) {
+    return [];
+  }
+
+  const modelRows = teamRowsForModel(teams);
+  const phase = String(session.current_phase ?? "setup");
+  const teamMetaById = new Map(
+    teams.map((team) => [
+      String(team.id),
+      {
+        team_letter: String(team.team_letter ?? ""),
+        team_name: String(team.team_name ?? ""),
+      },
+    ]),
+  );
+
+  const uniformByTeam = new Map((submissions.uniform ?? []).map((row) => [String(row.team_id), row]));
+  const calledPriceCurrentRows = (submissions.called_price ?? []).filter((row) => {
+    if (session.called_price === null || session.called_price === undefined) {
+      return false;
+    }
+    return Number(row.called_price) === Number(session.called_price);
+  });
+  const calledPriceByTeam = new Map(calledPriceCurrentRows.map((row) => [String(row.team_id), row]));
+  const mdCurrentRows = (submissions.md ?? []).filter((row) => {
+    if (session.md_constant === null || session.md_constant === undefined) {
+      return false;
+    }
+    return Number(row.md_constant) === Number(session.md_constant);
+  });
+  const mdByTeam = new Map(mdCurrentRows.map((row) => [String(row.team_id), row]));
+
+  if (phase === "uniform") {
+    const uniformStandard = Number(session.common_permit_allocation);
+    return modelRows.map((row) => {
+      const teamMeta = teamMetaById.get(row.team_id) ?? { team_letter: "", team_name: "" };
+      const expected = teamOutcomeAtUniformStandard(row, uniformStandard);
+      const submission = uniformByTeam.get(row.team_id);
+
+      return {
+        team_letter: teamMeta.team_letter,
+        team_name: teamMeta.team_name,
+        mac_intercept: row.mac_intercept,
+        mac_slope: row.mac_slope,
+        initial_emissions: row.initial_emissions,
+        permit_allocation: row.permit_allocation,
+        standard_emissions: expected.final_emissions,
+        standard_abatement: expected.abatement,
+        standard_abatement_cost: expected.abatement_cost,
+        submitted_emissions: submission?.submitted_emissions ?? null,
+        submitted_abatement: submission?.submitted_abatement ?? null,
+        submitted_abatement_cost: submission?.submitted_abatement_cost ?? null,
+        submission_correct: submission?.is_correct ?? null,
+      };
+    });
+  }
+
+  if (phase === "called_price") {
+    const calledPrice = Number(session.called_price ?? 0);
+    return modelRows.map((row) => {
+      const teamMeta = teamMetaById.get(row.team_id) ?? { team_letter: "", team_name: "" };
+      const expected = teamOutcomeAtPrice(row, calledPrice);
+      const submission = calledPriceByTeam.get(row.team_id);
+
+      return {
+        team_letter: teamMeta.team_letter,
+        team_name: teamMeta.team_name,
+        mac_intercept: row.mac_intercept,
+        mac_slope: row.mac_slope,
+        initial_emissions: row.initial_emissions,
+        permit_allocation: row.permit_allocation,
+        called_price: calledPrice,
+        optimal_emissions: expected.final_emissions,
+        optimal_abatement: expected.abatement,
+        optimal_abatement_cost: expected.abatement_cost,
+        permit_position: expected.permit_position,
+        permit_revenue: expected.permit_revenue,
+        net_cost: expected.net_cost,
+        submitted_abatement: submission?.submitted_abatement ?? null,
+        submission_correct: submission?.is_correct ?? null,
+      };
+    });
+  }
+
+  if (phase === "md") {
+    const mdConstant = Number(session.md_constant ?? 0);
+    const capResult = computeEfficientCap(modelRows, mdConstant);
+    const efficientByTeam = new Map(
+      capResult.team_outcomes.map((row) => [String(row.team_id), Number(row.efficient_emissions)]),
+    );
+
+    return modelRows.map((row) => {
+      const teamMeta = teamMetaById.get(row.team_id) ?? { team_letter: "", team_name: "" };
+      const submission = mdByTeam.get(row.team_id);
+
+      return {
+        team_letter: teamMeta.team_letter,
+        team_name: teamMeta.team_name,
+        mac_intercept: row.mac_intercept,
+        mac_slope: row.mac_slope,
+        initial_emissions: row.initial_emissions,
+        permit_allocation: row.permit_allocation,
+        md_constant: mdConstant,
+        efficient_emissions: efficientByTeam.get(row.team_id) ?? null,
+        efficient_industry_cap: capResult.efficient_cap,
+        submitted_efficient_emissions: submission?.submitted_efficient_emissions ?? null,
+        submitted_industry_cap: submission?.submitted_industry_cap ?? null,
+        submission_correct: submission?.is_correct ?? null,
+      };
+    });
+  }
+
+  return modelRows.map((row) => {
+    const teamMeta = teamMetaById.get(row.team_id) ?? { team_letter: "", team_name: "" };
+    return {
+      team_letter: teamMeta.team_letter,
+      team_name: teamMeta.team_name,
+      mac_intercept: row.mac_intercept,
+      mac_slope: row.mac_slope,
+      initial_emissions: row.initial_emissions,
+      permit_allocation: row.permit_allocation,
+    };
+  });
+}
+
+/**
  * @param {Record<string, unknown>} teamRow
  * @param {number} uniformStandard
  */

@@ -35,6 +35,8 @@ const phaseStatus = document.getElementById("phase-status");
 
 const sessionKv = document.getElementById("session-kv");
 const marketSummaryElement = document.getElementById("market-summary");
+const phaseTeamTitleElement = document.getElementById("phase-team-title");
+const phaseTeamTableElement = document.getElementById("phase-team-table");
 const teamsTableElement = document.getElementById("teams-table");
 const uniformTableElement = document.getElementById("uniform-table");
 const priceTableElement = document.getElementById("price-table");
@@ -180,6 +182,9 @@ function flattenRows(state) {
 
 function renderAllTables(state) {
   renderSessionSummary(state);
+  const phaseName = phaseLabel(state?.session?.current_phase ?? "setup");
+  phaseTeamTitleElement.textContent = `Current Phase Team Detail (${phaseName})`;
+  renderTable(phaseTeamTableElement, state.phase_team_rows ?? []);
   renderTable(teamsTableElement, state.teams ?? []);
   renderTable(uniformTableElement, state.submissions?.uniform ?? []);
   renderTable(priceTableElement, state.submissions?.called_price ?? []);
