@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard | Emissions Trading Game</title>
+    <link rel="stylesheet" href="/games/emissions-trading-online/app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h1>Admin Dashboard</h1>
+          <a href="/games/emissions-trading-online/index.html">Home</a>
+        </div>
+        <p>Instructor-only controls for setup, phase calls, and submission monitoring.</p>
+      </section>
+
+      <section id="login-card" class="card">
+        <h2>Admin Login</h2>
+        <div class="grid">
+          <div>
+            <label for="admin-email">Email</label>
+            <input id="admin-email" type="email" autocomplete="username" />
+          </div>
+          <div>
+            <label for="admin-password">Password</label>
+            <input id="admin-password" type="password" autocomplete="current-password" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 0.6rem">
+          <button id="login-btn" class="primary" type="button">Log In</button>
+          <button id="logout-btn" class="secondary" type="button">Log Out</button>
+        </div>
+        <div id="login-status" class="status hidden"></div>
+      </section>
+
+      <section id="admin-panel" class="hidden">
+        <section class="card">
+          <h2>Create / Reset Session</h2>
+          <div class="grid">
+            <div>
+              <label for="session-name">Session Name</label>
+              <input id="session-name" type="text" value="AEM 4510 Emissions Trading Session" />
+            </div>
+            <div>
+              <label for="expected-team-count">Expected Team Count</label>
+              <input id="expected-team-count" type="number" min="1" value="6" />
+            </div>
+            <div>
+              <label for="common-allocation">Common Permit Allocation</label>
+              <input id="common-allocation" type="number" min="0" value="1480" />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 0.6rem">
+            <button id="create-session-btn" class="primary" type="button">Create New Active Session</button>
+          </div>
+          <div id="session-status" class="status hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>Phase Controls</h2>
+          <div class="grid">
+            <div>
+              <label for="set-phase">Phase</label>
+              <select id="set-phase">
+                <option value="setup">Setup</option>
+                <option value="uniform">Uniform Standard</option>
+                <option value="called_price">Called Price</option>
+                <option value="md">Marginal Damages</option>
+                <option value="complete">Complete</option>
+              </select>
+            </div>
+            <div>
+              <label for="called-price-input">Called Price (for called_price phase)</label>
+              <input id="called-price-input" type="number" min="0" step="1" />
+            </div>
+            <div>
+              <label for="md-input">MD Constant (for md phase)</label>
+              <input id="md-input" type="number" min="0" step="1" />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 0.6rem">
+            <button id="apply-phase-btn" class="primary" type="button">Apply Phase Update</button>
+            <button id="refresh-admin-btn" class="secondary" type="button">Refresh Dashboard</button>
+            <button id="export-csv-btn" class="secondary" type="button">Download CSV Snapshot</button>
+          </div>
+          <div id="phase-status" class="status hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>Live Session Summary</h2>
+          <dl class="kv" id="session-kv"></dl>
+        </section>
+
+        <section class="card">
+          <h2>Market Summary (Hidden from Students)</h2>
+          <div id="market-summary" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Teams</h2>
+          <div id="teams-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Uniform Submissions</h2>
+          <div id="uniform-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Called Price Submissions</h2>
+          <div id="price-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>MD Submissions</h2>
+          <div id="md-table" class="table-wrap"></div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/games/emissions-trading-online/admin.mjs"></script>
+  </body>
+</html>

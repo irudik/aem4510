@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Portal | Emissions Trading Game</title>
+    <link rel="stylesheet" href="/games/emissions-trading-online/app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h1>Student Portal</h1>
+          <a href="/games/emissions-trading-online/index.html">Home</a>
+        </div>
+        <p>Enter your team name to receive your assigned MAC parameters and permit allocation.</p>
+      </section>
+
+      <section id="join-card" class="card">
+        <h2>Join Team</h2>
+        <div class="grid">
+          <div>
+            <label for="team-name">Team Name</label>
+            <input id="team-name" type="text" autocomplete="off" placeholder="e.g., Green Hawks" />
+          </div>
+          <div class="row" style="align-items: end">
+            <button id="join-btn" class="primary" type="button">Join / Rejoin Team</button>
+            <button id="reset-token-btn" class="secondary" type="button">Forget Team Token</button>
+          </div>
+        </div>
+        <div id="join-status" class="status hidden"></div>
+      </section>
+
+      <section id="team-card" class="card hidden">
+        <h2>Team Assignment</h2>
+        <dl class="kv" id="team-kv"></dl>
+      </section>
+
+      <section id="stage-card" class="card hidden">
+        <h2>Current Stage</h2>
+        <p>
+          Phase: <span id="phase-label" class="phase">-</span>
+          <span id="called-price-badge" class="badge hidden"></span>
+          <span id="md-badge" class="badge hidden"></span>
+        </p>
+        <div id="stage-status" class="status hidden"></div>
+        <div id="stage-form-container"></div>
+      </section>
+
+      <section id="reveal-card" class="card hidden">
+        <h2>Market Reveal</h2>
+        <p id="reveal-text"></p>
+      </section>
+    </main>
+
+    <script type="module" src="/games/emissions-trading-online/student.mjs"></script>
+  </body>
+</html>
