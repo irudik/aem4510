@@ -410,7 +410,7 @@ function renderStageForm(session, submissions) {
 
   if (phase === "called_price") {
     calledPriceBadge.classList.remove("hidden");
-    calledPriceBadge.textContent = `Called Price: ${formatNumber(session.called_price, 0)}`;
+    calledPriceBadge.textContent = `Permit Price: $${formatNumber(session.called_price, 0)}`;
   }
 
   if (phase === "md") {
