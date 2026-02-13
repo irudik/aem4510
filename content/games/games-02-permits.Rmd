@@ -14,54 +14,56 @@ output:
 
 ## Getting started
 
-In addition to providing a respite from lectures, the purpose of this exercise is to learn more about the practical process that underlies the path to equilibrium in a tradable permit market. 
-
-## Instructions for the game
-
-There are N firms in the market. Each team (comprised of 4-6 students) will be assigned to represent one of the firms and make decisions on firms’ emission decisions. Members of your team should work together to solve the problems but choose one student as your firm’s reporter. That student will come forward and report information about your firm’s choices and expenditures by typing numbers into the class spread sheet on my Mac as soon as you are ready. The first of the N groups to report in gets N points toward an end-of-class prize, the second group gets N-1 points and so on. However, points will be deducted if your answer is wrong. The group with the most points wins.
+This exercise teaches how permit markets reach equilibrium and how outcomes compare to a uniform emissions standard.
 
 ## Online game links
 
 - Student login: [Emissions Trading Student Portal](/games/emissions-trading-online/student.html)
 - Admin login (instructor): [Emissions Trading Admin Dashboard](/games/emissions-trading-online/admin.html)
 
-## Emissions Trading Background 
+## How we will play
 
-We describe firms only by their marginal abatement cost (or marginal benefits of making another unit of emissions). These MAC functions are given by the following equations. The MAC for emissions greater than the initial level is always 0. Firms differ both by amount of emissions they would choose to create in the absence of regulation, and in the marginal cost of cleaning up a unit of emissions. 
+- The class is split into teams. Each team represents one firm.
+- Each team should choose one reporter device (one browser per team).
+- Teams join through the student portal using a team name.
+- After joining, each team is assigned a random linear MAC with:
+  - Intercept in {2000, 4000, 6000, 8000, 10000, 12000}
+  - Slope in {1, 2, 3, 4, 5, 6}
+- The common permit allocation is set by the instructor in the admin dashboard.
+- Teams use their assigned MAC and allocation to compute decisions in each phase.
 
-<center> 
+## Phase 1: Uniform standard
 
-| Firm Type                 |   | MAC in Dollars      |   | Initial Emissions Level |
-|:--------------------:|:----:|:-------------:|:---:|:---------------:|
-| A                     |   | MAC = 4000 - 2E               |  |2000               |
-| B                     |   | MAC = 8000 - 4E              | |2000               |
-| C                      |  | MAC = 10000 - 5E             |    |2000                |
-| D                      |  | MAC = 4000 - E               |  |4000                |
-| E                       | | MAC = 8000 - 2E              |   |4000                |
-| F                      |  | MAC = 10000 - 2.5E             |   |4000                |
-</center>
+In the uniform-standard phase, each team submits:
 
-On the board I will list how many of each firm type there are.
+- Final emissions
+- Abatement
+- Abatement cost
 
-## Scenarios
+The system checks each submission immediately and allows resubmission until correct.
 
-### Uniform Emissions Standard
+## Phase 2: Called-price permit market
 
-In this scenario, firms are subject to a uniform standard (1,480 tons emissions for each firm, in this example). You should calculate and record the abatement quantity and cost that this standard imposes on your firm.
+In the called-price phase, the instructor announces a permit price in the dashboard.
+For that price, each team computes and submits:
 
-On a piece of paper turn in the following to the professor/market facilitator:
+- Optimal abatement at the called price
 
-- Your team name
-- Your firm type
-- Your total amount of emissions abated
-- Your total cost of abatement
- 
-### Tradable Permits
+After all expected teams submit correct values, the dashboard reveals market excess demand at the called price.
+The instructor can then call a new price and repeat the round.
 
-Now your firm is given an initial permit allocation of 1,480 for free. The industry total is 1,480*N permits. For this exercise, a permit price will be called out. For that price, your firm must decide how many permits it wants to hold, and thus how many it wishes to buy or to sell. As soon as you have that figured out, n a piece of paper turn in the following to the professor/market facilitator:
+## Phase 3: Constant marginal damages (MD)
 
-- Your team name
-- Your firm type
-- How many permits you want to buy (negative numbers mean you want to sell)
+In the MD phase, the instructor sets a constant marginal damages value.
+Each team submits:
 
-When all reports are in, the professor/market facilitator will figure out total demand and supply and announce if the market is cleared (you should write down total industry demand and supply). If the market is not cleared, a new price will be called out.
+- Efficient emissions for its own firm
+- Efficient industry cap (sum across teams)
+
+Submissions are checked immediately with resubmission allowed.
+
+## Notes for students
+
+- Your firm parameters are not fixed A-F types anymore; they are assigned when you join.
+- Keep your team page open during class because it updates as the phase changes.
+- The instructor sees full team-by-team outcomes in the admin dashboard; students do not see equilibrium internals.
