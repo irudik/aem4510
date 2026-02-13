@@ -231,6 +231,14 @@ tr.leaderboard-you td {
   font-weight: 700;
 }
 
+.called-price-callout {
+  margin: 0.35rem 0 0.2rem;
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #0d5bd7;
+}
+
 .phase {
   font-weight: 700;
   text-transform: uppercase;
@@ -256,6 +264,10 @@ small.note {
 
   .kv {
     grid-template-columns: 1fr;
+  }
+
+  .called-price-callout {
+    font-size: 1.5rem;
   }
 
   button {
