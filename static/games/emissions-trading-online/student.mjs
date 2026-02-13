@@ -7,6 +7,7 @@ import {
 } from "/games/emissions-trading-online/shared.mjs";
 
 const JOIN_TOKEN_KEY = "emissions_game_join_token";
+const DRAFT_KEY_PREFIX = "emissions_game_stage_draft_";
 
 const joinCard = document.getElementById("join-card");
 const joinStatus = document.getElementById("join-status");
@@ -42,6 +43,114 @@ function setJoinToken(token) {
 
 function clearJoinToken() {
   localStorage.removeItem(JOIN_TOKEN_KEY);
+}
+
+function getDraftStorageKey(joinToken) {
+  return `${DRAFT_KEY_PREFIX}${joinToken}`;
+}
+
+function readDraftStore(joinToken) {
+  if (!joinToken) {
+    return {};
+  }
+
+  try {
+    const rawDraft = localStorage.getItem(getDraftStorageKey(joinToken));
+    if (!rawDraft) {
+      return {};
+    }
+    const parsed = JSON.parse(rawDraft);
+    if (parsed && typeof parsed === "object") {
+      return parsed;
+    }
+  } catch {
+    return {};
+  }
+
+  return {};
+}
+
+function writeDraftStore(joinToken, draftStore) {
+  if (!joinToken) {
+    return;
+  }
+
+  localStorage.setItem(getDraftStorageKey(joinToken), JSON.stringify(draftStore));
+}
+
+function clearAllDrafts(joinToken) {
+  if (!joinToken) {
+    return;
+  }
+
+  localStorage.removeItem(getDraftStorageKey(joinToken));
+}
+
+function phaseDraftKey(session) {
+  const phase = String(session?.current_phase ?? "");
+  if (phase === "called_price") {
+    return `called_price:${session?.called_price ?? ""}`;
+  }
+  if (phase === "md") {
+    return `md:${session?.md_constant ?? ""}`;
+  }
+  return phase;
+}
+
+function getPhaseDraft(session) {
+  const joinToken = getJoinToken();
+  const draftStore = readDraftStore(joinToken);
+  const draftKey = phaseDraftKey(session);
+  const phaseDraft = draftStore[draftKey];
+  if (phaseDraft && typeof phaseDraft === "object") {
+    return phaseDraft;
+  }
+  return {};
+}
+
+function setPhaseDraftField(session, fieldName, fieldValue) {
+  const joinToken = getJoinToken();
+  if (!joinToken) {
+    return;
+  }
+
+  const draftKey = phaseDraftKey(session);
+  const draftStore = readDraftStore(joinToken);
+  const previousDraft = draftStore[draftKey] && typeof draftStore[draftKey] === "object"
+    ? draftStore[draftKey]
+    : {};
+
+  draftStore[draftKey] = {
+    ...previousDraft,
+    [fieldName]: fieldValue,
+  };
+
+  writeDraftStore(joinToken, draftStore);
+}
+
+function clearPhaseDraft(session) {
+  const joinToken = getJoinToken();
+  if (!joinToken) {
+    return;
+  }
+
+  const draftKey = phaseDraftKey(session);
+  const draftStore = readDraftStore(joinToken);
+  if (!(draftKey in draftStore)) {
+    return;
+  }
+
+  delete draftStore[draftKey];
+  writeDraftStore(joinToken, draftStore);
+}
+
+function bindDraftInputs(session, fieldBindings) {
+  for (const [inputId, fieldName] of fieldBindings) {
+    const input = document.getElementById(inputId);
+    input?.addEventListener("input", () => {
+      setPhaseDraftField(session, fieldName, input.value);
+    });
+  }
 }
 
 function macEquation(intercept, slope) {
@@ -318,8 +427,10 @@ function renderStageForm(session, submissions) {
 
   if (phase === "uniform") {
     const prior = submissions.uniform;
+    const draft = getPhaseDraft(session);
     const summary = submissionAttemptSummary(prior);
     if (summary.submission_locked) {
+      clearPhaseDraft(session);
       stageFormContainer.innerHTML = `
         <p><small class="note">You used all ${MAX_INCORRECT_SUBMISSIONS} incorrect attempts in this phase. Submissions are now closed.</small></p>
         ${uniformRevealTable(prior)}
@@ -328,6 +439,7 @@ function renderStageForm(session, submissions) {
     }
 
     if (summary.submission_correct) {
+      clearPhaseDraft(session);
       stageFormContainer.innerHTML = `
         <p><small class="note">Your uniform-standard submission is accepted for this phase.</small></p>
         ${uniformRevealTable(prior)}
@@ -340,15 +452,15 @@ function renderStageForm(session, submissions) {
       <form id="uniform-form" class="grid">
         <div>
           <label for="uniform-emissions">Final Emissions</label>
-          <input id="uniform-emissions" type="number" min="0" step="1" value="${prior?.submitted_emissions ?? ""}" />
+          <input id="uniform-emissions" type="number" min="0" step="1" value="${draft?.submitted_emissions ?? prior?.submitted_emissions ?? ""}" />
         </div>
         <div>
           <label for="uniform-abatement">Abatement</label>
-          <input id="uniform-abatement" type="number" min="0" step="1" value="${prior?.submitted_abatement ?? ""}" />
+          <input id="uniform-abatement" type="number" min="0" step="1" value="${draft?.submitted_abatement ?? prior?.submitted_abatement ?? ""}" />
         </div>
         <div>
           <label for="uniform-cost">Abatement Cost</label>
-          <input id="uniform-cost" type="number" min="0" step="1" value="${prior?.submitted_abatement_cost ?? ""}" />
+          <input id="uniform-cost" type="number" min="0" step="1" value="${draft?.submitted_abatement_cost ?? prior?.submitted_abatement_cost ?? ""}" />
         </div>
         <div class="row" style="grid-column: 1/-1; margin-top: 0.5rem;">
           <button class="primary" type="submit">Submit Uniform Answers</button>
@@ -357,13 +469,20 @@ function renderStageForm(session, submissions) {
     `;
 
     document.getElementById("uniform-form")?.addEventListener("submit", submitUniformForm);
+    bindDraftInputs(session, [
+      ["uniform-emissions", "submitted_emissions"],
+      ["uniform-abatement", "submitted_abatement"],
+      ["uniform-cost", "submitted_abatement_cost"],
+    ]);
     return;
   }
 
   if (phase === "called_price") {
     const prior = submissions.called_price;
+    const draft = getPhaseDraft(session);
     const summary = submissionAttemptSummary(prior);
     if (summary.submission_locked) {
+      clearPhaseDraft(session);
       stageFormContainer.innerHTML = `
         <p><small class="note">You used all ${MAX_INCORRECT_SUBMISSIONS} incorrect attempts in this phase. Submissions are now closed.</small></p>
         ${calledPriceRevealTable(prior)}
@@ -372,6 +491,7 @@ function renderStageForm(session, submissions) {
     }
 
     if (summary.submission_correct) {
+      clearPhaseDraft(session);
       stageFormContainer.innerHTML = `
         <p><small class="note">Your called-price submission is accepted for this phase.</small></p>
         ${calledPriceRevealTable(prior)}
@@ -384,7 +504,7 @@ function renderStageForm(session, submissions) {
       <form id="price-form">
         <div>
           <label for="price-abatement">Chosen Abatement</label>
-          <input id="price-abatement" type="number" min="0" step="1" value="${prior?.submitted_abatement ?? ""}" />
+          <input id="price-abatement" type="number" min="0" step="1" value="${draft?.submitted_abatement ?? prior?.submitted_abatement ?? ""}" />
         </div>
         <div class="row" style="margin-top: 0.6rem;">
           <button class="primary" type="submit">Submit Called-Price Abatement</button>
@@ -393,13 +513,16 @@ function renderStageForm(session, submissions) {
     `;
 
     document.getElementById("price-form")?.addEventListener("submit", submitCalledPriceForm);
+    bindDraftInputs(session, [["price-abatement", "submitted_abatement"]]);
     return;
   }
 
   if (phase === "md") {
     const prior = submissions.md;
+    const draft = getPhaseDraft(session);
     const summary = submissionAttemptSummary(prior);
     if (summary.submission_locked) {
+      clearPhaseDraft(session);
       stageFormContainer.innerHTML = `
         <p><small class="note">You used all ${MAX_INCORRECT_SUBMISSIONS} incorrect attempts in this phase. Submissions are now closed.</small></p>
         ${mdRevealTable(prior)}
@@ -408,6 +531,7 @@ function renderStageForm(session, submissions) {
     }
 
     if (summary.submission_correct) {
+      clearPhaseDraft(session);
       stageFormContainer.innerHTML = `
         <p><small class="note">Your MD-stage submission is accepted for this phase.</small></p>
         ${mdRevealTable(prior)}
@@ -420,11 +544,11 @@ function renderStageForm(session, submissions) {
       <form id="md-form" class="grid">
         <div>
           <label for="md-efficient-emissions">Efficient Emissions (Your Team)</label>
-          <input id="md-efficient-emissions" type="number" min="0" step="1" value="${prior?.submitted_efficient_emissions ?? ""}" />
+          <input id="md-efficient-emissions" type="number" min="0" step="1" value="${draft?.submitted_efficient_emissions ?? prior?.submitted_efficient_emissions ?? ""}" />
         </div>
         <div>
           <label for="md-industry-cap">Efficient Industry Cap (All Teams)</label>
-          <input id="md-industry-cap" type="number" min="0" step="1" value="${prior?.submitted_industry_cap ?? ""}" />
+          <input id="md-industry-cap" type="number" min="0" step="1" value="${draft?.submitted_industry_cap ?? prior?.submitted_industry_cap ?? ""}" />
         </div>
         <div class="row" style="grid-column: 1/-1; margin-top: 0.5rem;">
           <button class="primary" type="submit">Submit MD Answers</button>
@@ -433,6 +557,10 @@ function renderStageForm(session, submissions) {
     `;
 
     document.getElementById("md-form")?.addEventListener("submit", submitMdForm);
+    bindDraftInputs(session, [
+      ["md-efficient-emissions", "submitted_efficient_emissions"],
+      ["md-industry-cap", "submitted_industry_cap"],
+    ]);
     return;
   }
 
@@ -507,6 +635,8 @@ teamNameInput.addEventListener("keydown", (event) => {
 });
 
 resetTokenButton.addEventListener("click", () => {
+  const joinToken = getJoinToken();
+  clearAllDrafts(joinToken);
   clearJoinToken();
   clearStatus(joinStatus);
   teamLeaderboardRow.classList.add("hidden");
