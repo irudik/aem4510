@@ -52,8 +52,7 @@ Online multiplayer classroom implementation of the AEM 4510 emissions-trading ga
 ## Important Reveal Rule (Called Price)
 
 The app reveals market excess demand only when:
-- Number of joined teams equals `expected_team_count`, and
-- Every joined team is resolved for the active called price
+- Every currently joined team is resolved for the active called price
   (`is_correct = true` or max incorrect attempts reached).
 
 If excess demand does not reveal, first check team count and correctness in admin tables.

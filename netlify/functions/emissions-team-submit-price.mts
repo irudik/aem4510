@@ -27,12 +27,11 @@ async function maybeRevealCalledPriceExcessDemand(session, teams, calledPrice) {
     useServiceRole: true,
   });
 
-  const expectedTeamCount = Number(session.expected_team_count);
+  const joinedTeamCount = Array.isArray(teams) ? teams.length : 0;
   const allTeamsResolved =
     Array.isArray(resolutionRows) &&
-    teams.length === expectedTeamCount &&
-    resolutionRows.length === expectedTeamCount &&
-    expectedTeamCount > 0 &&
+    resolutionRows.length === joinedTeamCount &&
+    joinedTeamCount > 0 &&
     resolutionRows.every((row) => Boolean(row.is_correct) || Boolean(row.is_locked));
   const allTeamsCorrect = allTeamsResolved && resolutionRows.every((row) => Boolean(row.is_correct));
 
