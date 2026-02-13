@@ -68,6 +68,29 @@ function macEquation(intercept, slope) {
   return `MAC = ${formatNumber(intercept, 0)} - ${formatNumber(slope, 2)} × E`;
 }
 
+function formatColumnLabel(columnName) {
+  const acronymTokens = new Set(["id", "md", "mac"]);
+  const spacedText = String(columnName)
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .trim();
+
+  if (!spacedText) {
+    return "";
+  }
+
+  return spacedText
+    .split(/\s+/)
+    .map((token) => {
+      const lowerToken = token.toLowerCase();
+      if (acronymTokens.has(lowerToken)) {
+        return lowerToken.toUpperCase();
+      }
+      return `${token.slice(0, 1).toUpperCase()}${token.slice(1).toLowerCase()}`;
+    })
+    .join(" ");
+}
+
 async function loadPublicConfig() {
   if (publicConfig) {
     return publicConfig;
@@ -88,7 +111,7 @@ function renderTable(target, rows) {
   }
 
   const columns = Object.keys(rows[0]);
-  const header = columns.map((column) => `<th>${column}</th>`).join("");
+  const header = columns.map((column) => `<th>${formatColumnLabel(column)}</th>`).join("");
   const body = rows
     .map((row) => {
       const cells = columns
