@@ -6,6 +6,8 @@ import {
   evaluateUniformSubmission,
   evaluateCalledPriceSubmission,
   evaluateMdSubmission,
+  parseScoringRankPoints,
+  computeLeaderboard,
   nextAttemptState,
   MAX_INCORRECT_SUBMISSIONS,
 } from "../../../netlify/functions/_lib/game_service.mts";
@@ -83,6 +85,46 @@ test("attempt policy locks on third incorrect and preserves attempts on correct"
   assert.equal(correctAfterWrong.incorrect_attempts, 2);
   assert.equal(correctAfterWrong.attempts_remaining, 1);
   assert.equal(correctAfterWrong.is_locked, false);
+});
+
+test("scoring rank-points parser handles defaults and explicit vectors", () => {
+  assert.deepEqual(parseScoringRankPoints(undefined), [10, 7, 5, 3, 1]);
+  assert.deepEqual(parseScoringRankPoints("12,8,4"), [12, 8, 4]);
+  assert.deepEqual(parseScoringRankPoints([9, 6, 3]), [9, 6, 3]);
+});
+
+test("leaderboard combines speed points and wrong-answer deductions", () => {
+  const session = {
+    scoring_rank_points: "10,6,3",
+    scoring_wrong_deduction: 2,
+  };
+  const teams = [
+    { id: "A", team_letter: "A", team_name: "A" },
+    { id: "B", team_letter: "B", team_name: "B" },
+    { id: "C", team_letter: "C", team_name: "C" },
+  ];
+  const submissions = {
+    uniform: [
+      { team_id: "A", is_correct: true, incorrect_attempts: 0, updated_at: "2026-02-13T10:01:00Z" },
+      { team_id: "B", is_correct: true, incorrect_attempts: 1, updated_at: "2026-02-13T10:02:00Z" },
+      { team_id: "C", is_correct: false, incorrect_attempts: 3, updated_at: "2026-02-13T10:03:00Z" },
+    ],
+    called_price: [
+      { team_id: "A", called_price: 3000, is_correct: false, incorrect_attempts: 2, updated_at: "2026-02-13T10:05:00Z" },
+      { team_id: "B", called_price: 3000, is_correct: true, incorrect_attempts: 0, updated_at: "2026-02-13T10:07:00Z" },
+      { team_id: "C", called_price: 3000, is_correct: true, incorrect_attempts: 1, updated_at: "2026-02-13T10:06:00Z" },
+    ],
+    md: [],
+  };
+
+  const result = computeLeaderboard(session, teams, submissions);
+  assert.equal(result.leaderboard.length, 3);
+  assert.equal(result.leaderboard[0].team_id, "B");
+  assert.equal(result.leaderboard[0].total_points, 10);
+  assert.equal(result.leaderboard[1].team_id, "A");
+  assert.equal(result.leaderboard[1].total_points, 6);
+  assert.equal(result.leaderboard[2].team_id, "C");
+  assert.equal(result.leaderboard[2].total_points, 2);
 });
 
 test("phase team rows expose uniform expected and submitted values", () => {

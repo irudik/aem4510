@@ -1,5 +1,6 @@
 import {
   calledPriceSummary,
+  computeLeaderboard,
   getActiveSession,
   getTeamsForSession,
   marketEquilibriumSummary,
@@ -72,6 +73,11 @@ export default async function emissionsAdminState(req) {
       called_price: calledPriceSubmissions,
       md: mdSubmissions,
     });
+    const leaderboardSummary = computeLeaderboard(session, teams, {
+      uniform: uniformSubmissions,
+      called_price: calledPriceSubmissions,
+      md: mdSubmissions,
+    });
 
     return jsonResponse(200, {
       session,
@@ -84,6 +90,11 @@ export default async function emissionsAdminState(req) {
       market_summary: marketSummary,
       called_price_summary: calledSummary,
       phase_team_rows: phaseRows,
+      scoring: {
+        rank_points: leaderboardSummary.scoring_rank_points,
+        wrong_deduction: leaderboardSummary.scoring_wrong_deduction,
+      },
+      leaderboard: leaderboardSummary.leaderboard,
       progress: {
         team_count: teams.length,
         expected_team_count: session.expected_team_count,

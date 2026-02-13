@@ -15,6 +15,8 @@ import { fetchSupabaseAuthUser, supabaseRequest } from "./supabase_rest.mts";
 export const TON_TOLERANCE = 1;
 export const COST_TOLERANCE = 100;
 export const MAX_INCORRECT_SUBMISSIONS = 3;
+export const DEFAULT_SCORING_RANK_POINTS = [10, 7, 5, 3, 1];
+export const DEFAULT_SCORING_WRONG_DEDUCTION = 1;
 
 /**
  * Increment/decode incorrect-attempt counters for stage submissions.
@@ -34,6 +36,214 @@ export function nextAttemptState(priorIncorrectAttempts, isCorrect) {
     incorrect_attempts: incorrectAttempts,
     attempts_remaining: Math.max(0, MAX_INCORRECT_SUBMISSIONS - incorrectAttempts),
     is_locked: isLocked,
+  };
+}
+
+/**
+ * Parse a comma-separated or array-based scoring vector for 1st/2nd/... correct submissions.
+ * @param {string | Array<number> | null | undefined} rawValue
+ */
+export function parseScoringRankPoints(rawValue) {
+  if (Array.isArray(rawValue)) {
+    if (rawValue.length === 0) {
+      throw new Error("scoring_rank_points must contain at least one value");
+    }
+    const parsed = rawValue.map((value) => Number(value));
+    const invalid = parsed.some((value) => !Number.isFinite(value) || value < 0);
+    if (invalid) {
+      throw new Error("scoring_rank_points entries must be nonnegative numbers");
+    }
+    return parsed;
+  }
+
+  const text = String(rawValue ?? "").trim();
+  if (!text) {
+    return [...DEFAULT_SCORING_RANK_POINTS];
+  }
+
+  const parts = text.split(",").map((part) => part.trim()).filter(Boolean);
+  if (parts.length === 0) {
+    throw new Error("scoring_rank_points must contain at least one value");
+  }
+
+  const parsed = parts.map((part) => Number(part));
+  const invalid = parsed.some((value) => !Number.isFinite(value) || value < 0);
+  if (invalid) {
+    throw new Error("scoring_rank_points entries must be nonnegative numbers");
+  }
+
+  return parsed;
+}
+
+/**
+ * Canonical string storage for the rank-point vector.
+ * @param {Array<number>} rankPoints
+ */
+export function scoringRankPointsToText(rankPoints) {
+  return rankPoints.join(",");
+}
+
+/**
+ * Resolve scoring config from the session row with defaults.
+ * @param {Record<string, unknown>} session
+ */
+export function scoringConfigFromSession(session) {
+  const scoringRankPoints = parseScoringRankPoints(session?.scoring_rank_points);
+  const wrongDeductionRaw = Number(session?.scoring_wrong_deduction ?? DEFAULT_SCORING_WRONG_DEDUCTION);
+  const scoringWrongDeduction =
+    Number.isFinite(wrongDeductionRaw) && wrongDeductionRaw >= 0
+      ? wrongDeductionRaw
+      : DEFAULT_SCORING_WRONG_DEDUCTION;
+
+  return {
+    scoring_rank_points: scoringRankPoints,
+    scoring_wrong_deduction: scoringWrongDeduction,
+  };
+}
+
+/**
+ * @param {string | null | undefined} timestamp
+ */
+function timestampMs(timestamp) {
+  const parsed = Date.parse(String(timestamp ?? ""));
+  if (Number.isFinite(parsed)) {
+    return parsed;
+  }
+  return Number.POSITIVE_INFINITY;
+}
+
+/**
+ * Compute a session leaderboard from all submitted rows and scoring settings.
+ * Teams earn position-based points when correct; each incorrect attempt incurs a deduction.
+ * @param {Record<string, unknown>} session
+ * @param {Array<Record<string, unknown>>} teams
+ * @param {{uniform: Array<Record<string, unknown>>, called_price: Array<Record<string, unknown>>, md: Array<Record<string, unknown>>}} submissions
+ */
+export function computeLeaderboard(session, teams, submissions) {
+  const { scoring_rank_points: rankPoints, scoring_wrong_deduction: wrongDeduction } =
+    scoringConfigFromSession(session);
+
+  const scoreboard = new Map(
+    teams.map((team) => [
+      String(team.id),
+      {
+        team_id: String(team.id),
+        team_letter: String(team.team_letter ?? ""),
+        team_name: String(team.team_name ?? ""),
+        total_points: 0,
+        correct_points: 0,
+        penalty_points: 0,
+        incorrect_attempts: 0,
+        correct_submissions: 0,
+        uniform_points: 0,
+        called_price_points: 0,
+        md_points: 0,
+      },
+    ]),
+  );
+
+  /**
+   * @param {Array<Record<string, unknown>>} rows
+   * @param {(row: Record<string, unknown>) => string} roundKeyFn
+   * @param {"uniform_points" | "called_price_points" | "md_points"} phasePointsField
+   */
+  function applyPhaseRows(rows, roundKeyFn, phasePointsField) {
+    const rowsByRound = new Map();
+    for (const row of rows ?? []) {
+      const teamId = String(row.team_id ?? "");
+      if (!teamId || !scoreboard.has(teamId)) {
+        continue;
+      }
+
+      const incorrectAttemptsRaw = Number(row.incorrect_attempts ?? 0);
+      const incorrectAttempts =
+        Number.isFinite(incorrectAttemptsRaw) && incorrectAttemptsRaw > 0
+          ? Math.floor(incorrectAttemptsRaw)
+          : 0;
+      const penalty = wrongDeduction * incorrectAttempts;
+      const teamScore = scoreboard.get(teamId);
+      teamScore.penalty_points += penalty;
+      teamScore.total_points -= penalty;
+      teamScore.incorrect_attempts += incorrectAttempts;
+      teamScore[phasePointsField] -= penalty;
+
+      const roundKey = roundKeyFn(row);
+      if (!rowsByRound.has(roundKey)) {
+        rowsByRound.set(roundKey, []);
+      }
+      rowsByRound.get(roundKey).push(row);
+    }
+
+    for (const roundRows of rowsByRound.values()) {
+      const correctRows = roundRows
+        .filter((row) => Boolean(row.is_correct))
+        .sort((left, right) => {
+          const timeDelta = timestampMs(left.updated_at) - timestampMs(right.updated_at);
+          if (timeDelta !== 0) {
+            return timeDelta;
+          }
+          return String(left.team_id ?? "").localeCompare(String(right.team_id ?? ""));
+        });
+
+      for (let index = 0; index < correctRows.length; index += 1) {
+        const award = Number(rankPoints[index] ?? 0);
+        if (!Number.isFinite(award) || award <= 0) {
+          continue;
+        }
+        const teamId = String(correctRows[index].team_id ?? "");
+        const teamScore = scoreboard.get(teamId);
+        if (!teamScore) {
+          continue;
+        }
+        teamScore.correct_points += award;
+        teamScore.total_points += award;
+        teamScore.correct_submissions += 1;
+        teamScore[phasePointsField] += award;
+      }
+    }
+  }
+
+  applyPhaseRows(
+    submissions.uniform ?? [],
+    () => "uniform",
+    "uniform_points",
+  );
+  applyPhaseRows(
+    submissions.called_price ?? [],
+    (row) => `called_price:${Number(row.called_price ?? 0)}`,
+    "called_price_points",
+  );
+  applyPhaseRows(
+    submissions.md ?? [],
+    (row) => `md:${Number(row.md_constant ?? 0)}`,
+    "md_points",
+  );
+
+  const leaderboard = Array.from(scoreboard.values())
+    .sort((left, right) => {
+      const totalDelta = Number(right.total_points) - Number(left.total_points);
+      if (totalDelta !== 0) {
+        return totalDelta;
+      }
+      const correctDelta = Number(right.correct_submissions) - Number(left.correct_submissions);
+      if (correctDelta !== 0) {
+        return correctDelta;
+      }
+      const incorrectDelta = Number(left.incorrect_attempts) - Number(right.incorrect_attempts);
+      if (incorrectDelta !== 0) {
+        return incorrectDelta;
+      }
+      return String(left.team_letter).localeCompare(String(right.team_letter));
+    })
+    .map((row, index) => ({
+      rank: index + 1,
+      ...row,
+    }));
+
+  return {
+    scoring_rank_points: rankPoints,
+    scoring_wrong_deduction: wrongDeduction,
+    leaderboard,
   };
 }
 
@@ -158,7 +368,14 @@ export async function clearMdSubmissions(sessionId) {
 
 /**
  * Create a new active session and mark all prior sessions inactive.
- * @param {{session_name: string, expected_team_count: number, common_permit_allocation: number, created_by: string}} payload
+ * @param {{
+ *   session_name: string,
+ *   expected_team_count: number,
+ *   common_permit_allocation: number,
+ *   scoring_rank_points: string,
+ *   scoring_wrong_deduction: number,
+ *   created_by: string
+ * }} payload
  */
 export async function createSession(payload) {
   await supabaseRequest("/rest/v1/game_sessions", {

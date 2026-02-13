@@ -14,8 +14,11 @@ const joinButton = document.getElementById("join-btn");
 const resetTokenButton = document.getElementById("reset-token-btn");
 const teamNameInput = document.getElementById("team-name");
 
+const teamLeaderboardRow = document.getElementById("team-leaderboard-row");
 const teamCard = document.getElementById("team-card");
 const teamKv = document.getElementById("team-kv");
+const leaderboardCard = document.getElementById("leaderboard-card");
+const leaderboardTable = document.getElementById("leaderboard-table");
 const stageCard = document.getElementById("stage-card");
 const phaseLabelElement = document.getElementById("phase-label");
 const calledPriceBadge = document.getElementById("called-price-badge");
@@ -105,7 +108,9 @@ function mdRevealTable(submission) {
 }
 
 function renderTeamCard(session, team) {
+  teamLeaderboardRow.classList.remove("hidden");
   teamCard.classList.remove("hidden");
+  leaderboardCard.classList.remove("hidden");
   stageCard.classList.remove("hidden");
 
   teamKv.innerHTML = "";
@@ -127,6 +132,41 @@ function renderTeamCard(session, team) {
     dd.textContent = value;
     teamKv.append(dt, dd);
   }
+}
+
+function renderLeaderboard(rows, ownTeamId) {
+  if (!rows || rows.length === 0) {
+    leaderboardTable.innerHTML = "<p><small class=\"note\">No teams have joined yet.</small></p>";
+    return;
+  }
+
+  const body = rows
+    .map((row) => {
+      const highlightClass = String(row.team_id) === String(ownTeamId) ? "leaderboard-you" : "";
+      return `
+        <tr class="${highlightClass}">
+          <td>${row.rank}</td>
+          <td>${row.team_letter ?? ""}</td>
+          <td>${row.team_name ?? ""}</td>
+          <td>${formatNumber(row.total_points, 2)}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  leaderboardTable.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Team</th>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>${body}</tbody>
+    </table>
+  `;
 }
 
 async function submitUniformForm(event) {
@@ -412,7 +452,9 @@ function renderReveal(session) {
 async function refreshState() {
   const joinToken = getJoinToken();
   if (!joinToken) {
+    teamLeaderboardRow.classList.add("hidden");
     teamCard.classList.add("hidden");
+    leaderboardCard.classList.add("hidden");
     stageCard.classList.add("hidden");
     revealCard.classList.add("hidden");
     return;
@@ -422,6 +464,7 @@ async function refreshState() {
     const state = await apiJson(`/api/emissions-trading/team/state?join_token=${encodeURIComponent(joinToken)}`);
     clearStatus(joinStatus);
     renderTeamCard(state.session, state.team);
+    renderLeaderboard(state.leaderboard ?? [], state.team.id);
     renderStageForm(state.session, state.submissions);
     renderReveal(state.session);
   } catch (error) {
@@ -466,7 +509,9 @@ teamNameInput.addEventListener("keydown", (event) => {
 resetTokenButton.addEventListener("click", () => {
   clearJoinToken();
   clearStatus(joinStatus);
+  teamLeaderboardRow.classList.add("hidden");
   teamCard.classList.add("hidden");
+  leaderboardCard.classList.add("hidden");
   stageCard.classList.add("hidden");
   revealCard.classList.add("hidden");
   setStatus(joinStatus, "warn", "Stored team token cleared.");

@@ -51,6 +51,14 @@
               <label for="common-allocation">Common Permit Allocation</label>
               <input id="common-allocation" type="number" min="0" value="1480" />
             </div>
+            <div>
+              <label for="scoring-rank-points">Correct-Order Points (1st,2nd,3rd,...)</label>
+              <input id="scoring-rank-points" type="text" value="10,7,5,3,1" />
+            </div>
+            <div>
+              <label for="wrong-answer-deduction">Wrong-Answer Deduction (per incorrect submission)</label>
+              <input id="wrong-answer-deduction" type="number" min="0" step="1" value="1" />
+            </div>
           </div>
           <div class="row" style="margin-top: 0.6rem">
             <button id="create-session-btn" class="primary" type="button">Create New Active Session</button>
@@ -96,6 +104,11 @@
         <section class="card">
           <h2>Market Summary (Hidden from Students)</h2>
           <div id="market-summary" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Point Leaderboard</h2>
+          <div id="leaderboard-table" class="table-wrap"></div>
         </section>
 
         <section class="card">

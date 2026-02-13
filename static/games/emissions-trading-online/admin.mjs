@@ -22,6 +22,8 @@ const adminPanel = document.getElementById("admin-panel");
 const sessionNameInput = document.getElementById("session-name");
 const expectedTeamCountInput = document.getElementById("expected-team-count");
 const commonAllocationInput = document.getElementById("common-allocation");
+const scoringRankPointsInput = document.getElementById("scoring-rank-points");
+const wrongAnswerDeductionInput = document.getElementById("wrong-answer-deduction");
 const createSessionButton = document.getElementById("create-session-btn");
 const sessionStatus = document.getElementById("session-status");
 
@@ -35,6 +37,7 @@ const phaseStatus = document.getElementById("phase-status");
 
 const sessionKv = document.getElementById("session-kv");
 const marketSummaryElement = document.getElementById("market-summary");
+const leaderboardTableElement = document.getElementById("leaderboard-table");
 const phaseTeamTitleElement = document.getElementById("phase-team-title");
 const phaseTeamTableElement = document.getElementById("phase-team-table");
 const teamsTableElement = document.getElementById("teams-table");
@@ -112,6 +115,12 @@ function renderSessionSummary(state) {
   }
 
   const progress = state.progress ?? {};
+  const scoring = state.scoring ?? {};
+  const rankPointsText = Array.isArray(scoring.rank_points)
+    ? scoring.rank_points.join(",")
+    : (session.scoring_rank_points ?? "-");
+  const wrongDeductionValue =
+    scoring.wrong_deduction ?? session.scoring_wrong_deduction ?? "-";
   sessionKv.innerHTML = "";
   const entries = [
     ["Session", session.session_name],
@@ -122,6 +131,8 @@ function renderSessionSummary(state) {
     ["Called Price", session.called_price == null ? "-" : formatNumber(session.called_price, 0)],
     ["Called Price Excess Demand", session.called_price_excess_demand == null ? "Hidden" : formatNumber(session.called_price_excess_demand, 2)],
     ["MD Constant", session.md_constant == null ? "-" : formatNumber(session.md_constant, 0)],
+    ["Scoring Points (1st,2nd,...)", rankPointsText],
+    ["Wrong Deduction", formatNumber(wrongDeductionValue, 2)],
     ["Uniform Correct", progress.uniform_correct ?? 0],
     ["Price Correct", progress.called_price_correct ?? 0],
     ["MD Correct", progress.md_correct ?? 0],
@@ -154,11 +165,13 @@ function flattenRows(state) {
   const uniformByTeam = new Map((state.submissions?.uniform ?? []).map((row) => [row.team_id, row]));
   const priceByTeam = new Map((state.submissions?.called_price ?? []).map((row) => [row.team_id, row]));
   const mdByTeam = new Map((state.submissions?.md ?? []).map((row) => [row.team_id, row]));
+  const leaderboardByTeam = new Map((state.leaderboard ?? []).map((row) => [row.team_id, row]));
 
   return teams.map((team) => {
     const uniform = uniformByTeam.get(team.id) ?? {};
     const price = priceByTeam.get(team.id) ?? {};
     const md = mdByTeam.get(team.id) ?? {};
+    const score = leaderboardByTeam.get(team.id) ?? {};
 
     return {
       session_name: session?.session_name ?? "",
@@ -181,6 +194,8 @@ function flattenRows(state) {
       md_submitted_efficient_emissions: md.submitted_efficient_emissions ?? "",
       md_submitted_industry_cap: md.submitted_industry_cap ?? "",
       md_is_correct: md.is_correct ?? "",
+      points_total: score.total_points ?? 0,
+      points_rank: score.rank ?? "",
     };
   });
 }
@@ -197,6 +212,17 @@ function renderAllTables(state) {
     ...row,
     mac_equation: macEquation(row.mac_intercept, row.mac_slope),
   }));
+  const leaderboardRows = (state.leaderboard ?? []).map((row) => ({
+    rank: row.rank,
+    team_letter: row.team_letter,
+    team_name: row.team_name,
+    total_points: formatNumber(row.total_points, 2),
+    correct_points: formatNumber(row.correct_points, 2),
+    penalty_points: formatNumber(row.penalty_points, 2),
+    incorrect_attempts: row.incorrect_attempts,
+    correct_submissions: row.correct_submissions,
+  }));
+  renderTable(leaderboardTableElement, leaderboardRows);
   renderTable(phaseTeamTableElement, phaseRows);
   renderTable(teamsTableElement, teamsRows);
   renderTable(uniformTableElement, state.submissions?.uniform ?? []);
@@ -282,6 +308,8 @@ async function createSession() {
     session_name: sessionNameInput.value.trim(),
     expected_team_count: Number(expectedTeamCountInput.value),
     common_permit_allocation: Number(commonAllocationInput.value),
+    scoring_rank_points: scoringRankPointsInput.value.trim(),
+    scoring_wrong_deduction: Number(wrongAnswerDeductionInput.value),
   };
 
   try {

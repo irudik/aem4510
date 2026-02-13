@@ -15,6 +15,7 @@ Online multiplayer classroom implementation of the AEM 4510 emissions-trading ga
 - Database schema:
   - `games/emissions-trading-online/supabase/001_online_game_schema.sql`
   - `games/emissions-trading-online/supabase/002_submission_attempt_caps.sql`
+  - `games/emissions-trading-online/supabase/003_scoring_config.sql`
 
 ## One-Time Setup Checklist
 
@@ -22,6 +23,7 @@ Online multiplayer classroom implementation of the AEM 4510 emissions-trading ga
 2. Apply migrations in order:
    - `games/emissions-trading-online/supabase/001_online_game_schema.sql`
    - `games/emissions-trading-online/supabase/002_submission_attempt_caps.sql`
+   - `games/emissions-trading-online/supabase/003_scoring_config.sql`
 3. Add your instructor auth user id to `public.admin_users`.
 4. Set Netlify environment variables:
    - `SUPABASE_URL`
@@ -36,6 +38,8 @@ Online multiplayer classroom implementation of the AEM 4510 emissions-trading ga
    - Session name
    - Expected team count
    - Common permit allocation
+   - Correct-order points vector (1st,2nd,3rd,...)
+   - Wrong-answer deduction per incorrect submission
 3. Share student URL with class.
 4. Students join with team names and receive assigned MAC/intercept-slope.
 5. Drive phases from admin dashboard:
@@ -66,6 +70,12 @@ If excess demand does not reveal, first check team count and correctness in admi
 ## Data Export
 
 Admin dashboard `Download CSV Snapshot` exports per-team state and submission status for the active session.
+
+## Scoring
+
+- Points are awarded by submission speed among correct teams, using the configured 1st/2nd/3rd/... vector.
+- Each incorrect submission incurs the configured deduction.
+- Leaderboards are visible on both admin and student pages and update as submissions arrive.
 
 ## Local Development
 

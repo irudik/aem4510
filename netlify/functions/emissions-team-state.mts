@@ -1,4 +1,9 @@
-import { getActiveSession, getTeamByJoinToken } from "./_lib/game_service.mts";
+import {
+  computeLeaderboard,
+  getActiveSession,
+  getTeamByJoinToken,
+  getTeamsForSession,
+} from "./_lib/game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
 import { supabaseRequest } from "./_lib/supabase_rest.mts";
 
@@ -25,14 +30,14 @@ export default async function emissionsTeamState(req) {
       return jsonResponse(404, { error: "Session is no longer active for this team" });
     }
 
-    const [uniformRows, calledPriceRows, mdRows] = await Promise.all([
+    const [teams, uniformRows, calledPriceRows, mdRows] = await Promise.all([
+      getTeamsForSession(session.id),
       supabaseRequest("/rest/v1/uniform_submissions", {
         method: "GET",
         queryParams: {
           select: "*",
           session_id: `eq.${session.id}`,
-          team_id: `eq.${team.id}`,
-          limit: 1,
+          order: "updated_at.asc",
         },
         useServiceRole: true,
       }),
@@ -41,9 +46,7 @@ export default async function emissionsTeamState(req) {
         queryParams: {
           select: "*",
           session_id: `eq.${session.id}`,
-          team_id: `eq.${team.id}`,
-          called_price: session.called_price == null ? undefined : `eq.${session.called_price}`,
-          limit: 1,
+          order: "updated_at.asc",
         },
         useServiceRole: true,
       }),
@@ -52,13 +55,33 @@ export default async function emissionsTeamState(req) {
         queryParams: {
           select: "*",
           session_id: `eq.${session.id}`,
-          team_id: `eq.${team.id}`,
-          md_constant: session.md_constant == null ? undefined : `eq.${session.md_constant}`,
-          limit: 1,
+          order: "updated_at.asc",
         },
         useServiceRole: true,
       }),
     ]);
+    const leaderboardSummary = computeLeaderboard(session, teams, {
+      uniform: uniformRows,
+      called_price: calledPriceRows,
+      md: mdRows,
+    });
+    const uniformRow = (uniformRows ?? []).find((row) => String(row.team_id) === String(team.id)) ?? null;
+    const calledPriceRow = (calledPriceRows ?? []).find((row) =>
+      String(row.team_id) === String(team.id) &&
+      (
+        session.called_price === null ||
+        session.called_price === undefined ||
+        Number(row.called_price) === Number(session.called_price)
+      )
+    ) ?? null;
+    const mdRow = (mdRows ?? []).find((row) =>
+      String(row.team_id) === String(team.id) &&
+      (
+        session.md_constant === null ||
+        session.md_constant === undefined ||
+        Number(row.md_constant) === Number(session.md_constant)
+      )
+    ) ?? null;
 
     return jsonResponse(200, {
       session: {
@@ -70,6 +93,8 @@ export default async function emissionsTeamState(req) {
         md_constant: session.md_constant,
         called_price_excess_demand: session.called_price_excess_demand,
         called_price_revealed_at: session.called_price_revealed_at,
+        scoring_rank_points: session.scoring_rank_points,
+        scoring_wrong_deduction: session.scoring_wrong_deduction,
       },
       team: {
         id: team.id,
@@ -81,10 +106,15 @@ export default async function emissionsTeamState(req) {
         permit_allocation: team.permit_allocation,
       },
       submissions: {
-        uniform: uniformRows[0] ?? null,
-        called_price: calledPriceRows[0] ?? null,
-        md: mdRows[0] ?? null,
+        uniform: uniformRow,
+        called_price: calledPriceRow,
+        md: mdRow,
       },
+      scoring: {
+        rank_points: leaderboardSummary.scoring_rank_points,
+        wrong_deduction: leaderboardSummary.scoring_wrong_deduction,
+      },
+      leaderboard: leaderboardSummary.leaderboard,
     });
   } catch (error) {
     return jsonResponse(400, { error: error.message });
