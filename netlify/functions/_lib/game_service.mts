@@ -269,6 +269,15 @@ export function marketEquilibriumSummary(teams) {
 }
 
 /**
+ * MAC display string used in instructor/student tables.
+ * @param {number} macIntercept
+ * @param {number} macSlope
+ */
+export function formatMacEquation(macIntercept, macSlope) {
+  return `MAC = ${Number(macIntercept)} - ${Number(macSlope)} × E`;
+}
+
+/**
  * Build an instructor-facing team table for the current phase.
  * @param {Record<string, unknown>} session
  * @param {Array<Record<string, unknown>>} teams
@@ -319,6 +328,7 @@ export function phaseTeamRows(session, teams, submissions) {
         team_name: teamMeta.team_name,
         mac_intercept: row.mac_intercept,
         mac_slope: row.mac_slope,
+        mac_equation: formatMacEquation(row.mac_intercept, row.mac_slope),
         initial_emissions: row.initial_emissions,
         permit_allocation: row.permit_allocation,
         standard_emissions: expected.final_emissions,
@@ -344,6 +354,7 @@ export function phaseTeamRows(session, teams, submissions) {
         team_name: teamMeta.team_name,
         mac_intercept: row.mac_intercept,
         mac_slope: row.mac_slope,
+        mac_equation: formatMacEquation(row.mac_intercept, row.mac_slope),
         initial_emissions: row.initial_emissions,
         permit_allocation: row.permit_allocation,
         called_price: calledPrice,
@@ -375,6 +386,7 @@ export function phaseTeamRows(session, teams, submissions) {
         team_name: teamMeta.team_name,
         mac_intercept: row.mac_intercept,
         mac_slope: row.mac_slope,
+        mac_equation: formatMacEquation(row.mac_intercept, row.mac_slope),
         initial_emissions: row.initial_emissions,
         permit_allocation: row.permit_allocation,
         md_constant: mdConstant,
@@ -394,6 +406,7 @@ export function phaseTeamRows(session, teams, submissions) {
       team_name: teamMeta.team_name,
       mac_intercept: row.mac_intercept,
       mac_slope: row.mac_slope,
+      mac_equation: formatMacEquation(row.mac_intercept, row.mac_slope),
       initial_emissions: row.initial_emissions,
       permit_allocation: row.permit_allocation,
     };

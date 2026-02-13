@@ -85,6 +85,7 @@ test("phase team rows expose uniform expected and submitted values", () => {
   const rows = phaseTeamRows(session, allTeams, submissions);
   assert.equal(rows.length, 6);
   assert.equal(rows[0].team_letter, "A");
+  assert.equal(rows[0].mac_equation, "MAC = 4000 - 2 × E");
   assert.equal(rows[0].standard_emissions, 1480);
   assert.equal(rows[0].standard_abatement, 520);
   assert.equal(rows[0].standard_abatement_cost, 270400);
@@ -114,6 +115,7 @@ test("phase team rows expose called-price expected and submitted values", () => 
 
   const rows = phaseTeamRows(session, allTeams, submissions);
   assert.equal(rows.length, 6);
+  assert.equal(rows[0].mac_equation, "MAC = 4000 - 2 × E");
   assert.equal(rows[0].called_price, 3000);
   assert.equal(rows[0].optimal_abatement, 1500);
   assert.equal(rows[0].optimal_emissions, 500);
@@ -144,6 +146,7 @@ test("phase team rows expose md expected and submitted values", () => {
 
   const rows = phaseTeamRows(session, allTeams, submissions);
   assert.equal(rows.length, 6);
+  assert.equal(rows[0].mac_equation, "MAC = 4000 - 2 × E");
   assert.equal(rows[0].efficient_emissions, 250);
   assert.equal(rows[0].efficient_industry_cap, 8025);
   assert.equal(rows[0].submitted_efficient_emissions, 250);

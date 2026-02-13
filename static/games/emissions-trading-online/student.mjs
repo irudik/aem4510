@@ -40,6 +40,10 @@ function clearJoinToken() {
   localStorage.removeItem(JOIN_TOKEN_KEY);
 }
 
+function macEquation(intercept, slope) {
+  return `MAC = ${formatNumber(intercept, 0)} - ${formatNumber(slope, 2)} × E`;
+}
+
 function renderTeamCard(session, team) {
   teamCard.classList.remove("hidden");
   stageCard.classList.remove("hidden");
@@ -51,6 +55,7 @@ function renderTeamCard(session, team) {
     ["Team Letter", team.team_letter],
     ["MAC Intercept", formatNumber(team.mac_intercept, 0)],
     ["MAC Slope", formatNumber(team.mac_slope, 2)],
+    ["MAC Equation", macEquation(team.mac_intercept, team.mac_slope)],
     ["Initial Emissions", formatNumber(team.initial_emissions, 2)],
     ["Permit Allocation", formatNumber(team.permit_allocation, 0)],
   ];

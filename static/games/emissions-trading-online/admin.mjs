@@ -61,6 +61,10 @@ function clearAdminToken() {
   localStorage.removeItem(TOKEN_KEY);
 }
 
+function macEquation(intercept, slope) {
+  return `MAC = ${formatNumber(intercept, 0)} - ${formatNumber(slope, 2)} × E`;
+}
+
 async function loadPublicConfig() {
   if (publicConfig) {
     return publicConfig;
@@ -163,6 +167,7 @@ function flattenRows(state) {
       team_name: team.team_name,
       mac_intercept: team.mac_intercept,
       mac_slope: team.mac_slope,
+      mac_equation: macEquation(team.mac_intercept, team.mac_slope),
       initial_emissions: team.initial_emissions,
       permit_allocation: team.permit_allocation,
       uniform_submitted_emissions: uniform.submitted_emissions ?? "",
@@ -184,8 +189,16 @@ function renderAllTables(state) {
   renderSessionSummary(state);
   const phaseName = phaseLabel(state?.session?.current_phase ?? "setup");
   phaseTeamTitleElement.textContent = `Current Phase Team Detail (${phaseName})`;
-  renderTable(phaseTeamTableElement, state.phase_team_rows ?? []);
-  renderTable(teamsTableElement, state.teams ?? []);
+  const phaseRows = (state.phase_team_rows ?? []).map((row) => ({
+    ...row,
+    mac_equation: row.mac_equation ?? macEquation(row.mac_intercept, row.mac_slope),
+  }));
+  const teamsRows = (state.teams ?? []).map((row) => ({
+    ...row,
+    mac_equation: macEquation(row.mac_intercept, row.mac_slope),
+  }));
+  renderTable(phaseTeamTableElement, phaseRows);
+  renderTable(teamsTableElement, teamsRows);
   renderTable(uniformTableElement, state.submissions?.uniform ?? []);
   renderTable(priceTableElement, state.submissions?.called_price ?? []);
   renderTable(mdTableElement, state.submissions?.md ?? []);
