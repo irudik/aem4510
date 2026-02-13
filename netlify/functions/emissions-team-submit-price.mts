@@ -75,7 +75,12 @@ export default async function emissionsTeamSubmitPrice(req) {
       useServiceRole: true,
     });
 
-    const allCorrect = Array.isArray(correctRows) && correctRows.length === teams.length && teams.length > 0;
+    const expectedTeamCount = Number(session.expected_team_count);
+    const allCorrect =
+      Array.isArray(correctRows) &&
+      teams.length === expectedTeamCount &&
+      correctRows.length === expectedTeamCount &&
+      expectedTeamCount > 0;
     let excessDemandPayload = null;
 
     if (allCorrect) {
