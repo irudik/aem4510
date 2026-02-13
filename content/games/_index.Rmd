@@ -11,3 +11,5 @@ type: docs
 [Coase Theorem Game](/games/games-01-coase/): How do property rights and transaction costs matter for achieving efficient outcomes with externalities and no government intervention?
 
 [Permit Trading Game](/games/games-02-permits/): How do we reach equilibrium outcomes in tradable permit markets? Do they Pareto dominate uniform standards?
+
+[Hedonics Sorting Game](/games/games-03-hedonics/): How do household preferences and housing supply generate equilibrium sorting and hedonic price gradients?

@@ -1,0 +1,61 @@
+---
+title: "Hedonics Sorting Game"
+linktitle: "Games 3: Hedonics"
+date: "`r format(Sys.time())`"
+menu:
+  content:
+    parent: Games
+    weight: 3
+type: docs
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+## Getting started
+
+This exercise teaches hedonic price equilibrium, sorting, and interpretation of marginal willingness to pay.
+
+## Online game links
+
+- Student login: [Hedonics Student Portal](/games/hedonics-online/student.html)
+- Admin login (instructor): [Hedonics Admin Dashboard](/games/hedonics-online/admin.html)
+
+## How we will play
+
+- The class is split into teams. Each team represents one household type.
+- Each team should choose one reporter device (one browser per team).
+- Teams join through the student portal using a team name.
+- After joining, each team receives:
+  - A household type (Black, Red, Orange, Yellow, Green, or Blue)
+  - Number of households represented by that type
+  - Utility parameters in `U = alpha * EQ + beta * SQ - P`
+
+## Round workflow
+
+For each active round, teams see the location-level EQ and SQ values for locations A-F.
+Teams submit:
+
+- Market houses at each location (A-F)
+- Best location for their own household type
+- Best utility value for their own household type
+
+The system checks submissions immediately.
+Each round allows up to 3 incorrect submissions.
+After 3 incorrect submissions, that team is locked for the round and correct answers are revealed to that team.
+
+## Reveal rule
+
+The round market outcome is revealed after all joined teams are resolved for that round (`is_correct = true` or locked at max attempts).
+
+## Scoring
+
+- Points are awarded by submission speed among correct teams within each round.
+- Incorrect submissions receive a configurable deduction.
+- Leaderboards update live for both students and admin.
+
+## Notes for students
+
+- Keep your team page open during class because it updates as rounds change.
+- The instructor sees full team-by-team submissions and expected answers.
+- Students only see full answer reveals when their own round submission is resolved.

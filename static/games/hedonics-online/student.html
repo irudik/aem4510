@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Portal | Hedonics Game</title>
+    <link rel="stylesheet" href="/games/hedonics-online/app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h1>Student Portal</h1>
+          <a href="/games/hedonics-online/index.html">Home</a>
+        </div>
+        <p>Enter your team name to receive your household type assignment and round instructions.</p>
+      </section>
+
+      <section id="join-card" class="card">
+        <h2>Join Team</h2>
+        <div class="grid">
+          <div>
+            <label for="team-name">Team Name</label>
+            <input id="team-name" type="text" autocomplete="off" placeholder="e.g., Team Oak" />
+          </div>
+          <div class="row" style="align-items: end">
+            <button id="join-btn" class="primary" type="button">Join / Rejoin Team</button>
+            <button id="reset-token-btn" class="secondary" type="button">Forget Team Token</button>
+          </div>
+        </div>
+        <div id="join-status" class="status hidden"></div>
+      </section>
+
+      <section id="team-leaderboard-row" class="split-grid hidden">
+        <section id="team-card" class="card">
+          <h2>Team Assignment</h2>
+          <dl class="kv" id="team-kv"></dl>
+        </section>
+
+        <section id="leaderboard-card" class="card">
+          <h2>Point Leaderboard</h2>
+          <div id="leaderboard-table" class="table-wrap"></div>
+        </section>
+      </section>
+
+      <section id="stage-card" class="card hidden">
+        <h2>Current Stage</h2>
+        <p>Phase: <span id="phase-label" class="phase">-</span></p>
+        <div id="round-context" class="table-wrap"></div>
+        <div id="stage-status" class="status hidden"></div>
+        <div id="stage-form-container"></div>
+      </section>
+
+      <section id="reveal-card" class="card hidden">
+        <h2>Round Reveal</h2>
+        <p id="reveal-text"></p>
+        <div id="reveal-table" class="table-wrap"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/games/hedonics-online/student.mjs"></script>
+  </body>
+</html>
