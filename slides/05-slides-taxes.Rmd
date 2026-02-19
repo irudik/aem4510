@@ -511,7 +511,7 @@ local_video("videos/05-taxes-nyc-congestion-one-year.mp4")
 # NYC congestion pricing: one year later
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
 knitr::include_graphics("files/05-travel-time.png")
 ```
 </center>
@@ -521,7 +521,7 @@ knitr::include_graphics("files/05-travel-time.png")
 # NYC congestion pricing: one year later
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
 knitr::include_graphics("files/05-segment-speed.png")
 ```
 </center>
@@ -531,7 +531,7 @@ knitr::include_graphics("files/05-segment-speed.png")
 # NYC congestion pricing: one year later
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
 knitr::include_graphics("files/05-speed-effect.png")
 ```
 </center>
@@ -541,7 +541,7 @@ knitr::include_graphics("files/05-speed-effect.png")
 # NYC congestion pricing: one year later
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
 knitr::include_graphics("files/05-speed-spillovers.png")
 ```
 </center>
@@ -551,7 +551,7 @@ knitr::include_graphics("files/05-speed-spillovers.png")
 # NYC congestion pricing: one year later
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
 knitr::include_graphics("files/05-other-outcomes.png")
 ```
 </center>
@@ -561,7 +561,7 @@ knitr::include_graphics("files/05-other-outcomes.png")
 # NYC congestion pricing: one year later
 
 <center>
-```{r, out.width = "80%", fig.pos="c", echo = FALSE}
+```{r, out.width = "70%", fig.pos="c", echo = FALSE}
 knitr::include_graphics("files/05-other-outcomes-2.png")
 ```
 </center>
