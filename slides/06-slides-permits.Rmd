@@ -79,6 +79,51 @@ This is easy with one firm, but what if we have several, or hundreds?
 
 # Optimal policy with multiple firms
 
+Suppose the regulator chooses emissions for $N$ firms: $E_1,\dots,E_N$
+
+--
+
+Let firm $i$'s compliance/abatement cost be $C_i(E_i)$
+
+--
+
+Let total damages depend on aggregate emissions:
+$$D = D\!\left(\sum_{i=1}^N E_i\right)$$
+
+--
+
+Planner problem:
+$$\min_{E_1,\dots,E_N}\;\sum_{i=1}^N C_i(E_i) + D\!\left(\sum_{i=1}^N E_i\right)$$
+
+---
+
+# Optimal policy with multiple firms
+
+Take one FOC for each firm $i=1,\dots,N$:
+$$\frac{\partial}{\partial E_i}\left[\sum_{j=1}^N C_j(E_j) + D\!\left(\sum_{j=1}^N E_j\right)\right] = 0$$
+$$C_i'(E_i) + D'\!\left(\sum_{j=1}^N E_j\right) = 0$$
+
+--
+
+$$\underbrace{-C_i'(E_i)}_{MAC_i} = \underbrace{D'\!\left(\sum_{j=1}^N E_j\right)}_{MD}$$
+
+---
+
+# Optimal policy with multiple firms
+
+$$\underbrace{-C_i'(E_i)}_{MAC_i} = \underbrace{D'\!\left(\sum_{j=1}^N E_j\right)}_{MD}$$
+
+--
+
+At the optimum:
+$$MAC_1 = MAC_2 = \cdots = MAC_N = MD$$
+
+This gives the target condition that permit markets try to decentralize
+
+---
+
+# Optimal policy with multiple firms
+
 .pull-left[
 ```{r multifirm, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
@@ -128,150 +173,6 @@ If we use a regular emission standard: it has to be firm-specific!
 Mandate $E^*_1$ for 1 and $E^*_2$ for 2
 
 This requires .hi[a lot] of info and political capital on behalf of the regulator
-
-]
-
-
----
-
-# Optimal policy with multiple firms
-
-.pull-left[
-```{r multi-tax, echo = FALSE, fig.show = 'hide', warning = F}
-mac <- function(x) 2 - 2/3*x
-mac2 <- function(x) 3 - x
-md <- function(x) 1
-ggplot() +
-  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
-  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
-  annotate("text", x = 2.5, y = .9, label = "MD", size = 8) +
-  stat_function(fun = mac2, color = "#000000", size = 1.5) +
-  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
-  stat_function(fun = md, color = "#638ccc", size = 1.5) +
-  annotate("text", x = 2.5, y = 1.15, label = expression(tau), size = 8) +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 2, xend = 2, y = 0, yend = .99,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 0, xend = 3, y = 1.05, yend = 1.05,
-           linetype = "longdash", size = 1.5, color = "red") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff",colour = NA),
-    plot.background = element_rect(fill = "#ffffff",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Emissions",
-       y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5,2,3), labels = c(expression(E[1]^'*'), expression(E[2]^'*'), expression(E[0]))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
-
-```
-
-![taxes](`r knitr::fig_chunk("multi-tax", "png")`)
-]
-
-.pull-right[
-
-Regulating multiple heterogeneous firms with a tax can be easy:
-
-If MD is constant, then since firms select MAC = $\tau$, as long as we set $\tau = MD$, we can achieve the efficient outcome (MAC = MD) without knowing anything about the firms!
-
-]
-
-
----
-
-# Optimal policy with multiple firms
-
-Taxes also achieve the .hi[cost-effective] outcome: achieving a given emission level at least-cost
-
-Let's see why
-
---
-
-Suppose we want to minimize the total cost of achieving emission level $\bar{E}$ by abating across two different sources, plant 1 and plant 2
-
---
-
-The plants have abatement cost functions: $C_1(E_1)$ and $C_2(E_2)$
-
---
-
-Write down the regulator's problem
-
----
-
-# Optimal policy with multiple firms
-
-$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2) \,\,\,\, \text{subject to:} \, E_1 + E_2 = \bar{E}$$
-
---
-
-Solve the constraint for $E_2 = \bar{E} - E_1$ so we have a simpler problem:
-$$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$
-
---
-
-Take the first-order condition to find what is necessary for a cost minimum:
-$$C'_1(E_1) + C'_2(\bar{E} - E_1) \times (-1) = 0$$
-
----
-
-# Optimal policy with multiple firms
-
-This gives us:
-$$\underbrace{-C'_1(E_1)}_{\text{MAC}_1} = \underbrace{-C'_2(\overbrace{\bar{E} - E_1}^{E_2})}_{\text{MAC}_2}$$
-
-The marginal abatement costs across the sources must be equal at the cost-effective pollution level
-
---
-
-This is called the .hi-blue[equimarginal principle]
-
----
-
-# Optimal policy with multiple firms
-
-Taxes .hi[always] achieve the equimarginal principle and get us the given amount of emission reductions at least-cost
-
---
-
-Why?
-
---
-
-We know firms optimally select MAC equal to the emission tax
-
---
-
-This means all firms' MACs are equal!
-
---
-
-Even if we don't set the tax equal to MD, whatever emission reduction we get will be as cheap as possible
-
----
-
-# Optimal policy with multiple firms
-
-.pull-left[
-![taxes](`r knitr::fig_chunk("multi-tax", "png")`)
-]
-
-.pull-right[
-
-The big problem is political feasibility
-
-Firms resist taxation because they have to pay a fine for each unit of emissions
-
-Tradable permit systems are a way to make emission standards flexible enough to handle heterogeneous firms
 
 ]
 
@@ -553,6 +454,193 @@ We can reduce costs by increasing emissions at high MAC firm 2 and decreasing em
 # Tradable permits: graphical
 
 .pull-left[
+```{r permits-dwl-save2, echo = FALSE, fig.show = 'hide', warning = F}
+mac = function(x) 2 - 2/3*x
+mac2 = function(x) 3 - x
+x_l = 1.5
+x_m = 3.5/2
+x_r = 2
+p = 1
+savings2 = tibble(
+  x = c(x_m, x_r, x_r, x_m),
+  y = c(0, 0, mac2(x_r), mac2(x_m))
+)
+ggplot() +
+  geom_polygon(data = savings2, aes(x = x, y = y), fill = "#638ccc", alpha = 0.35) +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = x_m, xend = x_m, y = 0, yend = 3,
+           linetype = "longdash", size = 1.5, color = "black") +
+  annotate("segment", x = x_r, xend = x_r, y = 0, yend = p,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = p, yend = p,
+           linetype = "dotted", size = 1.5, color = "black") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
+                     breaks = c(x_m, x_r),
+                     labels = c(expression(bar(E)/2), expression(E[2]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![permits](`r knitr::fig_chunk("permits-dwl-save2", "png")`)
+]
+
+.pull-right[
+
+Step 1: allow firm 2 (high MAC) to emit more, from $\bar{E}/2$ to $E_2$
+
+The blue shaded area is firm 2's cost saving
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+```{r permits-dwl-cost1, echo = FALSE, fig.show = 'hide', warning = F}
+mac = function(x) 2 - 2/3*x
+mac2 = function(x) 3 - x
+x_l = 1.5
+x_m = 3.5/2
+x_r = 2
+p = 1
+cost1 = tibble(
+  x = c(x_l, x_m, x_m, x_l),
+  y = c(0, 0, mac(x_m), mac(x_l))
+)
+ggplot() +
+  geom_polygon(data = cost1, aes(x = x, y = y), fill = "#EB811B", alpha = 0.35) +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = x_l, xend = x_l, y = 0, yend = p,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = x_m, xend = x_m, y = 0, yend = 3,
+           linetype = "longdash", size = 1.5, color = "black") +
+  annotate("segment", x = 0, xend = 3, y = p, yend = p,
+           linetype = "dotted", size = 1.5, color = "black") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
+                     breaks = c(x_l, x_m),
+                     labels = c(expression(E[1]), expression(bar(E)/2))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![permits](`r knitr::fig_chunk("permits-dwl-cost1", "png")`)
+]
+
+.pull-right[
+
+Step 2: firm 1 (low MAC) emits less, from $\bar{E}/2$ to $E_1$
+
+The orange shaded area is firm 1's cost increase
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+```{r permits-dwl-net, echo = FALSE, fig.show = 'hide', warning = F}
+mac = function(x) 2 - 2/3*x
+mac2 = function(x) 3 - x
+x_l = 1.5
+x_m = 3.5/2
+x_r = 2
+p = 1
+rect1 = tibble(x = c(x_l, x_m, x_m, x_l), y = c(0, 0, p, p))
+rect2 = tibble(x = c(x_m, x_r, x_r, x_m), y = c(0, 0, p, p))
+tri1 = tibble(x = c(x_l, x_m, x_m), y = c(p, p, mac(x_m)))
+tri2 = tibble(x = c(x_m, x_r, x_m), y = c(p, p, mac2(x_m)))
+ggplot() +
+  geom_polygon(data = rect1, aes(x = x, y = y), fill = "grey70", alpha = 0.3) +
+  geom_polygon(data = rect2, aes(x = x, y = y), fill = "grey70", alpha = 0.3) +
+  geom_polygon(data = tri1, aes(x = x, y = y), fill = "red", alpha = 0.5) +
+  geom_polygon(data = tri2, aes(x = x, y = y), fill = "red", alpha = 0.5) +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = x_l, xend = x_l, y = 0, yend = p,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = x_m, xend = x_m, y = 0, yend = 3,
+           linetype = "longdash", size = 1.5, color = "black") +
+  annotate("segment", x = x_r, xend = x_r, y = 0, yend = p,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = p, yend = p,
+           linetype = "dotted", size = 1.5, color = "black") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
+                     breaks = c(x_l, x_m, x_r),
+                     labels = c(expression(E[1]), expression(bar(E)/2), expression(E[2]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![permits](`r knitr::fig_chunk("permits-dwl-net", "png")`)
+]
+
+.pull-right[
+
+Step 3: net cost change from trading
+
+The grey rectangles are equal (same height and same width $\Delta E$), so they cancel out
+
+What remains is the two red triangles: the net cost reduction from reallocation
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
 ```{r permits-dwl, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 mac2 <- function(x) 3 - x
@@ -710,9 +798,9 @@ This would be the prevailing permit price in a tradable permit system
 
 An alternative way to think about it:
 
-the prevailing permit price is the MC of freeing up one more unit, the MAC of the selling firm
+the prevailing permit price is the MC of freeing up one more permit, the MAC of the selling firm
 
-or it is the MB of freeing up one more unit (avoided MAC), the MAC of the buying firm
+or it is the MB of freeing up one more permit (avoided MAC), the MAC of the buying firm
 
 ]
 
@@ -1616,7 +1704,7 @@ knitr::include_graphics("files/06-eu-ets.png")
 
 ---
 
-# AB32
+# China ETS
 
 <center>
 ```{r, out.width = "100%", fig.pos="c", echo = FALSE}
@@ -1624,6 +1712,288 @@ knitr::include_graphics("files/06-china.png")
 ```
 </center>
 
+
+---
+
+class: inverse, center, middle
+
+# Banking and borrowing in permit markets
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Banking and borrowing in permits
+
+In cap-and-trade, permits may be shifted across time if we allow for banking and borrowing:
+
+--
+
+.hi-blue[Banking]: save unused permits for future compliance
+
+--
+
+.hi-blue[Borrowing]: use future permits early, then make up the shortfall later
+
+--
+
+Let $\bar{E}_t$ be permits issued in period $t$, $E_t$ emissions, and $B_t$ the end-of-period bank:
+$$B_t = B_{t-1} + \bar{E}_t - E_t$$
+
+--
+
+Banking only: $B_t \geq 0$  
+Borrowing allowed: $B_t$ can be negative (typically with limits/penalties)
+
+---
+
+# Banking and borrowing in permits
+
+Two-period cost-minimization benchmark:
+
+$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2)$$
+$$\text{subject to: }E_1 + E_2 = \bar{E}_1 + \bar{E}_2$$
+
+--
+
+FOC:
+$$C_1'(E_1^*) = C_2'(E_2^*)$$
+
+--
+
+In MAC terms:
+$$MAC_1(E_1^*) = MAC_2(E_2^*)$$
+
+--
+
+A firm equalizes its MAC over time!
+
+---
+
+# Banking and borrowing in permits
+
+Intuition:
+
+Standard cap-and-trade allows .hi-blue[within-period trade across firms]
+
+--
+
+Banking and borrowing add .hi-blue[across-period trade within a firm]
+
+--
+
+So a firm can effectively "trade with itself over time"
+
+--
+
+This shifts abatement away from high-MAC periods and toward low-MAC periods
+
+---
+
+# Banking and borrowing in permits
+
+Why might a firm's MAC change over time?
+
+1. Fuel and input prices move (e.g., coal vs natural gas prices)
+2. Output demand changes (business cycle, weather-driven load)
+3. Abatement equipment has temporary outages or maintenance
+4. New technology adoption lowers future abatement cost
+5. Learning-by-doing improves operational efficiency
+
+--
+
+With these shocks, banking/borrowing lowers compliance cost relative to a rigid period-by-period cap
+
+---
+
+# Banking and borrowing in permits
+
+.pull-left[
+```{r permits-time-rule, echo = FALSE, fig.show = 'hide', warning = F}
+mac1 = function(x) 2 - 2/3*x
+mac2 = function(x) 3 - x
+e_cap = 3.5/2
+e1_star = 1.5
+e2_star = 2
+p_star = 1
+
+ggplot() +
+  annotate("text", x = .58, y = 2.05, label = "MAC1 (period 1)", color = "#ca5670", size = 7) +
+  annotate("text", x = .58, y = 2.95, label = "MAC2 (period 2)", color = "#638ccc", size = 7) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  stat_function(fun = mac1, color = "#ca5670", size = 1.5) +
+  annotate("segment", x = e_cap, xend = e_cap, y = 0, yend = 3.1,
+           linetype = "longdash", size = 1.4, color = "black") +
+  annotate("segment", x = e1_star, xend = e1_star, y = 0, yend = p_star,
+           linetype = "dashed", size = 1.3, color = "grey50") +
+  annotate("segment", x = e2_star, xend = e2_star, y = 0, yend = p_star,
+           linetype = "dashed", size = 1.3, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = p_star, yend = p_star,
+           linetype = "dotted", size = 1.3, color = "black") +
+  annotate("curve", x = e_cap, y = 0.38, xend = e1_star, yend = 0.38,
+           curvature = .35, arrow = arrow(length = unit(0.16, "cm")),
+           color = "#ca5670", size = 1.1) +
+  annotate("curve", x = e_cap, y = 0.60, xend = e2_star, yend = 0.60,
+           curvature = -.35, arrow = arrow(length = unit(0.16, "cm")),
+           color = "#638ccc", size = 1.1) +
+  annotate("text", x = 1.00, y = 0.88, label = "Bank permits", color = "#638ccc", size = 6.5) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(size = 22),
+    axis.text.y = element_text(size = 22, color = "#ffffff"),
+    axis.title.x = element_text(size = 24),
+    axis.title.y = element_text(size = 24),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions in each period", y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
+                     breaks = c(e1_star, e_cap, e2_star),
+                     labels = c(expression(E[1]^"*"), expression(bar(E)), expression(E[2]^"*"))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![banking graphic](`r knitr::fig_chunk("permits-time-rule", "png")`)
+]
+
+.pull-right[
+
+Decision rule at the no-flex caps:
+
+If $MAC_2(\bar{E}_2) > MAC_1(\bar{E}_1)$, period 2 abatement is more expensive
+
+Banking is optimal: $E_1^* < \bar{E}_1$ and $E_2^* > \bar{E}_2$
+
+If $MAC_1(\bar{E}_1) > MAC_2(\bar{E}_2)$, borrowing is optimal
+
+]
+
+---
+
+# Banking and borrowing in permits
+
+.pull-left[
+```{r permits-time-borrowing, echo = FALSE, fig.show = 'hide', warning = F}
+mac1 = function(x) 3 - x
+mac2 = function(x) 2 - 2/3*x
+e_cap = 3.5/2
+e1_star = 2
+e2_star = 1.5
+p_star = 1
+
+ggplot() +
+  annotate("text", x = .58, y = 2.95, label = "MAC1 (period 1)", color = "#ca5670", size = 7) +
+  annotate("text", x = .58, y = 2.05, label = "MAC2 (period 2)", color = "#638ccc", size = 7) +
+  stat_function(fun = mac1, color = "#ca5670", size = 1.5) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = e_cap, xend = e_cap, y = 0, yend = 3.1,
+           linetype = "longdash", size = 1.4, color = "black") +
+  annotate("segment", x = e2_star, xend = e2_star, y = 0, yend = p_star,
+           linetype = "dashed", size = 1.3, color = "grey50") +
+  annotate("segment", x = e1_star, xend = e1_star, y = 0, yend = p_star,
+           linetype = "dashed", size = 1.3, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = p_star, yend = p_star,
+           linetype = "dotted", size = 1.3, color = "black") +
+  annotate("curve", x = e_cap, y = 0.42, xend = e1_star, yend = 0.42,
+           curvature = -.35, arrow = arrow(length = unit(0.16, "cm")),
+           color = "#ca5670", size = 1.1) +
+  annotate("curve", x = e_cap, y = 0.62, xend = e2_star, yend = 0.62,
+           curvature = .35, arrow = arrow(length = unit(0.16, "cm")),
+           color = "#638ccc", size = 1.1) +
+  annotate("text", x = 0.95, y = 0.90, label = "Borrow permits", color = "#ca5670", size = 6.5) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(size = 22),
+    axis.text.y = element_text(size = 22, color = "#ffffff"),
+    axis.title.x = element_text(size = 24),
+    axis.title.y = element_text(size = 24),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions in each period", y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
+                     breaks = c(e2_star, e_cap, e1_star),
+                     labels = c(expression(E[2]^"*"), expression(bar(E)), expression(E[1]^"*"))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![borrowing graphic](`r knitr::fig_chunk("permits-time-borrowing", "png")`)
+]
+
+.pull-right[
+
+Borrowing case: period 1 starts with the higher MAC at cap
+
+Cost minimization shifts emissions toward period 1 and away from period 2
+
+That is: $E_1^* > \bar{E}_1$ and $E_2^* < \bar{E}_2$
+
+Both banking and borrowing are intertemporal permit trade that aligns MACs across time
+
+]
+
+---
+
+# Banking and borrowing in practice: Acid Rain Program
+
+.pull-left[
+<center>
+```{r, out.width = "95%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/06-arp1.png")
+```
+</center>
+]
+
+.pull-right[
+
+U.S. $SO_2$ trading (Acid Rain Program) allowed banking across years
+
+Firms over-complied in the 1990s and built an allowance bank before tighter caps
+
+]
+
+---
+
+# Banking and borrowing in practice: EU-ETS
+
+.pull-left[
+<center>
+```{r, out.width = "85%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/06-eu-ets.png")
+```
+</center>
+]
+
+.pull-right[
+
+Phase I (2005-2007): limited inter-phase banking; surplus allowances led to a price collapse near phase end
+
+From Phase II onward, banking became a key margin for compliance planning
+
+Large cumulative surplus carried forward across phases and affected prices
+
+Borrowing is limited in practice; EU design relies much more on banking than borrowing
+
+]
+
+---
+
+# Banking and borrowing: design lessons
+
+1. Banking is widely used because it lowers costs while preserving a cumulative cap
+2. Borrowing is often constrained because of default, enforcement, and credibility concerns
+3. Rules on banking/borrowing strongly affect allowance price dynamics
+4. Without banking across phase boundaries, end-of-phase price volatility can be severe
 
 ---
 
@@ -1710,7 +2080,7 @@ The regulator can achieve $E^*$ through:
 - an emission standard of $E^*$
 - a tax of $\tau$
 - an abatement subsidy of $s$
-- "tradable permit" cap of $E^*$
+- "tradable permit" cap of $E^*$ with auctioned permits
 
 ]
 

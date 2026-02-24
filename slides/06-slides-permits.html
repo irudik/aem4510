@@ -152,6 +152,51 @@ This is easy with one firm, but what if we have several, or hundreds?
 
 # Optimal policy with multiple firms
 
+Suppose the regulator chooses emissions for `\(N\)` firms: `\(E_1,\dots,E_N\)`
+
+--
+
+Let firm `\(i\)`'s compliance/abatement cost be `\(C_i(E_i)\)`
+
+--
+
+Let total damages depend on aggregate emissions:
+`$$D = D\!\left(\sum_{i=1}^N E_i\right)$$`
+
+--
+
+Planner problem:
+`$$\min_{E_1,\dots,E_N}\;\sum_{i=1}^N C_i(E_i) + D\!\left(\sum_{i=1}^N E_i\right)$$`
+
+---
+
+# Optimal policy with multiple firms
+
+Take one FOC for each firm `\(i=1,\dots,N\)`:
+`$$\frac{\partial}{\partial E_i}\left[\sum_{j=1}^N C_j(E_j) + D\!\left(\sum_{j=1}^N E_j\right)\right] = 0$$`
+`$$C_i'(E_i) + D'\!\left(\sum_{j=1}^N E_j\right) = 0$$`
+
+--
+
+`$$\underbrace{-C_i'(E_i)}_{MAC_i} = \underbrace{D'\!\left(\sum_{j=1}^N E_j\right)}_{MD}$$`
+
+---
+
+# Optimal policy with multiple firms
+
+`$$\underbrace{-C_i'(E_i)}_{MAC_i} = \underbrace{D'\!\left(\sum_{j=1}^N E_j\right)}_{MD}$$`
+
+--
+
+At the optimum:
+`$$MAC_1 = MAC_2 = \cdots = MAC_N = MD$$`
+
+This gives the target condition that permit markets try to decentralize
+
+---
+
+# Optimal policy with multiple firms
+
 .pull-left[
 
 
@@ -169,115 +214,6 @@ If we use a regular emission standard: it has to be firm-specific!
 Mandate `\(E^*_1\)` for 1 and `\(E^*_2\)` for 2
 
 This requires .hi[a lot] of info and political capital on behalf of the regulator
-
-]
-
-
----
-
-# Optimal policy with multiple firms
-
-.pull-left[
-
-
-![taxes](06-slides-permits_files/figure-html/multi-tax-1.png)
-]
-
-.pull-right[
-
-Regulating multiple heterogeneous firms with a tax can be easy:
-
-If MD is constant, then since firms select MAC = `\(\tau\)`, as long as we set `\(\tau = MD\)`, we can achieve the efficient outcome (MAC = MD) without knowing anything about the firms!
-
-]
-
-
----
-
-# Optimal policy with multiple firms
-
-Taxes also achieve the .hi[cost-effective] outcome: achieving a given emission level at least-cost
-
-Let's see why
-
---
-
-Suppose we want to minimize the total cost of achieving emission level `\(\bar{E}\)` by abating across two different sources, plant 1 and plant 2
-
---
-
-The plants have abatement cost functions: `\(C_1(E_1)\)` and `\(C_2(E_2)\)`
-
---
-
-Write down the regulator's problem
-
----
-
-# Optimal policy with multiple firms
-
-`$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2) \,\,\,\, \text{subject to:} \, E_1 + E_2 = \bar{E}$$`
-
---
-
-Solve the constraint for `\(E_2 = \bar{E} - E_1\)` so we have a simpler problem:
-`$$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$`
-
---
-
-Take the first-order condition to find what is necessary for a cost minimum:
-`$$C'_1(E_1) + C'_2(\bar{E} - E_1) \times (-1) = 0$$`
-
----
-
-# Optimal policy with multiple firms
-
-This gives us:
-`$$\underbrace{-C'_1(E_1)}_{\text{MAC}_1} = \underbrace{-C'_2(\overbrace{\bar{E} - E_1}^{E_2})}_{\text{MAC}_2}$$`
-
-The marginal abatement costs across the sources must be equal at the cost-effective pollution level
-
---
-
-This is called the .hi-blue[equimarginal principle]
-
----
-
-# Optimal policy with multiple firms
-
-Taxes .hi[always] achieve the equimarginal principle and get us the given amount of emission reductions at least-cost
-
---
-
-Why?
-
---
-
-We know firms optimally select MAC equal to the emission tax
-
---
-
-This means all firms' MACs are equal!
-
---
-
-Even if we don't set the tax equal to MD, whatever emission reduction we get will be as cheap as possible
-
----
-
-# Optimal policy with multiple firms
-
-.pull-left[
-![taxes](06-slides-permits_files/figure-html/multi-tax-1.png)
-]
-
-.pull-right[
-
-The big problem is political feasibility
-
-Firms resist taxation because they have to pay a fine for each unit of emissions
-
-Tradable permit systems are a way to make emission standards flexible enough to handle heterogeneous firms
 
 ]
 
@@ -456,6 +392,62 @@ We can reduce costs by increasing emissions at high MAC firm 2 and decreasing em
 .pull-left[
 
 
+![permits](06-slides-permits_files/figure-html/permits-dwl-save2-1.png)
+]
+
+.pull-right[
+
+Step 1: allow firm 2 (high MAC) to emit more, from `\(\bar{E}/2\)` to `\(E_2\)`
+
+The blue shaded area is firm 2's cost saving
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+
+
+![permits](06-slides-permits_files/figure-html/permits-dwl-cost1-1.png)
+]
+
+.pull-right[
+
+Step 2: firm 1 (low MAC) emits less, from `\(\bar{E}/2\)` to `\(E_1\)`
+
+The orange shaded area is firm 1's cost increase
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+
+
+![permits](06-slides-permits_files/figure-html/permits-dwl-net-1.png)
+]
+
+.pull-right[
+
+Step 3: net cost change from trading
+
+The grey rectangles are equal (same height and same width `\(\Delta E\)`), so they cancel out
+
+What remains is the two red triangles: the net cost reduction from reallocation
+
+]
+
+---
+
+# Tradable permits: graphical
+
+.pull-left[
+
+
 ![permits](06-slides-permits_files/figure-html/permits-dwl-1.png)
 ]
 
@@ -535,9 +527,9 @@ This would be the prevailing permit price in a tradable permit system
 
 An alternative way to think about it:
 
-the prevailing permit price is the MC of freeing up one more unit, the MAC of the selling firm
+the prevailing permit price is the MC of freeing up one more permit, the MAC of the selling firm
 
-or it is the MB of freeing up one more unit (avoided MAC), the MAC of the buying firm
+or it is the MB of freeing up one more permit (avoided MAC), the MAC of the buying firm
 
 ]
 
@@ -1213,12 +1205,196 @@ Tradble permit systems are increasingly common:
 
 ---
 
-# AB32
+# China ETS
 
 &lt;center&gt;
 &lt;img src="files/06-china.png" width="100%" /&gt;
 &lt;/center&gt;
 
+
+---
+
+class: inverse, center, middle
+
+# Banking and borrowing in permit markets
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Banking and borrowing in permits
+
+In cap-and-trade, permits may be shifted across time if we allow for banking and borrowing:
+
+--
+
+.hi-blue[Banking]: save unused permits for future compliance
+
+--
+
+.hi-blue[Borrowing]: use future permits early, then make up the shortfall later
+
+--
+
+Let `\(\bar{E}_t\)` be permits issued in period `\(t\)`, `\(E_t\)` emissions, and `\(B_t\)` the end-of-period bank:
+`$$B_t = B_{t-1} + \bar{E}_t - E_t$$`
+
+--
+
+Banking only: `\(B_t \geq 0\)`  
+Borrowing allowed: `\(B_t\)` can be negative (typically with limits/penalties)
+
+---
+
+# Banking and borrowing in permits
+
+Two-period cost-minimization benchmark:
+
+`$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2)$$`
+`$$\text{subject to: }E_1 + E_2 = \bar{E}_1 + \bar{E}_2$$`
+
+--
+
+FOC:
+`$$C_1'(E_1^*) = C_2'(E_2^*)$$`
+
+--
+
+In MAC terms:
+`$$MAC_1(E_1^*) = MAC_2(E_2^*)$$`
+
+--
+
+A firm equalizes its MAC over time!
+
+---
+
+# Banking and borrowing in permits
+
+Intuition:
+
+Standard cap-and-trade allows .hi-blue[within-period trade across firms]
+
+--
+
+Banking and borrowing add .hi-blue[across-period trade within a firm]
+
+--
+
+So a firm can effectively "trade with itself over time"
+
+--
+
+This shifts abatement away from high-MAC periods and toward low-MAC periods
+
+---
+
+# Banking and borrowing in permits
+
+Why might a firm's MAC change over time?
+
+1. Fuel and input prices move (e.g., coal vs natural gas prices)
+2. Output demand changes (business cycle, weather-driven load)
+3. Abatement equipment has temporary outages or maintenance
+4. New technology adoption lowers future abatement cost
+5. Learning-by-doing improves operational efficiency
+
+--
+
+With these shocks, banking/borrowing lowers compliance cost relative to a rigid period-by-period cap
+
+---
+
+# Banking and borrowing in permits
+
+.pull-left[
+
+
+![banking graphic](06-slides-permits_files/figure-html/permits-time-rule-1.png)
+]
+
+.pull-right[
+
+Decision rule at the no-flex caps:
+
+If `\(MAC_2(\bar{E}_2) &gt; MAC_1(\bar{E}_1)\)`, period 2 abatement is more expensive
+
+Banking is optimal: `\(E_1^* &lt; \bar{E}_1\)` and `\(E_2^* &gt; \bar{E}_2\)`
+
+If `\(MAC_1(\bar{E}_1) &gt; MAC_2(\bar{E}_2)\)`, borrowing is optimal
+
+]
+
+---
+
+# Banking and borrowing in permits
+
+.pull-left[
+
+
+![borrowing graphic](06-slides-permits_files/figure-html/permits-time-borrowing-1.png)
+]
+
+.pull-right[
+
+Borrowing case: period 1 starts with the higher MAC at cap
+
+Cost minimization shifts emissions toward period 1 and away from period 2
+
+That is: `\(E_1^* &gt; \bar{E}_1\)` and `\(E_2^* &lt; \bar{E}_2\)`
+
+Both banking and borrowing are intertemporal permit trade that aligns MACs across time
+
+]
+
+---
+
+# Banking and borrowing in practice: Acid Rain Program
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/06-arp1.png" width="95%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+
+U.S. `\(SO_2\)` trading (Acid Rain Program) allowed banking across years
+
+Firms over-complied in the 1990s and built an allowance bank before tighter caps
+
+]
+
+---
+
+# Banking and borrowing in practice: EU-ETS
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/06-eu-ets.png" width="85%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+
+Phase I (2005-2007): limited inter-phase banking; surplus allowances led to a price collapse near phase end
+
+From Phase II onward, banking became a key margin for compliance planning
+
+Large cumulative surplus carried forward across phases and affected prices
+
+Borrowing is limited in practice; EU design relies much more on banking than borrowing
+
+]
+
+---
+
+# Banking and borrowing: design lessons
+
+1. Banking is widely used because it lowers costs while preserving a cumulative cap
+2. Borrowing is often constrained because of default, enforcement, and credibility concerns
+3. Rules on banking/borrowing strongly affect allowance price dynamics
+4. Without banking across phase boundaries, end-of-phase price volatility can be severe
 
 ---
 
@@ -1268,7 +1444,7 @@ The regulator can achieve `\(E^*\)` through:
 - an emission standard of `\(E^*\)`
 - a tax of `\(\tau\)`
 - an abatement subsidy of `\(s\)`
-- "tradable permit" cap of `\(E^*\)`
+- "tradable permit" cap of `\(E^*\)` with auctioned permits
 
 ]
 
