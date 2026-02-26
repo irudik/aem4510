@@ -672,6 +672,67 @@ What often happens in practice is `\(\bar{E}\)` starts high, giving us a low `\(
 
 ---
 
+# Tradable permits: numerical example
+
+Suppose two firms trade permits with total cap:
+`$$E_1 + E_2 = \bar{E} = 90$$`
+
+--
+
+Abatement cost functions:
+`$$C_1(E_1) = \frac{1}{2}(90-E_1)^2,\qquad C_2(E_2) = \frac{1}{4}(150-2E_2)^2$$`
+
+--
+
+So marginal abatement costs are:
+`$$MAC_1(E_1) = -C_1'(E_1) = 90 - E_1$$`
+`$$MAC_2(E_2) = -C_2'(E_2) = 150 - 2E_2$$`
+
+---
+
+# Tradable permits: numerical example
+
+In a competitive permit market:
+`$$MAC_1(E_1^*) = p,\qquad MAC_2(E_2^*) = p,\qquad E_1^*+E_2^* = \bar{E} = 90$$`
+
+--
+
+Plug in the MAC expressions:
+`$$90-E_1^* = p,\qquad 150-2E_2^* = p,\qquad E_1^*+E_2^* = 90$$`
+
+--
+
+Solve:
+`$$E_1^* = 40,\qquad E_2^* = 50,\qquad p^* = 50$$`
+
+--
+
+Firm 2 has higher MAC at an equal split, so it buys permits and emits more in equilibrium.
+
+---
+
+# Tradable permits: numerical example
+
+.pull-left[
+
+
+![numeric permit equilibrium](06-slides-permits_files/figure-html/permits-numeric-eq-1.png)
+]
+
+.pull-right[
+
+Numerical solution:
+`$$E_1^* = 40,\quad E_2^* = 50,\quad p^* = 50$$`
+
+Starting from equal allocation (`\(\frac{\bar{E}}{2} = 45\)` each):
+
+- firm 1 sells permits and emits less
+- firm 2 buys permits and emits more
+
+]
+
+---
+
 # Political economy of permits
 
 Firms are often more willing to accept a higher `\(p\)` than `\(\tau\)` because they are often endowed with (some) permits for free

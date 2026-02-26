@@ -943,6 +943,108 @@ What often happens in practice is $\bar{E}$ starts high, giving us a low $p$, an
 
 ---
 
+# Tradable permits: numerical example
+
+Suppose two firms trade permits with total cap:
+$$E_1 + E_2 = \bar{E} = 90$$
+
+--
+
+Abatement cost functions:
+$$C_1(E_1) = \frac{1}{2}(90-E_1)^2,\qquad C_2(E_2) = \frac{1}{4}(150-2E_2)^2$$
+
+--
+
+So marginal abatement costs are:
+$$MAC_1(E_1) = -C_1'(E_1) = 90 - E_1$$
+$$MAC_2(E_2) = -C_2'(E_2) = 150 - 2E_2$$
+
+---
+
+# Tradable permits: numerical example
+
+In a competitive permit market:
+$$MAC_1(E_1^*) = p,\qquad MAC_2(E_2^*) = p,\qquad E_1^*+E_2^* = \bar{E} = 90$$
+
+--
+
+Plug in the MAC expressions:
+$$90-E_1^* = p,\qquad 150-2E_2^* = p,\qquad E_1^*+E_2^* = 90$$
+
+--
+
+Solve:
+$$E_1^* = 40,\qquad E_2^* = 50,\qquad p^* = 50$$
+
+--
+
+Firm 2 has higher MAC at an equal split, so it buys permits and emits more in equilibrium.
+
+---
+
+# Tradable permits: numerical example
+
+.pull-left[
+```{r permits-numeric-eq, echo = FALSE, fig.show = 'hide', warning = F}
+mac1 = function(x) 90 - x
+mac2 = function(x) 150 - 2*x
+e1_star = 40
+e2_star = 50
+e_bar = 90
+p_star = 50
+
+ggplot() +
+  annotate("text", x = 16, y = 86, label = expression(MAC[1]), color = "#ca5670", size = 8) +
+  annotate("text", x = 16, y = 136, label = expression(MAC[2]), color = "#638ccc", size = 8) +
+  stat_function(fun = mac1, color = "#ca5670", size = 1.5) +
+  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = e_bar/2, xend = e_bar/2, y = 0, yend = 150,
+           linetype = "longdash", size = 1.3, color = "black") +
+  annotate("segment", x = e1_star, xend = e1_star, y = 0, yend = p_star,
+           linetype = "dashed", size = 1.3, color = "grey50") +
+  annotate("segment", x = e2_star, xend = e2_star, y = 0, yend = p_star,
+           linetype = "dashed", size = 1.3, color = "grey50") +
+  annotate("segment", x = 0, xend = 60, y = p_star, yend = p_star,
+           linetype = "dotted", size = 1.3, color = "black") +
+  annotate("text", x = 56, y = p_star + 4, label = expression(p^"*"), size = 7) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(size = 22),
+    axis.text.y = element_text(size = 18),
+    axis.title.x = element_text(size = 24),
+    axis.title.y = element_text(size = 24),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions", y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,60),
+                     breaks = c(e1_star, e_bar/2, e2_star),
+                     labels = c(expression(E[1]^"*"), expression(frac(bar(E),2)), expression(E[2]^"*"))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,150))
+
+```
+
+![numeric permit equilibrium](`r knitr::fig_chunk("permits-numeric-eq", "png")`)
+]
+
+.pull-right[
+
+Numerical solution:
+$$E_1^* = 40,\quad E_2^* = 50,\quad p^* = 50$$
+
+Starting from equal allocation ($\frac{\bar{E}}{2} = 45$ each):
+
+- firm 1 sells permits and emits less
+- firm 2 buys permits and emits more
+
+]
+
+---
+
 # Political economy of permits
 
 Firms are often more willing to accept a higher $p$ than $\tau$ because they are often endowed with (some) permits for free
