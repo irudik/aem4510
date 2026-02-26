@@ -3,6 +3,7 @@ import {
   getActiveSession,
   getTeamByJoinToken,
   getTeamsForSession,
+  summarizeMacTypeCounts,
 } from "./_lib/game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
 import { supabaseRequest } from "./_lib/supabase_rest.mts";
@@ -65,6 +66,7 @@ export default async function emissionsTeamState(req) {
       called_price: calledPriceRows,
       md: mdRows,
     });
+    const mdMacTypeCounts = summarizeMacTypeCounts(teams);
     const uniformRow = (uniformRows ?? []).find((row) => String(row.team_id) === String(team.id)) ?? null;
     const calledPriceRow = (calledPriceRows ?? []).find((row) =>
       String(row.team_id) === String(team.id) &&
@@ -91,6 +93,7 @@ export default async function emissionsTeamState(req) {
         common_permit_allocation: session.common_permit_allocation,
         called_price: session.called_price,
         md_constant: session.md_constant,
+        md_mac_type_counts: mdMacTypeCounts,
         called_price_excess_demand: session.called_price_excess_demand,
         called_price_revealed_at: session.called_price_revealed_at,
         scoring_rank_points: session.scoring_rank_points,

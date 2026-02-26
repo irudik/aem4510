@@ -288,17 +288,25 @@ export function teamLetterFromIndex(indexZeroBased) {
 }
 
 /**
- * Draw random MAC coefficients from classroom-friendly discrete supports.
- * Intercepts in {2000, 4000, ..., 12000}, slopes in {1,2,...,6}.
+ * Fixed MAC menu used for random classroom draws.
+ * Keeping only four types makes industry cap aggregation easier in the MD stage.
+ */
+export const DRAWABLE_MAC_TYPES = Object.freeze([
+  Object.freeze({ mac_intercept: 4000, mac_slope: 2 }),
+  Object.freeze({ mac_intercept: 8000, mac_slope: 4 }),
+  Object.freeze({ mac_intercept: 4000, mac_slope: 1 }),
+  Object.freeze({ mac_intercept: 8000, mac_slope: 2 }),
+]);
+
+/**
+ * Draw random MAC coefficients from a fixed classroom menu of four types.
  */
 export function randomMacCoefficients() {
-  const interceptOptions = [2000, 4000, 6000, 8000, 10000, 12000];
-  const macIntercept = interceptOptions[Math.floor(Math.random() * interceptOptions.length)];
-  const macSlope = 1 + Math.floor(Math.random() * 6);
+  const selectedType = DRAWABLE_MAC_TYPES[Math.floor(Math.random() * DRAWABLE_MAC_TYPES.length)];
 
   return {
-    mac_intercept: macIntercept,
-    mac_slope: macSlope,
-    initial_emissions: macIntercept / macSlope,
+    mac_intercept: selectedType.mac_intercept,
+    mac_slope: selectedType.mac_slope,
+    initial_emissions: selectedType.mac_intercept / selectedType.mac_slope,
   };
 }

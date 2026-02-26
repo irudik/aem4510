@@ -10,6 +10,7 @@ import {
   computeLeaderboard,
   nextAttemptState,
   MAX_INCORRECT_SUBMISSIONS,
+  summarizeMacTypeCounts,
 } from "../../../netlify/functions/_lib/game_service.mts";
 
 const singleTeam = {
@@ -57,6 +58,25 @@ test("called-price submission check flags near-miss outside tolerance", () => {
   assert.equal(wrong.checks.is_correct, false);
 });
 
+test("called-price submission accepts decimal and whole-number formatting", () => {
+  const decimalExampleTeam = {
+    id: "team-decimal",
+    team_name: "Decimal",
+    mac_intercept: 1000,
+    mac_slope: 10,
+    permit_allocation: 0,
+    initial_emissions: 100,
+  };
+
+  const firstDecimalEntry = evaluateCalledPriceSubmission(decimalExampleTeam, 523.5, 52.3);
+  assert.equal(firstDecimalEntry.expected.abatement, 52.35);
+  assert.equal(firstDecimalEntry.checks.is_correct, true);
+
+  const wholeNumberEntry = evaluateCalledPriceSubmission(decimalExampleTeam, 520, 52);
+  assert.equal(wholeNumberEntry.expected.abatement, 52);
+  assert.equal(wholeNumberEntry.checks.is_correct, true);
+});
+
 test("MD submission check evaluates team and industry targets", () => {
   const evaluated = evaluateMdSubmission(singleTeam, allTeams, 3500, 250, 8025);
   assert.equal(evaluated.checks.is_correct, true);
@@ -91,6 +111,34 @@ test("scoring rank-points parser handles defaults and explicit vectors", () => {
   assert.deepEqual(parseScoringRankPoints(undefined), [10, 7, 5, 3, 1]);
   assert.deepEqual(parseScoringRankPoints("12,8,4"), [12, 8, 4]);
   assert.deepEqual(parseScoringRankPoints([9, 6, 3]), [9, 6, 3]);
+});
+
+test("MAC-type summary counts duplicates by intercept and slope", () => {
+  const summary = summarizeMacTypeCounts(allTeams);
+
+  assert.deepEqual(summary, [
+    { mac_intercept: 4000, mac_slope: 1, team_count: 1 },
+    { mac_intercept: 4000, mac_slope: 2, team_count: 1 },
+    { mac_intercept: 8000, mac_slope: 2, team_count: 1 },
+    { mac_intercept: 8000, mac_slope: 4, team_count: 1 },
+    { mac_intercept: 10000, mac_slope: 2.5, team_count: 1 },
+    { mac_intercept: 10000, mac_slope: 5, team_count: 1 },
+  ]);
+
+  const withDuplicates = summarizeMacTypeCounts([
+    ...allTeams,
+    { id: "A2", team_letter: "G", team_name: "G", mac_intercept: 4000, mac_slope: 2, permit_allocation: 1480, initial_emissions: 2000 },
+    { id: "B2", team_letter: "H", team_name: "H", mac_intercept: 8000, mac_slope: 4, permit_allocation: 1480, initial_emissions: 2000 },
+  ]);
+
+  assert.deepEqual(withDuplicates, [
+    { mac_intercept: 4000, mac_slope: 1, team_count: 1 },
+    { mac_intercept: 4000, mac_slope: 2, team_count: 2 },
+    { mac_intercept: 8000, mac_slope: 2, team_count: 1 },
+    { mac_intercept: 8000, mac_slope: 4, team_count: 2 },
+    { mac_intercept: 10000, mac_slope: 2.5, team_count: 1 },
+    { mac_intercept: 10000, mac_slope: 5, team_count: 1 },
+  ]);
 });
 
 test("leaderboard combines speed points and wrong-answer deductions", () => {

@@ -230,6 +230,20 @@ function mdRevealTable(submission) {
   `;
 }
 
+function mdMacTypeCountSummary(mdMacTypeCounts) {
+  if (!Array.isArray(mdMacTypeCounts) || mdMacTypeCounts.length === 0) {
+    return "";
+  }
+
+  const byType = mdMacTypeCounts.map((row) => {
+    const firmCount = Number(row?.team_count ?? 0);
+    const firmLabel = firmCount === 1 ? "firm" : "firms";
+    return `${formatNumber(firmCount, 0)} ${firmLabel} with ${macEquation(row?.mac_intercept, row?.mac_slope)}`;
+  });
+
+  return `Firms by MAC: ${byType.join("; ")}`;
+}
+
 function renderTeamCard(session, team) {
   teamLeaderboardRow.classList.remove("hidden");
   teamCard.classList.remove("hidden");
@@ -429,7 +443,13 @@ function renderStageForm(session, submissions) {
 
   if (phase === "md") {
     mdBadge.classList.remove("hidden");
-    mdBadge.textContent = `MD: ${formatNumber(session.md_constant, 0)}`;
+    const mdGuidance = [`Marginal damages = ${formatNumber(session.md_constant, 0)}`];
+    const macTypeSummary = mdMacTypeCountSummary(session.md_mac_type_counts);
+    if (macTypeSummary) {
+      mdGuidance.push(macTypeSummary);
+    }
+    mdGuidance.push("Use these counts to compute the efficient industry cap");
+    mdBadge.textContent = `${mdGuidance.join(". ")}.`;
   }
 
   if (phase === "setup") {
@@ -464,15 +484,15 @@ function renderStageForm(session, submissions) {
       <form id="uniform-form" class="grid">
         <div>
           <label for="uniform-emissions">Final Emissions</label>
-          <input id="uniform-emissions" type="number" min="0" step="1" value="${draft?.submitted_emissions ?? prior?.submitted_emissions ?? ""}" />
+          <input id="uniform-emissions" type="number" min="0" step="any" value="${draft?.submitted_emissions ?? prior?.submitted_emissions ?? ""}" />
         </div>
         <div>
           <label for="uniform-abatement">Abatement</label>
-          <input id="uniform-abatement" type="number" min="0" step="1" value="${draft?.submitted_abatement ?? prior?.submitted_abatement ?? ""}" />
+          <input id="uniform-abatement" type="number" min="0" step="any" value="${draft?.submitted_abatement ?? prior?.submitted_abatement ?? ""}" />
         </div>
         <div>
           <label for="uniform-cost">Abatement Cost</label>
-          <input id="uniform-cost" type="number" min="0" step="1" value="${draft?.submitted_abatement_cost ?? prior?.submitted_abatement_cost ?? ""}" />
+          <input id="uniform-cost" type="number" min="0" step="any" value="${draft?.submitted_abatement_cost ?? prior?.submitted_abatement_cost ?? ""}" />
         </div>
         <div class="row" style="grid-column: 1/-1; margin-top: 0.5rem;">
           <button class="primary" type="submit">Submit Uniform Answers</button>
@@ -517,7 +537,7 @@ function renderStageForm(session, submissions) {
       <form id="price-form">
         <div>
           <label for="price-abatement">Chosen Abatement</label>
-          <input id="price-abatement" type="number" min="0" step="1" value="${draft?.submitted_abatement ?? prior?.submitted_abatement ?? ""}" />
+          <input id="price-abatement" type="number" min="0" step="any" value="${draft?.submitted_abatement ?? prior?.submitted_abatement ?? ""}" />
         </div>
         <div class="row" style="margin-top: 0.6rem;">
           <button class="primary" type="submit">Submit Called-Price Abatement</button>
@@ -558,11 +578,11 @@ function renderStageForm(session, submissions) {
       <form id="md-form" class="grid">
         <div>
           <label for="md-efficient-emissions">Efficient Emissions (Your Team)</label>
-          <input id="md-efficient-emissions" type="number" min="0" step="1" value="${draft?.submitted_efficient_emissions ?? prior?.submitted_efficient_emissions ?? ""}" />
+          <input id="md-efficient-emissions" type="number" min="0" step="any" value="${draft?.submitted_efficient_emissions ?? prior?.submitted_efficient_emissions ?? ""}" />
         </div>
         <div>
           <label for="md-industry-cap">Efficient Industry Cap (All Teams)</label>
-          <input id="md-industry-cap" type="number" min="0" step="1" value="${draft?.submitted_industry_cap ?? prior?.submitted_industry_cap ?? ""}" />
+          <input id="md-industry-cap" type="number" min="0" step="any" value="${draft?.submitted_industry_cap ?? prior?.submitted_industry_cap ?? ""}" />
         </div>
         <div class="row" style="grid-column: 1/-1; margin-top: 0.5rem;">
           <button class="primary" type="submit">Submit MD Answers</button>

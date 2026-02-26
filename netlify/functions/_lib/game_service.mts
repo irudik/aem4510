@@ -517,6 +517,41 @@ export function formatMacEquation(macIntercept, macSlope) {
 }
 
 /**
+ * Aggregate the class roster into MAC-type counts for MD-stage guidance.
+ * @param {Array<Record<string, unknown>>} teams
+ */
+export function summarizeMacTypeCounts(teams) {
+  const countsByMacType = new Map();
+
+  for (const team of teams ?? []) {
+    const macIntercept = Number(team?.mac_intercept);
+    const macSlope = Number(team?.mac_slope);
+    if (!Number.isFinite(macIntercept) || !Number.isFinite(macSlope) || macSlope <= 0) {
+      continue;
+    }
+
+    const typeKey = `${macIntercept}|${macSlope}`;
+    if (!countsByMacType.has(typeKey)) {
+      countsByMacType.set(typeKey, {
+        mac_intercept: macIntercept,
+        mac_slope: macSlope,
+        team_count: 0,
+      });
+    }
+    countsByMacType.get(typeKey).team_count += 1;
+  }
+
+  return Array.from(countsByMacType.values())
+    .sort((left, right) => {
+      const interceptDifference = left.mac_intercept - right.mac_intercept;
+      if (interceptDifference !== 0) {
+        return interceptDifference;
+      }
+      return left.mac_slope - right.mac_slope;
+    });
+}
+
+/**
  * Build an instructor-facing team table for the current phase.
  * @param {Record<string, unknown>} session
  * @param {Array<Record<string, unknown>>} teams

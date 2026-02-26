@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  DRAWABLE_MAC_TYPES,
   validateTeamRows,
   excessDemand,
   solveMarketPrice,
@@ -10,6 +11,7 @@ import {
   computeEfficientCap,
   withinTolerance,
   teamLetterFromIndex,
+  randomMacCoefficients,
 } from "../../../netlify/functions/_lib/econ.mts";
 
 const exampleTeams = [
@@ -84,4 +86,19 @@ test("tolerance and team-letter helper behavior", () => {
   assert.equal(teamLetterFromIndex(25), "Z");
   assert.equal(teamLetterFromIndex(26), "AA");
   assert.equal(teamLetterFromIndex(27), "AB");
+});
+
+test("random MAC draws come from the fixed four-type classroom menu", () => {
+  assert.equal(DRAWABLE_MAC_TYPES.length, 4);
+
+  const allowedTypeKeys = new Set(
+    DRAWABLE_MAC_TYPES.map((row) => `${row.mac_intercept}|${row.mac_slope}`),
+  );
+
+  for (let drawIndex = 0; drawIndex < 200; drawIndex += 1) {
+    const draw = randomMacCoefficients();
+    const typeKey = `${draw.mac_intercept}|${draw.mac_slope}`;
+    assert.equal(allowedTypeKeys.has(typeKey), true);
+    assert.equal(draw.initial_emissions, draw.mac_intercept / draw.mac_slope);
+  }
 });
