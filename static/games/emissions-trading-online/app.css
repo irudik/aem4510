@@ -231,6 +231,14 @@ tr.leaderboard-you td {
   font-weight: 700;
 }
 
+.md-guidance {
+  margin: 0.4rem 0 0.2rem;
+}
+
+.md-guidance p {
+  margin: 0.35rem 0;
+}
+
 .called-price-callout {
   margin: 0.35rem 0 0.2rem;
   font-size: 2rem;

@@ -57,8 +57,13 @@ test("MD stage guidance text includes marginal damages and MAC-type counts", () 
   );
   assert.match(
     studentScriptSource,
-    /Firms by MAC:/,
-    "MD guidance should show firm counts by MAC type",
+    /MAC Type/,
+    "MD guidance should include a MAC-type table header",
+  );
+  assert.match(
+    studentScriptSource,
+    /Number of Firms/,
+    "MD guidance should include a firm-count table header",
   );
   assert.match(
     studentScriptSource,

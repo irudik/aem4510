@@ -230,18 +230,25 @@ function mdRevealTable(submission) {
   `;
 }
 
-function mdMacTypeCountSummary(mdMacTypeCounts) {
-  if (!Array.isArray(mdMacTypeCounts) || mdMacTypeCounts.length === 0) {
+function mdGuidanceTable(mdMacTypeCounts) {
+  const mdCountRows = Array.isArray(mdMacTypeCounts) ? mdMacTypeCounts : [];
+  if (mdCountRows.length === 0) {
     return "";
   }
 
-  const byType = mdMacTypeCounts.map((row) => {
-    const firmCount = Number(row?.team_count ?? 0);
-    const firmLabel = firmCount === 1 ? "firm" : "firms";
-    return `${formatNumber(firmCount, 0)} ${firmLabel} with ${macEquation(row?.mac_intercept, row?.mac_slope)}`;
-  });
+  const rows = mdCountRows.map((row) => `
+    <tr>
+      <td>${macEquation(row?.mac_intercept, row?.mac_slope)}</td>
+      <td>${formatNumber(row?.team_count, 0)}</td>
+    </tr>
+  `).join("");
 
-  return `Firms by MAC: ${byType.join("; ")}`;
+  return `
+    <table>
+      <thead><tr><th>MAC Type</th><th>Number of Firms</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
 
 function renderTeamCard(session, team) {
@@ -443,13 +450,15 @@ function renderStageForm(session, submissions) {
 
   if (phase === "md") {
     mdBadge.classList.remove("hidden");
-    const mdGuidance = [`Marginal damages = ${formatNumber(session.md_constant, 0)}`];
-    const macTypeSummary = mdMacTypeCountSummary(session.md_mac_type_counts);
-    if (macTypeSummary) {
-      mdGuidance.push(macTypeSummary);
-    }
-    mdGuidance.push("Use these counts to compute the efficient industry cap");
-    mdBadge.textContent = `${mdGuidance.join(". ")}.`;
+    const mdTable = mdGuidanceTable(session.md_mac_type_counts);
+    const tableNote = mdTable
+      ? "<p><small class=\"note\">Use this table to compute the efficient industry cap.</small></p>"
+      : "";
+    mdBadge.innerHTML = `
+      <p><strong>Marginal damages = ${formatNumber(session.md_constant, 0)}</strong></p>
+      ${mdTable}
+      ${tableNote}
+    `;
   }
 
   if (phase === "setup") {
