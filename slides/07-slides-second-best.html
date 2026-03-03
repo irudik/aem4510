@@ -116,7 +116,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 
 # Roadmap
 
-1. What happens when we have another distortion like market power?
+1. What happens when we have another market failure like market power?
 3. How do second-best policies like output taxes or intensity standards work?
 
 
@@ -350,7 +350,7 @@ Why?
 
 .pull-right[
 
-We now have two distortions:
+We now have two market failures:
 
 1. Market power
 2. Pollution externality
@@ -369,7 +369,7 @@ We now have two distortions:
 
 .pull-right[
 
-We now have two distortions:
+We now have two market failures:
 
 1. Market power
 2. Pollution externality
@@ -390,7 +390,7 @@ With market power, the unregulated equilibrium quantity is .hi[too low]
 
 .pull-right[
 
-We now have two distortions:
+We now have two market failures:
 
 1. Market power
 2. Pollution externality
@@ -512,6 +512,91 @@ You can always draw this example in a different way where you should tax output
 --
 
 You just need marginal damages to be sufficiently large relative to the market power effect on quantity
+
+---
+
+# Monopoly
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/monopoly6_base-1.png)
+]
+
+.pull-right[
+
+What if marginal damages are larger?
+
+Suppose SMC is high enough that demand and SMC intersect to the .hi[left] of `\(q^m\)`
+
+]
+
+---
+
+# Monopoly
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly6_base-1.png)
+]
+
+.pull-right[
+
+What if marginal damages are larger?
+
+Suppose SMC is high enough that demand and SMC intersect to the .hi[left] of `\(q^m\)`
+
+Then the efficient quantity is lower than monopoly output: `\(q^* &lt; q^m\)`
+
+]
+
+---
+
+# Monopoly
+
+.pull-left[
+![monopoly](07-slides-second-best_files/figure-html/monopoly6_base-1.png)
+]
+
+.pull-right[
+
+What if marginal damages are larger?
+
+Suppose SMC is high enough that demand and SMC intersect to the .hi[left] of `\(q^m\)`
+
+Then the efficient quantity is lower than monopoly output: `\(q^* &lt; q^m\)`
+
+]
+
+---
+
+# Monopoly
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/monopoly6_tax-1.png)
+]
+
+.pull-right[
+
+Policy implication flips: .hi[tax output] at rate `\(t\)` so `\(MC+t\)` crosses `\(MR\)` at `\(q^*\)`
+
+]
+
+---
+
+# Monopoly
+
+.pull-left[
+
+![monopoly](07-slides-second-best_files/figure-html/monopoly6_tax_gain-1.png)
+]
+
+.pull-right[
+
+Policy implication flips: .hi[tax output] at rate `\(t\)` so `\(MC+t\)` crosses `\(MR\)` at `\(q^*\)`
+
+Welfare gain from this correction is the reduction in overproduction between `\(q^m\)` and `\(q^*\)`
+
+]
 
 ---
 
@@ -710,6 +795,425 @@ If emissions can be chosen separately from outcome by the firm, this is no longe
 
 In this case an output tax incorrectly taxes our clean inputs
 
+---
+
+# Intensity standards
+
+Another common second-best policy is an .hi[intensity standard]
+
+--
+
+Instead of pricing each unit of emissions directly, the regulator sets an emissions rate per unit of output
+
+--
+
+These policies are common when direct emissions monitoring is difficult but output composition is observable
+
+---
+
+# Intensity standards: RPS example
+
+&lt;center&gt;
+&lt;img src="files/07-rps.png" width="60%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Intensity standards: the constraint
+
+Suppose we have a high-emissions product `\(H\)` and a lower-emissions product `\(L\)`
+
+--
+
+An intensity standard can be written as:
+`$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} \leq \sigma$$`
+
+--
+
+The policy limits average emissions per unit of output, not total emissions directly
+
+---
+
+# Intensity standards: firm incentives
+
+The firm's choices satisfy:
+`$$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma), \quad i \in \{H,L\}$$`
+
+--
+
+If `\(\beta_i &gt; \sigma\)`, the policy creates an implicit .hi-red[tax] on that output
+
+--
+
+If `\(\beta_i &lt; \sigma\)`, the policy creates an implicit .hi-blue[subsidy] on that output
+
+---
+
+# Intensity standards: equivalent policy mix
+
+Rewrite the wedge term as:
+`$$\lambda(\beta_i-\sigma) = \underbrace{\lambda\beta_i}_{\text{emissions tax piece}} - \underbrace{\lambda\sigma}_{\text{output subsidy piece}}$$`
+
+--
+
+So an intensity standard is equivalent to:
+- a tax on emissions intensity
+- plus an output subsidy applied to all output
+
+--
+
+This is exactly why it can perform like a second-best policy
+
+---
+
+# Intensity standards: cleaner is not clean
+
+Suppose `\(\beta_H = 1.0\)`, `\(\beta_L = 0.4\)`, and `\(\sigma = 0.6\)`
+
+--
+
+Then the policy wedges are:
+- for `\(H\)`: `\(\lambda(1.0-0.6)=+0.4\lambda\)` (implicit tax)
+- for `\(L\)`: `\(\lambda(0.4-0.6)=-0.2\lambda\)` (implicit subsidy)
+
+--
+
+The lower-intensity good still pollutes, but it can get subsidized anyway
+
+--
+
+That is the core problem: we generally do .hi-red[not] want to subsidize positive emissions
+
+---
+
+# Why this is second-best
+
+An emissions tax prices all emissions at the same marginal damage
+
+--
+
+An intensity standard instead mixes:
+- an implicit tax on dirtier output
+- an implicit subsidy on cleaner output
+
+--
+
+So it can improve on no policy, but usually cannot hit the first-best allocation
+
+---
+
+# Intensity standards: scale vs composition
+
+The policy helps on .hi[composition]: firms shift away from dirtier output
+
+--
+
+But it can hurt on .hi[scale]: the implicit output subsidy encourages more total production
+
+--
+
+Total emissions are:
+`$$E = \beta_H Q_H + \beta_L Q_L$$`
+
+--
+
+So total emissions can rise if the scale effect dominates the composition effect
+
+---
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+.hi[How to read this figure:]
+
+1. The dashed ovals are iso-profit curves: each oval is a set of `\((Q_H,Q_L)\)` choices with the same private profit
+2. The intensity-standard line is the policy constraint:
+   `$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
+
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;img src="files/07-int-standard2.png" width="95%" /&gt;
+&lt;/center&gt;
+]
+
+---
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+.hi[How to read this figure:]
+
+1. Point A is the unregulated profit-maximizing choice
+2. The line through A labeled `\(K\)` shows choices with the same total emissions as A
+3. Points up and to the right of `\(K\)` imply higher total emissions
+
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;img src="files/07-int-standard2.png" width="95%" /&gt;
+&lt;/center&gt;
+]
+
+---
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+.hi[What the standard does:]
+
+1. The intensity standard forces choices onto the intensity line
+2. The firm moves from A to C, where the highest attainable iso-profit oval touches that line
+
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;img src="files/07-int-standard2.png" width="95%" /&gt;
+&lt;/center&gt;
+]
+
+---
+
+# Intensity standards: intuition
+
+.pull-left[
+
+.hi[What the standard does:]
+
+1. Relative to A, the firm cuts dirty output `\(H\)`, but expands cleaner output `\(L\)`
+2. Emissions intensity falls by construction, but total output can still rise
+
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;img src="files/07-int-standard2.png" width="95%" /&gt;
+&lt;/center&gt;
+]
+
+---
+
+# Intensity standards: intuition
+
+.pull-left[
+
+Two forces are operating at once:
+
+1. .hi[Composition effect:] shifts production toward lower-emissions output
+2. .hi[Scale effect:] implicit output subsidy encourages more production
+
+If the scale effect dominates, total emissions can rise even as emissions per unit fall
+
+.hi[Takeaway:] intensity standards are useful second-best tools, but they can misfire relative to direct emissions pricing
+
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;img src="files/07-int-standard2.png" width="95%" /&gt;
+&lt;/center&gt;
+]
+
+
+---
+
+# Second-best: distribution-constrained policy
+
+Even when a carbon price is efficient in a textbook model, incidence can be unequal across households
+
+--
+
+Let `\(G(\tau)\)` be the efficiency component (environmental benefit net of abatement cost), with:
+`$$G'(d)=0, \quad G''(\tau) &lt; 0$$`
+
+--
+
+Let distributional harm be approximated by:
+`$$D(\tau)=\kappa\tau, \quad \kappa&gt;0$$`
+
+--
+
+A planner that values equity places weight `\(\lambda&gt;0\)` on this burden
+
+---
+
+# Distribution-constrained optimum
+
+Planner problem:
+`$$\max_{\tau}\; W(\tau)=G(\tau)-\lambda D(\tau)=G(\tau)-\lambda\kappa\tau$$`
+
+--
+
+FOC:
+`$$G'(\tau^{SB})=\lambda\kappa$$`
+
+--
+
+Since `\(G'(d)=0\)` and `\(G'\)` is decreasing, we get:
+`$$\tau^{SB}&lt;d \quad \text{whenever } \lambda\kappa&gt;0$$`
+
+--
+
+This is a sharp second-best result: distribution constraints can lower the optimal carbon price
+
+---
+
+# Revenue recycling and the constraint
+
+Suppose a share `\(\rho\)` of revenue is targeted to constrained households
+
+--
+
+Then net distributional burden becomes:
+`$$D_\rho(\tau)=\kappa(1-\rho)\tau$$`
+
+--
+
+FOC becomes:
+`$$G'(\tau^{SB}_\rho)=\lambda\kappa(1-\rho)$$`
+
+--
+
+Higher targeted recycling (`\(\rho\uparrow\)`) reduces the equity wedge and raises the feasible optimal carbon price toward `\(d\)`
+
+---
+
+# Distribution-constrained: graphical
+
+.pull-left[
+
+![distribution tradeoff](07-slides-second-best_files/figure-html/dist_tradeoff-1.png)
+]
+
+.pull-right[
+
+The red line is marginal efficiency gain from a higher carbon price
+
+Horizontal lines are marginal distributional costs
+
+Targeted recycling lowers the distributional cost curve and moves `\(\tau^{SB}\)` closer to `\(d\)`
+
+]
+
+---
+
+# Distribution takeaway
+
+In a second-best world, we should evaluate policy bundles:
+`$$\{\text{carbon price},\; \text{recycling design}\}$$`
+
+--
+
+Two policies with similar emissions reductions can have very different welfare once incidence is included
+
+--
+
+.hi[Takeaway:] distributional design is not an add-on; it is part of optimal second-best climate policy
+
+---
+
+# Dynamic second-best: innovation spillovers
+
+Climate policy is also dynamic: today's innovation changes tomorrow's abatement costs
+
+--
+
+A carbon price targets the emissions externality
+
+--
+
+But clean innovation can generate knowledge spillovers that firms cannot fully appropriate
+
+--
+
+So even with a correctly-set carbon price, private R&amp;D can still be too low
+
+---
+
+# Dynamic model: private conditions
+
+Let firms choose emissions `\(E\)` and clean R&amp;D investment `\(I\)`
+
+--
+
+Private objective:
+`$$\min_{E,I}\; C(E,\theta) + \tau E + (1-s)\Psi(I), \quad \theta=\theta_0+I$$`
+
+--
+
+If firms capture only a share `\(\eta\in(0,1]\)` of innovation benefits, private FOCs are:
+`$$-C_E(E,\theta)=\tau$$`
+$$ (1-s)\Psi'(I)=\eta\left[-C_\theta(E,\theta)\right] $$
+
+---
+
+# Dynamic social optimum
+
+Social planner:
+`$$\min_{E,I}\; C(E,\theta)+D(E)+\Psi(I), \quad \theta=\theta_0+I$$`
+
+--
+
+FOCs:
+`$$-C_E(E^*,\theta^*)=MD(E^*)$$`
+`$$\Psi'(I^*)=-C_\theta(E^*,\theta^*)$$`
+
+--
+
+Comparing private and social FOCs gives sharp instrument rules:
+`$$\tau^*=MD(E^*), \qquad s^*=1-\eta$$`
+
+--
+
+If `\(\eta&lt;1\)`, we need a positive R&amp;D subsidy in addition to the carbon price
+
+---
+
+# Dynamic second-best: graphical
+
+.pull-left[
+
+![dynamic spillovers](07-slides-second-best_files/figure-html/dynamic_spillover-1.png)
+]
+
+.pull-right[
+
+Without subsidy, private R&amp;D is `\(I^p\)` where private MB crosses MC
+
+With spillovers (`\(\eta&lt;1\)`), this is below the social optimum `\(I^*\)`
+
+An R&amp;D subsidy lowers effective marginal cost to `\((1-s^*)MC\)`, moving investment toward `\(I^*\)`
+
+]
+
+---
+
+# Dynamic takeaway
+
+With innovation spillovers, one instrument is not enough
+
+--
+
+Policy bundle for the sharp benchmark:
+
+1. Carbon price to internalize current emissions damages
+2. R&amp;D subsidy to internalize dynamic knowledge spillovers
+
+--
+
+If spillovers are small (`\(\eta \approx 1\)`), the optimal subsidy is small
+
+--
+
+.hi[Second-best takeaway:] dynamic efficiency typically requires pricing emissions and subsidizing clean innovation together
+
+---
 
 &lt;!-- --- --&gt;
 
@@ -743,7 +1247,7 @@ In this case an output tax incorrectly taxes our clean inputs
 
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-rps.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-rps.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 
@@ -753,7 +1257,7 @@ In this case an output tax incorrectly taxes our clean inputs
 
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-rps2.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-rps2.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 
@@ -1047,7 +1551,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard3.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard3.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1070,7 +1574,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard3.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard3.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1090,7 +1594,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard2.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1108,7 +1612,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard2.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1128,7 +1632,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard2.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1151,7 +1655,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard2.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard2.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1168,7 +1672,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard1.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard1.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
@@ -1192,7 +1696,7 @@ In this case an output tax incorrectly taxes our clean inputs
 &lt;!-- .pull-left[ --&gt;
 &lt;!-- &lt;center&gt; --&gt;
 &lt;!-- ```{r, out.width = "100%", fig.pos="c", echo = FALSE} --&gt;
-&lt;!-- knitr::include_graphics("files/06-int-standard1.png") --&gt;
+&lt;!-- knitr::include_graphics("files/07-int-standard1.png") --&gt;
 &lt;!-- ``` --&gt;
 &lt;!-- &lt;/center&gt; --&gt;
 &lt;!-- ] --&gt;
