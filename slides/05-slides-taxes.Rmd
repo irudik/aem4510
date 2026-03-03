@@ -46,6 +46,7 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 
 1. What are the different kinds of price instruments in theory and the real world?
 2. What happens under a tax?
+3. Why cost-effectiveness requires equimarginal abatement when firms have heterogeneous MACs
 
 
 ---
@@ -627,6 +628,204 @@ NYC's congestion pricing includes income-based exemptions for this reason
 
 ---
 
+# Optimal policy with multiple firms
+
+.pull-left[
+```{r multifirm, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2 - 2/3*x
+mac2 <- function(x) 3 - x
+md <- function(x) 1
+ggplot() +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  annotate("text", x = 2.5, y = .9, label = "MD", size = 8) +
+  stat_function(fun = mac2, color = "#000000", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  stat_function(fun = md, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 2, xend = 2, y = 0, yend = .99,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5,2,3), labels = c(expression(E[1]^'*'), expression(E[2]^'*'), expression(E[0]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![taxes](`r knitr::fig_chunk("multifirm", "png")`)
+]
+
+.pull-right[
+
+Firm #2 is 'dirty': has higher MAC
+
+Firm #1 is 'clean': has lower MAC
+
+If we use a regular emission standard: it has to be firm-specific!
+
+Mandate $E^*_1$ for 1 and $E^*_2$ for 2
+
+This requires .hi[a lot] of info and political capital on behalf of the regulator
+
+]
+
+
+---
+
+# Optimal policy with multiple firms
+
+.pull-left[
+```{r multi-tax, echo = FALSE, fig.show = 'hide', warning = F}
+mac <- function(x) 2 - 2/3*x
+mac2 <- function(x) 3 - x
+md <- function(x) 1
+ggplot() +
+  annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+  annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+  annotate("text", x = 2.5, y = .9, label = "MD", size = 8) +
+  stat_function(fun = mac2, color = "#000000", size = 1.5) +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5) +
+  stat_function(fun = md, color = "#638ccc", size = 1.5) +
+  annotate("text", x = 2.5, y = 1.15, label = expression(tau), size = 8) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 2, xend = 2, y = 0, yend = .99,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 3, y = 1.05, yend = 1.05,
+           linetype = "longdash", size = 1.5, color = "red") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5,2,3), labels = c(expression(E[1]^'*'), expression(E[2]^'*'), expression(E[0]))) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+
+```
+
+![taxes](`r knitr::fig_chunk("multi-tax", "png")`)
+]
+
+.pull-right[
+
+Regulating multiple heterogeneous firms with a tax can be easy:
+
+If MD is constant, then since firms select MAC = $\tau$, as long as we set $\tau = MD$, we can achieve the efficient outcome (MAC = MD) without knowing anything about the firms!
+
+]
+
+
+---
+
+# Optimal policy with multiple firms
+
+Taxes also achieve the .hi[cost-effective] outcome: achieving a given emission level at least-cost
+
+Let's see why
+
+--
+
+Suppose we want to minimize the total cost of achieving emission level $\bar{E}$ by abating across two different sources, plant 1 and plant 2
+
+--
+
+The plants have abatement cost functions: $C_1(E_1)$ and $C_2(E_2)$
+
+--
+
+Write down the regulator's problem
+
+---
+
+# Optimal policy with multiple firms
+
+$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2) \,\,\,\, \text{subject to:} \, E_1 + E_2 = \bar{E}$$
+
+--
+
+Solve the constraint for $E_2 = \bar{E} - E_1$ so we have a simpler problem:
+$$\min_{E_1} C_1(E_1) + C_2(\bar{E} - E_1)$$
+
+--
+
+Take the first-order condition to find what is necessary for a cost minimum:
+$$C'_1(E_1) + C'_2(\bar{E} - E_1) \times (-1) = 0$$
+
+---
+
+# Optimal policy with multiple firms
+
+This gives us:
+$$\underbrace{-C'_1(E_1)}_{\text{MAC}_1} = \underbrace{-C'_2(\overbrace{\bar{E} - E_1}^{E_2})}_{\text{MAC}_2}$$
+
+The marginal abatement costs across the sources must be equal at the cost-effective pollution level
+
+--
+
+This is called the .hi-blue[equimarginal principle]
+
+---
+
+# Optimal policy with multiple firms
+
+Taxes .hi[always] achieve the equimarginal principle and get us the given amount of emission reductions at least-cost
+
+--
+
+Why?
+
+--
+
+We know firms optimally select MAC equal to the emission tax
+
+--
+
+This means all firms' MACs are equal!
+
+--
+
+Even if we don't set the tax equal to MD, whatever emission reduction we get will be as cheap as possible
+
+---
+
+# Optimal policy with multiple firms
+
+.pull-left[
+![taxes](`r knitr::fig_chunk("multi-tax", "png")`)
+]
+
+.pull-right[
+
+If standards are applied uniformly across heterogeneous firms, costs are not minimized
+
+If firms face a common emissions price, abatement is reallocated toward low-MAC sources
+
+]
+
+---
+
 # Taxes vs Standards
 <center>
 ```{r, out.width = "80%", fig.pos="c", echo = FALSE}
@@ -713,7 +912,7 @@ It was applied uniformly across firms
 
 --
 
-We know that means it'll be inefficient
+So with heterogeneous MACs, this generally violates the equimarginal principle and is not cost-effective
 
 ---
 
@@ -731,7 +930,7 @@ knitr::include_graphics("files/05-firm-mac.png")
 
 # Real world MACs
 
-But this doesn't mean total costs are minimized given the quantity of gas captured
+If we add up the MACs to the market-wide MAC, we aren't always abating at the cheapest wells (because the standard is uniform across firms)
 
 <center>
 ```{r, out.width = "50%", fig.pos="c", echo = FALSE}
