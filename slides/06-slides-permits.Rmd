@@ -1859,7 +1859,7 @@ $$\text{subject to: }E_1 + E_2 = \bar{E}_1 + \bar{E}_2$$
 --
 
 FOC:
-$$C_1'(E_1^*) = C_2'(E_2^*)$$
+$$-C_1'(E_1^*) = -C_2'(E_2^*)$$
 
 --
 
@@ -1896,10 +1896,24 @@ This shifts abatement away from high-MAC periods and toward low-MAC periods
 
 Why might a firm's MAC change over time?
 
+--
+
 1. Fuel and input prices move (e.g., coal vs natural gas prices)
+
+--
+
 2. Output demand changes (business cycle, weather-driven load)
+
+--
+
 3. Abatement equipment has temporary outages or maintenance
+
+--
+
 4. New technology adoption lowers future abatement cost
+
+--
+
 5. Learning-by-doing improves operational efficiency
 
 --
@@ -2038,7 +2052,7 @@ Borrowing case: period 1 starts with the higher MAC at cap
 
 Cost minimization shifts emissions toward period 1 and away from period 2
 
-That is: $E_1^* > \bar{E}_1$ and $E_2^* < \bar{E}_2$
+$E_1^* > \bar{E}_1$ and $E_2^* < \bar{E}_2$
 
 Both banking and borrowing are intertemporal permit trade that aligns MACs across time
 
@@ -2071,7 +2085,7 @@ Firms over-complied in the 1990s and built an allowance bank before tighter caps
 .pull-left[
 <center>
 ```{r, out.width = "85%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-eu-ets.png")
+knitr::include_graphics("files/06-eu-ets-2.png")
 ```
 </center>
 ]
@@ -2182,7 +2196,7 @@ The regulator can achieve $E^*$ through:
 - an emission standard of $E^*$
 - a tax of $\tau$
 - an abatement subsidy of $s$
-- "tradable permit" cap of $E^*$ with auctioned permits
+- "tradable permit" cap of $E^*$ with auctioned permits at price $p$
 
 ]
 
@@ -2201,7 +2215,7 @@ First let's look at .hi[equity]
 
 How do the costs and benefits of the policies fall on different groups?
 
-From here on we will roll the tax and permit system into 1: they are actually identical in terms of their impacts
+From here on we will roll the tax and permit system into 1: they are actually identical in terms of their impacts if all permits are auctioned
 
 ]
 
@@ -2244,11 +2258,22 @@ This won't always be true in the real world
 
 --
 
-Different policies have different implications for total cost and can thus affect production
+Key identity:
+$$E = \left(\frac{E}{q}\right)\times q$$
 
---
+Firms can reduce total emissions either by lowering emissions intensity per unit of output $q$: $\left(\frac{E}{q}\right)$, or by lowering output $q$
 
-To keep things simple lets suppose the firm has constant returns to scale technology and chooses the emissions rate / emissions per unit of output: $E/q$, this means that if they cut back on emissions it raises the MC of output
+---
+
+# Output effects
+
+Why can emissions policy reduce output?
+
+1. Taxes and standards make cleaner production more costly per unit of output
+2. That increases marginal cost of supplying output
+3. With downward-sloping demand, higher MC implies lower profit-maximizing output
+
+Even when the policy directly targets emissions, output can move as an indirect equilibrium response
 
 
 ---
@@ -2305,6 +2330,10 @@ ggplot() +
   annotate("text", x = .3, y = 2, label = "D", size = 8) +
   annotate("text", x = 2.5, y = 1.6, label = expression(MC^'*'), size = 8) +
   annotate("text", x = 2.5, y = 1.1, label = expression(MC[0]), size = 8) +
+  annotate("segment", x = .7, xend = .7, y = 1, yend = 1.5,
+           arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
+           size = 1.2, color = "black") +
+  annotate("text", x = .45, y = 1.27, label = "A+B", size = 8) +
   stat_function(fun = mc2, color = "#000000", size = 1.5) +
   stat_function(fun = mc1, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
@@ -2349,20 +2378,122 @@ Emission tax:
 
 # The output results
 
+.pull-left[
+
 Emission standard:
 - Firm pays A in abatement cost per unit of output
 - This raises the MC of production by A
 - Output and $(E^*/q^*)*q^*$ fall, but not by as much as under the tax
 
+]
+
+.pull-right[
+
+```{r output2_standard, echo = FALSE, fig.show = 'hide', warning = F}
+mc0 = function(x) 1
+mc_std = function(x) 1.25
+demand = function(x) 2.5 - x
+
+ggplot() +
+  annotate("text", x = .3, y = 2, label = "D", size = 8) +
+  annotate("text", x = 2.5, y = 1.35, label = expression(MC^'*'), size = 8) +
+  annotate("text", x = 2.5, y = 1.05, label = expression(MC[0]), size = 8) +
+  annotate("segment", x = .7, xend = .7, y = 1, yend = 1.25,
+           arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
+           size = 1.2, color = "black") +
+  annotate("text", x = .45, y = 1.125, label = "A", size = 8) +
+  stat_function(fun = mc_std, color = "#000000", size = 1.5) +
+  stat_function(fun = mc0, color = "#ca5670", size = 1.5) +
+  stat_function(fun = demand, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 1.25, xend = 1.25, y = 0, yend = 1.25,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Output",
+       y = "Capital/$") +
+  scale_x_continuous(
+    expand = c(0, 0), limits = c(0, 3.2),
+    breaks = c(1.25, 1.5),
+    labels = c(expression(q[std]^"*"), expression(q[0]))
+  ) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 3.1))
+```
+
+![standard output effect](`r knitr::fig_chunk("output2_standard", "png")`)
+]
+
 ---
 
 # The output results
+
+.pull-left[
 
 Abatement subsidy:
 - Reduces firm costs per unit of output by C
 - This reduces the MC of production by C
 - This .hi[raises] output
 - Even though $E/q$ goes down because the subsidy induces a lower emission intensity, total emissions may go up because $q$ will rise
+
+]
+
+.pull-right[
+
+```{r output2_subsidy, echo = FALSE, fig.show = 'hide', warning = F}
+mc0 = function(x) 1
+mc_sub = function(x) 0.8
+demand = function(x) 2.5 - x
+
+ggplot() +
+  annotate("text", x = .3, y = 2, label = "D", size = 8) +
+  annotate("text", x = 2.5, y = 1.12, label = expression(MC[0]), size = 8) +
+  annotate("text", x = 2.5, y = .85, label = expression(MC^'*'), size = 8) +
+  annotate("segment", x = .7, xend = .7, y = .8, yend = 1,
+           arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
+           size = 1.2, color = "black") +
+  annotate("text", x = .45, y = .9, label = "C", size = 8) +
+  stat_function(fun = mc0, color = "#ca5670", size = 1.5) +
+  stat_function(fun = mc_sub, color = "#000000", size = 1.5) +
+  stat_function(fun = demand, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 1.7, xend = 1.7, y = 0, yend = .8,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Output",
+       y = "Capital/$") +
+  scale_x_continuous(
+    expand = c(0, 0), limits = c(0, 3.2),
+    breaks = c(1.5, 1.7),
+    labels = c(expression(q[0]), expression(q[sub]^"*"))
+  ) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 3.1))
+```
+
+![subsidy output effect](`r knitr::fig_chunk("output2_subsidy", "png")`)
+]
 
 --
 

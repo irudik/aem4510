@@ -1317,7 +1317,7 @@ Two-period cost-minimization benchmark:
 --
 
 FOC:
-`$$C_1'(E_1^*) = C_2'(E_2^*)$$`
+`$$-C_1'(E_1^*) = -C_2'(E_2^*)$$`
 
 --
 
@@ -1354,10 +1354,24 @@ This shifts abatement away from high-MAC periods and toward low-MAC periods
 
 Why might a firm's MAC change over time?
 
+--
+
 1. Fuel and input prices move (e.g., coal vs natural gas prices)
+
+--
+
 2. Output demand changes (business cycle, weather-driven load)
+
+--
+
 3. Abatement equipment has temporary outages or maintenance
+
+--
+
 4. New technology adoption lowers future abatement cost
+
+--
+
 5. Learning-by-doing improves operational efficiency
 
 --
@@ -1402,7 +1416,7 @@ Borrowing case: period 1 starts with the higher MAC at cap
 
 Cost minimization shifts emissions toward period 1 and away from period 2
 
-That is: `\(E_1^* &gt; \bar{E}_1\)` and `\(E_2^* &lt; \bar{E}_2\)`
+`\(E_1^* &gt; \bar{E}_1\)` and `\(E_2^* &lt; \bar{E}_2\)`
 
 Both banking and borrowing are intertemporal permit trade that aligns MACs across time
 
@@ -1432,7 +1446,7 @@ Firms over-complied in the 1990s and built an allowance bank before tighter caps
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/06-eu-ets.png" width="85%" /&gt;
+&lt;img src="files/06-eu-ets-2.png" width="85%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1505,7 +1519,7 @@ The regulator can achieve `\(E^*\)` through:
 - an emission standard of `\(E^*\)`
 - a tax of `\(\tau\)`
 - an abatement subsidy of `\(s\)`
-- "tradable permit" cap of `\(E^*\)` with auctioned permits
+- "tradable permit" cap of `\(E^*\)` with auctioned permits at price `\(p\)`
 
 ]
 
@@ -1524,7 +1538,7 @@ First let's look at .hi[equity]
 
 How do the costs and benefits of the policies fall on different groups?
 
-From here on we will roll the tax and permit system into 1: they are actually identical in terms of their impacts
+From here on we will roll the tax and permit system into 1: they are actually identical in terms of their impacts if all permits are auctioned
 
 ]
 
@@ -1567,11 +1581,22 @@ This won't always be true in the real world
 
 --
 
-Different policies have different implications for total cost and can thus affect production
+Key identity:
+`$$E = \left(\frac{E}{q}\right)\times q$$`
 
---
+Firms can reduce total emissions either by lowering emissions intensity per unit of output `\(q\)`: `\(\left(\frac{E}{q}\right)\)`, or by lowering output `\(q\)`
 
-To keep things simple lets suppose the firm has constant returns to scale technology and chooses the emissions rate / emissions per unit of output: `\(E/q\)`, this means that if they cut back on emissions it raises the MC of output
+---
+
+# Output effects
+
+Why can emissions policy reduce output?
+
+1. Taxes and standards make cleaner production more costly per unit of output
+2. That increases marginal cost of supplying output
+3. With downward-sloping demand, higher MC implies lower profit-maximizing output
+
+Even when the policy directly targets emissions, output can move as an indirect equilibrium response
 
 
 ---
@@ -1606,20 +1631,42 @@ Emission tax:
 
 # The output results
 
+.pull-left[
+
 Emission standard:
 - Firm pays A in abatement cost per unit of output
 - This raises the MC of production by A
 - Output and `\((E^*/q^*)*q^*\)` fall, but not by as much as under the tax
 
+]
+
+.pull-right[
+
+
+
+![standard output effect](06-slides-permits_files/figure-html/output2_standard-1.png)
+]
+
 ---
 
 # The output results
+
+.pull-left[
 
 Abatement subsidy:
 - Reduces firm costs per unit of output by C
 - This reduces the MC of production by C
 - This .hi[raises] output
 - Even though `\(E/q\)` goes down because the subsidy induces a lower emission intensity, total emissions may go up because `\(q\)` will rise
+
+]
+
+.pull-right[
+
+
+
+![subsidy output effect](06-slides-permits_files/figure-html/output2_subsidy-1.png)
+]
 
 --
 
