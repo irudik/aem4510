@@ -2282,18 +2282,20 @@ Even when the policy directly targets emissions, output can move as an indirect 
 
 .pull-left[
 ```{r output1, echo = FALSE, fig.show = 'hide', warning = F}
-mac <- function(x) 2 - 2/3*x
-md <- function(x) 1
+mac = function(x) 2 - 2/3*x
+policy_price = function(x) 1
 
 ggplot() +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
-  annotate("text", x = 2.75, y = .85, label = "MD", size = 8) +
+  annotate("text", x = 2.55, y = 1.18, label = "Tax (t)", size = 7, color = "#638ccc") +
+  annotate("text", x = 2.55, y = .84, label = "Subsidy (s)", size = 7, color = "#638ccc") +
+  annotate("text", x = 1.62, y = 2.55, label = "Standard", angle = 90, size = 6.5, color = "grey35") +
   annotate("text", x = 2.15, y = .25, label = "A", size = 10, color = "black") +
   annotate("text", x = .5, y = .5, label = "B", size = 10, color = "black") +
   annotate("text", x = 2.15, y = .75, label = "C", size = 10, color = "black") +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
-  stat_function(fun = md, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+  stat_function(fun = policy_price, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 3,
            linetype = "dashed", size = 1.5, color = "grey50") +
   annotate("segment", x = 3, xend = 3, y = 0, yend = 1,
            linetype = "dashed", size = 1.5, color = "grey50") +

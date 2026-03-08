@@ -541,21 +541,24 @@ Noise `\(N\)` imposes cost `\(C(N)\)` on the doctor, benefits `\(B(N)\)` to the 
 
 --
 
-The confectioner could propose a contract where the doctor accepts some noise `\(N\)`, in exchange for a payment `\(\theta\)`
+Status quo is no contract: no additional noise and no transfer payment
+
+--
+
+This is a one-shot game: the confectioner gets one take-it-or-leave-it offer where the doctor accepts some noise `\(N\)` in exchange for payment `\(\theta\)`
 
 ---
 
 # Coase Caveats: Transactions costs
 
-The confectioner could propose a contract `\((N,\theta)\)` consisting of noise level `\(N\)` and transfer payment `\(\theta\)`
+Timing:
+1. Confectioner pays transaction/setup cost `\(tr\)` to propose one contract `\((N,\theta)\)`
+2. Doctor accepts or rejects once
+3. If rejected, they stay at the status quo (no additional noise, no transfer)
 
 --
 
-The doctor can then accept or refuse the contract `\((N,\theta)\)`
-
---
-
-Negotiating is .hi[costly] and has its own transactions cost `\(tr\)`
+There is no renegotiation after the accept/reject decision
 
 ---
 
@@ -591,7 +594,19 @@ Why?
 
 --
 
-It's the least amount required for the doctor to accept
+In a one-shot take-it-or-leave-it offer, the proposer sets the responder at reservation utility
+
+--
+
+So `\(\theta = C(N) = MC \times N\)` is the least amount required for the doctor to accept
+
+--
+
+If bargaining were unlimited, for a given `\(N\)` the feasible theta range is `\(\theta \in [MC \times N, B(N)]\)`
+
+--
+
+The realized payment in that interval depends on bargaining power and bargaining protocol
 
 ---
 
@@ -675,11 +690,11 @@ If the confectioner has the rights to noise, we just flip the script
 
 --
 
-The doctor proposes a contract `\((N, \theta)\)` where the confectioner reduces noise from `\(N_0\)` in exchange for a transfer payment
+The doctor makes a one-shot take-it-or-leave-it contract offer `\((N, \theta)\)` where the confectioner reduces noise from `\(N_0\)` in exchange for a transfer payment
 
 --
 
-The confectioner accepts or rejects the contract
+The confectioner accepts or rejects once; if rejected, they stay at `\(N_0\)` with no transfer
 
 When does the confectioner accept the contract?
 
@@ -689,7 +704,15 @@ The confectioner accepts if `\(\theta \geq B(N_0) - B(N)\)` (payment &gt; loss o
 
 --
 
-The doctor will then offer the minimum required: `\(\theta = B(N_0) - B(N)\)`
+Under one-shot take-it-or-leave-it bargaining, the doctor offers the minimum required: `\(\theta = B(N_0) - B(N)\)`
+
+--
+
+With unlimited bargaining, for given `\(N\)` the feasible theta range is `\(\theta \in [B(N_0)-B(N), MC \times (N_0-N)]\)`
+
+--
+
+Again, the realized payment in that interval depends on bargaining power and bargaining protocol
 
 ---
 
