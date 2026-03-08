@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lecture 08</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ivan Rudik" />
+    <script src="09-slides-carbon-tariffs_files/header-attrs/header-attrs.js"></script>
+    <link href="09-slides-carbon-tariffs_files/remark-css/default.css" rel="stylesheet" />
+    <link href="09-slides-carbon-tariffs_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="09-slides-carbon-tariffs_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="09-slides-carbon-tariffs_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="09-slides-carbon-tariffs_files/tile-view/tile-view.js"></script>
+    <link href="09-slides-carbon-tariffs_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="09-slides-carbon-tariffs_files/panelset/panelset.js"></script>
+    <script src="09-slides-carbon-tariffs_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Lecture 08
+]
+.subtitle[
+## Carbon Tariffs
+]
+.author[
+### Ivan Rudik
+]
+.date[
+### AEM 4510
+]
+
+---
+
+exclude: true
+
+``` r
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork
+)
+source("R/video_helpers.R")
+options(htmltools.dir.version = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo &lt;- FALSE
+  }
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+  options
+})
+```
+
+
+```
+## Warning in xaringanExtra::style_panelset(panel_tab_color_active = "red"): 'xaringanExtra::style_panelset' is deprecated.
+## Use 'style_panelset_tabs' instead.
+## See help("Deprecated")
+```
+
+```
+## Warning in style_panelset_tabs(...): The argument names of `style_panelset()`
+## changed in xaringanExtra 0.1.0. Please refer to the documentation to update to
+## the latest names.
+```
+
+```
+## NULL
+```
+
+---
+
+# Roadmap
+
+1. What are carbon tariffs?
+2. Basic trade theory: supply, demand, and tariffs
+3. Adding pollution externalities to trade
+4. Unilateral carbon taxes and leakage
+5. Carbon tariffs to prevent leakage
+6. Carbon tariffs alone
+7. World carbon taxes
+8. Different pollution intensities across countries
+
+---
+
+class: inverse, center, middle
+name: overview
+
+# What are carbon tariffs?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Carbon tariffs
+
+Carbon tariffs are tariffs imposed on imports based on their .hi[carbon content]
+
+--
+
+Why would we want carbon tariffs?
+
+---
+
+# Understanding border carbon adjustments
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/09-carbon-tariffs-bca-explained.mp4" type="video/mp4"></video>
+
+---
+
+# Carbon tariffs
+
+Why would we want carbon tariffs?
+
+--
+
+1. .hi[Leakage:] if country `\(i\)` imposes a carbon tax, production may shift to country `\(j\)` with no carbon tax
+
+--
+
+2. .hi[Competitiveness:] domestic firms face higher costs than foreign competitors
+
+--
+
+Carbon tariffs aim to "level the playing field" and reduce leakage
+
+---
+
+# Carbon tariffs in practice
+
+.hi[EU Carbon Border Adjustment Mechanism (CBAM):]
+- Phasing in 2023-2026, full implementation 2026
+- Covers cement, iron/steel, aluminum, fertilizers, electricity, hydrogen
+- Importers must purchase certificates matching EU ETS price
+
+--
+
+.hi[UK CBAM:] announced for 2027
+
+--
+
+.hi[US proposals:] various bills proposed but none passed yet
+
+---
+
+# This lecture
+
+We will use a simple partial equilibrium framework from Brunel and Levinson (2024) to understand:
+
+--
+
+1. How carbon tariffs work in theory
+
+--
+
+2. When they improve welfare
+
+--
+
+3. What complications arise in practice
+
+--
+
+The key insight: carbon tariffs are equivalent to a .hi[consumption tax] plus a .hi[production subsidy]
+
+---
+
+class: inverse, center, middle
+name: trade
+
+# Basic trade theory
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# A simple trade model
+
+Consider a small open economy (country `\(i\)`) that:
+- Takes world prices as given
+- Can import or export a homogeneous good
+
+--
+
+Key curves:
+- `\(S\)`: domestic supply
+- `\(D\)`: domestic demand
+- `\(p_w\)`: world price
+
+---
+
+# Free trade equilibrium
+
+&lt;!-- FIGURE 1: Standard tariff diagram showing S, D curves, world price, imports, and deadweight loss triangles a, b from tariff --&gt;
+
+
+```
+## [Figure 1: Standard tariff - S, D curves, deadweight triangles a, b]
+```
+
+With free trade at price `\(p_w\)`:
+- Domestic production: `\(Q_1\)`
+- Domestic consumption: `\(Q_4\)`
+- Imports: `\(Q_4 - Q_1\)`
+
+---
+
+# Adding a tariff
+
+A tariff `\(t\)` raises the domestic price to `\(p_w + t\)`
+
+--
+
+Effects:
+- Domestic production rises: `\(Q_1 \rightarrow Q_2\)`
+- Domestic consumption falls: `\(Q_4 \rightarrow Q_3\)`
+- Imports fall: `\((Q_4 - Q_1) \rightarrow (Q_3 - Q_2)\)`
+
+--
+
+.hi[Deadweight loss:] triangles `\(a + b\)`
+- `\(a\)`: production distortion (inefficient domestic production)
+- `\(b\)`: consumption distortion (foregone consumer surplus)
+
+---
+
+# Tariff revenue
+
+The tariff generates revenue: `\(t \times (Q_3 - Q_2)\)`
+
+--
+
+This is a transfer from consumers to the government
+
+--
+
+Net welfare effect of tariff: `\(-(a + b)\)` (deadweight loss)
+
+--
+
+Standard result: .hi[tariffs reduce welfare] in a small open economy
+
+---
+
+class: inverse, center, middle
+name: pollution
+
+# Adding pollution
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Production creates pollution
+
+Now suppose production of this good creates pollution
+
+--
+
+Let `\(e\)` = emissions per unit of output (same everywhere)
+
+--
+
+Let `\(d\)` = marginal damage from emissions (global pollutant)
+
+--
+
+The .hi[marginal social cost (MSC)] of production is: `\(MSC = S + e \times d\)`
+
+--
+
+MSC lies above the private supply curve by the external cost `\(e \times d\)`
+
+---
+
+# Free trade with pollution
+
+&lt;!-- FIGURE 2a: Country i with MSC curve above S, showing pollution externality --&gt;
+
+
+```
+## [Figure 2a: Country i with MSC curve above S]
+```
+
+Country `\(i\)`'s MSC curve lies above its supply curve
+
+The gap is the external cost: `\(e \times d\)`
+
+---
+
+# Global perspective
+
+&lt;!-- FIGURE 2b: World supply and demand with MSC --&gt;
+
+
+```
+## [Figure 2b: World S, MSC, D curves]
+```
+
+From a global perspective:
+- Free trade output: where `\(D = S\)` (too much!)
+- Efficient output: where `\(D = MSC\)` (less production)
+
+---
+
+# The externality problem
+
+With a global pollutant like `\(CO_2\)`:
+
+--
+
+- Damages occur regardless of where emissions happen
+- No country has incentive to fully internalize the externality
+- Free trade leads to .hi[too much production] globally
+
+--
+
+A global carbon tax `\(= e \times d\)` would achieve efficiency
+
+--
+
+But what if only .hi[one country] acts?
+
+---
+
+class: inverse, center, middle
+name: unilateral
+
+# Unilateral carbon tax
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Country `\(i\)` imposes a carbon tax
+
+Suppose country `\(i\)` imposes a carbon tax `\(\tau = e \times d\)` on domestic production
+
+--
+
+This shifts country `\(i\)`'s supply curve up by `\(\tau\)`
+
+--
+
+But the .hi[world price doesn't change] (small open economy)
+
+---
+
+# Effects of unilateral carbon tax
+
+&lt;!-- FIGURE 3: Unilateral carbon tax showing tax revenue Rt, deadweight loss d, and leakage --&gt;
+
+
+```
+## [Figure 3: Unilateral carbon tax with leakage]
+```
+
+---
+
+# Unilateral carbon tax effects
+
+Country `\(i\)`'s carbon tax:
+- Reduces domestic production
+- Does not change domestic consumption (price unchanged)
+- .hi[Increases imports]
+
+--
+
+The increase in imports means .hi[foreign production increases]
+
+--
+
+This is .hi[carbon leakage]: emissions shift abroad rather than being reduced
+
+---
+
+# Leakage undermines the tax
+
+With identical carbon intensities:
+- Every unit of reduced domestic production = 1 unit more foreign production
+- .hi[Net global emissions unchanged!]
+
+--
+
+The carbon tax:
+- Generates tax revenue `\(R_t\)` (rectangle)
+- Creates deadweight loss `\(d\)` (triangle) from production distortion
+- Achieves .hi[zero environmental benefit]
+
+--
+
+Country `\(i\)` bears costs but gets no environmental gain
+
+---
+
+class: inverse, center, middle
+name: tariff
+
+# Carbon tax + carbon tariff
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Adding a carbon tariff
+
+Now suppose country `\(i\)` adds a carbon tariff equal to the carbon tax: `\(t = \tau = e \times d\)`
+
+--
+
+This tariff applies to the carbon content of imports
+
+--
+
+Domestic price rises to: `\(p_w + t\)`
+
+---
+
+# Carbon tax + tariff effects
+
+&lt;!-- FIGURE 4: Carbon tax plus tariff showing combined effect and net welfare gain f --&gt;
+
+
+```
+## [Figure 4: Carbon tax + tariff effects]
+```
+
+---
+
+# How the tariff helps
+
+The carbon tariff:
+- Raises the domestic price
+- .hi[Reduces consumption] in country `\(i\)`
+- Reduces imports (less leakage)
+
+--
+
+Net effect:
+- Production distortion from tax alone: `\(-d\)`
+- Consumption distortion from tariff: `\(-b\)`
+- .hi[Environmental benefit:] reduced global emissions
+
+--
+
+If environmental benefit `\(&gt; d + b\)`: net welfare gain!
+
+---
+
+# Numerical check (practice-style)
+
+Use the same small-open-economy setup as in the practice set:
+
+- `\(Q_D = 100 - P\)`
+- `\(Q_S = P - 10\)`
+- `\(p_w = 30\)`
+- Identical carbon intensities: `\(e_H = e_F = 1\)`
+- Marginal damage per ton: `\(d = 8\)`
+- Domestic carbon tax: `\(\tau = e_H d = 8\)`
+- Border tariff with tax: `\(t = \tau = 8\)`
+
+Compute under:
+
+1. Free trade
+2. Unilateral domestic carbon tax only
+3. Domestic carbon tax + border carbon tariff
+
+For each case, find domestic production, domestic consumption, imports, and global emissions from serving Home demand.
+
+---
+
+# Numerical check: graph
+
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig-numeric-check-1.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Numerical check: answers
+
+1. .hi[Free trade at `\(P=30\)`]
+- `\(Q_S = 20,\; Q_D = 70,\; M = 50\)`
+- Emissions: `\(E_H = 20,\; E_F = 50,\; E_{global}=70\)`
+
+2. .hi[Unilateral domestic tax only (`\(\\tau=8\)`)]
+- Domestic supply shifts to `\(Q_S = P - 18\)`
+- At `\(P=30\)`: `\(Q_S = 12,\; Q_D = 70,\; M = 58\)`
+- Emissions: `\(E_H = 12,\; E_F = 58,\; E_{global}=70\)` (pure leakage)
+
+3. .hi[Domestic tax + tariff (`\(\\tau=t=8\)`)]
+- Domestic price rises to `\(P = p_w + t = 38\)`
+- `\(Q_S = 20,\; Q_D = 62,\; M = 42\)`
+- Emissions: `\(E_H = 20,\; E_F = 42,\; E_{global}=62\)`
+
+This is the core slide result: with identical intensities, tax-only can be offset by leakage, while adding a tariff reduces consumption and lowers global emissions.
+
+---
+
+# The key insight
+
+With identical carbon intensities everywhere:
+
+--
+
+.hi[Carbon tax + carbon tariff] = .hi[Consumption tax]
+
+--
+
+Why?
+- Tax on domestic production raises domestic costs
+- Tariff on imports raises import costs
+- Both domestic and imported goods face the same carbon price
+- Equivalent to taxing consumption of the carbon-intensive good
+
+---
+
+class: inverse, center, middle
+name: tariff-alone
+
+# Carbon tariff alone
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# What if we only use a tariff?
+
+Some proposals call for carbon tariffs .hi[without] a domestic carbon tax
+
+--
+
+What does this accomplish?
+
+---
+
+# Carbon tariff alone
+
+&lt;!-- FIGURE 5: Carbon tariff alone showing it equals consumption tax + production subsidy --&gt;
+
+
+```
+## [Figure 5: Carbon tariff alone = consumption tax + production subsidy]
+```
+
+---
+
+# Tariff alone = consumption tax + production subsidy
+
+A carbon tariff without a domestic carbon tax is equivalent to:
+
+--
+
+1. .hi[Consumption tax:] raises price consumers pay
+
+--
+
+2. .hi[Production subsidy:] domestic producers don't pay the carbon cost
+
+--
+
+This .hi[increases] domestic production while reducing consumption
+
+--
+
+Domestic emissions may .hi[rise]!
+
+---
+
+# Is a tariff alone good policy?
+
+A carbon tariff alone:
+- Reduces imports (good for leakage)
+- But .hi[subsidizes] domestic carbon-intensive production (bad)
+
+--
+
+Net environmental effect is ambiguous
+
+--
+
+Generally .hi[not as effective] as carbon tax + tariff
+
+--
+
+May violate WTO rules (discriminates against foreign producers)
+
+---
+
+class: inverse, center, middle
+name: world-tax
+
+# World carbon tax
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# What if everyone taxes carbon?
+
+Suppose all countries impose the same carbon tax `\(\tau = e \times d\)`
+
+--
+
+Now there's no competitive disadvantage
+
+--
+
+No leakage: all production faces the same carbon price
+
+---
+
+# World carbon tax
+
+&lt;!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary --&gt;
+
+
+```
+## [Figure 6: World carbon tax - efficient outcome]
+```
+
+---
+
+# Efficient outcome
+
+With a world carbon tax at `\(\tau = e \times d\)`:
+- Global production equals efficient level
+- Price reflects full social cost
+- .hi[No need for carbon tariffs]
+
+--
+
+Carbon tariffs are a .hi[second-best] policy for when global coordination fails
+
+---
+
+# Insufficient world carbon tax
+
+What if the world carbon tax is .hi[too low]?
+
+--
+
+Suppose world tax = `\(\tau' &lt; e \times d\)`
+
+--
+
+Global emissions still too high, but less so than with no tax
+
+---
+
+# Too-small world tax
+
+&lt;!-- FIGURE 7: Insufficient world carbon tax showing partial externality pricing --&gt;
+
+
+```
+## [Figure 7: Too-small world carbon tax]
+```
+
+Can country `\(i\)` improve things with a tariff?
+
+---
+
+# Tariff on top of insufficient world tax
+
+&lt;!-- FIGURE 8: Adding tariff to insufficient world tax - overshooting problem --&gt;
+
+
+```
+## [Figure 8: Overshooting with tariff on insufficient world tax]
+```
+
+---
+
+# Overshooting problem
+
+If country `\(i\)` adds a tariff `\(= e \times d - \tau'\)` on top of world tax `\(\tau'\)`:
+
+--
+
+- Domestic price rises to efficient level
+- But .hi[domestic consumption] falls below efficient level
+- Creates new distortion
+
+--
+
+Key issue: country `\(i\)` can only affect its .hi[own] consumption, not world production
+
+--
+
+A tariff can't fix insufficient global carbon pricing
+
+---
+
+class: inverse, center, middle
+name: intensities
+
+# Different carbon intensities
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# What if countries differ?
+
+So far: same carbon intensity `\(e\)` everywhere
+
+--
+
+Reality: countries have very different carbon intensities
+- Cleaner electricity grids
+- Different production technologies
+- Different regulatory environments
+
+--
+
+How should tariffs account for this?
+
+---
+
+# Cleaner domestic production
+
+Suppose country `\(i\)` has lower carbon intensity than the rest of the world:
+- `\(e_i &lt; e_j\)` (domestic production is cleaner)
+
+--
+
+Now the .hi[efficient] policy differs for domestic vs. foreign goods
+
+---
+
+# Tariff based on domestic carbon intensity
+
+&lt;!-- FIGURE 9: Different intensities - tariff = domestic tax rate --&gt;
+
+
+```
+## [Figure 9: Tariff based on domestic carbon intensity]
+```
+
+If tariff = domestic carbon tax = `\(e_i \times d\)`:
+- Correctly prices domestic emissions
+- .hi[Under-prices] foreign emissions (since `\(e_j &gt; e_i\)`)
+
+---
+
+# Tariff based on foreign carbon intensity
+
+&lt;!-- FIGURE 10: Different intensities - tariff = foreign external cost --&gt;
+
+
+```
+## [Figure 10: Tariff based on foreign carbon intensity]
+```
+
+If tariff = `\(e_j \times d\)` (foreign intensity):
+- Correctly prices foreign emissions
+- But tariff `\(&gt;\)` domestic tax: .hi[looks protectionist]
+
+---
+
+# The measurement problem
+
+Setting tariffs based on actual foreign carbon intensity requires:
+
+--
+
+1. Measuring emissions in foreign production
+2. Verifying foreign carbon prices
+3. Adjusting for different products/producers
+
+--
+
+This is .hi[extremely difficult] in practice
+
+--
+
+EU CBAM uses default values, allows importers to prove lower emissions
+
+---
+
+class: inverse, center, middle
+name: complications
+
+# Complications
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Real-world complications
+
+Several factors complicate carbon tariff design:
+
+--
+
+1. .hi[Resource shuffling:] clean production exported, dirty production consumed domestically
+
+--
+
+2. .hi[Non-price policies:] regulations vs. carbon prices
+
+--
+
+3. .hi[Export rebates:] should exports get carbon tax rebates?
+
+--
+
+4. .hi[Retaliation:] trading partners may impose counter-tariffs
+
+---
+
+# Resource shuffling
+
+Suppose country `\(j\)` has both clean and dirty production
+
+--
+
+With a carbon tariff based on average intensity:
+- Export the clean stuff to country `\(i\)`
+- Consume the dirty stuff domestically
+
+--
+
+No change in country `\(j\)`'s total emissions!
+
+--
+
+This is .hi[another form of leakage]
+
+---
+
+# Non-price policies
+
+Many countries use regulations rather than carbon prices:
+- Fuel economy standards
+- Renewable portfolio standards
+- Building codes
+
+--
+
+How do you calculate the "equivalent carbon price"?
+
+--
+
+Very difficult: may require complex modeling
+
+---
+
+# Export rebates
+
+Should country `\(i\)` rebate carbon taxes on exports?
+
+--
+
+Arguments for:
+- Maintains competitiveness
+- Symmetric with import tariffs
+
+--
+
+Arguments against:
+- Reduces domestic incentive to decarbonize
+- May look like an export subsidy (WTO issues)
+
+---
+
+# WTO compatibility
+
+Carbon tariffs face WTO scrutiny:
+
+--
+
+1. .hi[National treatment:] can't discriminate against foreign goods
+
+--
+
+2. .hi[Most favored nation:] can't discriminate among trading partners
+
+--
+
+3. .hi[GATT Article XX:] exceptions for environmental protection
+
+--
+
+EU CBAM designed carefully to fit within WTO rules
+
+---
+
+class: inverse, center, middle
+name: takeaways
+
+# Key takeaways
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Summary
+
+1. .hi[Carbon tariffs] aim to address leakage and competitiveness concerns
+
+--
+
+2. .hi[Carbon tax + tariff] is equivalent to a consumption tax
+   - Reduces consumption of carbon-intensive goods
+   - Can improve welfare if environmental benefit exceeds distortion costs
+
+--
+
+3. .hi[Carbon tariff alone] = consumption tax + production subsidy
+   - May increase domestic emissions
+   - Less effective than tax + tariff
+
+---
+
+# Summary (continued)
+
+4. .hi[World carbon tax] is first-best
+   - Carbon tariffs are second-best when global coordination fails
+
+--
+
+5. .hi[Different carbon intensities] create measurement challenges
+   - Setting tariff = foreign intensity is efficient but looks protectionist
+   - Setting tariff = domestic intensity under-prices foreign emissions
+
+--
+
+6. .hi[Many complications] in practice
+   - Resource shuffling, non-price policies, export rebates, WTO rules
+
+---
+
+# The bottom line
+
+Carbon tariffs are a .hi[complement] to carbon pricing, not a substitute
+
+--
+
+They work best when:
+- Combined with a domestic carbon tax
+- Set based on actual carbon content
+- Part of broader international coordination
+
+--
+
+Alone, they are an imperfect tool that may create new distortions
+
+---
+
+# References
+
+Brunel, C. and A. Levinson (2024). "Carbon Tariffs 101." NBER Working Paper 33024.
+
+EU Carbon Border Adjustment Mechanism: https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

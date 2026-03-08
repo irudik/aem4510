@@ -48,20 +48,20 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
   
 ### In class emissions trading game
 
-### Distortions and second-best policies
-
-  - [Lecture notes](07-second-best)
-  - *Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.*
-
-### Climate Policy and Trade:Carbon Tariffs
-
-  - [Lecture notes](08-carbon-tariffs)
-  - Brunel, Claire, and Arik Levinson. "[Carbon Tariffs 101.](https://www.nber.org/system/files/working_papers/w33024/w33024.pdf)" NBER Working Paper No. 33024 (2024).
-
 ### Policy under uncertainty
 
-  - [Lecture notes](09-uncertainty)
+  - [Lecture notes](07-uncertainty)
   - KO Chapters 8
+
+### Distortions and second-best policies
+
+  - [Lecture notes](08-second-best)
+  - *Holland, Stephen P., Jonathan E. Hughes, and Christopher R. Knittel. "[Greenhouse gas reductions under low carbon fuel standards?.](https://www.aeaweb.org/articles?id=10.1257/pol.1.1.106)" American Economic Journal: Economic Policy 1, no. 1 (2009): 106-46.*
+
+### Climate Policy and Trade: Carbon Tariffs
+
+  - [Lecture notes](09-carbon-tariffs)
+  - Brunel, Claire, and Arik Levinson. "[Carbon Tariffs 101.](https://www.nber.org/system/files/working_papers/w33024/w33024.pdf)" NBER Working Paper No. 33024 (2024).
   
 ### Econometrics review
 
