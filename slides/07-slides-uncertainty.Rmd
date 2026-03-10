@@ -1,5 +1,5 @@
 ---
-title: "Lecture 09"
+title: "Lecture 07"
 subtitle: "Policymaking Under Uncertainty"
 author: Ivan Rudik
 date: AEM 4510
