@@ -964,6 +964,73 @@ Collapse of Greenland ice sheet: could lead to a 7m rise in sea level
 
 ---
 
+# Policy under strategic uncertainty
+
+.pull-left[
+```{r strategy_perfect_steep, echo = FALSE, fig.show = 'hide', warning = F}
+mac = function(x) 2 - 2/3*x
+mach = function(x) 2.5 - 2/3*x
+e_star = 1.5
+e_tau = 2.25
+tau_e = 1
+dwl_tax = tibble(
+  x = c(e_star, e_star, e_tau),
+  y = c(tau_e, mach(e_star), tau_e)
+)
+
+ggplot() +
+  geom_polygon(data = dwl_tax, aes(x = x, y = y), fill = "blue", alpha = 0.25) +
+  annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
+  annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
+  annotate("text", x = 1.62, y = 2.4, label = expression(MD), angle = 90, size = 8, color = "#638ccc") +
+  annotate("segment", x = e_star, xend = e_star, y = 0, yend = 3,
+           size = 1.5, color = "#638ccc") +
+  annotate("segment", x = 0, xend = 3, y = tau_e, yend = tau_e,
+           linetype = "dotted", size = 2, color = "firebrick") +
+  annotate("segment", x = e_tau, xend = e_tau, y = 0, yend = tau_e,
+           linetype = "dotted", size = 1, color = "firebrick") +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
+  stat_function(fun = mach, color = "#000000", size = 1.5) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(
+    expand = c(0,0), limits = c(0,3.1),
+    breaks = c(e_star, e_tau),
+    labels = expression(E[e] == E^"*", E[tau])
+  ) +
+  scale_y_continuous(
+    expand = c(0,0), limits = c(0,3.1),
+    breaks = tau_e, labels = expression(tau[e])
+  )
+
+```
+![perfectly steep marginal damages](`r knitr::fig_chunk("strategy_perfect_steep", "png")`)
+]
+
+.pull-right[
+
+If MD is .hi[perfectly steep], the efficient quantity is pinned down exactly
+
+The standard still gives $E_e = E^*$, so there is .hi[no DWL under the standard]
+
+The tax still lets emissions move to $E_\tau$ when MAC is higher than expected
+
+]
+
+---
+
 # Tipping points
 
 Collapse of western Antarctic ice sheet
@@ -1104,6 +1171,74 @@ It's valuable to let the firm flexibly choose abatement
 
 Taxes impose a constant incentive on the firm, closer representation of the MD
 
+
+]
+
+---
+
+# Policy under strategic uncertainty
+
+.pull-left[
+```{r strategy_perfect_flat, echo = FALSE, fig.show = 'hide', warning = F}
+mac = function(x) 2 - 2/3*x
+md = function(x) 1
+mach = function(x) 2.5 - 2/3*x
+e_e = 1.5
+e_star = 2.25
+tau_e = 1
+dwl = tibble(
+  x = c(e_e, e_e, e_star),
+  y = c(tau_e, 2.5 - 2/3*e_e, tau_e)
+)
+
+ggplot() +
+  geom_polygon(data = dwl, aes(x = x, y = y), fill = "red", alpha = 0.4) +
+  annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
+  annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
+  annotate("text", x = 2.55, y = 1.15, label = expression(MD), size = 8, color = "#638ccc") +
+  annotate("segment", x = 0, xend = 3, y = tau_e, yend = tau_e,
+           size = 1.5, color = "#638ccc") +
+  annotate("segment", x = e_e, xend = e_e, y = 0, yend = 3,
+           linetype = "dotted", size = 2, color = "firebrick") +
+  annotate("segment", x = e_star, xend = e_star, y = 0, yend = tau_e,
+           linetype = "dotted", size = 1, color = "firebrick") +
+  stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
+  stat_function(fun = mach, color = "#000000", size = 1.5) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  labs(x = "Emissions",
+       y = "Capital/$") +
+  scale_x_continuous(
+    expand = c(0,0), limits = c(0,3.1),
+    breaks = c(e_e, e_star),
+    labels = expression(E[e], E[tau] == E^"*")
+  ) +
+  scale_y_continuous(
+    expand = c(0,0), limits = c(0,3.1),
+    breaks = tau_e, labels = expression(tau[e])
+  )
+
+```
+![perfectly flat marginal damages](`r knitr::fig_chunk("strategy_perfect_flat", "png")`)
+]
+
+.pull-right[
+
+If MD is .hi[perfectly flat], the efficient price is pinned down exactly
+
+The tax still gives $\tau_e = MD$, so the firm chooses $E_\tau = E^*$
+
+There is .hi[no DWL under the tax], while the standard still fixes the wrong quantity
 
 ]
 
