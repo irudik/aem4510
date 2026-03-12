@@ -70,7 +70,7 @@ Lets consider two extreme cases to understand whether and how market power matte
 In both cases we will assume that:
 
 1. Marginal costs of production are constant $MC$
-2. The marginal damage from a unit of output is constant giving us constant social marginal costs $SMC = MC + MD$
+2. Emissions are perfectly proportional to output, so each additional unit of output creates the same marginal damage and gives us constant social marginal cost $SMC = MC + MD$
 
 ---
 
@@ -110,7 +110,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1,1.5), labels = c(expression(q^'*'), expression(q[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
@@ -284,7 +284,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1), labels = c(expression(q^'*'))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5), labels = c(expression(p^'*')))
@@ -354,7 +354,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1, 1.5/2), labels = c(expression(q^'*'), expression(q^m))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5, 2.5-1.5/2), labels = c(expression(p^'*'), expression(p^m)))
@@ -426,7 +426,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(.5, 1, 1.5/2), labels = c(expression(q^tau), expression(q^'*'), expression(q^m))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
@@ -594,7 +594,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(.5, 1, 1.5/2), labels = c(expression(q^tau), expression(q^'*'), expression(q^m))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
@@ -666,7 +666,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(.5, 1, 1.5/2), labels = c(expression(q^tau), expression(q^'*'), expression(q^m))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(2.5-1/2, 1.5, 2.5-1.5/2), labels = c(expression(p^tau), expression(p^'*'), expression(p^m)))
@@ -769,7 +769,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Output",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(
     expand = c(0, 0),
@@ -877,7 +877,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Output",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(
     expand = c(0, 0),
@@ -952,7 +952,7 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff", colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Output",
+  labs(x = "Emissions / Output",
        y = "Capital/$") +
   scale_x_continuous(
     expand = c(0, 0),
@@ -1127,14 +1127,14 @@ Now let's break the link between output and emissions by writing down a slightly
 
 Here's our model:
 
-- Cobb-Douglas production using labor and emissions as inputs: $Q = L^\alpha E^{1-\alpha}$
-- The firm pays wages $w$ to labor, rental rate $r$ to emissions (capital)
+- General production function using labor and emissions as inputs: $Q = f(L,E)$
+- The firm pays wages $w$ to labor and rental rate $r$ for the emissions-generating input $E$
 - The firm receives a price $p$ per unit of output
 - Emissions cause marginal damage $d$
 
 --
 
-The firm can increase output without more emissions by increasing $L$
+The key point is that the firm can adjust $L$ and $E$ separately
 
 --
 
@@ -1146,16 +1146,16 @@ What does an output tax $\tau_o$ do versus a regular emission tax $\tau_e$?
 # Output taxes, part two
 
 The regulator wants the firm to internalize its social costs:
-$$\max_{L,E} p\,L^\alpha E^{1-\alpha} - wL - rE - dE$$
+$$\max_{L,E} p f(L,E) - wL - rE - dE$$
 
 --
 
 The first-order conditions for a socially efficient allocation of $L$ and $E$ are:
-$$\underbrace{\alpha p L^{\alpha-1} E^{1-\alpha}}_{\text{MR}} = \underbrace{w}_{\text{MC}} \qquad \underbrace{(1-\alpha) p L^{\alpha} E^{-\alpha}}_{\text{MR}} = \underbrace{r + d}_{\text{MC}}$$
+$$p\frac{\partial f(L,E)}{\partial L} = w \qquad p\frac{\partial f(L,E)}{\partial E} = r + d$$
 
 --
 
-The for a social optimum we want to equate the MR (left hand side) with the SMC (right hand side) for both inputs
+For a social optimum, labor is priced at its private cost, but emissions must face the extra damage term $d$
 
 
 ---
@@ -1163,20 +1163,31 @@ The for a social optimum we want to equate the MR (left hand side) with the SMC 
 # Output taxes, part two
 
 The firm's problem for the output tax is:
-$$\max_{L,E} (p-\tau_o)L^\alpha E^{1-\alpha} - wL - rE$$
+$$\max_{L,E} (p-\tau_o)f(L,E) - wL - rE$$
 
 --
 
 The firm's profit-maximizing choices are given by the first-order conditions:
-$$\alpha(p-\tau_o)L^{\alpha-1} E^{1-\alpha} = w \qquad (1-\alpha)(p-\tau_o)L^{\alpha} E^{-\alpha} = r$$
+$$(p-\tau_o)\frac{\partial f(L,E)}{\partial L} = w \qquad (p-\tau_o)\frac{\partial f(L,E)}{\partial E} = r$$
 
 --
 
-The firm equates the MR and MC of each input
+What do these conditions mean?
+
+---
+
+# Output taxes, part two
+
+The output tax reduces the value of the marginal product of .hi[both] inputs
 
 --
 
-The output tax penalizes the use of clean labor (despite it not causing any externalities) at a marginal rate of: $\tau_o L^{\alpha-1} E^{1-\alpha}$, this is .hi-red[not efficient]
+Rearranging the labor condition gives:
+$$p\frac{\partial f(L,E)}{\partial L} = w + \tau_o\frac{\partial f(L,E)}{\partial L}$$
+
+--
+
+So the output tax implicitly taxes clean labor too, which is .hi-red[not efficient]
 
 ---
 
@@ -1187,11 +1198,11 @@ How does this compare to a pure emission tax?
 --
 
 The firm's problem when facing an emission tax is:
-$$\max_{L,E} pL^\alpha E^{1-\alpha} - wL - (r+\tau_e)E$$
+$$\max_{L,E} p f(L,E) - wL - (r+\tau_e)E$$
 --
 
 The firm's profit-maximizing choices are given by the first-order conditions:
-$$\alpha(p)L^{\alpha-1} E^{1-\alpha} = w \qquad (1-\alpha) p L^{\alpha} E^{-\alpha} = r + \tau_e$$
+$$p\frac{\partial f(L,E)}{\partial L} = w \qquad p\frac{\partial f(L,E)}{\partial E} = r + \tau_e$$
 
 --
 
