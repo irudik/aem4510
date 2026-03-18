@@ -23,6 +23,7 @@ pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork
 )
 source("R/video_helpers.R")
+source("R/09-carbon-tariffs-figures.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -167,58 +168,59 @@ Key curves:
 
 <!-- FIGURE 1: Standard tariff diagram showing S, D curves, world price, imports, and deadweight loss triangles a, b from tariff -->
 
-```{r fig1-tariff, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 1 from paper
-# Shows: S and D curves, world price p_w, tariff price p_w + t
-# Areas: a (production distortion), b (consumption distortion)
-if (file.exists("files/08-fig1-tariff.png")) {
-  knitr::include_graphics("files/08-fig1-tariff.png")
-} else {
-  cat("[Figure 1: Standard tariff - S, D curves, deadweight triangles a, b]")
-}
+```{r fig1-tariff, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "free_trade")
 ```
 
 With free trade at price $p_w$:
-- Domestic production: $Q_1$
-- Domestic consumption: $Q_4$
-- Imports: $Q_4 - Q_1$
+- Domestic production: $q_i^S$
+- Domestic consumption and imports: $q_i^D$ and $q_i^D - q_i^S$
 
 ---
-
+count: false
 # Adding a tariff
 
-A tariff $t$ raises the domestic price to $p_w + t$
+```{r fig1-tariff-stage2, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "tariff")
+```
 
---
-
-Effects:
-- Domestic production rises: $Q_1 \rightarrow Q_2$
-- Domestic consumption falls: $Q_4 \rightarrow Q_3$
-- Imports fall: $(Q_4 - Q_1) \rightarrow (Q_3 - Q_2)$
-
---
-
-.hi[Deadweight loss:] triangles $a + b$
-- $a$: production distortion (inefficient domestic production)
-- $b$: consumption distortion (foregone consumer surplus)
+A tariff $\tau$ raises the domestic price to $p_w + \tau$:
+- Production rises to $q_{i\tau}^S$ and consumption falls to $q_{i\tau}^D$
+- Imports fall to $q_{i\tau}^D - q_{i\tau}^S$
 
 ---
-
+count: false
 # Tariff revenue
 
-The tariff generates revenue: $t \times (Q_3 - Q_2)$
+```{r fig1-tariff-stage3, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "welfare")
+```
 
---
+The tariff creates:
+- Revenue: $R(\tau) = \tau (q_{i\tau}^D - q_{i\tau}^S)$
+- Deadweight loss: triangles $a + b$
 
-This is a transfer from consumers to the government
+---
+count: false
+# Deadweight loss
 
---
+```{r fig1-tariff-stage4, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "welfare")
+```
 
-Net welfare effect of tariff: $-(a + b)$ (deadweight loss)
+Triangle $a$ is a production distortion:
+- The tariff shifts production from lower-cost foreign supply to higher-cost domestic production.
 
---
+---
+count: false
+# Deadweight loss
 
-Standard result: .hi[tariffs reduce welfare] in a small open economy
+```{r fig1-tariff-stage5, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "welfare")
+```
+
+Triangle $b$ is a consumption distortion:
+- The tariff eliminates units consumers value above the world price but below the tariff-inclusive price.
 
 ---
 
@@ -237,7 +239,7 @@ Now suppose production of this good creates pollution
 
 --
 
-Let $e$ = emissions per unit of output (same everywhere)
+Let $e$ = emissions per unit of output (same everywhere for now)
 
 --
 
@@ -257,20 +259,69 @@ MSC lies above the private supply curve by the external cost $e \times d$
 
 <!-- FIGURE 2a: Country i with MSC curve above S, showing pollution externality -->
 
-```{r fig2a-pollution, out.width = "500px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 2a from paper
-# Shows: S, MSC, D curves for country i
-# MSC = S + e*d (parallel shift up)
-if (file.exists("files/08-fig2a-country-i.png")) {
-  knitr::include_graphics("files/08-fig2a-country-i.png")
-} else {
-  cat("[Figure 2a: Country i with MSC curve above S]")
-}
+.pull-left[
+```{r fig2a-pollution, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_2_country(stage = "baseline")
 ```
+]
 
-Country $i$'s MSC curve lies above its supply curve
+.pull-right[
 
-The gap is the external cost: $e \times d$
+Free trade output is pinned down by domestic demand and supply at the world price.
+
+]
+
+---
+count: false
+# Free trade with pollution
+
+.pull-left[
+```{r fig2a-pollution-stage2, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_2_country(stage = "msc")
+```
+]
+
+.pull-right[
+
+Country $i$'s MSC curve lies above its private supply curve.
+
+The vertical gap is the external cost: $e \times d$.
+
+]
+
+---
+count: false
+# Free trade with pollution
+
+.pull-left[
+```{r fig2a-pollution-stage3, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_2_country(stage = "damage")
+```
+]
+
+.pull-right[
+
+The green region is the domestic deadweight loss from producing beyond the efficient output level.
+
+]
+
+---
+count: false
+# Free trade with pollution
+
+.pull-left[
+```{r fig2a-pollution-stage4, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_2_country(stage = "damage")
+```
+]
+
+.pull-right[
+
+At the world price $p_w$, marginal benefit is pinned down by world demand, while marginal social cost is given by $MSC$.
+
+That triangle is the set of units for which marginal benefit exceeds private supply cost but is below marginal social cost.
+
+]
 
 ---
 
@@ -278,20 +329,20 @@ The gap is the external cost: $e \times d$
 
 <!-- FIGURE 2b: World supply and demand with MSC -->
 
-```{r fig2b-world, out.width = "500px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 2b from paper
-# Shows: World S, MSC, D curves
-# Efficient output where D = MSC
-if (file.exists("files/08-fig2b-world.png")) {
-  knitr::include_graphics("files/08-fig2b-world.png")
-} else {
-  cat("[Figure 2b: World S, MSC, D curves]")
-}
+.pull-left[
+```{r fig2b-world, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_2_world()
 ```
+]
+
+.pull-right[
 
 From a global perspective:
-- Free trade output: where $D = S$ (too much!)
-- Efficient output: where $D = MSC$ (less production)
+- Free-trade output is where $D = S$.
+- Efficient output is where $D = MSC$.
+- The green region is the global welfare gain from cutting output from $Q_W$ to $Q_W^*$.
+
+]
 
 ---
 
@@ -342,28 +393,184 @@ But the .hi[world price doesn't change] (small open economy)
 
 <!-- FIGURE 3: Unilateral carbon tax showing tax revenue Rt, deadweight loss d, and leakage -->
 
-```{r fig3-unilateral, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 3 from paper
-# Shows: S shifts to S + tau, domestic production falls
-# Tax revenue rectangle, deadweight triangle d
-# Imports increase (leakage)
-if (file.exists("files/08-fig3-unilateral-tax.png")) {
-  knitr::include_graphics("files/08-fig3-unilateral-tax.png")
-} else {
-  cat("[Figure 3: Unilateral carbon tax with leakage]")
-}
+.pull-left[
+```{r fig3-unilateral, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "baseline")
 ```
+]
+
+.pull-right[
+
+Before the tax, the domestic market is at the free-trade benchmark with price $p_w$.
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "tax")
+```
+]
+
+.pull-right[
+
+After the tax:
+- Producers receive the net-of-tax price $p_w - t$
+- Because $t$ equals the external damage, domestic output falls to the Figure 2 optimum $q_{it}^S$
+- Consumers still face the world price $p_w$
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage3, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "tax")
+```
+]
+
+.pull-right[
+
+Leakage comes next:
+- Consumers in country $i$ still demand $q_i^D$ at price $p_w$
+- Imports rise enough to offset the fall in domestic output
+- Foreign production replaces home production: that is leakage
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage4, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+From country $i$'s perspective:
+- Consumers are no better or worse off: they still pay $p_w$ and consume $q_i^D$
+- The government gains revenue $R_t$
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage5, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+From country $i$'s perspective:
+- Consumers are no better or worse off: they still pay $p_w$ and consume $q_i^D$
+- The government gains revenue $R_t$
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage6, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+From country $i$'s perspective:
+- Producers lose producer surplus equal to $R_t + d$
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage7, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Why do producers lose $R_t + d$?
+- They receive a lower net-of-tax price on the units they still sell
+- They also stop selling the units between $q_{it}^S$ and $q_i^S$
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage8, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Why is $d$ the country's deadweight loss?
+- $R_t$ is only a transfer from producers to the government, so it stays inside country $i$
+- Net national effect: $+R_t - (R_t + d) = -d$
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage9, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Why does leakage make $d$ the relevant national loss?
+- The triangle $d$ is the pure private loss left after netting out the transfer $R_t$
+- Consumers in country $i$ are unchanged and imports replace the lost domestic output
+
+]
+
+---
+count: false
+# Effects of unilateral carbon tax
+
+.pull-left[
+```{r fig3-unilateral-stage10, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_3(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Why does leakage make $d$ the relevant national loss?
+- So the tax cuts home production, but foreign production rises instead: that is leakage
+- Because the environmental gain is undermined abroad, country $i$ is left mainly with the private distortion cost $d$
+
+]
 
 ---
 
 # Unilateral carbon tax effects
-
-Country $i$'s carbon tax:
-- Reduces domestic production
-- Does not change domestic consumption (price unchanged)
-- .hi[Increases imports]
-
---
 
 The increase in imports means .hi[foreign production increases]
 
@@ -371,11 +578,21 @@ The increase in imports means .hi[foreign production increases]
 
 This is .hi[carbon leakage]: emissions shift abroad rather than being reduced
 
+--
+
+Mechanism in words:
+
+- Country $i$ raises its marginal production costs through the carbon tax
+- Country $i$ producers supply less at any price with a higher MC
+- World price is unchanged at $P_w$ so quantity demanded domestically for the good does not change
+- Imports from abroad fill in the difference
+- Production and emissions shift abroad
+
 ---
 
 # Leakage undermines the tax
 
-With identical carbon intensities:
+With identical carbon intensities and a small country implementing the tax so $P_W$ is fixed:
 - Every unit of reduced domestic production = 1 unit more foreign production
 - .hi[Net global emissions unchanged!]
 
@@ -392,6 +609,65 @@ Country $i$ bears costs but gets no environmental gain
 
 ---
 
+# Leakage is a rate, not a constant
+
+Economists often summarize leakage with the .hi[leakage rate]:
+
+$$
+\text{Leakage rate} = \frac{\Delta E_j}{-\Delta E_i}
+$$
+
+where $\Delta E_i < 0$ is the change in home emissions and $\Delta E_j > 0$ is the change in foreign emissions.
+
+---
+
+# Leakage is a rate, not a constant
+
+$$
+\text{Leakage rate} = \frac{\Delta E_j}{-\Delta E_i}
+$$
+
+Benchmarks:
+- $0$: no foreign offset
+- Between $0$ and $1$: global emissions still fall, but less than the domestic reduction
+- $1$: one-for-one offset, as in the small-open-economy benchmark with identical intensities
+- Greater than $1$: possible if output shifts to dirtier foreign producers
+
+---
+
+# What determines leakage?
+
+Leakage is .hi[larger] when the world price barely moves:
+- The taxing country is small in world markets, so its supply cut hardly changes the world price
+- With little price movement, domestic demand changes little and imports replace the lost home output
+
+---
+count: false
+# What determines leakage?
+
+Leakage is .hi[larger] when foreign replacement is easy or dirty:
+- Foreign supply is elastic and trade costs are low, so firms abroad can expand output quickly when home production falls
+- Foreign production is more emissions-intensive than home production ($e_j > e_i$), so each unit shifted abroad offsets more of the home emissions reduction
+
+---
+count: false
+# What determines leakage?
+
+Leakage is .hi[smaller] when policy reduces demand, not just home supply:
+- The taxing country is large in world markets, so its supply cut changes the world price
+- With price increases, domestic quantity demanded falls
+- Then fewer imports are needed to fill the gap, so more of the domestic emissions cut becomes a true global reduction
+
+---
+count: false
+# What determines leakage?
+
+Leakage is .hi[smaller] when foreign expansion is constrained or cleaner:
+- If foreign producers face their own carbon price, they do not expand output as aggressively when home production falls
+- If home production is dirtier than foreign production ($e_i > e_j$), shifting output abroad offsets less of the domestic abatement and can even lower global emissions
+
+---
+
 class: inverse, center, middle
 name: tariff
 
@@ -403,144 +679,168 @@ name: tariff
 
 # Adding a carbon tariff
 
-Now suppose country $i$ adds a carbon tariff equal to the carbon tax: $t = \tau = e \times d$
+The problem with the carbon tax was that consumers can easily switch to importing the dirty good
 
 --
 
-This tariff applies to the carbon content of imports
+One potential way to address this is a .hi[carbon tariff] of rate $\tau$: a tax on imports proportional to their carbon content
 
 --
 
-Domestic price rises to: $p_w + t$
+Here we will tax imports at the same rate as domestic production: $$\tau = t = e \times d$$
 
 ---
 
-# Carbon tax + tariff effects
+# Adding a carbon tariff
 
-<!-- FIGURE 4: Carbon tax plus tariff showing combined effect and net welfare gain f -->
-
-```{r fig4-tax-tariff, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 4 from paper
-# Shows: Price rises to p_w + t
-# Consumption falls, production effect ambiguous
-# Net welfare gain f from reduced pollution
-if (file.exists("files/08-fig4-tax-plus-tariff.png")) {
-  knitr::include_graphics("files/08-fig4-tax-plus-tariff.png")
-} else {
-  cat("[Figure 4: Carbon tax + tariff effects]")
-}
+.pull-left[
+```{r fig4-tax-only-stage1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "tax_only")
 ```
+]
+
+.pull-right[
+
+Start from the carbon tax alone:
+- Producers net $P_W - t$
+- Home output falls to $q_{it}^S$
+- Consumers still pay $P_W$ and buy $q_i^D$
+
+]
 
 ---
+count: false
 
-# How the tariff helps
+# Adding a carbon tariff
 
-The carbon tariff:
-- Raises the domestic price
-- .hi[Reduces consumption] in country $i$
-- Reduces imports (less leakage)
-
---
-
-Net effect:
-- Production distortion from tax alone: $-d$
-- Consumption distortion from tariff: $-b$
-- .hi[Environmental benefit:] reduced global emissions
-
---
-
-If environmental benefit $> d + b$: net welfare gain!
-
----
-
-# Numerical check (practice-style)
-
-Use the same small-open-economy setup as in the practice set:
-
-- $Q_D = 100 - P$
-- $Q_S = P - 10$
-- $p_w = 30$
-- Identical carbon intensities: $e_H = e_F = 1$
-- Marginal damage per ton: $d = 8$
-- Domestic carbon tax: $\tau = e_H d = 8$
-- Border tariff with tax: $t = \tau = 8$
-
-Compute under:
-
-1. Free trade
-2. Unilateral domestic carbon tax only
-3. Domestic carbon tax + border carbon tariff
-
-For each case, find domestic production, domestic consumption, imports, and global emissions from serving Home demand.
-
----
-
-# Numerical check: graph
-
-```{r fig-numeric-check, out.width = "700px", echo = FALSE, fig.align = "center"}
-q_grid = seq(0, 100, by = 0.1)
-
-df_curves = tibble(
-  Q = q_grid,
-  Demand = 100 - q_grid,
-  Supply = q_grid + 10,
-  `Supply + tax` = q_grid + 18
-) |>
-  pivot_longer(-Q, names_to = "curve", values_to = "P")
-
-ggplot(df_curves, aes(x = Q, y = P, color = curve, linetype = curve)) +
-  geom_line(linewidth = 1.2) +
-  geom_hline(yintercept = 30, color = "black", linetype = "dashed", linewidth = 0.9) +
-  geom_hline(yintercept = 38, color = "black", linetype = "dotdash", linewidth = 0.9) +
-  annotate("text", x = 82, y = 31.7, label = "p_w = 30", size = 4) +
-  annotate("text", x = 80, y = 39.7, label = "p_w + t = 38", size = 4) +
-  annotate("point", x = 12, y = 30, size = 2.5, color = "#1b9e77") +
-  annotate("point", x = 20, y = 30, size = 2.5, color = "#d95f02") +
-  annotate("point", x = 20, y = 38, size = 2.5, color = "#7570b3") +
-  annotate("point", x = 62, y = 38, size = 2.5, color = "#e7298a") +
-  annotate("text", x = 11, y = 26.5, label = "Q_S = 12 (tax only)", size = 3.6) +
-  annotate("text", x = 23, y = 26.5, label = "Q_S = 20 (free trade)", size = 3.6) +
-  annotate("text", x = 28, y = 41.2, label = "Q_S = 20 (tax + tariff)", size = 3.6) +
-  annotate("text", x = 65, y = 41.2, label = "Q_D = 62 (tax + tariff)", size = 3.6) +
-  scale_color_manual(values = c(
-    "Demand" = "#1f77b4",
-    "Supply" = "#ff7f0e",
-    "Supply + tax" = "#2ca02c"
-  )) +
-  scale_linetype_manual(values = c(
-    "Demand" = "solid",
-    "Supply" = "solid",
-    "Supply + tax" = "solid"
-  )) +
-  coord_cartesian(xlim = c(0, 95), ylim = c(0, 100)) +
-  labs(x = "Quantity", y = "Price", color = "", linetype = "") +
-  theme_minimal(base_size = 16) +
-  theme(
-    legend.position = "bottom",
-    axis.line = element_line(color = "black"),
-    panel.grid.minor = element_blank()
-  )
+.pull-left[
+```{r fig4-tax-only-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "tax_only")
 ```
+]
+
+.pull-right[
+
+Why is leakage the problem here?
+- Imports replace the lost domestic output
+- So home emissions fall, but foreign production rises
+- The tax changes domestic supply, not consumption
+- Since consumption doesn't change, there must be more imports
+
+]
+
+---
+count: false
+
+# Adding a carbon tariff
+
+.pull-left[
+```{r fig4-tax-tariff-stage1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "tariff")
+```
+]
+
+.pull-right[
+
+Now add a carbon tariff $\tau = t$ on imports:
+- Producers can now charge $P+\tau$ so consumers pay $P_W + \tau$
+- Domestic producers only net $P_W + \tau - t = P_W$ after the carbon tax payment
+- The tax and tariff offset for producers so domestic supply returns to $q_i^S$
+
+]
+
+---
+count: false
+
+# Adding a carbon tariff
+
+.pull-left[
+```{r fig4-tax-tariff-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "tariff")
+```
+]
+
+.pull-right[
+
+What changes in demand and trade?
+- Consumers pay $P_W + \tau$ so domestic quantity demanded falls to $q_{i\tau}^D$
+- Imports shrink from $q_i^D - q_{it}^S$ to $q_{i\tau}^D - q_i^S$
+
+]
+
+---
+count: false
+
+# Adding a carbon tariff
+
+.pull-left[
+```{r fig4-tax-tariff-stage2.1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "tariff")
+```
+]
+
+.pull-right[
+
+Total supply and demand effects of tax+tariff:
+- No net effect on producers since their quantity is the same as unregulated
+- Consumers face a higher price $P_W + \tau$, reduce consumption, and reduce imports
+
+]
+
+---
+count: false
+
+# Adding a carbon tariff
+
+.pull-left[
+```{r fig4-tax-tariff-stage3, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "revenue")
+```
+]
+
+.pull-right[
+
+Revenue effects:
+- The domestic carbon tax still raises $R_t$
+- The tariff raises $R_\tau$ on remaining imports
+- Both are transfers inside country $i$: tax $R_t$ paid by producers, tariff $R_\tau$ paid by consumers
+
+]
+
+---
+count: false
+
+# Adding a carbon tariff
+
+.pull-left[
+```{r fig4-tax-tariff-stage4, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Welfare and environment:
+- $b$ is the consumption deadweight loss from the higher price
+- $b+f$ is the environmental gain from lower world output and emissions
+- Tax + tariff improves social welfare by $f$
+
+]
 
 ---
 
-# Numerical check: answers
+# Recap
 
-1. .hi[Free trade at $P=30$]
-- $Q_S = 20,\; Q_D = 70,\; M = 50$
-- Emissions: $E_H = 20,\; E_F = 50,\; E_{global}=70$
+With only a tax:
+- Domestic production/emissions become more expensive
+- Consumers can easily switch to imports: "leakage"
+- We taxed production but received no environmental benefits
 
-2. .hi[Unilateral domestic tax only ($\\tau=8$)]
-- Domestic supply shifts to $Q_S = P - 18$
-- At $P=30$: $Q_S = 12,\; Q_D = 70,\; M = 58$
-- Emissions: $E_H = 12,\; E_F = 58,\; E_{global}=70$ (pure leakage)
-
-3. .hi[Domestic tax + tariff ($\\tau=t=8$)]
-- Domestic price rises to $P = p_w + t = 38$
-- $Q_S = 20,\; Q_D = 62,\; M = 42$
-- Emissions: $E_H = 20,\; E_F = 42,\; E_{global}=62$
-
-This is the core slide result: with identical intensities, tax-only can be offset by leakage, while adding a tariff reduces consumption and lowers global emissions.
+Adding a carbon tariff:
+- We are now making foreign production/emissions more expensive for our domestic consumers
+- Consumers can no longer as easily switch to imports
+- Emissions fall because they are correctly priced (good!)
+- Consumption falls (bad!)
 
 ---
 
@@ -583,60 +883,115 @@ What does this accomplish?
 
 # Carbon tariff alone
 
-<!-- FIGURE 5: Carbon tariff alone showing it equals consumption tax + production subsidy -->
-
-```{r fig5-tariff-alone, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 5 from paper
-# Shows: Price rises but no domestic tax
-# Equivalent to consumption tax + production subsidy
-if (file.exists("files/08-fig5-tariff-alone.png")) {
-  knitr::include_graphics("files/08-fig5-tariff-alone.png")
-} else {
-  cat("[Figure 5: Carbon tariff alone = consumption tax + production subsidy]")
-}
+.pull-left[
+```{r fig5-tariff-alone-stage1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_5(stage = "baseline")
 ```
+]
+
+.pull-right[
+
+Start from free trade:
+- Consumers and producers in country $i$ both face $P_W$
+- Domestic output is $q_i^S$ and consumption is $q_i^D$
+- Imports fill the gap $q_i^D - q_i^S$
+
+]
 
 ---
+count: false
 
-# Tariff alone = consumption tax + production subsidy
+# Carbon tariff alone
 
-A carbon tariff without a domestic carbon tax is equivalent to:
+.pull-left[
+```{r fig5-tariff-alone-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_5(stage = "tariff")
+```
+]
 
---
+.pull-right[
 
-1. .hi[Consumption tax:] raises price consumers pay
+Now impose a carbon tariff $\tau$ with no domestic carbon tax:
+- Consumers pay $P_W + \tau$
+- Domestic producers also receive $P_W + \tau$
+- So consumption falls and home output rises
 
---
-
-2. .hi[Production subsidy:] domestic producers don't pay the carbon cost
-
---
-
-This .hi[increases] domestic production while reducing consumption
-
---
-
-Domestic emissions may .hi[rise]!
+]
 
 ---
+count: false
 
-# Is a tariff alone good policy?
+# Carbon tariff alone
 
-A carbon tariff alone:
-- Reduces imports (good for leakage)
-- But .hi[subsidizes] domestic carbon-intensive production (bad)
+.pull-left[
+```{r fig5-tariff-alone-stage3, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_5(stage = "tariff")
+```
+]
 
---
+.pull-right[
 
-Net environmental effect is ambiguous
+Why is this different from tax + tariff?
+- The tariff alone taxes consumption but also protects domestic producers
+- Output rises to $q_{i\tau}^S$ and demand falls to $q_{i\tau}^D$
+- Imports shrink because both margins move
 
---
+]
 
-Generally .hi[not as effective] as carbon tax + tariff
+---
+count: false
 
---
+# Carbon tariff alone
 
-May violate WTO rules (discriminates against foreign producers)
+.pull-left[
+```{r fig5-tariff-alone-stage4, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_5(stage = "revenue")
+```
+]
+
+.pull-right[
+
+- The government collects tariff revenue $R_\tau$ on remaining imports
+- The tariff pushes some production away from cheaper foreign suppliers
+
+]
+
+---
+count: false
+
+# Carbon tariff alone
+
+.pull-left[
+```{r fig5-tariff-alone-stage5, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_5(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Welfare and environment:
+- $a$ is the production deadweight loss from replacing cheaper imports with costlier home output
+- Reduced consumption creates environmental gains of $b+f$, offsetting the consumption loss $b$
+
+]
+
+---
+count: false
+
+# Carbon tariff alone
+
+.pull-left[
+```{r fig5-tariff-alone-stage5.1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_5(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Welfare and environment:
+- Net social effect is $(b+f)-(b+a) = f-a$, so a tariff alone mixes climate gains with a subsidy to domestic pollution
+
+]
 
 ---
 
@@ -649,17 +1004,26 @@ name: world-tax
 
 ---
 
-# What if everyone taxes carbon?
+# World carbon tax
 
-Suppose all countries impose the same carbon tax $\tau = e \times d$
+<!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary -->
 
---
+.pull-left[
+```{r fig6-world-tax, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_6()
+```
+]
 
-Now there's no competitive disadvantage
+.pull-right[
 
---
+Suppose the rest of the world already prices carbon so $P_W$ internalizes the externality *abroad*:
+- $P_W$ is then where abroad MSC = abroad D
+- $i$ produces at $q_i^S$, but at $q_i^S$: MSC $>$ world MB given by $P_W$ leading to DWL $a$
+- If $i$ also imposes the carbon tax $t$, supply falls from $q_i^S$ to $q_{it}^S$
+- Imports rise to $q_i^D-q_{it}^S$
 
-No leakage: all production faces the same carbon price
+]
+
 
 ---
 
@@ -667,199 +1031,61 @@ No leakage: all production faces the same carbon price
 
 <!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary -->
 
-```{r fig6-world-tax, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 6 from paper
-# Shows: All countries tax at e*d
-# World production at efficient level
-# No need for tariffs
-if (file.exists("files/08-fig6-world-tax.png")) {
-  knitr::include_graphics("files/08-fig6-world-tax.png")
-} else {
-  cat("[Figure 6: World carbon tax - efficient outcome]")
-}
+.pull-left[
+```{r fig6-world-tax.1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_6()
 ```
+]
+
+.pull-right[
+
+If country $i$ also imposes the carbon tax $t$:
+- Producers receive net-of-tax price $P_W - t$
+- Supply falls from $q_i^S$ to $q_{it}^S$
+- Imports rise to $q_i^D-q_{it}^S$ to make up the shortfall given quantity demanded does not change given world price $P_W$
+
+]
 
 ---
+count: false
 
-# Efficient outcome
+# World carbon tax
 
-With a world carbon tax at $\tau = e \times d$:
-- Global production equals efficient level
-- Price reflects full social cost
-- .hi[No need for carbon tariffs]
-
---
-
-Carbon tariffs are a .hi[second-best] policy for when global coordination fails
-
----
-
-# Insufficient world carbon tax
-
-What if the world carbon tax is .hi[too low]?
-
---
-
-Suppose world tax = $\tau' < e \times d$
-
---
-
-Global emissions still too high, but less so than with no tax
-
----
-
-# Too-small world tax
-
-<!-- FIGURE 7: Insufficient world carbon tax showing partial externality pricing -->
-
-```{r fig7-small-tax, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 7 from paper
-# Shows: World tax tau' < e*d
-# Some improvement but not efficient
-if (file.exists("files/08-fig7-small-world-tax.png")) {
-  knitr::include_graphics("files/08-fig7-small-world-tax.png")
-} else {
-  cat("[Figure 7: Too-small world carbon tax]")
-}
+.pull-left[
+```{r fig6-world-tax-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_6()
 ```
+]
 
-Can country $i$ improve things with a tariff?
+.pull-right[
+
+Why are those extra imports not leakage?
+- Foreign producers already face the same carbon price
+- That foreign carbon price led to leakage *into* country $i$
+- Those imports reverse leakage from the rest of the world to country $i$
+- The DWL $a$ disappears
+
+]
 
 ---
+count: false
 
-# Tariff on top of insufficient world tax
+# World carbon tax
 
-<!-- FIGURE 8: Adding tariff to insufficient world tax - overshooting problem -->
-
-```{r fig8-small-tax-tariff, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 8 from paper
-# Shows: Country i adds tariff
-# May overshoot efficient price domestically
-if (file.exists("files/08-fig8-overshoot.png")) {
-  knitr::include_graphics("files/08-fig8-overshoot.png")
-} else {
-  cat("[Figure 8: Overshooting with tariff on insufficient world tax]")
-}
+.pull-left[
+```{r fig6-world-tax-stage3, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_6()
 ```
+]
 
----
+.pull-right[
 
-# Overshooting problem
+At that point the allocation is efficient:
+- Every country has internalized the externality
+- Global marginal social cost equals the marginal benefit of the last unit consumed
+- A carbon tariff is unnecessary
 
-If country $i$ adds a tariff $= e \times d - \tau'$ on top of world tax $\tau'$:
-
---
-
-- Domestic price rises to efficient level
-- But .hi[domestic consumption] falls below efficient level
-- Creates new distortion
-
---
-
-Key issue: country $i$ can only affect its .hi[own] consumption, not world production
-
---
-
-A tariff can't fix insufficient global carbon pricing
-
----
-
-class: inverse, center, middle
-name: intensities
-
-# Different carbon intensities
-
-<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
-
----
-
-# What if countries differ?
-
-So far: same carbon intensity $e$ everywhere
-
---
-
-Reality: countries have very different carbon intensities
-- Cleaner electricity grids
-- Different production technologies
-- Different regulatory environments
-
---
-
-How should tariffs account for this?
-
----
-
-# Cleaner domestic production
-
-Suppose country $i$ has lower carbon intensity than the rest of the world:
-- $e_i < e_j$ (domestic production is cleaner)
-
---
-
-Now the .hi[efficient] policy differs for domestic vs. foreign goods
-
----
-
-# Tariff based on domestic carbon intensity
-
-<!-- FIGURE 9: Different intensities - tariff = domestic tax rate -->
-
-```{r fig9-intensity-domestic, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 9 from paper
-# Shows: Tariff = e_i * d (domestic intensity)
-# Under-taxes foreign emissions
-if (file.exists("files/08-fig9-domestic-intensity.png")) {
-  knitr::include_graphics("files/08-fig9-domestic-intensity.png")
-} else {
-  cat("[Figure 9: Tariff based on domestic carbon intensity]")
-}
-```
-
-If tariff = domestic carbon tax = $e_i \times d$:
-- Correctly prices domestic emissions
-- .hi[Under-prices] foreign emissions (since $e_j > e_i$)
-
----
-
-# Tariff based on foreign carbon intensity
-
-<!-- FIGURE 10: Different intensities - tariff = foreign external cost -->
-
-```{r fig10-intensity-foreign, out.width = "600px", echo = FALSE, fig.align = "center"}
-# Placeholder for Figure 10 from paper
-# Shows: Tariff = e_j * d (foreign intensity)
-# Correctly prices imports but creates trade barrier
-if (file.exists("files/08-fig10-foreign-intensity.png")) {
-  knitr::include_graphics("files/08-fig10-foreign-intensity.png")
-} else {
-  cat("[Figure 10: Tariff based on foreign carbon intensity]")
-}
-```
-
-If tariff = $e_j \times d$ (foreign intensity):
-- Correctly prices foreign emissions
-- But tariff $>$ domestic tax: .hi[looks protectionist]
-
----
-
-# The measurement problem
-
-Setting tariffs based on actual foreign carbon intensity requires:
-
---
-
-1. Measuring emissions in foreign production
-2. Verifying foreign carbon prices
-3. Adjusting for different products/producers
-
---
-
-This is .hi[extremely difficult] in practice
-
---
-
-EU CBAM uses default values, allows importers to prove lower emissions
+]
 
 ---
 
@@ -1030,11 +1256,3 @@ They work best when:
 --
 
 Alone, they are an imperfect tool that may create new distortions
-
----
-
-# References
-
-Brunel, C. and A. Levinson (2024). "Carbon Tariffs 101." NBER Working Paper 33024.
-
-EU Carbon Border Adjustment Mechanism: https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en
