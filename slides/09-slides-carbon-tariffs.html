@@ -195,7 +195,10 @@ Consider a small open economy (country `\(i\)`) that:
 Key curves:
 - `\(S\)`: domestic supply
 - `\(D\)`: domestic demand
-- `\(p_w\)`: world price
+- `\(P_W\)`: world price
+    - The social marginal benefit of the good
+
+Domestic suppliers can't charge more than `\(P_W\)`, and won't charge less
 
 ---
 
@@ -205,7 +208,7 @@ Key curves:
 
 &lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-1.png" width="900px" style="display: block; margin: auto;" /&gt;
 
-With free trade at price `\(p_w\)`:
+With free trade at price `\(P_W\)`:
 - Domestic production: `\(q_i^S\)`
 - Domestic consumption and imports: `\(q_i^D\)` and `\(q_i^D - q_i^S\)`
 
@@ -215,7 +218,18 @@ count: false
 
 &lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage2-1.png" width="900px" style="display: block; margin: auto;" /&gt;
 
-A tariff `\(\tau\)` raises the domestic price to `\(p_w + \tau\)`:
+Suppose we implement an import tariff `\(\tau\)`:
+- Price of imports increases to `\(P_W + \tau\)`
+- Domestic suppliers can now charge `\(P_W + \tau\)`
+
+
+---
+count: false
+# Adding a tariff
+
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage2.1-1.png" width="900px" style="display: block; margin: auto;" /&gt;
+
+A tariff `\(\tau\)` raises the equilibrium domestic price to `\(P_W + \tau\)`:
 - Production rises to `\(q_{i\tau}^S\)` and consumption falls to `\(q_{i\tau}^D\)`
 - Imports fall to `\(q_{i\tau}^D - q_{i\tau}^S\)`
 
@@ -236,7 +250,7 @@ count: false
 &lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage4-1.png" width="900px" style="display: block; margin: auto;" /&gt;
 
 Triangle `\(a\)` is a production distortion:
-- The tariff shifts production from lower-cost foreign supply to higher-cost domestic production.
+- The tariff shifts production from lower-cost foreign supply to higher-cost domestic production: MC (`\(S[i]\)`) is higher than the MB (`\(P_W\)`)
 
 ---
 count: false
@@ -245,7 +259,7 @@ count: false
 &lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage5-1.png" width="900px" style="display: block; margin: auto;" /&gt;
 
 Triangle `\(b\)` is a consumption distortion:
-- The tariff eliminates units consumers value above the world price but below the tariff-inclusive price.
+- The tariff eliminates units consumers value above the world price but below the tariff-inclusive price: MB (`\(D[i]\)`) is higher than the MC (`\(P_W\)`)
 
 ---
 
@@ -290,7 +304,7 @@ MSC lies above the private supply curve by the external cost `\(e \times d\)`
 
 .pull-right[
 
-Free trade output is pinned down by domestic demand and supply at the world price.
+Free trade output is pinned down by domestic demand and supply at the world price
 
 ]
 
@@ -304,9 +318,9 @@ count: false
 
 .pull-right[
 
-Country `\(i\)`'s MSC curve lies above its private supply curve.
+Country `\(i\)`'s MSC curve lies above its private supply curve
 
-The vertical gap is the external cost: `\(e \times d\)`.
+The vertical gap is the external cost: `\(e \times d\)`
 
 ]
 
@@ -320,7 +334,7 @@ count: false
 
 .pull-right[
 
-The green region is the domestic deadweight loss from producing beyond the efficient output level.
+The green region is the domestic deadweight loss from producing beyond the efficient output level
 
 ]
 
@@ -334,9 +348,9 @@ count: false
 
 .pull-right[
 
-At the world price `\(p_w\)`, marginal benefit is pinned down by world demand, while marginal social cost is given by `\(MSC\)`.
+At the world price `\(P_W\)`, marginal benefit is pinned down by world demand, while marginal social cost is given by `\(MSC\)`
 
-That triangle is the set of units for which marginal benefit exceeds private supply cost but is below marginal social cost.
+That triangle is the set of units for which marginal benefit exceeds private supply cost but is below marginal social cost
 
 ]
 
@@ -353,11 +367,19 @@ That triangle is the set of units for which marginal benefit exceeds private sup
 .pull-right[
 
 From a global perspective:
-- Free-trade output is where `\(D = S\)`.
-- Efficient output is where `\(D = MSC\)`.
-- The green region is the global welfare gain from cutting output from `\(Q_W\)` to `\(Q_W^*\)`.
+- Free-trade output is where `\(D = S\)`
+- Efficient output is where `\(D = MSC\)`
+- The green region is the global welfare gain from cutting output from `\(Q_W\)` to `\(Q_W^*\)`
 
 ]
+
+---
+
+# Country and global perspectives
+
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2-comparison-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+Global DWL on the right is the sum of each country's DWL on the left
 
 ---
 
@@ -392,11 +414,11 @@ name: unilateral
 
 # Country `\(i\)` imposes a carbon tax
 
-Suppose country `\(i\)` imposes a carbon tax `\(\tau = e \times d\)` on domestic production
+Suppose country `\(i\)` imposes a carbon tax `\(t = e \times d\)` on domestic production
 
 --
 
-This shifts country `\(i\)`'s supply curve up by `\(\tau\)`
+This shifts country `\(i\)`'s supply curve up by `\(t\)`
 
 --
 
@@ -414,7 +436,7 @@ But the .hi[world price doesn't change] (small open economy)
 
 .pull-right[
 
-Before the tax, the domestic market is at the free-trade benchmark with price `\(p_w\)`.
+Before the tax, the domestic market is at the free-trade benchmark with price `\(P_W\)`
 
 ]
 
@@ -429,9 +451,9 @@ count: false
 .pull-right[
 
 After the tax:
-- Producers receive the net-of-tax price `\(p_w - t\)`
-- Because `\(t\)` equals the external damage, domestic output falls to the Figure 2 optimum `\(q_{it}^S\)`
-- Consumers still face the world price `\(p_w\)`
+- Producers receive the net-of-tax price `\(P_W - t\)`
+- Because `\(t\)` equals the external damage, domestic output falls to `\(q_{it}^S\)`
+- Consumers still face the world price `\(P_W\)`
 
 ]
 
@@ -445,8 +467,8 @@ count: false
 
 .pull-right[
 
-Leakage comes next:
-- Consumers in country `\(i\)` still demand `\(q_i^D\)` at price `\(p_w\)`
+.hi[Leakage] comes next:
+- Consumers in country `\(i\)` still demand `\(q_i^D\)` at price `\(P_W\)`
 - Imports rise enough to offset the fall in domestic output
 - Foreign production replaces home production: that is leakage
 
@@ -463,23 +485,7 @@ count: false
 .pull-right[
 
 From country `\(i\)`'s perspective:
-- Consumers are no better or worse off: they still pay `\(p_w\)` and consume `\(q_i^D\)`
-- The government gains revenue `\(R_t\)`
-
-]
-
----
-count: false
-# Effects of unilateral carbon tax
-
-.pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage5-1.png" width="100%" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-
-From country `\(i\)`'s perspective:
-- Consumers are no better or worse off: they still pay `\(p_w\)` and consume `\(q_i^D\)`
+- Consumers are no better or worse off: they still pay `\(P_W\)` and consume `\(q_i^D\)`
 - The government gains revenue `\(R_t\)`
 
 ]
@@ -543,6 +549,7 @@ count: false
 
 Why does leakage make `\(d\)` the relevant national loss?
 - The triangle `\(d\)` is the pure private loss left after netting out the transfer `\(R_t\)`
+    - Goods not produced where PMC (`\(S[i]\)`) `\(&lt;\)` SMB (`\(P_W\)`)
 - Consumers in country `\(i\)` are unchanged and imports replace the lost domestic output
 
 ]
@@ -558,8 +565,8 @@ count: false
 .pull-right[
 
 Why does leakage make `\(d\)` the relevant national loss?
-- So the tax cuts home production, but foreign production rises instead: that is leakage
-- Because the environmental gain is undermined abroad, country `\(i\)` is left mainly with the private distortion cost `\(d\)`
+- The tax reduces home production, but foreign production rises 1-for-1: that is leakage
+- The environmental gain is offset abroad, so country `\(i\)` is left with the private DWL `\(d\)`
 
 ]
 
@@ -575,20 +582,30 @@ This is .hi[carbon leakage]: emissions shift abroad rather than being reduced
 
 --
 
-Mechanism in words:
-
 - Country `\(i\)` raises its marginal production costs through the carbon tax
+
+--
+
 - Country `\(i\)` producers supply less at any price with a higher MC
-- World price is unchanged at `\(P_w\)` so quantity demanded domestically for the good does not change
+
+--
+
+- World price is unchanged at `\(P_W\)` so quantity demanded domestically for the good does not change
+
+--
+
 - Imports from abroad fill in the difference
-- Production and emissions shift abroad
+
+--
+
+- Production and emissions increase abroad
 
 ---
 
 # Leakage undermines the tax
 
-With identical carbon intensities and a small country implementing the tax so `\(P_W\)` is fixed:
-- Every unit of reduced domestic production = 1 unit more foreign production
+With identical carbon intensities and a small country implementing the tax (so `\(P_W\)` is fixed):
+- 1 unit fewer domestic production = 1 unit more foreign production
 - .hi[Net global emissions unchanged!]
 
 --
@@ -612,7 +629,7 @@ $$
 \text{Leakage rate} = \frac{\Delta E_j}{-\Delta E_i}
 $$
 
-where `\(\Delta E_i &lt; 0\)` is the change in home emissions and `\(\Delta E_j &gt; 0\)` is the change in foreign emissions.
+where `\(\Delta E_i &lt; 0\)` is the change in home emissions and `\(\Delta E_j &gt; 0\)` is the change in foreign emissions
 
 ---
 
@@ -625,40 +642,67 @@ $$
 Benchmarks:
 - `\(0\)`: no foreign offset
 - Between `\(0\)` and `\(1\)`: global emissions still fall, but less than the domestic reduction
-- `\(1\)`: one-for-one offset, as in the small-open-economy benchmark with identical intensities
+- `\(1\)`: one-for-one offset, as in this small-open-economy example with identical intensities
 - Greater than `\(1\)`: possible if output shifts to dirtier foreign producers
 
 ---
 
 # What determines leakage?
 
-Leakage is .hi[larger] when the world price barely moves:
+Leakage is .hi[larger] when the world price moves less in response to the tax:
+
+--
+
 - The taxing country is small in world markets, so its supply cut hardly changes the world price
-- With little price movement, domestic demand changes little and imports replace the lost home output
+
+--
+
+- With little price movement, domestic demand doesn't change and imports replace the lost domestic output
 
 ---
 count: false
 # What determines leakage?
 
-Leakage is .hi[larger] when foreign replacement is easy or dirty:
+Leakage is .hi[larger] when foreign replacement is elastic or dirty:
+
+--
+
 - Foreign supply is elastic and trade costs are low, so firms abroad can expand output quickly when home production falls
+
+--
+
 - Foreign production is more emissions-intensive than home production (`\(e_j &gt; e_i\)`), so each unit shifted abroad offsets more of the home emissions reduction
 
 ---
 count: false
 # What determines leakage?
 
-Leakage is .hi[smaller] when policy reduces demand, not just home supply:
+Leakage is .hi[smaller] when policy reduces quantity demanded by increasing the world price:
+
+--
+
 - The taxing country is large in world markets, so its supply cut changes the world price
+
+--
+
 - With price increases, domestic quantity demanded falls
-- Then fewer imports are needed to fill the gap, so more of the domestic emissions cut becomes a true global reduction
+
+--
+
+- Then fewer imports are needed to fill the gap, so there is less of an emissions increase abroad, and greater global emissions reductions
 
 ---
 count: false
 # What determines leakage?
 
 Leakage is .hi[smaller] when foreign expansion is constrained or cleaner:
-- If foreign producers face their own carbon price, they do not expand output as aggressively when home production falls
+
+--
+
+- If foreign producers supply is inelastic, firms abroad are limited in how much they can increase production
+
+--
+
 - If home production is dirtier than foreign production (`\(e_i &gt; e_j\)`), shifting output abroad offsets less of the domestic abatement and can even lower global emissions
 
 ---
@@ -674,7 +718,7 @@ name: tariff
 
 # Adding a carbon tariff
 
-The problem with the carbon tax was that consumers can easily switch to importing the dirty good
+The problem with the carbon tax was that consumers can easily switch to importing the dirty good from another country not subject to the carbon tax
 
 --
 
@@ -985,9 +1029,8 @@ name: world-tax
 
 Suppose the rest of the world already prices carbon so `\(P_W\)` internalizes the externality *abroad*:
 - `\(P_W\)` is then where abroad MSC = abroad D
-- `\(i\)` produces at `\(q_i^S\)`, but at `\(q_i^S\)`: MSC `\(&gt;\)` world MB given by `\(P_W\)` leading to DWL `\(a\)`
-- If `\(i\)` also imposes the carbon tax `\(t\)`, supply falls from `\(q_i^S\)` to `\(q_{it}^S\)`
-- Imports rise to `\(q_i^D-q_{it}^S\)`
+- `\(i\)` produces at `\(q_i^S\)`
+- At `\(q_i^S\)`: MSC `\(&gt;\)` world MB given by `\(P_W\)` leading to DWL `\(a\)`
 
 ]
 

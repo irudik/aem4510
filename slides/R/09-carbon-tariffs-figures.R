@@ -512,7 +512,8 @@ ct_plot_figure_1 = function(stage = c("welfare", "free_trade", "tariff")) {
     ct_imports_arrow(imports_start, imports_end) +
     ct_label_prices(
       labels = price_labels,
-      y_values = price_values
+      y_values = price_values,
+      x = 1.2
     ) +
     ct_label_quantities(
       labels = quantity_labels,
@@ -581,7 +582,7 @@ ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
     c(country$q_msc, country$q_supply, country$q_demand)
   }
 
-  figure = ct_base_plot() +
+  figure = ct_base_plot(y_limit = c(0, 92)) +
     ct_country_curve_layer(parameters, show_msc = TRUE)
 
   if (stage == "damage") {
@@ -603,8 +604,39 @@ ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
     ct_imports_arrow(country$q_supply, country$q_demand) +
     ct_label_prices(
       labels = c("P[W]"),
-      y_values = c(country$world_price)
+      y_values = c(country$world_price),
+      x = 6.4,
+      hjust = 1
     ) +
+    {
+      if (stage != "baseline") {
+        list(
+          ggplot2::annotate(
+            "segment",
+            x = 7.2,
+            xend = 7.2,
+            y = parameters$supply_intercept + 6.0,
+            yend = parameters$supply_intercept + parameters$external_cost + 6.0,
+            linewidth = 0.6,
+            color = ct_palette$msc,
+            arrow = ggplot2::arrow(
+              ends = "both",
+              type = "closed",
+              length = grid::unit(0.08, "inches")
+            )
+          ),
+          ggplot2::annotate(
+            "text",
+            x = 5.8,
+            y = parameters$supply_intercept + 0.7 * parameters$external_cost + 6.0,
+            label = "e %*% d",
+            parse = TRUE,
+            size = 4.0,
+            hjust = 1
+          )
+        )
+      }
+    } +
     {
       if (stage != "baseline") {
         ggplot2::annotate("text", x = country$q_msc, y = 4.0, label = "q[i]^\"*\"", parse = TRUE, size = 4.1)
