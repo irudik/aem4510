@@ -1260,13 +1260,52 @@ $$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} \leq \sigma$$
 
 --
 
+Here:
+- $\beta_H$ and $\beta_L$ are emissions coefficients: each unit of $H$ emits $\beta_H$ units and each unit of $L$ emits $\beta_L$ units
+- $\sigma$ is the policy target: the maximum average emissions rate per unit of total output
+- Usually $\beta_H > \sigma > \beta_L$, so $H$ is dirtier than the standard while $L$ is cleaner than the standard
+
+--
+
 The policy limits average emissions per unit of output, not total emissions directly
+
+---
+
+# Intensity standards: firm's problem
+
+Suppose the firm takes output prices $p_H$ and $p_L$ as given
+
+--
+
+Its private problem is:
+$$\max_{Q_H,Q_L} \pi(Q_H,Q_L) = p_H Q_H + p_L Q_L - C_H(Q_H) - C_L(Q_L)$$
+
+--
+
+subject to the intensity standard:
+$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} \leq \sigma$$
+
+---
+
+# Intensity standards: Lagrangian setup
+
+Rewrite the constraint as:
+$$\sigma(Q_H + Q_L) - \beta_H Q_H - \beta_L Q_L \geq 0$$
+
+--
+
+The Lagrangian is:
+$$\mathcal{L} = p_H Q_H + p_L Q_L - C_H(Q_H) - C_L(Q_L) + \lambda\left[\sigma(Q_H + Q_L) - \beta_H Q_H - \beta_L Q_L\right]$$
+
+--
+
+with $\lambda \geq 0$; if the standard binds, $\lambda$ is the shadow value of relaxing it
 
 ---
 
 # Intensity standards: firm incentives
 
-The firm's choices satisfy:
+Taking first-order conditions from the Lagrangian gives:
 $$p_i = MC_i(Q_i) + \lambda(\beta_i-\sigma), \quad i \in \{H,L\}$$
 
 --
@@ -1462,272 +1501,6 @@ knitr::include_graphics("files/07-int-standard2.png")
 
 
 ---
-
-# Second-best: distribution-constrained policy
-
-Even when a carbon price is efficient in a textbook model, incidence can be unequal across households
-
---
-
-Let $G(\tau)$ be the efficiency component (environmental benefit net of abatement cost), with:
-$$G'(d)=0, \quad G''(\tau) < 0$$
-
---
-
-Let distributional harm be approximated by:
-$$D(\tau)=\kappa\tau, \quad \kappa>0$$
-
---
-
-A planner that values equity places weight $\lambda>0$ on this burden
-
----
-
-# Distribution-constrained optimum
-
-Planner problem:
-$$\max_{\tau}\; W(\tau)=G(\tau)-\lambda D(\tau)=G(\tau)-\lambda\kappa\tau$$
-
---
-
-FOC:
-$$G'(\tau^{SB})=\lambda\kappa$$
-
---
-
-Since $G'(d)=0$ and $G'$ is decreasing, we get:
-$$\tau^{SB}<d \quad \text{whenever } \lambda\kappa>0$$
-
---
-
-This is a sharp second-best result: distribution constraints can lower the optimal carbon price
-
----
-
-# Revenue recycling and the constraint
-
-Suppose a share $\rho$ of revenue is targeted to constrained households
-
---
-
-Then net distributional burden becomes:
-$$D_\rho(\tau)=\kappa(1-\rho)\tau$$
-
---
-
-FOC becomes:
-$$G'(\tau^{SB}_\rho)=\lambda\kappa(1-\rho)$$
-
---
-
-Higher targeted recycling ($\rho\uparrow$) reduces the equity wedge and raises the feasible optimal carbon price toward $d$
-
----
-
-# Distribution-constrained: graphical
-
-.pull-left[
-```{r dist_tradeoff, echo = FALSE, fig.show = 'hide', warning = F}
-meg = function(x) 2 - x
-mdc_no_recycle = function(x) 1
-mdc_recycle = function(x) 0.5
-
-ggplot() +
-  annotate("text", x = 1.7, y = 1.65, label = "MEG(τ)", size = 8) +
-  annotate("text", x = 2.2, y = 1.05, label = "λκ", size = 8) +
-  annotate("text", x = 2.15, y = 0.55, label = "λκ(1-ρ)", size = 8) +
-  stat_function(fun = meg, color = "#ca5670", size = 1.5) +
-  stat_function(fun = mdc_no_recycle, color = "#638ccc", size = 1.5) +
-  stat_function(fun = mdc_recycle, color = "firebrick", size = 1.5, linetype = "dashed") +
-  annotate("segment", x = 1, xend = 1, y = 0, yend = 1,
-           linetype = "dotted", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 0.5,
-           linetype = "dotted", size = 1.5, color = "grey50") +
-  annotate("segment", x = 2, xend = 2, y = 0, yend = 0,
-           linetype = "dotted", size = 1.5, color = "grey50") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff",colour = NA),
-    plot.background = element_rect(fill = "#ffffff",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = expression(tau),
-       y = "Marginal welfare effect") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,2.5),
-                     breaks = c(1,1.5,2),
-                     labels = c(expression(tau[SB]^0), expression(tau[SB]^R), expression(d))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,2.2))
-```
-![distribution tradeoff](`r knitr::fig_chunk("dist_tradeoff", "png")`)
-]
-
-.pull-right[
-
-The red line is marginal efficiency gain from a higher carbon price
-
-Horizontal lines are marginal distributional costs
-
-Targeted recycling lowers the distributional cost curve and moves $\tau^{SB}$ closer to $d$
-
-]
-
----
-
-# Distribution takeaway
-
-In a second-best world, we should evaluate policy bundles:
-$$\{\text{carbon price},\; \text{recycling design}\}$$
-
---
-
-Two policies with similar emissions reductions can have very different welfare once incidence is included
-
---
-
-.hi[Takeaway:] distributional design is not an add-on; it is part of optimal second-best climate policy
-
----
-
-# Dynamic second-best: innovation spillovers
-
-Climate policy is also dynamic: today's innovation changes tomorrow's abatement costs
-
---
-
-A carbon price targets the emissions externality
-
---
-
-But clean innovation can generate knowledge spillovers that firms cannot fully appropriate
-
---
-
-So even with a correctly-set carbon price, private R&D can still be too low
-
----
-
-# Dynamic model: private conditions
-
-Let firms choose emissions $E$ and clean R&D investment $I$
-
---
-
-Private objective:
-$$\min_{E,I}\; C(E,\theta) + \tau E + (1-s)\Psi(I), \quad \theta=\theta_0+I$$
-
---
-
-If firms capture only a share $\eta\in(0,1]$ of innovation benefits, private FOCs are:
-$$-C_E(E,\theta)=\tau$$
-$$ (1-s)\Psi'(I)=\eta\left[-C_\theta(E,\theta)\right] $$
-
----
-
-# Dynamic social optimum
-
-Social planner:
-$$\min_{E,I}\; C(E,\theta)+D(E)+\Psi(I), \quad \theta=\theta_0+I$$
-
---
-
-FOCs:
-$$-C_E(E^*,\theta^*)=MD(E^*)$$
-$$\Psi'(I^*)=-C_\theta(E^*,\theta^*)$$
-
---
-
-Comparing private and social FOCs gives sharp instrument rules:
-$$\tau^*=MD(E^*), \qquad s^*=1-\eta$$
-
---
-
-If $\eta<1$, we need a positive R&D subsidy in addition to the carbon price
-
----
-
-# Dynamic second-best: graphical
-
-.pull-left[
-```{r dynamic_spillover, echo = FALSE, fig.show = 'hide', warning = F}
-mb_social = function(x) 2.2 - 0.7*x
-mb_private = function(x) 0.7*(2.2 - 0.7*x)
-mc = function(x) 0.6 + 0.2*x
-mc_subsidized = function(x) 0.7*(0.6 + 0.2*x)
-
-ggplot() +
-  annotate("text", x = 2.2, y = 1.75, label = "Social MB(I)", size = 8) +
-  annotate("text", x = 2.05, y = 1.22, label = "Private MB(I)", size = 8) +
-  annotate("text", x = 2.3, y = 1.02, label = "MC(I)", size = 8) +
-  annotate("text", x = 2.3, y = 0.68, label = "(1-s*)MC(I)", size = 8) +
-  stat_function(fun = mb_social, color = "#ca5670", size = 1.5) +
-  stat_function(fun = mb_private, color = "#638ccc", size = 1.5) +
-  stat_function(fun = mc, color = "#000000", size = 1.5) +
-  stat_function(fun = mc_subsidized, color = "firebrick", size = 1.5, linetype = "dashed") +
-  annotate("segment", x = 1.3623, xend = 1.3623, y = 0, yend = mc(1.3623),
-           linetype = "dotted", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1.7778, xend = 1.7778, y = 0, yend = mc_subsidized(1.7778),
-           linetype = "dotted", size = 1.5, color = "grey50") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff",colour = NA),
-    plot.background = element_rect(fill = "#ffffff",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Clean R&D investment (I)",
-       y = "Marginal value / cost") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3),
-                     breaks = c(1.3623, 1.7778),
-                     labels = c(expression(I^p), expression(I^'*'))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,2.3))
-```
-![dynamic spillovers](`r knitr::fig_chunk("dynamic_spillover", "png")`)
-]
-
-.pull-right[
-
-Without subsidy, private R&D is $I^p$ where private MB crosses MC
-
-With spillovers ($\eta<1$), this is below the social optimum $I^*$
-
-An R&D subsidy lowers effective marginal cost to $(1-s^*)MC$, moving investment toward $I^*$
-
-]
-
----
-
-# Dynamic takeaway
-
-With innovation spillovers, one instrument is not enough
-
---
-
-Policy bundle for the sharp benchmark:
-
-1. Carbon price to internalize current emissions damages
-2. R&D subsidy to internalize dynamic knowledge spillovers
-
---
-
-If spillovers are small ($\eta \approx 1$), the optimal subsidy is small
-
---
-
-.hi[Second-best takeaway:] dynamic efficiency typically requires pricing emissions and subsidizing clean innovation together
-
----
-
 <!-- --- -->
 
 <!-- # Intensity standards -->
