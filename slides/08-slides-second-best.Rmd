@@ -22,12 +22,18 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
 )
+source("R/08-second-best-intensity-figures.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo <- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/08-second-best-intensity-figures.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -1355,6 +1361,98 @@ That is the core problem: we generally do .hi-red[not] want to subsidize positiv
 
 ---
 
+# Intensity standards: baseline DWL
+
+.pull-left[
+<div style="margin-top:-28px;">
+```{r intensity-markets-baseline-dwl, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
+sb_plot_intensity_market_pair(show_policy = FALSE, dwl_mode = "baseline", ncol = 1)
+```
+</div>
+]
+
+.pull-right[
+Start from the unregulated allocation $(q_H^0, q_L^0)$:
+- Each market overproduces relative to $q_X^*$ because firms ignore $\beta_X MD$
+- The red triangle is baseline DWL from moving from $q_X^*$ to $q_X^0$
+- At this stage there is .hi[no] implicit tax or subsidy layered onto the market graph yet
+]
+
+---
+
+# Intensity standards: separate output markets
+
+.pull-left[
+<div style="margin-top:-28px;">
+```{r intensity-markets, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
+sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "none", ncol = 1)
+```
+</div>
+]
+
+.pull-right[
+Market-by-market intuition:
+- In market $X \in \{H,L\}$, PMB is the flat price line $p_X$ and PMC is the upward-sloping cost curve $MC_X$
+- Social marginal cost is $SMC_X = MC_X + \beta_X MD$
+- The intensity standard shifts PMC .hi-red[up] for $H$ and .hi-blue[down] for $L$
+]
+
+---
+
+# Intensity standards: DWL changes by market
+
+.pull-left[
+<div style="margin-top:-28px;">
+```{r intensity-markets-dwl, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
+sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "baseline", ncol = 1)
+```
+</div>
+]
+
+.pull-right[
+Relative to no policy:
+- The red triangle is baseline DWL under no policy
+]
+
+---
+
+# Intensity standards: DWL changes by market
+
+.pull-left[
+<div style="margin-top:-28px;">
+```{r intensity-markets-dwl-2, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
+sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "change", ncol = 1)
+```
+</div>
+]
+
+.pull-right[
+Relative to no policy:
+- The red triangle is baseline DWL under no policy
+- The blue triangle shows the DWL after the implicit tax/subsidy wedges are layered onto the markets
+- Both goods still pollute, so the subsidy on $L$ keeps the policy from reaching the socially optimal allocation
+]
+
+---
+
+# Intensity standards: DWL changes by market
+
+.pull-left[
+<div style="margin-top:-28px;">
+```{r intensity-markets-dwl-3, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
+sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "change", ncol = 1)
+```
+</div>
+]
+
+.pull-right[
+Relative to no policy:
+- The implicit tax on $H$ shifts $MC_H$ up and moves output toward $q_H^*$, so DWL falls in the $H$ market
+- The implicit subsidy on $L$ shifts $MC_L$ down and moves output away from $q_L^*$, so DWL rises in the $L$ market
+]
+
+---
+
 # Why this is second-best
 
 An emissions tax prices all emissions at the same marginal damage
@@ -1367,7 +1465,7 @@ An intensity standard instead mixes:
 
 --
 
-So it can improve on no policy, but usually cannot hit the first-best allocation
+So it can improve on no policy, but usually cannot hit the socially optimal allocation
 
 ---
 

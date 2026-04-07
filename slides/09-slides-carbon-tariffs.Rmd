@@ -20,18 +20,30 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork
+  tidyverse, xaringanExtra, rlang, patchwork, ragg
 )
 source("R/video_helpers.R")
 source("R/09-carbon-tariffs-figures.R")
+source("R/09-solar-tariffs-figures.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo <- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
   options
 })
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(
+    tools::md5sum("R/09-carbon-tariffs-figures.R"),
+    tools::md5sum("R/09-solar-tariffs-figures.R")
+  ),
+  echo = TRUE,
+  fig.align = "center",
+  dev = "ragg_png",
+  dpi = 220,
+  fig.retina = 2
+)
 ```
 ```{r xaringanExtra, echo = FALSE}
 xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
@@ -53,6 +65,7 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 6. Carbon tariffs alone
 7. World carbon taxes
 8. Different pollution intensities across countries
+9. Solar tariffs: taxing a clean input
 
 ---
 
@@ -70,20 +83,6 @@ name: overview
 Carbon tariffs are tariffs imposed on imports based on their .hi[carbon content]
 
 --
-
-Why would we want carbon tariffs?
-
----
-
-# Understanding border carbon adjustments
-
-```{r, echo = FALSE}
-local_video("videos/09-carbon-tariffs-bca-explained.mp4")
-```
-
----
-
-# Carbon tariffs
 
 Why would we want carbon tariffs?
 
@@ -118,6 +117,14 @@ Carbon tariffs aim to "level the playing field" and reduce leakage
 
 ---
 
+# Understanding border carbon adjustments
+
+```{r, echo = FALSE}
+local_video("videos/09-carbon-tariffs-bca-explained.mp4")
+```
+
+---
+
 # This lecture
 
 We will use a simple partial equilibrium framework from Brunel and Levinson (2024) to understand:
@@ -149,6 +156,19 @@ name: trade
 
 ---
 
+# Tariffs are taxes on imports
+
+A tariff is a .hi[tax on imports]
+
+--
+
+In this lecture we study the .hi[small-country] case:
+- country $i$ is too small to affect the world price
+- imports are available at the exogenous world price $P_W$
+- this is the benchmark that makes leakage especially transparent later on
+
+---
+
 # A simple trade model
 
 Consider a small open economy (country $i$) that:
@@ -167,76 +187,236 @@ Domestic suppliers can't charge more than $P_W$, and won't charge less
 
 ---
 
-# Free trade equilibrium
+# Supply and demand refresher
 
-<!-- FIGURE 1: Standard tariff diagram showing S, D curves, world price, imports, and deadweight loss triangles a, b from tariff -->
+In this market:
 
-```{r fig1-tariff, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
+--
+
+- $D$ is .hi[marginal benefit] to consumers
+
+--
+
+- $S$ is .hi[marginal cost] to domestic producers
+
+--
+
+- If $P_W$ is below the autarky price, country $i$ imports the good
+
+--
+
+- The gap between domestic demand and domestic supply is imports
+
+---
+
+# Free trade benchmark
+
+.pull-left[
+```{r fig1-tariff, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
 ct_plot_figure_1(stage = "free_trade")
 ```
+]
+
+.pull-right[
 
 With free trade at price $P_W$:
-- Domestic production: $q_i^S$
-- Domestic consumption and imports: $q_i^D$ and $q_i^D - q_i^S$
+- Domestic production is $q_i^S$
+- Domestic consumption is $q_i^D$
+- Imports are $q_i^D - q_i^S$
+
+]
 
 ---
 count: false
-# Adding a tariff
+# The tariff wedge
 
-```{r fig1-tariff-stage2, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
-ct_plot_figure_1(stage = "tariff")
+.pull-left[
+```{r fig1-tariff-stage2, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "price")
 ```
+]
+
+.pull-right[
 
 Suppose we implement an import tariff $\tau$:
-- Price of imports increases to $P_W + \tau$
-- Domestic suppliers can now charge $P_W + \tau$
+- The domestic price rises from $P_W$ to $P_W + \tau$
+- Imported units now enter at the tariff-inclusive price
+- Domestic suppliers can charge that same higher price
 
-
----
-count: false
-# Adding a tariff
-
-```{r fig1-tariff-stage2.1, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
-ct_plot_figure_1(stage = "tariff")
-```
-
-A tariff $\tau$ raises the equilibrium domestic price to $P_W + \tau$:
-- Production rises to $q_{i\tau}^S$ and consumption falls to $q_{i\tau}^D$
-- Imports fall to $q_{i\tau}^D - q_{i\tau}^S$
+]
 
 ---
 count: false
-# Tariff revenue
+# Quantity effects of a tariff
 
-```{r fig1-tariff-stage3, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
-ct_plot_figure_1(stage = "welfare")
+.pull-left[
+```{r fig1-tariff-stage2.1, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "quantities")
 ```
+]
 
-The tariff creates:
-- Revenue: $R(\tau) = \tau (q_{i\tau}^D - q_{i\tau}^S)$
-- Deadweight loss: triangles $a + b$
+.pull-right[
+
+A tariff $\tau$ raises the domestic price to $P_W + \tau$:
+- Domestic production rises to $q_{i\tau}^S$
+- Domestic consumption falls to $q_{i\tau}^D$
+- Imports shrink to $q_{i\tau}^D - q_{i\tau}^S$
+
+]
 
 ---
 count: false
-# Deadweight loss
+# Consumer surplus refresher
 
-```{r fig1-tariff-stage4, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
-ct_plot_figure_1(stage = "welfare")
+.pull-left[
+```{r fig1-consumer-surplus, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_surplus_refresher(type = "consumer")
 ```
+]
 
-Triangle $a$ is a production distortion:
-- The tariff shifts production from lower-cost foreign supply to higher-cost domestic production: MC ($S[i]$) is higher than the MB ($P_W$)
+.pull-right[
+
+Consumer surplus is the area below demand and above price.
+
+- Blue rectangle: consumers pay more on the units they still buy
+- Orange triangle: consumers stop buying units they still valued above $P_W$
+
+]
 
 ---
 count: false
-# Deadweight loss
+# Producer surplus refresher
 
-```{r fig1-tariff-stage5, out.width = "900px", fig.width = 11, fig.height = 4.25, echo = FALSE, fig.align = "center"}
-ct_plot_figure_1(stage = "welfare")
+.pull-left[
+```{r fig1-producer-surplus, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_surplus_refresher(type = "producer")
 ```
+]
 
-Triangle $b$ is a consumption distortion:
-- The tariff eliminates units consumers value above the world price but below the tariff-inclusive price: MB ($D[i]$) is higher than the MC ($P_W$)
+.pull-right[
+
+Producer surplus is the area above supply and below price.
+
+- Blue rectangle: producers receive a higher price on their original output
+- Orange triangle: producers gain extra surplus when they expand output to $q_{i\tau}^S$
+
+]
+
+---
+count: false
+# Welfare accounting under a tariff
+
+.pull-left[
+```{r fig1-tariff-stage3, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "welfare_components")
+```
+]
+
+.pull-right[
+
+- $a$: producer gain on the original domestic output
+- $b$: producer gain on the extra domestic output
+- $c$: production deadweight loss
+- $d$: tariff revenue on remaining imports
+- $e$: consumption deadweight loss
+
+]
+
+---
+count: false
+# Consumer loss and redistribution
+
+.pull-left[
+```{r fig1-tariff-stage3.05, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "welfare_components")
+```
+]
+
+.pull-right[
+
+- $-\Delta CS = a + b + c + d + e$
+- The whole shaded area is the .hi[consumer surplus loss]
+- But $a+b$ reappear as part of .hi[producer surplus gain]
+- And $d$ reappears as .hi[tariff revenue]
+
+]
+
+---
+count: false
+# Tariff welfare accounting
+
+.pull-left[
+```{r fig1-tariff-stage3.1, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "welfare_dwl")
+```
+]
+
+.pull-right[
+
+- $\Delta PS = a + b$
+- $\Delta CS = -(a + b + c + d + e)$
+- $R = d$
+- $\Delta W_i = \Delta PS + R - \Delta CS$
+- So for a .hi[small country], $\Delta W_i = -c - e$
+- The only net welfare losses are the two deadweight-loss regions $c$ and $e$
+
+]
+
+---
+count: false
+# Production distortion
+
+.pull-left[
+```{r fig1-tariff-stage4, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "production_distortion")
+```
+]
+
+.pull-right[
+
+Triangle $c$ is a production distortion:
+- The tariff shifts production from lower-cost foreign supply to higher-cost domestic production
+- For those extra domestic units, MC ($S[i]$) exceeds MB ($P_W$)
+
+]
+
+---
+count: false
+# Consumption distortion
+
+.pull-left[
+```{r fig1-tariff-stage5, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_1(stage = "consumption_distortion")
+```
+]
+
+.pull-right[
+
+Triangle $e$ is a consumption distortion:
+- The tariff eliminates units consumers value above the world price but below the tariff-inclusive price
+- For those lost units, MB ($D[i]$) exceeds MC ($P_W$)
+
+]
+
+---
+
+# Why start with ordinary tariffs?
+
+In a .hi[small open economy], an ordinary tariff is a private welfare loss: it transfers surplus around inside the country but leaves deadweight loss $c+e$
+
+--
+
+- Consumer surplus falls by $a+b+c+d+e$
+- Producer surplus rises by $a+b$
+- Government revenue is $d$, so the private net loss is the deadweight loss $c+e$
+
+--
+
+Carbon tariffs are only potentially useful because there is .hi[another distortion] missing from this diagram: production creates pollution
+
+--
+
+So next we add the environmental externality to this standard tariff benchmark
 
 ---
 
@@ -263,17 +443,17 @@ Let $d$ = marginal damage from emissions (global pollutant)
 
 --
 
-The .hi[marginal social cost (MSC)] of production is: $MSC = S + e \times d$
+The .hi[social marginal cost (SMC)] of production is: $SMC = S + e \times d$
 
 --
 
-MSC lies above the private supply curve by the external cost $e \times d$
+SMC lies above the private supply curve by the external cost $e \times d$
 
 ---
 
 # Free trade with pollution
 
-<!-- FIGURE 2a: Country i with MSC curve above S, showing pollution externality -->
+<!-- FIGURE 2a: Country i with SMC curve above S, showing pollution externality -->
 
 .pull-left[
 ```{r fig2a-pollution, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
@@ -299,7 +479,7 @@ ct_plot_figure_2_country(stage = "msc")
 
 .pull-right[
 
-Country $i$'s MSC curve lies above its private supply curve
+Country $i$'s SMC curve lies above its private supply curve
 
 The vertical gap is the external cost: $e \times d$
 
@@ -333,7 +513,7 @@ ct_plot_figure_2_country(stage = "damage")
 
 .pull-right[
 
-At the world price $P_W$, marginal benefit is pinned down by world demand, while marginal social cost is given by $MSC$
+At the world price $P_W$, marginal benefit is pinned down by world demand, while marginal social cost is given by $SMC$
 
 That triangle is the set of units for which marginal benefit exceeds private supply cost but is below marginal social cost
 
@@ -343,7 +523,7 @@ That triangle is the set of units for which marginal benefit exceeds private sup
 
 # Global perspective
 
-<!-- FIGURE 2b: World supply and demand with MSC -->
+<!-- FIGURE 2b: World supply and demand with SMC -->
 
 .pull-left[
 ```{r fig2b-world, out.width = "100%", fig.width = 5.4, fig.height = 4.3, echo = FALSE, fig.align = "center"}
@@ -355,7 +535,7 @@ ct_plot_figure_2_world()
 
 From a global perspective:
 - Free-trade output is where $D = S$
-- Efficient output is where $D = MSC$
+- Efficient output is where $D = SMC$
 - The green region is the global welfare gain from cutting output from $Q_W$ to $Q_W^*$
 
 ]
@@ -369,7 +549,7 @@ patchwork::wrap_plots(
   ct_plot_figure_2_country(stage = "damage"),
   ct_plot_figure_2_world(),
   ncol = 2,
-  widths = c(1, 1)
+  widths = c(1, 1.1)
 )
 ```
 
@@ -418,6 +598,10 @@ This shifts country $i$'s supply curve up by $t$
 
 But the .hi[world price doesn't change] (small open economy)
 
+--
+
+So the carbon tax reduces the net price domestic producers receive from $P_W$ to $P_W - t$
+
 ---
 
 # Effects of unilateral carbon tax
@@ -434,6 +618,9 @@ ct_plot_figure_3(stage = "baseline")
 
 Before the tax, the domestic market is at the free-trade benchmark with price $P_W$
 
+- You can think of a tax $t = e \times d$ as shifting $S[i]$ up to $SMC[i]$, so firms produce until $S[i] + t = P_W$
+- Equivalently, firms keep the same supply curve $S[i]$ but face the net-of-tax price $P_W - t$
+
 ]
 
 ---
@@ -449,9 +636,9 @@ ct_plot_figure_3(stage = "tax")
 .pull-right[
 
 After the tax:
-- Producers receive the net-of-tax price $P_W - t$
-- Because $t$ equals the external damage, domestic output falls to $q_{it}^S$
 - Consumers still face the world price $P_W$
+- But with a tax $t$, producers receive the net-of-tax price $P_W - t$
+- Domestic output falls to $q_{it}^S$
 
 ]
 
@@ -461,7 +648,7 @@ count: false
 
 .pull-left[
 ```{r fig3-unilateral-stage3, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
-ct_plot_figure_3(stage = "tax")
+ct_plot_figure_3(stage = "tax_delta_imports")
 ```
 ]
 
@@ -471,6 +658,7 @@ ct_plot_figure_3(stage = "tax")
 - Consumers in country $i$ still demand $q_i^D$ at price $P_W$
 - Imports rise enough to offset the fall in domestic output
 - Foreign production replaces home production: that is leakage
+- .hi[Global] quantity produced (and emissions) does not change
 
 ]
 
@@ -487,7 +675,7 @@ ct_plot_figure_3(stage = "welfare")
 .pull-right[
 
 From country $i$'s perspective:
-- Consumers are no better or worse off: they still pay $P_W$ and consume $q_i^D$
+- Consumer surplus does not change: they still pay $P_W$ and consume $q_i^D$
 - The government gains revenue $R_t$
 
 ]
@@ -522,8 +710,8 @@ ct_plot_figure_3(stage = "welfare")
 .pull-right[
 
 Why do producers lose $R_t + d$?
-- They receive a lower net-of-tax price on the units they still sell
-- They also stop selling the units between $q_{it}^S$ and $q_i^S$
+- Blue rectangle: they receive a lower net-of-tax price on the units they still sell
+- Orange triangle: they also stop selling the units between $q_{it}^S$ and $q_i^S$ for which their PMC $< P_W$
 
 ]
 
@@ -559,8 +747,7 @@ ct_plot_figure_3(stage = "welfare")
 
 Why does leakage make $d$ the relevant national loss?
 - The triangle $d$ is the pure private loss left after netting out the transfer $R_t$
-    - Goods not produced where PMC ($S[i]$) $<$ SMB ($P_W$)
-- Consumers in country $i$ are unchanged and imports replace the lost domestic output
+- Consumers in country $i$ are unaffected and imports replace the lost domestic output/emissions
 
 ]
 
@@ -741,6 +928,27 @@ One potential way to address this is a .hi[carbon tariff] of rate $\tau$: a tax 
 Here we will tax imports at the same rate as domestic production: $$\tau = t = e \times d$$
 
 ---
+count: false
+
+# Adding a carbon tariff
+
+.hi[Key intuition:]
+
+A carbon tax reduces the net price producers receive by $t$
+
+--
+
+A carbon tariff raises the price producers receive by $\tau = t$, so producers get $P_W - t + \tau = P_W$, the price without a tax or tariff
+
+--
+
+A carbon tariff raises the price consumers pay by $\tau = t$, so consumers pay $P_W + \tau$
+
+--
+
+So tax + tariff works like a consumption tax in the end
+
+---
 
 # Adding a carbon tariff
 
@@ -754,8 +962,9 @@ ct_plot_figure_4(stage = "tax_only")
 
 Start from the carbon tax alone:
 - Producers net $P_W - t$
-- Home output falls to $q_{it}^S$
+- Home output is $q_{it}^S$
 - Consumers still pay $P_W$ and buy $q_i^D$
+- Country $i$ imports $q_i^D - q_{it}^S$
 
 ]
 
@@ -786,36 +995,17 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-```{r fig4-tax-tariff-stage1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+```{r fig4-tax-tariff-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
 ct_plot_figure_4(stage = "tariff")
 ```
-]
+] 
 
 .pull-right[
 
 Now add a carbon tariff $\tau = t$ on imports:
-- Producers can now charge $P+\tau$ so consumers pay $P_W + \tau$
-- Domestic producers only net $P_W + \tau - t = P_W$ after the carbon tax payment
-- The tax and tariff offset for producers so domestic supply returns to $q_i^S$
-
-]
-
----
-count: false
-
-# Adding a carbon tariff
-
-.pull-left[
-```{r fig4-tax-tariff-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
-ct_plot_figure_4(stage = "tariff")
-```
-]
-
-.pull-right[
-
-What changes in demand and trade?
-- Consumers pay $P_W + \tau$ so domestic quantity demanded falls to $q_{i\tau}^D$
-- Imports shrink from $q_i^D - q_{it}^S$ to $q_{i\tau}^D - q_i^S$
+- Consumers pay $P_W + \tau$
+- Domestic producers net $P_W + \tau - t = P_W$
+- So domestic supply returns to $q_i^S$ 
 
 ]
 
@@ -834,7 +1024,7 @@ ct_plot_figure_4(stage = "tariff")
 
 Total supply and demand effects of tax+tariff:
 - No net effect on producers since their quantity is the same as unregulated
-- Consumers face a higher price $P_W + \tau$, reduce consumption, and reduce imports
+- Consumers face a higher price $P_W + \tau$, reduce consumption, and reduce imports: .hi[global production and emissions fall]
 
 ]
 
@@ -873,7 +1063,25 @@ ct_plot_figure_4(stage = "welfare")
 
 Welfare and environment:
 - $b$ is the consumption deadweight loss from the higher price
-- $b+f$ is the environmental gain from lower world output and emissions
+- Reduced consumption where the private benefit $D[i]$ was greater than the PMC of production $P_W$
+
+]
+
+---
+count: false
+
+# Adding a carbon tariff
+
+.pull-left[
+```{r fig4-tax-tariff-stage4.1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_4(stage = "welfare")
+```
+]
+
+.pull-right[
+
+Welfare and environment:
+- $b+f$ is the environmental gain from lower world output and emissions of $q_i^D - q_{i\tau}^D$
 - Tax + tariff improves social welfare by $f$
 
 ]
@@ -913,6 +1121,140 @@ Why?
 
 ---
 
+```{r ct-numeric-example-data, echo = FALSE, include = FALSE}
+numeric_example = ct_numeric_example_outcomes()
+numeric_example_parameters = ct_numeric_example_parameters()
+numeric_free_trade = numeric_example |> dplyr::filter(.data$regime == "free_trade")
+numeric_tax_tariff = numeric_example |> dplyr::filter(.data$regime == "tax_tariff")
+numeric_consumption_tax = numeric_example |> dplyr::filter(.data$regime == "consumption_tax")
+numeric_tariff_alone = numeric_example |> dplyr::filter(.data$regime == "tariff_alone")
+numeric_consumption_tax_prod_subsidy = numeric_example |>
+  dplyr::filter(.data$regime == "consumption_tax_prod_subsidy")
+```
+
+# Numerical example: setup
+
+Use the same simple market for both equivalence results:
+
+$$Q_D = 100 - P,\qquad Q_S = P - 20,\qquad P_W = 40$$
+
+--
+Definitions:
+- $Q_D$ = domestic quantity demanded
+- $Q_S$ = domestic quantity supplied
+- $M = Q_D - Q_S$ = imports
+- $P_W$ = world price
+
+---
+count: false
+
+# Numerical example: setup
+
+Carbon and policy terms:
+- $e_H$ and $e_F$ = home and foreign emissions per unit
+- $d$ = damage per unit of emissions
+- $t$ = domestic carbon tax on home production
+- $\tau$ = carbon tariff on imports
+$$e_H = e_F = 1,\qquad d = 10,\qquad t = \tau = 10$$
+
+---
+count: false
+
+# Numerical example: setup
+
+Start from the free-trade benchmark:
+
+--
+
+Step 1: under free trade, the domestic price equals the world price
+$$P = P_W = 40$$
+
+--
+
+Step 2: plug $P_W$ into demand and supply
+$$Q_D = 100 - 40 = `r numeric_free_trade$domestic_consumption`$$
+$$Q_S = 40 - 20 = `r numeric_free_trade$domestic_production`$$
+$$M = Q_D - Q_S = `r numeric_free_trade$domestic_consumption` - `r numeric_free_trade$domestic_production` = `r numeric_free_trade$imports`$$
+
+---
+
+# Numerical example: tax + tariff
+
+Under a domestic carbon tax and equal tariff, work in three steps:
+
+--
+
+Step 1: solve for prices
+
+Here $P_c$ is the price paid by consumers and $P_p$ is the net price received by domestic producers
+$$P_c = P_W + \tau = 40 + 10 = `r numeric_tax_tariff$consumer_price`$$
+$$P_p = P_c - t = `r numeric_tax_tariff$consumer_price` - 10 = `r numeric_tax_tariff$producer_price`$$
+
+---
+count: false
+
+# Numerical example: tax + tariff
+
+Step 2: plug those prices into demand and supply
+$$Q_D = 100 - P_c = 100 - `r numeric_tax_tariff$consumer_price` = `r numeric_tax_tariff$domestic_consumption`$$
+$$Q_S = P_p - 20 = `r numeric_tax_tariff$producer_price` - 20 = `r numeric_tax_tariff$domestic_production`$$
+$$M = Q_D - Q_S = `r numeric_tax_tariff$domestic_consumption` - `r numeric_tax_tariff$domestic_production` = `r numeric_tax_tariff$imports`$$
+
+---
+count: false
+
+# Numerical example: tax + tariff
+
+Step 3: compute government revenue
+
+Here $R_t$ is domestic carbon-tax revenue and $R_\tau$ is tariff revenue
+$$R_t = t \times Q_S = 10 \times `r numeric_tax_tariff$domestic_production` = `r numeric_tax_tariff$carbon_tax_revenue`$$
+$$R_\tau = \tau \times M = 10 \times `r numeric_tax_tariff$imports` = `r numeric_tax_tariff$tariff_revenue`$$
+$$R = R_t + R_\tau = `r numeric_tax_tariff$carbon_tax_revenue` + `r numeric_tax_tariff$tariff_revenue` = `r numeric_tax_tariff$net_revenue`$$
+
+---
+
+# Numerical example: equivalent consumption tax
+
+Now replace tax + tariff with a pure consumption tax of `r numeric_example_parameters$consumption_tax`:
+
+--
+
+Step 1: solve for prices
+
+Consumers pay the tax, so $P_c$ rises, but producers still receive the world price
+$$P_c = P_W + 10 = 40 + 10 = `r numeric_consumption_tax$consumer_price`$$
+$$P_p = P_W = `r numeric_consumption_tax$producer_price`$$
+
+---
+
+# Numerical example: equivalent consumption tax
+
+Step 2: plug those prices into demand and supply
+$$Q_D = 100 - P_c = 100 - `r numeric_consumption_tax$consumer_price` = `r numeric_consumption_tax$domestic_consumption`$$
+$$Q_S = P_p - 20 = `r numeric_consumption_tax$producer_price` - 20 = `r numeric_consumption_tax$domestic_production`$$
+$$M = Q_D - Q_S = `r numeric_consumption_tax$domestic_consumption` - `r numeric_consumption_tax$domestic_production` = `r numeric_consumption_tax$imports`$$
+
+---
+
+# Numerical example: equivalent consumption tax
+
+Step 3: compute government revenue
+
+$$R_c = 10 \times Q_D = 10 \times `r numeric_consumption_tax$domestic_consumption` = `r numeric_consumption_tax$consumption_tax_revenue`$$
+
+--
+
+So tax + tariff and a consumption tax generate the same outcome:
+- same consumer price: $P_c = `r numeric_tax_tariff$consumer_price`$
+- same producer price: $P_p = `r numeric_tax_tariff$producer_price`$
+- same domestic demand: $Q_D = `r numeric_tax_tariff$domestic_consumption`$
+- same domestic supply: $Q_S = `r numeric_tax_tariff$domestic_production`$
+- same imports: $M = `r numeric_tax_tariff$imports`$
+- same total revenue: `r numeric_tax_tariff$net_revenue`
+
+---
+
 class: inverse, center, middle
 name: tariff-alone
 
@@ -929,6 +1271,31 @@ Some proposals call for carbon tariffs .hi[without] a domestic carbon tax
 --
 
 What does this accomplish?
+
+---
+count: false
+
+# What if we only use a tariff?
+
+.hi[Key intuition:]
+
+A carbon tariff raises the price producers receive by $\tau$, which is the same thing as a production subsidy of $\tau$
+
+--
+
+A carbon tariff raises the price consumers pay by $\tau$, which is the same thing as a consumption tax of $\tau$
+
+--
+
+So tariff alone works like a consumption tax plus a production subsidy in the end
+
+---
+
+# Carbon tariff alone in practice
+
+```{r, echo = FALSE}
+local_video("videos/09-carbon-tariffs-tariff-alone-practice.mp4")
+```
 
 ---
 
@@ -1044,6 +1411,128 @@ Welfare and environment:
 
 ]
 
+
+---
+count: false
+
+# Numerical example: setup
+
+For the tariff-alone example, use the same market structure:
+
+$$Q_D = 100 - P,\qquad Q_S = P - 20,\qquad P_W = 40$$
+
+--
+
+Definitions:
+- $Q_D$ = domestic quantity demanded
+- $Q_S$ = domestic quantity supplied
+- $M = Q_D - Q_S$ = imports
+- $P_c$ = price paid by consumers
+- $P_p$ = price received by domestic producers
+
+--
+
+Policy for this case:
+$$t = 0,\qquad \tau = 10$$
+
+---
+count: false
+
+# Numerical example: setup
+
+Start from the free-trade benchmark:
+
+--
+
+Free-trade benchmark:
+$$P_c = P_p = P_W = 40$$
+$$Q_D = 100 - 40 = `r numeric_free_trade$domestic_consumption`$$
+$$Q_S = 40 - 20 = `r numeric_free_trade$domestic_production`$$
+$$M = Q_D - Q_S = `r numeric_free_trade$imports`$$
+
+---
+count: false
+
+# Numerical example: tariff alone
+
+With a tariff alone, work in three steps:
+
+--
+
+Step 1: solve for prices
+
+Here both consumers and domestic producers face the tariff-inclusive price
+$$P_c = P_W + \tau = 40 + 10 = `r numeric_tariff_alone$consumer_price`$$
+$$P_p = P_c = `r numeric_tariff_alone$producer_price`$$
+
+---
+count: false
+
+# Numerical example: tariff alone
+
+Step 2: plug those prices into demand and supply
+$$Q_D = 100 - P_c = 100 - `r numeric_tariff_alone$consumer_price` = `r numeric_tariff_alone$domestic_consumption`$$
+$$Q_S = P_p - 20 = `r numeric_tariff_alone$producer_price` - 20 = `r numeric_tariff_alone$domestic_production`$$
+$$M = Q_D - Q_S = `r numeric_tariff_alone$domestic_consumption` - `r numeric_tariff_alone$domestic_production` = `r numeric_tariff_alone$imports`$$
+
+---
+count: false
+
+# Numerical example: tariff alone
+
+Step 3: compute tariff revenue
+$$R_\tau = \tau \times M = 10 \times `r numeric_tariff_alone$imports` = `r numeric_tariff_alone$tariff_revenue`$$
+
+---
+count: false
+
+# Numerical example: equivalent tax + subsidy
+
+Now replace the tariff with a consumption tax of `r numeric_example_parameters$consumption_tax` and a production subsidy of `r numeric_example_parameters$production_subsidy`:
+
+--
+
+Step 1: solve for prices
+
+Consumers pay the consumption tax, and producers receive the world price plus the subsidy
+$$P_c = P_W + 10 = 40 + 10 = `r numeric_consumption_tax_prod_subsidy$consumer_price`$$
+$$P_p = P_W + 10 = 40 + 10 = `r numeric_consumption_tax_prod_subsidy$producer_price`$$
+
+---
+count: false
+
+# Numerical example: equivalent tax + subsidy
+
+Step 2: plug those prices into demand and supply
+$$Q_D = 100 - P_c = 100 - `r numeric_consumption_tax_prod_subsidy$consumer_price` = `r numeric_consumption_tax_prod_subsidy$domestic_consumption`$$
+$$Q_S = P_p - 20 = `r numeric_consumption_tax_prod_subsidy$producer_price` - 20 = `r numeric_consumption_tax_prod_subsidy$domestic_production`$$
+$$M = Q_D - Q_S = `r numeric_consumption_tax_prod_subsidy$domestic_consumption` - `r numeric_consumption_tax_prod_subsidy$domestic_production` = `r numeric_consumption_tax_prod_subsidy$imports`$$
+
+---
+count: false
+
+# Numerical example: equivalent tax + subsidy
+
+Step 3: compute the government budget
+
+Here $R_c$ is consumption-tax revenue
+$$R_c = 10 \times Q_D = 10 \times `r numeric_consumption_tax_prod_subsidy$domestic_consumption` = `r numeric_consumption_tax_prod_subsidy$consumption_tax_revenue`$$
+$$\text{Subsidy cost} = 10 \times Q_S = 10 \times `r numeric_consumption_tax_prod_subsidy$domestic_production` = `r numeric_consumption_tax_prod_subsidy$production_subsidy_cost`$$
+$$R^{net} = R_c - \text{Subsidy cost} = `r numeric_consumption_tax_prod_subsidy$consumption_tax_revenue` - `r numeric_consumption_tax_prod_subsidy$production_subsidy_cost` = `r numeric_consumption_tax_prod_subsidy$net_revenue`$$
+
+---
+count: false
+
+# Numerical example: equivalent tax + subsidy
+
+So tariff alone and a consumption tax plus production subsidy generate the same outcome:
+- same consumer price: $P_c = `r numeric_tariff_alone$consumer_price`$
+- same producer price: $P_p = `r numeric_tariff_alone$producer_price`$
+- same domestic demand: $Q_D = `r numeric_tariff_alone$domestic_consumption`$
+- same domestic supply: $Q_S = `r numeric_tariff_alone$domestic_production`$
+- same imports: $M = `r numeric_tariff_alone$imports`$
+- same net government revenue: `r numeric_tariff_alone$net_revenue`
+
 ---
 
 class: inverse, center, middle
@@ -1061,19 +1550,17 @@ name: world-tax
 
 .pull-left[
 ```{r fig6-world-tax, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
-ct_plot_figure_6()
+ct_plot_figure_6(stage = "baseline")
 ```
 ]
 
 .pull-right[
 
-Suppose the rest of the world already prices carbon so $P_W$ internalizes the externality *abroad*:
-- $P_W$ is then where abroad MSC = abroad D
-- $i$ produces at $q_i^S$
-- At $q_i^S$: MSC $>$ world MB given by $P_W$ leading to DWL $a$
+Suppose the rest of the world already prices carbon so $P_W$ reflects the carbon cost *abroad*:
+- Country $i$ still produces $q_i^S$ without its own carbon tax
+- The efficient output for country $i$ is $q_{it}^S$, where SMC = $P_W$
 
 ]
-
 
 ---
 
@@ -1083,7 +1570,27 @@ Suppose the rest of the world already prices carbon so $P_W$ internalizes the ex
 
 .pull-left[
 ```{r fig6-world-tax.1, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
-ct_plot_figure_6()
+ct_plot_figure_6(stage = "baseline")
+```
+]
+
+.pull-right[
+
+- At $q_i^S$, SMC exceeds the revenue from selling the good at $P_W$
+- $q_i^S - q_{it}^S$ is leakage *into* the country from carbon taxation abroad 
+- $a$ is the resulting deadweight loss from overproduction domestically
+
+]
+
+---
+
+# World carbon tax
+
+<!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary -->
+
+.pull-left[
+```{r fig6-world-tax.2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+ct_plot_figure_6(stage = "tax")
 ```
 ]
 
@@ -1092,7 +1599,8 @@ ct_plot_figure_6()
 If country $i$ also imposes the carbon tax $t$:
 - Producers receive net-of-tax price $P_W - t$
 - Supply falls from $q_i^S$ to $q_{it}^S$
-- Imports rise to $q_i^D-q_{it}^S$ to make up the shortfall given quantity demanded does not change given world price $P_W$
+- Imports rise to $q_i^D-q_{it}^S$
+- Consumers still face the world price $P_W$
 
 ]
 
@@ -1103,7 +1611,7 @@ count: false
 
 .pull-left[
 ```{r fig6-world-tax-stage2, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
-ct_plot_figure_6()
+ct_plot_figure_6(stage = "tax")
 ```
 ]
 
@@ -1111,8 +1619,8 @@ ct_plot_figure_6()
 
 Why are those extra imports not leakage?
 - Foreign producers already face the same carbon price
-- That foreign carbon price led to leakage *into* country $i$
-- Those imports reverse leakage from the rest of the world to country $i$
+- The earlier distortion was leakage from the rest of the world to country $i$
+- Those imports reverse that leakage
 - The DWL $a$ disappears
 
 ]
@@ -1124,7 +1632,7 @@ count: false
 
 .pull-left[
 ```{r fig6-world-tax-stage3, out.width = "100%", fig.width = 5.8, fig.height = 4.3, echo = FALSE, fig.align = "center"}
-ct_plot_figure_6()
+ct_plot_figure_6(stage = "tax")
 ```
 ]
 
@@ -1132,7 +1640,8 @@ ct_plot_figure_6()
 
 At that point the allocation is efficient:
 - Every country has internalized the externality
-- Global marginal social cost equals the marginal benefit of the last unit consumed
+- Global SMC equals the marginal benefit of the last unit consumed
+- Production is cost-effective across countries
 - A carbon tariff is unnecessary
 
 ]
@@ -1167,6 +1676,16 @@ Several factors complicate carbon tariff design:
 --
 
 4. .hi[Retaliation:] trading partners may impose counter-tariffs
+
+---
+
+# Retaliation risk
+
+If trading partners see carbon tariffs as protectionist, they may respond with counter-tariffs or broader trade barriers
+
+```{r, echo = FALSE}
+local_video("videos/09-carbon-tariffs-retaliation-trade-war.mp4")
+```
 
 ---
 
@@ -1248,6 +1767,203 @@ EU CBAM designed carefully to fit within WTO rules
 ---
 
 class: inverse, center, middle
+name: solar
+
+# Solar tariffs
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Solar tariffs: the opposite-sign case
+
+```{r fig-solar-mirror-case, out.width = "100%", fig.width = 11.2, fig.height = 3.9, echo = FALSE, fig.align = "center"}
+st_plot_mirror_case("both")
+```
+
+- Carbon tariffs tax a .hi[dirty good]
+- Solar tariffs tax a .hi[clean input]
+- The missing wedge is on the .hi[benefit side], not the cost side
+
+---
+
+# Free trade benchmark for solar modules
+
+.pull-left[
+```{r fig-solar-free-trade, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("free_trade")
+```
+]
+
+.pull-right[
+
+At price $P_W$:
+- Domestic manufacturing is $q_i^S$
+- Domestic purchases/installations are $q_i^D$
+- Imports are $q_i^D - q_i^S$
+
+]
+
+---
+count: false
+# The tariff wedge for solar modules
+
+.pull-left[
+```{r fig-solar-tariff-price, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("price")
+```
+]
+
+.pull-right[
+
+- A tariff raises the domestic module price
+- Domestic manufacturers can charge the higher price
+- Imported units now enter at the tariff-inclusive price $P_W + \tau$
+
+]
+
+---
+count: false
+# Quantity effects of a solar tariff
+
+.pull-left[
+```{r fig-solar-tariff-quantities, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("quantities")
+```
+]
+
+.pull-right[
+
+- Domestic manufacturing rises to $q_{i\tau}^S$
+- Domestic purchases/installations fall to $q_{i\tau}^D$
+- Imports shrink
+- In the simple 2-country model, foreign production falls with imports
+
+]
+
+---
+count: false
+# Same private tariff geometry as before
+
+.pull-left[
+```{r fig-solar-tariff-welfare, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("welfare")
+```
+]
+
+.pull-right[
+
+- Producer gain = $a+b$
+- Buyers/installers lose = $a+b+c+d+e$
+- Government revenue = $d$
+- Private deadweight loss = $c+e$
+- .hi[Privately], a solar tariff looks just like any ordinary tariff
+
+]
+
+---
+<!-- Sources: One Earth paper on climate and health benefits of imported solar PV in the US: https://www.sciencedirect.com/science/article/abs/pii/S2590332225002933 -->
+# Solar deployment has a positive externality
+
+.pull-left[
+```{r fig-solar-externality-private, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("private")
+```
+]
+
+.pull-right[
+
+- Solar deployment displaces fossil generation
+
+]
+
+---
+count: false
+# Solar deployment has a positive externality
+
+.pull-left[
+```{r fig-solar-externality-smb, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("smb")
+```
+]
+
+.pull-right[
+
+- Solar deployment displaces fossil generation
+- Private demand understates social value
+
+]
+
+---
+count: false
+# Solar deployment has a positive externality
+
+.pull-left[
+```{r fig-solar-externality-smb-final, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("smb")
+```
+]
+
+.pull-right[
+
+- Solar deployment displaces fossil generation
+- Private demand understates social value
+- The efficient quantity is higher than the private-market quantity
+
+]
+
+---
+
+# Solar tariff with deployment benefits
+
+.pull-left[
+```{r fig-solar-tariff-social, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("tariff_social")
+```
+]
+
+.pull-right[
+
+- The standard tariff losses $c+e$ are still there
+- There is an extra environmental loss $g$
+- If domestic and foreign manufacturing have the same environmental intensity, then $\Delta W_i^{social} = -(c + e + g)$
+
+]
+
+---
+
+# When could a solar tariff help the climate?
+
+.pull-left[
+```{r fig-solar-manufacturing-offset, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("manufacturing_offset")
+```
+]
+
+.pull-right[
+
+- Cleaner domestic manufacturing can create an upstream environmental gain
+- $\Delta W_i^{social} = h - (c + e + g)$
+- A solar tariff helps the climate only if $h$ is large enough to offset $g$ and the usual tariff distortions
+- If domestic manufacturing is .hi[dirtier], then $h < 0$ and the case gets weaker
+
+]
+
+---
+<!-- Sources: NBER working paper on strategic avoidance and welfare impacts of U.S. solar tariffs: https://www.nber.org/system/files/working_papers/w34401/w34401.pdf -->
+# Trade diversion in practice
+
+- Country-specific tariffs often shift production to .hi[third countries], not just back home
+- That weakens the domestic-manufacturing argument
+- It also makes climate accounting messier
+- This is the solar analogue of .hi[leakage / resource shuffling]
+- Chinese manufacturers' offshore manufacturing share rose from `5%` in `2012` to `20%` by `2019`
+
+<!-- TODO numerical examples: (i) linear D and S with constant deployment wedge B; (ii) cleaner domestic manufacturing case with h > 0; (iii) trade-diversion case with third-country supply. -->
+
+---
+
+class: inverse, center, middle
 name: takeaways
 
 # Key takeaways
@@ -1290,6 +2006,11 @@ name: takeaways
 6. .hi[Many complications] in practice
    - Resource shuffling, non-price policies, export rebates, WTO rules
 
+--
+
+7. .hi[Solar tariffs] usually worsen climate outcomes in the basic model because they tax a clean technology and reduce deployment
+   - They only look better if they shift production toward substantially cleaner domestic manufacturing
+
 ---
 
 # The bottom line
@@ -1306,3 +2027,7 @@ They work best when:
 --
 
 Alone, they are an imperfect tool that may create new distortions
+
+--
+
+For clean technologies, .hi[production subsidies / tax credits] usually fit the economic problem better than tariffs on imports.
