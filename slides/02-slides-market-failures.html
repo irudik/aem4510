@@ -1515,9 +1515,9 @@ We know:
 
 --
 
-Suppose we have a public good, e.g. depth of a river for public use
+Suppose we have a public good, e.g. air quality in a city
 
-How do we decide the socially efficient depth?
+How do we decide the socially efficient level of air quality?
 
 
 ---
@@ -1538,7 +1538,7 @@ Public goods have two defining characteristics:
 
 --
 
-.hi[Non-excludable:] it is difficult or costly to prevent nonpayers from using the good
+.hi[Non-excludable:] it is hard to prevent nonpayers from using the good
 
 --
 
@@ -1548,7 +1548,7 @@ Public goods have two defining characteristics:
 
 # Optimal provision of public goods
 
-What does this mean?
+What does this mean for how we determine the optimal provision?
 
 --
 
@@ -1632,15 +1632,13 @@ Public goods: we add demand curves vertically
 
 .pull-right[
 
-3 different groups: boaters (B), anglers (A), and hikers (H)
+3 groups: asthmatic families (F), outdoor workers (W), healthy adults (H)
 
-Each has a different marginal benefit for water depth:
-- Boaters: MB = 12-Q
-- Anglers: MB = 10-Q
-- Hikers: MB = 6-Q
-- MC of provision: MC = Q
-
-We assume MB can't go negative
+Each has a different marginal benefit for air quality:
+- Families: MB = 12-Q
+- Workers: MB = 10-Q
+- Adults: MB = 6-Q
+- MC of abatement: MC = Q
 
 ]
 
@@ -1677,7 +1675,7 @@ At each Q, sum the MBs
 
 Why is the aggregate demand curve kinked?
 
-Because at each quantity/depth, only certain groups are willing to pay
+Because at each level of air quality, only certain groups are willing to pay
 
 Kinks are at the dotted lines, where PMBs hit zero
 
@@ -1694,9 +1692,9 @@ Kinks are at the dotted lines, where PMBs hit zero
 
 .pull-right[
 
-At quantities &gt; 10, only boaters are willing to pay
+At quantities &gt; 10, only families are willing to pay
 
-At quantities &gt; 6 and &lt;= 10, only boaters and anglers are willing to pay
+At quantities &gt; 6 and &lt;= 10, only families and workers are willing to pay
 
 At quantities `\(Q \leq 6\)`, all groups are willing to pay
 
@@ -1770,7 +1768,7 @@ Is this the price the groups pay?
 
 --
 
-If the government is able to provide the good, how does it finance the cost raising the river depth above zero?
+If the government is able to provide the good, how does it finance the cost of raising air quality above the unregulated level?
 
 ---
 
@@ -1788,9 +1786,9 @@ What share is everyone charged?
 
 --
 
-Boaters pay: 14/3  
-Anglers pay: 8/3  
-Hikers: free
+Families pay: 14/3
+Workers pay: 8/3
+Adults: free
 
 --
 
@@ -1812,11 +1810,149 @@ People can lie about which group they're in
 
 --
 
-Anglers might say they're hikers
+Workers might say they're healthy adults
 
 --
 
 It requires perfect information on behalf of the regulator
+
+---
+
+# A second public good: flood protection
+
+.pull-left[
+&lt;center&gt;
+&lt;img src="files/02-levee-new-orleans.jpg" alt="" width="100%" /&gt;
+&lt;/center&gt;
+.smallest[Levee and floodwall, 17th Street Canal, New Orleans]
+
+&lt;!-- Photo: Wikimedia Commons, File:17StCanalLakewardFromMetarieRd.jpg,
+by Infrogmation, CC BY 2.5 --&gt;
+]
+
+.pull-right[
+A levee protects everyone behind it, whether or not they pay
+
+- Non-rival: my protection does not reduce yours
+- Non-excludable: the wall cannot keep the flood out for payers only
+
+How high should the levee be?
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+
+
+![levee marginal benefit curves](02-slides-market-failures_files/figure-html/levee-1.png)
+]
+
+.pull-right[
+
+3 groups: homeowners (H), businesses (B), and hill residents (R)
+
+Marginal benefits of levee height:
+- Homeowners: MB = 16-2Q
+- Businesses: MB = 9-Q
+- Hill residents: MB = 4-Q
+- MC of provision: MC = 2Q
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+![levee marginal benefit curves](02-slides-market-failures_files/figure-html/levee-1.png)
+]
+
+.pull-right[
+
+3 groups: homeowners (H), businesses (B), and hill residents (R)
+
+Marginal benefits of levee height:
+- Homeowners: MB = 16-2Q
+- Businesses: MB = 9-Q
+- Hill residents: MB = 4-Q
+- MC of provision: MC = 2Q
+
+.hi[Your turn:] derive the SMB curve
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+
+
+![aggregate levee demand](02-slides-market-failures_files/figure-html/levee-agg-1.png)
+]
+
+.pull-right[
+
+The SMB curve is:
+
+29 - 4Q for Q &lt;= 4
+
+25 - 3Q for 4 &lt; Q &lt;= 8
+
+9 - Q for 8 &lt; Q &lt;= 9
+
+Kinks where R's and H's MBs hit zero
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+![aggregate levee demand](02-slides-market-failures_files/figure-html/levee-agg-1.png)
+]
+
+.pull-right[
+
+The SMB curve is:
+
+29 - 4Q for Q &lt;= 4
+
+25 - 3Q for 4 &lt; Q &lt;= 8
+
+9 - Q for 8 &lt; Q &lt;= 9
+
+.hi[Your turn:] find the efficient height and each group's Lindahl price
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+
+
+![optimal levee height](02-slides-market-failures_files/figure-html/levee-optim-1.png)
+]
+
+.pull-right[
+
+Optimal height: MC crosses SMB on the middle segment
+
+2Q = 25 - 3Q `\(\Rightarrow\)` Q = 5
+
+Lindahl prices at Q = 5:
+- Homeowners pay: 6
+- Businesses pay: 4
+- Hill residents: free
+
+The prices again sum to MC = 10
+
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -3014,9 +3014,9 @@ We know:
 
 --
 
-Suppose we have a public good, e.g. depth of a river for public use
+Suppose we have a public good, e.g. air quality in a city
 
-How do we decide the socially efficient depth?
+How do we decide the socially efficient level of air quality?
 
 
 ---
@@ -3037,7 +3037,7 @@ Public goods have two defining characteristics:
 
 --
 
-.hi[Non-excludable:] it is difficult or costly to prevent nonpayers from using the good
+.hi[Non-excludable:] it is hard to prevent nonpayers from using the good
 
 --
 
@@ -3047,7 +3047,7 @@ Public goods have two defining characteristics:
 
 # Optimal provision of public goods
 
-What does this mean?
+What does this mean for how we determine the optimal provision?
 
 --
 
@@ -3126,17 +3126,17 @@ Public goods: we add demand curves vertically
 .pull-left[
 ```{r pub-good, echo = FALSE, fig.show = 'hide', warning = F}
 pmc <- function(x) x
-d_b <- function(x) 12 - x
-d_a <- function(x) 10 - x
+d_f <- function(x) 12 - x
+d_w <- function(x) 10 - x
 d_h <- function(x) 6 - x
 ggplot() +
-  annotate("text", x = 1, y = 13, label = "B", size = 8) +
-  annotate("text", x = 7.5, y = 1.5, label = "A", size = 8) +
+  annotate("text", x = 1, y = 13, label = "F", size = 8) +
+  annotate("text", x = 7.5, y = 1.5, label = "W", size = 8) +
   annotate("text", x = 4, y = 1, label = "H", size = 8) +
   annotate("text", x = 8, y = 11, label = "MC", size = 8) +
   stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
-  stat_function(fun = d_b, color = "#AAAAAA", size = 1.5) +
-  stat_function(fun = d_a, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_f, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_w, color = "#AAAAAA", size = 1.5) +
   stat_function(fun = d_h, color = "#AAAAAA", size = 1.5) +
   annotate("segment", x = 0, xend = 16.67, y = 13.33, yend = 13.33, 
            linetype = "dashed", size = 1.5, color = "grey50") +
@@ -3160,7 +3160,7 @@ ggplot() +
   ) +
   scale_x_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
   scale_y_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
-  labs(x = "Quantity",
+  labs(x = "Air quality",
        y = "Marginal Benefit/Marginal Cost")
   
 ```
@@ -3170,15 +3170,13 @@ ggplot() +
 
 .pull-right[
 
-3 different groups: boaters (B), anglers (A), and hikers (H)
+3 groups: asthmatic families (F), outdoor workers (W), healthy adults (H)
 
-Each has a different marginal benefit for water depth:
-- Boaters: MB = 12-Q
-- Anglers: MB = 10-Q
-- Hikers: MB = 6-Q
-- MC of provision: MC = Q
-
-We assume MB can't go negative
+Each has a different marginal benefit for air quality:
+- Families: MB = 12-Q
+- Workers: MB = 10-Q
+- Adults: MB = 6-Q
+- MC of abatement: MC = Q
 
 ]
 
@@ -3190,12 +3188,12 @@ We assume MB can't go negative
 .pull-left[
 ```{r pub-good-agg, echo = FALSE, fig.show = 'hide', warning = F}
 pmc <- function(x) x
-d_b <- function(x) 12 - x
-d_a <- function(x) 10 - x
+d_f <- function(x) 12 - x
+d_w <- function(x) 10 - x
 d_h <- function(x) 6 - x
 ggplot() +
-  annotate("text", x = 1, y = 13, label = "B", size = 8) +
-  annotate("text", x = 7.5, y = 1.5, label = "A", size = 8) +
+  annotate("text", x = 1, y = 13, label = "F", size = 8) +
+  annotate("text", x = 7.5, y = 1.5, label = "W", size = 8) +
   annotate("text", x = 4, y = 1, label = "H", size = 8) +
   annotate("text", x = 4, y = 25, label = "SMB", size = 8) +
   annotate("text", x = 12, y = 15, label = "MC", size = 8) +
@@ -3204,8 +3202,8 @@ ggplot() +
   annotate("segment", x = 10, xend = 10, y = 0, yend = 2, 
            linetype = "dotted", size = 1, color = "#AAAAAA") +
   stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
-  stat_function(fun = d_b, color = "#AAAAAA", size = 1.5) +
-  stat_function(fun = d_a, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_f, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_w, color = "#AAAAAA", size = 1.5) +
   stat_function(fun = d_h, color = "#AAAAAA", size = 1.5) +
   annotate("segment", x = 0, xend = 6, y = 28, yend = 10, 
            linetype = "longdash", size = 1.5, color = "red") +
@@ -3227,7 +3225,7 @@ ggplot() +
   ) +
   scale_x_continuous(limits = c(0,13), expand = c(0,0), breaks = scales::breaks_pretty()) +
   scale_y_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
-  labs(x = "Quantity",
+  labs(x = "Air quality",
        y = "Marginal Benefit/Marginal Cost")
   
 ```
@@ -3257,7 +3255,7 @@ At each Q, sum the MBs
 
 Why is the aggregate demand curve kinked?
 
-Because at each quantity/depth, only certain groups are willing to pay
+Because at each level of air quality, only certain groups are willing to pay
 
 Kinks are at the dotted lines, where PMBs hit zero
 
@@ -3274,9 +3272,9 @@ Kinks are at the dotted lines, where PMBs hit zero
 
 .pull-right[
 
-At quantities > 10, only boaters are willing to pay
+At quantities > 10, only families are willing to pay
 
-At quantities > 6 and <= 10, only boaters and anglers are willing to pay
+At quantities > 6 and <= 10, only families and workers are willing to pay
 
 At quantities $Q \leq 6$, all groups are willing to pay
 
@@ -3313,8 +3311,8 @@ Summing the PMBs over the relevant range of Q
 .pull-left[
 ```{r pub-good-optim, echo = FALSE, fig.show = 'hide', warning = F}
 pmc <- function(x) x
-d_b <- function(x) 12 - x
-d_a <- function(x) 10 - x
+d_f <- function(x) 12 - x
+d_w <- function(x) 10 - x
 d_h <- function(x) 6 - x
 ggplot() +
   annotate("text", x = 4, y = 25, label = "SMB", size = 8) +
@@ -3348,7 +3346,7 @@ ggplot() +
   ) +
   scale_x_continuous(limits = c(0,13), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
   scale_y_continuous(limits = c(0,31), breaks = 22/3, labels = "22/3", expand = c(0,0)) +
-  labs(x = "Quantity",
+  labs(x = "Air quality",
        y = "Marginal Benefit/Marginal Cost")
   
 ```
@@ -3390,7 +3388,7 @@ Is this the price the groups pay?
 
 --
 
-If the government is able to provide the good, how does it finance the cost raising the river depth above zero?
+If the government is able to provide the good, how does it finance the cost of raising air quality above the unregulated level?
 
 ---
 
@@ -3408,9 +3406,9 @@ What share is everyone charged?
 
 --
 
-Boaters pay: 14/3  
-Anglers pay: 8/3  
-Hikers: free
+Families pay: 14/3
+Workers pay: 8/3
+Adults: free
 
 --
 
@@ -3432,8 +3430,258 @@ People can lie about which group they're in
 
 --
 
-Anglers might say they're hikers
+Workers might say they're healthy adults
 
 --
 
 It requires perfect information on behalf of the regulator
+
+---
+
+# A second public good: flood protection
+
+.pull-left[
+<center>
+```{r, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/02-levee-new-orleans.jpg")
+```
+</center>
+.smallest[Levee and floodwall, 17th Street Canal, New Orleans]
+
+<!-- Photo: Wikimedia Commons, File:17StCanalLakewardFromMetarieRd.jpg,
+by Infrogmation, CC BY 2.5 -->
+]
+
+.pull-right[
+A levee protects everyone behind it, whether or not they pay
+
+- Non-rival: my protection does not reduce yours
+- Non-excludable: the wall cannot keep the flood out for payers only
+
+How high should the levee be?
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+```{r levee, echo = FALSE, fig.show = 'hide', warning = F}
+pmc <- function(x) 2*x
+d_home <- function(x) 16 - 2*x
+d_biz <- function(x) 9 - x
+d_hill <- function(x) 4 - x
+ggplot() +
+  annotate("text", x = 1.5, y = 14.7, label = "H", size = 8) +
+  annotate("text", x = 8.5, y = 1.6, label = "B", size = 8) +
+  annotate("text", x = 0.7, y = 2.1, label = "R", size = 8) +
+  annotate("text", x = 7.6, y = 17.3, label = "MC", size = 8) +
+  stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
+  stat_function(fun = d_home, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_biz, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_hill, color = "#AAAAAA", size = 1.5) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(limits = c(0,10.4), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_y_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  labs(x = "Levee height",
+       y = "Marginal Benefit/Marginal Cost")
+
+```
+
+![levee marginal benefit curves](`r knitr::fig_chunk("levee", "png")`)
+]
+
+.pull-right[
+
+3 groups: homeowners (H), businesses (B), and hill residents (R)
+
+Marginal benefits of levee height:
+- Homeowners: MB = 16-2Q
+- Businesses: MB = 9-Q
+- Hill residents: MB = 4-Q
+- MC of provision: MC = 2Q
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+![levee marginal benefit curves](`r knitr::fig_chunk("levee", "png")`)
+]
+
+.pull-right[
+
+3 groups: homeowners (H), businesses (B), and hill residents (R)
+
+Marginal benefits of levee height:
+- Homeowners: MB = 16-2Q
+- Businesses: MB = 9-Q
+- Hill residents: MB = 4-Q
+- MC of provision: MC = 2Q
+
+.hi[Your turn:] derive the SMB curve
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+```{r levee-agg, echo = FALSE, fig.show = 'hide', warning = F}
+pmc <- function(x) 2*x
+d_home <- function(x) 16 - 2*x
+d_biz <- function(x) 9 - x
+d_hill <- function(x) 4 - x
+ggplot() +
+  annotate("text", x = 1.5, y = 14.7, label = "H", size = 8) +
+  annotate("text", x = 8.5, y = 1.6, label = "B", size = 8) +
+  annotate("text", x = 0.7, y = 2.1, label = "R", size = 8) +
+  annotate("text", x = 1.3, y = 27.5, label = "SMB", size = 8) +
+  annotate("text", x = 9.3, y = 21, label = "MC", size = 8) +
+  annotate("segment", x = 4, xend = 4, y = 0, yend = 13,
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
+  annotate("segment", x = 8, xend = 8, y = 0, yend = 1,
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
+  stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
+  stat_function(fun = d_home, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_biz, color = "#AAAAAA", size = 1.5) +
+  stat_function(fun = d_hill, color = "#AAAAAA", size = 1.5) +
+  annotate("segment", x = 0, xend = 4, y = 29, yend = 13,
+           linetype = "longdash", size = 1.5, color = "red") +
+  annotate("segment", x = 4, xend = 8, y = 13, yend = 1,
+           linetype = "longdash", size = 1.5, color = "red") +
+  annotate("segment", x = 8, xend = 9, y = 1, yend = 0,
+           linetype = "longdash", size = 1.5, color = "red") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(limits = c(0,10.4), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  scale_y_continuous(limits = c(0,31), expand = c(0,0), breaks = scales::breaks_pretty()) +
+  labs(x = "Levee height",
+       y = "Marginal Benefit/Marginal Cost")
+
+```
+
+![aggregate levee demand](`r knitr::fig_chunk("levee-agg", "png")`)
+]
+
+.pull-right[
+
+The SMB curve is:
+
+29 - 4Q for Q <= 4
+
+25 - 3Q for 4 < Q <= 8
+
+9 - Q for 8 < Q <= 9
+
+Kinks where R's and H's MBs hit zero
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+![aggregate levee demand](`r knitr::fig_chunk("levee-agg", "png")`)
+]
+
+.pull-right[
+
+The SMB curve is:
+
+29 - 4Q for Q <= 4
+
+25 - 3Q for 4 < Q <= 8
+
+9 - Q for 8 < Q <= 9
+
+.hi[Your turn:] find the efficient height and each group's Lindahl price
+
+]
+
+---
+
+# Flood protection: graphical
+
+.pull-left[
+```{r levee-optim, echo = FALSE, fig.show = 'hide', warning = F}
+pmc <- function(x) 2*x
+ggplot() +
+  annotate("text", x = 1.3, y = 27.5, label = "SMB", size = 8) +
+  annotate("text", x = 9.3, y = 21, label = "MC", size = 8) +
+  stat_function(fun = pmc, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 4, xend = 4, y = 0, yend = 13,
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
+  annotate("segment", x = 8, xend = 8, y = 0, yend = 1,
+           linetype = "dotted", size = 1, color = "#AAAAAA") +
+  annotate("segment", x = 0, xend = 4, y = 29, yend = 13,
+           linetype = "longdash", size = 1.5, color = "red") +
+  annotate("segment", x = 4, xend = 8, y = 13, yend = 1,
+           linetype = "longdash", size = 1.5, color = "red") +
+  annotate("segment", x = 8, xend = 9, y = 1, yend = 0,
+           linetype = "longdash", size = 1.5, color = "red") +
+  annotate("segment", x = 5, xend = 5, y = 0, yend = 10,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  annotate("segment", x = 0, xend = 5, y = 10, yend = 10,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(limits = c(0,10), breaks = 5, labels = "5", expand = c(0,0)) +
+  scale_y_continuous(limits = c(0,31), breaks = 10, labels = "10", expand = c(0,0)) +
+  labs(x = "Levee height",
+       y = "Marginal Benefit/Marginal Cost")
+
+```
+
+![optimal levee height](`r knitr::fig_chunk("levee-optim", "png")`)
+]
+
+.pull-right[
+
+Optimal height: MC crosses SMB on the middle segment
+
+2Q = 25 - 3Q $\Rightarrow$ Q = 5
+
+Lindahl prices at Q = 5:
+- Homeowners pay: 6
+- Businesses pay: 4
+- Hill residents: free
+
+The prices again sum to MC = 10
+
+]
