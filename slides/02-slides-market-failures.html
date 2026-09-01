@@ -49,42 +49,6 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## Warning: package 'tweetrmd' is not available for this version of R
-## 
-## A version of this package for your version of R might be available elsewhere,
-## see the ideas at
-## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
-```
-
-```
-## Warning: 'BiocManager' not available.  Could not check Bioconductor.
-## 
-## Please use `install.packages('BiocManager')` and then retry.
-```
-
-```
-## Warning in p_install(package, character.only = TRUE, ...):
-```
-
-```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
-```
-
-```
-## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
-## tweetrmd
-```
-
-``` r
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -960,6 +924,20 @@ The private actors are not accounting for the external benefits they confer on p
 
 ---
 
+# MMR coverage was near 95% before COVID
+
+
+
+![U.S. kindergarten two-dose MMR coverage, 2011–12 through 2025–26](02-slides-market-failures_files/figure-html/mmr-coverage-trend-1.png)
+
+&lt;!-- Sources:
+- CDC, Measles Cases and Outbreaks: https://www.cdc.gov/measles/data-research/index.html
+- CDC, SchoolVaxView: https://www.cdc.gov/schoolvaxview/data/index.html
+- CDC, MMWR kindergarten vaccination coverage reports, 2011–12 through 2023–24: https://www.cdc.gov/schoolvaxview/pubs-resources/index.html
+--&gt;
+
+---
+
 # Measles returned as vaccination rates fell
 
 On August 25, 2026, Pennsylvania confirmed:
@@ -1032,8 +1010,26 @@ This gives us a total endowment:
 
 # Why do externalities arise? Edgeworth Box
 
+Each person starts with an ordinary consumption diagram
+
+Rotate B's diagram 180 degrees and place it over A's so the endowment points coincide
+
+The result is a box with width `\(W_X\)` and height `\(W_Y\)`
+
 &lt;center&gt;
-&lt;img src="files/02-edgeworth1.png" alt="" width="80%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-panels-1.png" alt="" width="56%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+&lt;center&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-box-1.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1042,7 +1038,7 @@ This gives us a total endowment:
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth1.png" alt="" width="100%" /&gt;
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-box-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1053,7 +1049,7 @@ Total horizontal distance is `\(W_X\)`
 
 Initial endowment is given by the empty circle
 
-Initial indifference curves for A and B are `\(UA(0)\)` and `\(UB(0)\)`
+Initial indifference curves for A and B are `\(U_A(0)\)` and `\(U_B(0)\)`
 ]
 
 ---
@@ -1062,7 +1058,7 @@ Initial indifference curves for A and B are `\(UA(0)\)` and `\(UB(0)\)`
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth1.png" alt="" width="100%" /&gt;
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-box-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1078,12 +1074,18 @@ e.g. can we make both A and B better off?
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth1.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-lens-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
 .pull-right[
 Yes!
+
+The shaded lens is the set of Pareto improvements
+
+If we move anywhere in the lens of their initial indifference curves we have a Pareto improvement
 ]
 
 ---
@@ -1092,16 +1094,66 @@ Yes!
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth1.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-optimum-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
 .pull-right[
-Yes!
+Only a subset of the lens is Pareto efficient
 
-If we move anywhere in the lens of their initial indifference curves we have a Pareto improvement
+At these allocations no further Pareto improvement is possible
 
-If we move to an allocation where their indifference curves are .hi[tangent] to one another (e.g. the filled-in point), we have a Pareto optimum
+This is where the indifference curves are .hi[tangent] to one another, like the filled-in point
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+.pull-left[
+&lt;center&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-tangency2-1.png" alt="" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+Another tangency gives another Pareto-efficient allocation
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+.pull-left[
+&lt;center&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-tangency3-1.png" alt="" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+More tangencies trace out the Pareto-efficient subset of the lens
+]
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+.pull-left[
+&lt;center&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth1-paretoset-1.png" alt="" width="100%" /&gt;
+&lt;/center&gt;
+]
+
+.pull-right[
+This segment is the set of Pareto-efficient allocations reachable by voluntary trade from the endowment
 ]
 
 ---
@@ -1125,10 +1177,41 @@ In a properly functioning market:
 
 # Why do externalities arise? Edgeworth Box
 
+The contract curve collects every allocation where A's and B's indifference curves are tangent
+
+.hi[Every point on it is Pareto efficient]
+
 &lt;center&gt;
-&lt;img src="files/02-edgeworth2.png" alt="" width="50%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth2-curve-1.png" alt="" width="45%" /&gt;
 &lt;/center&gt;
 
+---
+
+# Why do externalities arise? Edgeworth Box
+
+Starting from `\(c\)`, voluntary trade reaches only the thick segment
+
+This is the achievable Pareto set for that endowment
+
+&lt;center&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth2-core1-1.png" alt="" width="45%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Why do externalities arise? Edgeworth Box
+
+A different initial allocation, `\(c'\)`, gives a different achievable Pareto set on the same contract curve
+
+&lt;center&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth2-core2-1.png" alt="" width="45%" /&gt;
+&lt;/center&gt;
 
 ---
 
@@ -1159,7 +1242,9 @@ Suppose both start off with the same quantity of X
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-endowments-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1180,7 +1265,7 @@ Think about why these are where we must start
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-endowments-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1196,7 +1281,9 @@ Suppose we start at W1, what happens?
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w1-conflict-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1214,7 +1301,9 @@ A wants to have more Y, but this imposes a cost on B
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w1-pay-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1234,7 +1323,9 @@ Therefore, A has to .hi[pay] B to get more Y
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w1-opt-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1257,7 +1348,9 @@ A pays B in units of X, move to Z1, Pareto optimum
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w2-start-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1273,7 +1366,9 @@ Suppose we start at W2, what happens?
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w2-conflict-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1290,7 +1385,9 @@ B wants to have less Y, but this imposes a cost on A
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w2-pay-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1311,7 +1408,9 @@ Therefore, B has to .hi[pay] A to get less Y
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/02-edgeworth3.png" alt="" width="100%" /&gt;
+
+
+&lt;img src="02-slides-market-failures_files/figure-html/edgeworth3-w2-opt-1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
