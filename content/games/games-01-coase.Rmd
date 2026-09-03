@@ -1,5 +1,5 @@
 ---
-title: "Coase Theorem Game"
+title: "Data Center Bargaining Game"
 linktitle: "Games 1: Coase"
 date: "`r format(Sys.time())`"
 menu:
@@ -12,57 +12,66 @@ output:
     toc: false
 ---
 
-## Getting started
+## The story
 
-This exercise teaches how property rights and transaction costs affect bargaining outcomes with externalities.
+A data center has moved in next door. Its diesel backup generators have to be
+tested, and every test hour is money to the operator and noise to the
+neighbor. One of you runs the data center (Player A), one of you lives next
+door (Player B). You will bargain in real time over generator hours and a
+payment, and who holds the property right changes by round.
 
 ## Online game links
 
-- Student login: [Coase Student Portal](/games/coase-online/student.html)
-- Admin login (instructor): [Coase Admin Dashboard](/games/coase-online/admin.html)
+- Student login: [Student Portal](/games/coase-online/student.html)
+- Admin login (instructor): [Admin Dashboard](/games/coase-online/admin.html)
 
 ## How we will play
 
-- Each student joins the Student Portal with a player name.
-- The instructor creates a live session and starts random pairing.
-- If the number of students is odd, one student is paired with an admin proxy.
-- Pairs bargain over emissions and transfers, then submit agreed outcomes in each round.
+- Join the Student Portal with a player name.
+- The instructor starts random pairing. You keep the same partner and role
+  for all three rounds. If the class size is odd, one student bargains with
+  an instructor proxy that accepts any offer.
+- Each round runs against a countdown. Bargain inside the app: put an offer
+  on the table, counter your partner's, accept, reject, or walk away.
+- If the clock runs out with no deal, the round ends at the status quo: the
+  rights holder picks their favorite hours and no payment changes hands.
 
 ## Payoff schedule
 
-Payoffs are in hundred thousand dollars per month and emissions are in hundred gallons per month.
+Payoffs are in hundred thousand dollars per month and generator hours are
+per week.
 
-| Emissions | Player A payoff | Player B payoff |
-|:---------:|:---------------:|:---------------:|
-| 0         | 0               | 12              |
-| 1         | 4               | 10              |
-| 2         | 6               | 6               |
-| 3         | 6               | 4               |
-| 4         | 9               | 2               |
-| 5         | 10              | 1               |
-| 6         | 11              | 0               |
+| Generator hours | Operator (A) payoff | Resident (B) payoff |
+|:---------------:|:-------------------:|:-------------------:|
+| 0               | 0                   | 12                  |
+| 1               | 4                   | 10                  |
+| 2               | 6                   | 6                   |
+| 3               | 6                   | 4                   |
+| 4               | 9                   | 2                   |
+| 5               | 10                  | 1                   |
+| 6               | 11                  | 0                   |
+
+An accepted deal pays the agreed payment from the noncontroller to the
+controller on top of these payoffs.
 
 ## Round 1
 
-- Controller: Player A.
-- Player B may offer a payment to Player A (noncontroller to controller).
-- Pair submits agreed emissions and payment.
+- The operator (A) holds the property right: no deal means 6 hours.
+- The resident can pay the operator to cut hours.
 
 ## Round 2
 
-- Controller: Player B.
-- Player A may offer a payment to Player B (noncontroller to controller).
-- Pair submits agreed emissions and payment.
+- The resident (B) holds the property right: no deal means 0 hours.
+- The operator can pay the resident to allow hours.
 
 ## Round 3
 
-- Controller: Player B.
-- Same bargaining as Round 2, but any positive transfer requires legal agreement costs of 5.
-- Pair must choose how much of the legal cost is paid by Player A (0 to 5), with the rest paid by Player B.
-- Pair submits agreed emissions, payment, and legal-cost split.
+- Same rights as Round 2, but any accepted deal with a positive payment
+  triggers legal drafting costs of 5, split between A and B as part of the
+  offer. Think hard about whether a deal is still worth it.
 
-## Notes for students
+## Tips
 
-- Keep your student page open; it updates as the instructor changes phases.
-- For regular pairs, both players must submit matching values for a round to resolve.
-- For admin-proxy pairs, only the student submission is required.
+- The offer preview shows both payoffs before you commit; use it.
+- Your total across all three rounds goes on the class leaderboard.
+- Walking away is final for the round, and the confirm button means it.

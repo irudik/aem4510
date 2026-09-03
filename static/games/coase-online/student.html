@@ -3,54 +3,73 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Student Portal | Coase Game</title>
+    <title>Student Portal | Data Center Bargaining Game</title>
     <link rel="stylesheet" href="/games/coase-online/app.css" />
   </head>
   <body>
     <main>
-      <section class="card">
+      <section class="card hero-card">
         <div class="row" style="justify-content: space-between">
-          <h1>Student Portal</h1>
+          <h1>Data Center Bargaining</h1>
           <a href="/games/coase-online/index.html">Home</a>
         </div>
-        <p>Enter your player name to join and submit Coase round agreements with your matched partner.</p>
+        <p>
+          A data center's diesel backup generators are the loudest thing on the block. One of you runs
+          the data center, one of you lives next door. Bargain over generator hours and payments before
+          the clock runs out.
+        </p>
       </section>
 
       <section id="join-card" class="card">
-        <h2>Join Player</h2>
+        <h2>Join Game</h2>
         <div class="grid">
           <div>
             <label for="player-name">Player Name</label>
-            <input id="player-name" type="text" autocomplete="off" placeholder="e.g., Alex" />
+            <input id="player-name" type="text" maxlength="40" autocomplete="off" placeholder="e.g., Alex" />
           </div>
           <div class="row" style="align-items: end">
             <button id="join-btn" class="primary" type="button">Join / Rejoin</button>
-            <button id="reset-token-btn" class="secondary" type="button">Forget Join Token</button>
+            <button id="reset-token-btn" class="secondary" type="button">Switch Player</button>
           </div>
         </div>
         <div id="join-status" class="status hidden"></div>
       </section>
 
       <section id="player-card" class="card hidden">
-        <h2>Player Assignment</h2>
+        <h2>Your Assignment</h2>
         <dl class="kv" id="player-kv"></dl>
       </section>
 
-      <section id="stage-card" class="card hidden">
-        <h2>Current Stage</h2>
+      <section id="stage-card" class="card stage-card hidden">
+        <div class="row" style="justify-content: space-between; align-items: baseline">
+          <h2>Bargaining Table</h2>
+          <div id="round-timer" class="round-timer hidden"></div>
+        </div>
         <p>Phase: <span id="phase-label" class="phase">-</span></p>
+        <ol class="phase-steps" aria-label="Bargaining steps">
+          <li>Review who holds the right and the highlighted status quo.</li>
+          <li>Compare payoffs, then send an offer or respond to your partner.</li>
+          <li>Reach a deal before time expires—or keep the status quo.</li>
+        </ol>
         <div id="round-context" class="table-wrap"></div>
         <div id="stage-status" class="status hidden"></div>
-        <div id="stage-form-container"></div>
+        <div id="pending-offer-container"></div>
+        <div id="offer-composer-container"></div>
+        <div id="offer-feed-container"></div>
       </section>
 
       <section id="current-outcome-card" class="card hidden">
-        <h2>Current Round Outcome</h2>
+        <h2>This Round's Result</h2>
         <div id="current-outcome-table" class="table-wrap"></div>
       </section>
 
+      <section id="leaderboard-card" class="card hidden">
+        <h2>Leaderboard</h2>
+        <div id="leaderboard-table" class="table-wrap"></div>
+      </section>
+
       <section id="history-card" class="card hidden">
-        <h2>Round History</h2>
+        <h2>Your Round History</h2>
         <div id="history-table" class="table-wrap"></div>
       </section>
     </main>

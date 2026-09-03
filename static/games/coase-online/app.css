@@ -22,6 +22,7 @@ body {
   background: linear-gradient(180deg, #f7f9fd 0%, #edf2fa 100%);
   color: var(--ink);
   font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  min-height: 100vh;
 }
 
 main {
@@ -38,7 +39,9 @@ h3 {
 }
 
 h1 {
-  font-size: 1.7rem;
+  color: #123d8f;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  letter-spacing: -0.025em;
 }
 
 h2 {
@@ -60,7 +63,23 @@ a {
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 3px 14px rgba(16, 44, 84, 0.06);
+  box-shadow: 0 5px 18px rgba(16, 44, 84, 0.08);
+}
+
+.hero-card {
+  border-top: 5px solid var(--accent);
+  background: linear-gradient(135deg, #ffffff 0%, #f2f6ff 100%);
+}
+
+.hero-card p {
+  color: #38506f;
+  font-size: 1.02rem;
+  max-width: 78ch;
+}
+
+.stage-card {
+  border-color: #b9ccee;
+  box-shadow: 0 8px 24px rgba(13, 91, 215, 0.1);
 }
 
 .split-grid {
@@ -111,6 +130,15 @@ textarea {
   background: #fff;
 }
 
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(13, 91, 215, 0.28);
+  outline-offset: 2px;
+}
+
 /* Hide default spinner controls on numeric inputs for cleaner classroom entry fields. */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -134,6 +162,15 @@ button {
 button.primary {
   background: var(--accent);
   color: #fff;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #0949ad;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 button.secondary {
@@ -231,6 +268,93 @@ tr.leaderboard-you td {
   font-weight: 700;
 }
 
+.round-timer {
+  font-weight: 800;
+  font-size: 1.15rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #123d8f;
+}
+
+.round-timer.closing {
+  background: #fff5e6;
+  color: var(--warn);
+}
+
+.round-timer.expired {
+  background: #ffecee;
+  color: var(--bad);
+}
+
+.offer-banner {
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  margin: 0.6rem 0;
+  background: #f9fbff;
+}
+
+.offer-banner.partner {
+  border-left-color: var(--good);
+  background: #f4fbf5;
+}
+
+.offer-banner-payoffs {
+  margin-top: 0.35rem;
+}
+
+.offer-preview-box {
+  border: 1px dashed #b8c7da;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  background: #fafcff;
+  min-height: 2.2rem;
+}
+
+.offer-feed {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.offer-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.45rem 0.6rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.92rem;
+  background: #fff;
+}
+
+.offer-item.own {
+  border-left: 4px solid var(--accent);
+}
+
+.offer-item.partner {
+  border-left: 4px solid var(--good);
+}
+
+.offer-item.rejected,
+.offer-item.superseded {
+  opacity: 0.6;
+}
+
+.offer-item.accepted {
+  background: #e8f7eb;
+}
+
+.offer-who {
+  font-weight: 700;
+}
+
+tr.status-quo-row td {
+  background: #fff5e6;
+}
+
 .called-price-callout {
   margin: 0.35rem 0 0.2rem;
   font-size: 2rem;
@@ -243,6 +367,43 @@ tr.leaderboard-you td {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.phase-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.65rem 0 1rem;
+  padding: 0;
+  counter-reset: phase-step;
+  list-style: none;
+}
+
+.phase-steps li {
+  position: relative;
+  min-height: 4.4rem;
+  padding: 0.7rem 0.7rem 0.7rem 2.65rem;
+  border: 1px solid #cad8f6;
+  border-radius: 10px;
+  background: #f7faff;
+  font-size: 0.9rem;
+}
+
+.phase-steps li::before {
+  counter-increment: phase-step;
+  content: counter(phase-step);
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
 small.note {
@@ -268,6 +429,14 @@ small.note {
 
   .called-price-callout {
     font-size: 1.5rem;
+  }
+
+  .phase-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .phase-steps li {
+    min-height: auto;
   }
 
   button {

@@ -13,6 +13,9 @@ export default async function coasePlayerJoin(req) {
     if (!playerName) {
       return jsonResponse(400, { error: "player_name is required" });
     }
+    if (playerName.length > 40) {
+      return jsonResponse(400, { error: "player_name must be at most 40 characters" });
+    }
 
     const session = await getActiveSession();
     if (!session) {

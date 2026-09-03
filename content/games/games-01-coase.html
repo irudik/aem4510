@@ -1,34 +1,57 @@
+---
+title: "Data Center Bargaining Game"
+linktitle: "Games 1: Coase"
+date: "2026-09-01 16:40:03"
+menu:
+  content:
+    parent: Games
+    weight: 1
+type: docs
+output:
+  blogdown::html_page:
+    toc: false
+---
 
 
-<div id="getting-started" class="section level2">
-<h2>Getting started</h2>
-<p>This exercise teaches how property rights and transaction costs affect bargaining outcomes with externalities.</p>
+
+<div id="the-story" class="section level2">
+<h2>The story</h2>
+<p>A data center has moved in next door. Its diesel backup generators have to be
+tested, and every test hour is money to the operator and noise to the
+neighbor. One of you runs the data center (Player A), one of you lives next
+door (Player B). You will bargain in real time over generator hours and a
+payment, and who holds the property right changes by round.</p>
 </div>
 <div id="online-game-links" class="section level2">
 <h2>Online game links</h2>
 <ul>
-<li>Student login: <a href="/games/coase-online/student.html">Coase Student Portal</a></li>
-<li>Admin login (instructor): <a href="/games/coase-online/admin.html">Coase Admin Dashboard</a></li>
+<li>Student login: <a href="/games/coase-online/student.html">Student Portal</a></li>
+<li>Admin login (instructor): <a href="/games/coase-online/admin.html">Admin Dashboard</a></li>
 </ul>
 </div>
 <div id="how-we-will-play" class="section level2">
 <h2>How we will play</h2>
 <ul>
-<li>Each student joins the Student Portal with a player name.</li>
-<li>The instructor creates a live session and starts random pairing.</li>
-<li>If the number of students is odd, one student is paired with an admin proxy.</li>
-<li>Pairs bargain over emissions and transfers, then submit agreed outcomes in each round.</li>
+<li>Join the Student Portal with a player name.</li>
+<li>The instructor starts random pairing. You keep the same partner and role
+for all three rounds. If the class size is odd, one student bargains with
+an instructor proxy that accepts any offer.</li>
+<li>Each round runs against a countdown. Bargain inside the app: put an offer
+on the table, counter your partner’s, accept, reject, or walk away.</li>
+<li>If the clock runs out with no deal, the round ends at the status quo: the
+rights holder picks their favorite hours and no payment changes hands.</li>
 </ul>
 </div>
 <div id="payoff-schedule" class="section level2">
 <h2>Payoff schedule</h2>
-<p>Payoffs are in hundred thousand dollars per month and emissions are in hundred gallons per month.</p>
+<p>Payoffs are in hundred thousand dollars per month and generator hours are
+per week.</p>
 <table>
 <thead>
 <tr class="header">
-<th align="center">Emissions</th>
-<th align="center">Player A payoff</th>
-<th align="center">Player B payoff</th>
+<th align="center">Generator hours</th>
+<th align="center">Operator (A) payoff</th>
+<th align="center">Resident (B) payoff</th>
 </tr>
 </thead>
 <tbody>
@@ -69,37 +92,36 @@
 </tr>
 </tbody>
 </table>
+<p>An accepted deal pays the agreed payment from the noncontroller to the
+controller on top of these payoffs.</p>
 </div>
 <div id="round-1" class="section level2">
 <h2>Round 1</h2>
 <ul>
-<li>Controller: Player A.</li>
-<li>Player B may offer a payment to Player A (noncontroller to controller).</li>
-<li>Pair submits agreed emissions and payment.</li>
+<li>The operator (A) holds the property right: no deal means 6 hours.</li>
+<li>The resident can pay the operator to cut hours.</li>
 </ul>
 </div>
 <div id="round-2" class="section level2">
 <h2>Round 2</h2>
 <ul>
-<li>Controller: Player B.</li>
-<li>Player A may offer a payment to Player B (noncontroller to controller).</li>
-<li>Pair submits agreed emissions and payment.</li>
+<li>The resident (B) holds the property right: no deal means 0 hours.</li>
+<li>The operator can pay the resident to allow hours.</li>
 </ul>
 </div>
 <div id="round-3" class="section level2">
 <h2>Round 3</h2>
 <ul>
-<li>Controller: Player B.</li>
-<li>Same bargaining as Round 2, but any positive transfer requires legal agreement costs of 5.</li>
-<li>Pair must choose how much of the legal cost is paid by Player A (0 to 5), with the rest paid by Player B.</li>
-<li>Pair submits agreed emissions, payment, and legal-cost split.</li>
+<li>Same rights as Round 2, but any accepted deal with a positive payment
+triggers legal drafting costs of 5, split between A and B as part of the
+offer. Think hard about whether a deal is still worth it.</li>
 </ul>
 </div>
-<div id="notes-for-students" class="section level2">
-<h2>Notes for students</h2>
+<div id="tips" class="section level2">
+<h2>Tips</h2>
 <ul>
-<li>Keep your student page open; it updates as the instructor changes phases.</li>
-<li>For regular pairs, both players must submit matching values for a round to resolve.</li>
-<li>For admin-proxy pairs, only the student submission is required.</li>
+<li>The offer preview shows both payoffs before you commit; use it.</li>
+<li>Your total across all three rounds goes on the class leaderboard.</li>
+<li>Walking away is final for the round, and the confirm button means it.</li>
 </ul>
 </div>

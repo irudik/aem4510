@@ -13,8 +13,14 @@ const ROUND_LABELS = {
   complete: "Complete",
 };
 
+const ROLE_NAMES = {
+  A: "Data center operator",
+  B: "Resident next door",
+};
+
 const JOIN_TOKEN_KEY = "coase_game_join_token";
 const DRAFT_KEY_PREFIX = "coase_game_round_draft_";
+const POLL_INTERVAL_MS = 3000;
 
 const joinStatus = document.getElementById("join-status");
 const joinButton = document.getElementById("join-btn");
@@ -25,16 +31,33 @@ const playerCard = document.getElementById("player-card");
 const playerKv = document.getElementById("player-kv");
 const stageCard = document.getElementById("stage-card");
 const phaseLabelElement = document.getElementById("phase-label");
+const roundTimerElement = document.getElementById("round-timer");
 const roundContextElement = document.getElementById("round-context");
 const stageStatus = document.getElementById("stage-status");
-const stageFormContainer = document.getElementById("stage-form-container");
+const pendingOfferContainer = document.getElementById("pending-offer-container");
+const offerComposerContainer = document.getElementById("offer-composer-container");
+const offerFeedContainer = document.getElementById("offer-feed-container");
 const currentOutcomeCard = document.getElementById("current-outcome-card");
 const currentOutcomeTable = document.getElementById("current-outcome-table");
+const leaderboardCard = document.getElementById("leaderboard-card");
+const leaderboardTable = document.getElementById("leaderboard-table");
 const historyCard = document.getElementById("history-card");
 const historyTable = document.getElementById("history-table");
 
 /** @type {number | null} */
 let refreshTimer = null;
+/** @type {number | null} */
+let countdownTimer = null;
+/** Milliseconds to add to local clock to approximate server time. */
+let serverClockOffsetMs = 0;
+/** Deadline for the current round in server time, or null. */
+let deadlineMs = null;
+/** Signature of the last rendered bargaining panel, to keep inputs stable. */
+let renderedPanelSignature = null;
+/** Latest state payload, reused by the composer's live payoff preview. */
+let latestState = null;
+/** Two-step confirmation flag for walking away. */
+let walkAwayArmed = false;
 
 function roundLabel(phase) {
   return ROUND_LABELS[String(phase ?? "")] ?? String(phase ?? "unknown");
@@ -128,43 +151,6 @@ function setPhaseDraftField(session, fieldName, fieldValue) {
   writeDraftStore(joinToken, draftStore);
 }
 
-function clearPhaseDraft(session) {
-  const joinToken = getJoinToken();
-  if (!joinToken) {
-    return;
-  }
-
-  const draftKey = phaseDraftKey(session);
-  const draftStore = readDraftStore(joinToken);
-  if (!(draftKey in draftStore)) {
-    return;
-  }
-
-  delete draftStore[draftKey];
-  writeDraftStore(joinToken, draftStore);
-}
-
-function bindDraftInput(session, inputId, fieldName) {
-  const input = document.getElementById(inputId);
-  input?.addEventListener("input", () => {
-    setPhaseDraftField(session, fieldName, input.value);
-  });
-}
-
-function bindEnterToSubmit(formId) {
-  const form = document.getElementById(formId);
-  form?.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" || event.shiftKey) {
-      return;
-    }
-    if (event.target instanceof HTMLTextAreaElement) {
-      return;
-    }
-    event.preventDefault();
-    form.requestSubmit();
-  });
-}
-
 function formatColumnLabel(columnName) {
   const acronymTokens = new Set(["id"]);
   const spacedText = String(columnName)
@@ -188,11 +174,12 @@ function formatColumnLabel(columnName) {
     .join(" ");
 }
 
-function tableHtml(rows) {
+function tableHtml(rows, options = {}) {
   if (!rows || rows.length === 0) {
     return "<p><small class=\"note\">No rows yet.</small></p>";
   }
 
+  const rowClassFor = options.rowClassFor ?? (() => "");
   const columns = Object.keys(rows[0]);
   const header = columns.map((column) => `<th>${formatColumnLabel(column)}</th>`).join("");
   const body = rows
@@ -200,7 +187,8 @@ function tableHtml(rows) {
       const cells = columns
         .map((column) => `<td>${row[column] == null ? "" : String(row[column])}</td>`)
         .join("");
-      return `<tr>${cells}</tr>`;
+      const rowClass = rowClassFor(row);
+      return rowClass ? `<tr class="${rowClass}">${cells}</tr>` : `<tr>${cells}</tr>`;
     })
     .join("");
 
@@ -213,13 +201,116 @@ function tableHtml(rows) {
 }
 
 function roleDescription(role) {
-  if (role === "A") {
-    return "A (chemical plant)";
-  }
-  if (role === "B") {
-    return "B (water sports)";
+  if (role === "A" || role === "B") {
+    return `${role} (${ROLE_NAMES[role].toLowerCase()})`;
   }
   return "Not assigned";
+}
+
+function controllerRoleForPhase(state) {
+  return state?.round_context?.controller_role ?? null;
+}
+
+function paymentDirectionText(state) {
+  const controller = controllerRoleForPhase(state);
+  if (controller === "A") {
+    return "resident pays operator";
+  }
+  if (controller === "B") {
+    return "operator pays resident";
+  }
+  return "";
+}
+
+/**
+ * Mirror of the server payoff engine so offers can be previewed live.
+ */
+function previewPayoffs(state, emissions, payment, legalFeePaidByA) {
+  const schedule = state?.round_context?.payoff_schedule ?? {};
+  const base = schedule[emissions];
+  const roundKey = String(state?.session?.current_phase ?? "");
+  const controller = controllerRoleForPhase(state);
+
+  if (!base || !controller || !Number.isFinite(payment) || payment < 0) {
+    return null;
+  }
+
+  let feeA = 0;
+  let feeB = 0;
+  if (roundKey === "round3" && payment > 0) {
+    const fee = Number(legalFeePaidByA ?? 0);
+    if (!Number.isFinite(fee) || fee < 0 || fee > 5) {
+      return null;
+    }
+    feeA = fee;
+    feeB = 5 - fee;
+  }
+
+  const transferToA = controller === "A" ? payment : -payment;
+
+  return {
+    payoff_a: Number(base.player_a) + transferToA - feeA,
+    payoff_b: Number(base.player_b) - transferToA - feeB,
+    legal_fee_paid_by_a: feeA,
+    legal_fee_paid_by_b: feeB,
+  };
+}
+
+function payoffsForRole(payoffs, role) {
+  if (!payoffs || (role !== "A" && role !== "B")) {
+    return { own: null, partner: null };
+  }
+  return role === "A"
+    ? { own: payoffs.payoff_a, partner: payoffs.payoff_b }
+    : { own: payoffs.payoff_b, partner: payoffs.payoff_a };
+}
+
+function deadlineExpired() {
+  return deadlineMs !== null && (Date.now() + serverClockOffsetMs) > deadlineMs;
+}
+
+function updateCountdownDisplay() {
+  if (deadlineMs === null) {
+    roundTimerElement.classList.add("hidden");
+    return;
+  }
+
+  roundTimerElement.classList.remove("hidden");
+  const remainingMs = deadlineMs - (Date.now() + serverClockOffsetMs);
+
+  if (remainingMs <= 0) {
+    roundTimerElement.textContent = "Time is up";
+    roundTimerElement.classList.add("expired");
+    // Lock the bargaining panel the moment the clock hits zero.
+    if (renderedPanelSignature !== null && !renderedPanelSignature.endsWith("|expired")) {
+      renderBargainingPanel(latestState, { force: true });
+    }
+    return;
+  }
+
+  roundTimerElement.classList.remove("expired");
+  const totalSeconds = Math.floor(remainingMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  roundTimerElement.textContent = `${minutes}:${String(seconds).padStart(2, "0")} left`;
+  roundTimerElement.classList.toggle("closing", totalSeconds < 60);
+}
+
+function syncCountdown(state) {
+  const serverNow = Date.parse(String(state?.server_now ?? ""));
+  if (Number.isFinite(serverNow)) {
+    serverClockOffsetMs = serverNow - Date.now();
+  }
+
+  const deadlineRaw = state?.session?.phase_deadline_at;
+  const parsedDeadline = deadlineRaw ? Date.parse(String(deadlineRaw)) : NaN;
+  deadlineMs = Number.isFinite(parsedDeadline) ? parsedDeadline : null;
+
+  updateCountdownDisplay();
+
+  if (!countdownTimer) {
+    countdownTimer = window.setInterval(updateCountdownDisplay, 1000);
+  }
 }
 
 function renderPlayerCard(session, player, pair) {
@@ -227,7 +318,7 @@ function renderPlayerCard(session, player, pair) {
   stageCard.classList.remove("hidden");
 
   const partnerText = pair
-    ? (pair.partner_is_admin_proxy ? `${pair.partner_name} (Admin)` : pair.partner_name)
+    ? (pair.partner_is_admin_proxy ? `${pair.partner_name} (Instructor)` : pair.partner_name)
     : "Waiting for pairing";
 
   const entries = [
@@ -249,66 +340,350 @@ function renderPlayerCard(session, player, pair) {
   }
 }
 
-function renderRoundContext(roundContext) {
+function renderRoundContext(state) {
+  const roundContext = state?.round_context;
   if (!roundContext) {
     roundContextElement.innerHTML = "<p><small class=\"note\">No active round. Wait for the instructor.</small></p>";
     return;
   }
 
+  const role = state?.pair?.role ?? null;
+  const statusQuo = Number(roundContext.status_quo_emissions);
+
   const payoffRows = Object.entries(roundContext.payoff_schedule ?? {})
     .map(([emissions, payoff]) => ({
-      emissions: Number(emissions),
-      player_a_payoff: formatNumber(payoff.player_a, 0),
-      player_b_payoff: formatNumber(payoff.player_b, 0),
+      generator_hours: Number(emissions),
+      operator_a_payoff: formatNumber(payoff.player_a, 0),
+      resident_b_payoff: formatNumber(payoff.player_b, 0),
     }))
-    .sort((left, right) => left.emissions - right.emissions);
+    .sort((left, right) => left.generator_hours - right.generator_hours);
+
+  const roleReminder = role
+    ? `<p><small class="note">You are Player ${role}: the ${ROLE_NAMES[role].toLowerCase()}.</small></p>`
+    : "";
 
   roundContextElement.innerHTML = `
-    <p><small class="note">Controller in ${roundLabel(roundContext.round_key)}: Player ${roundContext.controller_role}</small></p>
-    ${tableHtml(payoffRows)}
-    <p><small class="note">${roundContext.legal_cost_note}</small></p>
+    ${roleReminder}
+    <p><small class="note">${roundContext.rights_note} Payments run ${paymentDirectionText(state)}.</small></p>
+    ${tableHtml(payoffRows, {
+      rowClassFor: (row) => (Number(row.generator_hours) === statusQuo ? "status-quo-row" : ""),
+    })}
+    <p><small class="note">Highlighted row: the status quo if you never reach a deal. ${roundContext.legal_cost_note}</small></p>
   `;
 }
 
-function submissionStatusBlock(pair, ownSubmission, partnerSubmission) {
-  const partnerRequired = pair && !pair.partner_is_admin_proxy;
-  const ownSubmitted = Boolean(ownSubmission);
-  const partnerSubmitted = Boolean(partnerSubmission);
+function offerTermsText(state, offer) {
+  const hours = Number(offer.offered_emissions);
+  const payment = Number(offer.offered_payment_noncontroller_to_controller);
+  const parts = [
+    `${hours} generator ${hours === 1 ? "hour" : "hours"}`,
+    `payment ${formatNumber(payment, 2)} (${paymentDirectionText(state)})`,
+  ];
 
-  const rows = [{
-    own_submitted: ownSubmitted ? "Yes" : "No",
-    partner_submitted: partnerRequired ? (partnerSubmitted ? "Yes" : "No") : "Not required",
-    own_updated_at: ownSubmission?.updated_at ?? "",
-    partner_updated_at: partnerSubmission?.updated_at ?? "",
-  }];
+  if (String(state?.session?.current_phase) === "round3" && payment > 0) {
+    parts.push(`legal fee split A/B: ${formatNumber(offer.offered_legal_fee_paid_by_a, 1)} / ${formatNumber(5 - Number(offer.offered_legal_fee_paid_by_a), 1)}`);
+  }
 
-  const note = pair?.partner_is_admin_proxy
-    ? "Your partner is the instructor proxy. Only your submission is required to resolve this round."
-    : "Both paired players must submit the same values to resolve this round.";
+  return parts.join(", ");
+}
 
-  return `
-    ${tableHtml(rows)}
-    <p><small class="note">${note}</small></p>
+async function postAction(url, payload, pendingMessage) {
+  clearStatus(stageStatus);
+  if (pendingMessage) {
+    setStatus(stageStatus, "warn", pendingMessage);
+  }
+
+  try {
+    const response = await apiJson(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    clearStatus(stageStatus);
+    await refreshState();
+    return response;
+  } catch (error) {
+    setStatus(stageStatus, "bad", error.message);
+    await refreshState();
+    return null;
+  }
+}
+
+async function sendOffer(state) {
+  const hours = Number(document.getElementById("offer-hours")?.value);
+  const payment = Number(document.getElementById("offer-payment")?.value);
+  const legalFeeInput = document.getElementById("offer-legal-fee-a");
+  const legalFee = legalFeeInput ? Number(legalFeeInput.value || 0) : 0;
+
+  if (!Number.isInteger(hours) || hours < 0 || hours > 6) {
+    setStatus(stageStatus, "warn", "Pick generator hours between 0 and 6.");
+    return;
+  }
+  if (!Number.isFinite(payment) || payment < 0) {
+    setStatus(stageStatus, "warn", "Payment must be a nonnegative number.");
+    return;
+  }
+
+  const response = await postAction("/api/coase/player/offer", {
+    join_token: getJoinToken(),
+    offered_emissions: hours,
+    offered_payment_noncontroller_to_controller: payment,
+    offered_legal_fee_paid_by_a: legalFee,
+  });
+
+  if (response) {
+    const message = response.auto_accepted_by_proxy
+      ? "The instructor accepted your offer. Round settled."
+      : "Offer sent. Your partner sees it now.";
+    setStatus(stageStatus, "good", message);
+  }
+}
+
+async function respondToOffer(action) {
+  const response = await postAction("/api/coase/player/respond", {
+    join_token: getJoinToken(),
+    action,
+  });
+
+  if (response) {
+    if (action === "accept") {
+      setStatus(stageStatus, "good", "Deal! The round is settled.");
+    } else if (action === "reject") {
+      setStatus(stageStatus, "warn", "Offer rejected. Either side can make a new offer.");
+    } else {
+      setStatus(stageStatus, "warn", "You walked away. Status quo payoffs apply this round.");
+    }
+  }
+}
+
+function bindComposerPreview(state) {
+  const hoursInput = document.getElementById("offer-hours");
+  const paymentInput = document.getElementById("offer-payment");
+  const legalFeeInput = document.getElementById("offer-legal-fee-a");
+  const previewElement = document.getElementById("offer-preview");
+
+  if (!previewElement) {
+    return;
+  }
+
+  const role = state?.pair?.role ?? null;
+
+  const updatePreview = () => {
+    const hours = Number(hoursInput?.value);
+    const payment = Number(paymentInput?.value);
+    const legalFee = legalFeeInput ? Number(legalFeeInput.value || 0) : 0;
+
+    if (!Number.isInteger(hours) || hours < 0 || hours > 6 || !Number.isFinite(payment)) {
+      previewElement.innerHTML = "<small class=\"note\">Set hours and payment to preview payoffs.</small>";
+      return;
+    }
+
+    const payoffs = previewPayoffs(state, hours, payment, legalFee);
+    if (!payoffs) {
+      previewElement.innerHTML = "<small class=\"note\">Set hours and payment to preview payoffs.</small>";
+      return;
+    }
+
+    const { own, partner } = payoffsForRole(payoffs, role);
+    previewElement.innerHTML = `
+      <span class="badge">If accepted</span>
+      <strong>You: ${formatNumber(own, 2)}</strong> &middot; Partner: ${formatNumber(partner, 2)}
+    `;
+  };
+
+  for (const input of [hoursInput, paymentInput, legalFeeInput]) {
+    input?.addEventListener("input", () => {
+      updatePreview();
+      if (input === hoursInput) {
+        setPhaseDraftField(state.session, "offer_hours", hoursInput.value);
+      } else if (input === paymentInput) {
+        setPhaseDraftField(state.session, "offer_payment", paymentInput.value);
+      } else if (legalFeeInput && input === legalFeeInput) {
+        setPhaseDraftField(state.session, "offer_legal_fee_a", legalFeeInput.value);
+      }
+    });
+  }
+
+  updatePreview();
+}
+
+function renderPendingOffer(state) {
+  const pendingOffer = state?.pending_offer;
+  const expired = deadlineExpired();
+
+  if (!pendingOffer || state?.current_outcome) {
+    pendingOfferContainer.innerHTML = "";
+    return;
+  }
+
+  if (pendingOffer.proposer_is_self) {
+    pendingOfferContainer.innerHTML = `
+      <div class="offer-banner own">
+        <strong>Your offer is on the table:</strong> ${offerTermsText(state, pendingOffer)}.
+        <small class="note">Waiting for your partner. Sending a new offer replaces this one.</small>
+      </div>
+    `;
+    return;
+  }
+
+  const payoffs = previewPayoffs(
+    state,
+    Number(pendingOffer.offered_emissions),
+    Number(pendingOffer.offered_payment_noncontroller_to_controller),
+    Number(pendingOffer.offered_legal_fee_paid_by_a ?? 0),
+  );
+  const { own, partner } = payoffsForRole(payoffs, state?.pair?.role ?? null);
+
+  pendingOfferContainer.innerHTML = `
+    <div class="offer-banner partner">
+      <strong>Offer from your partner:</strong> ${offerTermsText(state, pendingOffer)}.
+      <div class="offer-banner-payoffs">If you accept &rarr; You: <strong>${formatNumber(own, 2)}</strong> &middot; Partner: ${formatNumber(partner, 2)}</div>
+      <div class="row" style="margin-top: 0.5rem">
+        <button id="accept-offer-btn" class="primary" type="button" ${expired ? "disabled" : ""}>Accept Deal</button>
+        <button id="reject-offer-btn" class="secondary" type="button" ${expired ? "disabled" : ""}>Reject</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("accept-offer-btn")?.addEventListener("click", () => respondToOffer("accept"));
+  document.getElementById("reject-offer-btn")?.addEventListener("click", () => respondToOffer("reject"));
+}
+
+function renderComposer(state) {
+  walkAwayArmed = false;
+  const session = state.session;
+  const phase = String(session.current_phase ?? "");
+  const expired = deadlineExpired();
+  const draft = getPhaseDraft(session);
+  const partnerOffer = state?.pending_offer && !state.pending_offer.proposer_is_self
+    ? state.pending_offer
+    : null;
+
+  // Counteroffers start from the partner's terms so haggling moves in steps.
+  const defaultHours = draft.offer_hours
+    ?? (partnerOffer ? String(partnerOffer.offered_emissions) : "");
+  const defaultPayment = draft.offer_payment
+    ?? (partnerOffer ? String(partnerOffer.offered_payment_noncontroller_to_controller) : "");
+  const defaultLegalFee = draft.offer_legal_fee_a
+    ?? (partnerOffer ? String(partnerOffer.offered_legal_fee_paid_by_a ?? 0) : "0");
+
+  const legalFeeBlock = phase === "round3"
+    ? `
+      <div>
+        <label for="offer-legal-fee-a">Legal Fee Paid by A (0 to 5)</label>
+        <input id="offer-legal-fee-a" type="number" min="0" max="5" step="0.5" inputmode="decimal" value="${defaultLegalFee}" />
+        <small class="note">Only charged if the payment is positive; B pays the rest of the 5.</small>
+      </div>
+    `
+    : "";
+
+  offerComposerContainer.innerHTML = `
+    <h3>${partnerOffer ? "Counteroffer" : "Make an Offer"}</h3>
+    <form id="offer-form" class="grid">
+      <div>
+        <label for="offer-hours">Generator Hours (0 to 6)</label>
+        <input id="offer-hours" type="number" min="0" max="6" step="1" inputmode="numeric" value="${defaultHours}" />
+      </div>
+      <div>
+        <label for="offer-payment">Payment (${paymentDirectionText(state)})</label>
+        <input id="offer-payment" type="number" min="0" step="0.5" inputmode="decimal" value="${defaultPayment}" />
+      </div>
+      ${legalFeeBlock}
+      <div class="offer-preview-box" style="grid-column: 1/-1">
+        <div id="offer-preview"></div>
+      </div>
+      <div class="row" style="grid-column: 1/-1; margin-top: 0.4rem">
+        <button id="send-offer-btn" class="primary" type="submit" ${expired ? "disabled" : ""}>
+          ${partnerOffer ? "Send Counteroffer" : "Send Offer"}
+        </button>
+        <button id="walk-away-btn" class="danger" type="button" ${expired ? "disabled" : ""}>Walk Away (No Deal)</button>
+      </div>
+    </form>
+    ${expired ? "<p><small class=\"note\">Time is up. If you have no deal, status quo payoffs lock in when the instructor closes the round.</small></p>" : ""}
+  `;
+
+  document.getElementById("offer-form")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!deadlineExpired()) {
+      sendOffer(state);
+    }
+  });
+
+  const walkAwayButton = document.getElementById("walk-away-btn");
+  walkAwayButton?.addEventListener("click", () => {
+    if (deadlineExpired()) {
+      return;
+    }
+    if (!walkAwayArmed) {
+      walkAwayArmed = true;
+      walkAwayButton.textContent = "Confirm: lock in NO DEAL for this round";
+      window.setTimeout(() => {
+        walkAwayArmed = false;
+        if (document.getElementById("walk-away-btn") === walkAwayButton) {
+          walkAwayButton.textContent = "Walk Away (No Deal)";
+        }
+      }, 5000);
+      return;
+    }
+    walkAwayArmed = false;
+    respondToOffer("walk_away");
+  });
+
+  bindComposerPreview(state);
+}
+
+function renderOfferFeed(state) {
+  const offers = state?.offers ?? [];
+  if (offers.length === 0) {
+    offerFeedContainer.innerHTML = "";
+    return;
+  }
+
+  const items = [...offers]
+    .sort((left, right) => Number(right.offer_index) - Number(left.offer_index))
+    .map((offer) => {
+      const who = offer.proposer_is_self ? "You" : (offer.proposer_name || "Partner");
+      const statusLabel = {
+        pending: "on the table",
+        accepted: "accepted",
+        rejected: "rejected",
+        superseded: "replaced",
+      }[String(offer.status)] ?? String(offer.status);
+
+      return `
+        <li class="offer-item ${offer.proposer_is_self ? "own" : "partner"} ${offer.status}">
+          <span class="offer-who">${who}:</span>
+          ${offerTermsText(state, offer)}
+          <span class="badge">${statusLabel}</span>
+        </li>
+      `;
+    })
+    .join("");
+
+  offerFeedContainer.innerHTML = `
+    <h3>Offer History</h3>
+    <ul class="offer-feed">${items}</ul>
   `;
 }
 
-function submissionOutcomeRows(outcome) {
+function outcomeRows(state, outcome) {
   if (!outcome) {
     return [];
   }
 
   return [{
     round: roundLabel(outcome.round_key),
-    agreed_emissions: outcome.agreed_emissions,
-    payment_noncontroller_to_controller: formatNumber(outcome.payment_noncontroller_to_controller, 2),
-    legal_fee_paid_by_a: formatNumber(outcome.legal_fee_paid_by_a, 2),
-    legal_fee_paid_by_b: formatNumber(outcome.legal_fee_paid_by_b, 2),
-    player_a_payoff: formatNumber(outcome.player_a_payoff, 2),
-    player_b_payoff: formatNumber(outcome.player_b_payoff, 2),
+    deal: outcome.no_deal ? "No deal (status quo)" : "Deal",
+    generator_hours: outcome.agreed_emissions,
+    payment: `${formatNumber(outcome.payment_noncontroller_to_controller, 2)}`,
+    legal_fees_a_b: `${formatNumber(outcome.legal_fee_paid_by_a, 1)} / ${formatNumber(outcome.legal_fee_paid_by_b, 1)}`,
+    operator_a_payoff: formatNumber(outcome.player_a_payoff, 2),
+    resident_b_payoff: formatNumber(outcome.player_b_payoff, 2),
   }];
 }
 
-function renderCurrentOutcome(outcome) {
+function renderCurrentOutcome(state) {
+  const outcome = state?.current_outcome;
   if (!outcome) {
     currentOutcomeCard.classList.add("hidden");
     currentOutcomeTable.innerHTML = "";
@@ -316,158 +691,118 @@ function renderCurrentOutcome(outcome) {
   }
 
   currentOutcomeCard.classList.remove("hidden");
-  currentOutcomeTable.innerHTML = tableHtml(submissionOutcomeRows(outcome));
+  currentOutcomeTable.innerHTML = tableHtml(outcomeRows(state, outcome));
 }
 
-function renderHistory(pairOutcomes) {
-  if (!pairOutcomes || pairOutcomes.length === 0) {
+function renderLeaderboard(state) {
+  const leaderboard = state?.leaderboard ?? [];
+  if (leaderboard.length === 0) {
+    leaderboardCard.classList.add("hidden");
+    leaderboardTable.innerHTML = "";
+    return;
+  }
+
+  const ownPlayerId = String(state?.player?.id ?? "");
+  const rows = leaderboard.map((row) => ({
+    rank: row.rank,
+    player: row.player_name,
+    round_1: row.round1 == null ? "-" : formatNumber(row.round1, 2),
+    round_2: row.round2 == null ? "-" : formatNumber(row.round2, 2),
+    round_3: row.round3 == null ? "-" : formatNumber(row.round3, 2),
+    total: formatNumber(row.total_payoff, 2),
+    player_id: row.player_id,
+  }));
+
+  leaderboardCard.classList.remove("hidden");
+  leaderboardTable.innerHTML = tableHtml(
+    rows.map(({ player_id, ...visible }) => visible),
+    {
+      rowClassFor: (row) => {
+        const source = rows.find((candidate) => candidate.rank === row.rank && candidate.player === row.player);
+        return source && String(source.player_id) === ownPlayerId ? "leaderboard-you" : "";
+      },
+    },
+  );
+}
+
+function renderHistory(state) {
+  const pairOutcomes = state?.pair_outcomes ?? [];
+  if (pairOutcomes.length === 0) {
     historyCard.classList.add("hidden");
     historyTable.innerHTML = "";
     return;
   }
 
-  const rows = pairOutcomes.map((outcome) => ({
-    round: roundLabel(outcome.round_key),
-    agreed_emissions: outcome.agreed_emissions,
-    payment_noncontroller_to_controller: formatNumber(outcome.payment_noncontroller_to_controller, 2),
-    legal_fee_paid_by_a: formatNumber(outcome.legal_fee_paid_by_a, 2),
-    legal_fee_paid_by_b: formatNumber(outcome.legal_fee_paid_by_b, 2),
-    player_a_payoff: formatNumber(outcome.player_a_payoff, 2),
-    player_b_payoff: formatNumber(outcome.player_b_payoff, 2),
-  }));
-
+  const rows = pairOutcomes.flatMap((outcome) => outcomeRows(state, outcome));
   historyCard.classList.remove("hidden");
   historyTable.innerHTML = tableHtml(rows);
 }
 
-function fillSubmissionInputs(session, draft, ownSubmission, phase) {
-  const emissionsInput = document.getElementById("submitted-emissions");
-  const paymentInput = document.getElementById("submitted-payment");
-  const legalFeeInput = document.getElementById("submitted-legal-fee-a");
-
-  if (emissionsInput) {
-    emissionsInput.value = draft.submitted_emissions ?? (ownSubmission?.submitted_emissions ?? "");
-    bindDraftInput(session, "submitted-emissions", "submitted_emissions");
-  }
-
-  if (paymentInput) {
-    paymentInput.value = draft.submitted_payment_noncontroller_to_controller
-      ?? (ownSubmission?.submitted_payment_noncontroller_to_controller ?? "");
-    bindDraftInput(session, "submitted-payment", "submitted_payment_noncontroller_to_controller");
-  }
-
-  if (phase === "round3" && legalFeeInput) {
-    legalFeeInput.value = draft.submitted_legal_fee_paid_by_a
-      ?? (ownSubmission?.submitted_legal_fee_paid_by_a ?? "0");
-    bindDraftInput(session, "submitted-legal-fee-a", "submitted_legal_fee_paid_by_a");
-  }
+/**
+ * The bargaining panel holds live inputs, so it re-renders only when the
+ * underlying negotiation state changes, not on every poll.
+ */
+function bargainingPanelSignature(state) {
+  const pendingOffer = state?.pending_offer;
+  return [
+    String(state?.session?.current_phase ?? ""),
+    state?.pair ? "paired" : "unpaired",
+    pendingOffer ? `${pendingOffer.id}:${pendingOffer.proposer_is_self}` : "none",
+    state?.current_outcome ? "settled" : "open",
+    (state?.offers ?? []).length,
+    deadlineExpired() ? "expired" : "live",
+  ].join("|");
 }
 
-async function submitRoundForm(event) {
-  event.preventDefault();
-  clearStatus(stageStatus);
-
-  const phase = event.currentTarget.dataset.phase;
-
-  const payload = {
-    join_token: getJoinToken(),
-    submitted_emissions: Number(document.getElementById("submitted-emissions").value),
-    submitted_payment_noncontroller_to_controller: Number(document.getElementById("submitted-payment").value),
-    submitted_legal_fee_paid_by_a: phase === "round3"
-      ? Number(document.getElementById("submitted-legal-fee-a").value)
-      : 0,
-  };
-
-  try {
-    const response = await apiJson("/api/coase/player/submit-round", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (response.resolved) {
-      setStatus(stageStatus, "good", "Round outcome resolved for your pair.");
-    } else {
-      setStatus(stageStatus, "warn", "Submission saved. Waiting for partner to submit matching terms.");
-    }
-
-    await refreshState();
-  } catch (error) {
-    setStatus(stageStatus, "bad", error.message);
+function renderBargainingPanel(state, options = {}) {
+  if (!state) {
+    return;
   }
-}
 
-function renderStageForm(state) {
+  const signature = bargainingPanelSignature(state);
+  if (!options.force && signature === renderedPanelSignature) {
+    return;
+  }
+  renderedPanelSignature = signature;
+
   const session = state.session;
   const phase = String(session.current_phase ?? "");
   const pair = state.pair;
-  const roundContext = state.round_context;
-  const ownSubmission = state.own_submission;
-  const partnerSubmission = state.partner_submission;
-  const currentOutcome = state.current_outcome;
-
-  phaseLabelElement.textContent = roundLabel(phase);
 
   if (phase === "setup") {
-    roundContextElement.innerHTML = "<p><small class=\"note\">The instructor has not opened rounds yet.</small></p>";
-    stageFormContainer.innerHTML = "<p><small class=\"note\">Stay on this page while pairing is prepared.</small></p>";
+    pendingOfferContainer.innerHTML = "";
+    offerComposerContainer.innerHTML = "<p><small class=\"note\">Stay on this page while the instructor sets up pairing.</small></p>";
+    offerFeedContainer.innerHTML = "";
     return;
   }
 
   if (!pair) {
-    roundContextElement.innerHTML = "<p><small class=\"note\">Waiting for random pairing.</small></p>";
-    stageFormContainer.innerHTML = "<p><small class=\"note\">Your pair is not assigned yet.</small></p>";
+    pendingOfferContainer.innerHTML = "";
+    offerComposerContainer.innerHTML = "<p><small class=\"note\">Waiting for random pairing.</small></p>";
+    offerFeedContainer.innerHTML = "";
     return;
   }
 
   if (phase === "complete") {
-    renderRoundContext(roundContext);
-    stageFormContainer.innerHTML = "<p><small class=\"note\">Session is complete. No further submissions are accepted.</small></p>";
+    pendingOfferContainer.innerHTML = "";
+    offerComposerContainer.innerHTML = "<p><small class=\"note\">The game is over. Check the leaderboard below.</small></p>";
+    renderOfferFeed(state);
     return;
   }
 
-  renderRoundContext(roundContext);
-
-  if (currentOutcome) {
-    clearPhaseDraft(session);
-    stageFormContainer.innerHTML = `
-      <p><small class="note">Your pair's agreement is resolved for this round.</small></p>
-      ${submissionStatusBlock(pair, ownSubmission, partnerSubmission)}
-    `;
+  if (state.current_outcome) {
+    pendingOfferContainer.innerHTML = "";
+    const outcome = state.current_outcome;
+    offerComposerContainer.innerHTML = outcome.no_deal
+      ? "<p><small class=\"note\">No deal this round: status quo payoffs locked in. Wait for the next round.</small></p>"
+      : "<p><small class=\"note\">Deal reached! Wait for the instructor to open the next round.</small></p>";
+    renderOfferFeed(state);
     return;
   }
 
-  const draft = getPhaseDraft(session);
-  const legalFeeInput = phase === "round3"
-    ? `
-      <div>
-        <label for="submitted-legal-fee-a">Legal Fee Paid by Player A (0 to 5)</label>
-        <input id="submitted-legal-fee-a" type="number" min="0" max="5" step="1" inputmode="numeric" />
-      </div>
-    `
-    : "";
-
-  stageFormContainer.innerHTML = `
-    ${submissionStatusBlock(pair, ownSubmission, partnerSubmission)}
-    <form id="round-form" class="grid" data-phase="${phase}">
-      <div>
-        <label for="submitted-emissions">Agreed Emissions (integer 0 to 6)</label>
-        <input id="submitted-emissions" type="number" min="0" max="6" step="1" inputmode="numeric" />
-      </div>
-      <div>
-        <label for="submitted-payment">Payment (noncontroller to controller)</label>
-        <input id="submitted-payment" type="number" min="0" step="0.01" inputmode="decimal" />
-      </div>
-      ${legalFeeInput}
-      <div class="row" style="grid-column: 1/-1; margin-top: 0.5rem;">
-        <button class="primary" type="submit">Submit Round Agreement</button>
-      </div>
-    </form>
-  `;
-
-  fillSubmissionInputs(session, draft, ownSubmission, phase);
-  document.getElementById("round-form")?.addEventListener("submit", submitRoundForm);
-  bindEnterToSubmit("round-form");
+  renderPendingOffer(state);
+  renderComposer(state);
+  renderOfferFeed(state);
 }
 
 async function refreshState() {
@@ -476,17 +811,23 @@ async function refreshState() {
     playerCard.classList.add("hidden");
     stageCard.classList.add("hidden");
     currentOutcomeCard.classList.add("hidden");
+    leaderboardCard.classList.add("hidden");
     historyCard.classList.add("hidden");
     return;
   }
 
   try {
     const state = await apiJson(`/api/coase/player/state?join_token=${encodeURIComponent(joinToken)}`);
+    latestState = state;
     clearStatus(joinStatus);
+    syncCountdown(state);
     renderPlayerCard(state.session, state.player, state.pair);
-    renderStageForm(state);
-    renderCurrentOutcome(state.current_outcome);
-    renderHistory(state.pair_outcomes);
+    phaseLabelElement.textContent = roundLabel(state.session.current_phase);
+    renderRoundContext(state);
+    renderBargainingPanel(state);
+    renderCurrentOutcome(state);
+    renderLeaderboard(state);
+    renderHistory(state);
   } catch (error) {
     setStatus(joinStatus, "bad", error.message);
   }
@@ -512,7 +853,7 @@ async function joinPlayer() {
     await refreshState();
 
     if (!refreshTimer) {
-      refreshTimer = window.setInterval(refreshState, 5000);
+      refreshTimer = window.setInterval(refreshState, POLL_INTERVAL_MS);
     }
   } catch (error) {
     setStatus(joinStatus, "bad", error.message);
@@ -535,11 +876,12 @@ resetTokenButton.addEventListener("click", () => {
   playerCard.classList.add("hidden");
   stageCard.classList.add("hidden");
   currentOutcomeCard.classList.add("hidden");
+  leaderboardCard.classList.add("hidden");
   historyCard.classList.add("hidden");
   setStatus(joinStatus, "warn", "Stored join token cleared.");
 });
 
 if (getJoinToken()) {
   refreshState();
-  refreshTimer = window.setInterval(refreshState, 5000);
+  refreshTimer = window.setInterval(refreshState, POLL_INTERVAL_MS);
 }

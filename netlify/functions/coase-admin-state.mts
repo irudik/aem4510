@@ -1,11 +1,14 @@
 import {
-  adminProxyIdsFromPlayers,
+  leaderboardRows,
+  roundSummaryRows,
+} from "./_lib/coase_bargaining.mts";
+import {
   currentRoundPairStatusRows,
   getActiveSession,
+  getOffersForSession,
   getPairsForSession,
   getPlayersForSession,
   getRoundOutcomesForSession,
-  getRoundSubmissionsForSession,
   pairDetailsRows,
   progressSummary,
   requireAdminUser,
@@ -27,35 +30,35 @@ export default async function coaseAdminState(req) {
         session: null,
         players: [],
         pairs: [],
-        submissions: [],
+        offers: [],
         outcomes: [],
       });
     }
 
-    const [players, pairs, submissions, outcomes] = await Promise.all([
+    const [players, pairs, offers, outcomes] = await Promise.all([
       getPlayersForSession(String(session.id)),
       getPairsForSession(String(session.id)),
-      getRoundSubmissionsForSession(String(session.id)),
+      getOffersForSession(String(session.id)),
       getRoundOutcomesForSession(String(session.id)),
     ]);
 
-    const adminProxyIds = adminProxyIdsFromPlayers(players);
-
     return jsonResponse(200, {
       session,
+      server_now: new Date().toISOString(),
       round_context: roundContext(session.current_phase),
       players,
       pairs,
       pair_details: pairDetailsRows(pairs, players),
-      submissions,
+      offers,
       outcomes,
       pair_status: currentRoundPairStatusRows(
         session.current_phase,
         pairs,
-        submissions,
+        offers,
         outcomes,
-        adminProxyIds,
       ),
+      leaderboard: leaderboardRows(players, pairs, outcomes),
+      round_summaries: roundSummaryRows(pairs, outcomes),
       progress: progressSummary(session, pairs, outcomes),
     });
   } catch (error) {

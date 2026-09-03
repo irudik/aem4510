@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Dashboard | Coase Game</title>
+    <title>Admin Dashboard | Data Center Bargaining Game</title>
     <link rel="stylesheet" href="/games/coase-online/app.css" />
   </head>
   <body>
@@ -13,7 +13,7 @@
           <h1>Admin Dashboard</h1>
           <a href="/games/coase-online/index.html">Home</a>
         </div>
-        <p>Instructor controls for session setup, random pairing, and round transitions.</p>
+        <p>Instructor controls for the data center bargaining game: session setup, random pairing, round timers, and live offer monitoring.</p>
       </section>
 
       <section id="login-card" class="card">
@@ -68,6 +68,10 @@
                 <option value="complete">Complete</option>
               </select>
             </div>
+            <div>
+              <label for="round-seconds">Round Length (seconds)</label>
+              <input id="round-seconds" type="number" min="30" max="3600" step="30" value="300" />
+            </div>
           </div>
           <div class="row" style="margin-top: 0.6rem">
             <button id="apply-phase-btn" class="primary" type="button">Apply Phase Update</button>
@@ -102,8 +106,18 @@
         </section>
 
         <section class="card">
-          <h2>Round Submissions</h2>
-          <div id="submissions-table" class="table-wrap"></div>
+          <h2>Live Offers</h2>
+          <div id="offers-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Round Results Summary</h2>
+          <div id="round-summary-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Leaderboard</h2>
+          <div id="leaderboard-table" class="table-wrap"></div>
         </section>
 
         <section class="card">

@@ -30,6 +30,7 @@ const startGameButton = document.getElementById("start-game-btn");
 const sessionStatus = document.getElementById("session-status");
 
 const phaseInput = document.getElementById("set-phase");
+const roundSecondsInput = document.getElementById("round-seconds");
 const applyPhaseButton = document.getElementById("apply-phase-btn");
 const refreshButton = document.getElementById("refresh-admin-btn");
 const phaseStatus = document.getElementById("phase-status");
@@ -39,7 +40,9 @@ const roundContextElement = document.getElementById("round-context");
 const pairStatusTableElement = document.getElementById("pair-status-table");
 const pairsTableElement = document.getElementById("pairs-table");
 const playersTableElement = document.getElementById("players-table");
-const submissionsTableElement = document.getElementById("submissions-table");
+const offersTableElement = document.getElementById("offers-table");
+const roundSummaryTableElement = document.getElementById("round-summary-table");
+const leaderboardTableElement = document.getElementById("leaderboard-table");
 const outcomesTableElement = document.getElementById("outcomes-table");
 
 /** @type {{supabaseUrl: string, supabaseAnonKey: string} | null} */
@@ -134,10 +137,16 @@ function renderSessionSummary(state) {
   const progress = state.progress ?? {};
   const resolvedByRound = progress.resolved_by_round ?? {};
 
+  const deadlineText = session.phase_deadline_at
+    ? new Date(String(session.phase_deadline_at)).toLocaleTimeString()
+    : "-";
+
   sessionKv.innerHTML = "";
   const entries = [
     ["Session", session.session_name],
     ["Phase", roundLabel(session.current_phase)],
+    ["Round Length (s)", session.round_seconds ?? "-"],
+    ["Round Deadline", deadlineText],
     ["Started", boolText(session.has_started)],
     ["Expected Players", progress.expected_player_count ?? session.expected_player_count ?? "-"],
     ["Joined Players", joinedPlayers],
@@ -167,14 +176,14 @@ function renderRoundContext(roundContext) {
 
   const payoffRows = Object.entries(roundContext.payoff_schedule ?? {})
     .map(([emissions, payoff]) => ({
-      emissions: Number(emissions),
-      player_a_payoff: formatNumber(payoff.player_a, 0),
-      player_b_payoff: formatNumber(payoff.player_b, 0),
+      generator_hours: Number(emissions),
+      operator_a_payoff: formatNumber(payoff.player_a, 0),
+      resident_b_payoff: formatNumber(payoff.player_b, 0),
     }))
-    .sort((left, right) => left.emissions - right.emissions);
+    .sort((left, right) => left.generator_hours - right.generator_hours);
 
   roundContextElement.innerHTML = `
-    <p><small class="note">Controller in ${roundLabel(roundContext.round_key)}: Player ${roundContext.controller_role}</small></p>
+    <p><small class="note">${roundContext.rights_note}</small></p>
     ${tableHtml(payoffRows)}
     <p><small class="note">${roundContext.legal_cost_note}</small></p>
   `;
@@ -187,12 +196,13 @@ function renderAllTables(state) {
   const pairStatusRows = (state.pair_status ?? []).map((row) => ({
     pair_number: row.pair_number,
     round: roundLabel(row.round_key),
-    player_a_submitted: boolText(row.player_a_submitted),
-    player_b_submitted: boolText(row.player_b_submitted),
-    submissions_match: boolText(row.submissions_match),
+    offers_made: row.offers_made,
+    pending_hours: row.pending_offer_emissions,
+    pending_payment: row.pending_offer_payment,
     resolved: boolText(row.resolved),
-    agreed_emissions: row.agreed_emissions,
-    payment_noncontroller_to_controller: row.payment_noncontroller_to_controller,
+    no_deal: row.no_deal == null ? "" : boolText(row.no_deal),
+    agreed_hours: row.agreed_emissions,
+    payment: row.payment_noncontroller_to_controller,
     player_a_payoff: row.player_a_payoff,
     player_b_payoff: row.player_b_payoff,
   }));
@@ -213,21 +223,53 @@ function renderAllTables(state) {
     created_at: row.created_at,
   }));
 
-  const submissionRows = (state.submissions ?? []).map((row) => ({
+  const playerNamesById = new Map(
+    (state.players ?? []).map((row) => [String(row.id), String(row.player_name ?? "")]),
+  );
+  const pairNumbersById = new Map(
+    (state.pairs ?? []).map((row) => [String(row.id), Number(row.pair_number)]),
+  );
+
+  const offerRows = (state.offers ?? []).map((row) => ({
     round: roundLabel(row.round_key),
-    pair_id: row.pair_id,
-    player_id: row.player_id,
-    submitted_emissions: row.submitted_emissions,
-    submitted_payment_noncontroller_to_controller: row.submitted_payment_noncontroller_to_controller,
-    submitted_legal_fee_paid_by_a: row.submitted_legal_fee_paid_by_a,
-    updated_at: row.updated_at,
+    pair_number: pairNumbersById.get(String(row.pair_id)) ?? "",
+    offer_index: row.offer_index,
+    proposer: playerNamesById.get(String(row.proposer_player_id)) ?? "",
+    generator_hours: row.offered_emissions,
+    payment: row.offered_payment_noncontroller_to_controller,
+    legal_fee_paid_by_a: row.offered_legal_fee_paid_by_a,
+    status: row.status,
+    created_at: row.created_at,
+  }));
+
+  const roundSummaryRows = (state.round_summaries ?? []).map((row) => ({
+    round: roundLabel(row.round_key),
+    status_quo_hours: row.status_quo_emissions,
+    resolved_pairs: `${row.resolved_pairs} / ${row.pair_count}`,
+    deals: row.deals,
+    no_deals: row.no_deals,
+    pairs_at_1_hour: row.pairs_at_efficient_emissions,
+    average_payment: row.average_payment_among_deals == null
+      ? "-"
+      : formatNumber(row.average_payment_among_deals, 2),
+    total_surplus: row.total_surplus == null ? "-" : formatNumber(row.total_surplus, 1),
+  }));
+
+  const leaderboardRows = (state.leaderboard ?? []).map((row) => ({
+    rank: row.rank,
+    player: row.player_name,
+    round_1: row.round1 == null ? "-" : formatNumber(row.round1, 2),
+    round_2: row.round2 == null ? "-" : formatNumber(row.round2, 2),
+    round_3: row.round3 == null ? "-" : formatNumber(row.round3, 2),
+    total: formatNumber(row.total_payoff, 2),
   }));
 
   const outcomeRows = (state.outcomes ?? []).map((row) => ({
     round: roundLabel(row.round_key),
-    pair_id: row.pair_id,
-    agreed_emissions: row.agreed_emissions,
-    payment_noncontroller_to_controller: row.payment_noncontroller_to_controller,
+    pair_number: pairNumbersById.get(String(row.pair_id)) ?? "",
+    deal: row.no_deal ? "No deal" : "Deal",
+    agreed_hours: row.agreed_emissions,
+    payment: row.payment_noncontroller_to_controller,
     legal_fee_paid_by_a: row.legal_fee_paid_by_a,
     legal_fee_paid_by_b: row.legal_fee_paid_by_b,
     player_a_payoff: row.player_a_payoff,
@@ -238,11 +280,16 @@ function renderAllTables(state) {
   renderTable(pairStatusTableElement, pairStatusRows);
   renderTable(pairsTableElement, pairDetailRows);
   renderTable(playersTableElement, playerRows);
-  renderTable(submissionsTableElement, submissionRows);
+  renderTable(offersTableElement, offerRows);
+  renderTable(roundSummaryTableElement, roundSummaryRows);
+  renderTable(leaderboardTableElement, leaderboardRows);
   renderTable(outcomesTableElement, outcomeRows);
 
   if (state?.session?.current_phase) {
     phaseInput.value = String(state.session.current_phase);
+  }
+  if (state?.session?.round_seconds && document.activeElement !== roundSecondsInput) {
+    roundSecondsInput.value = String(state.session.round_seconds);
   }
 }
 
@@ -375,16 +422,23 @@ async function applyPhaseUpdate() {
   clearStatus(phaseStatus);
 
   try {
-    await apiJson("/api/coase/admin/set-phase", {
+    const response = await apiJson("/api/coase/admin/set-phase", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getAdminToken()}`,
       },
-      body: JSON.stringify({ phase: phaseInput.value }),
+      body: JSON.stringify({
+        phase: phaseInput.value,
+        round_seconds: roundSecondsInput.value ? Number(roundSecondsInput.value) : undefined,
+      }),
     });
 
-    setStatus(phaseStatus, "good", "Phase updated.");
+    const finalizedPairs = Number(response?.finalized_pairs ?? 0);
+    const finalizedNote = finalizedPairs > 0
+      ? ` Closed ${finalizedPairs} unresolved pair${finalizedPairs === 1 ? "" : "s"} at the status quo.`
+      : "";
+    setStatus(phaseStatus, "good", `Phase updated.${finalizedNote}`);
     await fetchAdminState();
   } catch (error) {
     setStatus(phaseStatus, "bad", error.message);
@@ -412,7 +466,7 @@ refreshButton.addEventListener("click", fetchAdminState);
 
 bindEnterAction([adminEmailInput, adminPasswordInput], adminLogin);
 bindEnterAction([sessionNameInput, expectedPlayerCountInput], createSession);
-bindEnterAction([phaseInput], applyPhaseUpdate);
+bindEnterAction([phaseInput, roundSecondsInput], applyPhaseUpdate);
 
 if (getAdminToken()) {
   fetchAdminState();

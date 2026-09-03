@@ -1,12 +1,12 @@
 import {
   PAYOFF_TABLE,
   VALID_PHASES,
-  computeRoundOutcome,
   isRoundPhase,
   randomPairing,
   roundContext,
-  submissionsAgree,
+  statusQuoOutcome,
 } from "./coase.mts";
+import { pendingOfferForPair } from "./coase_bargaining.mts";
 import { getBearerToken } from "./http.mts";
 import { fetchSupabaseAuthUser, supabaseRequest } from "./supabase_rest.mts";
 
@@ -162,13 +162,13 @@ export async function getPairsForSession(sessionId) {
 /**
  * @param {string} sessionId
  */
-export async function getRoundSubmissionsForSession(sessionId) {
-  return supabaseRequest("/rest/v1/coase_round_submissions", {
+export async function getOffersForSession(sessionId) {
+  return supabaseRequest("/rest/v1/coase_offers", {
     method: "GET",
     queryParams: {
       select: "*",
       session_id: `eq.${sessionId}`,
-      order: "updated_at.asc",
+      order: "created_at.asc",
     },
     useServiceRole: true,
   });
@@ -214,15 +214,7 @@ export async function getPlayerByJoinToken(joinToken) {
  * @param {string} sessionId
  */
 export async function clearPairingForSession(sessionId) {
-  await supabaseRequest("/rest/v1/coase_pairs", {
-    method: "DELETE",
-    queryParams: {
-      session_id: `eq.${sessionId}`,
-    },
-    useServiceRole: true,
-  });
-
-  await supabaseRequest("/rest/v1/coase_round_submissions", {
+  await supabaseRequest("/rest/v1/coase_offers", {
     method: "DELETE",
     queryParams: {
       session_id: `eq.${sessionId}`,
@@ -237,6 +229,14 @@ export async function clearPairingForSession(sessionId) {
     },
     useServiceRole: true,
   });
+
+  await supabaseRequest("/rest/v1/coase_pairs", {
+    method: "DELETE",
+    queryParams: {
+      session_id: `eq.${sessionId}`,
+    },
+    useServiceRole: true,
+  });
 }
 
 /**
@@ -244,7 +244,7 @@ export async function clearPairingForSession(sessionId) {
  * @param {string} roundKey
  */
 export async function clearRoundData(sessionId, roundKey) {
-  await supabaseRequest("/rest/v1/coase_round_submissions", {
+  await supabaseRequest("/rest/v1/coase_offers", {
     method: "DELETE",
     queryParams: {
       session_id: `eq.${sessionId}`,
@@ -430,86 +430,127 @@ export function partnerForPlayer(pair, players, playerId) {
 }
 
 /**
- * Resolve one pair in one round.
+ * Mark any pending offer for a pair in a round as superseded (a fresh offer
+ * replaces it) and insert the new offer as the pending one.
  *
- * Normal pair:
- * - requires both A and B submissions and exact agreement.
- *
- * Admin-proxy pair:
- * - requires only the non-admin player's submission.
- *
- * @param {string} roundKey
+ * @param {string} sessionId
  * @param {Record<string, unknown>} pair
- * @param {Array<Record<string, unknown>>} roundSubmissions
- * @param {Set<string>} adminProxyPlayerIds
+ * @param {string} roundKey
+ * @param {string} proposerPlayerId
+ * @param {{
+ * offered_emissions: number,
+ * offered_payment_noncontroller_to_controller: number,
+ * offered_legal_fee_paid_by_a: number,
+ * }} terms
+ * @param {number} nextOfferIndex
  */
-export function maybeResolvePairRound(roundKey, pair, roundSubmissions, adminProxyPlayerIds = new Set()) {
-  const pairRows = (roundSubmissions ?? []).filter((row) => String(row.pair_id) === String(pair.id));
-
-  const isAdminPair =
-    adminProxyPlayerIds.has(String(pair.player_a_id))
-    || adminProxyPlayerIds.has(String(pair.player_b_id));
-
-  if (isAdminPair) {
-    const nonAdminSubmission = pairRows.find(
-      (row) => !adminProxyPlayerIds.has(String(row.player_id)),
-    );
-
-    if (!nonAdminSubmission) {
-      return {
-        resolved: false,
-        outcome: null,
-      };
-    }
-
-    const outcome = computeRoundOutcome({
-      round_key: roundKey,
-      emissions: Number(nonAdminSubmission.submitted_emissions),
-      payment_noncontroller_to_controller: Number(nonAdminSubmission.submitted_payment_noncontroller_to_controller),
-      legal_fee_paid_by_a: Number(nonAdminSubmission.submitted_legal_fee_paid_by_a ?? 0),
-    });
-
-    return {
-      resolved: true,
-      outcome,
-    };
-  }
-
-  if (pairRows.length < 2) {
-    return {
-      resolved: false,
-      outcome: null,
-    };
-  }
-
-  const submissionA = pairRows.find((row) => String(row.player_id) === String(pair.player_a_id));
-  const submissionB = pairRows.find((row) => String(row.player_id) === String(pair.player_b_id));
-
-  if (!submissionA || !submissionB) {
-    return {
-      resolved: false,
-      outcome: null,
-    };
-  }
-
-  if (!submissionsAgree(submissionA, submissionB)) {
-    return {
-      resolved: false,
-      outcome: null,
-    };
-  }
-
-  const outcome = computeRoundOutcome({
-    round_key: roundKey,
-    emissions: Number(submissionA.submitted_emissions),
-    payment_noncontroller_to_controller: Number(submissionA.submitted_payment_noncontroller_to_controller),
-    legal_fee_paid_by_a: Number(submissionA.submitted_legal_fee_paid_by_a ?? 0),
+export async function insertOfferSupersedingPending(sessionId, pair, roundKey, proposerPlayerId, terms, nextOfferIndex) {
+  await supabaseRequest("/rest/v1/coase_offers", {
+    method: "PATCH",
+    queryParams: {
+      session_id: `eq.${sessionId}`,
+      pair_id: `eq.${pair.id}`,
+      round_key: `eq.${roundKey}`,
+      status: "eq.pending",
+    },
+    body: {
+      status: "superseded",
+      responded_at: new Date().toISOString(),
+    },
+    prefer: "return=minimal",
+    useServiceRole: true,
   });
 
-  return {
-    resolved: true,
-    outcome,
-  };
+  const insertedRows = await supabaseRequest("/rest/v1/coase_offers", {
+    method: "POST",
+    body: [{
+      session_id: sessionId,
+      pair_id: String(pair.id),
+      round_key: roundKey,
+      offer_index: nextOfferIndex,
+      proposer_player_id: proposerPlayerId,
+      offered_emissions: terms.offered_emissions,
+      offered_payment_noncontroller_to_controller: terms.offered_payment_noncontroller_to_controller,
+      offered_legal_fee_paid_by_a: terms.offered_legal_fee_paid_by_a,
+      status: "pending",
+    }],
+    prefer: "return=representation",
+    useServiceRole: true,
+  });
+
+  return insertedRows[0];
+}
+
+/**
+ * @param {string} offerId
+ * @param {string} status
+ * @param {string} respondedByPlayerId
+ */
+export async function updateOfferStatus(offerId, status, respondedByPlayerId) {
+  const updatedRows = await supabaseRequest("/rest/v1/coase_offers", {
+    method: "PATCH",
+    queryParams: {
+      id: `eq.${offerId}`,
+      select: "*",
+    },
+    body: {
+      status,
+      responded_by_player_id: respondedByPlayerId,
+      responded_at: new Date().toISOString(),
+    },
+    prefer: "return=representation",
+    useServiceRole: true,
+  });
+
+  return updatedRows[0];
+}
+
+/**
+ * Write status quo outcomes for every pair in a round that has no resolved
+ * outcome yet, and retire any offers still pending. Used when the instructor
+ * closes a round with bargaining unfinished.
+ *
+ * @param {string} sessionId
+ * @param {string} roundKey
+ */
+export async function finalizeUnresolvedPairsForRound(sessionId, roundKey) {
+  const [pairs, outcomes] = await Promise.all([
+    getPairsForSession(sessionId),
+    getRoundOutcomesForSession(sessionId),
+  ]);
+
+  const resolvedPairIds = new Set(
+    (outcomes ?? [])
+      .filter((row) => String(row.round_key) === roundKey)
+      .map((row) => String(row.pair_id)),
+  );
+
+  const unresolvedPairs = (pairs ?? []).filter(
+    (pair) => !resolvedPairIds.has(String(pair.id)),
+  );
+
+  for (const pair of unresolvedPairs) {
+    await upsertRoundOutcome(sessionId, pair, roundKey, statusQuoOutcome(roundKey), { noDeal: true });
+  }
+
+  if (unresolvedPairs.length > 0) {
+    await supabaseRequest("/rest/v1/coase_offers", {
+      method: "PATCH",
+      queryParams: {
+        session_id: `eq.${sessionId}`,
+        round_key: `eq.${roundKey}`,
+        status: "eq.pending",
+      },
+      body: {
+        status: "superseded",
+        responded_at: new Date().toISOString(),
+      },
+      prefer: "return=minimal",
+      useServiceRole: true,
+    });
+  }
+
+  return unresolvedPairs.length;
 }
 
 /**
@@ -517,8 +558,9 @@ export function maybeResolvePairRound(roundKey, pair, roundSubmissions, adminPro
  * @param {Record<string, unknown>} pair
  * @param {string} roundKey
  * @param {Record<string, unknown>} outcome
+ * @param {{noDeal?: boolean}} options
  */
-export async function upsertRoundOutcome(sessionId, pair, roundKey, outcome) {
+export async function upsertRoundOutcome(sessionId, pair, roundKey, outcome, options = {}) {
   await supabaseRequest("/rest/v1/coase_round_outcomes", {
     method: "POST",
     queryParams: {
@@ -534,26 +576,10 @@ export async function upsertRoundOutcome(sessionId, pair, roundKey, outcome) {
       legal_fee_paid_by_b: Number(outcome.legal_fee_paid_by_b),
       player_a_payoff: Number(outcome.payoff_a),
       player_b_payoff: Number(outcome.payoff_b),
+      no_deal: Boolean(options.noDeal),
       resolved_at: new Date().toISOString(),
     }],
     prefer: "resolution=merge-duplicates,return=minimal",
-    useServiceRole: true,
-  });
-}
-
-/**
- * @param {string} sessionId
- * @param {string} pairId
- * @param {string} roundKey
- */
-export async function deleteRoundOutcome(sessionId, pairId, roundKey) {
-  await supabaseRequest("/rest/v1/coase_round_outcomes", {
-    method: "DELETE",
-    queryParams: {
-      session_id: `eq.${sessionId}`,
-      pair_id: `eq.${pairId}`,
-      round_key: `eq.${roundKey}`,
-    },
     useServiceRole: true,
   });
 }
@@ -614,31 +640,25 @@ export function pairDetailsRows(pairs, players) {
 }
 
 /**
+ * Live bargaining status per pair for the current round, built from offers
+ * rather than the retired matched-submission flow.
+ *
  * @param {string} phase
  * @param {Array<Record<string, unknown>>} pairs
- * @param {Array<Record<string, unknown>>} submissions
+ * @param {Array<Record<string, unknown>>} offers
  * @param {Array<Record<string, unknown>>} outcomes
- * @param {Set<string>} adminProxyPlayerIds
  */
-export function currentRoundPairStatusRows(
-  phase,
-  pairs,
-  submissions,
-  outcomes,
-  adminProxyPlayerIds = new Set(),
-) {
+export function currentRoundPairStatusRows(phase, pairs, offers, outcomes) {
   if (!isRoundPhase(phase)) {
     return [];
   }
 
   return (pairs ?? []).map((pair) => {
-    const pairSubmissions = (submissions ?? []).filter((row) => (
+    const pairOffers = (offers ?? []).filter((row) => (
       String(row.pair_id) === String(pair.id)
       && String(row.round_key) === String(phase)
     ));
-    const isAdminPair =
-      adminProxyPlayerIds.has(String(pair.player_a_id))
-      || adminProxyPlayerIds.has(String(pair.player_b_id));
+    const pendingOffer = pendingOfferForPair(pairOffers, String(pair.id), String(phase));
     const outcome = (outcomes ?? []).find((row) => (
       String(row.pair_id) === String(pair.id)
       && String(row.round_key) === String(phase)
@@ -647,12 +667,11 @@ export function currentRoundPairStatusRows(
     return {
       pair_number: Number(pair.pair_number),
       round_key: phase,
-      player_a_submitted: pairSubmissions.some((row) => String(row.player_id) === String(pair.player_a_id)),
-      player_b_submitted: pairSubmissions.some((row) => String(row.player_id) === String(pair.player_b_id)),
-      submissions_match: isAdminPair
-        ? pairSubmissions.some((row) => !adminProxyPlayerIds.has(String(row.player_id)))
-        : (pairSubmissions.length === 2 ? submissionsAgree(pairSubmissions[0], pairSubmissions[1]) : false),
+      offers_made: pairOffers.length,
+      pending_offer_emissions: pendingOffer?.offered_emissions ?? null,
+      pending_offer_payment: pendingOffer?.offered_payment_noncontroller_to_controller ?? null,
       resolved: Boolean(outcome),
+      no_deal: outcome ? Boolean(outcome.no_deal) : null,
       agreed_emissions: outcome?.agreed_emissions ?? null,
       payment_noncontroller_to_controller: outcome?.payment_noncontroller_to_controller ?? null,
       player_a_payoff: outcome?.player_a_payoff ?? null,

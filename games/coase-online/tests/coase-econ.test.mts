@@ -8,7 +8,8 @@ import {
   isRoundPhase,
   randomPairing,
   roundContext,
-  submissionsAgree,
+  statusQuoEmissions,
+  statusQuoOutcome,
   validateEmissions,
 } from "../../../netlify/functions/_lib/coase.mts";
 
@@ -67,25 +68,23 @@ test("round 3 legal agreement cost is applied only when transfer is positive", (
   assert.equal(withTransfer.payoff_b, 5);
 });
 
-test("submission agreement requires identical negotiated values", () => {
-  const left = {
-    submitted_emissions: 3,
-    submitted_payment_noncontroller_to_controller: 1,
-    submitted_legal_fee_paid_by_a: 2,
-  };
-  const rightSame = {
-    submitted_emissions: 3,
-    submitted_payment_noncontroller_to_controller: 1,
-    submitted_legal_fee_paid_by_a: 2,
-  };
-  const rightDiff = {
-    submitted_emissions: 3,
-    submitted_payment_noncontroller_to_controller: 1,
-    submitted_legal_fee_paid_by_a: 3,
-  };
+test("status quo is the controller's privately optimal emissions with no payment", () => {
+  assert.equal(statusQuoEmissions("round1"), 6);
+  assert.equal(statusQuoEmissions("round2"), 0);
+  assert.equal(statusQuoEmissions("round3"), 0);
 
-  assert.equal(submissionsAgree(left, rightSame), true);
-  assert.equal(submissionsAgree(left, rightDiff), false);
+  const round1 = statusQuoOutcome("round1");
+  assert.equal(round1.emissions, 6);
+  assert.equal(round1.payoff_a, 11);
+  assert.equal(round1.payoff_b, 0);
+
+  const round3 = statusQuoOutcome("round3");
+  assert.equal(round3.emissions, 0);
+  assert.equal(round3.payment_noncontroller_to_controller, 0);
+  assert.equal(round3.legal_fee_paid_by_a, 0);
+  assert.equal(round3.legal_fee_paid_by_b, 0);
+  assert.equal(round3.payoff_a, 0);
+  assert.equal(round3.payoff_b, 12);
 });
 
 test("random pairing covers each player exactly once with even counts", () => {
@@ -115,5 +114,6 @@ test("round helpers validate emissions and phase context", () => {
 
   const ctx = roundContext("round3");
   assert.equal(ctx.controller_role, "B");
+  assert.equal(ctx.status_quo_emissions, 0);
   assert.equal(ctx.payoff_schedule[1].player_b, 10);
 });
