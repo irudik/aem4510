@@ -18,11 +18,16 @@
 - **Readable research code** -- prefer clear, reproducible, prose-like code
   over clever compactness; code should be easy for coauthors, referees, and
   future selves to audit
+- **Plain-language writing** -- all prose (replies, issues, reports,
+  comments) follows `protocols/writing.md`; write for an economist coauthor,
+  never in programmer jargon
 - **Single source of truth** -- `latex/manuscript.tex` is authoritative for the paper
 - **Quality gates** -- apply scoring before commit or merge when it adds value;
   do not score every routine edit
 - **Template hygiene** -- in this template repo, remove branch-specific files under `quality_reports/` before merging to `main`; keep `main` fresh
 - **Structured [LEARN] tags** -- when corrected or when you discover a durable lesson, save a structured `[LEARN:category]` entry to `MEMORY.md`
+- **Dynamic result context** -- when a generated numeric macro changes value,
+  review every prose use under the changed-value workflow in `AGENTS.md`
 
 ---
 
@@ -34,7 +39,8 @@
 ├── AGENTS.md                    # Codex CLI instructions
 ├── MEMORY.md                    # Persistent [LEARN] entries across sessions
 ├── Makefile                     # Root — delegates to code/ and latex/
-├── protocols/                   # Canonical shared skill bodies
+├── protocols/                   # Shared writing guide and skill bodies
+│   ├── writing.md
 │   └── skills/
 │       └── *.md
 ├── .claude/                     # Claude Code: settings, wrappers, agents, hooks
@@ -67,6 +73,11 @@
 ---
 
 ## Commands
+
+Run all Make commands below from the repository root.
+`make -C path` changes Make's working directory to `path`, so paths in that
+Makefile and in the scripts its recipes run are relative to `path`, not to the
+repository root.
 
 ```bash
 # Make (preferred — builds everything)
@@ -117,7 +128,7 @@ pdflatex -interaction=nonstopmode manuscript.tex
 | `/review-julia [file]` | Julia code quality review |
 | `/review-stata [file]` | Stata code quality review |
 | `/review-matlab [file]` | MATLAB code quality review |
-| `/review-tex [file]` | LaTeX hardcoded-number review for manuscripts and slides |
+| `/review-tex [file]` | LaTeX hardcoded-number and updated-result prose review |
 | `/review-makefile [file]` | Makefile conventions review |
 | `/review-comments [path]` | Clean up comments, docstrings, dead code |
 | `/review-domain [file]` | Substantive domain review (identification, citations, code-theory) — opt-in |
@@ -129,18 +140,20 @@ pdflatex -interaction=nonstopmode manuscript.tex
 
 ## Shared Skill Protocols
 
-- Canonical shared skill bodies live in `protocols/skills/`
+- Shared skill bodies live in `protocols/skills/`
 - `.claude/skills/` and `.agents/skills/` are thin wrappers around those files
-- Review-oriented agents in `.claude/agents/` execute the same canonical protocols
+- Review-oriented agents in `.claude/agents/` execute the same shared protocols
+- Kimi Code CLI reuses the `.agents/skills/` wrappers natively; its example
+  permission config lives in `.kimi-code/config.toml.example`
 
 ## Claude Loading Model
 
 - Root `CLAUDE.md` sets project-wide workflow rules
 - `code/CLAUDE.md` loads when Claude works in `code/`
 - `latex/CLAUDE.md` loads when Claude works in `latex/`
-- `code/AGENTS.md` routes code work to `code/conventions/shared.md` and only
+- `code/AGENTS.md` routes code work to `protocols/conventions/shared.md` and only
   the applicable language or Makefile convention
-- Shared local conventions live in `AGENTS.md`, `code/conventions/`, and
+- Shared local conventions live in `AGENTS.md`, `protocols/conventions/`, and
   `latex/AGENTS.md`
 - `.claude/agents/` and `.claude/hooks/` remain Claude-only execution surfaces
   and mechanics
@@ -163,6 +176,16 @@ pdflatex -interaction=nonstopmode manuscript.tex
   plan in `quality_reports/plans/`, read the most recent relevant handoff in
   `quality_reports/handoffs/` if one exists, then inspect
   `git log --oneline -10` and `git diff`
+
+## Kimi Code CLI
+
+Kimi Code CLI is a third supported agent alongside Codex CLI. It reads the same
+`AGENTS.md` hierarchy and scans `.agents/skills/` natively, so the shared
+skills and workflow rules apply without Kimi-specific wrappers. Kimi has no
+project-level config file for permissions, models, or hooks (its project-local
+`.kimi-code/local.toml` only stores workspace directories and is gitignored);
+permission parity comes from merging `.kimi-code/config.toml.example` into the
+user-level `~/.kimi-code/config.toml`.
 
 ## Explicit Codex Handoff
 
@@ -191,9 +214,10 @@ and how to poll it (`/codex:status <jobId>`). This watcher compensates for the
 plugin's fire-and-forget dispatch; retire it if the Codex plugin adds a native
 completion signal. A foreground/`--wait` handoff already blocks then wakes
 Claude on its own and needs no watcher.
+
 Codex is the implementer for both the feature/fix and its verification. Codex
 adds or updates the verification code needed to make the acceptance criteria
-checkable, such as unit tests, fixtures, Makefile targets, data-property checks,
+checkable, such as unit tests, example inputs, Makefile targets, data-property checks,
 checksum scripts, or build checks. Before handing back, Codex self-reviews its
 diff, verification design, and test/build/check results, fixes obvious gaps,
 and reports exact evidence.

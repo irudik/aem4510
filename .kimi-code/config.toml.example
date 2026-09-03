@@ -1,0 +1,179 @@
+# Kimi Code CLI example permission configuration
+#
+# Kimi Code CLI reads permissions, models, and hooks from a single user-level
+# config at ~/.kimi-code/config.toml; it has no project-level config file for
+# these settings. (The project-local .kimi-code/local.toml only stores
+# workspace directories and is gitignored.) To mirror the broad command-family
+# permissions in .claude/settings.json.example and .codex/rules/default.rules,
+# merge the [[permission.rules]] blocks below into ~/.kimi-code/config.toml.
+#
+# No project-level skill setup is needed: Kimi Code loads AGENTS.md and scans
+# .agents/skills/ (shared with Codex CLI) automatically.
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Edit"
+reason = "Match .claude/settings.json.example"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Write"
+reason = "Match .claude/settings.json.example"
+
+# Git and GitHub CLI
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(git *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(gh *)"
+
+# Build tools and shells
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(bash *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(make *)"
+
+# Scripting languages
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(Rscript *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(julia *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(python3 *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(stata *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(stata-mp *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(matlab *)"
+
+# Common inspection and text-processing utilities
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(ls *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(rg *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(find *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(cat *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(sed *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(head *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(tail *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(wc *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(sort *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(grep *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(awk *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(jq *)"
+
+# File utilities
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(chmod *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(cp *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(mv *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(open *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(mkdir *)"
+
+# LaTeX and PDF toolchain
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(xelatex *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(pdflatex *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(TEXINPUTS=*)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(BIBINPUTS=*)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(BSTINPUTS=*)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(latexmk *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(bibtex *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(pdfinfo *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(pdf2svg *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(gs *)"
+
+[[permission.rules]]
+decision = "allow"
+pattern = "Bash(pdftk *)"

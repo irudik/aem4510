@@ -1,0 +1,3 @@
+# Codex CLI project configuration
+# Model, reasoning effort, and sandbox settings come from ~/.codex/config.toml.
+# Add a key here only to override the user-level setting for this project.

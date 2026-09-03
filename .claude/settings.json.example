@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(bash *)",
+      "Bash(make *)",
+      "Bash(Rscript *)",
+      "Bash(julia *)",
+      "Bash(python3 *)",
+      "Bash(stata *)",
+      "Bash(stata-mp *)",
+      "Bash(matlab *)",
+      "Bash(ls *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(cat *)",
+      "Bash(sed *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(sort *)",
+      "Bash(grep *)",
+      "Bash(awk *)",
+      "Bash(jq *)",
+      "Bash(chmod *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(open *)",
+      "Bash(mkdir *)",
+      "Bash(xelatex *)",
+      "Bash(pdflatex *)",
+      "Bash(TEXINPUTS=*)",
+      "Bash(BIBINPUTS=*)",
+      "Bash(BSTINPUTS=*)",
+      "Bash(latexmk *)",
+      "Bash(bibtex *)",
+      "Bash(pdfinfo *)",
+      "Bash(pdf2svg *)",
+      "Bash(gs *)",
+      "Bash(pdftk *)"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/notify.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-files.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-compact.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

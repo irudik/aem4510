@@ -21,6 +21,9 @@ and align documentation with code reality.
    - Comments referencing non-existent features or files
    - Docstrings that conflict with behavior
    - Verbose comments that restate mechanics
+   - Programmer jargon or software-style shorthand that would not be
+     immediately clear to an economics PhD, including terms such as `harness`,
+     `fixture`, `scaffold`, `canonical`, and `legacy`
    - Comments or docstrings that reference issue or ticket numbers, commit
      hashes, pull requests, or conversations with Claude or Codex
 4. Check documentation files and verify referenced paths exist.
@@ -36,6 +39,11 @@ and align documentation with code reality.
 - File headers: clean and self-contained, with purpose, inputs, outputs, and
   assumptions when relevant
 - Inline comments: short, explain domain logic rather than code mechanics
+- Plain language: name the object or task directly. Prefer `test setup`,
+  `example input`, `initial structure`, `main specification`, or `earlier
+  method` to programmer jargon or software-style shorthand. Explain any precise
+  software term in plain language in the same comment or docstring. The full
+  banned-term and replacement table is in `protocols/writing.md`.
 - Comments self-contained: strip references to issues, commit hashes, pull
   requests, or Claude/Codex conversations
 - Do not prefix with "Economic intuition:"

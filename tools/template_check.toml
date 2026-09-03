@@ -1,0 +1,6 @@
+# Parts of repo-template present in this repository.
+# The consistency checker applies only the checks that match this structure.
+
+has_latex = false
+has_code = false
+readme_documents_framework = false
