@@ -138,15 +138,6 @@ Do we actually .hi[NEED] government intervention?
 
 ---
 
-# Ronald Coase (1910-2013)
-
-
-```{r, echo = FALSE}
-local_video("videos/03-coase-ronald-coase.mp4")
-```
-
----
-
 # The Coase Theorem
 
 If there are:
@@ -310,7 +301,7 @@ The doctor can pay the data center to reduce operation of its noisy equipment
 
 Why?
 
-Because MC to the doctor is higher than MB to the data center for the units of noise after N<sup>*</sup>
+Because MC to the doctor is higher than MB to the data center for noise at N<sub>0</sub>
 
 ]
 
@@ -580,43 +571,6 @@ You will only change the level of noise if your welfare/surplus improves
 
 ---
 
-# Coase: Point 3
-
-What if the choice is discrete: noise or silence?
-
---
-
-Suppose the surplus to the two people under noise and silence is given by:
-
-|         	| Data center 	| Doctor 	|
-|---------	|:-----------:	|:------:	|
-| Noise   	|     500     	|    0   	|
-| Silence 	|      0      	|   250  	|
-
-What happens?
-
---
-
-Total surplus is maximized with noise (500 > 250)...
-
----
-
-# Coase: Point 3
-
-|         	| Data center 	| Doctor 	|
-|---------	|:-----------:	|:------:	|
-| Noise   	|     500     	|    0   	|
-| Silence 	|      0      	|   250  	|
-
-If the data center has the right to create noise, we are already at the efficient outcome
-
---
-
-If the doctor has the right to quiet, the data center can pay the doctor more than 250 but less than 500 and both are better off: a Pareto improvement
-
-
----
-
 # Coase Caveats
 
 Coasean bargaining does not always work like you think
@@ -640,14 +594,14 @@ Status quo is no contract: no additional noise and no transfer payment
 
 --
 
-This is a one-shot game: the data center makes one take-it-or-leave-it offer in which the doctor accepts noise $N$ in exchange for payment $\theta$
+This is a one-shot game: the data center makes one take-it-or-leave-it offer in which the doctor accepts noise $N$ in exchange for payment $P$
 
 ---
 
 # Coase Caveats: Transactions costs
 
 Timing:
-1. The data center pays transaction/setup cost $tr$ to propose one contract $(N,\theta)$
+1. The data center pays transaction/setup cost $tr$ to propose one contract $(N,P)$
 2. Doctor accepts or rejects once
 3. If rejected, they stay at the status quo (no additional noise, no transfer)
 
@@ -663,11 +617,11 @@ When does the doctor accept the contract?
 
 --
 
-The doctor is weakly better off accepting the contract if the transfer payment $\theta$ (the benefit) is at least the cost of noise $C(N)$ 
+The doctor is weakly better off accepting the contract if the payment $P$ is at least the cost of noise $C(N)$
 
 --
 
-In our graphical example, C(N) = MC $\times$ N since MC is constant
+Let $C(N)$ denote the doctor's total cost of noise, so $C'(N)$ is the marginal cost of additional noise
 
 --
 
@@ -681,7 +635,7 @@ i.e. what contract proposal maximizes the data center's profit?
 
 # Coase Caveats: Transactions costs
 
-The data center will choose to offer $\theta = MC \times N$
+The data center will choose to offer $P = C(N)$
 
 --
 
@@ -689,11 +643,11 @@ Why?
 
 --
 
-In a one-shot take-it-or-leave-it offer, the data center offers the minimum the doctor is willing to accept: $\theta = C(N) = MC \times N$
+In a one-shot take-it-or-leave-it offer, the data center offers the minimum the doctor is willing to accept: $P = C(N)$
 
 --
 
-If bargaining were unlimited, for a given $N$ the feasible theta range is $\theta \in [MC \times N, B(N)]$
+If bargaining were unlimited, for a given $N$, the feasible payment range is between the minimum the doctor is willing to accept and the maximum the data center is willing to pay
 
 --
 
@@ -703,22 +657,22 @@ The realized payment in that interval depends on bargaining power and bargaining
 
 # Coase Caveats: Transactions costs
 
-This means we can write the data center's total profit as:
+The data center's total profit is:
 
 --
 
-$$\pi(N) = B(N) - MC \times N - tr$$
+$$\pi(N) = B(N) - \underbrace{C(N)}_{P} - tr$$
 
-where $B(N)$ is the data center's benefit from operating the equipment that creates noise (area under MB)
-
---
-
-Its optimal choice of $N$ (and $\theta$) is given by the first-order condition:
+where $B(N)$ is the data center's operating benefit from noise
 
 --
 
-$$B'(N) = MC \leftrightarrow MB(N) = MC$$
-which matches our condition for efficiency in noise
+Its optimal choice of $N$ satisfies:
+
+--
+
+$$B'(N) = C'(N)$$
+which is the condition for efficient noise
 
 --
 
@@ -781,7 +735,7 @@ If the data center has the right to create noise, we just flip the script
 
 --
 
-The doctor makes a one-shot take-it-or-leave-it contract offer $(N, \theta)$ in which the data center reduces noise from $N_0$ in exchange for a transfer payment
+The doctor makes a one-shot take-it-or-leave-it contract offer $(N, P)$ in which the data center reduces noise from $N_0$ in exchange for a payment
 
 ---
 
@@ -793,17 +747,17 @@ When does the data center accept the contract?
 
 --
 
-The data center accepts if $\theta \geq B(N_0) - B(N)$ (payment exceeds its lost operating benefit)
+The data center accepts if $P \geq B(N_0) - B(N)$ (payment exceeds its lost operating benefit)
 
 --
 
-Under one-shot take-it-or-leave-it bargaining, the doctor offers the minimum required: $\theta = B(N_0) - B(N)$
+Under one-shot take-it-or-leave-it bargaining, the doctor offers the minimum required: $P = B(N_0) - B(N)$
 
 ---
 
 # The feasible payment range
 
-With unlimited bargaining, for given $N$ the feasible theta range is $\theta \in [B(N_0)-B(N), MC \times (N_0-N)]$
+With unlimited bargaining, for a given $N$, the feasible payment range is between the minimum the data center is willing to accept and the maximum the doctor is willing to pay
 
 --
 
@@ -813,24 +767,17 @@ Again, the realized payment in that interval depends on bargaining power and bar
 
 # Coase Caveats: Transactions costs
 
-The doctor's problem is then to maximize the benefits of the transaction:
-$$\max_{N} \underbrace{MC \times(N_0-N)}_{\text{noise cost reduction}} - \theta - tr$$
-Which we can write as:
-$$\max_{N} MC \times (N_0-N) - \underbrace{(B(N_0) - B(N))}_{\theta} - tr$$
----
-
-# Coase Caveats: Transactions costs
-
-$$\max_{N} MC \times (N_0-N) - \underbrace{(B(N_0) - B(N))}_{\theta} - tr$$
+The doctor chooses $N$ to minimize total cost:
+$$\min_{N} C(N) + \underbrace{\left[B(N_0)-B(N)\right]}_{P} + tr$$
 
 --
 
-First term is the avoided noise costs, second term is the payment, third term is the transaction cost
+$C(N)$ is the remaining noise cost, $P$ is the payment, and $tr$ is the transaction cost
 
 --
 
-The doctor's problem gives us the first-order condition:
-$$MC = B'(N) \equiv MC = MB$$
+The first-order condition is:
+$$C'(N) = B'(N)$$
 
 ---
 
@@ -1215,27 +1162,25 @@ local_video("videos/03-coase-ashburn-buyout-offers.mp4")
 
 # A bargaining attempt: Ashburn, Virginia
 
-Reports described a proposal to assemble all 143 homes in Ashburn's Regency neighborhood for data center development
+Developers discussed buying all 143 homes in Ashburn's Regency neighborhood
 
 --
 
-The target price was roughly $4.4 million per acre, potentially more than $500 million in total
+The reported target was about $4.4 million per acre---more than $500 million in total
 
 --
 
-But the HOA president told NBC4 there was .hi[no current purchase offer], and no sale had closed
-
---
-
-Why is agreement difficult despite the potential gains from trade?
-
-- .hi[Many parties:] roughly 143 homeowners must coordinate
-- .hi[Site assembly:] the developer needs a contiguous parcel, giving each owner veto power
-- .hi[Regulatory risk:] buying the land does not guarantee approval for a data center
-
-Large potential surplus can start bargaining, but coordination costs and contingent approvals can keep a deal from closing
+But the HOA president told NBC4 there was .hi[no current offer], and no sale closed
 
 .footnote[Source: NBC4 Washington, March 25, 2026.]
+
+---
+
+# Why didn't a deal close?
+
+- .hi[Many parties:] 143 homeowners must coordinate
+- .hi[Holdouts:] each owner may demand a larger share of the surplus
+- .hi[Regulatory risk:] purchase does not guarantee data center approval
 
 ---
 
@@ -1261,10 +1206,9 @@ Not necessarily: if their true willingness to accept exceeds the developer's wil
 
 --
 
-But land assembly makes bargaining fragile:
+But bargaining with many owners is fragile:
 
 - Is a "no" true WTA, or a holdout for a bigger share of the surplus?
-- A .hi[contiguous] site gives every owner veto power
 - With $N$ owners who must all say yes, transactions costs rise fast
 
 ---
@@ -1462,7 +1406,7 @@ ggplot() +
 
 Start at G = 0; the operator pays for hours
 
-Residents accept $\theta \geq 4 \times 8 = 32$; the operator pays at most his benefit, $\theta \leq 96$
+Residents accept $P \geq 4 \times 8 = 32$; the operator pays at most his benefit, $P \leq 96$
 
 Gains from trade: the .hi-blue[blue] triangle $= \frac{1}{2} \times 8 \times 16 = 64$
 
