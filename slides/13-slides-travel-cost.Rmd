@@ -42,7 +42,7 @@ blue <- "#3C93DC"
 red <- "#ff0000"
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 xaringanExtra::style_panelset(panel_tab_color_active = "red")
 ```
 <style>

@@ -8,8 +8,6 @@
     <link href="05-slides-taxes_files/remark-css/default.css" rel="stylesheet" />
     <link href="05-slides-taxes_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="05-slides-taxes_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="05-slides-taxes_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="05-slides-taxes_files/tile-view/tile-view.js"></script>
     <link href="05-slides-taxes_files/panelset/panelset.css" rel="stylesheet" />
     <script src="05-slides-taxes_files/panelset/panelset.js"></script>
     <script src="05-slides-taxes_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,20 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.5/site-library'
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
 ## (as 'lib' is unspecified)
 ```
 
@@ -91,7 +82,12 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/video_helpers.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -502,7 +498,7 @@ In January 2025, NYC became the first US city to implement congestion pricing
 # NYC congestion pricing: one year later
 
 &lt;center&gt;
-&lt;img src="files/05-travel-time.png" width="70%" /&gt;
+&lt;img src="files/05-travel-time.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -510,7 +506,7 @@ In January 2025, NYC became the first US city to implement congestion pricing
 # NYC congestion pricing: one year later
 
 &lt;center&gt;
-&lt;img src="files/05-segment-speed.png" width="70%" /&gt;
+&lt;img src="files/05-segment-speed.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -518,7 +514,7 @@ In January 2025, NYC became the first US city to implement congestion pricing
 # NYC congestion pricing: one year later
 
 &lt;center&gt;
-&lt;img src="files/05-speed-effect.png" width="70%" /&gt;
+&lt;img src="files/05-speed-effect.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -526,7 +522,7 @@ In January 2025, NYC became the first US city to implement congestion pricing
 # NYC congestion pricing: one year later
 
 &lt;center&gt;
-&lt;img src="files/05-speed-spillovers.png" width="70%" /&gt;
+&lt;img src="files/05-speed-spillovers.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -534,7 +530,7 @@ In January 2025, NYC became the first US city to implement congestion pricing
 # NYC congestion pricing: one year later
 
 &lt;center&gt;
-&lt;img src="files/05-other-outcomes.png" width="70%" /&gt;
+&lt;img src="files/05-other-outcomes.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -542,7 +538,7 @@ In January 2025, NYC became the first US city to implement congestion pricing
 # NYC congestion pricing: one year later
 
 &lt;center&gt;
-&lt;img src="files/05-other-outcomes-2.png" width="70%" /&gt;
+&lt;img src="files/05-other-outcomes-2.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -737,7 +733,7 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 
 # Taxes vs Standards
 &lt;center&gt;
-&lt;img src="files/05-bakken.png" width="80%" /&gt;
+&lt;img src="files/05-bakken.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -745,7 +741,7 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 # Taxes vs Standards
 
 &lt;center&gt;
-&lt;img src="files/05-bakken.png" width="80%" /&gt;
+&lt;img src="files/05-bakken.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -759,7 +755,7 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 # Unconventional oil
 
 &lt;center&gt;
-&lt;img src="files/05-drill.png" width="80%" /&gt;
+&lt;img src="files/05-drill.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 
@@ -768,7 +764,7 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 # Unconventional oil
 
 &lt;center&gt;
-&lt;img src="files/05-complete.png" width="80%" /&gt;
+&lt;img src="files/05-complete.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -776,7 +772,7 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 # Unconventional oil
 
 &lt;center&gt;
-&lt;img src="files/05-flare.png" width="80%" /&gt;
+&lt;img src="files/05-flare.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -786,11 +782,11 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 North Dakota Industrial Commission established firm-level flaring limits beginning in October 2014
 
 &lt;center&gt;
-&lt;img src="files/05-flaring1.png" width="80%" /&gt;
+&lt;img src="files/05-flaring1.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 &lt;center&gt;
-&lt;img src="files/05-flaring2.png" width="80%" /&gt;
+&lt;img src="files/05-flaring2.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -814,7 +810,7 @@ So with heterogeneous MACs, this generally violates the equimarginal principle a
 Firms appear to be cost-minimizing to comply
 
 &lt;center&gt;
-&lt;img src="files/05-firm-mac.png" width="60%" /&gt;
+&lt;img src="files/05-firm-mac.png" alt="" width="60%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -824,7 +820,7 @@ Firms appear to be cost-minimizing to comply
 If we add up the MACs to the market-wide MAC, we aren't always abating at the cheapest wells (because the standard is uniform across firms)
 
 &lt;center&gt;
-&lt;img src="files/05-industry-mac.png" width="50%" /&gt;
+&lt;img src="files/05-industry-mac.png" alt="" width="50%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -848,7 +844,7 @@ We could capture 99% of the gas as the regulation, but 50% of the cost
 The majority of firms are better off with a tax
 
 &lt;center&gt;
-&lt;img src="files/05-flaring4.png" width="60%" /&gt;
+&lt;img src="files/05-flaring4.png" alt="" width="60%" /&gt;
 &lt;/center&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

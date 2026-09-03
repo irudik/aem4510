@@ -8,8 +8,6 @@
     <link href="02-slides-market-failures_files/remark-css/default.css" rel="stylesheet" />
     <link href="02-slides-market-failures_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="02-slides-market-failures_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="02-slides-market-failures_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="02-slides-market-failures_files/tile-view/tile-view.js"></script>
     <link href="02-slides-market-failures_files/panelset/panelset.css" rel="stylesheet" />
     <script src="02-slides-market-failures_files/panelset/panelset.js"></script>
     <script src="02-slides-market-failures_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,16 +37,45 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
+```
+
+```
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
+## (as 'lib' is unspecified)
+```
+
+```
+## Warning: package 'tweetrmd' is not available for this version of R
+## 
+## A version of this package for your version of R might be available elsewhere,
+## see the ideas at
+## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
+```
+
+```
+## Warning: 'BiocManager' not available.  Could not check Bioconductor.
+## 
+## Please use `install.packages('BiocManager')` and then retry.
+```
+
+```
+## Warning in p_install(package, character.only = TRUE, ...):
+```
+
+```
+## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
+## logical.return = TRUE, : there is no package called 'tweetrmd'
+```
+
+```
+## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
+## tweetrmd
+```
+
+``` r
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {

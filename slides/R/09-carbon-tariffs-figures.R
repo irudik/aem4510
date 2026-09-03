@@ -3,14 +3,20 @@
 # demand, supply, and marginal-social-cost schedules that are easy to test.
 
 ct_palette = list(
-  demand = "#6f8fcf",
-  supply = "#8f8f8f",
-  msc = "#5b5b5b",
-  tax = "#4f81bd",
+  demand = "#638ccc",
+  supply = "#ca5670",
+  msc = "#000000",
+  tax = "#638ccc",
   tariff = "#f2b233",
   loss = "#c9c9c9",
   gain = "#7fbf7b",
-  guide = "#9bb4e5",
+  revenue = "#f2b233",
+  producer_gain = "#5aa469",
+  production_dwl = "#d95f02",
+  consumption_dwl = "#6a51a3",
+  surplus_rect = "#8ecae6",
+  surplus_triangle = "#fb8500",
+  guide = "grey50",
   accent = "#c44e52",
   foreign = "#7a68c5"
 )
@@ -78,6 +84,7 @@ ct_country_outcomes = function(parameters = ct_country_parameters()) {
   world_price = parameters$world_price
   tariff_inclusive_price = world_price + parameters$tariff
   producer_price_with_tax = world_price - parameters$carbon_tax
+  producer_price_with_tax_tariff = tariff_inclusive_price - parameters$carbon_tax
 
   q_supply = ct_inverse_supply(
     world_price,
@@ -114,6 +121,7 @@ ct_country_outcomes = function(parameters = ct_country_parameters()) {
     world_price = world_price,
     tariff_price = tariff_inclusive_price,
     producer_price_with_tax = producer_price_with_tax,
+    producer_price_with_tax_tariff = producer_price_with_tax_tariff,
     q_supply = q_supply,
     q_supply_tariff = q_supply_tariff,
     q_supply_tax = q_supply_tax,
@@ -247,59 +255,203 @@ ct_intensity_outcomes = function(
   )
 }
 
+# Shared round-number example used for the lecture's equivalence results.
+ct_numeric_example_parameters = function() {
+  list(
+    demand_intercept = 100,
+    demand_slope = 1,
+    supply_intercept = 20,
+    supply_slope = 1,
+    world_price = 40,
+    carbon_tax = 10,
+    tariff = 10,
+    consumption_tax = 10,
+    production_subsidy = 10
+  )
+}
+
+ct_numeric_example_outcomes = function(parameters = ct_numeric_example_parameters()) {
+  free_trade = tibble::tibble(
+    regime = "free_trade",
+    consumer_price = parameters$world_price,
+    producer_price = parameters$world_price,
+    domestic_production = parameters$world_price - parameters$supply_intercept,
+    domestic_consumption = parameters$demand_intercept - parameters$world_price,
+    imports = (parameters$demand_intercept - parameters$world_price) -
+      (parameters$world_price - parameters$supply_intercept),
+    tariff_revenue = 0,
+    carbon_tax_revenue = 0,
+    consumption_tax_revenue = 0,
+    production_subsidy_cost = 0
+  )
+
+  tariff_alone_price = parameters$world_price + parameters$tariff
+  tariff_alone = tibble::tibble(
+    regime = "tariff_alone",
+    consumer_price = tariff_alone_price,
+    producer_price = tariff_alone_price,
+    domestic_production = tariff_alone_price - parameters$supply_intercept,
+    domestic_consumption = parameters$demand_intercept - tariff_alone_price,
+    imports = (parameters$demand_intercept - tariff_alone_price) -
+      (tariff_alone_price - parameters$supply_intercept),
+    tariff_revenue = parameters$tariff * (
+      (parameters$demand_intercept - tariff_alone_price) -
+        (tariff_alone_price - parameters$supply_intercept)
+    ),
+    carbon_tax_revenue = 0,
+    consumption_tax_revenue = 0,
+    production_subsidy_cost = 0
+  )
+
+  tax_tariff_consumer_price = parameters$world_price + parameters$tariff
+  tax_tariff_producer_price = tax_tariff_consumer_price - parameters$carbon_tax
+  tax_tariff = tibble::tibble(
+    regime = "tax_tariff",
+    consumer_price = tax_tariff_consumer_price,
+    producer_price = tax_tariff_producer_price,
+    domestic_production = tax_tariff_producer_price - parameters$supply_intercept,
+    domestic_consumption = parameters$demand_intercept - tax_tariff_consumer_price,
+    imports = (parameters$demand_intercept - tax_tariff_consumer_price) -
+      (tax_tariff_producer_price - parameters$supply_intercept),
+    tariff_revenue = parameters$tariff * (
+      (parameters$demand_intercept - tax_tariff_consumer_price) -
+        (tax_tariff_producer_price - parameters$supply_intercept)
+    ),
+    carbon_tax_revenue = parameters$carbon_tax * (
+      tax_tariff_producer_price - parameters$supply_intercept
+    ),
+    consumption_tax_revenue = 0,
+    production_subsidy_cost = 0
+  )
+
+  consumption_tax_price = parameters$world_price + parameters$consumption_tax
+  consumption_tax = tibble::tibble(
+    regime = "consumption_tax",
+    consumer_price = consumption_tax_price,
+    producer_price = parameters$world_price,
+    domestic_production = parameters$world_price - parameters$supply_intercept,
+    domestic_consumption = parameters$demand_intercept - consumption_tax_price,
+    imports = (parameters$demand_intercept - consumption_tax_price) -
+      (parameters$world_price - parameters$supply_intercept),
+    tariff_revenue = 0,
+    carbon_tax_revenue = 0,
+    consumption_tax_revenue = parameters$consumption_tax * (
+      parameters$demand_intercept - consumption_tax_price
+    ),
+    production_subsidy_cost = 0
+  )
+
+  consumption_tax_subsidy_price = parameters$world_price + parameters$consumption_tax
+  production_subsidy_net_price = parameters$world_price + parameters$production_subsidy
+  consumption_tax_prod_subsidy = tibble::tibble(
+    regime = "consumption_tax_prod_subsidy",
+    consumer_price = consumption_tax_subsidy_price,
+    producer_price = production_subsidy_net_price,
+    domestic_production = production_subsidy_net_price - parameters$supply_intercept,
+    domestic_consumption = parameters$demand_intercept - consumption_tax_subsidy_price,
+    imports = (parameters$demand_intercept - consumption_tax_subsidy_price) -
+      (production_subsidy_net_price - parameters$supply_intercept),
+    tariff_revenue = 0,
+    carbon_tax_revenue = 0,
+    consumption_tax_revenue = parameters$consumption_tax * (
+      parameters$demand_intercept - consumption_tax_subsidy_price
+    ),
+    production_subsidy_cost = parameters$production_subsidy * (
+      production_subsidy_net_price - parameters$supply_intercept
+    )
+  )
+
+  dplyr::bind_rows(
+    free_trade,
+    tariff_alone,
+    tax_tariff,
+    consumption_tax,
+    consumption_tax_prod_subsidy
+  ) |>
+    dplyr::mutate(
+      net_revenue = .data$tariff_revenue +
+        .data$carbon_tax_revenue +
+        .data$consumption_tax_revenue -
+        .data$production_subsidy_cost
+    )
+}
+
 ct_plot_theme = function() {
-  ggplot2::theme_void(base_size = 16) +
+  ggplot2::theme_minimal() +
     ggplot2::theme(
-      plot.margin = ggplot2::margin(10, 18, 14, 18),
-      plot.title = ggplot2::element_text(size = 18, face = "bold", hjust = 0),
-      plot.subtitle = ggplot2::element_text(size = 14, hjust = 0.5)
+      legend.position = "none",
+      plot.margin = ggplot2::margin(10, 18, 14, 24),
+      plot.title = ggplot2::element_text(size = 24, face = "bold", hjust = 0),
+      plot.subtitle = ggplot2::element_text(size = 15, hjust = 0.5),
+      axis.text.x = ggplot2::element_text(size = 18, color = "black"),
+      axis.text.y = ggplot2::element_text(size = 18, color = "black"),
+      axis.title.x = ggplot2::element_text(size = 24, color = "black", margin = ggplot2::margin(t = 10)),
+      axis.title.y = ggplot2::element_text(size = 24, color = "black", margin = ggplot2::margin(r = 10)),
+      axis.line = ggplot2::element_line(color = "black"),
+      axis.ticks = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      panel.grid.major = ggplot2::element_blank(),
+      panel.background = ggplot2::element_rect(fill = "#ffffff", colour = NA),
+      plot.background = ggplot2::element_rect(fill = "#ffffff", colour = NA)
     )
 }
 
 ct_base_plot = function(
   x_limit = c(0, 82),
-  y_limit = c(0, 86),
-  x_label = "q[i]",
-  x_axis_end = 78,
-  x_label_x = x_axis_end + 1
+  y_limit = c(0, 100),
+  x_label = "Domestic quantity",
+  y_label = "Price",
+  subtitle = NULL,
+  x_breaks = NULL,
+  x_labels = NULL,
+  y_breaks = NULL,
+  y_labels = NULL,
+  x_axis_end = NULL,
+  x_label_x = NULL
 ) {
+  if (is.null(x_breaks)) {
+    x_breaks = pretty(x_limit, n = 5)
+  }
+  if (is.null(y_breaks)) {
+    y_breaks = pretty(y_limit, n = 5)
+  }
+
   ggplot2::ggplot() +
     ggplot2::coord_cartesian(xlim = x_limit, ylim = y_limit, clip = "off") +
-    ggplot2::annotate(
-      "segment", x = 8, xend = 8, y = 8, yend = 82, linewidth = 0.7
+    ggplot2::scale_x_continuous(
+      expand = c(0, 0),
+      breaks = x_breaks,
+      labels = if (is.null(x_labels)) ggplot2::waiver() else x_labels
     ) +
-    ggplot2::annotate(
-      "segment", x = 8, xend = x_axis_end, y = 8, yend = 8, linewidth = 0.7
+    ggplot2::scale_y_continuous(
+      expand = c(0, 0),
+      breaks = y_breaks,
+      labels = if (is.null(y_labels)) ggplot2::waiver() else y_labels
     ) +
-    ggplot2::annotate(
-      "text", x = 7, y = 84, label = "P", size = 5.0, hjust = 0.5
-    ) +
-    ggplot2::annotate(
-      "text", x = x_label_x, y = 5, label = x_label, parse = TRUE, size = 5.0, hjust = 1
-    ) +
+    ggplot2::labs(x = x_label, y = y_label, subtitle = subtitle) +
     ct_plot_theme()
 }
 
-ct_curve_data = function(q_grid, curve_function, y_floor = 8) {
+ct_curve_data = function(q_grid, curve_function, y_floor = 0) {
   tibble::tibble(q = q_grid, p = curve_function(q_grid)) |>
-    dplyr::filter(q >= 8, p >= y_floor)
+    dplyr::filter(q >= 0, p >= y_floor)
 }
 
 ct_country_curve_layer = function(parameters, show_msc = FALSE) {
-  q_grid = seq(8, 82, by = 0.25)
+  q_grid = seq(0, 82, by = 0.25)
 
   layers = list(
     ggplot2::geom_line(
       data = ct_curve_data(q_grid, function(q) ct_country_demand(q, parameters)),
       ggplot2::aes(x = q, y = p),
       color = ct_palette$demand,
-      linewidth = 1.0
+      linewidth = 1.5
     ),
     ggplot2::geom_line(
       data = ct_curve_data(q_grid, function(q) ct_country_supply(q, parameters)),
       ggplot2::aes(x = q, y = p),
       color = ct_palette$supply,
-      linewidth = 1.0
+      linewidth = 1.5
     )
   )
 
@@ -311,7 +463,7 @@ ct_country_curve_layer = function(parameters, show_msc = FALSE) {
           data = ct_curve_data(q_grid, function(q) ct_country_msc(q, parameters)),
           ggplot2::aes(x = q, y = p),
           color = ct_palette$msc,
-          linewidth = 1.0
+          linewidth = 1.5
         )
       )
     )
@@ -321,20 +473,20 @@ ct_country_curve_layer = function(parameters, show_msc = FALSE) {
 }
 
 ct_world_curve_layer = function(parameters, show_msc = FALSE) {
-  q_grid = seq(8, 110, by = 0.25)
+  q_grid = seq(0, 110, by = 0.25)
 
   layers = list(
     ggplot2::geom_line(
       data = ct_curve_data(q_grid, function(q) ct_world_demand(q, parameters)),
       ggplot2::aes(x = q, y = p),
       color = ct_palette$demand,
-      linewidth = 1.0
+      linewidth = 1.5
     ),
     ggplot2::geom_line(
       data = ct_curve_data(q_grid, function(q) ct_world_supply(q, parameters)),
       ggplot2::aes(x = q, y = p),
       color = ct_palette$supply,
-      linewidth = 1.0
+      linewidth = 1.5
     )
   )
 
@@ -346,7 +498,7 @@ ct_world_curve_layer = function(parameters, show_msc = FALSE) {
           data = ct_curve_data(q_grid, function(q) ct_world_msc(q, parameters)),
           ggplot2::aes(x = q, y = p),
           color = ct_palette$msc,
-          linewidth = 1.0
+          linewidth = 1.5
         )
       )
     )
@@ -355,7 +507,17 @@ ct_world_curve_layer = function(parameters, show_msc = FALSE) {
   layers
 }
 
-ct_imports_arrow = function(x_start, x_end, y = 18) {
+ct_imports_arrow = function(
+  x_start,
+  x_end,
+  y = 14,
+  label = "imports",
+  color = ct_palette$guide,
+  parse = FALSE,
+  text_size = 5.2,
+  text_y_offset = 4,
+  lineheight = 1.0
+) {
   list(
     ggplot2::annotate(
       "segment",
@@ -363,8 +525,42 @@ ct_imports_arrow = function(x_start, x_end, y = 18) {
       xend = x_end,
       y = y,
       yend = y,
-      color = ct_palette$guide,
-      linewidth = 0.7,
+      color = color,
+      linewidth = 1.2,
+      arrow = grid::arrow(
+        type = "closed",
+        ends = "both",
+        length = grid::unit(0.10, "inches")
+      )
+    ),
+    ggplot2::annotate(
+      "text",
+      x = mean(c(x_start, x_end)),
+      y = y + text_y_offset,
+      label = label,
+      color = color,
+      parse = parse,
+      size = text_size,
+      lineheight = lineheight
+    )
+  )
+}
+
+ct_delta_imports_arrow = function(
+  x_start,
+  x_end,
+  y = 14,
+  color = ct_palette$accent
+) {
+  list(
+    ggplot2::annotate(
+      "segment",
+      x = x_start,
+      xend = x_end,
+      y = y,
+      yend = y,
+      color = color,
+      linewidth = 1.2,
       arrow = grid::arrow(
         type = "closed",
         ends = "both",
@@ -375,9 +571,10 @@ ct_imports_arrow = function(x_start, x_end, y = 18) {
       "text",
       x = mean(c(x_start, x_end)),
       y = y + 4,
-      label = "imports",
-      color = ct_palette$guide,
-      size = 4.4
+      label = "Delta~imports",
+      parse = TRUE,
+      color = color,
+      size = 5.0
     )
   )
 }
@@ -389,10 +586,10 @@ ct_guide_segments = function(x_values, y_values) {
       "segment",
       x = .x,
       xend = .x,
-      y = 8,
+      y = 0,
       yend = max(y_values),
       linetype = "dashed",
-      linewidth = 0.5,
+      linewidth = 1.0,
       color = ct_palette$guide
     )
   )
@@ -401,12 +598,12 @@ ct_guide_segments = function(x_values, y_values) {
     y_values,
     ~ ggplot2::annotate(
       "segment",
-      x = 8,
-      xend = 78,
+      x = 0,
+      xend = max(x_values),
       y = .x,
       yend = .x,
       linetype = "dashed",
-      linewidth = 0.5,
+      linewidth = 1.0,
       color = ct_palette$guide
     )
   )
@@ -424,7 +621,7 @@ ct_label_quantities = function(labels, x_values, y = 4.5) {
         y = y,
         label = label,
         parse = TRUE,
-        size = 4.1
+        size = 5.2
       )
     }
   )
@@ -440,51 +637,230 @@ ct_label_prices = function(labels, y_values, x = 4.5, hjust = 0) {
         y = y_value,
         label = label,
         parse = TRUE,
-        size = 4.1,
+        size = 5.2,
         hjust = hjust
       )
     }
   )
 }
 
-ct_plot_figure_1 = function(stage = c("welfare", "free_trade", "tariff")) {
-  stage = match.arg(stage)
+ct_plot_surplus_refresher = function(type = c("consumer", "producer")) {
+  type = match.arg(type)
   parameters = ct_country_parameters()
   country = ct_country_outcomes(parameters)
-  world = ct_world_outcomes()
+
+  if (type == "consumer") {
+    figure = ct_base_plot(
+      x_breaks = c(country$q_demand_tariff, country$q_demand),
+      x_labels = c(expression(q[i * tau]^D), expression(q[i]^D)),
+      y_breaks = c(country$world_price, country$tariff_price),
+      y_labels = c(expression(P[W]), expression(P[W] + tau)),
+      x_label = "Quantity",
+      y_label = "Price"
+    ) +
+      ggplot2::annotate(
+        "rect",
+        xmin = 0,
+        xmax = country$q_demand_tariff,
+        ymin = country$world_price,
+        ymax = country$tariff_price,
+        fill = ct_palette$surplus_rect,
+        alpha = 0.45
+      ) +
+      ggplot2::annotate(
+        "polygon",
+        x = c(country$q_demand_tariff, country$q_demand, country$q_demand_tariff),
+        y = c(country$tariff_price, country$world_price, country$world_price),
+        fill = ct_palette$surplus_triangle,
+        alpha = 0.70
+      ) +
+      ct_country_curve_layer(parameters) +
+      ct_guide_segments(
+        x_values = c(country$q_demand_tariff, country$q_demand),
+        y_values = c(country$world_price, country$tariff_price)
+      ) +
+      ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
+      ggplot2::annotate("text", x = 72, y = 74, label = "S[i]", color = ct_palette$supply, size = 4.3)
+
+    return(figure)
+  }
+
+  ct_base_plot(
+    x_breaks = c(country$q_supply, country$q_supply_tariff),
+    x_labels = c(expression(q[i]^S), expression(q[i * tau]^S)),
+    y_breaks = c(country$world_price, country$tariff_price),
+    y_labels = c(expression(P[W]), expression(P[W] + tau)),
+    x_label = "Quantity",
+    y_label = "Price"
+  ) +
+    ggplot2::annotate(
+      "rect",
+      xmin = 0,
+      xmax = country$q_supply,
+      ymin = country$world_price,
+      ymax = country$tariff_price,
+      fill = ct_palette$surplus_rect,
+      alpha = 0.45
+    ) +
+    ggplot2::annotate(
+      "polygon",
+      x = c(country$q_supply, country$q_supply, country$q_supply_tariff),
+      y = c(country$world_price, country$tariff_price, country$tariff_price),
+      fill = ct_palette$surplus_triangle,
+      alpha = 0.70
+    ) +
+    ct_country_curve_layer(parameters) +
+    ct_guide_segments(
+      x_values = c(country$q_supply, country$q_supply_tariff),
+      y_values = c(country$world_price, country$tariff_price)
+    ) +
+    ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 74, label = "S[i]", color = ct_palette$supply, size = 4.3)
+}
+
+ct_tariff_welfare_components = function(parameters = ct_country_parameters()) {
+  country = ct_country_outcomes(parameters)
+  tariff_wedge = country$tariff_price - country$world_price
+
+  producer_gain_rectangle = country$q_supply * tariff_wedge
+  producer_gain_triangle = 0.5 * (country$q_supply_tariff - country$q_supply) * tariff_wedge
+  tariff_revenue = (country$q_demand_tariff - country$q_supply_tariff) * tariff_wedge
+  production_dwl = 0.5 * (country$q_supply_tariff - country$q_supply) * tariff_wedge
+  consumption_dwl = 0.5 * (country$q_demand - country$q_demand_tariff) * tariff_wedge
+  consumer_loss = country$q_demand_tariff * tariff_wedge +
+    0.5 * (country$q_demand - country$q_demand_tariff) * tariff_wedge
+
+  tibble::tibble(
+    area_a = producer_gain_rectangle,
+    area_b = producer_gain_triangle,
+    area_c = production_dwl,
+    area_d = tariff_revenue,
+    area_e = consumption_dwl,
+    producer_gain_rectangle = producer_gain_rectangle,
+    producer_gain_triangle = producer_gain_triangle,
+    producer_gain = producer_gain_rectangle + producer_gain_triangle,
+    tariff_revenue = tariff_revenue,
+    production_dwl = production_dwl,
+    consumption_dwl = consumption_dwl,
+    consumer_loss = consumer_loss,
+    national_welfare_change = -(production_dwl + consumption_dwl)
+  )
+}
+
+ct_plot_figure_1 = function(
+  stage = c(
+    "consumption_distortion",
+    "production_distortion",
+    "welfare_dwl",
+    "welfare_components",
+    "welfare",
+    "quantities",
+    "price",
+    "free_trade",
+    "tariff"
+  )
+) {
+  stage = match.arg(stage)
+  if (stage == "tariff") {
+    stage = "quantities"
+  }
+  if (stage == "welfare") {
+    stage = "welfare_components"
+  }
+  parameters = ct_country_parameters()
+  country = ct_country_outcomes(parameters)
 
   if (stage == "free_trade") {
-    quantity_labels = c("q[i]^S", "q[i]^D")
     quantity_values = c(country$q_supply, country$q_demand)
-    price_labels = c("P[W]")
     price_values = c(country$world_price)
+    quantity_labels = c(expression(q[i]^S), expression(q[i]^D))
+    price_labels = c(expression(P[W]))
+    imports_start = country$q_supply
+    imports_end = country$q_demand
+  } else if (stage == "price") {
+    quantity_values = c(country$q_supply, country$q_demand)
+    price_values = c(country$world_price, country$tariff_price)
+    quantity_labels = c(expression(q[i]^S), expression(q[i]^D))
+    price_labels = c(expression(P[W]), expression(P[W] + tau))
     imports_start = country$q_supply
     imports_end = country$q_demand
   } else {
-    quantity_labels = c("q[i]^S", "q[i*tau]^S", "q[i*tau]^D", "q[i]^D")
     quantity_values = c(
       country$q_supply,
       country$q_supply_tariff,
       country$q_demand_tariff,
       country$q_demand
     )
-    price_labels = c("P[W]", "P[W] + tau")
     price_values = c(country$world_price, country$tariff_price)
+    quantity_labels = c(
+      expression(q[i]^S),
+      expression(q[i * tau]^S),
+      expression(q[i * tau]^D),
+      expression(q[i]^D)
+    )
+    price_labels = c(expression(P[W]), expression(P[W] + tau))
     imports_start = country$q_supply_tariff
     imports_end = country$q_demand_tariff
   }
 
-  panel_a = ct_base_plot() +
+  figure = ct_base_plot(
+    x_breaks = quantity_values,
+    x_labels = quantity_labels,
+    y_breaks = price_values,
+    y_labels = price_labels,
+    x_label = "Quantity",
+    y_label = "Price",
+    subtitle = "Country i"
+  ) +
     ct_country_curve_layer(parameters)
 
-  if (stage == "welfare") {
-    panel_a = panel_a +
+  if (stage %in% c("welfare_components", "welfare_dwl", "production_distortion", "consumption_distortion")) {
+    producer_gain_alpha = dplyr::case_when(
+      stage == "welfare_components" ~ 0.55,
+      stage == "welfare_dwl" ~ 0.55,
+      TRUE ~ 0.18
+    )
+    revenue_alpha = dplyr::case_when(
+      stage == "welfare_components" ~ 0.60,
+      stage == "welfare_dwl" ~ 0.60,
+      TRUE ~ 0.18
+    )
+    production_alpha = dplyr::case_when(
+      stage == "production_distortion" ~ 0.78,
+      stage == "welfare_dwl" ~ 0.78,
+      stage == "consumption_distortion" ~ 0.18,
+      TRUE ~ 0.70
+    )
+    consumption_alpha = dplyr::case_when(
+      stage == "consumption_distortion" ~ 0.78,
+      stage == "welfare_dwl" ~ 0.78,
+      stage == "production_distortion" ~ 0.18,
+      TRUE ~ 0.70
+    )
+
+    figure = figure +
+      ggplot2::annotate(
+        "rect",
+        xmin = 0,
+        xmax = country$q_supply,
+        ymin = country$world_price,
+        ymax = country$tariff_price,
+        fill = ct_palette$producer_gain,
+        alpha = producer_gain_alpha
+      ) +
+      ggplot2::annotate(
+        "polygon",
+        x = c(country$q_supply, country$q_supply, country$q_supply_tariff),
+        y = c(country$world_price, country$tariff_price, country$tariff_price),
+        fill = ct_palette$producer_gain,
+        alpha = producer_gain_alpha
+      ) +
       ggplot2::annotate(
         "polygon",
         x = c(country$q_supply, country$q_supply_tariff, country$q_supply_tariff),
         y = c(country$world_price, country$world_price, country$tariff_price),
-        fill = ct_palette$loss,
-        alpha = 0.55
+        fill = ct_palette$production_dwl,
+        alpha = production_alpha
       ) +
       ggplot2::annotate(
         "rect",
@@ -492,83 +868,74 @@ ct_plot_figure_1 = function(stage = c("welfare", "free_trade", "tariff")) {
         xmax = country$q_demand_tariff,
         ymin = country$world_price,
         ymax = country$tariff_price,
-        fill = ct_palette$tariff,
-        alpha = 0.55
+        fill = ct_palette$revenue,
+        alpha = revenue_alpha
       ) +
       ggplot2::annotate(
         "polygon",
         x = c(country$q_demand_tariff, country$q_demand, country$q_demand_tariff),
         y = c(country$tariff_price, country$world_price, country$world_price),
-        fill = ct_palette$loss,
-        alpha = 0.55
+        fill = ct_palette$consumption_dwl,
+        alpha = consumption_alpha
       )
   }
 
-  panel_a = panel_a +
+  figure = figure +
     ct_guide_segments(
       x_values = quantity_values,
       y_values = price_values
     ) +
     ct_imports_arrow(imports_start, imports_end) +
-    ct_label_prices(
-      labels = price_labels,
-      y_values = price_values,
-      x = 1.2
-    ) +
-    ct_label_quantities(
-      labels = quantity_labels,
-      x_values = quantity_values
-    ) +
     ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 74, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 48, y = 77, label = "Country i", size = 4.6)
+    ggplot2::annotate("text", x = 72, y = 74, label = "S[i]", color = ct_palette$supply, size = 4.3)
 
-  if (stage == "welfare") {
-    panel_a = panel_a +
-      ggplot2::annotate("text", x = 21, y = 48, label = "Delta*PS[tau]", parse = TRUE, size = 4.2) +
-      ggplot2::annotate("text", x = 39, y = 49, label = "a", size = 4.2) +
-      ggplot2::annotate("text", x = 47, y = 50, label = "R[tau]", parse = TRUE, size = 4.2) +
-      ggplot2::annotate("text", x = 56, y = 49, label = "b", size = 4.2)
+  if (stage == "price") {
+    figure = figure +
+      ggplot2::annotate(
+        "segment",
+        x = 6.5,
+        xend = 6.5,
+        y = country$world_price,
+        yend = country$tariff_price,
+        linewidth = 0.8,
+        color = ct_palette$tariff,
+        arrow = ggplot2::arrow(
+          ends = "both",
+          type = "closed",
+          length = grid::unit(0.08, "inches")
+        )
+      ) +
+      ggplot2::annotate(
+        "text",
+        x = 10.5,
+        y = mean(c(country$world_price, country$tariff_price)),
+        label = "tariff wedge",
+        color = ct_palette$tariff,
+        size = 4.1,
+        hjust = 0
+      )
   }
 
-  world_parameters = ct_world_parameters()
+  if (stage %in% c("welfare_components", "welfare_dwl")) {
+    figure = figure +
+      ggplot2::annotate("text", x = 16, y = 50, label = "a", size = 4.2) +
+      ggplot2::annotate("text", x = 36.5, y = 53.0, label = "b", size = 4.2) +
+      ggplot2::annotate("text", x = 40.5, y = 48.5, label = "c", size = 4.2) +
+      ggplot2::annotate("text", x = 47, y = 50, label = "d", size = 4.2) +
+      ggplot2::annotate("text", x = 56, y = 49, label = "e", size = 4.2)
+  }
 
-  panel_b = ct_base_plot(
-    x_limit = c(0, 125),
-    y_limit = c(0, 86),
-    x_label = "Q[W]",
-    x_axis_end = 116,
-    x_label_x = 117
-  ) +
-    ct_world_curve_layer(world_parameters) +
-    ggplot2::annotate(
-      "segment",
-      x = world$q_world,
-      xend = world$q_world,
-      y = 8,
-      yend = world$world_price,
-      linetype = "dashed",
-      linewidth = 0.5,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = 8,
-      xend = world$q_world,
-      y = world$world_price,
-      yend = world$world_price,
-      linetype = "dashed",
-      linewidth = 0.5,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate("text", x = 96, y = 58, label = "S[W]", parse = TRUE, color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 93, y = 29, label = "D[W]", parse = TRUE, color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 62, y = 77, label = "World", size = 4.6) +
-    ggplot2::annotate("text", x = 6.6, y = world$world_price, label = "P[W]", parse = TRUE, size = 4.1, hjust = 1) +
-    ggplot2::annotate("text", x = world$q_world - 2.2, y = 4.5, label = "Q[W]", parse = TRUE, size = 4.1) +
-    ggplot2::annotate("text", x = 102, y = 11, label = "Q[W] == sum(q[i])", parse = TRUE, size = 3.8, hjust = 0)
+  if (stage == "production_distortion") {
+    figure = figure +
+      ggplot2::annotate("text", x = 40.5, y = 48.5, label = "c", size = 4.2)
+  }
 
-  patchwork::wrap_plots(panel_a, panel_b, ncol = 2, widths = c(1.7, 1))
+  if (stage == "consumption_distortion") {
+    figure = figure +
+      ggplot2::annotate("text", x = 56, y = 49, label = "e", size = 4.2)
+  }
+
+  figure
 }
 
 ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
@@ -581,8 +948,22 @@ ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
   } else {
     c(country$q_msc, country$q_supply, country$q_demand)
   }
+  quantity_labels = if (stage == "baseline") {
+    c(expression(q[i]^S), expression(q[i]^D))
+  } else {
+    c(expression(q[i]^"*"), expression(q[i]^S), expression(q[i]^D))
+  }
 
-  figure = ct_base_plot(y_limit = c(0, 92)) +
+  figure = ct_base_plot(
+    y_limit = c(0, 92),
+    x_breaks = quantity_guides,
+    x_labels = quantity_labels,
+    y_breaks = c(country$world_price),
+    y_labels = c(expression(P[W])),
+    x_label = "Quantity",
+    y_label = "Price",
+    subtitle = "Country i"
+  ) +
     ct_country_curve_layer(parameters, show_msc = TRUE)
 
   if (stage == "damage") {
@@ -602,12 +983,6 @@ ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
       y_values = c(country$world_price)
     ) +
     ct_imports_arrow(country$q_supply, country$q_demand) +
-    ct_label_prices(
-      labels = c("P[W]"),
-      y_values = c(country$world_price),
-      x = 6.4,
-      hjust = 1
-    ) +
     {
       if (stage != "baseline") {
         list(
@@ -628,7 +1003,7 @@ ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
           ggplot2::annotate(
             "text",
             x = 5.8,
-            y = parameters$supply_intercept + 0.7 * parameters$external_cost + 6.0,
+            y = parameters$supply_intercept + 0.6 * parameters$external_cost,
             label = "e %*% d",
             parse = TRUE,
             size = 4.0,
@@ -637,17 +1012,9 @@ ct_plot_figure_2_country = function(stage = c("damage", "msc", "baseline")) {
         )
       }
     } +
-    {
-      if (stage != "baseline") {
-        ggplot2::annotate("text", x = country$q_msc, y = 4.0, label = "q[i]^\"*\"", parse = TRUE, size = 4.1)
-      }
-    } +
-    ggplot2::annotate("text", x = country$q_supply, y = 4.0, label = "q[i]^S", parse = TRUE, size = 4.1) +
-    ggplot2::annotate("text", x = country$q_demand, y = 4.0, label = "q[i]^D", parse = TRUE, size = 4.1) +
-    ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 68, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 86, label = "MSC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
-    ggplot2::annotate("text", x = 48, y = 81, label = "Country i", size = 4.6)
+    ggplot2::annotate("text", x = 72, y = 28, label = "D[i]", color = ct_palette$demand, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 72, label = "S[i]", color = ct_palette$supply, size = 4.3) +
+    ggplot2::annotate("text", x = 64, y = 90, label = "SMC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3)
 }
 
 ct_plot_figure_2_world = function() {
@@ -657,9 +1024,13 @@ ct_plot_figure_2_world = function() {
   ct_base_plot(
     x_limit = c(0, 125),
     y_limit = c(0, 92),
-    x_label = "Q[W]",
-    x_axis_end = 116,
-    x_label_x = 117
+    x_breaks = c(world$q_world_star, world$q_world),
+    x_labels = c(expression(Q[W]^"*"), expression(Q[W])),
+    y_breaks = c(world$world_price, world$efficient_price),
+    y_labels = c(expression(P[W]), expression(P^"*")),
+    x_label = "World quantity",
+    y_label = "Price",
+    subtitle = "World"
   ) +
     ct_world_curve_layer(world_parameters, show_msc = TRUE) +
     ggplot2::annotate(
@@ -677,7 +1048,7 @@ ct_plot_figure_2_world = function() {
       "segment",
       x = world$q_world_star,
       xend = world$q_world_star,
-      y = 8,
+      y = 0,
       yend = world$efficient_price,
       linetype = "dashed",
       linewidth = 0.5,
@@ -687,7 +1058,7 @@ ct_plot_figure_2_world = function() {
       "segment",
       x = world$q_world,
       xend = world$q_world,
-      y = 8,
+      y = 0,
       yend = world$world_price,
       linetype = "dashed",
       linewidth = 0.5,
@@ -695,7 +1066,17 @@ ct_plot_figure_2_world = function() {
     ) +
     ggplot2::annotate(
       "segment",
-      x = 8,
+      x = 0,
+      xend = world$q_world_star,
+      y = world$efficient_price,
+      yend = world$efficient_price,
+      linetype = "dashed",
+      linewidth = 0.5,
+      color = ct_palette$guide
+    ) +
+    ggplot2::annotate(
+      "segment",
+      x = 0,
       xend = world$q_world,
       y = world$world_price,
       yend = world$world_price,
@@ -703,29 +1084,57 @@ ct_plot_figure_2_world = function() {
       linewidth = 0.5,
       color = ct_palette$guide
     ) +
-    ggplot2::annotate("text", x = 96, y = 50, label = "S[W]", parse = TRUE, color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 95, y = 72, label = "MSC", color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 96, y = 47, label = "S[W]", parse = TRUE, color = ct_palette$supply, size = 4.3) +
+    ggplot2::annotate("text", x = 95, y = 72, label = "SMC", color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 93, y = 29, label = "D[W]", parse = TRUE, color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 62, y = 82, label = "World", size = 4.6) +
-    ggplot2::annotate("text", x = 6.6, y = world$world_price, label = "P[W]", parse = TRUE, size = 4.1, hjust = 1) +
-    ggplot2::annotate("text", x = world$q_world_star - 2.0, y = 3.2, label = "Q[W]^\"*\"", parse = TRUE, size = 4.1) +
-    ggplot2::annotate("text", x = world$q_world + 1.2, y = 6.2, label = "Q[W]", parse = TRUE, size = 4.1) +
-    ggplot2::annotate("text", x = 102, y = 11, label = "Q[W] == sum(q[i])", parse = TRUE, size = 3.8, hjust = 0)
+    ggplot2::annotate("text", x = 102, y = 11, label = "Q[W] == sum(q[i])", parse = TRUE, size = 3.8, hjust = 0) +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(size = 15, color = "black"),
+      plot.margin = ggplot2::margin(10, 22, 14, 24)
+    )
 }
 
-ct_plot_figure_3 = function(stage = c("welfare", "tax", "baseline")) {
+ct_plot_figure_3 = function(stage = c("welfare", "tax_delta_imports", "tax", "baseline")) {
   stage = match.arg(stage)
   parameters = ct_country_parameters()
   country = ct_country_outcomes(parameters)
+  quantity_breaks = if (stage == "baseline") {
+    c(country$q_supply, country$q_demand)
+  } else {
+    c(country$q_supply_tax, country$q_supply, country$q_demand)
+  }
+  quantity_labels = if (stage == "baseline") {
+    c(expression(q[i]^S), expression(q[i]^D))
+  } else {
+    c(expression(q[i * t]^S), expression(q[i]^S), expression(q[i]^D))
+  }
+  price_breaks = if (stage == "baseline") {
+    c(country$world_price)
+  } else {
+    c(country$producer_price_with_tax, country$world_price)
+  }
+  price_labels = if (stage == "baseline") {
+    c(expression(P[W]))
+  } else {
+    c(expression(P[W] - t), expression(P[W]))
+  }
 
-  figure = ct_base_plot() +
-    ct_country_curve_layer(parameters, show_msc = stage != "baseline")
+  figure = ct_base_plot(
+    x_breaks = quantity_breaks,
+    x_labels = quantity_labels,
+    y_breaks = price_breaks,
+    y_labels = price_labels,
+    x_label = "Quantity",
+    y_label = "Price",
+    subtitle = "Country i"
+  ) +
+    ct_country_curve_layer(parameters, show_msc = TRUE)
 
   if (stage == "welfare") {
     figure = figure +
       ggplot2::annotate(
         "rect",
-        xmin = 8,
+        xmin = 0,
         xmax = country$q_supply_tax,
         ymin = country$producer_price_with_tax,
         ymax = country$world_price,
@@ -736,64 +1145,39 @@ ct_plot_figure_3 = function(stage = c("welfare", "tax", "baseline")) {
         "polygon",
         x = c(country$q_supply_tax, country$q_supply, country$q_supply_tax),
         y = c(country$world_price, country$world_price, ct_country_supply(country$q_supply_tax, parameters)),
-        fill = ct_palette$loss,
-        alpha = 0.55
+        fill = ct_palette$surplus_triangle,
+        alpha = 0.70
       )
   }
 
   figure +
     ct_guide_segments(
-      x_values = if (stage == "baseline") {
-        c(country$q_supply, country$q_demand)
-      } else {
-        c(country$q_supply_tax, country$q_supply, country$q_demand)
-      },
-      y_values = if (stage == "baseline") {
-        c(country$world_price)
-      } else {
-        c(country$producer_price_with_tax, country$world_price)
-      }
+      x_values = quantity_breaks,
+      y_values = price_breaks
     ) +
     ct_imports_arrow(
-      if (stage == "baseline") country$q_supply else country$q_supply_tax,
-      country$q_demand
+      if (stage %in% c("baseline", "tax", "tax_delta_imports")) country$q_supply else country$q_supply_tax,
+      country$q_demand,
+      label = dplyr::case_when(
+        stage %in% c("tax", "tax_delta_imports") ~ "pre-tax\nimports",
+        stage == "welfare" ~ "post-tax\nimports",
+        TRUE ~ "imports"
+      ),
+      text_size = if (stage %in% c("tax", "tax_delta_imports", "welfare")) 4.8 else 5.2,
+      text_y_offset = if (stage %in% c("tax", "tax_delta_imports", "welfare")) 6.5 else 4,
+      lineheight = if (stage %in% c("tax", "tax_delta_imports", "welfare")) 0.85 else 1.0
     ) +
     {
-      if (stage == "baseline") {
-        ct_label_prices(
-          labels = c("P[W]"),
-          y_values = c(country$world_price)
-        )
-      } else {
-        list(
-          ggplot2::annotate("text", x = 6.6, y = country$producer_price_with_tax, label = "P[W] - t", parse = TRUE, size = 4.1, hjust = 1),
-          ggplot2::annotate("text", x = 6.6, y = country$world_price, label = "P[W]", parse = TRUE, size = 4.1, hjust = 1)
-        )
+      if (stage == "tax_delta_imports") {
+        ct_delta_imports_arrow(country$q_supply_tax, country$q_supply, y = 14)
       }
     } +
-    {
-      if (stage == "baseline") {
-        ct_label_quantities(
-          labels = c("q[i]^S", "q[i]^D"),
-          x_values = c(country$q_supply, country$q_demand)
-        )
-      } else {
-        ct_label_quantities(
-          labels = c("q[i*t]^S", "q[i]^S", "q[i]^D"),
-          x_values = c(country$q_supply_tax, country$q_supply, country$q_demand)
-        )
-      }
-    } +
-    ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 30, label = "D[i]", color = ct_palette$demand, size = 4.3) +
     ggplot2::annotate("text", x = 72, y = 71, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    {
-      if (stage != "baseline") {
-        ggplot2::annotate("text", x = 72, y = 86, label = "MSC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3)
-      }
-    } +
+    ggplot2::annotate("text", x = 66, y = 94, label = "SMC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
     {
       if (stage == "welfare") {
-        ggplot2::annotate("text", x = 18, y = 40, label = "R[t]", parse = TRUE, size = 4.3)
+        ggplot2::annotate("text", x = 8.5, y = 40, label = "R[t]", parse = TRUE, size = 4.3, hjust = 0)
       }
     } +
     {
@@ -810,25 +1194,51 @@ ct_plot_figure_3 = function(stage = c("welfare", "tax", "baseline")) {
           size = 4.3
         )
       }
-    } +
-    ggplot2::annotate("text", x = 47, y = 81, label = "Country i", size = 4.6)
+    }
 }
 
 ct_plot_figure_4 = function(stage = c("welfare", "revenue", "tariff", "tax_only")) {
   stage = match.arg(stage)
   parameters = ct_country_parameters()
   country = ct_country_outcomes(parameters)
+  if (stage == "tax_only") {
+    quantity_breaks = c(country$q_supply_tax, country$q_demand)
+    quantity_labels = c(
+      expression(q[i * t]^S),
+      expression(q[i]^D)
+    )
+    price_breaks = c(country$producer_price_with_tax, country$world_price)
+    price_labels = c(expression(P[W] - t), expression(P[W]))
+  } else {
+    quantity_breaks = c(country$q_supply_tax, country$q_supply, country$q_demand_tariff, country$q_demand)
+    quantity_labels = c(
+      expression(q[i * t]^S),
+      expression(q[i]^S),
+      expression(q[i * tau]^D),
+      expression(q[i]^D)
+    )
+    price_breaks = c(country$producer_price_with_tax, country$world_price, country$tariff_price)
+    price_labels = c(expression(P[W] - t), expression(P[W]), expression(P[W] + tau))
+  }
 
-  figure = ct_base_plot() +
+  figure = ct_base_plot(
+    x_breaks = quantity_breaks,
+    x_labels = quantity_labels,
+    y_breaks = price_breaks,
+    y_labels = price_labels,
+    x_label = "Quantity",
+    y_label = "Price",
+    subtitle = "Country i"
+  ) +
     ct_country_curve_layer(parameters, show_msc = TRUE)
 
   if (stage %in% c("revenue", "welfare")) {
     figure = figure +
       ggplot2::annotate(
         "rect",
-        xmin = 8,
+        xmin = 0,
         xmax = country$q_supply,
-        ymin = country$world_price,
+        ymin = country$producer_price_with_tax_tariff,
         ymax = country$tariff_price,
         fill = ct_palette$tax,
         alpha = 0.30
@@ -864,30 +1274,24 @@ ct_plot_figure_4 = function(stage = c("welfare", "revenue", "tariff", "tax_only"
 
   figure +
     ct_guide_segments(
-      x_values = c(country$q_supply_tax, country$q_supply, country$q_demand_tariff, country$q_demand),
-      y_values = c(country$producer_price_with_tax, country$world_price, country$tariff_price)
+      x_values = quantity_breaks,
+      y_values = price_breaks
     ) +
     ct_imports_arrow(
       if (stage == "tax_only") country$q_supply_tax else country$q_supply,
-      if (stage == "tax_only") country$q_demand else country$q_demand_tariff
+      if (stage == "tax_only") country$q_demand else country$q_demand_tariff,
+      label = if (stage == "tax_only") "pre-tariff\nimports" else "post-tariff\nimports",
+      text_size = 4.4,
+      text_y_offset = 6.5,
+      lineheight = 0.85
     ) +
-    ct_label_prices(
-      labels = c("P[W] - t", "P[W] == P[W] - t + tau", "P[W] + tau"),
-      y_values = c(country$producer_price_with_tax, country$world_price, country$tariff_price),
-      x = 7.2,
-      hjust = 1
-    ) +
-    ct_label_quantities(
-      labels = c("q[i*t]^S", "q[i]^S", "q[i*tau]^D", "q[i]^D"),
-      x_values = c(country$q_supply_tax, country$q_supply, country$q_demand_tariff, country$q_demand)
-    ) +
-    ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 30, label = "D[i]", color = ct_palette$demand, size = 4.3) +
     ggplot2::annotate("text", x = 72, y = 71, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 86, label = "MSC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 66, y = 94, label = "SMC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
     {
       if (stage %in% c("revenue", "welfare")) {
         list(
-          ggplot2::annotate("text", x = (8 + country$q_supply) / 2, y = (country$world_price + country$tariff_price) / 2, label = "R[t]", parse = TRUE, size = 4.3),
+          ggplot2::annotate("text", x = country$q_supply / 2, y = (country$producer_price_with_tax_tariff + country$tariff_price) / 2, label = "R[t]", parse = TRUE, size = 4.3),
           ggplot2::annotate("text", x = (country$q_supply + country$q_demand_tariff) / 2, y = (country$world_price + country$tariff_price) / 2, label = "R[tau]", parse = TRUE, size = 4.3)
         )
       }
@@ -900,7 +1304,6 @@ ct_plot_figure_4 = function(stage = c("welfare", "revenue", "tariff", "tax_only"
         )
       }
     } +
-    ggplot2::annotate("text", x = 47, y = 77, label = "Country i", size = 4.6) +
     ggplot2::theme(plot.margin = ggplot2::margin(10, 18, 14, 58))
 }
 
@@ -908,8 +1311,25 @@ ct_plot_figure_5 = function(stage = c("welfare", "revenue", "tariff", "baseline"
   stage = match.arg(stage)
   parameters = ct_country_parameters()
   country = ct_country_outcomes(parameters)
+  quantity_breaks = c(country$q_supply, country$q_supply_tariff, country$q_demand_tariff, country$q_demand)
+  quantity_labels = c(
+    expression(q[i]^S),
+    expression(q[i * tau]^S),
+    expression(q[i * tau]^D),
+    expression(q[i]^D)
+  )
+  price_breaks = c(country$world_price, country$tariff_price)
+  price_labels = c(expression(P[W]), expression(P[W] + tau))
 
-  figure = ct_base_plot() +
+  figure = ct_base_plot(
+    x_breaks = quantity_breaks,
+    x_labels = quantity_labels,
+    y_breaks = price_breaks,
+    y_labels = price_labels,
+    x_label = "Quantity",
+    y_label = "Price",
+    subtitle = "Country i"
+  ) +
     ct_country_curve_layer(parameters, show_msc = TRUE)
 
   if (stage %in% c("revenue", "welfare")) {
@@ -952,26 +1372,20 @@ ct_plot_figure_5 = function(stage = c("welfare", "revenue", "tariff", "baseline"
 
   figure +
     ct_guide_segments(
-      x_values = c(country$q_supply, country$q_supply_tariff, country$q_demand_tariff, country$q_demand),
-      y_values = c(country$world_price, country$tariff_price)
+      x_values = quantity_breaks,
+      y_values = price_breaks
     ) +
     ct_imports_arrow(
       if (stage == "baseline") country$q_supply else country$q_supply_tariff,
-      if (stage == "baseline") country$q_demand else country$q_demand_tariff
+      if (stage == "baseline") country$q_demand else country$q_demand_tariff,
+      label = if (stage == "baseline") "pre-tariff\nimports" else "post-tariff\nimports",
+      text_size = 4.4,
+      text_y_offset = 6.5,
+      lineheight = 0.85
     ) +
-    ct_label_prices(
-      labels = c("P[W]", "P[W] + tau"),
-      y_values = c(country$world_price, country$tariff_price),
-      x = 7.2,
-      hjust = 1
-    ) +
-    ct_label_quantities(
-      labels = c("q[i]^S", "q[i*tau]^S", "q[i*tau]^D", "q[i]^D"),
-      x_values = c(country$q_supply, country$q_supply_tariff, country$q_demand_tariff, country$q_demand)
-    ) +
-    ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 73, y = 75, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72.5, y = 90, label = "MSC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 30, label = "D[i]", color = ct_palette$demand, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 71, label = "S[i]", color = ct_palette$supply, size = 4.3) +
+    ggplot2::annotate("text", x = 66, y = 94, label = "SMC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
     {
       if (stage %in% c("revenue", "welfare")) {
         list(
@@ -994,172 +1408,78 @@ ct_plot_figure_5 = function(stage = c("welfare", "revenue", "tariff", "baseline"
         )
       }
     } +
-    ggplot2::annotate("text", x = 47, y = 77, label = "Country i", size = 4.6) +
     ggplot2::theme(plot.margin = ggplot2::margin(10, 18, 14, 42))
 }
 
-ct_plot_figure_6 = function() {
+ct_plot_figure_6 = function(stage = c("baseline", "tax")) {
+  stage = match.arg(stage)
   parameters = ct_country_parameters()
   country = ct_country_outcomes(parameters)
 
-  ct_base_plot() +
+  if (stage == "baseline") {
+    return(
+      ct_base_plot(
+        x_breaks = c(country$q_supply_tax, country$q_supply, country$q_demand),
+        x_labels = c(expression(q[i*t]^S), expression(q[i]^S), expression(q[i]^D)),
+        y_breaks = c(country$world_price),
+        y_labels = c(expression(P[W])),
+        x_label = "Quantity",
+        y_label = "Price",
+        subtitle = "Country i"
+      ) +
+        ct_country_curve_layer(parameters, show_msc = TRUE) +
+        ggplot2::annotate(
+          "polygon",
+          x = c(country$q_supply_tax, country$q_supply, country$q_supply),
+          y = c(country$world_price, country$world_price, ct_country_msc(country$q_supply, parameters)),
+          fill = ct_palette$loss,
+          alpha = 0.55
+        ) +
+        ct_guide_segments(
+          x_values = c(country$q_supply_tax, country$q_supply, country$q_demand),
+          y_values = c(country$world_price)
+        ) +
+        ggplot2::annotate("text", x = 72, y = 30, label = "D", color = ct_palette$demand, size = 4.3) +
+        ggplot2::annotate("text", x = 72, y = 71, label = "S", color = ct_palette$supply, size = 4.3) +
+        ggplot2::annotate("text", x = 66, y = 94, label = "SMC", color = ct_palette$msc, size = 4.3) +
+        ggplot2::annotate(
+          "text",
+          x = mean(c(country$q_supply_tax, country$q_supply, country$q_supply)),
+          y = mean(c(country$world_price, country$world_price, ct_country_msc(country$q_supply, parameters))),
+          label = "a",
+          size = 4.2
+        )
+    )
+  }
+
+  ct_base_plot(
+    x_breaks = c(country$q_supply_tax, country$q_supply, country$q_demand),
+    x_labels = c(
+      expression(q[i*t]^S),
+      expression(q[i]^S),
+      expression(q[i]^D)
+    ),
+    y_breaks = c(country$producer_price_with_tax, country$world_price),
+    y_labels = c(expression(P[W] - t), expression(P[W])),
+    x_label = "Quantity",
+    y_label = "Price",
+    subtitle = "Country i"
+  ) +
     ct_country_curve_layer(parameters, show_msc = TRUE) +
-    ggplot2::annotate(
-      "polygon",
-      x = c(country$q_supply_tax, country$q_supply, country$q_supply),
-      y = c(country$world_price, country$world_price, country$tariff_price),
-      fill = ct_palette$loss,
-      alpha = 0.55
-    ) +
-    ggplot2::annotate(
-      "rect",
-      xmin = country$q_supply,
-      xmax = country$q_demand_tariff,
-      ymin = country$world_price,
-      ymax = country$tariff_price,
-      fill = ct_palette$tariff,
-      alpha = 0.45
-    ) +
-    ggplot2::annotate(
-      "polygon",
-      x = c(country$q_demand_tariff, country$q_demand, country$q_demand_tariff),
-      y = c(country$tariff_price, country$world_price, country$world_price),
-      fill = ct_palette$loss,
-      alpha = 0.55
-    ) +
-    ggplot2::annotate(
-      "polygon",
-      x = c(country$q_demand_tariff, country$q_demand, country$q_demand),
-      y = c(country$tariff_price, country$tariff_price, country$world_price),
-      fill = ct_palette$gain,
-      alpha = 0.45
-    ) +
     ct_guide_segments(
-      x_values = c(country$q_supply_tax, country$q_supply, country$q_demand_tariff, country$q_demand),
-      y_values = c(country$producer_price_with_tax, country$world_price, country$tariff_price)
+      x_values = c(country$q_supply_tax, country$q_supply, country$q_demand),
+      y_values = c(country$producer_price_with_tax, country$world_price)
     ) +
-    ct_label_prices(
-      labels = c("P[W] - t", "P[W]", "P[W] + t"),
-      y_values = c(country$producer_price_with_tax, country$world_price, country$tariff_price),
-      x = 7.2,
-      hjust = 1
+    ct_imports_arrow(
+      country$q_supply_tax,
+      country$q_demand,
+      label = "imports",
+      text_size = 4.4,
+      text_y_offset = 3.4
     ) +
-    ct_label_quantities(
-      labels = c("q[i*t]^S", "q[i]^S", "q[i]^D"),
-      x_values = c(country$q_supply_tax, country$q_supply, country$q_demand)
-    ) +
-    ggplot2::annotate("text", x = 72, y = 34, label = "D", color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 74, y = 75, label = "S", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 74, y = 88, label = "MSC", color = ct_palette$msc, size = 4.3) +
-    ggplot2::annotate("text", x = 29.5, y = 48.2, label = "a", size = 4.2) +
-    ggplot2::annotate("text", x = 46, y = 50, label = "R[tau]", parse = TRUE, size = 4.2) +
-    ggplot2::annotate("text", x = 55, y = 49, label = "b", size = 4.2) +
-    ggplot2::annotate(
-      "text",
-      x = country$q_demand - 1.8,
-      y = country$world_price + 0.72 * (country$tariff_price - country$world_price),
-      label = "f",
-      size = 4.3
-    ) +
-    ggplot2::annotate("text", x = 47, y = 77, label = "Country i", size = 4.6) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_supply,
-      xend = country$q_demand_tariff,
-      y = 42.5,
-      yend = 42.5,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_supply,
-      xend = country$q_supply,
-      y = 42.5,
-      yend = 44.5,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_demand_tariff,
-      xend = country$q_demand_tariff,
-      y = 42.5,
-      yend = 44.5,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "text",
-      x = mean(c(country$q_supply, country$q_demand_tariff)),
-      y = 38.8,
-      label = "Imports with\nt and tau",
-      size = 3.1,
-      lineheight = 0.9
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_supply,
-      xend = country$q_demand,
-      y = 24.5,
-      yend = 24.5,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_supply,
-      xend = country$q_supply,
-      y = 24.5,
-      yend = 26.5,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_demand,
-      xend = country$q_demand,
-      y = 24.5,
-      yend = 26.5,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "text",
-      x = mean(c(country$q_supply, country$q_demand)),
-      y = 19.3,
-      label = "Imports if no\ncarbon tax t",
-      size = 3.1,
-      lineheight = 0.9
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_supply_tax,
-      xend = country$q_demand,
-      y = 11.2,
-      yend = 11.2,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_supply_tax,
-      xend = country$q_supply_tax,
-      y = 11.2,
-      yend = 13.2,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate(
-      "segment",
-      x = country$q_demand,
-      xend = country$q_demand,
-      y = 11.2,
-      yend = 13.2,
-      linewidth = 0.9,
-      color = ct_palette$guide
-    ) +
-    ggplot2::annotate("text", x = mean(c(country$q_supply_tax, country$q_demand)), y = 14.6, label = "efficient imports", size = 3.1)
+    ggplot2::annotate("text", x = 72, y = 30, label = "D", color = ct_palette$demand, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 71, label = "S", color = ct_palette$supply, size = 4.3) +
+    ggplot2::annotate("text", x = 66, y = 94, label = "SMC", color = ct_palette$msc, size = 4.3)
 }
 
 ct_plot_figure_7 = function() {
@@ -1169,11 +1489,11 @@ ct_plot_figure_7 = function() {
 
   shifted_world_supply = function(q) ct_world_supply(q, world_parameters) + small_tax$small_tax
 
-  panel_country = ct_base_plot() +
+  panel_country = ct_base_plot(subtitle = "Country i") +
     ct_country_curve_layer(parameters, show_msc = TRUE) +
     ggplot2::annotate(
       "rect",
-      xmin = 8,
+      xmin = 0,
       xmax = small_tax$q_supply_small_tax,
       ymin = small_tax$producer_price_small_tax,
       ymax = small_tax$world_price_small_tax,
@@ -1202,17 +1522,16 @@ ct_plot_figure_7 = function() {
     ) +
     ggplot2::annotate("text", x = 72, y = 34, label = "D", color = ct_palette$demand, size = 4.3) +
     ggplot2::annotate("text", x = 72, y = 71, label = "S", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 80, label = "MSC", color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 80, label = "SMC", color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 19, y = 48, label = "R[t^\"'\"]", parse = TRUE, size = 4.1) +
-    ggplot2::annotate("text", x = 31, y = 50, label = "d", size = 4.2) +
-    ggplot2::annotate("text", x = 47, y = 77, label = "Country i", size = 4.6)
+    ggplot2::annotate("text", x = 31, y = 50, label = "d", size = 4.2)
 
   q_grid = seq(8, 110, by = 0.25)
   q_world_small = small_tax$q_world_small_tax
   q_world_no_policy = small_tax$q_world_no_policy
   world_price_small = small_tax$world_price_small
 
-  panel_world = ct_base_plot(x_limit = c(0, 110), y_limit = c(0, 92), x_label = "Q[W]") +
+  panel_world = ct_base_plot(x_limit = c(0, 110), y_limit = c(0, 92), x_label = "World quantity", subtitle = "World") +
     ct_world_curve_layer(world_parameters, show_msc = TRUE) +
     ggplot2::geom_line(
       data = ct_curve_data(q_grid, shifted_world_supply),
@@ -1236,17 +1555,16 @@ ct_plot_figure_7 = function() {
       "segment",
       x = q_world_small,
       xend = q_world_small,
-      y = 8,
+      y = 0,
       yend = world_price_small,
       linetype = "dashed",
       linewidth = 0.5,
       color = ct_palette$guide
     ) +
     ggplot2::annotate("text", x = 92, y = 57, label = "S[W]", parse = TRUE, color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 92, y = 68, label = "MSC", color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 92, y = 68, label = "SMC", color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 80, y = 62, label = "S[W] + t^\"'\"", parse = TRUE, color = ct_palette$accent, size = 4.0) +
     ggplot2::annotate("text", x = 90, y = 29, label = "D[W]", parse = TRUE, color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 55, y = 82, label = "World", size = 4.6) +
     ggplot2::annotate("text", x = q_world_small + 2, y = 3.5, label = "Q[W]^\"'\" == Sigma*q[i]", parse = TRUE, size = 3.8, hjust = 0)
 
   patchwork::wrap_plots(panel_country, panel_world, ncol = 2, widths = c(1.25, 1))
@@ -1269,11 +1587,11 @@ ct_plot_figure_8 = function() {
     parameters$demand_slope
   )
 
-  ct_base_plot() +
+  ct_base_plot(subtitle = "Country i") +
     ct_country_curve_layer(parameters, show_msc = TRUE) +
     ggplot2::annotate(
       "rect",
-      xmin = 8,
+      xmin = 0,
       xmax = small_tax$q_supply_small_tax,
       ymin = small_tax$no_policy_world_price,
       ymax = small_tax$world_price_small_tax,
@@ -1325,13 +1643,12 @@ ct_plot_figure_8 = function() {
     ggplot2::annotate("text", x = small_tax$q_demand_small_tax, y = 4.2, label = "q_i,t'^D", size = 3.8) +
     ggplot2::annotate("text", x = 72, y = 34, label = "D", color = ct_palette$demand, size = 4.3) +
     ggplot2::annotate("text", x = 72, y = 71, label = "S", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 80, label = "MSC", color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 80, label = "SMC", color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 23, y = 50, label = "Delta*PS", parse = TRUE, size = 4.1) +
     ggplot2::annotate("text", x = 38, y = 52, label = "a", size = 4.2) +
     ggplot2::annotate("text", x = 47, y = 54, label = "R[tau]", parse = TRUE, size = 4.1) +
     ggplot2::annotate("text", x = 58, y = 53, label = "b", size = 4.2) +
-    ggplot2::annotate("text", x = small_tax$q_demand_small_tax - 2.4, y = top_price + 3.5, label = "f", size = 4.2) +
-    ggplot2::annotate("text", x = 47, y = 77, label = "Country i", size = 4.6)
+    ggplot2::annotate("text", x = small_tax$q_demand_small_tax - 2.4, y = top_price + 3.5, label = "f", size = 4.2)
 }
 
 ct_plot_figure_9 = function() {
@@ -1342,11 +1659,11 @@ ct_plot_figure_9 = function() {
   q_world_domestic = world$q_world - 6
   domestic_world_price = world$world_price + intensity$domestic_tax
 
-  panel_country = ct_base_plot() +
+  panel_country = ct_base_plot(subtitle = "Country i") +
     ct_country_curve_layer(parameters, show_msc = TRUE) +
     ggplot2::annotate(
       "rect",
-      xmin = 8,
+      xmin = 0,
       xmax = intensity$q_supply_tax_domestic,
       ymin = intensity$world_price,
       ymax = intensity$consumer_price_domestic,
@@ -1381,14 +1698,13 @@ ct_plot_figure_9 = function() {
     ) +
     ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
     ggplot2::annotate("text", x = 72, y = 71, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 86, label = "MSC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 86, label = "SMC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 21, y = 49, label = "R[t]", parse = TRUE, size = 4.1) +
     ggplot2::annotate("text", x = 38, y = 52, label = "a", size = 4.2) +
     ggplot2::annotate("text", x = intensity$q_demand_domestic_tariff + 6, y = intensity$consumer_price_domestic - 2, label = "Country i\nexternal\ncost", color = ct_palette$accent, size = 2.8, lineheight = 0.9) +
-    ggplot2::annotate("text", x = intensity$q_demand_domestic_tariff + 12, y = intensity$consumer_price_foreign + 1.5, label = "World\nexternal\ncost", color = ct_palette$foreign, size = 2.8, lineheight = 0.9) +
-    ggplot2::annotate("text", x = 48, y = 77, label = "Country i", size = 4.6)
+    ggplot2::annotate("text", x = intensity$q_demand_domestic_tariff + 12, y = intensity$consumer_price_foreign + 1.5, label = "World\nexternal\ncost", color = ct_palette$foreign, size = 2.8, lineheight = 0.9)
 
-  panel_world = ct_base_plot(x_limit = c(0, 110), y_limit = c(0, 92), x_label = "Q[W]") +
+  panel_world = ct_base_plot(x_limit = c(0, 110), y_limit = c(0, 92), x_label = "World quantity", subtitle = "World") +
     ct_world_curve_layer(ct_world_parameters(), show_msc = TRUE) +
     ggplot2::annotate(
       "polygon",
@@ -1403,7 +1719,7 @@ ct_plot_figure_9 = function() {
     ) +
     ggplot2::annotate(
       "segment",
-      x = 8,
+      x = 0,
       xend = q_world_domestic,
       y = domestic_world_price,
       yend = domestic_world_price,
@@ -1412,9 +1728,8 @@ ct_plot_figure_9 = function() {
       color = ct_palette$guide
     ) +
     ggplot2::annotate("text", x = 92, y = 57, label = "S[W]", parse = TRUE, color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 92, y = 68, label = "MSC", color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 92, y = 68, label = "SMC", color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 90, y = 29, label = "D[W]", parse = TRUE, color = ct_palette$demand, size = 4.3) +
-    ggplot2::annotate("text", x = 55, y = 82, label = "World", size = 4.6) +
     ggplot2::annotate("text", x = 4.5, y = domestic_world_price, label = "P''", size = 4.1, hjust = 0) +
     ggplot2::annotate("text", x = q_world_domestic + 2, y = 3.5, label = "Q[W] == Sigma*q[i]", parse = TRUE, size = 3.8, hjust = 0) +
     ggplot2::annotate("text", x = world$q_world + 2, y = 5.5, label = "Q[W]", parse = TRUE, size = 3.9)
@@ -1426,7 +1741,7 @@ ct_plot_figure_10 = function() {
   parameters = ct_country_parameters()
   intensity = ct_intensity_outcomes()
 
-  ct_base_plot() +
+  ct_base_plot(subtitle = "Country i") +
     ct_country_curve_layer(parameters, show_msc = TRUE) +
     ggplot2::annotate(
       "polygon",
@@ -1460,7 +1775,7 @@ ct_plot_figure_10 = function() {
       fill = ct_palette$gain,
       alpha = 0.45
     ) +
-    ct_guide_segments(
+  ct_guide_segments(
       x_values = c(intensity$q_supply_tax_domestic, intensity$q_supply_foreign_tariff, intensity$q_demand_foreign_tariff, intensity$q_demand_domestic_tariff),
       y_values = c(intensity$world_price, intensity$producer_price_foreign, intensity$consumer_price_foreign)
     ) +
@@ -1474,13 +1789,32 @@ ct_plot_figure_10 = function() {
     ) +
     ggplot2::annotate("text", x = 72, y = 34, label = "D[i]", color = ct_palette$demand, size = 4.3) +
     ggplot2::annotate("text", x = 72, y = 71, label = "S[i]", color = ct_palette$supply, size = 4.3) +
-    ggplot2::annotate("text", x = 72, y = 86, label = "MSC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
+    ggplot2::annotate("text", x = 72, y = 86, label = "SMC[i]", parse = TRUE, color = ct_palette$msc, size = 4.3) +
     ggplot2::annotate("text", x = 36, y = intensity$producer_price_foreign - 2, label = "a", size = 4.2) +
     ggplot2::annotate("text", x = 53, y = mean(c(intensity$world_price, intensity$producer_price_foreign)), label = "b", size = 4.2) +
     ggplot2::annotate("text", x = intensity$q_demand_domestic_tariff - 2.2, y = intensity$producer_price_foreign + 3.5, label = "f", size = 4.2) +
     ggplot2::annotate("text", x = intensity$q_demand_foreign_tariff + 6, y = intensity$producer_price_foreign - 1.5, label = "Country i\nexternal\ncost", color = ct_palette$accent, size = 2.8, lineheight = 0.9) +
-    ggplot2::annotate("text", x = intensity$q_demand_foreign_tariff + 13, y = intensity$consumer_price_foreign + 1.5, label = "World\nexternal\ncost", color = ct_palette$foreign, size = 2.8, lineheight = 0.9) +
-    ggplot2::annotate("text", x = 47, y = 77, label = "Country i", size = 4.6)
+    ggplot2::annotate("text", x = intensity$q_demand_foreign_tariff + 13, y = intensity$consumer_price_foreign + 1.5, label = "World\nexternal\ncost", color = ct_palette$foreign, size = 2.8, lineheight = 0.9)
+}
+
+ct_assert_plot_is_warning_free = function(plot_object) {
+  plot_warnings = character()
+
+  withCallingHandlers(
+    {
+      print(plot_object)
+    },
+    warning = function(warning_condition) {
+      plot_warnings <<- c(plot_warnings, conditionMessage(warning_condition))
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  if (length(plot_warnings) > 0) {
+    stop(paste(unique(plot_warnings), collapse = "\n"))
+  }
+
+  invisible(TRUE)
 }
 
 # Test the geometry rather than the pixels. These checks ensure the diagrams
@@ -1488,6 +1822,26 @@ ct_plot_figure_10 = function() {
 test_ct_module_one_figures = function() {
   country = ct_country_outcomes()
   world = ct_world_outcomes()
+  tariff_welfare = ct_tariff_welfare_components()
+  numeric_example = ct_numeric_example_outcomes()
+  numeric_free_trade = numeric_example |>
+    dplyr::filter(.data$regime == "free_trade")
+  numeric_tax_tariff = numeric_example |>
+    dplyr::filter(.data$regime == "tax_tariff")
+  numeric_consumption_tax = numeric_example |>
+    dplyr::filter(.data$regime == "consumption_tax")
+  numeric_tariff_alone = numeric_example |>
+    dplyr::filter(.data$regime == "tariff_alone")
+  numeric_consumption_tax_prod_subsidy = numeric_example |>
+    dplyr::filter(.data$regime == "consumption_tax_prod_subsidy")
+  equivalence_columns = c(
+    "consumer_price",
+    "producer_price",
+    "domestic_production",
+    "domestic_consumption",
+    "imports",
+    "net_revenue"
+  )
 
   stopifnot(country$q_supply_tax < country$q_supply)
   stopifnot(country$q_supply < country$q_supply_tariff)
@@ -1496,15 +1850,70 @@ test_ct_module_one_figures = function() {
   stopifnot(country$q_demand_tariff < country$q_demand)
   stopifnot(country$producer_price_with_tax < country$world_price)
   stopifnot(country$world_price < country$tariff_price)
+  stopifnot(country$tariff_price - country$producer_price_with_tax_tariff == ct_country_parameters()$carbon_tax)
   stopifnot(country$imports_free_trade > 0)
   stopifnot(country$imports_with_tariff < country$imports_free_trade)
   stopifnot(country$imports_with_tax > country$imports_free_trade)
   stopifnot(country$imports_with_tax_tariff < country$imports_with_tax)
   stopifnot(world$q_world_star < world$q_world)
   stopifnot(world$world_price < world$efficient_price)
-  stopifnot(inherits(ct_plot_figure_1("free_trade"), "patchwork"))
-  stopifnot(inherits(ct_plot_figure_1("tariff"), "patchwork"))
-  stopifnot(inherits(ct_plot_figure_1("welfare"), "patchwork"))
+  stopifnot(abs(
+    tariff_welfare$consumer_loss - (
+      tariff_welfare$producer_gain +
+        tariff_welfare$tariff_revenue +
+        tariff_welfare$production_dwl +
+        tariff_welfare$consumption_dwl
+    )
+  ) < 1e-8)
+  stopifnot(abs(
+    tariff_welfare$consumer_loss - (
+      tariff_welfare$area_a +
+        tariff_welfare$area_b +
+        tariff_welfare$area_c +
+        tariff_welfare$area_d +
+        tariff_welfare$area_e
+    )
+  ) < 1e-8)
+  stopifnot(abs(tariff_welfare$producer_gain - (tariff_welfare$area_a + tariff_welfare$area_b)) < 1e-8)
+  stopifnot(abs(tariff_welfare$tariff_revenue - tariff_welfare$area_d) < 1e-8)
+  stopifnot(abs(tariff_welfare$national_welfare_change + (tariff_welfare$area_c + tariff_welfare$area_e)) < 1e-8)
+  stopifnot(tariff_welfare$producer_gain > 0)
+  stopifnot(tariff_welfare$tariff_revenue > 0)
+  stopifnot(tariff_welfare$national_welfare_change < 0)
+  stopifnot(all(numeric_example$imports == numeric_example$domestic_consumption - numeric_example$domestic_production))
+  stopifnot(all(
+    numeric_example$net_revenue ==
+      numeric_example$tariff_revenue +
+      numeric_example$carbon_tax_revenue +
+      numeric_example$consumption_tax_revenue -
+      numeric_example$production_subsidy_cost
+  ))
+  stopifnot(numeric_free_trade$imports == 40)
+  stopifnot(numeric_tax_tariff$consumer_price == 50)
+  stopifnot(numeric_tax_tariff$producer_price == 40)
+  stopifnot(numeric_tax_tariff$net_revenue == 500)
+  stopifnot(numeric_tariff_alone$consumer_price == 50)
+  stopifnot(numeric_tariff_alone$producer_price == 50)
+  stopifnot(numeric_tariff_alone$net_revenue == 200)
+  stopifnot(all(vapply(
+    equivalence_columns,
+    function(column_name) identical(numeric_tax_tariff[[column_name]], numeric_consumption_tax[[column_name]]),
+    logical(1)
+  )))
+  stopifnot(all(vapply(
+    equivalence_columns,
+    function(column_name) identical(numeric_tariff_alone[[column_name]], numeric_consumption_tax_prod_subsidy[[column_name]]),
+    logical(1)
+  )))
+  stopifnot(inherits(ct_plot_figure_1("free_trade"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_1("price"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_1("tariff"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_1("welfare_components"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_1("welfare_dwl"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_1("production_distortion"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_1("consumption_distortion"), "ggplot"))
+  stopifnot(inherits(ct_plot_surplus_refresher("consumer"), "ggplot"))
+  stopifnot(inherits(ct_plot_surplus_refresher("producer"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_2_country("baseline"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_2_country("msc"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_2_country("damage"), "ggplot"))
@@ -1517,6 +1926,12 @@ test_ct_module_one_figures = function() {
   stopifnot(inherits(ct_plot_figure_4("tariff"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_4("revenue"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_4("welfare"), "ggplot"))
+  ct_assert_plot_is_warning_free(ct_plot_surplus_refresher("consumer"))
+  ct_assert_plot_is_warning_free(ct_plot_surplus_refresher("producer"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_1("welfare_components"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_1("welfare_dwl"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_1("consumption_distortion"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_4("welfare"))
 
   invisible(TRUE)
 }
@@ -1534,7 +1949,10 @@ test_ct_module_two_figures = function() {
   stopifnot(inherits(ct_plot_figure_5("tariff"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_5("revenue"), "ggplot"))
   stopifnot(inherits(ct_plot_figure_5("welfare"), "ggplot"))
-  stopifnot(inherits(ct_plot_figure_6(), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_6("baseline"), "ggplot"))
+  stopifnot(inherits(ct_plot_figure_6("tax"), "ggplot"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_6("baseline"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_6("tax"))
 
   invisible(TRUE)
 }
@@ -1549,6 +1967,9 @@ test_ct_module_three_figures = function() {
   stopifnot(intensity$q_demand_foreign_tariff < intensity$q_demand_domestic_tariff)
   stopifnot(inherits(ct_plot_figure_8(), "ggplot"))
   stopifnot(inherits(ct_plot_figure_10(), "ggplot"))
+  ct_assert_plot_is_warning_free(ct_plot_figure_7())
+  ct_assert_plot_is_warning_free(ct_plot_figure_8())
+  ct_assert_plot_is_warning_free(ct_plot_figure_10())
 
   invisible(TRUE)
 }

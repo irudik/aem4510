@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lecture 16</title>
+    <title>Lecture 11</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ivan Rudik" />
     <script src="16-slides-climate-finance_files/header-attrs/header-attrs.js"></script>
@@ -21,7 +21,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Lecture 16
+# Lecture 11
 ]
 .subtitle[
 ## Climate Risk and Financial Instruments
@@ -54,7 +54,11 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -81,10 +85,11 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 # Roadmap
 
 1. .hi[Weather markets (Schlenker and Taylor, 2021):] do traders forecast weather and climate?
-2. .hi[Municipal bond markets (Painter, 2020):] is sea level rise capitalized into municipal financing costs?
+2. .hi[Discounting] 
+3. .hi[Municipal bond markets (Painter, 2020):] is sea level rise capitalized into municipal financing costs?
   - Marginal damages
-3. .hi[Prediction markets (Meng, 2017):] what is the probability of environmental regulation?
-4. .hi[Equity markets (Meng, 2017):] what is the financial impact of expected environmental regulation?
+4. .hi[Prediction markets (Meng, 2017):] what is the probability of environmental regulation?
+5. .hi[Equity markets (Meng, 2017):] what is the financial impact of expected environmental regulation?
   - Marginal abatement costs
 
 
@@ -121,7 +126,7 @@ Studying the market for weather derivatives
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-cme-cities.png" width="700px" /&gt;
+&lt;img src="files/16-cme-cities.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 Weather derivatives are a way for weather-exposed firms to manage climate risk
@@ -155,21 +160,43 @@ Idea is `\(65^\circ\)`F is about where you would heat or cool a building to duri
 
 # Betting on the weather
 
+&lt;img src="16-slides-climate-finance_files/figure-html/hdd-cdd-by-temperature-1.png" width="100%" /&gt;
+
+At `\(65^\circ\)`F both contracts are at zero
+
+Below 65 only HDDs matter, above 65 only CDDs matter
+
+---
+
+# Betting on the weather
+
 How do the contracts work?
 
 --
 
-The contracts are bought and sold like regular assets, but the settlement price is explicitly based on the realized HDD/CDD
+The contracts are bought and sold like regular assets, but the settlement price is explicitly based on the realized HDD/CDD and are sold in terms of months
+
+For example for July: 
+
+`$$CDD_{july} = \sum_{d=1}^{31} CDD_{july,d} = \sum_{d=1}^{31} max(0, 65 - T_{july,d})$$`
+
+where we sum over the days of July `\(d\)`
+
+---
+
+# Betting on the weather
+
+CME contracts work where the settlement price is: 20 `\(\times\)` monthly CDD/HDD
+
+They are a promise to pay, at the end of the month, 20 `\(\times\)` the *actual* CDD/HDD
 
 --
 
-CME contracts work where the settlement price is: 20 `\(\times\)` CDD/HDD
+If the July CDD contract is trading at 300 CDDs, the contract costs `\(20 \times 300 = 6000\)` to buy, or generates 6000 in revenue to sell
 
 --
 
-Example:
- - If the July CDD contract is trading at 300 CDDs, the contract costs `\(20 \times 300 = 6000\)`
- - If actual July CDDs are 330, a buy-side trader profits: `\(20 \times (330 - 300) = 600\)`
+If *actual* July CDDs happened to be 330, a buy-side trader profits: `\(20 \times (330 - 300) = 600\)`
 
     
 ---
@@ -198,7 +225,7 @@ Do these firms want to buy or sell winter HDD contracts to manage risk?
 
 ---
 
-# Betting on the weather
+# Mitigating risk: simple example
 
 Selling a winter HDD contract is a bet that HDDs will be low `\(\rightarrow\)` winter will be warm
 
@@ -210,33 +237,49 @@ This bet pays off when natural gas revenues are low and helps manage risk
 
 Example:
 
-- The winter HDD contract is trading at 1250
-- At 1250 HDDs, NYSEG expects to generate $80 million in profit
-- An increase in HDDs of 1 increases profits by $80,000
+- The winter HDD contract is trading at 1250 HDDs
+
+--
+
+- At 1250 HDDs, NYSEG expects to generate $80 million in profit from its natural gas business
+
+--
+
+- An increase in HDDs of 1 increases natural gas profits by $80,000
 
 
 ---
 
-# Betting on the weather
+# Mitigating risk: simple example
 
-Example:
-
-- The winter HDD contract is trading at 1250
-- At 1250 HDDs, NYSEG expects to generate $80 million in profit
-- An increase in HDDs of 1 increases profits by $80,000
+- The winter HDD contract is trading at 1250 HDDs
+- At 1250 HDDs, NYSEG expects to generate $80 million in profit from its natural gas business
+- An increase in HDDs of 1 increases natural gas profits by $80,000
 
 --
 
 If NYSEG sells `\(Y\)` winter HDD contracts, and the realized winter HDD is `\(HDD_{actual}\)`:
-- Its futures market profits are: `\(Y \times 20 \times (1250 - HDD_{actual})\)`
-- Its natural gas profits are: `\(80,000,000 + 80,000 \times (HDD_{actual} - 1250)\)`
 
-Futures profits down in `\(HDD_{actual}\)`, natural gas profits go up
+--
+
+- Its futures market profits are: 
+--
+`\(Y \times 20 \times (1250 - HDD_{actual})\)`
+
+--
+
+- Its natural gas profits are: 
+--
+`\(80,000,000 + 80,000 \times (HDD_{actual} - 1250)\)`
+
+--
+
+Futures profits increase in `\(HDD_{actual}\)`, natural gas profits decrease
 
 
 ---
 
-# Betting on the weather
+# Mitigating risk: simple example
 
 Example:
 - The winter HDD contract is trading at 1250
@@ -258,6 +301,91 @@ Eliminate risk by setting sum of futures market profit and HDD-related natural g
 
 ---
 
+# Aggregating private information
+
+Suppose now a trader has a private AI-based forecast for July weather
+
+--
+
+The July CDD contract is trading at 300
+
+--
+
+But the trader's AI forecast predicts 330 CDDs
+
+--
+
+Does the trader buy or sell?
+
+--
+
+The contract looks .hi[undervalued] so the trader buys July CDD contracts
+
+---
+
+# Aggregating private information
+
+If the forecast is right and July CDDs are on average 330:
+
+--
+
+The trader receives: `\(20 \times 330 = 6600\)`
+
+--
+
+The trader paid: `\(20 \times 300 = 6000\)`
+
+--
+
+Profit per contract is:
+
+`$$20 \times (330 - 300) = 600$$`
+
+---
+
+# Aggregating private information
+
+What happens after the trader starts buying?
+
+--
+
+This is just demand going up for this good, the contract
+
+--
+
+Higher demand pushes the July CDD price up: 300 `\(\rightarrow\)` 308 `\(\rightarrow\)` 323 `\(\rightarrow\)` 330
+
+--
+
+As the price rises, expected profit on the remaining trades gets smaller
+
+--
+
+The trader keeps buying until price is close to the forecast-implied value
+
+---
+
+# Aggregating private information
+
+Now the market price itself contains this private information about weather
+
+--
+
+At 330, other traders can infer the market expects a much hotter July than before
+
+--
+
+This is how .hi[private forecasts become public information through prices]
+
+--
+
+Trading does two things at once:
+
+1. Informed traders make profits on their private information
+2. Prices become more informative about expected HDD/CDD through their trades
+
+---
+
 # Betting on the weather
 
 Who else might participate in these markets (summer or winter)?
@@ -267,6 +395,7 @@ Who else might participate in these markets (summer or winter)?
 - Electricity utilities
 - Snow plow services
 - People who think they have better private information
+- Gamblers
 
 --
 
@@ -299,9 +428,19 @@ How do they do it?
 
 # Betting on the weather
 
+Which weather forecast provides the biggest impact on weather futures prices?
+
+Another way of asking this: how many days ahead is a weather forecast providing the most **new** information about weather
+
+First lets see how good forecasts are at different lead times from 3 to 10 days ahead
+
+---
+
+# Betting on the weather
+
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-forecast-skill.webp" width="600px" /&gt;
+&lt;img src="files/16-forecast-skill.webp" width="600px" /&gt;
 &lt;/div&gt; 
 
 1-3 day forecasts are essentially perfect now
@@ -314,12 +453,16 @@ How do they do it?
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-forecast-skill.webp" width="600px" /&gt;
+&lt;img src="files/16-forecast-skill.webp" width="600px" /&gt;
 &lt;/div&gt; 
 
 Forecasts &gt;10 days out have little skill `\(\rightarrow\)` little information value
 
-Forecasts 1-3 days out have near-perfect skill, their information is probably already capitalized by prior forecasts 5-7 days ago
+Forecasts 1-3 days out have near-perfect skill, 
+--
+but 
+--
+their information is probably already capitalized by prior forecasts 5-7 days ago
 
 
 
@@ -329,7 +472,7 @@ Forecasts 1-3 days out have near-perfect skill, their information is probably al
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-forecast-skill.webp" width="600px" /&gt;
+&lt;img src="files/16-forecast-skill.webp" width="600px" /&gt;
 &lt;/div&gt; 
 
 We should expect forecasts 3-10 days out to matter the most for contract prices
@@ -343,12 +486,12 @@ We should expect little to zero effect of 1-3 day forecasts, and 10+ day forecas
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-weather-futures-prices.png" width="600px" /&gt;
+&lt;img src="files/16-weather-futures-prices.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 July in NY averages about 400 CDDs
 
-Each year from 2001-2020 (different color lines) differs in terms of actual CDDs (price at 0), and expected CDDs (prices to the left of 0)
+Each year from 2001-2020 (different color lines) differs in terms of .hi[actual CDDs] (price at 0), and .hi[expected CDDs] (prices to the left of 0)
 
 ---
 
@@ -356,10 +499,27 @@ Each year from 2001-2020 (different color lines) differs in terms of actual CDDs
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-weather-futures-prices.png" width="600px" /&gt;
+&lt;img src="files/16-weather-futures-prices.png" width="600px" /&gt;
 &lt;/div&gt; 
 
-In general, prices don't move much further than 10 days before the start of July `\(\rightarrow\)` consistent with short-run 10+ day forecasts not being skillful
+What do you see?
+
+--
+
+In general, prices don't move much further than 10 days before the start of July `\(\rightarrow\)` consistent with short-run 10+ day forecasts not containing a lot of info
+
+---
+
+# July CDD prices for Laguardia airport
+
+
+&lt;div style= "float:right;position: relative;"&gt;
+&lt;img src="files/16-weather-futures-prices.png" width="600px" /&gt;
+&lt;/div&gt; 
+
+But if that's true, why are there diffrences aross years?
+
+--
 
 Differences across years can be from long-run trends, El Nino, etc
 
@@ -370,12 +530,17 @@ Differences across years can be from long-run trends, El Nino, etc
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-weather-futures-prices.png" width="600px" /&gt;
+&lt;img src="files/16-weather-futures-prices.png" width="600px" /&gt;
 &lt;/div&gt; 
 
-Once we near the actual month (about -40), forecasts are skillful
+Once we near the actual month (about -40), forecasts are skillful about some days during July
+
+--
 
 They start trending toward their realized values (at 0)
+
+
+--
 
 From -30 to 0 we are .hi[in] the actual month and observe some of the realized CDDs
 
@@ -431,7 +596,7 @@ Should weather anomalies in the future affect the change in the contract price t
 # Futures prices predict future weather
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-futures-event-study.png" width="600px" /&gt;
+&lt;img src="files/16-futures-event-study.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 X-axis: days before (left) and after (right) current trading day
@@ -440,7 +605,7 @@ Y-axis: change in contract price given a `\(1^\circ\)`C higher CDD anomaly
 
 --
 
-Black line: today's change in the CDD contract price changes when CDDs are higher by 1 degree at `\(\tau\)` days in the future
+Black line: change in today's contract price given 1 CDD more in a day in the past (left of dashed line) or future (right)
 
 Negative `\(\tau\)`s are past days / weather anomalies, positive `\(\tau\)`s are future days / weather anomalies
 
@@ -449,7 +614,7 @@ Negative `\(\tau\)`s are past days / weather anomalies, positive `\(\tau\)`s are
 # Futures prices predict future weather
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-futures-event-study.png" width="600px" /&gt;
+&lt;img src="files/16-futures-event-study.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 Does past weather affect changes in current prices?
@@ -471,18 +636,18 @@ Does future weather affect changes in current prices?
 # Futures prices predict future weather
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-futures-event-study.png" width="600px" /&gt;
+&lt;img src="files/16-futures-event-study.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 What does all this mean?
 
 --
 
-Since future weather can only affect today's contract price through forecasts (future weather hasn't happened yet!)...
+How can future weather affect today's prices or expectations?
 
 --
 
-This means that .hi[traders respond to weather forecasts]
+.hi[Traders must respond to weather forecasts]
 
 --
 
@@ -494,7 +659,7 @@ Traders also are using the info correctly because prices are .hi[positively] ass
 # Futures prices predict future weather
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-futures-event-study.png" width="600px" /&gt;
+&lt;img src="files/16-futures-event-study.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 Does the weather anomaly get fully capitalized?
@@ -513,7 +678,7 @@ The sum (integral) of the values of the black line over all `\(\tau\)` equals 1 
 # Futures prices predict future weather
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-futures-cumulative.png" width="600px" /&gt;
+&lt;img src="files/16-futures-cumulative.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 Black line: the .hi[cumulative] sum of the previous black line
@@ -552,7 +717,7 @@ If so, the long run trends in futures prices should match either:
 # Futures prices predict long-run climate
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-long-run-futures.png" width="700px" /&gt;
+&lt;img src="files/16-long-run-futures.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 Y-axis: CDD/HDD relative to the city average (0 is average)
@@ -569,11 +734,819 @@ What stands out?
 # Futures prices predict long-run climate
 
 &lt;div style= "float:top;position: relative;"&gt;
-&lt;img src="files/15-long-run-futures.png" width="10000px" /&gt;
+&lt;img src="files/16-long-run-futures.png" width="10000px" /&gt;
 &lt;/div&gt; 
 
-Longer-run changes in futures prices closely track .hi[climate models], weather to a lesser extent
+Futures prices are strongly correlated with .hi[climate model predictions], weather to a lesser extent
 
+
+---
+
+class: inverse, center, middle
+name: tradable permits
+
+# Discounting
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+At the end of the century we will have much more hot days in some places
+&lt;center&gt;
+&lt;img src="files/11-climate-change.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+At the end of the century we will have much fewer freezing days in others
+
+&lt;center&gt;
+&lt;img src="files/11-climate-change2.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting: http://impactlab.org/map
+
+This has massive implications for mortality
+&lt;center&gt;
+&lt;img src="files/11-climate-damage.png" width="100%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Motivating discounting
+
+Some places are expecting to have huge gains in GDP from mortality risk
+
+--
+
+Others are expecting to have huge losses
+
+--
+
+This is all happening in 60-80 years
+
+--
+
+How do we compare these costs and benefits to those incurred today?
+
+--
+
+We use a .hi[discount rate:] a value that tells us how much future dollars are worth in today's terms
+
+---
+
+# A simple example
+
+Let `\(r\)` be the discount rate, so `\(\beta = {1 \over 1+r}\)` is the discount factor
+
+Suppose we are considering two different projects that have costs and benefits that accrue differently over time
+
+| Year | Project A Cost | Project A Benefit | Project B Cost | Project B Benefit |
+|------|----------------|------------------|----------------|------------------|
+| 0    | 10000          | 0                | 6000           | 0                |
+| 1    | 1000           | 4000             | 0              | 1000             |
+| 2    | 0              | 4000             | 0              | 3000             |
+| 3    | 0              | 4000             | 0              | 3000             |
+
+Project A has higher costs and benefits in nominal terms
+
+---
+
+# A simple example
+
+| Year | Project A Cost | Project A Benefit | Project B Cost | Project B Benefit |
+|------|----------------|------------------|----------------|------------------|
+| 0    | 10000          | 0                | 6000           | 0                |
+| 1    | 1000           | 4000             | 0              | 1000             |
+| 2    | 0              | 4000             | 0              | 3000             |
+| 3    | 0              | 4000             | 0              | 3000             |
+
+**Project A:**
+
+`\(PV_A = \frac{4000}{1.05^1} + \frac{4000}{1.05^2} + \frac{4000}{1.05^3} - \frac{10000}{1.05^0} - \frac{1000}{1.05^1} = -59.39\)`
+
+**Project B:**
+
+`\(PV_B = \frac{1000}{1.05^1} + \frac{3000}{1.05^2} + \frac{3000}{1.05^3} - \frac{6000}{1.05^0} = 264.98\)`
+
+---
+
+# What if the discount rate was 3%?
+
+| Year | Project A Cost | Project A Benefit | Project B Cost | Project B Benefit |
+|------|----------------|------------------|----------------|------------------|
+| 0    | 10000          | 0                | 6000           | 0                |
+| 1    | 1000           | 4000             | 0              | 1000             |
+| 2    | 0              | 4000             | 0              | 3000             |
+| 3    | 0              | 4000             | 0              | 3000             |
+
+**Project A:**
+
+`\(PV_A = \frac{4000}{1.03^1} + \frac{4000}{1.03^2} + \frac{4000}{1.03^3} - \frac{10000}{1.03^0} - \frac{1000}{1.03^1} = 343.57\)`
+
+**Project B:**
+
+`\(PV_B = \frac{1000}{1.03^1} + \frac{3000}{1.03^2} + \frac{3000}{1.03^3} - \frac{6000}{1.03^0} = 544.09\)`
+
+---
+
+# Discounting
+
+Discounting results in us placing less value on costs and benefits that accrue in the future 
+
+A dollar 1 year from now is worth `\(\beta = \frac{1}{1+r}\)` dollars today
+
+The timing of costs and benefits of projects can then sway which project has greater present value
+
+---
+
+# Return to Manne-Richels
+
+We ignored the idea of discounting in our discussion of the Manne-Richels model
+
+
+--
+
+Our new problem with discounting is then:
+
+--
+
+`$$\min_{a_1} E[TC] = \underbrace{\frac{1}{2}a_1^2}_{\text{current cost}} + \beta\left[(1-p)\times \underbrace{0}_{\text{good state cost}} + p \times \underbrace{\frac{1}{2}(1-a_1)^2}_{\text{bad state cost}}\right]$$`
+
+---
+
+# Return to Manne-Richels
+
+The first-order condition is:
+`$$\frac{d E[TC]}{da_1} = a^*_1 - \beta p(1-a^*_1) = 0$$`
+
+--
+
+This gives us that:
+`$$a^*_1 = \frac{\beta p}{1+\beta p}$$`
+
+--
+
+How does discounting affect our decisionmaking?
+
+
+---
+
+# Discounting and decisionmaking
+
+`$$a^*_1 = \frac{\beta p}{1+\beta p}$$`
+
+--
+
+First, notice as `\(r \rightarrow \infty\)` we have `\(\beta = {1 \over 1 + r} \rightarrow 0\)`, we put less and less weight on the future
+
+--
+
+This means we do less abatement today in period 1!
+
+--
+
+That's intuitive, let's see what discount actually looks like graphically
+
+--
+
+What is the value of a future payment of $100?
+
+---
+
+# PV of $100
+
+.pull-left[
+
+![higher discount rates mean lower value](16-slides-climate-finance_files/figure-html/discounting-1.png)
+]
+
+.pull-right[
+Higher discount rates place less value on future benefits
+
+Things &gt; 30 years in the future have basically no value with a 10% discount rate
+
+At a 1% discount rate we value things 100 years in the future at almost half their value today
+]
+
+---
+
+# Discounting
+
+Why does this matter?
+
+--
+
+Lots of things (like climate change) have costs or benefits that occur .hi[far] in the future
+
+--
+
+e.g. the benefits of taking action against climate change will be mostly borne by future generations, decades from now
+
+--
+
+Depending on our choice of discount rate these costs and benefits can be substantial or trivial
+
+---
+
+# Discounting
+
+1 million in damages in 200 years at a discount rate of r = 2% is worth 19,053 today
+
+--
+
+1 million in damages in 200 years at a discount rate of r = 8% is worth only 21 cents today
+
+--
+
+5 orders of magnitude difference!
+
+--
+
+This makes the choice of the discount rate one of the most important (and contentious) things about climate change policy
+
+---
+
+# Discounting: how do we choose?
+
+How do we choose the discount rate?
+
+--
+
+.hi[Option 1:] take the market rate
+
+--
+
+This is just the real interest paid on certain investments
+
+--
+
+In a perfect market equilibrium, it is the productivity of capital
+
+--
+
+Why might this not be the rate we want to choose as a regulator?
+
+
+---
+
+# Discounting: how do we choose?
+
+Issues with market rates:
+
+--
+
+Market rates don't reflect externalities
+
+--
+
+Super-responsibility of government: the government represents future generations as well as current generations (only current ones are represented in the market)
+
+--
+
+Dual-role of individuals: in political roles, people are more concerned about future generations than in their day-to-day behavior which determines the market rate
+
+---
+
+# Discounting: how do we choose?
+
+.hi[Option 2:] social discounting
+
+--
+
+With social discounting we determine the discount rate from economic and ethical considerations
+
+--
+
+Why should we discount the future?
+
+--
+
+First, .hi[time]: people are impatient
+
+--
+
+And .hi[growth/inequality]: all else equal, if someone is richer in 10 years, a dollar is worth more to them today than in 10 years (in utility terms)
+
+
+---
+
+# Ramsey Discounting
+
+With a decent amount of math we can write the social discount rate `\(r\)` as a function of three terms:
+`$$r = \delta + \eta \times g$$`
+
+--
+
+`\(\delta\)` is called the .hi[pure rate of time preference] or .hi[utility discount rate]: how much do we value future *utility*
+
+--
+
+`\(\eta\)` is the .hi[elasticity of marginal utility]: how quickly does marginal utility (benefit) decline in consumption (how severe are diminishing marginal returns)?
+
+--
+
+`\(g\)` is the .hi[growth rate]: how fast does consumption grow over time?
+
+---
+
+# Ramsey Discounting
+
+Here's some alternative descriptions of how to think about these terms:
+
+--
+
+`\(\delta\)`: how much is 1 util tomorrow worth today?
+
+--
+
+`\(\eta\)`: how much do we value poorer vs richer times/generations? Bigger `\(\eta\)` `\(\rightarrow\)` more averse to inequality over time
+- `\(\eta = - \frac{\partial U'(X)}{\partial X}{X \over U'(X)} =  - U''(X){X \over U'(X)}\)`, by how many percent does marginal utility `\(U'(X)\)` change if consumption changes by 1%
+
+--
+
+`\(g\)`: how rich will we / future generations be compared to today?
+
+---
+
+# Ramsey Discounting
+
+`$$r = \delta + \eta \times g$$`
+
+What this means is that if we have values for `\(r\)`, `\(\eta\)`, and `\(g\)`, we can compute the "correct" discount rate from a social perspective
+
+--
+
+How do we get values for these terms?
+
+--
+
+Two common approaches: descriptive and prescriptive
+
+
+---
+
+# Ramsey Discounting: the descriptive approach
+
+The descriptive approach aims to calibrate the discount rate to the real world
+
+--
+
+We can observe `\(g\)` in the data / forecasts
+
+--
+
+We can sometimes estimate `\(\eta\)` from observed behavior over time
+
+--
+
+Once we pick a `\(\delta\)` we have our discount rate `\(r\)`
+
+--
+
+The descriptive approach generally chooses `\(\delta\)` so `\(r\)` matches market rates
+
+--
+
+Most philosophers and economists would probably not prescribe the descriptive approach
+
+---
+
+# Ramsey Discounting: the prescriptive approach
+
+First we decide on the 'correct' level of `\(\delta\)` and `\(\eta\)`
+
+--
+
+Then we observe `\(g\)` in the data / forecasts
+
+--
+
+That gives us `\(r\)`
+
+---
+
+# What's the utility discount rate?
+
+Both approaches depend on us choosing `\(\delta\)`
+
+--
+
+What is the right value for `\(\delta\)`? This is a philosophical question.
+
+--
+
+Ramsey (1928): placing different weights upon the utility of different generations is ‘ethically indefensible'
+
+--
+
+Harrod (1948): discounting utility represented a 'polite expression for rapacity and the conquest of reason by passion'
+
+--
+
+The above arguments are ethical arguments, so are typically used by those favoring the prescriptive approach
+
+
+---
+
+# What's the discount rate? Descriptive
+
+The descriptive approach often results in `\(\delta\)` being between 2-3% from reverse engineering the observed market rates
+
+--
+
+`\(\eta\)` is then often engineered to be between 1 and 4
+
+--
+
+`\(g\)` is observed and generally between 1 and 3%
+
+--
+
+Thus the discount rate usually lies between 2 and 7%
+
+--
+
+Quick example: `\(\delta = 2\%, \eta = 2, g = 2\% \rightarrow r = 6\%\)`
+
+---
+
+# What's the discount rate? Prescriptive
+
+The prescriptive approach often results in `\(\delta\)` being zero or nearly zero for the ethical reasons described above
+
+---
+
+# What's the discount rate? Prescriptive
+
+Choosing `\(\eta\)` also conveys ethical choices: how do we weigh the distribution of consumption across generations
+
+Recall: `\(r = \delta + \eta g\)`
+
+--
+
+- `\(\eta = 0\)`: consumption in the future doesn't change our willingness to save/invest today (r is independent of g)
+
+--
+
+- `\(\eta\)` is large: if there is positive growth, we are .hi[less] likely to invest in the future (future generations will be rich anyway)
+
+--
+
+- `\(\eta\)` is large: if there is negative growth, we are .hi[more] likely to invest in the future (future generations will be poorer than today)
+
+---
+
+# Distributive justice
+
+Rawls' theory of justice applied here would set `\(\delta = 0\)` and `\(\eta = \infty\)`: fairness for all
+
+--
+
+More egalitarian perspectives with respect to:
+
+.hi[time] 
+--
+yields a smaller `\(\delta\)` and `\(r\)`
+
+--
+
+.hi[intergenerational inequality] 
+--
+yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
+
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+&lt;center&gt;
+&lt;img src="files/11-experts-1.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+ 
+&lt;center&gt;
+&lt;img src="files/11-experts-2.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+&lt;center&gt;
+&lt;img src="files/11-experts-3.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+&lt;center&gt;
+&lt;img src="files/11-experts-4.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+&lt;center&gt;
+&lt;img src="files/11-experts-5.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# What do the experts think? Drupp et al. (2018)
+
+&lt;center&gt;
+&lt;img src="files/11-experts-6.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Discount rates are being significantly revised
+
+
+&lt;center&gt;
+&lt;img src="files/11-discounting-1.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Discount rates are being significantly revised
+
+&lt;center&gt;
+&lt;img src="files/11-discounting-2.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Discount rates are being significantly revised
+
+&lt;center&gt;
+&lt;img src="files/11-discounting-3.png" width="70%" /&gt;
+&lt;/center&gt;
+
+
+---
+
+# Discount rates are being significantly revised
+
+&lt;center&gt;
+&lt;img src="files/11-discounting-4.png" width="70%" /&gt;
+&lt;/center&gt;
+
+---
+
+# Discount rates in the (very) long run
+
+How should we think about discounting in the .hi[very] long run?
+
+--
+
+100, 100, 300 years into the future when we expect climate change impacts to be their worst?
+
+--
+
+Giglo, Maggiori, and Stroebel (2015) come up with a clever way to think about discount rates in the far future: looking at UK and Singaporean housing markets
+
+---
+
+# Discount rates in the (very) long run
+
+In the UK and Singapore, properties are acquired via .hi[leasehold] or .hi[freehold]
+
+--
+
+- .hi[Leasehold:] temporary, pre-paid, tradable ownership contracts with maturities of 99-999 years, once it expires, you lose the property
+
+--
+
+- .hi[Freeholds:] same, but **perpetual** ownership, you never lose the property
+    - Similar to how things work in the US
+
+---
+
+# Property prices, what do they tell us?
+
+Imagine there are two properties A and B, identical in every way except A is a leasehold with 500 years left until maturity and B is a freehold
+
+Suppose we observe A selling for 900,000 dollars and B selling for 1,000,000 dollars
+
+What do these prices mean? What value do they capture?
+
+--
+
+Let's think about a simple example: you are a real estate investor deciding on purchasing a property to add to your rental portfolio in a competitive property market
+
+---
+
+# Property prices, what do they tell us?
+
+A property makes sense to buy if its cost is less than its benefits
+
+--
+
+Houses are kind of like annuities:
+  - Pay an upfront cost (mortgage)
+  - Get a future stream of revenues (rental payments from renters)
+
+--
+
+Suppose buyers were competing for a property that has a net present value of $900,000, what market price would we expect someone to pay for this?
+
+--
+
+.hi[$900,000!] investors will compete, bidding higher and higher prices until it reaches the benefits of owning the property (same logic as why prices are the MB of regular goods in competitive markets)
+
+---
+
+# Discount rates in the (very) long run
+
+The price of a house tells us the present value of the future stream of rental payments!
+
+--
+
+Now let's go back to the original example:
+
+--
+
+Suppose we observe A selling for 900,000 dollars and B selling for 1,000,000 dollars
+
+What does the price difference between the two properties tell us?
+
+---
+
+# Discount rates in the (very) long run
+
+
+Both properties are identical until year 500 when .hi-blue[poof],
+--
+you no longer own property A but you still own property B
+
+--
+
+The difference in prices is telling us the present value of property B rental payments starting .hi[500 years from now]
+
+--
+
+The prices tell us about how the market discounts cash flows very, very far in the future, outside anyone's expected lifespan
+
+---
+
+# Why do discount rates change over time?
+
+Discount rates for cash flows this year versus 500 years in the future may be different for a lot of reasons
+
+--
+
+- .hi[Changes in growth:] if growth slows down (e.g. from climate change), discount rates fall
+    - The future is getting richer slower, so the future's marginal value of a dollar is higher than if growth did not slow
+    
+--
+
+- .hi[Uncertainty:] if we are uncertain about future economic conditions determining the discount rate (e.g. climate change), the discount rate we should use is lower than the average (expected) discount rate
+
+---
+
+# Why do discount rates change over time?
+
+Let's get a sense of how uncertainty over the proper discount rate matters
+
+--
+
+Suppose a hypothetical public transit project is going to impose 1 trillion dollars of costs in 100 years
+
+--
+
+Suppose the pure rate of time preference `\(\delta = 1\%\)`, and the elasticity of marginal utility `\(\eta = 1\)` so that the discount rate `\(r = 1\% + 1 \times g\)`
+
+--
+
+We think that in 100 years economic growth will either be 0% or 6%, each with 50% chance, (because we are uncertain about the extent of climate change)
+
+--
+
+What are the current expected costs of the project?
+
+---
+
+# Why do discount rates change over time?
+
+The current expected costs are just the costs averaged over either of the potential real discount rates:
+
+$$\frac{1}{2} \frac{\$1 \text{ trillion}}{1.01^{100}} + \frac{1}{2} \frac{\$1 \text{ trillion}}{1.07^{100}} = \$185 \text{ billion}$$
+
+--
+
+Now lets compute the value of the damages if we used the expected discount rate, the average of the two: 4%
+
+$$\frac{\$1 \text{trillion}}{1.04^{100}} = \$20 \text{ billion}$$
+
+---
+
+# Why do discount rates change over time?
+
+The expected discount rate of 4% generated costs that were 10 times smaller than the actual costs!
+
+This means that the expected discount rate is too high compared to the actual discount rate we should be using if we are uncertain about future discount rates
+
+--
+
+What discount rate should we use?
+
+--
+
+$$\frac{\$1 \text{ trillion}}{(1+r)^{100}} = \$185 \text{ billion} \qquad \rightarrow r = .017=1.7\%$$
+
+---
+
+# Why do discount rates change over time?
+
+If we expected the future discount rate to be either 1% or 7%, the proper discount rate to use was actually 1.7%, .hi[not] the average 4%!
+
+--
+
+1.7% is called the .hi[certainty-equivalent] discount rate: the certain discount rate that delivers the same present value as the possible set of uncertain rates (1% and 7%)
+
+--
+
+.hi[Main takeaway:] Uncertainty about the future economic conditions governing the discount rate makes the discount rate we should be using lower than expected
+
+---
+
+# Discount rates in the (very) long run: United Kingdom
+
+.pull-left[
+
+What are these long run discount rate?
+
+In the UK:
+
+- leases expiring within 100 years cost 17% less than a freehold
+- leases expiring 150-300 years from now cost 5% less
+
+Implies a discount rate of about .hi[2.6%]
+
+]
+
+.pull-right[
+&lt;img src="files/11-long-run-discount-1.png" width="100%" /&gt;
+]
+
+---
+
+# Discount rates in the (very) long run: Singapore
+
+.pull-left[
+
+What are these long run discount rate?
+
+In Singapore:
+
+- leases expiring within 70 years cost 40% less than a freehold
+- leases expiring 95-99 years from now cost 15% less
+
+Implies a discount rate of about .hi[2.6%]
+
+]
+
+.pull-right[
+&lt;img src="files/11-long-run-discount-2.png" width="100%" /&gt;
+]
+
+
+---
+
+# Discount rates on rental payments
+
+We can check the validity of these estimates by seeing whether .hi[rental payments] depend on the length remaining of the contract
+
+--
+
+There's no reason the rent you pay for your house should depend on how much longer the owner has property rights if your lease is short
+
+---
+
+# Discount rates on rental payments
+
+.pull-left[
+
+Rental rates (mostly) do not depend on the remaining lease time!
+
+]
+
+.pull-right[
+&lt;img src="files/11-long-run-discount-3.png" width="100%" /&gt;
+]
 
 ---
 
@@ -658,7 +1631,7 @@ Debt is typically paid back in a pre-specified way
   
 --
 
-General obligation bonds are typically less risky
+Which are less risky for lenders?
 
 ---
 
@@ -680,10 +1653,22 @@ They trade on the bond market at some .hi[price] `\(P\)` which will depend on:
   - The face value
   - The coupon
   - When the bond matures
-  - *Other underlying economic conditions*
+  - *Other underlying economic conditions affecting risk of non-payment*
   
 
 ---
+
+# Municipal bonds
+
+The price of a bond should be equal to the expected present value cash flow
+
+If we hold a bond, we discount future payments because:
+- Inflation
+- Risk of non-payment
+- Etc
+
+---
+
 
 # Municipal bonds
 
@@ -744,7 +1729,7 @@ To bear this additional risk, traders will demand a higher yield (lower price)
 # Municipal bonds 
   
 We can solve for the new price:
-`$$P = \frac{105}{1+.05} \times \underbrace{(1 - .07)}_{1/(1+.075)} = \frac{105}{1+.05} \times \frac{1}{1+.075}=93$$`
+`$$P = \frac{105}{1+.05} \times \underbrace{(1 - .07)}_{\approx 1/(1+.075)} = \frac{105}{1+.05} \times \frac{1}{1+.075}=93$$`
 and the associated yield:
 `\begin{align}
   \frac{1}{1+y} &amp;= \frac{1}{1+.05} \times (1 - .07) = \frac{.93}{1.05} \\
@@ -794,7 +1779,7 @@ SLR is a slow phenomenon, will matter increasingly over the next century
 # Municipal bonds and sea level rise
 
 .center[
-&lt;img src="files/15-climate-risk-table.png" width="800px" /&gt;
+&lt;img src="files/16-climate-risk-table.png" width="800px" /&gt;
 ]
 
 Climate risk: expected percent loss of city GDP
@@ -806,7 +1791,7 @@ Where is the climate risk?
 # Municipal bonds and sea level rise
 
 .center[
-&lt;img src="files/15-raw-bond-data.png" width="800px" /&gt;
+&lt;img src="files/16-raw-bond-data.png" width="800px" /&gt;
 ]
 
 What does the raw data say about climate/SLR exposed and non-exposed munis?
@@ -823,7 +1808,7 @@ Climate(-exposed) bonds are 8 basis points more expensive to offer
 # Yield
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-yield-results.png" width="700px" /&gt;
+&lt;img src="files/16-yield-results.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 Comparing munis offered in the same state and year, controlling for other factors:
@@ -835,7 +1820,7 @@ Comparing munis offered in the same state and year, controlling for other factor
 # Gross spread
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-gross-spread-results.png" width="700px" /&gt;
+&lt;img src="files/16-gross-spread-results.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 They have higher gross spreads (higher underwriter search costs): 10-15bp higher for long-term bonds
@@ -845,7 +1830,7 @@ They have higher gross spreads (higher underwriter search costs): 10-15bp higher
 # Maturities
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-maturity-results.png" width="700px" /&gt;
+&lt;img src="files/16-maturity-results.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 Effect is larger for longer-maturity bonds: bonds maturing 
@@ -855,7 +1840,7 @@ Effect is larger for longer-maturity bonds: bonds maturing
 # Credit ratings
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-credit-rating.png" width="700px" /&gt;
+&lt;img src="files/16-credit-rating.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 SLR matters most for bonds with lower ratings:
@@ -924,7 +1909,7 @@ In both cases, muni markets serve an important function for directing resources 
 # Prediction markets
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-predict-it.png" width="700px" /&gt;
+&lt;img src="files/16-predict-it.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 Prediction markets are where traders bet on binary outcomes
@@ -942,7 +1927,7 @@ How does it work?
 # Prediction markets
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-predict-it.png" width="700px" /&gt;
+&lt;img src="files/16-predict-it.png" width="700px" /&gt;
 &lt;/div&gt; 
 
 You can buy a share (asset) for whether the event will happen or not happen
@@ -1111,7 +2096,7 @@ It took until April 2010 to convince one Republican ... who was it?
 # Waxman-Markey: the history
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-lindsey-graham.jpeg" width="300px" /&gt;
+&lt;img src="files/16-lindsey-graham.jpeg" width="300px" /&gt;
 &lt;/div&gt; 
 
 --
@@ -1140,7 +2125,7 @@ You won't believe what happens next
 # Waxman-Markey: the history
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-harry-reid.jpg" width="300px" /&gt;
+&lt;img src="files/16-harry-reid.jpg" width="300px" /&gt;
 &lt;/div&gt; 
 
 --
@@ -1169,7 +2154,7 @@ The Senate calendar couldn't accommodate both climate and immigration legislatio
 # Waxman-Markey: the history
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-arizona.svg" width="300px" /&gt;
+&lt;img src="files/16-arizona.svg" width="300px" /&gt;
 &lt;/div&gt; 
 
 --
@@ -1199,7 +2184,7 @@ It was unclear whether governor Jan Brewer would sign it
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-jan-brewer.jpg" width="300px" /&gt;
+&lt;img src="files/16-jan-brewer.jpg" width="300px" /&gt;
 &lt;/div&gt; 
 
 --
@@ -1228,7 +2213,7 @@ Graham formally states he refuses to delay a climate bill for immigration and ab
 # Waxman-Markey: the probabilities
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-intrade-prices.png" width="600px" /&gt;
+&lt;img src="files/16-intrade-prices.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 .hi[Jun 26:] House passes WM
@@ -1249,7 +2234,7 @@ Graham formally states he refuses to delay a climate bill for immigration and ab
 # Waxman-Markey: the probabilities
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-intrade-prices.png" width="600px" /&gt;
+&lt;img src="files/16-intrade-prices.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 Markets almost never thought WM was a favorite to pass!
@@ -1261,7 +2246,7 @@ Even around Graham-Kerry-Lieberman announcement, probabilities were only 20%
 # Waxman-Markey: the probabilities
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-intrade-prices.png" width="600px" /&gt;
+&lt;img src="files/16-intrade-prices.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 The prediction market prices tell us the market's expectation of climate legislation being implemented
@@ -1356,7 +2341,7 @@ We have data on stock returns `\(r_{i,t}\)`, we have data on market expectations
 # Equity markets: getting MAC
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-wm-rdd-plot.png" width="600px" /&gt;
+&lt;img src="files/16-wm-rdd-plot.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 .hi[X-axis:] energy intensity
@@ -1380,7 +2365,7 @@ WM generally has a bigger negative effect on firm valuations the more energy int
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-wm-rdd-plot.png" width="600px" /&gt;
+&lt;img src="files/16-wm-rdd-plot.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 At an energy intensity of 5%, WM reduces firm value by about 6%!
@@ -1408,7 +2393,7 @@ If we have forecasts about emissions and the interest rate, we can solve for `\(
 # Equity markets: getting MAC
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/15-mac-table.png" width="600px" /&gt;
+&lt;img src="files/16-mac-table.png" width="600px" /&gt;
 &lt;/div&gt; 
 
 Using the listed decline in emissions and a 5% interest rate gives us these MACs

@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 })
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 
 ```
 ```{r echo=FALSE}

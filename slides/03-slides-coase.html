@@ -8,8 +8,6 @@
     <link href="03-slides-coase_files/remark-css/default.css" rel="stylesheet" />
     <link href="03-slides-coase_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="03-slides-coase_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="03-slides-coase_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="03-slides-coase_files/tile-view/tile-view.js"></script>
     <link href="03-slides-coase_files/panelset/panelset.css" rel="stylesheet" />
     <script src="03-slides-coase_files/panelset/panelset.js"></script>
     <script src="03-slides-coase_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,20 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, tweetrmd
 )
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.5/site-library'
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
 ## (as 'lib' is unspecified)
 ```
 
@@ -91,7 +82,12 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/video_helpers.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -120,7 +116,35 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 1. Can we achieve the efficient outcome .hi[without] government intervention?
 2. What does the Coase theorem say?
 3. What are the limits to Coasean bargaining?
+4. Can data centers and their neighbors bargain their way out of the AI boom's externalities?
 
+
+---
+
+# This lecture's running example: the AI boom next door
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/03-coase-data-centers-utility-bills.mp4" type="video/mp4"></video>
+
+---
+
+# Data centers are a textbook externality problem
+
+Data centers bring jobs and tax revenue, and their neighbors bear real costs:
+
+--
+
+- Cooling fans and diesel backup generators hum around the clock
+- Generator testing burns diesel next to homes
+- Water use competes with local supplies
+- Electricity demand pushes up everyone's bills
+
+--
+
+The parties are easy to name: one operator, identifiable neighbors
+
+--
+
+.hi[Today's question:] when can the operator and the neighbors bargain to the efficient outcome, and when do transactions costs get in the way?
 
 ---
 
@@ -159,7 +183,7 @@ This means there's a role for government to create this market or price the exte
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/03-coase.png" width="100%" /&gt;
+&lt;img src="files/03-coase.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 
 ]
@@ -1016,6 +1040,292 @@ Now imagine that AEP Gavin’s control costs were low, and the efficient outcome
 
 Would it matter whether we granted the “right to clean air” to the town or to AEP?
 
+
+---
+
+class: inverse, center, middle
+name: datacenters
+
+# Data centers: Coasean bargaining in the AI boom
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Cheshire, twenty years later
+
+The Cheshire transaction was one power plant buying out one small town
+
+--
+
+The AI boom is running the same experiment hundreds of times at once
+
+--
+
+Data centers need land, power, and water next to real neighborhoods
+
+--
+
+Sometimes the operator and the neighbors bargain, sometimes they end up in court
+
+--
+
+The difference is exactly what our transactions cost model predicts
+
+---
+
+# When bargaining works: Ashburn, Virginia
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/03-coase-ashburn-buyout-offers.mp4" type="video/mp4"></video>
+
+---
+
+# When bargaining works: Ashburn, Virginia
+
+Developers offered some Ashburn homeowners around $4 million per house to sell
+
+--
+
+Why does bargaining break out here?
+
+--
+
+- .hi[Few parties:] a developer and a handful of homeowners
+- .hi[Well-defined property rights:] you own your land, they cannot take it
+- .hi[Large surplus:] the land is worth far more under a data center than as housing
+
+--
+
+Low transactions costs + big gains from trade `\(\rightarrow\)` deals close: the land moves to its higher-value use and the homeowners are paid to move
+
+---
+
+# When the deal doesn't close: holdouts
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/03-coase-farmland-holdout.mp4" type="video/mp4"></video>
+
+---
+
+# When the deal doesn't close: holdouts
+
+The sisters turned down $26 million for the family farmland
+
+--
+
+Is this a failure of the Coase theorem?
+
+--
+
+Not necessarily: if their true willingness to accept exceeds the developer's willingness to pay, .hi[no deal is the efficient outcome]
+
+--
+
+But land assembly makes bargaining fragile:
+
+- Is a "no" true WTA, or a holdout for a bigger share of the surplus?
+- A .hi[contiguous] site gives every owner veto power
+- With `\(N\)` owners who must all say yes, transactions costs rise fast
+
+---
+
+# When bargaining fails: Memphis and Southaven
+
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/03-coase-xai-turbines-residents.mp4" type="video/mp4"></video>
+
+---
+
+# When bargaining fails: Memphis and Southaven
+
+xAI's data center runs dozens of gas turbines next to residential neighborhoods
+
+--
+
+Why is there no Cheshire-style transaction here?
+
+--
+
+- .hi[Many parties:] thousands of households breathe the emissions
+- .hi[Contested rights:] who owns the air? Permits are disputed, not settled
+- .hi[Free riding:] every resident hopes the others fund the fight
+- .hi[Information:] health damages are diffuse and hard to document
+
+--
+
+High transactions costs choke off bargaining `\(\rightarrow\)` the conflict moves to lawsuits (the NAACP sued under the Clean Air Act) and permit fights
+
+---
+
+# Data centers through Coase's lens
+
+|                    | Ashburn buyouts | Farmland holdout | Memphis turbines |
+|--------------------|:---------------:|:----------------:|:----------------:|
+| Parties            | Few             | Few              | Thousands        |
+| Property rights    | Clear (land)    | Clear (land)     | Contested (air)  |
+| Transactions costs | Low             | Medium           | High             |
+| Outcome            | Deals close     | No deal          | Litigation       |
+
+--
+
+Same technology, same externalities, three different outcomes
+
+--
+
+The Coase theorem tells us where to look: .hi[who holds the rights, and how costly is it to strike the deal?]
+
+---
+
+# Your turn: a data center next door
+
+.pull-left[
+
+
+![data center generator bargaining](03-slides-coase_files/figure-html/dc-bargain-1.png)
+]
+
+.pull-right[
+
+A data center tests its backup generators `\(G\)` hours per month
+
+Marginal benefit to the operator: MB = 20 - 2G
+
+Marginal noise cost to the residents: MC = 4
+
+Left alone, the operator would run `\(G_0 = 10\)` hours; residents want zero
+
+]
+
+---
+
+# Your turn: a data center next door
+
+.pull-left[
+![data center generator bargaining](03-slides-coase_files/figure-html/dc-bargain-1.png)
+]
+
+.pull-right[
+
+MB = 20 - 2G, MC = 4
+
+Any deal needs lawyers: transactions cost `\(tr = 10\)`
+
+.hi[Your turn:]
+
+1. Find the efficient hours `\(G^*\)`
+2. Rights to the residents: what payments could work?
+3. Under each rights assignment: does a deal happen?
+
+]
+
+---
+
+# Your turn: the efficient hours
+
+.pull-left[
+![data center generator bargaining](03-slides-coase_files/figure-html/dc-bargain-1.png)
+]
+
+.pull-right[
+
+Efficiency: MB = MC
+
+20 - 2G = 4 `\(\Rightarrow\)` `\(G^* = 8\)`
+
+The first 8 hours are worth more to the operator than they cost the residents; the last 2 are not
+
+]
+
+---
+
+# Your turn: residents hold the rights
+
+.pull-left[
+
+
+![gains from trade when residents hold the rights](03-slides-coase_files/figure-html/dc-bargain-resident-1.png)
+]
+
+.pull-right[
+
+Start at G = 0; the operator pays for hours
+
+Residents accept `\(\theta \geq 4 \times 8 = 32\)`; the operator pays at most his benefit, `\(\theta \leq 96\)`
+
+Gains from trade: the .hi-blue[blue] triangle `\(= \frac{1}{2} \times 8 \times 16 = 64\)`
+
+`\(64 &gt; tr = 10\)` `\(\rightarrow\)` .hi[the deal happens] and we reach `\(G^* = 8\)`
+
+]
+
+---
+
+# Your turn: the operator holds the rights
+
+.pull-left[
+
+
+![gains from trade when the operator holds the rights](03-slides-coase_files/figure-html/dc-bargain-operator-1.png)
+]
+
+.pull-right[
+
+Start at `\(G_0 = 10\)`; residents pay to cut hours
+
+Gains from trade: the .hi-red[red] triangle `\(= \frac{1}{2} \times 2 \times 4 = 4\)`
+
+`\(4 &lt; tr = 10\)` `\(\rightarrow\)` .hi[no deal], and skipping the deal is the right call
+
+With transactions costs, .hi[who holds the rights changes the outcome]
+
+]
+
+---
+
+class: inverse, center, middle
+name: game
+
+# Let's bargain: the data center game
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# The data center bargaining game
+
+You will be randomly paired: one .hi[data center operator], one .hi[resident next door]
+
+--
+
+Bargain in real time over .hi[generator hours] (0 to 6) and a .hi[payment]: send offers, counter, accept, reject, or walk away before the clock runs out
+
+--
+
+- Round 1: the operator holds the rights (no deal = 6 hours)
+- Round 2: the resident holds the rights (no deal = 0 hours)
+- Round 3: same as round 2, but any paid deal costs 5 in legal fees
+
+--
+
+Your payoffs across all three rounds go on the class leaderboard
+
+--
+
+.hi[Join now:] course website `\(\rightarrow\)` Content `\(\rightarrow\)` Games 1: Coase
+
+---
+
+# The data center bargaining game: what should happen?
+
+If Coase is right, what do we expect to see in the data?
+
+--
+
+- Rounds 1 and 2 should land on the .hi[same] generator hours
+- The .hi[payments] should flow in opposite directions: rights are valuable
+- Round 3: think before you deal
+
+--
+
+We will check the class results against these predictions after we play
 
 ---
 

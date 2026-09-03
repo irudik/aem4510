@@ -8,8 +8,6 @@
     <link href="13-slides-travel-cost_files/remark-css/default.css" rel="stylesheet" />
     <link href="13-slides-travel-cost_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="13-slides-travel-cost_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="13-slides-travel-cost_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="13-slides-travel-cost_files/tile-view/tile-view.js"></script>
     <link href="13-slides-travel-cost_files/panelset/panelset.css" rel="stylesheet" />
     <script src="13-slides-travel-cost_files/panelset/panelset.js"></script>
     <script src="13-slides-travel-cost_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,16 +37,60 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf
 )
+```
+
+```
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
+## (as 'lib' is unspecified)
+```
+
+```
+## 
+## viridis installed
+```
+
+```
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
+## (as 'lib' is unspecified)
+```
+
+```
+## also installing the dependencies 'zoo', 'Formula', 'sandwich', 'dreamerr', 'stringmagic'
+```
+
+```
+## 
+## fixest installed
+```
+
+```
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
+## (as 'lib' is unspecified)
+```
+
+```
+## 
+## maps installed
+```
+
+```
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
+## (as 'lib' is unspecified)
+```
+
+```
+## also installing the dependencies 'proxy', 'e1071', 'wk', 'classInt', 's2', 'units', 'sf'
+```
+
+```
+## 
+## tigris installed
+```
+
+``` r
 source("R/video_helpers.R")
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -215,7 +257,7 @@ name: background
 # Should we separate the Great Lakes and Mississippi?
 
 .center[
-&lt;img src="files/12-carp1.png" width="70%" /&gt;
+&lt;img src="files/12-carp1.png" alt="" width="70%" /&gt;
 ]
 
 ---
@@ -223,7 +265,7 @@ name: background
 # Should we separate the Great Lakes and Mississippi?
 
 .center[
-&lt;img src="files/12-carp2.png" width="50%" /&gt;
+&lt;img src="files/12-carp2.png" alt="" width="50%" /&gt;
 ]
 
 ---
@@ -491,7 +533,7 @@ Here's the most basic travel cost model to start
 # Zonal (single-site) model
 
 Here's a simple example of a set of zones 1-5:
-&lt;img src="13-slides-travel-cost_files/figure-html/sample2 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="13-slides-travel-cost_files/figure-html/sample2 scatter-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -554,7 +596,7 @@ where `\(\beta_0\)` is the intercept and `\(\beta_1\)` is the slope
 ]
 
 .pull-right[
-&lt;img src="13-slides-travel-cost_files/figure-html/zonal example-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="13-slides-travel-cost_files/figure-html/zonal example-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -570,7 +612,7 @@ For now, we'd continue by fitting a line through the points (OLS/regression)
 ]
 
 .pull-right[
-&lt;img src="13-slides-travel-cost_files/figure-html/zonal example 2-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="13-slides-travel-cost_files/figure-html/zonal example 2-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -714,7 +756,7 @@ Once we estimate demand curves, we can see how welfare changes when we alter qua
 ]
 
 .pull-right[
-&lt;img src="13-slides-travel-cost_files/figure-html/multi site example-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="13-slides-travel-cost_files/figure-html/multi site example-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 ]
 
 ---

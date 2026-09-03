@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 })
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 xaringanExtra::style_panelset(panel_tab_color_active = "red")
 ```
 ```{r themes}
@@ -274,30 +274,6 @@ Main idea: Take two otherwise very similar houses: one in a neighborhood surroun
 
 How do their prices differ?
 
-<!-- 
----
-
-# The hedonic method
-
-The hedonic pricing approach derives from the characteristics theory of value first proposed by Lancaster (1966)
-
---
-
-This seeks to explain the value of a commodity as a bundle of valuable characteristics
-
---
-
-One or more of these characteristics may be environmental
-
---
-
-Ridker and Henning (1967) first applied method to environmental valuation in a study of the effect of air pollution on property values in St. Louis
-
---
-
-It motivated the conceptual model of Rosen (1974) of how we might use hedonic prices to estimate peoples’ values for site-specific amenities -->
-
----
 
 # The hedonic method
 

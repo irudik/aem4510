@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 })
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 
 ```
 ```{r echo=FALSE}
@@ -52,7 +52,37 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 1. Can we achieve the efficient outcome .hi[without] government intervention?
 2. What does the Coase theorem say?
 3. What are the limits to Coasean bargaining?
+4. Can data centers and their neighbors bargain their way out of the AI boom's externalities?
 
+
+---
+
+# This lecture's running example: the AI boom next door
+
+```{r, echo = FALSE}
+local_video("videos/03-coase-data-centers-utility-bills.mp4")
+```
+
+---
+
+# Data centers are a textbook externality problem
+
+Data centers bring jobs and tax revenue, and their neighbors bear real costs:
+
+--
+
+- Cooling fans and diesel backup generators hum around the clock
+- Generator testing burns diesel next to homes
+- Water use competes with local supplies
+- Electricity demand pushes up everyone's bills
+
+--
+
+The parties are easy to name: one operator, identifiable neighbors
+
+--
+
+.hi[Today's question:] when can the operator and the neighbors bargain to the efficient outcome, and when do transactions costs get in the way?
 
 ---
 
@@ -1141,6 +1171,385 @@ Now imagine that AEP Gavin’s control costs were low, and the efficient outcome
 
 Would it matter whether we granted the “right to clean air” to the town or to AEP?
 
+
+---
+
+class: inverse, center, middle
+name: datacenters
+
+# Data centers: Coasean bargaining in the AI boom
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Cheshire, twenty years later
+
+The Cheshire transaction was one power plant buying out one small town
+
+--
+
+The AI boom is running the same experiment hundreds of times at once
+
+--
+
+Data centers need land, power, and water next to real neighborhoods
+
+--
+
+Sometimes the operator and the neighbors bargain, sometimes they end up in court
+
+--
+
+The difference is exactly what our transactions cost model predicts
+
+---
+
+# When bargaining works: Ashburn, Virginia
+
+```{r, echo = FALSE}
+local_video("videos/03-coase-ashburn-buyout-offers.mp4")
+```
+
+---
+
+# When bargaining works: Ashburn, Virginia
+
+Developers offered some Ashburn homeowners around $4 million per house to sell
+
+--
+
+Why does bargaining break out here?
+
+--
+
+- .hi[Few parties:] a developer and a handful of homeowners
+- .hi[Well-defined property rights:] you own your land, they cannot take it
+- .hi[Large surplus:] the land is worth far more under a data center than as housing
+
+--
+
+Low transactions costs + big gains from trade $\rightarrow$ deals close: the land moves to its higher-value use and the homeowners are paid to move
+
+---
+
+# When the deal doesn't close: holdouts
+
+```{r, echo = FALSE}
+local_video("videos/03-coase-farmland-holdout.mp4")
+```
+
+---
+
+# When the deal doesn't close: holdouts
+
+The sisters turned down $26 million for the family farmland
+
+--
+
+Is this a failure of the Coase theorem?
+
+--
+
+Not necessarily: if their true willingness to accept exceeds the developer's willingness to pay, .hi[no deal is the efficient outcome]
+
+--
+
+But land assembly makes bargaining fragile:
+
+- Is a "no" true WTA, or a holdout for a bigger share of the surplus?
+- A .hi[contiguous] site gives every owner veto power
+- With $N$ owners who must all say yes, transactions costs rise fast
+
+---
+
+# When bargaining fails: Memphis and Southaven
+
+```{r, echo = FALSE}
+local_video("videos/03-coase-xai-turbines-residents.mp4")
+```
+
+---
+
+# When bargaining fails: Memphis and Southaven
+
+xAI's data center runs dozens of gas turbines next to residential neighborhoods
+
+--
+
+Why is there no Cheshire-style transaction here?
+
+--
+
+- .hi[Many parties:] thousands of households breathe the emissions
+- .hi[Contested rights:] who owns the air? Permits are disputed, not settled
+- .hi[Free riding:] every resident hopes the others fund the fight
+- .hi[Information:] health damages are diffuse and hard to document
+
+--
+
+High transactions costs choke off bargaining $\rightarrow$ the conflict moves to lawsuits (the NAACP sued under the Clean Air Act) and permit fights
+
+---
+
+# Data centers through Coase's lens
+
+|                    | Ashburn buyouts | Farmland holdout | Memphis turbines |
+|--------------------|:---------------:|:----------------:|:----------------:|
+| Parties            | Few             | Few              | Thousands        |
+| Property rights    | Clear (land)    | Clear (land)     | Contested (air)  |
+| Transactions costs | Low             | Medium           | High             |
+| Outcome            | Deals close     | No deal          | Litigation       |
+
+--
+
+Same technology, same externalities, three different outcomes
+
+--
+
+The Coase theorem tells us where to look: .hi[who holds the rights, and how costly is it to strike the deal?]
+
+---
+
+# Your turn: a data center next door
+
+.pull-left[
+```{r dc-bargain, echo = FALSE, fig.show = 'hide', warning = F}
+mc_res <- function(x) 4
+mb_op <- function(x) 20 - 2*x
+ggplot() +
+  annotate("text", x = 1.6, y = 18.5, label = "MB", size = 8) +
+  annotate("text", x = 9.5, y = 5.5, label = "MC", size = 8) +
+  stat_function(fun = mb_op, color = "#ca5670", size = 1.5, xlim = c(0, 10)) +
+  stat_function(fun = mc_res, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 8, xend = 8, y = 0, yend = 4,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(labels = c(expression(G^'*'), expression(G[0])), breaks = c(8, 10), limits = c(0,10.6), expand = c(0,0)) +
+  scale_y_continuous(labels = c("4", "20"), breaks = c(4, 20), limits = c(0,22), expand = c(0,0)) +
+  labs(x = "Generator test hours",
+       y = "Marginal Benefit/Marginal Cost")
+
+```
+
+![data center generator bargaining](`r knitr::fig_chunk("dc-bargain", "png")`)
+]
+
+.pull-right[
+
+A data center tests its backup generators $G$ hours per month
+
+Marginal benefit to the operator: MB = 20 - 2G
+
+Marginal noise cost to the residents: MC = 4
+
+Left alone, the operator would run $G_0 = 10$ hours; residents want zero
+
+]
+
+---
+
+# Your turn: a data center next door
+
+.pull-left[
+![data center generator bargaining](`r knitr::fig_chunk("dc-bargain", "png")`)
+]
+
+.pull-right[
+
+MB = 20 - 2G, MC = 4
+
+Any deal needs lawyers: transactions cost $tr = 10$
+
+.hi[Your turn:]
+
+1. Find the efficient hours $G^*$
+2. Rights to the residents: what payments could work?
+3. Under each rights assignment: does a deal happen?
+
+]
+
+---
+
+# Your turn: the efficient hours
+
+.pull-left[
+![data center generator bargaining](`r knitr::fig_chunk("dc-bargain", "png")`)
+]
+
+.pull-right[
+
+Efficiency: MB = MC
+
+20 - 2G = 4 $\Rightarrow$ $G^* = 8$
+
+The first 8 hours are worth more to the operator than they cost the residents; the last 2 are not
+
+]
+
+---
+
+# Your turn: residents hold the rights
+
+.pull-left[
+```{r dc-bargain-resident, echo = FALSE, fig.show = 'hide', warning = F}
+mc_res <- function(x) 4
+mb_op <- function(x) 20 - 2*x
+gain_points <- tibble(x = c(0, 0, 8),
+                      y = c(4, 20, 4))
+ggplot() +
+  geom_polygon(data = gain_points, aes(x = x, y = y), fill = "blue", alpha = 0.5) +
+  annotate("text", x = 1.6, y = 18.5, label = "MB", size = 8) +
+  annotate("text", x = 9.5, y = 5.5, label = "MC", size = 8) +
+  stat_function(fun = mb_op, color = "#ca5670", size = 1.5, xlim = c(0, 10)) +
+  stat_function(fun = mc_res, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 8, xend = 8, y = 0, yend = 4,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(labels = c(expression(G^'*'), expression(G[0])), breaks = c(8, 10), limits = c(0,10.6), expand = c(0,0)) +
+  scale_y_continuous(labels = c("4", "20"), breaks = c(4, 20), limits = c(0,22), expand = c(0,0)) +
+  labs(x = "Generator test hours",
+       y = "Marginal Benefit/Marginal Cost")
+
+```
+
+![gains from trade when residents hold the rights](`r knitr::fig_chunk("dc-bargain-resident", "png")`)
+]
+
+.pull-right[
+
+Start at G = 0; the operator pays for hours
+
+Residents accept $\theta \geq 4 \times 8 = 32$; the operator pays at most his benefit, $\theta \leq 96$
+
+Gains from trade: the .hi-blue[blue] triangle $= \frac{1}{2} \times 8 \times 16 = 64$
+
+$64 > tr = 10$ $\rightarrow$ .hi[the deal happens] and we reach $G^* = 8$
+
+]
+
+---
+
+# Your turn: the operator holds the rights
+
+.pull-left[
+```{r dc-bargain-operator, echo = FALSE, fig.show = 'hide', warning = F}
+mc_res <- function(x) 4
+mb_op <- function(x) 20 - 2*x
+gain_points <- tibble(x = c(8, 10, 10),
+                      y = c(4, 4, 0))
+ggplot() +
+  geom_polygon(data = gain_points, aes(x = x, y = y), fill = "red", alpha = 0.5) +
+  annotate("text", x = 1.6, y = 18.5, label = "MB", size = 8) +
+  annotate("text", x = 9.5, y = 5.5, label = "MC", size = 8) +
+  stat_function(fun = mb_op, color = "#ca5670", size = 1.5, xlim = c(0, 10)) +
+  stat_function(fun = mc_res, color = "#638ccc", size = 1.5) +
+  annotate("segment", x = 8, xend = 8, y = 0, yend = 4,
+           linetype = "dashed", size = 1.5, color = "grey50") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    title = element_text(size = 24),
+    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24),
+    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff",colour = NA),
+    plot.background = element_rect(fill = "#ffffff",colour = NA),
+    axis.line = element_line(colour = "black")
+  ) +
+  scale_x_continuous(labels = c(expression(G^'*'), expression(G[0])), breaks = c(8, 10), limits = c(0,10.6), expand = c(0,0)) +
+  scale_y_continuous(labels = c("4", "20"), breaks = c(4, 20), limits = c(0,22), expand = c(0,0)) +
+  labs(x = "Generator test hours",
+       y = "Marginal Benefit/Marginal Cost")
+
+```
+
+![gains from trade when the operator holds the rights](`r knitr::fig_chunk("dc-bargain-operator", "png")`)
+]
+
+.pull-right[
+
+Start at $G_0 = 10$; residents pay to cut hours
+
+Gains from trade: the .hi-red[red] triangle $= \frac{1}{2} \times 2 \times 4 = 4$
+
+$4 < tr = 10$ $\rightarrow$ .hi[no deal], and skipping the deal is the right call
+
+With transactions costs, .hi[who holds the rights changes the outcome]
+
+]
+
+---
+
+class: inverse, center, middle
+name: game
+
+# Let's bargain: the data center game
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# The data center bargaining game
+
+You will be randomly paired: one .hi[data center operator], one .hi[resident next door]
+
+--
+
+Bargain in real time over .hi[generator hours] (0 to 6) and a .hi[payment]: send offers, counter, accept, reject, or walk away before the clock runs out
+
+--
+
+- Round 1: the operator holds the rights (no deal = 6 hours)
+- Round 2: the resident holds the rights (no deal = 0 hours)
+- Round 3: same as round 2, but any paid deal costs 5 in legal fees
+
+--
+
+Your payoffs across all three rounds go on the class leaderboard
+
+--
+
+.hi[Join now:] course website $\rightarrow$ Content $\rightarrow$ Games 1: Coase
+
+---
+
+# The data center bargaining game: what should happen?
+
+If Coase is right, what do we expect to see in the data?
+
+--
+
+- Rounds 1 and 2 should land on the .hi[same] generator hours
+- The .hi[payments] should flow in opposite directions: rights are valuable
+- Round 3: think before you deal
+
+--
+
+We will check the class results against these predictions after we play
 
 ---
 

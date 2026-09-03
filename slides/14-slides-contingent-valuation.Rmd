@@ -1,5 +1,5 @@
 ---
-title: "Lecture 13"
+title: "Lecture 14"
 subtitle: "Contingent valuation method"
 author: Ivan Rudik
 date: AEM 4510
@@ -13,7 +13,7 @@ output:
       countIncrementalSlides: false
       ratio: '16:9'
 
-<!-- Auto-rebuild: ls slides/13-slides-contingent-valuation.Rmd | entr -c Rscript -e "rmarkdown::render('slides/13-slides-contingent-valuation.Rmd')" -->
+<!-- Auto-rebuild: ls slides/14-slides-contingent-valuation.Rmd | entr -c Rscript -e "rmarkdown::render('slides/14-slides-contingent-valuation.Rmd')" -->
 
 ---
 exclude: true
@@ -67,7 +67,7 @@ theme_blank <- theme_minimal() +
   ) 
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 
 ```
 ```{r echo=FALSE}
@@ -175,7 +175,7 @@ CVM has had a lot of impact on policy:
 1989: Exxon Valdez oil spill — non-use value losses estimated by CV method to exceed $2.2 billion; Exxon launches research & campaign to discredit CV 
 
 ```{r, echo = FALSE}
-local_video("videos/13-cv-exxon-valdez.mp4")
+local_video("videos/14-cv-exxon-valdez.mp4")
 ```
 
 ---

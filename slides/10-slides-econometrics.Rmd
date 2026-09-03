@@ -76,7 +76,7 @@ nascar_df = read_csv("data/10-florida-nascar.csv") |>
   as_tibble() 
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 
 ```
 ```{r echo=FALSE}
@@ -91,7 +91,7 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 - Intro to regression and ordinary least squares
 
 ---
-  
+
 class: inverse, center, middle
 name: tidyverse
 
@@ -252,7 +252,7 @@ Suppose we were only looking at GPA and pollution (lead/Pb):
 
 $$\text{GPA}_i = \beta_0 + \beta_1 P_i + \varepsilon_i $$
 
-```{R, ols vs lines 1, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, ols vs lines 1, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 ggplot(data = pop_df, aes(x = x, y = y)) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
   theme_empty +
@@ -267,7 +267,7 @@ count: false
 
 For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$
 
-```{R, vs lines 2, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, vs lines 2, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 # Define a function
 y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -275,9 +275,9 @@ b0 = 1
 b1 = 0.4
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
-  # geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  # geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), linewidth = 0.5, alpha = 0.2) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", linewidth = 2, alpha = 0.9) +
   theme_empty +
   labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
   coord_cartesian(ylim = c(-5, 5))
@@ -290,7 +290,7 @@ count: false
 
 For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
 
-```{R, ols vs lines 3, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, ols vs lines 3, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 # Define a function
 y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -298,9 +298,9 @@ b0 = 1
 b1 = 0.4
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
-  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), linewidth = 0.5, alpha = 0.2) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", linewidth = 2, alpha = 0.9) +
   theme_empty +
   labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
   coord_cartesian(ylim = c(-5, 5))
@@ -313,7 +313,7 @@ count: false
 
 For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
 
-```{R, ols vs lines 4, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, ols vs lines 4, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 # Define a function
 y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -321,9 +321,9 @@ b0 = 3
 b1 = 0.2
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
-  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), linewidth = 0.5, alpha = 0.2) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", linewidth = 2, alpha = 0.9) +
   theme_empty +
   labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
   coord_cartesian(ylim = c(-5, 5))
@@ -336,7 +336,7 @@ count: false
 
 For any line $\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)$, we calculate errors: $e_i = GPA_i - \hat{GPA}_i$
 
-```{R, ols vs lines 5, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, ols vs lines 5, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 # Define a function
 y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -344,9 +344,9 @@ b0 = 2
 b1 = -0.8
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
-  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), linewidth = 0.5, alpha = 0.2) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", linewidth = 2, alpha = 0.9) +
   theme_empty +
   labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
   coord_cartesian(ylim = c(-5, 5))
@@ -359,7 +359,7 @@ count: false
 
 SSE squares the errors $\left(\sum e_i^2\right)$: bigger errors get bigger penalties
 
-```{R, ols vs lines 6, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, ols vs lines 6, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 # Define a function
 y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -367,9 +367,9 @@ b0 = 2
 b1 = -0.8
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
-  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), linewidth = 0.5, alpha = 0.8) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", size = 2, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#3C93DC", linewidth = 2, alpha = 0.9) +
   scale_color_viridis(option = "cividis", direction = -1) +
   theme_empty +
   labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
@@ -383,7 +383,7 @@ count: false
 
 The OLS estimate is the combination of $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize SSE
 
-```{R, ols vs lines 7, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10}
+```{R, ols vs lines 7, echo = F, dev = "svg", fig.height = 4.5, fig.width = 10, fig.align = 'center'}
 # Define a function
 y_hat = function(x, b0, b1) {b0 + b1 * x}
 # Define line's parameters
@@ -391,9 +391,9 @@ b0 = lm0$coefficients[1]
 b1 = lm0$coefficients[2]
 # The plot
 ggplot(data = pop_df, aes(x = x, y = y)) +
-  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), size = 0.5, alpha = 0.8) +
+  geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y_hat(x, b0, b1))^2), linewidth = 0.5, alpha = 0.8) +
   geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-  geom_abline(intercept = b0, slope = b1, color = "#ff0000", size = 2, alpha = 0.9) +
+  geom_abline(intercept = b0, slope = b1, color = "#ff0000", linewidth = 2, alpha = 0.9) +
   scale_color_viridis(option = "cividis", direction = -1) +
   theme_empty +
   labs(y = "GPA", x = "Average Annual Lead Exposure (grams)") +
@@ -496,7 +496,7 @@ theme_blank
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
 intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-color = "#3C93DC", size = 3
+color = "#3C93DC", linewidth = 3
 ) +
 geom_point(color = "darkslategray", size = 6) +
 theme_blank
@@ -504,9 +504,9 @@ theme_blank
 
 .center[**Population relationship**]
 
-$$ y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i $$
+$$ \text{GPA}_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` P_i + u_i $$
 
-$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+$$ \text{GPA}_i = \beta_0 + \beta_1 P_i + u_i $$
 
 
 ]
@@ -537,12 +537,12 @@ theme_blank
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
 intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-color = red_pink, size = 3, alpha = 0.3
+color = red_pink, linewidth = 3, alpha = 0.3
 ) +
 geom_point(aes(shape = s1), color = "darkslategray", size = 6) +
 geom_abline(
 intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
-size = 2, linetype = 2, color = "black"
+linewidth = 2, linetype = 2, color = "black"
 ) +
 scale_shape_manual(values = c(1, 19)) +
 theme_blank
@@ -553,11 +553,11 @@ theme_blank
 
 **Population relationship**
 <br>
-$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+$\text{GPA}_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` P_i + u_i$
 
 **Sample relationship**
 <br>
-$\hat{y}_i = `r round(lm1$coefficients[1], 2)` + `r round(lm1$coefficients[2], 2)` x_i$
+$\widehat{\text{GPA}}_i = `r round(lm1$coefficients[1], 2)` + `r round(lm1$coefficients[2], 2)` P_i$
 
 ]
 
@@ -585,16 +585,16 @@ theme_blank
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
 intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-color = red_pink, size = 3, alpha = 0.3
+color = red_pink, linewidth = 3, alpha = 0.3
 ) +
 geom_point(aes(shape = s2), color = "darkslategray", size = 6) +
 geom_abline(
 intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
-size = 2, linetype = 2, color = "black", alpha = 0.3
+linewidth = 2, linetype = 2, color = "black", alpha = 0.3
 ) +
 geom_abline(
 intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
-size = 2, linetype = 2, color = "black"
+linewidth = 2, linetype = 2, color = "black"
 ) +
 scale_shape_manual(values = c(1, 19)) +
 theme_blank
@@ -604,11 +604,11 @@ theme_blank
 
 **Population relationship**
 <br>
-$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+$\text{GPA}_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` P_i + u_i$
 
 **Sample relationship**
 <br>
-$\hat{y}_i = `r round(lm2$coefficients[1], 2)` + `r round(lm2$coefficients[2], 2)` x_i$
+$\widehat{\text{GPA}}_i = `r round(lm2$coefficients[1], 2)` + `r round(lm2$coefficients[2], 2)` P_i$
 
 ]
 
@@ -635,20 +635,20 @@ theme_blank
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_abline(
 intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-color = red_pink, size = 3, alpha = 0.3
+color = red_pink, linewidth = 3, alpha = 0.3
 ) +
 geom_point(aes(shape = s3), color = "darkslategray", size = 6) +
 geom_abline(
 intercept = lm1$coefficients[1], slope = lm1$coefficients[2],
-size = 2, linetype = 2, color = "black", alpha = 0.3
+linewidth = 2, linetype = 2, color = "black", alpha = 0.3
 ) +
 geom_abline(
 intercept = lm2$coefficients[1], slope = lm2$coefficients[2],
-size = 2, linetype = 2, color = "black", alpha = 0.3
+linewidth = 2, linetype = 2, color = "black", alpha = 0.3
 ) +
 geom_abline(
 intercept = lm3$coefficients[1], slope = lm3$coefficients[2],
-size = 2, linetype = 2, color = "black"
+linewidth = 2, linetype = 2, color = "black"
 ) +
 scale_shape_manual(values = c(1, 19)) +
 theme_blank
@@ -658,11 +658,11 @@ theme_blank
 
 **Population relationship**
 <br>
-$y_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` x_i + u_i$
+$\text{GPA}_i = `r round(lm0$coefficients[1], 2)` + `r round(lm0$coefficients[2], 2)` P_i + u_i$
 
 **Sample relationship**
 <br>
-$\hat{y}_i = `r round(lm3$coefficients[1], 2)` + `r round(lm3$coefficients[2], 2)` x_i$
+$\widehat{\text{GPA}}_i = `r round(lm3$coefficients[1], 2)` + `r round(lm3$coefficients[2], 2)` P_i$
 
 ]
 
@@ -691,7 +691,7 @@ geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0
 geom_point(data = pop_df, aes(x = x, y = y), size = 3, color = "darkslategray") +
 geom_abline(
   intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-  color = "#3C93DC", size = 1.5
+  color = "#3C93DC", linewidth = 1.5
 ) +
 theme_blank
 ```
@@ -712,11 +712,11 @@ theme_blank
     slope = sim_df |> filter(term == "x") |> select(estimate) |> unlist()
   ) 
   ggplot() + 
-    geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, size = 1) +
+    geom_abline(data = line_df, aes(intercept = intercept, slope = slope), alpha = 0.01, linewidth = 1) +
     geom_point(data = pop_df, aes(x = x, y = y), size = 6, color = "darkslategray") +
     geom_abline(
       intercept = lm0$coefficients[1], slope = lm0$coefficients[2],
-      color = "#3C93DC", size = 3
+      color = "#3C93DC", linewidth = 3
     ) +
     theme_blank
   ```
@@ -874,7 +874,11 @@ This is because our data on lead exposure is also proxying for income (since $\t
 
 --
 
-So $\hat{\beta}_1$ will pick up the effect of both!
+Poorer households are exposed to more lead **and** have fewer tutoring resources
+
+--
+
+$\hat{\beta}_1$ will pick up the effect of both!
 
 --
 
@@ -941,10 +945,10 @@ tri <- read_csv("data/TRI_2005_US.csv") %>%
 
 ggplot(tri) +
   geom_histogram(aes(x = emissions), fill = "#3C93DC", color = "#3C93DC", bins = 50) +
-  geom_vline(xintercept = median(tri$emissions), color = "black", linetype = "dotdash", size = 2) +
-  geom_vline(xintercept = 1.53, color = "#ff0000", size = 2) +
-  geom_vline(xintercept = 1.75, color = "#FFAC0F", linetype = "longdash", size = 2) +
-  geom_vline(xintercept = 6.04, color = "#FFAC0F", linetype = "longdash", size = 2) +
+  geom_vline(xintercept = median(tri$emissions), color = "black", linetype = "dotdash", linewidth = 2) +
+  geom_vline(xintercept = 1.53, color = "#ff0000", linewidth = 2) +
+  geom_vline(xintercept = 1.75, color = "#FFAC0F", linetype = "longdash", linewidth = 2) +
+  geom_vline(xintercept = 6.04, color = "#FFAC0F", linetype = "longdash", linewidth = 2) +
   annotate("text", size = 6, label = "Median Facility", x = -.2, y = 490) +
   annotate("text", size = 6, label = "1 NASCAR Race", x = .6, y = 590, color = "#ff0000") +
   annotate("text", size = 6, label = "1 Airport", x = 2.2, y = 590, color = "#FFAC0F") +
@@ -982,32 +986,29 @@ knitr::include_graphics("files/10-fcat-site.png")
 
 # Let's look at the data
 
-```{r}
-nascar_df
+```{r, echo = FALSE, results = 'asis'}
+nascar_df |>
+  select(school_id, school_name, grade, year, zscore, nascar_lead, industrial_lead, median_income, num_students) |>
+  slice_head(n = 10) |>
+  mutate(
+    zscore = round(zscore, 3),
+    nascar_lead = round(nascar_lead, 2),
+    industrial_lead = round(industrial_lead, 2),
+    median_income = round(median_income, 1)
+  ) |>
+  knitr::kable(
+    format = "html",
+    col.names = c("School ID", "School", "Grade", "Year", "Test avg", "NASCAR lead", "Industrial lead", "Median income", "Students")
+  ) |>
+  kableExtra::kable_styling(font_size = 18, full_width = FALSE, position = "center")
 ```
 
----
-
-# My sister is in these observations!
-
-```{r}
-nascar_df |> # only keep Saturn Elementary School
-  filter(school_name == "SATURN ELEM")
-```
-
----
-
-# Let's look at the data
-
-```{r, warning = F, echo = F}
-summary(nascar_df |> select(school_id, zscore, nascar_lead, industrial_lead, median_income, num_students))
-```
 
 ---
 
 # The variables
 
-- .hi[zscore]: the school's score for the average student in terms of standard deviations above or below the state-wide average
+- .hi[test avg]: the school's score for the average student in terms of standard deviations above or below the state-wide average
 - .hi[nascar lead]: lifetime exposure to lead emissions from NASCAR tracks within 50 miles
 - .hi[industrial lead]: lead emissions from industrial sources (e.g. factories) within 50 miles
 - .hi[median income]: the school district's median incoe
@@ -1046,46 +1047,19 @@ Units are 10s of kilograms
 # What is the association between lead and scores?
 
 .pull-left[
-```{r pure_corr, echo = FALSE, fig.show = 'hide', warning = F}
-ggplot(nascar_df, aes(x = nascar_lead_weighted, y = zscore)) +
-  geom_point(size = 1, color = "darkslategray", alpha = 0.25) +
-  geom_smooth(formula = y ~ x, color = red_pink, method = 'lm', size = 2) +
-  theme_regular +
-  scale_y_continuous(breaks = scales::pretty_breaks()) +
-  scale_x_continuous(breaks = scales::pretty_breaks()) +
-  labs(
-    y = "Test Score (standard deviations)",
-    x = "Lead Exposure\n(tens of weighted kilograms)"
-  )
-``` 
-
-![negatively correlated](`r knitr::fig_chunk("pure_corr", "png")`)
-]
-
-.pull-right[
-Let's look at the pure correlation between test scores and lead
-
-There's a lot of data so it's kind of hard to see but it appears there's a .hi-red[negative] association: lead is bad for test scores
-
-
-]
-
-
----
-
-# What is the association between lead and scores?
-
-.pull-left[
 ```{r binned, echo = FALSE, fig.show = 'hide', warning = F}
 bin_df = nascar_df |>
-  mutate(nascar_lead_weighted = round(nascar_lead_weighted)) %>%
-  group_by(nascar_lead_weighted) |>
+  mutate(
+    lead_bin = cut_interval(nascar_lead_weighted, n = 50, labels = FALSE)
+  ) |>
+  group_by(lead_bin) |>
   summarise(
+    mean_lead = mean(nascar_lead_weighted),
     mean_score = mean(zscore)
   ) |>
   ungroup()
 
-ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_score)) +
+ggplot(bin_df, aes(x = mean_lead, y = mean_score)) +
   geom_point(size = 5, color = "darkslategray") +
   geom_smooth(formula = y ~ x, color = red_pink, method = "lm", se = FALSE) +
   theme_regular +
@@ -1102,13 +1076,9 @@ ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_score)) +
 
 .pull-right[
 
-Lets .hi[bin] the data to see the pattern more clearly
+Let's look at the pure correlation between test scores and lead
 
-All I'm doing is:
-
-- Rounding lead to the nearest integer
-- Taking the average of test scores for that bin
-- Plot the average scores versus rounded lead
+It appears there's a .hi-red[negative] association: lead is bad for test scores
 
 
 ]
@@ -1118,22 +1088,23 @@ All I'm doing is:
 # What is the association between lead and scores?
 
 We can get a better sense by running a regression: 
-$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy}$$ $(s$ is school, $g$ is grade, $y$ is year)
+$$test\ avg_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy}$$ $(s$ is school, $g$ is grade, $y$ is year)
 
 ---
 
 # What is the association between lead and scores?
 
-```{r, eval = F, echo = F}
+```{r, echo = FALSE, results = 'asis'}
 lm(zscore ~ nascar_lead_weighted, nascar_df) |>
-  broom::tidy()
-```
-
-```
-## Estimation Results
-##   parameter                      estimate   
-## 1 beta_0 (Intercept)             0.002   
-*## 2 beta_1 nascar_lead_weighted   -0.004   
+  broom::tidy() |>
+  transmute(
+    Parameter = c("beta_0 (Intercept)", "beta_1 NASCAR lead"),
+    Estimate = round(estimate, 4),
+    `Std. error` = round(std.error, 4),
+    `t value` = round(statistic, 2)
+  ) |>
+  knitr::kable(format = "html", caption = "Estimation results") |>
+  kableExtra::kable_styling(font_size = 18, full_width = FALSE, position = "center")
 ```
 
 What does this mean?
@@ -1162,16 +1133,19 @@ Two broad important things: lead emissions from other sources, socioeconomic sta
 
 # Do we believe this number?
 
-$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy} + \beta_2 other\_lead_{sgy}  + \beta_3 income_{sgy}$$
+$$test\ avg_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy} + \beta_2 other\_lead_{sgy}  + \beta_3 income_{sgy}$$
 
 
-```
-## Estimation results
-##   parameter                      estimate  
-## 1 beta_0 (Intercept)             -0.846     
-*## 2 beta_1 nascar_lead_weighted   -0.0008   (versus -0.004 above)
-## 3 beta_2 other_lead             -0.00000006 (other lead = bad!)
-## 4 beta_3 income                  0.00002 (rich family = good!)
+```{r, echo = FALSE, results = 'asis'}
+reg_table = tibble::tibble(
+  Parameter = c("beta_0 (Intercept)", "beta_1 NASCAR lead", "beta_2 Other lead", "beta_3 Income"),
+  Estimate = c("-0.846", "-0.0008", "-0.00000006", "0.00002"),
+  Note = c("", "(versus -0.004 above)", "(other lead = bad!)", "(rich family = good!)")
+)
+
+reg_table |>
+  knitr::kable(format = "html", caption = "Estimation results with controls") |>
+  kableExtra::kable_styling(font_size = 18, full_width = FALSE, position = "center")
 ```
 
 Controlling for other things matters: new estimate is 1/4 the size
@@ -1183,14 +1157,17 @@ Controlling for other things matters: new estimate is 1/4 the size
 .pull-left[
 ```{r income, echo = FALSE, fig.show = 'hide', warning = F}
 bin_df = nascar_df |>
-  mutate(nascar_lead_weighted = round(nascar_lead_weighted)) %>%
-  group_by(nascar_lead_weighted) |>
+  mutate(
+    lead_bin = cut_interval(nascar_lead_weighted, n = 50, labels = FALSE)
+  ) |>
+  group_by(lead_bin) |>
   summarise(
+    mean_lead = mean(nascar_lead_weighted),
     mean_income = mean(median_income)
   ) |>
   ungroup()
 
-ggplot(bin_df, aes(x = nascar_lead_weighted, y = mean_income)) +
+ggplot(bin_df, aes(x = mean_lead, y = mean_income)) +
   geom_point(size = 5, color = "darkslategray") +
   geom_smooth(formula = y ~ x, color = red_pink, method = "lm", se = FALSE) +
   theme_regular +

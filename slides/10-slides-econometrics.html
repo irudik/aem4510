@@ -8,12 +8,12 @@
     <link href="10-slides-econometrics_files/remark-css/default.css" rel="stylesheet" />
     <link href="10-slides-econometrics_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="10-slides-econometrics_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="10-slides-econometrics_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="10-slides-econometrics_files/tile-view/tile-view.js"></script>
     <link href="10-slides-econometrics_files/panelset/panelset.css" rel="stylesheet" />
     <script src="10-slides-econometrics_files/panelset/panelset.js"></script>
     <script src="10-slides-econometrics_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="10-slides-econometrics_files/kePrint/kePrint.js"></script>
+    <link href="10-slides-econometrics_files/lightable/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -54,7 +54,11 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo = FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 red_pink = "#e64173"
@@ -138,7 +142,7 @@ nascar_df = read_csv("data/10-florida-nascar.csv") |&gt;
 - Intro to regression and ordinary least squares
 
 ---
-  
+
 class: inverse, center, middle
 name: tidyverse
 
@@ -271,7 +275,7 @@ Suppose we were only looking at GPA and pollution (lead/Pb):
 
 $$\text{GPA}_i = \beta_0 + \beta_1 P_i + \varepsilon_i $$
 
-![](10-slides-econometrics_files/figure-html/ols vs lines 1-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/ols vs lines 1-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
@@ -280,16 +284,7 @@ count: false
 
 For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`
 
-
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-```
-
-![](10-slides-econometrics_files/figure-html/vs lines 2-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/vs lines 2-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
@@ -298,7 +293,7 @@ count: false
 
 For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`, we calculate errors: `\(e_i = GPA_i - \hat{GPA}_i\)`
 
-![](10-slides-econometrics_files/figure-html/ols vs lines 3-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/ols vs lines 3-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
@@ -307,7 +302,7 @@ count: false
 
 For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`, we calculate errors: `\(e_i = GPA_i - \hat{GPA}_i\)`
 
-![](10-slides-econometrics_files/figure-html/ols vs lines 4-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/ols vs lines 4-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
@@ -316,7 +311,7 @@ count: false
 
 For any line `\(\left(\hat{GPA}_i = \hat{\beta}_0 + \hat{\beta}_1 P_i\right)\)`, we calculate errors: `\(e_i = GPA_i - \hat{GPA}_i\)`
 
-![](10-slides-econometrics_files/figure-html/ols vs lines 5-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/ols vs lines 5-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
@@ -325,7 +320,7 @@ count: false
 
 SSE squares the errors `\(\left(\sum e_i^2\right)\)`: bigger errors get bigger penalties
 
-![](10-slides-econometrics_files/figure-html/ols vs lines 6-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/ols vs lines 6-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 count: false
@@ -334,7 +329,7 @@ count: false
 
 The OLS estimate is the combination of `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` that minimize SSE
 
-![](10-slides-econometrics_files/figure-html/ols vs lines 7-1.svg)&lt;!-- --&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/ols vs lines 7-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -414,7 +409,7 @@ Let's see in an example where we only have a subsample of the full population of
 
 .pull-left[
 
-&lt;img src="10-slides-econometrics_files/figure-html/pop1-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/pop1-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[**Population**]
 
@@ -424,13 +419,13 @@ Let's see in an example where we only have a subsample of the full population of
 
 .pull-right[
 
-&lt;img src="10-slides-econometrics_files/figure-html/scatter1-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/scatter1-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[**Population relationship**]
 
-$$ y_i = 2.53 + -0.43 x_i + u_i $$
+$$ \text{GPA}_i = 2.53 + -0.43 P_i + u_i $$
 
-$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+$$ \text{GPA}_i = \beta_0 + \beta_1 P_i + u_i $$
 
 
 ]
@@ -440,7 +435,7 @@ $$ y_i = \beta_0 + \beta_1 x_i + u_i $$
 .pull-left[
 
 
-&lt;img src="10-slides-econometrics_files/figure-html/sample1-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/sample1-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[**Sample 1:** 10 random individuals]
 
@@ -452,18 +447,18 @@ $$ y_i = \beta_0 + \beta_1 x_i + u_i $$
 .pull-right[
 
 
-&lt;img src="10-slides-econometrics_files/figure-html/sample1 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/sample1 scatter-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 
 .center[
 
 **Population relationship**
 &lt;br&gt;
-`\(y_i = 2.53 + -0.43 x_i + u_i\)`
+`\(\text{GPA}_i = 2.53 + -0.43 P_i + u_i\)`
 
 **Sample relationship**
 &lt;br&gt;
-`\(\hat{y}_i = 0.72 + -0.19 x_i\)`
+`\(\widehat{\text{GPA}}_i = 0.72 + -0.19 P_i\)`
 
 ]
 
@@ -474,7 +469,7 @@ count: false
 
 .pull-left[
 
-&lt;img src="10-slides-econometrics_files/figure-html/sample2-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/sample2-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[**Sample 2:** 10 random individuals]
 
@@ -482,17 +477,17 @@ count: false
 
 .pull-right[
 
-&lt;img src="10-slides-econometrics_files/figure-html/sample2 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/sample2 scatter-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[
 
 **Population relationship**
 &lt;br&gt;
-`\(y_i = 2.53 + -0.43 x_i + u_i\)`
+`\(\text{GPA}_i = 2.53 + -0.43 P_i + u_i\)`
 
 **Sample relationship**
 &lt;br&gt;
-`\(\hat{y}_i = 2.82 + -0.47 x_i\)`
+`\(\widehat{\text{GPA}}_i = 2.82 + -0.47 P_i\)`
 
 ]
 
@@ -502,7 +497,7 @@ count: false
 
 .pull-left[
 
-&lt;img src="10-slides-econometrics_files/figure-html/sample3-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/sample3-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[**Sample 3:** 10 random individuals]
 
@@ -510,17 +505,17 @@ count: false
 
 .pull-right[
 
-&lt;img src="10-slides-econometrics_files/figure-html/sample3 scatter-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/sample3 scatter-1.svg" alt="" style="display: block; margin: auto;" /&gt;
 
 .center[
 
 **Population relationship**
 &lt;br&gt;
-`\(y_i = 2.53 + -0.43 x_i + u_i\)`
+`\(\text{GPA}_i = 2.53 + -0.43 P_i + u_i\)`
 
 **Sample relationship**
 &lt;br&gt;
-`\(\hat{y}_i = 2.32 + -0.44 x_i\)`
+`\(\widehat{\text{GPA}}_i = 2.32 + -0.44 P_i\)`
 
 ]
 
@@ -704,7 +699,11 @@ This is because our data on lead exposure is also proxying for income (since `\(
 
 --
 
-So `\(\hat{\beta}_1\)` will pick up the effect of both!
+Poorer households are exposed to more lead **and** have fewer tutoring resources
+
+--
+
+`\(\hat{\beta}_1\)` will pick up the effect of both!
 
 --
 
@@ -746,7 +745,7 @@ name: r
 # Real pollution education example
 
 &lt;center&gt;
-&lt;img src="files/10-alex-nascar.png" width="80%" /&gt;
+&lt;img src="files/10-alex-nascar.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -764,7 +763,7 @@ In .hi[3 hours], one NASCAR race emits more lead than a majority of industrial f
 # We will look at Florida
 
 &lt;center&gt;
-&lt;img src="files/10-florida-map.png" width="80%" /&gt;
+&lt;img src="files/10-florida-map.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -772,93 +771,147 @@ In .hi[3 hours], one NASCAR race emits more lead than a majority of industrial f
 # All the data are public, you can look at scores yourself!
 
 &lt;center&gt;
-&lt;img src="files/10-fcat-site.png" width="80%" /&gt;
+&lt;img src="files/10-fcat-site.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
 
 # Let's look at the data
 
+&lt;table class="table" style="font-size: 18px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; School ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; School &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Grade &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Test avg &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; NASCAR lead &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Industrial lead &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Median income &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Students &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 822328.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49267 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 112 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.101 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 80.37 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 822639.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49267 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 117 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.206 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 88.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 822909.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49267 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.686 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.97 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 967077.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50842 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 131 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.633 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 82.39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 967352.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50842 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 105 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.352 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 90.52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 967663.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50842 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 109 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2005 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.138 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 76.98 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1061570.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2005 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.649 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 84.74 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1062071.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 137 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2005 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.336 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 92.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1062346.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 56 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; HAMILTON ELEM &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2006 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 79.91 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1164071.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56655 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 133 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
-``` r
-nascar_df
-```
-
-```
-## # A tibble: 68,858 × 12
-##    school_id school_name   grade  year zscore nascar_lead nascar_lead_weighted
-##        &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;                &lt;dbl&gt;
-##  1        56 HAMILTON ELEM     3  2003 -0.186        72.2                 2.53
-##  2        56 HAMILTON ELEM     4  2003  0.101        80.4                 2.81
-##  3        56 HAMILTON ELEM     5  2003 -0.206        88.0                 3.08
-##  4        56 HAMILTON ELEM     3  2004 -0.686        74.0                 2.59
-##  5        56 HAMILTON ELEM     4  2004 -0.633        82.4                 2.88
-##  6        56 HAMILTON ELEM     5  2004  0.352        90.5                 3.17
-##  7        56 HAMILTON ELEM     3  2005 -1.14         77.0                 2.69
-##  8        56 HAMILTON ELEM     4  2005 -0.649        84.7                 2.97
-##  9        56 HAMILTON ELEM     5  2005 -0.336        92.0                 3.26
-## 10        56 HAMILTON ELEM     3  2006 -0.333        79.9                 2.80
-## # ℹ 68,848 more rows
-## # ℹ 5 more variables: years_leaded &lt;dbl&gt;, industrial_lead &lt;dbl&gt;,
-## #   median_income &lt;dbl&gt;, unemp_rate &lt;dbl&gt;, num_students &lt;dbl&gt;
-```
-
----
-
-# My sister is in these observations!
-
-
-``` r
-nascar_df |&gt; # only keep Saturn Elementary School
-  filter(school_name == "SATURN ELEM")
-```
-
-```
-## # A tibble: 21 × 12
-##    school_id school_name grade  year  zscore nascar_lead nascar_lead_weighted
-##        &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;                &lt;dbl&gt;
-##  1      2067 SATURN ELEM     3  2003  0.105            0                    0
-##  2      2067 SATURN ELEM     4  2003 -0.0633           0                    0
-##  3      2067 SATURN ELEM     5  2003  0.163            0                    0
-##  4      2067 SATURN ELEM     3  2004  0.655            0                    0
-##  5      2067 SATURN ELEM     4  2004  0.586            0                    0
-##  6      2067 SATURN ELEM     5  2004  0.679            0                    0
-##  7      2067 SATURN ELEM     3  2005  1.03             0                    0
-##  8      2067 SATURN ELEM     4  2005  0.131            0                    0
-##  9      2067 SATURN ELEM     5  2005  0.696            0                    0
-## 10      2067 SATURN ELEM     3  2006  0.599            0                    0
-## # ℹ 11 more rows
-## # ℹ 5 more variables: years_leaded &lt;dbl&gt;, industrial_lead &lt;dbl&gt;,
-## #   median_income &lt;dbl&gt;, unemp_rate &lt;dbl&gt;, num_students &lt;dbl&gt;
-```
-
----
-
-# Let's look at the data
-
-
-```
-##    school_id        zscore            nascar_lead    industrial_lead  
-##  Min.   :   3   Min.   :-6.7659874   Min.   : 0.00   Min.   :      0  
-##  1st Qu.: 961   1st Qu.:-0.6308566   1st Qu.: 0.00   1st Qu.: 300489  
-##  Median :1811   Median : 0.0128066   Median : 0.00   Median : 562856  
-##  Mean   :1832   Mean   : 0.0003581   Mean   :12.88   Mean   :1197073  
-##  3rd Qu.:2702   3rd Qu.: 0.6617611   3rd Qu.:16.38   3rd Qu.:2040709  
-##  Max.   :4110   Max.   : 4.8842550   Max.   :92.02   Max.   :6454837  
-##  median_income    num_students  
-##  Min.   :25201   Min.   : 10.0  
-##  1st Qu.:41184   1st Qu.: 72.0  
-##  Median :44635   Median :100.0  
-##  Mean   :44712   Mean   :102.5  
-##  3rd Qu.:48772   3rd Qu.:130.0  
-##  Max.   :67238   Max.   :447.0
-```
 
 ---
 
 # The variables
 
-- .hi[zscore]: the school's score for the average student in terms of standard deviations above or below the state-wide average
+- .hi[test avg]: the school's score for the average student in terms of standard deviations above or below the state-wide average
 - .hi[nascar lead]: lifetime exposure to lead emissions from NASCAR tracks within 50 miles
 - .hi[industrial lead]: lead emissions from industrial sources (e.g. factories) within 50 miles
 - .hi[median income]: the school district's median incoe
@@ -869,14 +922,14 @@ nascar_df |&gt; # only keep Saturn Elementary School
 
 # What does the distribution of scores look like?
 
-&lt;img src="10-slides-econometrics_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/unnamed-chunk-7-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # What about exposure to NASCAR lead
 
 .pull-left[
-&lt;img src="10-slides-econometrics_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-slides-econometrics_files/figure-html/unnamed-chunk-8-1.png" alt="" style="display: block; margin: auto;" /&gt;
 ]
 .pull-right[
 
@@ -895,37 +948,14 @@ Units are 10s of kilograms
 .pull-left[
 
 
-![negatively correlated](10-slides-econometrics_files/figure-html/pure_corr-1.png)
-]
-
-.pull-right[
-Let's look at the pure correlation between test scores and lead
-
-There's a lot of data so it's kind of hard to see but it appears there's a .hi-red[negative] association: lead is bad for test scores
-
-
-]
-
-
----
-
-# What is the association between lead and scores?
-
-.pull-left[
-
-
 ![negatively correlated](10-slides-econometrics_files/figure-html/binned-1.png)
 ]
 
 .pull-right[
 
-Lets .hi[bin] the data to see the pattern more clearly
+Let's look at the pure correlation between test scores and lead
 
-All I'm doing is:
-
-- Rounding lead to the nearest integer
-- Taking the average of test scores for that bin
-- Plot the average scores versus rounded lead
+It appears there's a .hi-red[negative] association: lead is bad for test scores
 
 
 ]
@@ -935,20 +965,37 @@ All I'm doing is:
 # What is the association between lead and scores?
 
 We can get a better sense by running a regression: 
-`$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy}$$` `\((s\)` is school, `\(g\)` is grade, `\(y\)` is year)
+`$$test\ avg_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy}$$` `\((s\)` is school, `\(g\)` is grade, `\(y\)` is year)
 
 ---
 
 # What is the association between lead and scores?
 
-
-
-```
-## Estimation Results
-##   parameter                      estimate   
-## 1 beta_0 (Intercept)             0.002   
-*## 2 beta_1 nascar_lead_weighted   -0.004   
-```
+&lt;table class="table" style="font-size: 18px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+&lt;caption style="font-size: initial !important;"&gt;Estimation results&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parameter &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Std. error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; t value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta_0 (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0024 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0042 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.58 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta_1 NASCAR lead &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0040 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0033 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.23 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 What does this mean?
 
@@ -976,17 +1023,41 @@ Two broad important things: lead emissions from other sources, socioeconomic sta
 
 # Do we believe this number?
 
-`$$zscore_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy} + \beta_2 other\_lead_{sgy}  + \beta_3 income_{sgy}$$`
+`$$test\ avg_{sgy} = \beta_0 + \beta_1 nascar\_lead\_weighted_{sgy} + \beta_2 other\_lead_{sgy}  + \beta_3 income_{sgy}$$`
 
 
-```
-## Estimation results
-##   parameter                      estimate  
-## 1 beta_0 (Intercept)             -0.846     
-*## 2 beta_1 nascar_lead_weighted   -0.0008   (versus -0.004 above)
-## 3 beta_2 other_lead             -0.00000006 (other lead = bad!)
-## 4 beta_3 income                  0.00002 (rich family = good!)
-```
+&lt;table class="table" style="font-size: 18px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+&lt;caption style="font-size: initial !important;"&gt;Estimation results with controls&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parameter &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Note &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta_0 (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.846 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta_1 NASCAR lead &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.0008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (versus -0.004 above) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta_2 Other lead &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.00000006 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (other lead = bad!) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta_3 Income &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.00002 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (rich family = good!) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 Controlling for other things matters: new estimate is 1/4 the size
 

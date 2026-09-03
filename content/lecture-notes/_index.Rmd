@@ -1,6 +1,6 @@
 ---
 title: Schedule, Lecture Notes, and Readings
-date: "`r format(Sys.time())`"
+date: 2026-04-20
 menu:
   content:
     parent: 
@@ -68,10 +68,13 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
   - [Lecture notes](10-econometrics)
   - [Mixtape Chapter 2](https://mixtape.scunning.com/02-probability_and_regression#ordinary-least-squares)
 
-### Discounting
+### Climate risk and financial instruments
 
-  - [Lecture notes](11-discounting)
+  - [Lecture notes](11-climate-finance)
   - *[Giglio, Stefano, Matteo Maggiori, and Johannes Stroebel. "Very long-run discount rates." The Quarterly Journal of Economics 130, no. 1 (2015): 1-53.](https://search.ebscohost.com/login.aspx?direct=true&db=bah&AN=101480957&site=ehost-live)" The Review of Financial Studies 34, no. 8 (2021): 3527-3571.*
+  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
+  - Schlenker, Wolfram, and Charles A. Taylor. "[Market expectations of a warming climate.](https://www.sciencedirect.com/science/article/am/pii/S0304405X21001495)" Journal of Financial Economics 142, no. 2 (2021): 627-640.
+  - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
 
 <!-- ### R and the tidyverse, regression review -->
 
@@ -80,23 +83,23 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
 <!--   - Mixtape: [properties of regression](https://mixtape.scunning.com/probability-and-regression.html), *[directed acyclical graphs](https://mixtape.scunning.com/dag.html), [potential outcomes causal model](https://mixtape.scunning.com/potential-outcomes.html)* -->
 
 
-### Non-market valuation: Travel cost
-
-  - [Lecture notes](12-travel-cost)
-  - [King and Marzotta](http://www.ecosystemvaluation.org/travel_costs.htm)
-
-### Non-market valuation: Contingent valuation
-
-  - [Lecture notes](13-contingent-valuation)
-  - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Resources 50 (2007): 1-14.
-  
 ### In class hedonics game
   
 ### The environment and real estate markets
 
-  - [Lecture notes](14-hedonics)
+  - [Lecture notes](12-hedonics)
   - Greenstone, Michael, and Justin Gallagher. "[Does hazardous waste matter? Evidence from the housing market and the superfund program.](https://search.ebscohost.com/login.aspx?direct=true&db=bah&AN=33227874&site=ehost-live)" The Quarterly Journal of Economics 123, no. 3 (2008): 951-1003.
   - Bernstein, Asaf, Matthew T. Gustafson, and Ryan Lewis. "[Disaster on the horizon: The price effect of sea level rise.](https://discovery.ebsco.com/linkprocessor/plink?id=b2f8348a-8a0a-3b1b-8ea2-6714078cf5ed)" Journal of Financial Economics 134, no. 2 (2019): 253-272.
+
+### Non-market valuation: Travel cost
+
+  - [Lecture notes](13-travel-cost)
+  - [King and Marzotta](http://www.ecosystemvaluation.org/travel_costs.htm)
+
+### Non-market valuation: Contingent valuation
+
+  - [Lecture notes](14-contingent-valuation)
+  - Krupnick, Alan J., and Juha Siikamäki. ["How people value what nature provides."](https://media.rff.org/archive/files/sharepoint/WorkImages/Download/RFF-Resources-165_WhatNatureProvides.pdf) Resources 50 (2007): 1-14.
 
 ### Offset markets
 
@@ -106,13 +109,6 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
 
   
 
-### Climate risk and financial instruments
-
-  - [Lecture notes](16-climate-finance)
-  - [Resources Radio: Pricing Climate Risk in the Markets, with Robert Litterman](https://www.resourcesmag.org/resources-radio/pricing-climate-risk-markets-robert-litterman/)
-  - Schlenker, Wolfram, and Charles A. Taylor. "[Market expectations of a warming climate.](https://www.sciencedirect.com/science/article/am/pii/S0304405X21001495)" Journal of Financial Economics 142, no. 2 (2021): 627-640.
-  - Painter, Marcus. "[An inconvenient cost: The effects of climate change on municipal bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3167379)" Journal of Financial Economics 135, no. 2 (2020): 468-482.
-  
 ### Green instruments
 
   - [Lecture notes](17-green-instruments)

@@ -8,8 +8,6 @@
     <link href="06-slides-permits_files/remark-css/default.css" rel="stylesheet" />
     <link href="06-slides-permits_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="06-slides-permits_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="06-slides-permits_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="06-slides-permits_files/tile-view/tile-view.js"></script>
     <link href="06-slides-permits_files/panelset/panelset.css" rel="stylesheet" />
     <script src="06-slides-permits_files/panelset/panelset.js"></script>
     <script src="06-slides-permits_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,20 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.5/site-library'
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
 ## (as 'lib' is unspecified)
 ```
 
@@ -91,7 +82,12 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/video_helpers.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -261,7 +257,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/06-cnp1.png" width="40%" /&gt;
+&lt;img src="files/06-cnp1.png" alt="" width="40%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -269,7 +265,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/06-cnp2.png" width="70%" /&gt;
+&lt;img src="files/06-cnp2.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -277,7 +273,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/06-arp1.png" width="80%" /&gt;
+&lt;img src="files/06-arp1.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -285,7 +281,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/06-arp2.png" width="80%" /&gt;
+&lt;img src="files/06-arp2.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -293,7 +289,7 @@ Phase II (2000+):
 # Tradable permit systems: example
 
 &lt;center&gt;
-&lt;img src="files/06-arp3.png" width="100%" /&gt;
+&lt;img src="files/06-arp3.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 
 
@@ -1106,7 +1102,7 @@ Another way is .hi[zonal trading]: firms can only trade in similar MD areas
 Below are estimates of efficient trading ratios for the Acid Rain Program
 
 &lt;center&gt;
-&lt;img src="files/06-trading-ratios.png" width="80%" /&gt;
+&lt;img src="files/06-trading-ratios.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 Muller and Mendelsohn (2009)
@@ -1118,7 +1114,7 @@ Muller and Mendelsohn (2009)
 Trading ratios are required because damages are heterogeneous across space
 
 &lt;center&gt;
-&lt;img src="files/06-damages.png" width="60%" /&gt;
+&lt;img src="files/06-damages.png" alt="" width="60%" /&gt;
 &lt;/center&gt;
 
 Muller and Mendelsohn (2009)
@@ -1130,7 +1126,7 @@ Muller and Mendelsohn (2009)
 The Acid Rain Program .hi-red[increased] damages in the eastern US
 
 &lt;center&gt;
-&lt;img src="files/06-arp4.png" width="50%" /&gt;
+&lt;img src="files/06-arp4.png" alt="" width="50%" /&gt;
 &lt;/center&gt;
 
 Chan et al. (2018)
@@ -1150,7 +1146,7 @@ Chan et al. (2018) JEEM:
 .hi-red[Redder:] trading lead to greater emissions vs no trading
 
 &lt;center&gt;
-&lt;img src="files/06-arp5.jpg" width="70%" /&gt;
+&lt;img src="files/06-arp5.jpg" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 
@@ -1204,7 +1200,7 @@ $39,000 per ton of NOx in 2000
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/06-reclaim1.png" width="100%" /&gt;
+&lt;img src="files/06-reclaim1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1237,7 +1233,7 @@ Tradble permit systems are increasingly common:
 # RGGI
 
 &lt;center&gt;
-&lt;img src="files/06-rggi1.png" width="100%" /&gt;
+&lt;img src="files/06-rggi1.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1245,7 +1241,7 @@ Tradble permit systems are increasingly common:
 # RGGI
 
 &lt;center&gt;
-&lt;img src="files/06-rggi2.png" width="70%" /&gt;
+&lt;img src="files/06-rggi2.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1253,7 +1249,7 @@ Tradble permit systems are increasingly common:
 # AB32
 
 &lt;center&gt;
-&lt;img src="files/06-ab32.png" width="70%" /&gt;
+&lt;img src="files/06-ab32.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1261,7 +1257,7 @@ Tradble permit systems are increasingly common:
 # EU-ETS
 
 &lt;center&gt;
-&lt;img src="files/06-eu-ets.png" width="70%" /&gt;
+&lt;img src="files/06-eu-ets.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -1269,7 +1265,7 @@ Tradble permit systems are increasingly common:
 # China ETS
 
 &lt;center&gt;
-&lt;img src="files/06-china.png" width="100%" /&gt;
+&lt;img src="files/06-china.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 
 
@@ -1428,7 +1424,7 @@ Both banking and borrowing are intertemporal permit trade that aligns MACs acros
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/06-arp1.png" width="95%" /&gt;
+&lt;img src="files/06-arp1.png" alt="" width="95%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -1446,7 +1442,7 @@ Firms over-complied in the 1990s and built an allowance bank before tighter caps
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/06-eu-ets-2.png" width="85%" /&gt;
+&lt;img src="files/06-eu-ets-2.png" alt="" width="85%" /&gt;
 &lt;/center&gt;
 ]
 

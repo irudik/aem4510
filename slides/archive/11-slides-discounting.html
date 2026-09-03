@@ -90,7 +90,11 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -136,7 +140,7 @@ name: tradable permits
 
 At the end of the century we will have much more hot days in some places
 &lt;center&gt;
-&lt;img src="files/09-climate-change.png" width="100%" /&gt;
+&lt;img src="files/11-climate-change.png" width="100%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -146,7 +150,7 @@ At the end of the century we will have much more hot days in some places
 At the end of the century we will have much fewer freezing days in others
 
 &lt;center&gt;
-&lt;img src="files/09-climate-change2.png" width="100%" /&gt;
+&lt;img src="files/11-climate-change2.png" width="100%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -155,7 +159,7 @@ At the end of the century we will have much fewer freezing days in others
 
 This has massive implications for mortality
 &lt;center&gt;
-&lt;img src="files/09-climate-damage.png" width="100%" /&gt;
+&lt;img src="files/11-climate-damage.png" width="100%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -608,7 +612,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # What do the experts think? Drupp et al. (2018)
 
 &lt;center&gt;
-&lt;img src="files/10-experts-1.png" width="70%" /&gt;
+&lt;img src="files/11-experts-1.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -616,7 +620,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # What do the experts think? Drupp et al. (2018)
  
 &lt;center&gt;
-&lt;img src="files/10-experts-2.png" width="70%" /&gt;
+&lt;img src="files/11-experts-2.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -624,7 +628,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # What do the experts think? Drupp et al. (2018)
 
 &lt;center&gt;
-&lt;img src="files/10-experts-3.png" width="70%" /&gt;
+&lt;img src="files/11-experts-3.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -632,7 +636,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # What do the experts think? Drupp et al. (2018)
 
 &lt;center&gt;
-&lt;img src="files/10-experts-4.png" width="70%" /&gt;
+&lt;img src="files/11-experts-4.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -640,7 +644,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # What do the experts think? Drupp et al. (2018)
 
 &lt;center&gt;
-&lt;img src="files/10-experts-5.png" width="70%" /&gt;
+&lt;img src="files/11-experts-5.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -648,7 +652,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # What do the experts think? Drupp et al. (2018)
 
 &lt;center&gt;
-&lt;img src="files/10-experts-6.png" width="70%" /&gt;
+&lt;img src="files/11-experts-6.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -657,7 +661,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 
 
 &lt;center&gt;
-&lt;img src="files/10-discounting-1.png" width="70%" /&gt;
+&lt;img src="files/11-discounting-1.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -665,7 +669,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # Discount rates are being significantly revised
 
 &lt;center&gt;
-&lt;img src="files/10-discounting-2.png" width="70%" /&gt;
+&lt;img src="files/11-discounting-2.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -673,7 +677,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # Discount rates are being significantly revised
 
 &lt;center&gt;
-&lt;img src="files/10-discounting-3.png" width="70%" /&gt;
+&lt;img src="files/11-discounting-3.png" width="70%" /&gt;
 &lt;/center&gt;
 
 
@@ -682,7 +686,7 @@ yields a larger `\(\eta\)` and larger `\(r\)` if growth is positive
 # Discount rates are being significantly revised
 
 &lt;center&gt;
-&lt;img src="files/10-discounting-4.png" width="70%" /&gt;
+&lt;img src="files/11-discounting-4.png" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -880,7 +884,7 @@ Implies a discount rate of about .hi[2.6%]
 ]
 
 .pull-right[
-&lt;img src="files/10-long-run-discount-1.png" width="100%" /&gt;
+&lt;img src="files/11-long-run-discount-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -901,7 +905,7 @@ Implies a discount rate of about .hi[2.6%]
 ]
 
 .pull-right[
-&lt;img src="files/10-long-run-discount-2.png" width="100%" /&gt;
+&lt;img src="files/11-long-run-discount-2.png" width="100%" /&gt;
 ]
 
 
@@ -926,7 +930,7 @@ Rental rates (mostly) do not depend on the remaining lease time!
 ]
 
 .pull-right[
-&lt;img src="files/10-long-run-discount-3.png" width="100%" /&gt;
+&lt;img src="files/11-long-run-discount-3.png" width="100%" /&gt;
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

@@ -1,6 +1,6 @@
 ---
-title: "Discounting"
-linktitle: "LN11: Discounting"
+title: "Climate Risk and Financial Instruments"
+linktitle: "LN11: Climate Risk and Financial Instruments"
 date: "`r format(Sys.time())`"
 menu:
   content:
@@ -9,7 +9,10 @@ menu:
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "11-slides-discounting"
+aliases:
+  - /lecture-notes/11-discounting/
+  - /lecture-notes/16-climate-finance/
+slides: "11-slides-climate-finance"
 output:
   blogdown::html_page:
     toc: false
@@ -17,13 +20,13 @@ output:
 
 ### Overview
 
-This lecture answers:
+This lecture:
 
-1. What is discounting?
-2. What determines the discount rate?
-3. What are the implications of discounting on computing the costs and benefits of policies?
+1. How do weather and financial markets price climate risk?
+2. How does discounting change the way we value future climate damages and benefits?
+3. What do municipal bond, prediction, and equity markets tell us about climate risk and environmental regulation?
 
-### Slides
+### Slides 
 
 Slides are below. 
 The HTML slides will open in your browser and you might need to install the [Lato](https://fonts.google.com/specimen/Lato) font for it to look like it does in class.
@@ -31,4 +34,3 @@ If you use the HTML slides you can navigate with the left and right arrows.
 Pressing 'o' lets you see all the slides.
 
 `r blogdown::shortcode("slide-buttons")`
-

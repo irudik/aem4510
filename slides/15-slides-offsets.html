@@ -8,8 +8,6 @@
     <link href="15-slides-offsets_files/remark-css/default.css" rel="stylesheet" />
     <link href="15-slides-offsets_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="15-slides-offsets_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="15-slides-offsets_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="15-slides-offsets_files/tile-view/tile-view.js"></script>
     <link href="15-slides-offsets_files/panelset/panelset.css" rel="stylesheet" />
     <script src="15-slides-offsets_files/panelset/panelset.js"></script>
     <script src="15-slides-offsets_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,13 +37,6 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork
 )
@@ -54,7 +45,11 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -193,7 +188,7 @@ This can reduce costs since it doesn't really matter *where* we reduce carbon em
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/14-offset-market-size.png" width="575px" /&gt;
+&lt;img src="files/15-offset-market-size.png" alt="" width="575px" /&gt;
 &lt;/div&gt; 
 
 Offset markets are currently small but are expected to grow as countries march up their MAC curves
@@ -230,7 +225,7 @@ The avoided emissions from burned trees (1) or absorbed carbon (2) are the .hi[c
 # Forest carbon offsets
 
 .center[
-&lt;img src="files/14-how-many-trees.png" width="70%" /&gt;
+&lt;img src="files/15-how-many-trees.png" alt="" width="70%" /&gt;
 ]
 
 How much carbon can a tree absorb?
@@ -819,7 +814,7 @@ Let's see how well the CDM worked in India: Calel et al. (2022)
 
 
 &lt;div style= "float:right;position: relative;"&gt;
-&lt;img src="files/14-cdm-trends.png" width="575px" /&gt;
+&lt;img src="files/15-cdm-trends.png" alt="" width="575px" /&gt;
 &lt;/div&gt; 
 
 Half of projects generated CERs (~50 million total expected CERs)
@@ -865,7 +860,7 @@ What they do is go through each CDM project and try to find a clearly "better" p
 
 # India is BLIMP-city (i.e. SUPER not additional)
 
-&lt;img src="files/14-blimps.png" width="1200px" /&gt;
+&lt;img src="files/15-blimps.png" alt="" width="1200px" /&gt;
 
 
 Half of the projects, capacity, and offsets in India are BLIMPs
@@ -892,7 +887,7 @@ This is a conservative benchmark, isn't even trying to target additional project
 # How bad is it? Bad
 
 .center[
-&lt;img src="files/14-blimp-lottery.png" width="800px" /&gt;
+&lt;img src="files/15-blimp-lottery.png" alt="" width="800px" /&gt;
 ]
 
 87% of the time a lottery generates fewer BLIMP projects

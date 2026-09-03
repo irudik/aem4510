@@ -8,8 +8,6 @@
     <link href="07-slides-uncertainty_files/remark-css/default.css" rel="stylesheet" />
     <link href="07-slides-uncertainty_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="07-slides-uncertainty_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="07-slides-uncertainty_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="07-slides-uncertainty_files/tile-view/tile-view.js"></script>
     <link href="07-slides-uncertainty_files/panelset/panelset.css" rel="stylesheet" />
     <script src="07-slides-uncertainty_files/panelset/panelset.js"></script>
     <script src="07-slides-uncertainty_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,20 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.5/site-library'
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
 ## (as 'lib' is unspecified)
 ```
 
@@ -91,7 +82,12 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/video_helpers.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -214,7 +210,7 @@ How do we value threatened environmental amenities?
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/09-climate-sens.png" width="100%" /&gt;
+&lt;img src="files/09-climate-sens.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 ]
 
@@ -232,7 +228,7 @@ Uncertainty in ECS means we are uncertain about the true costs of emitting a ton
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/09-damages.png" width="100%" /&gt;
+&lt;img src="files/09-damages.png" alt="" width="100%" /&gt;
 &lt;/center&gt;
 Rudik (2020)
 
@@ -711,7 +707,7 @@ There is .hi[no DWL under the tax], while the standard still fixes the wrong qua
 
 .pull-left[
 &lt;center&gt;
-&lt;img src="files/09-tax.png" width="100%" /&gt;
+&lt;img src="files/09-tax.png" alt="" width="100%" /&gt;
 Optimal carbon tax = MD
 &lt;/center&gt;
 ]

@@ -1,7 +1,7 @@
 ---
-title: "Contingent Valuation Method"
-linktitle: "LN13: Contingent Valuation"
-date: "`r format(Sys.time())`"
+title: "Travel Cost Method"
+linktitle: "LN13: Travel Cost"
+date: 2026-04-20
 menu:
   content:
     parent: Schedule, Lecture Notes, and Readings
@@ -9,7 +9,9 @@ menu:
 type: docs
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
-slides: "13-slides-contingent-valuation"
+aliases:
+  - /lecture-notes/12-travel-cost/
+slides: "13-slides-travel-cost"
 output:
   blogdown::html_page:
     toc: false
@@ -19,8 +21,7 @@ output:
 
 This lecture:
 
-1. How do stated preference methods differ from revealed preference methods?
-2. How do we do contingent valuation?
+1. How do we estimate the value of recreational goods?
 
 ### Slides
 
@@ -30,4 +31,3 @@ If you use the HTML slides you can navigate with the left and right arrows.
 Pressing 'o' lets you see all the slides.
 
 `r blogdown::shortcode("slide-buttons")`
-

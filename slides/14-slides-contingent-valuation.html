@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lecture 13</title>
+    <title>Lecture 14</title>
     <meta charset="utf-8" />
     <meta name="author" content="Ivan Rudik" />
-    <script src="13-slides-contingent-valuation_files/header-attrs/header-attrs.js"></script>
-    <link href="13-slides-contingent-valuation_files/remark-css/default.css" rel="stylesheet" />
-    <link href="13-slides-contingent-valuation_files/remark-css/metropolis.css" rel="stylesheet" />
-    <link href="13-slides-contingent-valuation_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="13-slides-contingent-valuation_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="13-slides-contingent-valuation_files/tile-view/tile-view.js"></script>
-    <link href="13-slides-contingent-valuation_files/panelset/panelset.css" rel="stylesheet" />
-    <script src="13-slides-contingent-valuation_files/panelset/panelset.js"></script>
-    <script src="13-slides-contingent-valuation_files/xaringanExtra-webcam/webcam.js"></script>
+    <script src="14-slides-contingent-valuation_files/header-attrs/header-attrs.js"></script>
+    <link href="14-slides-contingent-valuation_files/remark-css/default.css" rel="stylesheet" />
+    <link href="14-slides-contingent-valuation_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="14-slides-contingent-valuation_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="14-slides-contingent-valuation_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="14-slides-contingent-valuation_files/panelset/panelset.js"></script>
+    <script src="14-slides-contingent-valuation_files/xaringanExtra-webcam/webcam.js"></script>
     <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
-    <link href="13-slides-contingent-valuation_files/vembedr/css/vembedr.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -22,7 +19,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Lecture 13
+# Lecture 14
 ]
 .subtitle[
 ## Contingent valuation method
@@ -40,23 +37,22 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, broom, viridis
 )
+source("R/video_helpers.R")
 set.seed(1)
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/video_helpers.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 red_pink &lt;- "#e64173"
@@ -206,11 +202,7 @@ CVM has had a lot of impact on policy:
 
 1989: Exxon Valdez oil spill — non-use value losses estimated by CV method to exceed $2.2 billion; Exxon launches research &amp; campaign to discredit CV 
 
-<div class="vembedr" align="center">
-<div>
-<iframe src="https://www.youtube.com/embed/YPAH8XUEMY4" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
+<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/14-cv-exxon-valdez.mp4" type="video/mp4"></video>
 
 ---
 
@@ -457,7 +449,7 @@ Programs are costly: clear skies cost 4.3 bil. (2010) rising to 6.3 bil. (2020)
 
 .pull-left[
 .center[
-&lt;img src="files/13-valuation1.png" width="70%" /&gt;
+&lt;img src="files/13-valuation1.png" alt="" width="70%" /&gt;
 ]
 ]
 
@@ -501,7 +493,7 @@ Depending on chemical thresholds under the 1990 CAAA, this could fall to 11% by 
 # Summary of the science
 
 .center[
-&lt;img src="files/13-science-summary.png" width="70%" /&gt;
+&lt;img src="files/13-science-summary.png" alt="" width="70%" /&gt;
 ]
 
 ---
@@ -509,7 +501,7 @@ Depending on chemical thresholds under the 1990 CAAA, this could fall to 11% by 
 # ADK map
 
 .center[
-&lt;img src="files/13-adk-map.png" width="70%" /&gt;
+&lt;img src="files/13-adk-map.png" alt="" width="70%" /&gt;
 ]
 
 ---
@@ -517,7 +509,7 @@ Depending on chemical thresholds under the 1990 CAAA, this could fall to 11% by 
 # Eliciting WTP
 
 .center[
-&lt;img src="files/13-adk-impact.png" width="60%" /&gt;
+&lt;img src="files/13-adk-impact.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -535,7 +527,7 @@ Depending on chemical thresholds under the 1990 CAAA, this could fall to 11% by 
 # WTP for base scenario
 
 .center[
-&lt;img src="files/13-adk-wtp.png" width="80%" /&gt;
+&lt;img src="files/13-adk-wtp.png" alt="" width="80%" /&gt;
 ]
 
 ---
@@ -543,7 +535,7 @@ Depending on chemical thresholds under the 1990 CAAA, this could fall to 11% by 
 # Average WTP by region
 
 .center[
-&lt;img src="files/13-adk-wtp-by-region.png" width="60%" /&gt;
+&lt;img src="files/13-adk-wtp-by-region.png" alt="" width="60%" /&gt;
 ]
 
 
@@ -570,7 +562,7 @@ WTP increased with:
 ]
 
 .pull-right[
-&lt;img src="files/13-adk-validity.png" width="100%" /&gt;
+&lt;img src="files/13-adk-validity.png" alt="" width="100%" /&gt;
 ]
 
 ---
@@ -621,7 +613,7 @@ We will look at their survey instrument to see how "best practices" are followed
 ]
 
 .pull-right[
-&lt;img src="files/13-exxon1.png" width="100%" /&gt;
+&lt;img src="files/13-exxon1.png" alt="" width="100%" /&gt;
 ]
 
 ---
@@ -629,7 +621,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: background
 
 .center[
-&lt;img src="files/13-exxon2.png" width="90%" /&gt;
+&lt;img src="files/13-exxon2.png" alt="" width="90%" /&gt;
 ]
 
 ---
@@ -637,7 +629,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: background
 
 .center[
-&lt;img src="files/13-exxon3.png" width="50%" /&gt;
+&lt;img src="files/13-exxon3.png" alt="" width="50%" /&gt;
 ]
 
 ---
@@ -645,7 +637,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: background
 
 .center[
-&lt;img src="files/13-exxon4.png" width="60%" /&gt;
+&lt;img src="files/13-exxon4.png" alt="" width="60%" /&gt;
 ]
 
 
@@ -654,7 +646,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: background
 
 .center[
-&lt;img src="files/13-exxon5.png" width="50%" /&gt;
+&lt;img src="files/13-exxon5.png" alt="" width="50%" /&gt;
 ]
 
 
@@ -663,7 +655,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: wildlife
 
 .center[
-&lt;img src="files/13-exxon6.png" width="50%" /&gt;
+&lt;img src="files/13-exxon6.png" alt="" width="50%" /&gt;
 ]
 
 
@@ -672,11 +664,11 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: wildlife
 
 .pull-left[
-&lt;img src="files/13-exxon7a.png" width="100%" /&gt;
+&lt;img src="files/13-exxon7a.png" alt="" width="100%" /&gt;
 ]
 
 .pull-right[
-&lt;img src="files/13-exxon7b.png" width="100%" /&gt;
+&lt;img src="files/13-exxon7b.png" alt="" width="100%" /&gt;
 ]
 
 ---
@@ -684,16 +676,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: spill
 
 .center[
-&lt;img src="files/13-exxon8.png" width="50%" /&gt;
-]
-
-
----
-
-# CVM and Exxon Valdez: spill
-
-.center[
-&lt;img src="files/13-exxon9.png" width="50%" /&gt;
+&lt;img src="files/13-exxon8.png" alt="" width="50%" /&gt;
 ]
 
 
@@ -702,8 +685,17 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: spill
 
 .center[
-&lt;img src="files/13-exxon10a.png" width="60%" /&gt;
-&lt;img src="files/13-exxon10b.png" width="60%" /&gt;
+&lt;img src="files/13-exxon9.png" alt="" width="50%" /&gt;
+]
+
+
+---
+
+# CVM and Exxon Valdez: spill
+
+.center[
+&lt;img src="files/13-exxon10a.png" alt="" width="60%" /&gt;
+&lt;img src="files/13-exxon10b.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -711,7 +703,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: clean up
 
 .center[
-&lt;img src="files/13-exxon11.png" width="60%" /&gt;
+&lt;img src="files/13-exxon11.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -719,7 +711,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: wildlife consequences
 
 .center[
-&lt;img src="files/13-exxon12.png" width="60%" /&gt;
+&lt;img src="files/13-exxon12.png" alt="" width="60%" /&gt;
 ]
 
 
@@ -728,7 +720,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: wildlife consequences
 
 .center[
-&lt;img src="files/13-exxon13.png" width="60%" /&gt;
+&lt;img src="files/13-exxon13.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -736,7 +728,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: hypothetical market
 
 .center[
-&lt;img src="files/13-exxon14.png" width="60%" /&gt;
+&lt;img src="files/13-exxon14.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -744,7 +736,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: hypothetical market
 
 .center[
-&lt;img src="files/13-exxon15.png" width="60%" /&gt;
+&lt;img src="files/13-exxon15.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -752,7 +744,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: hypothetical market
 
 .center[
-&lt;img src="files/13-exxon16.png" width="60%" /&gt;
+&lt;img src="files/13-exxon16.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -760,7 +752,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: hypothetical market
 
 .center[
-&lt;img src="files/13-exxon17.png" width="60%" /&gt;
+&lt;img src="files/13-exxon17.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -768,7 +760,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: hypothetical market
 
 .center[
-&lt;img src="files/13-exxon18.png" width="60%" /&gt;
+&lt;img src="files/13-exxon18.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -776,7 +768,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: hypothetical market
 
 .center[
-&lt;img src="files/13-exxon19.png" width="60%" /&gt;
+&lt;img src="files/13-exxon19.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -784,7 +776,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: valuation
 
 .center[
-&lt;img src="files/13-exxon20.png" width="60%" /&gt;
+&lt;img src="files/13-exxon20.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -793,8 +785,8 @@ We will look at their survey instrument to see how "best practices" are followed
 
 
 .center[
-&lt;img src="files/13-exxon21a.png" width="60%" /&gt;
-&lt;img src="files/13-exxon21b.png" width="60%" /&gt;
+&lt;img src="files/13-exxon21a.png" alt="" width="60%" /&gt;
+&lt;img src="files/13-exxon21b.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -802,7 +794,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: valuation
 
 .center[
-&lt;img src="files/13-exxon22.png" width="60%" /&gt;
+&lt;img src="files/13-exxon22.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -810,8 +802,8 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: valuation
 
 .center[
-&lt;img src="files/13-exxon23a.png" width="60%" /&gt;
-&lt;img src="files/13-exxon23b.png" width="60%" /&gt;
+&lt;img src="files/13-exxon23a.png" alt="" width="60%" /&gt;
+&lt;img src="files/13-exxon23b.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -819,7 +811,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: valuation
 
 .center[
-&lt;img src="files/13-exxon24.png" width="60%" /&gt;
+&lt;img src="files/13-exxon24.png" alt="" width="60%" /&gt;
 ]
 
 ---
@@ -827,7 +819,7 @@ We will look at their survey instrument to see how "best practices" are followed
 # CVM and Exxon Valdez: valuation
 
 .center[
-&lt;img src="files/13-exxon25.png" width="60%" /&gt;
+&lt;img src="files/13-exxon25.png" alt="" width="60%" /&gt;
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

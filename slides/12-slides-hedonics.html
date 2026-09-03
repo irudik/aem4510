@@ -8,8 +8,6 @@
     <link href="12-slides-hedonics_files/remark-css/default.css" rel="stylesheet" />
     <link href="12-slides-hedonics_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="12-slides-hedonics_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="12-slides-hedonics_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="12-slides-hedonics_files/tile-view/tile-view.js"></script>
     <link href="12-slides-hedonics_files/panelset/panelset.css" rel="stylesheet" />
     <script src="12-slides-hedonics_files/panelset/panelset.js"></script>
     <script src="12-slides-hedonics_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,20 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.5/site-library'
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
 ## (as 'lib' is unspecified)
 ```
 
@@ -348,30 +339,6 @@ Main idea: Take two otherwise very similar houses: one in a neighborhood surroun
 
 How do their prices differ?
 
-&lt;!-- 
----
-
-# The hedonic method
-
-The hedonic pricing approach derives from the characteristics theory of value first proposed by Lancaster (1966)
-
---
-
-This seeks to explain the value of a commodity as a bundle of valuable characteristics
-
---
-
-One or more of these characteristics may be environmental
-
---
-
-Ridker and Henning (1967) first applied method to environmental valuation in a study of the effect of air pollution on property values in St. Louis
-
---
-
-It motivated the conceptual model of Rosen (1974) of how we might use hedonic prices to estimate peoples’ values for site-specific amenities --&gt;
-
----
 
 # The hedonic method
 
@@ -543,7 +510,7 @@ This is effectively the environmental good demand curve
 # Price curve example
 
 &lt;center&gt;
-&lt;img src="files/14-woburn.png" width="80%" /&gt;
+&lt;img src="files/14-woburn.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -768,7 +735,7 @@ Places right below 28.5 probably aren't systematically different than those righ
 # Superfund location
 
 &lt;center&gt;
-&lt;img src="files/14-superfund-location.png" width="50%" /&gt;
+&lt;img src="files/14-superfund-location.png" alt="" width="50%" /&gt;
 &lt;/center&gt;
 
 
@@ -796,7 +763,7 @@ They are interested in `\(\theta\)` which tells us the percent change in a censu
 # Superfund results: "quasi-experimental"
 
 &lt;center&gt;
-&lt;img src="files/14-superfund-results2.png" width="80%" /&gt;
+&lt;img src="files/14-superfund-results2.png" alt="" width="80%" /&gt;
 &lt;/center&gt;
 
 Top row of the last three columns are the important ones
@@ -964,7 +931,7 @@ $$ 400*60,000 = 24  \text{ million dollars}$$
 # VSL estimates
 
 &lt;center&gt;
-&lt;img src="files/14-vsl-estimates.png" width="50%" /&gt;
+&lt;img src="files/14-vsl-estimates.png" alt="" width="50%" /&gt;
 &lt;/center&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

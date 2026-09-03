@@ -40,7 +40,7 @@ knitr::opts_chunk$set(
 })
 ```
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "panelset", "webcam"))
+xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 
 ```
 ```{r echo=FALSE}
@@ -67,36 +67,94 @@ name: course_set_up
 
 ---
 
-# Basics
+# Course logistics
 
-.hi[Professor:] Ivan Rudik
+.hi[Class:] Tuesday and Thursday, 2:55–4:10 p.m., Mallott 228
 
-.hi[TAs:] Chrisma D'Souza, Nathan Bol, Becca Ford
+.hi[Professor:] Ivan Rudik (ir229)
 
-.hi[Office hours:] see canvas
+.hi[Professor office hours:] Tuesday, 10:00–11:00 a.m., Warren 462
 
-.hi[Readings:] Markets and the Environment by Keohane and Olmstead, papers available through the course website or library
+.hi[TA office hours:]
+  - Chrisma D'Souza (ccd84): Friday, 1:00–2:00 p.m., Warren 330
+  - Jacob Holifield (jh2799): Monday, 3:00–4:00 p.m., Warren 330
 
-.hi[Prereqs:] MATH 1110, and either AEM 2600 or ECON 3030
+Office hours begin in Week 2
+
+---
+
+# Readings and prerequisites
+
+.hi[Required text:] *Markets and the Environment* by Keohane and Olmstead
+
+.hi[Other readings:] papers linked on the course website or available through the Cornell library or Google Scholar
+
+.hi[Optional econometrics reference:] *Causal Inference: The Mixtape* by Cunningham is available free online
+
+.hi[Prerequisites:] MATH 1110 and either AEM 2600 or ECON 3030
 
 ---
 
 # Grading
 
-.hi[4 prelims (20% each):] 
-  - Feb 12, Mar 17, Apr 14, May 5
-  - Prelims will be a combination of multiple choice, short answer, graphical, and simple mathematical questions that will not require a calculator
-  - .hi[SDS:] This class is in the Alternative Test Program, if approved for exam accommodations, you must request your exam accommodation(s) for this course and fill out an exam request form for each exam in this course via the SDS student portal by February 8th 
-  - No makeup prelims: if you miss a prelim, it's weight is equally distributed to your other prelims
+.hi[4 problem sets (12%):] 3% each
+
+.hi[4 in-class prelims (68%):] 17% each
+
+.hi[Optional final (20%):]
+  - If you take all four prelims, you may skip the final
+  - If you skip it, your final-exam grade equals your average prelim grade
+  - If you miss a prelim, the final is required and also replaces the missed prelim grade, so it counts for 37% of your course grade
+
+.hi[Letter grades:] A = 93–100 and A- = 90–92; the remaining cutoffs follow the syllabus through D- = 60–62, with F below 60
 
 
 ---
 
-# Grading
-.hi[4 Problem Sets (5% each):] mix of quantitative and conceptual problems to give you practice in learning key concepts (teams of 3)
-  - 1 before each prelim: Feb 10, Mar 12, Apr 9, Apr 30
-  - Solutions posted immediately after the deadline
-  - No late submissions
+# Problem sets
+
+.hi[Due at 11:59 p.m.:] Sep 10, Oct 8, Nov 5, and Dec 1
+
+- One problem set is due before each prelim
+- Work in teams of up to three; submit one PDF per team through Gradescope
+- Include every group member's name
+- You may submit as often as needed before the deadline
+- No late work: solutions are posted immediately after the deadline
+- Your final submission before the deadline is the version that will be graded
+
+---
+
+# Prelims and final
+
+.hi[In-class prelims:] Sep 15, Oct 15, Nov 10, and Dec 3
+
+- Prelims emphasize material since the prior prelim, but may use all earlier material
+- The optional final is cumulative; its date is to be determined
+- Bring only a pen or pencil: paper is provided, and calculators, notes, and electronics are not allowed
+- Problem sets and the additional review questions on Canvas are the main preparation
+
+---
+
+# Missed prelims
+
+.hi[Your first missed prelim:] no makeup, regardless of the reason
+
+- Its 17% weight moves to the final, so the final becomes 37% of your course grade
+- The final is no longer optional
+
+.hi[Later missed prelims:] a valid excuse is required for a makeup
+
+---
+
+# Student Disability Services
+
+This course participates in the SDS Alternative Testing Program
+
+- Request your approved testing accommodation for this course as soon as possible
+- Submit an Exam Request Form for each exam through the SDS student portal
+- SDS will email the time and room no later than 48 hours before the exam
+- Send exam-logistics questions to sds-testing@cornell.edu
+- Contact me about access barriers or non-testing accommodations
   
 ---
 
@@ -115,9 +173,11 @@ name: course_set_up
 
 # In class
 
-No recording or sharing of materials outside class: Each person in this class is expected to respect the principles of academic freedom for instructors and classmates and will maintain the privacy of the classroom environment, as outlined in Cornell's Code of Academic Integrity.
+.hi[No recording or sharing:] do not record, photograph, or share classroom interactions or course materials without written permission
 
-No use of electronics in class: the use of laptops, tablets, phones, or other electronics in class is prohibited. Notes must be taken on paper.
+.hi[No electronics:] laptops, tablets, phones, and other electronics are prohibited; take notes on paper
+
+Exceptions are available for approved accommodations. Students permitted to record must still protect the privacy of the classroom.
 
 ---
 
@@ -134,13 +194,17 @@ Mueller, P. & Oppenheimer, D. (2014). *Psychological Science*, 25(6), 1159-1168.
 Carter, S. P., Greenberg, K., & Walker, M. S. (2017). *Economics of Education Review*, 56, 118-132.
 ] 
 
-I post slides after we finish each section so you will not miss any content
+I post slides after we finish each section so you can review the material
 
 ---
 
 # Last words
 
-This was just an overview, canvas has a lot more details about specific requirements
+Canvas contains the full syllabus, assignment instructions, readings, and review materials
+
+Attendance is not required, but it is highly recommended
+
+Grade appeals must be submitted through Gradescope within 24 hours
 
 
 --
@@ -861,4 +925,3 @@ E.g.
 ```{r, echo = FALSE}
 local_video("videos/01-intro-ecological-wealth.mp4")
 ```
-

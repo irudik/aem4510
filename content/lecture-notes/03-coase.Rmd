@@ -22,6 +22,7 @@ This lecture answers:
 1. Can we achieve the efficient outcome without government intervention?
 2. What does the Coase theorem say?
 3. What are the limits to Coasean bargaining?
+4. Can data centers and their neighbors bargain their way out of the AI boom's externalities?
 
 ### Slides
 

@@ -8,8 +8,6 @@
     <link href="04-slides-standards_files/remark-css/default.css" rel="stylesheet" />
     <link href="04-slides-standards_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="04-slides-standards_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <link href="04-slides-standards_files/tile-view/tile-view.css" rel="stylesheet" />
-    <script src="04-slides-standards_files/tile-view/tile-view.js"></script>
     <link href="04-slides-standards_files/panelset/panelset.css" rel="stylesheet" />
     <script src="04-slides-standards_files/panelset/panelset.js"></script>
     <script src="04-slides-standards_files/xaringanExtra-webcam/webcam.js"></script>
@@ -39,20 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-```
-
-```
-## Loading required package: pacman
-```
-
-``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
 )
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.5/site-library'
+## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
 ## (as 'lib' is unspecified)
 ```
 
@@ -91,7 +82,12 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo &lt;- FALSE
   }
-knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+knitr::opts_chunk$set(
+  cache = TRUE,
+  cache.extra = list(tools::md5sum("R/video_helpers.R")),
+  echo = TRUE,
+  fig.align = "center"
+)
   options
 })
 ```
@@ -150,7 +146,7 @@ Next we will look at command and control and emission standard regulations
 # Pigouvian policy: Arthur Pigou
 
 .pull-left[
-&lt;img src="files/04-pigou.png" width="100%" /&gt;
+&lt;img src="files/04-pigou.png" alt="" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -163,7 +159,7 @@ Pigou is responsible for the famous distinction between private and  social marg
 # Working example: pollution from coal
 
 .pull-left[
-&lt;img src="files/04-coal1.jpg" width="100%" /&gt;
+&lt;img src="files/04-coal1.jpg" alt="" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -224,19 +220,19 @@ Typical plant with control equipment (e.g. baghouses) emits just a few tons a ye
 
 # Costs of particulate matter
 
-&lt;img src="files/04-pm1.png" width="80%" /&gt;
+&lt;img src="files/04-pm1.png" alt="" width="80%" /&gt;
 
 ---
 
 # Costs of particulate matter
 
-&lt;img src="files/04-pm2.png" width="80%" /&gt;
+&lt;img src="files/04-pm2.png" alt="" width="80%" /&gt;
 
 ---
 
 # Costs of particulate matter
 
-&lt;img src="files/04-pm3.png" width="80%" /&gt;
+&lt;img src="files/04-pm3.png" alt="" width="80%" /&gt;
 
 ---
 
@@ -265,7 +261,7 @@ Activated carbon injection technology can reduce mercury  emissions by up to 90 
 # Coal and health in 1800s Britain
 
 .pull-left[
-&lt;img src="files/04-coal-health.png" width="60%" /&gt;
+&lt;img src="files/04-coal-health.png" alt="" width="60%" /&gt;
 
 
 ]
@@ -610,7 +606,7 @@ If you're interested in doing cool real world policy work on the environment, RF
 
 Half of the environmental economists at Dyson have current/prior affiliations with RFF
 
-&lt;img src="files/04-rff1.png" width="50%" /&gt;
+&lt;img src="files/04-rff1.png" alt="" width="50%" /&gt;
 
 ---
 
@@ -633,7 +629,7 @@ What are some CC policy examples?
 # Command and control
 
 .pull-left[
-&lt;img src="files/04-cc-distortion.png" width="100%" /&gt;
+&lt;img src="files/04-cc-distortion.png" alt="" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -647,7 +643,7 @@ They also have significant costs in that they lead to distortions
 # Command and control
 
 .pull-left[
-&lt;img src="files/04-cc-distortion.png" width="100%" /&gt;
+&lt;img src="files/04-cc-distortion.png" alt="" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -661,7 +657,7 @@ Ideally, if we want to reduce sulfur dioxide emissions, we would like coal plant
 
 # Command and control
 
-&lt;img src="files/04-byrd-legislation.png" width="100%" /&gt;
+&lt;img src="files/04-byrd-legislation.png" alt="" width="100%" /&gt;
 
 Senator Byrd from WV single-handledly blocked legislation for sulfur regulations and pushed for scrubber mandates so that high-sulfur WV coal could compete with low-sulfur WY coal
 
@@ -905,7 +901,7 @@ Currently, Tier 3 standards are being phased in
 # Tailpipe emission standards
 
 &lt;center&gt;
-&lt;img src="files/04-tailpipe.png" width="70%" /&gt;
+&lt;img src="files/04-tailpipe.png" alt="" width="70%" /&gt;
 &lt;/center&gt;
 
 ---
@@ -913,7 +909,7 @@ Currently, Tier 3 standards are being phased in
 # Tailpipe emission standards
 
 &lt;center&gt;
-&lt;img src="files/04-tailpipe2.png" width="90%" /&gt;
+&lt;img src="files/04-tailpipe2.png" alt="" width="90%" /&gt;
 &lt;/center&gt;
 
 ---
