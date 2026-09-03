@@ -1,7 +1,7 @@
 ---
-title: "Tradable Permits Game"
+title: "Permit Market Game"
 linktitle: "Games 2: Permits"
-date: "2026-02-13 00:00:00"
+date: "2026-09-01 17:13:40"
 menu:
   content:
     parent: Games
@@ -12,65 +12,72 @@ output:
     toc: false
 ---
 
-<div id="getting-started" class="section level2">
-<h2>Getting started</h2>
-<p>This exercise teaches how permit markets reach equilibrium and how outcomes compare to a uniform emissions standard.</p>
+
+
+<div id="the-story" class="section level2">
+<h2>The story</h2>
+<p>Your team runs a firm that must hold a permit for every unit it emits.
+Whatever you cannot cover with permits, you must abate, and abatement gets
+more expensive with every unit. The regulator sells a fixed number of
+permits at auction, then opens a market where firms trade with each other.
+Cheap abaters should end up selling to expensive abaters; whether that
+happens is up to you.</p>
 </div>
 <div id="online-game-links" class="section level2">
 <h2>Online game links</h2>
 <ul>
-<li>Student login: <a href="/games/emissions-trading-online/student.html">Emissions Trading Student Portal</a></li>
-<li>Admin login (instructor): <a href="/games/emissions-trading-online/admin.html">Emissions Trading Admin Dashboard</a></li>
+<li>Student login: <a href="/games/permit-market-online/student.html">Permit Market Student Portal</a></li>
+<li>Admin login (instructor): <a href="/games/permit-market-online/admin.html">Permit Market Admin Dashboard</a></li>
 </ul>
 </div>
 <div id="how-we-will-play" class="section level2">
 <h2>How we will play</h2>
 <ul>
-<li>The class is split into teams. Each team represents one firm.</li>
-<li>Each team should choose one reporter device (one browser per team).</li>
-<li>Teams join through the student portal using a team name.</li>
-<li>After joining, each team is assigned a random linear MAC with:
-<ul>
-<li>Intercept in {2000, 4000, 6000, 8000, 10000, 12000}</li>
-<li>Slope in {1, 2, 3, 4, 5, 6}</li>
-</ul>
-</li>
-<li>The common permit allocation is set by the instructor in the admin dashboard.</li>
-<li>Teams use their assigned MAC and allocation to compute decisions in each phase.</li>
+<li>Each team joins with a team name (one browser per team) and is assigned a
+firm: baseline emissions and a marginal abatement cost schedule. Your
+page shows exactly what each permit is worth to your firm. Keep it
+private.</li>
+<li>The game runs two rounds, each with two timed phases:
+<ol style="list-style-type: decimal">
+<li>A sealed-bid auction, then</li>
+<li>An open trading market.</li>
+</ol></li>
+<li>Round 2 repeats everything with a much tighter cap. If banking is on,
+permits you do not use in round 1 carry into round 2.</li>
 </ul>
 </div>
-<div id="phase-1-uniform-standard" class="section level2">
-<h2>Phase 1: Uniform standard</h2>
-<p>In the uniform-standard phase, each team submits:</p>
-<ul>
-<li>Final emissions</li>
-<li>Abatement</li>
-<li>Abatement cost</li>
-</ul>
-<p>The system checks each submission immediately and allows resubmission until correct.</p>
+<div id="the-auction" class="section level2">
+<h2>The auction</h2>
+<p>Submit up to four price/quantity bids before the clock runs out. All bids
+are stacked from the highest price down and the top bids win until the
+permits run out. Everyone pays the same price: the lowest accepted bid.
+Think about what this pricing rule means for how honestly you should bid.
+Real allowance auctions (RGGI, the EU ETS) use exactly this design.</p>
 </div>
-<div id="phase-2-called-price-permit-market" class="section level2">
-<h2>Phase 2: Called-price permit market</h2>
-<p>In the called-price phase, the instructor announces a permit price in the dashboard. For that price, each team computes and submits:</p>
-<ul>
-<li>Optimal abatement at the called price</li>
-</ul>
-<p>After all expected teams submit correct values, the dashboard reveals market excess demand at the called price. The instructor can then call a new price and repeat the round.</p>
+<div id="the-market" class="section level2">
+<h2>The market</h2>
+<p>After the auction clears you see the price, your allocation, and a live
+order book. Post a buy or sell order at any price; if it crosses an order
+on the other side it trades immediately at the resting order’s price,
+otherwise it waits in the book. You can cancel open orders. You cannot
+sell permits you do not hold.</p>
+<p>Your page shows your live position: permits held, what you can still sell,
+and what your round score would be if the market closed right now.</p>
 </div>
-<div id="phase-3-constant-marginal-damages-md" class="section level2">
-<h2>Phase 3: Constant marginal damages (MD)</h2>
-<p>In the MD phase, the instructor sets a constant marginal damages value. Each team submits:</p>
-<ul>
-<li>Efficient emissions for its own firm</li>
-<li>Efficient industry cap (sum across teams)</li>
-</ul>
-<p>Submissions are checked immediately with resubmission allowed.</p>
+<div id="scoring" class="section level2">
+<h2>Scoring</h2>
+<p>Round score = avoided abatement cost - auction spending - net market
+spending. The leaderboard ranks teams by how far they beat an efficiency
+benchmark computed for their own firm type, so a lucky firm assignment does
+not decide the winner. Watch for the debrief chart comparing the class’s
+bids to the true demand curve.</p>
 </div>
 <div id="notes-for-students" class="section level2">
 <h2>Notes for students</h2>
 <ul>
-<li>Your firm parameters are not fixed A-F types anymore; they are assigned when you join.</li>
-<li>Keep your team page open during class because it updates as the phase changes.</li>
-<li>The instructor sees full team-by-team outcomes in the admin dashboard; students do not see equilibrium internals.</li>
+<li>Keep your team page open; phases and timers update automatically.</li>
+<li>Bids and orders lock when a phase’s countdown hits zero.</li>
+<li>Overbuying is allowed but hurts: permits beyond your baseline are
+worthless unless banking carries them forward.</li>
 </ul>
 </div>

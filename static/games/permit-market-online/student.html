@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Portal | Permit Market Game</title>
+    <link rel="stylesheet" href="/games/permit-market-online/app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="card hero-card">
+        <div class="row" style="justify-content: space-between">
+          <h1>Permit Market</h1>
+          <a href="/games/permit-market-online/index.html">Home</a>
+        </div>
+        <p>
+          Your firm needs permits to emit; every unit you cannot cover, you must abate at rising cost.
+          Buy permits in the auction, then trade them in the open market before the clock runs out.
+        </p>
+      </section>
+
+      <section id="join-card" class="card">
+        <h2>Join Game</h2>
+        <div class="grid">
+          <div>
+            <label for="team-name">Team Name</label>
+            <input id="team-name" type="text" maxlength="40" autocomplete="off" placeholder="e.g., Cayuga Power" />
+          </div>
+          <div class="row" style="align-items: end">
+            <button id="join-btn" class="primary" type="button">Join / Rejoin</button>
+            <button id="reset-token-btn" class="secondary" type="button">Switch Team</button>
+          </div>
+        </div>
+        <div id="join-status" class="status hidden"></div>
+      </section>
+
+      <section id="firm-card" class="card hidden">
+        <h2>Your Firm</h2>
+        <dl class="kv" id="firm-kv"></dl>
+        <div id="value-schedule" class="table-wrap"></div>
+      </section>
+
+      <section id="stage-card" class="card stage-card hidden">
+        <div class="row" style="justify-content: space-between; align-items: baseline">
+          <h2 id="stage-title">Current Stage</h2>
+          <div id="round-timer" class="round-timer hidden"></div>
+        </div>
+        <p>Phase: <span id="phase-label" class="phase">-</span></p>
+        <div id="stage-status" class="status hidden"></div>
+        <div id="stage-container"></div>
+      </section>
+
+      <section id="results-card" class="card hidden">
+        <h2>Your Round Results</h2>
+        <div id="results-table" class="table-wrap"></div>
+      </section>
+
+      <section id="leaderboard-card" class="card hidden">
+        <h2>Leaderboard</h2>
+        <p><small class="note">Ranked by points relative to the efficient benchmark, so every firm type can win.</small></p>
+        <div id="leaderboard-table" class="table-wrap"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/games/permit-market-online/student.mjs"></script>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard | Permit Market Game</title>
+    <link rel="stylesheet" href="/games/permit-market-online/app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h1>Admin Dashboard</h1>
+          <a href="/games/permit-market-online/index.html">Home</a>
+        </div>
+        <p>Instructor controls for the permit market game: session setup, auctions, timers, market monitoring, and the clearing chart.</p>
+      </section>
+
+      <section id="login-card" class="card">
+        <h2>Admin Login</h2>
+        <div class="grid">
+          <div>
+            <label for="admin-email">Email</label>
+            <input id="admin-email" type="email" autocomplete="username" />
+          </div>
+          <div>
+            <label for="admin-password">Password</label>
+            <input id="admin-password" type="password" autocomplete="current-password" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 0.6rem">
+          <button id="login-btn" class="primary" type="button">Log In</button>
+          <button id="logout-btn" class="secondary" type="button">Log Out</button>
+        </div>
+        <div id="login-status" class="status hidden"></div>
+      </section>
+
+      <section id="admin-panel" class="hidden">
+        <section class="card">
+          <h2>Create / Reset Session</h2>
+          <div class="grid">
+            <div>
+              <label for="session-name">Session Name</label>
+              <input id="session-name" type="text" value="AEM 4510 Permit Market" />
+            </div>
+            <div>
+              <label for="expected-team-count">Expected Team Count</label>
+              <input id="expected-team-count" type="number" min="2" step="1" value="20" />
+            </div>
+            <div>
+              <label for="cap-share-1">Round 1 Cap (% of total baseline)</label>
+              <input id="cap-share-1" type="number" min="1" max="100" step="1" value="60" />
+            </div>
+            <div>
+              <label for="cap-share-2">Round 2 Cap (% of total baseline)</label>
+              <input id="cap-share-2" type="number" min="1" max="100" step="1" value="40" />
+            </div>
+            <div>
+              <label for="round-seconds-create">Phase Length (seconds)</label>
+              <input id="round-seconds-create" type="number" min="30" max="3600" step="30" value="300" />
+            </div>
+            <div>
+              <label for="banking-enabled">Banking</label>
+              <select id="banking-enabled">
+                <option value="">Off: permits expire each round</option>
+                <option value="on">On: unused permits carry to round 2</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 0.6rem">
+            <button id="create-session-btn" class="primary" type="button">Create New Active Session</button>
+            <button id="start-game-btn" class="secondary" type="button">Start Game (assign firms, open auction 1)</button>
+          </div>
+          <div id="session-status" class="status hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>Phase Controls</h2>
+          <div class="grid">
+            <div>
+              <label for="set-phase">Phase</label>
+              <select id="set-phase">
+                <option value="setup">Setup</option>
+                <option value="auction1">Auction (Round 1)</option>
+                <option value="market1">Open Market (Round 1)</option>
+                <option value="auction2">Auction (Round 2)</option>
+                <option value="market2">Open Market (Round 2)</option>
+                <option value="complete">Complete</option>
+              </select>
+            </div>
+            <div>
+              <label for="round-seconds">Phase Length (seconds)</label>
+              <input id="round-seconds" type="number" min="30" max="3600" step="30" value="300" />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 0.6rem">
+            <button id="apply-phase-btn" class="primary" type="button">Apply Phase Update</button>
+            <button id="refresh-admin-btn" class="secondary" type="button">Refresh Dashboard</button>
+            <button id="download-csv-btn" class="secondary" type="button">Download Scores CSV</button>
+          </div>
+          <p><small class="note">Moving forward closes the current phase: leaving an auction clears it, leaving a market scores the round. Re-selecting the current phase replays it with a fresh timer.</small></p>
+          <div id="phase-status" class="status hidden"></div>
+        </section>
+
+        <section class="card">
+          <h2>Live Session Summary</h2>
+          <dl class="kv" id="session-kv"></dl>
+        </section>
+
+        <section class="card">
+          <h2>Auction Clearing</h2>
+          <p><small class="note">Blue: submitted bids stacked from the highest price. Grey: the class's true permit values (revealed to students only in the debrief). Red line: the cap. The clearing price is where the bid stack crosses the cap.</small></p>
+          <div id="auction-charts"></div>
+        </section>
+
+        <section class="card">
+          <h2>Teams</h2>
+          <div id="teams-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Current Auction Bids</h2>
+          <div id="bids-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Auction Allocations</h2>
+          <div id="allocations-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Open Order Book</h2>
+          <div class="book-grid">
+            <div><h4>Bids</h4><div id="book-bids" class="table-wrap"></div></div>
+            <div><h4>Asks</h4><div id="book-asks" class="table-wrap"></div></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Trades</h2>
+          <div id="trades-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Round Scores</h2>
+          <div id="scores-table" class="table-wrap"></div>
+        </section>
+
+        <section class="card">
+          <h2>Leaderboard</h2>
+          <div id="leaderboard-table" class="table-wrap"></div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/games/permit-market-online/admin.mjs"></script>
+  </body>
+</html>

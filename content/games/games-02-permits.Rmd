@@ -1,5 +1,5 @@
 ---
-title: "Tradable Permits Game"
+title: "Permit Market Game"
 linktitle: "Games 2: Permits"
 date: "`r format(Sys.time())`"
 menu:
@@ -12,58 +12,62 @@ output:
     toc: false
 ---
 
-## Getting started
+## The story
 
-This exercise teaches how permit markets reach equilibrium and how outcomes compare to a uniform emissions standard.
+Your team runs a firm that must hold a permit for every unit it emits.
+Whatever you cannot cover with permits, you must abate, and abatement gets
+more expensive with every unit. The regulator sells a fixed number of
+permits at auction, then opens a market where firms trade with each other.
+Cheap abaters should end up selling to expensive abaters; whether that
+happens is up to you.
 
 ## Online game links
 
-- Student login: [Emissions Trading Student Portal](/games/emissions-trading-online/student.html)
-- Admin login (instructor): [Emissions Trading Admin Dashboard](/games/emissions-trading-online/admin.html)
+- Student login: [Permit Market Student Portal](/games/permit-market-online/student.html)
+- Admin login (instructor): [Permit Market Admin Dashboard](/games/permit-market-online/admin.html)
 
 ## How we will play
 
-- The class is split into teams. Each team represents one firm.
-- Each team should choose one reporter device (one browser per team).
-- Teams join through the student portal using a team name.
-- After joining, each team is assigned a random linear MAC with:
-  - Intercept in {2000, 4000, 6000, 8000, 10000, 12000}
-  - Slope in {1, 2, 3, 4, 5, 6}
-- The common permit allocation is set by the instructor in the admin dashboard.
-- Teams use their assigned MAC and allocation to compute decisions in each phase.
+- Each team joins with a team name (one browser per team) and is assigned a
+  firm: baseline emissions and a marginal abatement cost schedule. Your
+  page shows exactly what each permit is worth to your firm. Keep it
+  private.
+- The game runs two rounds, each with two timed phases:
+  1. A sealed-bid auction, then
+  2. An open trading market.
+- Round 2 repeats everything with a much tighter cap. If banking is on,
+  permits you do not use in round 1 carry into round 2.
 
-## Phase 1: Uniform standard
+## The auction
 
-In the uniform-standard phase, each team submits:
+Submit up to four price/quantity bids before the clock runs out. All bids
+are stacked from the highest price down and the top bids win until the
+permits run out. Everyone pays the same price: the lowest accepted bid.
+Think about what this pricing rule means for how honestly you should bid.
+Real allowance auctions (RGGI, the EU ETS) use exactly this design.
 
-- Final emissions
-- Abatement
-- Abatement cost
+## The market
 
-The system checks each submission immediately and allows resubmission until correct.
+After the auction clears you see the price, your allocation, and a live
+order book. Post a buy or sell order at any price; if it crosses an order
+on the other side it trades immediately at the resting order's price,
+otherwise it waits in the book. You can cancel open orders. You cannot
+sell permits you do not hold.
 
-## Phase 2: Called-price permit market
+Your page shows your live position: permits held, what you can still sell,
+and what your round score would be if the market closed right now.
 
-In the called-price phase, the instructor announces a permit price in the dashboard.
-For that price, each team computes and submits:
+## Scoring
 
-- Optimal abatement at the called price
-
-After all expected teams submit correct values, the dashboard reveals market excess demand at the called price.
-The instructor can then call a new price and repeat the round.
-
-## Phase 3: Constant marginal damages (MD)
-
-In the MD phase, the instructor sets a constant marginal damages value.
-Each team submits:
-
-- Efficient emissions for its own firm
-- Efficient industry cap (sum across teams)
-
-Submissions are checked immediately with resubmission allowed.
+Round score = avoided abatement cost - auction spending - net market
+spending. The leaderboard ranks teams by how far they beat an efficiency
+benchmark computed for their own firm type, so a lucky firm assignment does
+not decide the winner. Watch for the debrief chart comparing the class's
+bids to the true demand curve.
 
 ## Notes for students
 
-- Your firm parameters are not fixed A-F types anymore; they are assigned when you join.
-- Keep your team page open during class because it updates as the phase changes.
-- The instructor sees full team-by-team outcomes in the admin dashboard; students do not see equilibrium internals.
+- Keep your team page open; phases and timers update automatically.
+- Bids and orders lock when a phase's countdown hits zero.
+- Overbuying is allowed but hurts: permits beyond your baseline are
+  worthless unless banking carries them forward.
