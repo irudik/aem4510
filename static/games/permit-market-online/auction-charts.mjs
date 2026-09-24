@@ -48,6 +48,7 @@ export function auctionComparisonModel(state, roundKey) {
     ...curves.flatMap((curve) => curve.steps.map((step) => step.cost))) * 1.1 / 4) * 4;
   return { curves, groups: groupFirmCurves(curves), aggregate, bids, maxCost,
     cap: Number(chart.cap), clearingPrice, benchmarkPrice, live: Boolean(chart.is_live),
+    pricing: chart.pricing ?? "uniform", shock: Boolean(chart.shock),
     totalBidQuantity: Number(chart.total_bid_quantity),
     aggregateMax: Math.max(1, Number(chart.cap) * 1.08, ...aggregate.map((step) => step.to), ...bids.map((step) => step.to)),
     firmMax: Math.max(1, ...curves.map((curve) => curve.baseline)) };
@@ -106,7 +107,9 @@ export function auctionComparisonHtml(state, roundKey, { popoutLink = true } = {
     </div>
     <p class="auction-summary">${model.totalBidQuantity} permits bid for a cap of ${model.cap}.</p>
     <div class="auction-prices">
-      <span><i class="auction-price-key"></i>${model.live ? "Clearing price if closed now" : "Auction clearing price"}: <strong>${dollars(model.clearingPrice)}</strong></span>
+      <span><i class="auction-price-key"></i>${model.pricing === "pay_as_bid"
+        ? (model.live ? "Lowest winning bid if closed now" : "Lowest winning bid (pay as bid)")
+        : (model.live ? "Clearing price if closed now" : "Auction clearing price")}: <strong>${dollars(model.clearingPrice)}</strong></span>
       <span><i class="auction-benchmark-key"></i>Efficient benchmark price: <strong>${dollars(model.benchmarkPrice)}</strong></span>
     </div>
     <div class="auction-comparison">
@@ -129,6 +132,7 @@ export function auctionComparisonHtml(state, roundKey, { popoutLink = true } = {
           Firms with identical MACs share a curve; every team is listed.</p>
       </figure>
     </div>
+    ${model.shock ? '<p class="mac-note">This round has a cost shock: MACs shown are before the shock, which is what bidders knew. Scored benchmarks use the shocked MACs.</p>' : ""}
     <p class="mac-note auction-reading-note">Both graphs use the same price scale. Steps represent whole permits; firms can have no gains from trading when price lies between adjacent MAC steps.
       ${state.session?.banking_enabled ? "The benchmark measures current-round abatement costs and excludes the future value of banked permits." : ""}</p>
   </section>`;

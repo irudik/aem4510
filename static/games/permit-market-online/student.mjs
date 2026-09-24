@@ -10,11 +10,14 @@ import {
   biddablePermits,
   bidsFromPermitPrices,
   clearedAuctionsHtml,
+  freeAllocationHtml,
   outcomeAtPrice,
   outcomeSummaryHtml,
   permitBidInputsHtml,
+  permitBoxHtml,
   permitPricesFromBids,
   priceRangeMax,
+  shockNoticeHtml,
   typedPermitPrices,
   whatIfChartSvg,
 } from "/games/permit-market-online/auction-guide.mjs";
@@ -63,8 +66,15 @@ let latestState = null;
 /** Price chosen on the what-if slider, kept when the auction form is redrawn. */
 let whatIfPrice = null;
 
-function phaseLabel(phase) {
-  return PHASE_LABELS[String(phase ?? "")] ?? String(phase ?? "unknown");
+function phaseLabel(phase, state = latestState) {
+  const key = String(phase ?? "");
+  if ((key === "auction1" || key === "auction2") && state?.allocation_method === "free") {
+    return `Free Permits (Round ${key.endsWith("2") ? 2 : 1})`;
+  }
+  if ((key === "auction1" || key === "auction2") && state?.allocation_method === "pay_as_bid") {
+    return `Pay-as-Bid Auction (Round ${key.endsWith("2") ? 2 : 1})`;
+  }
+  return PHASE_LABELS[key] ?? String(phase ?? "unknown");
 }
 
 function getJoinToken() {
@@ -258,28 +268,59 @@ function renderAuctionStage(state) {
   const expired = deadlineExpired();
   const session = state.session;
   const phase = String(session.current_phase);
+  const roundKey = phase === "auction2" ? "round2" : "round1";
+  const roundLabel = roundKey === "round2" ? "Round 2" : "Round 1";
   const cap = formatNumber(phase === "auction1" ? session.cap_round1 : session.cap_round2, 0);
-  const ownBids = state.own_bids ?? [];
+  const method = state.allocation_method ?? "uniform";
+  const shockComing = Boolean(roundKey === "round2" ? session.shock_round2 : session.shock_round1);
   const firm = {
     baseline: Number(state.team.baseline_emissions),
     slope: Number(state.team.mac_slope),
     bankedIn: Number(state.permits_banked_in ?? 0),
+    owedIn: Number(state.permits_owed_in ?? 0),
+    penalty: Number(session.shortfall_penalty ?? 0),
+    finalRound: roundKey === "round2",
   };
-  const boxCount = biddablePermits(firm.baseline, firm.bankedIn);
-  const savedPrices = permitPricesFromBids(ownBids).slice(0, boxCount);
+
+  if (method === "free") {
+    stageContainer.innerHTML = `
+      ${freeAllocationHtml({ cap, permits: Number(state.free_allocation ?? 0), baseline: firm.baseline, roundLabel })}
+      ${firm.owedIn > 0 ? `<p class="mac-note">You also owe ${firm.owedIn} permit(s) from borrowing in Round 1; your free permits cover them first.</p>` : ""}
+      ${firm.bankedIn > 0 ? `<p class="mac-note">You also carry ${firm.bankedIn} banked permit(s) from Round 1.</p>` : ""}
+      ${shockComing ? shockNoticeHtml() : ""}
+      ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
+      <p><small class="note">Waiting for the instructor to open the market.</small></p>`;
+    return;
+  }
+
+  const ownBids = state.own_bids ?? [];
+  // Extra boxes for banking: only in Round 1 with banking on.
+  const allowMore = roundKey === "round1" && Boolean(session.banking_enabled);
+  const needed = biddablePermits(firm.baseline, firm.bankedIn, firm.owedIn);
+  const quantityLimit = Number(state.bid_quantity_limit ?? firm.baseline);
+  const savedPrices = permitPricesFromBids(ownBids).slice(0, Math.max(needed, allowMore ? quantityLimit : needed));
+  const pricing = method === "pay_as_bid" ? "pay_as_bid" : "uniform";
   const rangeMax = priceRangeMax(firm, savedPrices);
   if (whatIfPrice === null || whatIfPrice > rangeMax) {
     whatIfPrice = Math.round(rangeMax * 0.4);
   }
-  const noBoxes = boxCount === 0;
+  const noBoxes = needed === 0 && !allowMore;
+  const priceWord = pricing === "pay_as_bid" ? "lowest winning bid" : "price";
 
   stageContainer.innerHTML = `
     <p class="called-price-callout">${cap} permits for sale</p>
-    ${auctionRulesHtml(cap)}
+    ${auctionRulesHtml(cap, { pricing })}
+    ${shockComing ? shockNoticeHtml() : ""}
     ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
     <h3>Your bids</h3>
     <p class="learning-prompt">Before bidding: if you won one more permit, which unit of abatement would you avoid?</p>
-    ${permitBidInputsHtml(firm.baseline, savedPrices, { disabled: expired, bankedIn: firm.bankedIn })}
+    ${permitBidInputsHtml(firm.baseline, savedPrices, {
+      disabled: expired,
+      bankedIn: firm.bankedIn,
+      owedIn: firm.owedIn,
+      penalty: firm.penalty,
+      allowMore,
+    })}
     <div class="row" style="margin-top: 0.6rem">
       <button id="clear-bids-btn" class="secondary" type="button" ${expired || noBoxes ? "disabled" : ""}>Clear Boxes</button>
       <button id="submit-bids-btn" class="primary" type="button" ${expired || noBoxes ? "disabled" : ""}>
@@ -291,10 +332,10 @@ function renderAuctionStage(state) {
       Clear Boxes only empties the form: bids you already submitted stay in until you submit new ones.</p>
     ${expired ? "<p><small class=\"note\">The auction has closed. Waiting for the instructor to clear it.</small></p>" : ""}
     <section class="whatif" aria-labelledby="whatif-heading">
-      <h3 id="whatif-heading">What if the price were...?</h3>
-      <p class="mac-note">No one knows the price until the auction clears. Move the slider to see what the bids typed
-        above would get you at different prices. Only your own bids are used.</p>
-      <label for="whatif-price">Possible auction price: <strong id="whatif-price-value"></strong></label>
+      <h3 id="whatif-heading">What if the ${priceWord} were...?</h3>
+      <p class="mac-note">No one knows the ${priceWord} until the auction clears. Move the slider to see what the bids typed
+        above would get you at different values. Only your own bids are used${shockComing ? ", with your cost before the shock" : ""}.</p>
+      <label for="whatif-price">Possible ${priceWord}: <strong id="whatif-price-value"></strong></label>
       <input id="whatif-price" type="range" min="0" max="${rangeMax}" step="0.5" value="${whatIfPrice}" />
       <div id="whatif-chart"></div>
       <div id="whatif-summary"></div>
@@ -303,22 +344,36 @@ function renderAuctionStage(state) {
 
   const slider = document.getElementById("whatif-price");
   const updateWhatIf = () => {
+    const boxCount = document.querySelectorAll(".permit-bid-price").length;
     const prices = typedPermitPrices(readPermitBoxes()).slice(0, boxCount);
     // Widen the slider when a typed bid goes above its current range.
     const sliderMax = Math.max(rangeMax, priceRangeMax(firm, prices));
     slider.max = String(sliderMax);
     whatIfPrice = Number(slider.value);
     document.getElementById("whatif-price-value").textContent = `$${whatIfPrice.toFixed(2)}`;
-    document.getElementById("whatif-chart").innerHTML = whatIfChartSvg(boxCount, prices, whatIfPrice, sliderMax);
-    document.getElementById("whatif-summary").innerHTML = prices.length === 0 && firm.bankedIn === 0
+    document.getElementById("whatif-chart").innerHTML = whatIfChartSvg(boxCount, prices, whatIfPrice, sliderMax, { pricing });
+    document.getElementById("whatif-summary").innerHTML = prices.length === 0 && firm.bankedIn === 0 && firm.owedIn === 0
       ? "<p class=\"mac-note\">Enter bids above to see what they would win.</p>"
-      : outcomeSummaryHtml(outcomeAtPrice(firm, prices, whatIfPrice), firm.baseline);
+      : outcomeSummaryHtml(outcomeAtPrice(firm, prices, whatIfPrice, { pricing }), firm.baseline);
   };
 
   slider.addEventListener("input", updateWhatIf);
-  for (const input of document.querySelectorAll(".permit-bid-price")) {
-    input.addEventListener("input", updateWhatIf);
-  }
+  const grid = document.getElementById("permit-bid-grid");
+  grid?.addEventListener("input", updateWhatIf);
+  document.getElementById("add-permit-boxes-btn")?.addEventListener("click", () => {
+    if (deadlineExpired() || !grid) return;
+    const current = grid.querySelectorAll(".permit-bid-price").length;
+    const toAdd = Math.min(5, Math.max(0, quantityLimit - current));
+    if (toAdd === 0) {
+      setStatus(stageStatus, "warn", `You can bid for at most ${quantityLimit} permits, the number for sale.`);
+      return;
+    }
+    grid.insertAdjacentHTML("beforeend", Array.from({ length: toAdd }, (_, index) => (
+      permitBoxHtml(current + index + 1, "", { kind: "extra" })
+    )).join(""));
+    grid.querySelector(`.permit-bid:nth-child(${current + 1}) input`)?.focus();
+    updateWhatIf();
+  });
   document.getElementById("clear-bids-btn")?.addEventListener("click", () => {
     if (deadlineExpired()) return;
     for (const input of document.querySelectorAll(".permit-bid-price")) {
@@ -330,15 +385,66 @@ function renderAuctionStage(state) {
   updateWhatIf();
 }
 
+/** Save (or clear, with null) the team's Round 1 emissions choice. */
+async function saveEmissionsChoice(emissions) {
+  clearStatus(stageStatus);
+  try {
+    await apiJson("/api/permit-market/team/set-emissions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ join_token: getJoinToken(), emissions }),
+    });
+    setStatus(stageStatus, "good", emissions === null
+      ? "Emissions reset: you will use the permits you hold."
+      : `Round 1 emissions set to ${emissions}. You can change this until the market closes.`);
+    await refreshState();
+  } catch (error) {
+    setStatus(stageStatus, "bad", error.message);
+  }
+}
+
+/** Round 1 control for banking and borrowing: how much to emit this round. */
+function emissionsPlanHtml(state, expired) {
+  const session = state.session;
+  const baseline = Number(state.team.baseline_emissions);
+  const penalty = Number(session.shortfall_penalty ?? 0);
+  const choice = state.market?.emissions_choice;
+  const options = [
+    session.banking_enabled ? "Emit fewer units than the permits you hold and bank the rest for Round 2, where the cap is tighter." : "",
+    session.borrowing_enabled ? `Emit more units than your permits and borrow the difference from Round 2. Borrowed permits must
+      be covered in Round 2; each one still owed at the end of the game costs $${penalty.toFixed(2)}.` : "",
+  ].filter(Boolean).map((line) => `<li>${line}</li>`).join("");
+  return `<section class="emissions-plan" aria-labelledby="emissions-plan-heading">
+      <h3 id="emissions-plan-heading">Round 1 emissions: ${session.banking_enabled && session.borrowing_enabled ? "bank or borrow" : (session.banking_enabled ? "bank" : "borrow")}</h3>
+      <ul>${options}</ul>
+      <div class="row">
+        <label for="emissions-choice">Emit this round (0 to ${baseline} units)</label>
+        <input id="emissions-choice" type="number" min="0" max="${baseline}" step="1" inputmode="numeric"
+          value="${choice ?? ""}" placeholder="use my permits" style="max-width: 9rem" ${expired ? "disabled" : ""} />
+        <button id="save-emissions-btn" class="primary" type="button" ${expired ? "disabled" : ""}>Save</button>
+        <button id="reset-emissions-btn" class="secondary" type="button" ${expired ? "disabled" : ""}>Use my permits</button>
+      </div>
+      <p id="emissions-plan-summary" class="mac-note"></p>
+    </section>`;
+}
+
 function renderMarketScaffold(state) {
   const expired = deadlineExpired();
   // The auction charts do not change during a market, so they are drawn once
   // here rather than on every refresh; that keeps them open or closed as the
   // student left them.
+  const roundKey = String(state.session.current_phase) === "market2" ? "round2" : "round1";
+  const shock = state.team?.shocks?.[roundKey];
+  const shockBanner = shock == null ? "" : `<p class="shock-notice"><strong>Cost shock revealed:</strong> your MAC slope is
+    ×${shock} this round${Number(shock) === 1 ? " (no change)" : `, so each unit of abatement now costs $${state.team.display_mac_slope} × a`}.
+    Other firms learned theirs too, so what permits are worth has changed.</p>`;
+  const showPlan = roundKey === "round1" && (state.session.banking_enabled || state.session.borrowing_enabled);
   stageContainer.innerHTML = `
+    ${shockBanner}
     <div id="auction-outcome"></div>
     ${clearedAuctionsHtml(state.auction_reports)}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
+    ${showPlan ? emissionsPlanHtml(state, expired) : ""}
     <h3>Current Offers</h3>
     <div class="book-grid" style="margin-top: 0.6rem">
       <div><h4>Buyers (bids)</h4><div id="book-bids" class="table-wrap"></div></div>
@@ -380,6 +486,24 @@ function renderMarketScaffold(state) {
       postOrder();
     }
   });
+  document.getElementById("save-emissions-btn")?.addEventListener("click", () => {
+    const raw = document.getElementById("emissions-choice").value.trim();
+    if (raw === "") {
+      saveEmissionsChoice(null);
+      return;
+    }
+    const value = Number(raw);
+    const baseline = Number(state.team.baseline_emissions);
+    if (!Number.isInteger(value) || value < 0 || value > baseline) {
+      setStatus(stageStatus, "warn", `Enter a whole number of units from 0 to ${baseline}.`);
+      return;
+    }
+    saveEmissionsChoice(value);
+  });
+  document.getElementById("reset-emissions-btn")?.addEventListener("click", () => {
+    document.getElementById("emissions-choice").value = "";
+    saveEmissionsChoice(null);
+  });
 }
 
 function renderMarketLiveData(state) {
@@ -393,12 +517,25 @@ function renderMarketLiveData(state) {
     const result = state.auction_result;
     const allocation = state.own_allocation;
     const banked = Number(state.permits_banked_in ?? 0);
+    const owed = Number(state.permits_owed_in ?? 0);
+    const carry = [
+      banked > 0 ? `plus ${banked} banked from Round 1` : "",
+      owed > 0 ? `minus ${owed} owed from Round 1 borrowing` : "",
+    ].filter(Boolean).join(", ");
+    const method = state.allocation_method ?? "uniform";
+    const headline = method === "free"
+      ? "<strong>Free allocation:</strong> permits were given away in proportion to baseline emissions."
+      : (result?.clearing_price == null
+        ? "<strong>Auction result:</strong> no price (no bids)."
+        : (method === "pay_as_bid"
+          ? `<strong>Auction result:</strong> lowest winning bid $${formatNumber(result.clearing_price, 2)}; each winner paid its own bids.`
+          : `<strong>Auction result:</strong> $${formatNumber(result.clearing_price, 2)} per permit.`));
     outcome.innerHTML = result
       ? `
-        <p><strong>Auction result:</strong> ${result.clearing_price == null ? "no price (no bids)" : `$${formatNumber(result.clearing_price, 2)} per permit`}.</p>
+        <p>${headline}</p>
         <p><small class="note">
-          You won ${formatNumber(allocation?.permits_won ?? 0, 0)} permit(s) for $${formatNumber(allocation?.payment ?? 0, 2)}${banked > 0 ? `, plus ${banked} banked from round 1` : ""}.
-          Cap: ${formatNumber(result.cap, 0)}; total bids: ${formatNumber(result.total_bid_quantity, 0)}.
+          You ${method === "free" ? "received" : "won"} ${formatNumber(allocation?.permits_won ?? 0, 0)} permit(s) for $${formatNumber(allocation?.payment ?? 0, 2)}${carry ? `, ${carry}` : ""}.
+          Cap: ${formatNumber(result.cap, 0)}${method === "free" ? "" : `; total bids: ${formatNumber(result.total_bid_quantity, 0)}`}.
         </small></p>
       `
       : "";
@@ -408,14 +545,37 @@ function renderMarketLiveData(state) {
   if (tiles) {
     const preview = market.score_preview;
     const position = macModel(state);
+    const carryTiles = [
+      preview?.permits_banked_out > 0 ? ["Banked for Round 2", formatNumber(preview.permits_banked_out, 0)] : null,
+      preview?.permits_borrowed_out > 0 ? ["Borrowed from Round 2", formatNumber(preview.permits_borrowed_out, 0)] : null,
+      preview?.shortfall > 0 ? ["Still owed: penalty", `$${formatNumber(preview.shortfall_penalty, 2)}`] : null,
+    ].filter(Boolean).map(([label, value]) => `<div class="cell"><div class="label">${label}</div><div class="value">${value}</div></div>`).join("");
     tiles.innerHTML = `
       <div class="cell"><div class="label">Permits held</div><div class="value">${formatNumber(market.holdings, 0)}</div></div>
       <div class="cell"><div class="label">Emissions, E</div><div class="value">${formatNumber(position?.emissions, 0)}</div></div>
       <div class="cell"><div class="label">Required abatement</div><div class="value">${formatNumber(position?.abatement, 0)}</div></div>
-      <div class="cell"><div class="label">Available to sell</div><div class="value">${formatNumber(market.sellable, 0)}</div></div>
+      <div class="cell"><div class="label">Available to sell</div><div class="value">${formatNumber(Math.max(0, market.sellable), 0)}</div></div>
       <div class="cell"><div class="label">Abatement cost</div><div class="value">$${formatNumber(position?.cost, 2)}</div></div>
       <div class="cell"><div class="label">Round score if market closed now</div><div class="value">${preview ? formatNumber(preview.score, 2) : "-"}</div></div>
+      ${carryTiles}
     `;
+  }
+
+  const planSummary = document.getElementById("emissions-plan-summary");
+  if (planSummary && market.score_preview) {
+    const preview = market.score_preview;
+    const choice = market.emissions_choice;
+    const carryText = preview.permits_banked_out > 0
+      ? `banking ${preview.permits_banked_out} permit(s) for Round 2`
+      : (preview.permits_borrowed_out > 0
+        ? `borrowing ${preview.permits_borrowed_out} permit(s) from Round 2`
+        : "neither banking nor borrowing");
+    const tradeoff = preview.permits_borrowed_out > 0
+      ? " Borrowing raises this round's score, but the borrowed permits must come out of Round 2."
+      : (preview.permits_banked_out > 0 ? " Banking lowers this round's score, but the banked permits are yours to use in Round 2." : "");
+    planSummary.textContent = `${choice == null ? "Using your permits" : `Your choice: emit ${choice}`}. If the market closed now you would
+      emit ${preview.emissions}, holding ${market.holdings} permit(s) and ${carryText}; this round's abatement cost would be
+      $${formatNumber(preview.abatement_cost, 2)}.${tradeoff}`;
   }
 
   const ownOrders = document.getElementById("own-orders");
@@ -488,7 +648,7 @@ function renderStage(state, options = {}) {
   }
 
   const phase = String(state.session.current_phase ?? "");
-  phaseLabelElement.textContent = phaseLabel(phase);
+  phaseLabelElement.textContent = phaseLabel(phase, state);
 
   const signature = stageSignature(state);
   const scaffoldChanged = options.force || signature !== renderedStageSignature;
@@ -500,7 +660,7 @@ function renderStage(state, options = {}) {
       stageTitle.textContent = "Waiting Room";
       stageContainer.innerHTML = `<p><small class="note">${state.joined_team_count} team(s) joined. The game begins when the instructor starts it.</small></p>`;
     } else if (phase === "auction1" || phase === "auction2") {
-      stageTitle.textContent = "Permit Auction";
+      stageTitle.textContent = state.allocation_method === "free" ? "Free Permits" : "Permit Auction";
       renderAuctionStage(state);
     } else if (phase === "market1" || phase === "market2") {
       stageTitle.textContent = "Open Market";
@@ -537,17 +697,25 @@ function renderResults(state) {
     return;
   }
 
+  const session = state?.session ?? {};
+  const carryOn = Boolean(session.banking_enabled || session.borrowing_enabled);
+  const shocksOn = Boolean(session.shock_round1 || session.shock_round2);
   const rows = scores.map((row) => ({
     round: row.round_key === "round1" ? "Round 1" : "Round 2",
-    auction_permits: row.permits_from_auction,
+    ...(shocksOn ? { mac_shock: `×${Number(row.mac_shock ?? 1)}` } : {}),
+    permits_allocated: row.permits_from_auction,
     auction_paid: formatNumber(row.auction_payment, 2),
-    banked_in: row.permits_banked_in,
+    ...(carryOn ? { banked_in: row.permits_banked_in, owed_in: row.permits_owed_in ?? 0 } : {}),
     bought: row.market_buys,
     sold: row.market_sells,
     market_net_spend: formatNumber(row.market_net_spend, 2),
     emissions: row.emissions,
     abatement_cost: formatNumber(row.abatement_cost, 2),
-    banked_out: row.permits_banked_out,
+    ...(carryOn ? {
+      banked_out: row.permits_banked_out,
+      borrowed_out: row.permits_borrowed_out ?? 0,
+      penalty: formatNumber(row.shortfall_penalty ?? 0, 2),
+    } : {}),
     score: formatNumber(row.score, 2),
     benchmark: formatNumber(row.benchmark_score, 2),
   }));

@@ -1,6 +1,9 @@
 import {
   AUCTION_PHASES,
+  allocationMethodForRound,
+  bidQuantityLimit,
   deadlinePassed,
+  roundForPhase,
   validateBidSet,
 } from "./_lib/permit_market.mts";
 import {
@@ -46,7 +49,14 @@ export default async function permitTeamSubmitBids(req) {
       return jsonResponse(400, { error: "Your firm type is not assigned yet. Wait for the game to start." });
     }
 
-    const bidSet = validateBidSet(team, body.bids);
+    if (allocationMethodForRound(session, roundForPhase(phase)) === "free") {
+      return jsonResponse(400, { error: "Permits are given away free this round; there is nothing to bid on." });
+    }
+
+    const cap = phase === "auction1" ? session.cap_round1 : session.cap_round2;
+    const bidSet = validateBidSet(team, body.bids, {
+      maxQuantity: bidQuantityLimit(session, team, cap),
+    });
     await replaceTeamBids(String(session.id), String(team.id), phase, bidSet);
 
     return jsonResponse(200, {

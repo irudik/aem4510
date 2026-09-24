@@ -1,7 +1,8 @@
 /** Describe the firm's MAC in emissions units, including its current position. */
 export function macModel(state) {
   const baseline = Number(state?.team?.baseline_emissions);
-  const slope = Number(state?.team?.mac_slope);
+  // After a cost shock is revealed, the chart uses the shocked slope.
+  const slope = Number(state?.team?.display_mac_slope ?? state?.team?.mac_slope);
   if (!Number.isInteger(baseline) || baseline <= 0 || !Number.isFinite(slope) || slope <= 0) {
     return null;
   }
@@ -19,7 +20,13 @@ export function macModel(state) {
   const rawHoldings = state.market?.holdings ?? finalScore?.permits_end;
   const hasPosition = rawHoldings != null && Number.isFinite(Number(rawHoldings));
   const holdings = hasPosition ? Math.max(0, Math.floor(Number(rawHoldings))) : null;
-  const emissions = hasPosition ? Math.min(baseline, holdings) : null;
+  // Emissions follow the permits held unless the game reports them directly:
+  // a Round 1 choice to bank or borrow, or the final Round 2 outcome.
+  const reportedEmissions = state.market?.score_preview?.emissions ?? finalScore?.emissions;
+  const emissions = !hasPosition ? null
+    : (reportedEmissions != null && Number.isFinite(Number(reportedEmissions))
+      ? Math.min(baseline, Math.max(0, Math.floor(Number(reportedEmissions))))
+      : Math.min(baseline, holdings));
   const abatement = hasPosition ? baseline - emissions : null;
   const cost = hasPosition ? slope * abatement * (abatement + 1) / 2 : null;
 
@@ -95,13 +102,26 @@ export function macPanel(state) {
     ? "Your emissions position will appear after the auction clears."
     : `${model.final ? "Final Round 2 emissions" : "Emissions if this round ended now"}: <strong>${model.emissions}</strong>.
       Required abatement: <strong>${model.abatement}</strong>. Abatement cost: <strong>${dollars(model.cost)}</strong>.`;
-  const banking = state.session.banking_enabled
-    ? `<p class="mac-note">Banking is on. Only permits held above your baseline emissions carry from Round 1 to Round 2.
-      The curve shows current-round abatement costs; it does not include the future use of banked permits.</p>` : "";
+  const phase = String(state.session?.current_phase ?? "");
+  const shockRound = phase === "complete" || phase.endsWith("2") ? "round2" : "round1";
+  const shock = state.team?.shocks?.[shockRound];
+  const shockLine = shock != null && Number(shock) !== 1
+    ? `<p class="shock-notice"><strong>Cost shock:</strong> your MAC slope is ×${shock} this round, so each unit of abatement
+      costs $${model.slope} × a instead of $${state.team.mac_slope} × a.</p>`
+    : (shock != null ? `<p class="mac-note">Cost shock: your MAC slope is unchanged (×1) this round.</p>` : "");
+  const carryRules = [
+    state.session.banking_enabled ? "permits you do not use in Round 1 carry to Round 2" : "",
+    state.session.borrowing_enabled ? "you can emit more than your permits in Round 1 and repay the difference in Round 2" : "",
+  ].filter(Boolean).join("; ");
+  const banking = carryRules
+    ? `<p class="mac-note">${state.session.banking_enabled && state.session.borrowing_enabled ? "Banking and borrowing are" : (state.session.banking_enabled ? "Banking is" : "Borrowing is")} on:
+      ${carryRules}. The curve shows current-round abatement costs; it does not include the future use of banked
+      permits or the cost of repaying borrowed ones.</p>` : "";
   return `<h3>Your marginal abatement cost (MAC)</h3>
     <p>Without abatement, your firm emits <strong>${model.baseline} units</strong>.
       Abating the <em>a</em>th unit costs <strong>$${model.slope} × a</strong>, where
       <em>a</em> = ${model.baseline} − <em>E</em>.</p>
+    ${shockLine}
     <figure class="mac-figure">
       ${macChart(model)}
       <figcaption>

@@ -1,5 +1,6 @@
 import {
   MARKET_PHASES,
+  carryIntoRound2,
   deadlinePassed,
   freeHoldings,
   matchIncomingOrder,
@@ -85,10 +86,12 @@ export default async function permitTeamOrder(req) {
       String(row.round_key) === auctionKey && String(row.team_id) === String(team.id)
     ));
 
-    const bankedIn = (roundKey === "round2" && session.banking_enabled)
-      ? Number(scores.find((row) => (
+    // Round 2 holdings include banked permits and subtract permits owed from
+    // Round 1 borrowing.
+    const carryIn = roundKey === "round2"
+      ? carryIntoRound2(session, scores.find((row) => (
         String(row.round_key) === "round1" && String(row.team_id) === String(team.id)
-      ))?.permits_banked_out ?? 0)
+      ))).net
       : 0;
 
     // Sellers cannot promise more permits than they hold and have not
@@ -97,7 +100,7 @@ export default async function permitTeamOrder(req) {
       const sellable = freeHoldings(
         String(team.id),
         allocation?.permits_won ?? 0,
-        bankedIn,
+        carryIn,
         marketTrades,
         marketOrders.filter((row) => String(row.status) === "open"),
       );

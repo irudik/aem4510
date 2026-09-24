@@ -1181,7 +1181,7 @@ high_price = 70
 low_price = 50
 
 ggplot() +
-  stat_function(fun = mac1, color = "#ca5670", linewidth = 1.5) +
+  stat_function(fun = mac1, xlim = c(0, 90), color = "#ca5670", linewidth = 1.5) +
   annotate("text", x = 12, y = 86, label = "MAC[1] == permit~demand", parse = TRUE,
            color = "#ca5670", size = 8, hjust = 0) +
   annotate("segment", x = 0, xend = 90 - high_price, y = high_price, yend = high_price,
@@ -1216,7 +1216,7 @@ Lower price, more permits: an ordinary demand curve
 # Permit auctions: supply meets demand
 
 .pull-left[
-```{r permits-auction-supply-demand, echo = FALSE, fig.show = 'hide', warning = F, dependson = "permits-auction-demand"}
+```{r permits-auction-supply-demand, echo = FALSE, fig.show = 'hide', warning = F}
 # Horizontal sum of the two MACs is the class's demand for permits; the cap is supply.
 # Firm 1 demands 90 - p (for p <= 90) and firm 2 demands 75 - p/2 (for p <= 150).
 mac1 = function(x) 90 - x
@@ -1307,7 +1307,7 @@ Major permit auctions (RGGI, California-Quebec, EU ETS) are .hi[uniform-price se
 4. .hi[Every] winner pays the same price: the lowest winning bid
 
 .footnote[
-<sup>1</sup> The EU ETS and California-Quebec also charge the lowest winning bid; RGGI charges the highest losing bid.
+<sup>1</sup> The EU ETS and California-Quebec also charge the lowest winning bid; RGGI charges the highest losing bid; EPA's Acid Rain Program auctions charged each winner its own bid.
 ]
 
 ---
@@ -1331,7 +1331,7 @@ Which bids win? What is the price? What does each firm pay?
 # Permit auctions: example
 
 .pull-left[
-```{r permits-auction-clearing, echo = FALSE, fig.show = 'hide', warning = F, dependson = "permits-auction-demand"}
+```{r permits-auction-clearing, echo = FALSE, fig.show = 'hide', warning = F}
 # Three firms bid their MAC for each permit; 5 permits are for sale.
 example_bids <- tibble::tribble(
   ~firm, ~bid,
@@ -3041,3 +3041,39 @@ This is .hi[demand reduction]: bidders who might set the price, especially large
 --
 
 Here only revenue falls (35 to 30). In general, shading can misallocate permits, which later trading can fix
+
+---
+
+# Debrief: why trade after an auction?
+
+If every firm bids its MAC and nothing changes, the auction already equalizes MACs: there is nothing left to trade
+
+--
+
+In the game, costs changed after the auction: real MACs move with fuel prices, demand, outages, and new technology
+
+--
+
+The permit market lets firms whose MAC rose buy from firms whose MAC fell, until MACs are equal again
+
+--
+
+Banking and borrowing do the same across time: each firm equalizes its own MAC across rounds
+
+---
+
+# Debrief: pay as you bid
+
+EPA's Acid Rain Program auctions (from 1993) were .hi[pay-as-bid]; they sold about 2.8% of allowances, and the rest were given away
+
+--
+
+Bidding your MAC then earns nothing on the permits you win, so bidders shade toward the price they expect
+
+--
+
+Bids stop revealing MACs, and bidders who guess the price wrong end up with too few or too many permits
+
+--
+
+Svendsen and Christensen (1999): a uniform-price design "would probably have generated better price signals"

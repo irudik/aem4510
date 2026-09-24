@@ -8,6 +8,7 @@ import { fetchSupabaseAuthUser, supabaseRequest } from "./supabase_rest.mts";
 import {
   AUCTION_PHASES,
   MARKET_PHASES,
+  drawShockFactors,
   firmTypeForIndex,
   roundForPhase,
 } from "./permit_market.mts";
@@ -76,6 +77,12 @@ export async function getActiveSession() {
  * cap_share_round1: number,
  * cap_share_round2: number,
  * banking_enabled: boolean,
+ * borrowing_enabled: boolean,
+ * shortfall_penalty: number,
+ * allocation_round1: string,
+ * allocation_round2: string,
+ * shock_round1: boolean,
+ * shock_round2: boolean,
  * round_seconds: number,
  * created_by: string,
  * }} payload
@@ -179,7 +186,10 @@ export async function createOrFetchTeam(session, teamName) {
 }
 
 /**
- * Assign firm types round-robin in join order and mark the session started.
+ * Assign firm types round-robin in join order, draw each round's cost-shock
+ * multipliers (1 when that round has no shock), and mark the session
+ * started. Shocks are stored now but shown to each team only when that
+ * round's market opens.
  * @param {Record<string, unknown>} session
  */
 export async function startGameAndAssignFirms(session) {
@@ -187,6 +197,10 @@ export async function startGameAndAssignFirms(session) {
   if (!Array.isArray(teams) || teams.length < 2) {
     throw new Error("Need at least two teams before starting the game");
   }
+
+  const noShock = teams.map(() => 1);
+  const shocksRound1 = session.shock_round1 ? drawShockFactors(teams.length) : noShock;
+  const shocksRound2 = session.shock_round2 ? drawShockFactors(teams.length) : noShock;
 
   for (let index = 0; index < teams.length; index += 1) {
     const firmType = firmTypeForIndex(index);
@@ -198,6 +212,8 @@ export async function startGameAndAssignFirms(session) {
       body: {
         baseline_emissions: firmType.baseline_emissions,
         mac_slope: firmType.mac_slope,
+        mac_shock_round1: shocksRound1[index],
+        mac_shock_round2: shocksRound2[index],
       },
       prefer: "return=minimal",
       useServiceRole: true,
@@ -459,6 +475,56 @@ export async function insertTrades(sessionId, marketKey, tradeRows) {
 }
 
 /**
+ * Round 1 emissions chosen by teams (banking and borrowing).
+ * @param {string} sessionId
+ */
+export async function getEmissionChoicesForSession(sessionId) {
+  return supabaseRequest("/rest/v1/permit_emission_choices", {
+    method: "GET",
+    queryParams: {
+      select: "*",
+      session_id: `eq.${sessionId}`,
+    },
+    useServiceRole: true,
+  });
+}
+
+/**
+ * Save a team's chosen emissions for a round, or clear the choice (null) so
+ * the team simply uses the permits it holds.
+ */
+export async function setEmissionChoice(sessionId, teamId, roundKey, emissions) {
+  if (emissions === null) {
+    await supabaseRequest("/rest/v1/permit_emission_choices", {
+      method: "DELETE",
+      queryParams: {
+        session_id: `eq.${sessionId}`,
+        team_id: `eq.${teamId}`,
+        round_key: `eq.${roundKey}`,
+      },
+      useServiceRole: true,
+    });
+    return;
+  }
+
+  await supabaseRequest("/rest/v1/permit_emission_choices", {
+    method: "POST",
+    queryParams: {
+      on_conflict: "session_id,team_id,round_key",
+    },
+    body: [{
+      session_id: sessionId,
+      team_id: teamId,
+      round_key: roundKey,
+      emissions,
+      updated_at: new Date().toISOString(),
+    }],
+    prefer: "resolution=merge-duplicates,return=minimal",
+    useServiceRole: true,
+  });
+}
+
+/**
  * @param {string} sessionId
  */
 export async function getRoundScoresForSession(sessionId) {
@@ -532,6 +598,15 @@ export async function clearPhaseDataForEntry(sessionId, phase) {
     });
 
     await supabaseRequest("/rest/v1/permit_round_scores", {
+      method: "DELETE",
+      queryParams: {
+        session_id: `eq.${sessionId}`,
+        round_key: `eq.${roundKey}`,
+      },
+      useServiceRole: true,
+    });
+
+    await supabaseRequest("/rest/v1/permit_emission_choices", {
       method: "DELETE",
       queryParams: {
         session_id: `eq.${sessionId}`,

@@ -1,9 +1,12 @@
 import {
   AUCTION_PHASES,
+  allocationMethodForRound,
   benchmarkForRound,
   bookLevels,
   clearAuction,
   leaderboardRows,
+  roundForPhase,
+  shockEnabledForRound,
 } from "./_lib/permit_market.mts";
 import {
   getActiveSession,
@@ -50,14 +53,18 @@ export default async function permitAdminState(req) {
     ]);
 
     // Chart data per auction: the (live or final) bid stack against the
-    // cap, plus the true aggregate demand and its benchmark price.
+    // cap, plus the true aggregate demand and its benchmark price. MACs here
+    // are before any cost shock, which is what bidders know; scored
+    // benchmarks use the shocked MACs. Free rounds have no bids to chart.
     const firmsAssigned = teams.some((team) => team.baseline_emissions);
     const auctionCharts = {};
     for (const auctionKey of ["auction1", "auction2"]) {
       const cap = auctionKey === "auction1"
         ? Number(session.cap_round1 ?? 0)
         : Number(session.cap_round2 ?? 0);
-      if (!cap || !firmsAssigned) {
+      const roundKey = roundForPhase(auctionKey);
+      const method = allocationMethodForRound(session, roundKey);
+      if (!cap || !firmsAssigned || method === "free") {
         continue;
       }
 
@@ -73,7 +80,7 @@ export default async function permitAdminState(req) {
         bid_price: row.bid_price,
         bid_quantity: row.bid_quantity,
         submitted_at: row.submitted_at,
-      })));
+      })), { pricing: method });
       const benchmark = benchmarkForRound(teams, cap);
 
       auctionCharts[auctionKey] = {
@@ -84,6 +91,8 @@ export default async function permitAdminState(req) {
         bid_stack: clearing.bid_stack,
         true_demand_stack: benchmark.true_demand_stack,
         benchmark_price: benchmark.benchmark_price,
+        pricing: method,
+        shock: shockEnabledForRound(session, roundKey),
       };
     }
 

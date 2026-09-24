@@ -8,7 +8,7 @@
  * are unchanged.
  */
 
-const dollars = (value) => `$${Number(value).toFixed(2)}`;
+const dollars = (value) => `${Number(value) < 0 ? "−" : ""}$${Math.abs(Number(value)).toFixed(2)}`;
 const ordinal = (number) => {
   const lastTwo = number % 100;
   if (lastTwo >= 11 && lastTwo <= 13) return `${number}th`;
@@ -87,40 +87,60 @@ export function typedPermitPrices(rawPrices) {
 }
 
 /**
- * What the team's own bids would deliver if the auction price turned out to
- * be `price`. Bids above the price win; a bid exactly at the price wins
- * unless too many bids tie there. Scores follow the game's scoring rule:
- * avoided abatement cost minus the auction payment, before any trading.
- * @param {{baseline: number, slope: number, bankedIn?: number}} firm
+ * What the team's own bids would deliver if the lowest winning bid turned
+ * out to be `price`. Bids above it win; a bid exactly at it wins unless too
+ * many bids tie there. Under uniform pricing every winning permit costs
+ * `price`; under pay-as-bid pricing each costs its own bid.
+ *
+ * Scores follow the game's scoring rule before any trading: avoided
+ * abatement cost, minus the auction payment, minus the penalty on permits
+ * still owed at the end of the game. Permits beyond baseline count for
+ * nothing now; in Round 1 with banking they carry to Round 2.
+ * @param {{baseline: number, slope: number, bankedIn?: number, owedIn?: number,
+ *   penalty?: number, finalRound?: boolean}} firm
  * @param {number[]} prices the team's bid prices, one per permit
- * @param {number} price hypothetical auction price
+ * @param {number} price hypothetical lowest winning bid
+ * @param {{pricing?: "uniform" | "pay_as_bid"}} options
  */
-export function outcomeAtPrice(firm, prices, price) {
+export function outcomeAtPrice(firm, prices, price, { pricing = "uniform" } = {}) {
   const baseline = Number(firm.baseline);
   const slope = Number(firm.slope);
   const bankedIn = Math.max(0, Math.floor(Number(firm.bankedIn ?? 0)));
+  const owedIn = Math.max(0, Math.floor(Number(firm.owedIn ?? 0)));
+  const penaltyPerPermit = Math.max(0, Number(firm.penalty ?? 0));
   const valid = (prices ?? []).filter((value) => Number.isFinite(value));
 
-  const permitsWon = valid.filter((value) => value >= price).length;
+  const winning = valid.filter((value) => value >= price);
+  const permitsWon = winning.length;
   const tiedAtPrice = valid.filter((value) => value === price).length;
-  const payment = Math.round(price * permitsWon * 100) / 100;
-  const permitsHeld = permitsWon + bankedIn;
-  const emissions = Math.min(baseline, permitsHeld);
+  const payment = Math.round((pricing === "pay_as_bid"
+    ? winning.reduce((sum, value) => sum + value, 0)
+    : price * permitsWon) * 100) / 100;
+  const permitsHeld = permitsWon + bankedIn - owedIn;
+  const emissions = Math.min(baseline, Math.max(0, permitsHeld));
+  const shortfall = firm.finalRound ? Math.max(0, -permitsHeld) : 0;
+  const extraPermits = Math.max(0, permitsHeld - baseline);
   const abatement = baseline - emissions;
   const cost = abatementCost(slope, abatement);
   const avoidedCost = abatementCost(slope, baseline) - cost;
+  const penaltyCost = shortfall * penaltyPerPermit;
 
   return {
     price,
+    pricing,
     permitsWon,
     tiedAtPrice,
     payment,
     bankedIn,
+    owedIn,
     emissions,
     abatement,
     abatementCost: cost,
     avoidedCost,
-    score: Math.round((avoidedCost - payment) * 100) / 100,
+    extraPermits,
+    shortfall,
+    penaltyCost,
+    score: Math.round((avoidedCost - payment - penaltyCost) * 100) / 100,
   };
 }
 
@@ -131,16 +151,32 @@ export function priceRangeMax(firm, prices) {
 }
 
 /** Plain-language auction rules with a worked example students can open. */
-export function auctionRulesHtml(cap) {
+export function auctionRulesHtml(cap, { pricing = "uniform" } = {}) {
+  const payAsBid = pricing === "pay_as_bid";
+  const paymentRule = payAsBid
+    ? `Each winner pays <strong>its own bid</strong> for every permit it wins. If you bid $15 and win, you pay $15,
+        even if the lowest winning bid is $9.`
+    : `Every winner pays the <strong>same price</strong>: the lowest winning bid. If you bid $15 and the price is $9, you pay $9.`;
+  const supplyDemand = payAsBid
+    ? `The lowest winning bid is still where the class's total demand meets the ${cap} permits of supply, but each
+        winner pays what it bid. EPA sold Acid Rain Program permits this way. Nobody sees anyone else's bids until
+        the auction clears.`
+    : `Think of it as supply and demand. Supply is the ${cap} permits. Your bids are your demand curve.
+        The price is where the class's total demand equals supply. Nobody sees anyone else's bids until the auction clears.`;
+  const exampleResult = payAsBid
+    ? `<p>Each winner pays its own bids. A wins 2 permits and pays $12 + $9 = <strong>$21</strong>, B pays $10 + $7 = $17,
+        and C pays $8. Under a uniform price all winners would have paid $7 a permit, so A would have paid $14.</p>`
+    : `<p>The price is the lowest winning bid, <strong>$7</strong>. A wins 2 permits and pays $14, B wins 2 and pays $14,
+        C wins 1 and pays $7. A bid $12 for its first permit but pays only $7 for it.</p>`;
+
   return `<div class="auction-rules">
-    <h3>How the auction works</h3>
+    <h3>How the auction works${payAsBid ? ": pay as you bid" : ""}</h3>
     <ol>
       <li>For each permit, enter the <strong>most you would pay</strong> for it. Leave a box blank if you do not want that permit.</li>
       <li>When the clock runs out, every team's bids are ranked from highest to lowest. The top <strong>${cap}</strong> bids win.</li>
-      <li>Every winner pays the <strong>same price</strong>: the lowest winning bid. If you bid $15 and the price is $9, you pay $9.</li>
+      <li>${paymentRule}</li>
     </ol>
-    <p class="mac-note">Think of it as supply and demand. Supply is the ${cap} permits. Your bids are your demand curve.
-      The price is where the class's total demand equals supply. Nobody sees anyone else's bids until the auction clears.</p>
+    <p class="mac-note">${supplyDemand}</p>
     <details class="worked-example">
       <summary>Worked example: 3 firms, 5 permits</summary>
       <table>
@@ -152,67 +188,119 @@ export function auctionRulesHtml(cap) {
         </tbody>
       </table>
       <p>Ranked from highest: $12, $10, $9, $8, <strong>$7</strong> are the top 5 bids, so they win. The next bid, $6, just misses.</p>
-      <p>The price is the lowest winning bid, <strong>$7</strong>. A wins 2 permits and pays $14, B wins 2 and pays $14,
-        C wins 1 and pays $7. A bid $12 for its first permit but pays only $7 for it.</p>
+      ${exampleResult}
     </details>
   </div>`;
 }
 
-/**
- * Permits worth bidding for this round. Banked permits already cover the
- * first units of emissions, and in the final round any permit beyond the
- * baseline is worth nothing, so only baseline minus banked permits get a box.
- */
-export function biddablePermits(baseline, bankedIn = 0) {
-  return Math.max(0, Math.floor(Number(baseline)) - Math.max(0, Math.floor(Number(bankedIn))));
+/** Notice shown while bidding in a round whose market opens with a cost shock. */
+export function shockNoticeHtml() {
+  return `<p class="shock-notice"><strong>Cost shock this round.</strong> When the market opens, each firm learns whether
+    its MAC slope is multiplied by 0.5, 1, or 1.5. Each is equally likely: a third of the firms get each, and only you
+    see yours. Your MAC chart shows your cost before the shock, which is also your expected cost.</p>`;
 }
 
-/** One price box per permit, in the order the permits would be used. */
-export function permitBidInputsHtml(baseline, prices, { disabled = false, bankedIn = 0 } = {}) {
-  const boxCount = biddablePermits(baseline, bankedIn);
-  if (boxCount === 0) {
+/** What a team sees during a free-allocation round instead of a bid form. */
+export function freeAllocationHtml({ cap, permits, baseline, roundLabel }) {
+  return `<p class="called-price-callout">${cap} permits given away free</p>
+    <div class="auction-rules">
+      <h3>No auction in ${roundLabel}: free permits</h3>
+      <p>The regulator gives the ${cap} permits away in proportion to each firm's baseline emissions, the way the
+        Acid Rain Program handed out most of its permits based on past emissions ("grandfathering").</p>
+      <p>Your firm's baseline is ${baseline} units, so you receive <strong>${permits} permit${permits === 1 ? "" : "s"}</strong>
+        at no cost. There is nothing to bid on. When the market opens, compare what one more permit would save you
+        with what it costs to buy, and what selling one would earn with the extra abatement it requires.</p>
+    </div>`;
+}
+
+/**
+ * Permits worth bidding for this round to cover baseline emissions. Banked
+ * permits already cover the first units of emissions; owed permits must be
+ * covered before any emissions are. Permits beyond this number are worth
+ * something only if they can be banked (Round 1 with banking on).
+ */
+export function biddablePermits(baseline, bankedIn = 0, owedIn = 0) {
+  return Math.max(0, Math.floor(Number(baseline))
+    - Math.max(0, Math.floor(Number(bankedIn)))
+    + Math.max(0, Math.floor(Number(owedIn))));
+}
+
+/** One labelled price box. `kind` is "owed", "extra", or "" for an ordinary permit. */
+export function permitBoxHtml(number, value, { kind = "", disabled = false } = {}) {
+  const note = kind === "owed" ? " (repays a borrowed permit)" : (kind === "extra" ? " (extra: bank for Round 2)" : "");
+  return `<label class="permit-bid${kind ? ` permit-bid-${kind}` : ""}">
+      <span>Permit ${number}${note}</span>
+      <span class="permit-bid-input"><span aria-hidden="true">$</span><input class="permit-bid-price" type="number" min="0" step="0.01"
+        inputmode="decimal" value="${value}" aria-label="Most you would pay for permit ${number}${note}, in dollars" ${disabled ? "disabled" : ""} /></span>
+    </label>`;
+}
+
+/**
+ * One price box per permit, in the order the permits would be used: owed
+ * permits first, then one per unit of emissions not already covered, then
+ * any extra permits to bank. `allowMore` adds a button for more extra boxes.
+ */
+export function permitBidInputsHtml(baseline, prices, {
+  disabled = false,
+  bankedIn = 0,
+  owedIn = 0,
+  penalty = 0,
+  allowMore = false,
+} = {}) {
+  const needed = biddablePermits(baseline, bankedIn, owedIn);
+  if (needed === 0 && !allowMore) {
     return `<p class="mac-note">Your ${bankedIn} banked permits already cover all ${baseline} units of your emissions.
       Any permit you won this round would be worth $0 to you, so there is nothing to bid for.</p>`;
   }
 
-  const boxes = Array.from({ length: boxCount }, (_, index) => {
-    const number = index + 1;
-    const value = prices[index] ?? "";
-    return `<label class="permit-bid">
-      <span>Permit ${number}</span>
-      <span class="permit-bid-input"><span aria-hidden="true">$</span><input class="permit-bid-price" type="number" min="0" step="0.01"
-        inputmode="decimal" value="${value}" aria-label="Most you would pay for permit ${number}, in dollars" ${disabled ? "disabled" : ""} /></span>
-    </label>`;
-  }).join("");
+  const boxCount = Math.max(needed, prices.length);
+  const kindFor = (index) => (index < owedIn ? "owed" : (index >= needed ? "extra" : ""));
+  const boxes = Array.from({ length: boxCount }, (_, index) => permitBoxHtml(
+    index + 1,
+    prices[index] ?? "",
+    { kind: kindFor(index), disabled },
+  )).join("");
 
-  const coverage = bankedIn > 0
-    ? `Your ${bankedIn} banked permit${bankedIn === 1 ? "" : "s"} from Round 1 already cover${bankedIn === 1 ? "s" : ""} your first
-      ${bankedIn} unit${bankedIn === 1 ? "" : "s"} of emissions, so permit 1 here covers your ${ordinal(bankedIn + 1)} unit, permit 2 the next, and so on.`
-    : "Permit 1 covers your first unit of emissions (the leftmost step on your MAC chart), permit 2 your second unit, and so on.";
+  let coverage;
+  if (owedIn > 0) {
+    coverage = `You owe ${owedIn} permit${owedIn === 1 ? "" : "s"} from borrowing in Round 1. The first ${owedIn} permit${owedIn === 1 ? "" : "s"}
+      you win repay ${owedIn === 1 ? "it" : "them"}; each one still owed at the end of the game costs $${Number(penalty).toFixed(2)}.
+      After that, each permit covers one unit of emissions, starting with the leftmost step on your MAC chart.`;
+  } else if (bankedIn > 0) {
+    coverage = `Your ${bankedIn} banked permit${bankedIn === 1 ? "" : "s"} from Round 1 already cover${bankedIn === 1 ? "s" : ""} your first
+      ${bankedIn} unit${bankedIn === 1 ? "" : "s"} of emissions, so permit 1 here covers your ${ordinal(bankedIn + 1)} unit, permit 2 the next, and so on.`;
+  } else {
+    coverage = "Permit 1 covers your first unit of emissions (the leftmost step on your MAC chart), permit 2 your second unit, and so on.";
+  }
+  const extraNote = allowMore
+    ? ` Banking is on: permits beyond your ${needed} are extra and carry to Round 2, where the cap is tighter.
+      Add as many extra boxes as you like.`
+    : "";
 
-  return `<p class="mac-note">${coverage} Each permit you win lets you emit one more unit instead of abating it.</p>
-    <div class="permit-bid-grid">${boxes}</div>`;
+  return `<p class="mac-note">${coverage} Each permit you win lets you emit one more unit instead of abating it.${extraNote}</p>
+    <div class="permit-bid-grid" id="permit-bid-grid" data-needed="${needed}" data-owed="${owedIn}">${boxes}</div>
+    ${allowMore ? `<button id="add-permit-boxes-btn" class="secondary" type="button" ${disabled ? "disabled" : ""}>Add 5 extra permits to bank</button>` : ""}`;
 }
 
 /** Bars for the team's own bids, colored by whether they win at `price`. */
-export function whatIfChartSvg(baseline, prices, price, maxPrice) {
+export function whatIfChartSvg(baseline, prices, price, maxPrice, { pricing = "uniform" } = {}) {
   const left = 52;
   const right = 592;
   const top = 30;
   const bottom = 214;
-  const slots = Math.max(1, baseline);
+  const slots = Math.max(1, baseline, prices.length);
   const slotWidth = (right - left) / slots;
   const y = (value) => bottom - Math.min(value, maxPrice) / maxPrice * (bottom - top);
 
-  const bars = prices.slice(0, baseline).map((bidPrice, index) => {
+  const bars = prices.slice(0, slots).map((bidPrice, index) => {
     const wins = bidPrice >= price;
     const x = left + index * slotWidth + slotWidth * 0.12;
     return `<rect class="${wins ? "whatif-bar-win" : "whatif-bar-lose"}" x="${x}" y="${y(bidPrice)}"
       width="${slotWidth * 0.76}" height="${bottom - y(bidPrice)}"><title>Permit ${index + 1}: bid ${dollars(bidPrice)}, ${wins ? "wins" : "loses"}</title></rect>`;
   }).join("");
 
-  const labels = Array.from({ length: baseline }, (_, index) => index + 1)
-    .filter((number) => baseline <= 10 || number % 2 === 1 || number === baseline)
+  const labels = Array.from({ length: slots }, (_, index) => index + 1)
+    .filter((number) => slots <= 10 || number % 2 === 1 || number === slots)
     .map((number) => `<text x="${left + (number - 0.5) * slotWidth}" y="${bottom + 20}" text-anchor="middle">${number}</text>`)
     .join("");
 
@@ -226,7 +314,7 @@ export function whatIfChartSvg(baseline, prices, price, maxPrice) {
     <desc id="whatif-desc">${prices.length} bids entered. At a price of ${dollars(price)}, ${winning} of them win.</desc>
     ${grid}${bars}
     <line class="whatif-price-line" x1="${left}" x2="${right}" y1="${y(price)}" y2="${y(price)}" />
-    <text class="whatif-price-label" x="${right}" y="${y(price) - 6}" text-anchor="end">Price ${dollars(price)}</text>
+    <text class="whatif-price-label" x="${right}" y="${y(price) - 6}" text-anchor="end">${pricing === "pay_as_bid" ? "Lowest winning bid" : "Price"} ${dollars(price)}</text>
     <line class="mac-axis" x1="${left}" x2="${right}" y1="${bottom}" y2="${bottom}" />
     <line class="mac-axis" x1="${left}" x2="${left}" y1="${top}" y2="${bottom}" />
     ${labels}
@@ -236,20 +324,36 @@ export function whatIfChartSvg(baseline, prices, price, maxPrice) {
 
 /** Text summary of `outcomeAtPrice`, written for students. */
 export function outcomeSummaryHtml(outcome, baseline) {
-  if (outcome.permitsWon === 0 && outcome.bankedIn === 0) {
-    return `<p>At ${dollars(outcome.price)}, none of your bids win. You pay nothing, emit nothing, and abate all
+  const payAsBid = outcome.pricing === "pay_as_bid";
+  const priceWords = payAsBid ? `If the lowest winning bid is ${dollars(outcome.price)}` : `At ${dollars(outcome.price)}`;
+  if (outcome.permitsWon === 0 && outcome.bankedIn === 0 && outcome.owedIn === 0) {
+    return `<p>${priceWords}, none of your bids win. You pay nothing, emit nothing, and abate all
       ${baseline} units at a cost of <strong>${dollars(outcome.abatementCost)}</strong>. Round score before trading: <strong>${dollars(outcome.score)}</strong>.</p>`;
   }
   const tie = outcome.tiedAtPrice > 0
-    ? `<p class="mac-note">${outcome.tiedAtPrice} of your bids equal the price exactly. A bid at the price can lose some permits if too many bids tie there.</p>`
+    ? `<p class="mac-note">${outcome.tiedAtPrice} of your bids equal ${dollars(outcome.price)} exactly. A bid there can lose some permits if too many bids tie.</p>`
     : "";
-  const banked = outcome.bankedIn > 0 ? ` plus ${outcome.bankedIn} banked` : "";
-  return `<p>At ${dollars(outcome.price)}, you win <strong>${outcome.permitsWon}</strong> permit${outcome.permitsWon === 1 ? "" : "s"}
-    and pay <strong>${dollars(outcome.payment)}</strong> (${outcome.permitsWon} × ${dollars(outcome.price)}).
-    With ${outcome.permitsWon}${banked} permit${outcome.permitsWon + outcome.bankedIn === 1 ? "" : "s"} you emit ${outcome.emissions} and abate ${outcome.abatement}
-    unit${outcome.abatement === 1 ? "" : "s"} at a cost of <strong>${dollars(outcome.abatementCost)}</strong>.</p>
-    <p>Abatement cost avoided: ${dollars(outcome.avoidedCost)}. Minus payment: ${dollars(outcome.payment)}.
-      Round score before trading: <strong>${dollars(outcome.score)}</strong>.</p>${tie}`;
+  const paymentWords = payAsBid
+    ? `pay your own bids, <strong>${dollars(outcome.payment)}</strong> in total`
+    : `pay <strong>${dollars(outcome.payment)}</strong> (${outcome.permitsWon} × ${dollars(outcome.price)})`;
+  const carry = [
+    outcome.bankedIn > 0 ? `plus ${outcome.bankedIn} banked` : "",
+    outcome.owedIn > 0 ? `minus ${outcome.owedIn} owed` : "",
+  ].filter(Boolean).join(", ");
+  const held = outcome.permitsWon + outcome.bankedIn - outcome.owedIn;
+  const extra = outcome.extraPermits > 0
+    ? `<p class="mac-note">${outcome.extraPermits} of these permits are beyond your baseline. They are worth nothing this round;
+        with banking on, they carry to Round 2.</p>`
+    : "";
+  const short = outcome.shortfall > 0
+    ? `<p class="mac-note">You would still owe ${outcome.shortfall} permit${outcome.shortfall === 1 ? "" : "s"} at the end of the game,
+        a penalty of ${dollars(outcome.penaltyCost)}, unless you buy more in the market.</p>`
+    : "";
+  return `<p>${priceWords}, you win <strong>${outcome.permitsWon}</strong> permit${outcome.permitsWon === 1 ? "" : "s"}
+    and ${paymentWords}. With ${outcome.permitsWon}${carry ? ` ${carry}` : ""} permit${held === 1 ? "" : "s"} you emit ${outcome.emissions}
+    and abate ${outcome.abatement} unit${outcome.abatement === 1 ? "" : "s"} at a cost of <strong>${dollars(outcome.abatementCost)}</strong>.</p>
+    <p>Abatement cost avoided: ${dollars(outcome.avoidedCost)}. Minus payment: ${dollars(outcome.payment)}.${outcome.penaltyCost > 0 ? ` Minus penalty: ${dollars(outcome.penaltyCost)}.` : ""}
+      Round score before trading: <strong>${dollars(outcome.score)}</strong>.</p>${tie}${extra}${short}`;
 }
 
 /**
@@ -302,7 +406,7 @@ export function auctionReportChartSvg(report, idPrefix = "report") {
   const price = report.clearing_price === null ? "" : `<line class="report-price-line" x1="${left}" x2="${right}"
       y1="${y(report.clearing_price)}" y2="${y(report.clearing_price)}" />
     <circle class="report-price-point" cx="${x(Math.min(report.cap, report.total_bid_quantity))}" cy="${y(report.clearing_price)}" r="6" />
-    <text class="report-price-label" x="${right}" y="${y(report.clearing_price) - 9}" text-anchor="end">Price ${dollars(report.clearing_price)}</text>`;
+    <text class="report-price-label" x="${right}" y="${y(report.clearing_price) - 9}" text-anchor="end">${report.pricing === "pay_as_bid" ? "Lowest winning bid" : "Price"} ${dollars(report.clearing_price)}</text>`;
 
   return `<svg class="report-chart" viewBox="0 0 620 330" role="img" aria-labelledby="${idPrefix}-title ${idPrefix}-desc">
     <title id="${idPrefix}-title">Auction supply and demand</title>
@@ -330,9 +434,12 @@ export function auctionReportChartSvg(report, idPrefix = "report") {
 export function auctionReportHtml(report, roundLabel, { open = true } = {}) {
   if (!report) return "";
   const idPrefix = `report-${roundLabel.replace(/\W+/g, "-").toLowerCase()}`;
+  const payAsBid = report.pricing === "pay_as_bid";
   const summary = report.clearing_price === null
     ? `${roundLabel} auction: no bids`
-    : `${roundLabel} auction: supply, demand, and the price (${dollars(report.clearing_price)})`;
+    : (payAsBid
+      ? `${roundLabel} auction (pay as bid): supply, demand, and the lowest winning bid (${dollars(report.clearing_price)})`
+      : `${roundLabel} auction: supply, demand, and the price (${dollars(report.clearing_price)})`);
   if (report.clearing_price === null) {
     return `<details class="auction-report" ${open ? "open" : ""}><summary>${summary}</summary>
       <p class="mac-note">No bids arrived in the ${roundLabel} auction, so no permits were sold.</p></details>`;
@@ -352,15 +459,18 @@ export function auctionReportHtml(report, roundLabel, { open = true } = {}) {
       </table></div>`;
 
   const highestWinningOwn = report.own_bids.find((bid) => bid.won);
-  const example = highestWinningOwn && highestWinningOwn.bid_price > report.clearing_price
+  const example = !payAsBid && highestWinningOwn && highestWinningOwn.bid_price > report.clearing_price
     ? ` For example, you bid ${dollars(highestWinningOwn.bid_price)} for permit ${highestWinningOwn.permit_number} and paid ${dollars(report.clearing_price)}.`
     : "";
   const unsold = report.cap - report.total_bid_quantity;
+  const whoPaidWhat = payAsBid
+    ? "Each winner paid its own bids, so winners with higher bids paid more for the same permit."
+    : "Every winner paid it.";
   const howPriceWasSet = unsold > 0
     ? `Only ${report.total_bid_quantity} permits were bid for, fewer than the ${report.cap} for sale, so every bid won and
-      ${unsold} permit${unsold === 1 ? " went" : "s went"} unsold. The price is the lowest bid, ${dollars(report.clearing_price)}, and every winner paid it.`
-    : `Demand meets supply at the ${ordinal(report.cap)} permit. The price is the bid there, the lowest winning bid,
-      ${dollars(report.clearing_price)}, and every winner paid it. Bids to the left of the supply line won; bids to the right lost.`;
+      ${unsold} permit${unsold === 1 ? " went" : "s went"} unsold. The lowest winning bid is the lowest bid, ${dollars(report.clearing_price)}. ${whoPaidWhat}`
+    : `Demand meets supply at the ${ordinal(report.cap)} permit. The bid there is the lowest winning bid,
+      ${dollars(report.clearing_price)}. ${whoPaidWhat} Bids to the left of the supply line won; bids to the right lost.`;
 
   return `<details class="auction-report" ${open ? "open" : ""}>
     <summary>${summary}</summary>
@@ -370,7 +480,7 @@ export function auctionReportHtml(report, roundLabel, { open = true } = {}) {
         <span><i class="report-key report-key-demand"></i>Demand: all bids, highest first</span>
         <span><i class="report-key report-key-own"></i>Your bids</span>
         <span><i class="report-key report-key-supply"></i>Supply: permits for sale</span>
-        <span><i class="report-key report-key-price"></i>Clearing price</span>
+        <span><i class="report-key report-key-price"></i>${payAsBid ? "Lowest winning bid" : "Clearing price"}</span>
       </figcaption>
     </figure>
     <p class="mac-note">${howPriceWasSet}${example} When bids tie at the price and not all of them fit, the bids submitted

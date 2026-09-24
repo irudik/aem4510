@@ -33,6 +33,18 @@ const capShare1Input = document.getElementById("cap-share-1");
 const capShare2Input = document.getElementById("cap-share-2");
 const roundSecondsCreateInput = document.getElementById("round-seconds-create");
 const bankingEnabledInput = document.getElementById("banking-enabled");
+const borrowingEnabledInput = document.getElementById("borrowing-enabled");
+const shortfallPenaltyInput = document.getElementById("shortfall-penalty");
+const allocation1Input = document.getElementById("allocation-1");
+const allocation2Input = document.getElementById("allocation-2");
+const shock1Input = document.getElementById("shock-1");
+const shock2Input = document.getElementById("shock-2");
+
+const ALLOCATION_LABELS = {
+  uniform: "Uniform-price auction",
+  pay_as_bid: "Pay-as-bid auction",
+  free: "Free (grandfathered by baseline)",
+};
 const createSessionButton = document.getElementById("create-session-btn");
 const startGameButton = document.getElementById("start-game-btn");
 const sessionStatus = document.getElementById("session-status");
@@ -133,7 +145,10 @@ function renderSessionSummary(state) {
     ["Expected Teams", session.expected_team_count],
     ["Round 1 Cap", session.cap_round1 ?? `${session.cap_share_round1}% of baseline (set when auction opens)`],
     ["Round 2 Cap", session.cap_round2 ?? `${session.cap_share_round2}% of baseline (set when auction opens)`],
+    ["Round 1 Permits", `${ALLOCATION_LABELS[session.allocation_round1] ?? "Uniform-price auction"}${session.shock_round1 ? ", cost shock" : ""}`],
+    ["Round 2 Permits", `${ALLOCATION_LABELS[session.allocation_round2] ?? "Uniform-price auction"}${session.shock_round2 ? ", cost shock" : ""}`],
     ["Banking", boolText(session.banking_enabled)],
+    ["Borrowing", session.borrowing_enabled ? `Yes (penalty $${formatNumber(session.shortfall_penalty, 2)} per permit still owed)` : "No"],
     ["Teams With Bids In", state.bids_in_current_auction ?? "-"],
     ["Open Orders", openOrderCount],
     ["Trades", (state.trades ?? []).length],
@@ -157,10 +172,15 @@ function renderAllTables(state) {
     (state.teams ?? []).map((row) => [String(row.id), String(row.team_name ?? "")]),
   );
 
+  const shocksOn = Boolean(state.session?.shock_round1 || state.session?.shock_round2);
   renderTable(teamsTableElement, (state.teams ?? []).map((row) => ({
     team: row.team_name,
     baseline_emissions: row.baseline_emissions ?? "-",
     mac_slope: row.mac_slope ?? "-",
+    ...(shocksOn ? {
+      round_1_shock: state.session?.shock_round1 ? `×${Number(row.mac_shock_round1 ?? 1)}` : "-",
+      round_2_shock: state.session?.shock_round2 ? `×${Number(row.mac_shock_round2 ?? 1)}` : "-",
+    } : {}),
     joined_at: row.created_at,
   })));
 
@@ -206,15 +226,20 @@ function renderAllTables(state) {
   renderTable(scoresTableElement, (state.scores ?? []).map((row) => ({
     round: row.round_key === "round1" ? "Round 1" : "Round 2",
     team: teamNamesById.get(String(row.team_id)) ?? "",
-    auction_permits: row.permits_from_auction,
+    shock: `×${Number(row.mac_shock ?? 1)}`,
+    permits_allocated: row.permits_from_auction,
     auction_paid: formatNumber(row.auction_payment, 2),
     banked_in: row.permits_banked_in,
+    owed_in: row.permits_owed_in ?? 0,
     bought: row.market_buys,
     sold: row.market_sells,
     net_spend: formatNumber(row.market_net_spend, 2),
     emissions: row.emissions,
     abatement_cost: formatNumber(row.abatement_cost, 2),
     banked_out: row.permits_banked_out,
+    borrowed_out: row.permits_borrowed_out ?? 0,
+    shortfall: row.shortfall ?? 0,
+    penalty: formatNumber(row.shortfall_penalty ?? 0, 2),
     score: formatNumber(row.score, 2),
     benchmark: formatNumber(row.benchmark_score, 2),
   })));
@@ -329,6 +354,12 @@ async function createSession() {
     cap_share_round2: Number(capShare2Input.value),
     round_seconds: Number(roundSecondsCreateInput.value),
     banking_enabled: bankingEnabledInput.value === "on",
+    borrowing_enabled: borrowingEnabledInput.value === "on",
+    shortfall_penalty: Number(shortfallPenaltyInput.value),
+    allocation_round1: allocation1Input.value,
+    allocation_round2: allocation2Input.value,
+    shock_round1: shock1Input.value === "on",
+    shock_round2: shock2Input.value === "on",
   };
 
   try {
@@ -403,7 +434,9 @@ function downloadScoresCsv() {
     team: teamNamesById.get(String(row.team_id)) ?? "",
     permits_from_auction: row.permits_from_auction,
     auction_payment: row.auction_payment,
+    mac_shock: row.mac_shock,
     permits_banked_in: row.permits_banked_in,
+    permits_owed_in: row.permits_owed_in,
     market_buys: row.market_buys,
     market_sells: row.market_sells,
     market_net_spend: row.market_net_spend,
@@ -411,6 +444,9 @@ function downloadScoresCsv() {
     emissions: row.emissions,
     abatement_cost: row.abatement_cost,
     permits_banked_out: row.permits_banked_out,
+    permits_borrowed_out: row.permits_borrowed_out,
+    shortfall: row.shortfall,
+    shortfall_penalty: row.shortfall_penalty,
     score: row.score,
     benchmark_price: row.benchmark_price,
     benchmark_score: row.benchmark_score,

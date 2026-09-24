@@ -755,3 +755,29 @@ small.note {
   .whatif-chart,
   .report-chart { font-size: 22px; }
 }
+
+/* Cost shocks, extra and owed permit boxes, and the Round 1 emissions choice. */
+.shock-notice {
+  margin: 0.7rem 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid #b76a06;
+  background: #fff7eb;
+  border-radius: 0 8px 8px 0;
+  line-height: 1.45;
+}
+
+.permit-bid-owed > span:first-child { color: #b01b2f; }
+.permit-bid-extra > span:first-child { color: #1f7a35; }
+#add-permit-boxes-btn { margin-top: 0.6rem; }
+
+.emissions-plan {
+  margin: 0.8rem 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f7f9fd;
+}
+
+.emissions-plan ul { margin: 0.2rem 0 0.6rem; padding-left: 1.2rem; }
+.emissions-plan label { font-weight: 600; }
+.emissions-plan input { width: auto; }

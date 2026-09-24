@@ -61,6 +61,79 @@ export function firmTypeForIndex(teamIndex) {
 }
 
 /**
+ * How a round's permits reach firms: a uniform-price auction, a pay-as-bid
+ * auction (each winner pays its own bid), or free allocation in proportion
+ * to baseline emissions.
+ */
+export const ALLOCATION_METHODS = Object.freeze(["uniform", "pay_as_bid", "free"]);
+
+/** Cost-shock multipliers on a firm's MAC slope, equally likely. */
+export const SHOCK_FACTORS = Object.freeze([0.5, 1, 1.5]);
+
+/** Allocation method a session uses in a round ("round1" or "round2"). */
+export function allocationMethodForRound(session, roundKey) {
+  const raw = String((roundKey === "round2" ? session?.allocation_round2 : session?.allocation_round1) ?? "uniform");
+  return ALLOCATION_METHODS.includes(raw) ? raw : "uniform";
+}
+
+/** Whether a session applies a cost shock when a round's market opens. */
+export function shockEnabledForRound(session, roundKey) {
+  return Boolean(roundKey === "round2" ? session?.shock_round2 : session?.shock_round1);
+}
+
+/** A team's cost-shock multiplier in a round (1 when there is no shock). */
+export function shockFactor(team, roundKey) {
+  const factor = Number(roundKey === "round2" ? team?.mac_shock_round2 : team?.mac_shock_round1);
+  return Number.isFinite(factor) && factor > 0 ? factor : 1;
+}
+
+/**
+ * Whether teams may see a round's cost shock yet: only once that round's
+ * market has opened, and only if the round has a shock.
+ */
+export function shockRevealed(session, roundKey, phase) {
+  if (!shockEnabledForRound(session, roundKey)) {
+    return false;
+  }
+  return PHASE_ORDER.indexOf(String(phase)) >= PHASE_ORDER.indexOf(marketPhaseForRound(roundKey));
+}
+
+/** A team's MAC slope in a round after any cost shock. */
+export function effectiveSlope(team, roundKey) {
+  return Number(team?.mac_slope) * shockFactor(team, roundKey);
+}
+
+/**
+ * Shock multipliers for a class: equal thirds of 0.5, 1, and 1.5 (as close
+ * as the class size allows), in random order. Balancing the draws keeps the
+ * class's total demand for permits close to its expected level.
+ * @param {number} teamCount
+ * @param {() => number} random uniform draw on [0, 1)
+ */
+export function drawShockFactors(teamCount, random = Math.random) {
+  const factors = Array.from({ length: teamCount }, (_, index) => SHOCK_FACTORS[index % SHOCK_FACTORS.length]);
+  for (let index = factors.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [factors[index], factors[swapIndex]] = [factors[swapIndex], factors[index]];
+  }
+  return factors;
+}
+
+/**
+ * Most permits a team may bid for in one auction. Without banking or
+ * borrowing, permits beyond baseline are worthless, so bids stop at the
+ * baseline. With either, extra permits can be banked or repay borrowing, so
+ * the only limit is the number of permits for sale.
+ */
+export function bidQuantityLimit(session, team, cap) {
+  const baseline = Number(team?.baseline_emissions ?? 0);
+  if (session?.banking_enabled || session?.borrowing_enabled) {
+    return Math.max(baseline, Math.floor(Number(cap ?? 0)));
+  }
+  return baseline;
+}
+
+/**
  * Cost of abating `abatement` units at MAC slope c: sum of c*k.
  */
 export function abatementCost(macSlope, abatement) {
@@ -99,12 +172,13 @@ export function grossValue(baselineEmissions, macSlope) {
 }
 
 /**
- * Validate price/quantity bids whose total quantity cannot exceed baseline
- * emissions. Positive whole quantities allow at most one row per permit.
+ * Validate price/quantity bids. Total quantity cannot exceed `maxQuantity`,
+ * which defaults to baseline emissions (see `bidQuantityLimit`).
  * @param {{baseline_emissions: number}} team
  * @param {Array<{bid_price: unknown, bid_quantity: unknown}>} bids
+ * @param {{maxQuantity?: number}} options
  */
-export function validateBidSet(team, bids) {
+export function validateBidSet(team, bids, { maxQuantity } = {}) {
   if (!Array.isArray(bids) || bids.length === 0) {
     throw new Error("Submit at least one bid (price and quantity)");
   }
@@ -127,8 +201,11 @@ export function validateBidSet(team, bids) {
 
   const totalQuantity = normalized.reduce((sum, bid) => sum + bid.bid_quantity, 0);
   const baseline = Number(team?.baseline_emissions ?? 0);
-  if (totalQuantity > baseline) {
-    throw new Error(`Total bid quantity (${totalQuantity}) cannot exceed your baseline emissions (${baseline})`);
+  const limit = maxQuantity === undefined ? baseline : Number(maxQuantity);
+  if (totalQuantity > limit) {
+    throw new Error(limit === baseline
+      ? `Total bid quantity (${totalQuantity}) cannot exceed your baseline emissions (${baseline})`
+      : `Total bid quantity (${totalQuantity}) cannot exceed the ${limit} permits for sale`);
   }
 
   return normalized;
@@ -155,11 +232,13 @@ function rankAuctionBids(bidRows) {
 }
 
 /**
- * Clear a uniform-price auction.
+ * Clear a sealed-bid permit auction.
  *
  * Bid units are stacked from the highest price down (ties go to the earlier
- * submission); the top `cap` units win and every winner pays the price of
- * the lowest accepted unit.
+ * submission) and the top `cap` units win. Under uniform pricing every
+ * winner pays the price of the lowest accepted unit; under pay-as-bid
+ * pricing each winning unit costs its own bid. `clearing_price` is the
+ * lowest accepted bid in both cases.
  *
  * @param {number} cap total permits for sale
  * @param {Array<{
@@ -168,14 +247,16 @@ function rankAuctionBids(bidRows) {
  * bid_quantity: number,
  * submitted_at?: string,
  * }>} bidRows
+ * @param {{pricing?: "uniform" | "pay_as_bid"}} options
  */
-export function clearAuction(cap, bidRows) {
+export function clearAuction(cap, bidRows, { pricing = "uniform" } = {}) {
   const capUnits = Math.max(0, Math.floor(Number(cap)));
   const sortedBids = rankAuctionBids(bidRows);
 
   const totalBidQuantity = sortedBids.reduce((sum, bid) => sum + bid.bid_quantity, 0);
 
   const allocations = new Map();
+  const ownBidSpending = new Map();
   let remainingCap = capUnits;
   let clearingPrice = null;
 
@@ -188,21 +269,59 @@ export function clearAuction(cap, bidRows) {
     clearingPrice = bid.bid_price;
     const current = allocations.get(bid.team_id) ?? 0;
     allocations.set(bid.team_id, current + filled);
+    ownBidSpending.set(bid.team_id, (ownBidSpending.get(bid.team_id) ?? 0) + filled * bid.bid_price);
   }
 
-  const allocationRows = [...allocations.entries()].map(([teamId, permitsWon]) => ({
-    team_id: teamId,
-    permits_won: permitsWon,
-    payment: clearingPrice === null ? 0 : Math.round(permitsWon * clearingPrice * 100) / 100,
-  }));
+  const allocationRows = [...allocations.entries()].map(([teamId, permitsWon]) => {
+    const payment = pricing === "pay_as_bid"
+      ? ownBidSpending.get(teamId) ?? 0
+      : (clearingPrice === null ? 0 : permitsWon * clearingPrice);
+    return {
+      team_id: teamId,
+      permits_won: permitsWon,
+      payment: Math.round(payment * 100) / 100,
+    };
+  });
 
   return {
     cap: capUnits,
+    pricing,
     clearing_price: clearingPrice,
     total_bid_quantity: totalBidQuantity,
     allocations: allocationRows,
     bid_stack: stepSeriesFromSortedUnits(sortedBids),
   };
+}
+
+/**
+ * Free allocation in proportion to baseline emissions (grandfathering):
+ * each firm gets its share of the cap, rounded to whole permits by largest
+ * remainder so the allocations add up to the cap exactly. Ties in the
+ * remainder go to the firm listed first.
+ * @param {Array<{id: string, baseline_emissions: number}>} teams
+ * @param {number} cap
+ */
+export function freeAllocation(teams, cap) {
+  const capUnits = Math.max(0, Math.floor(Number(cap)));
+  const firms = (teams ?? []).filter((team) => Number(team.baseline_emissions) > 0);
+  const totalBaseline = firms.reduce((sum, team) => sum + Number(team.baseline_emissions), 0);
+  if (totalBaseline === 0) {
+    return [];
+  }
+
+  const shares = firms.map((team, order) => {
+    const exact = capUnits * Number(team.baseline_emissions) / totalBaseline;
+    return { team_id: String(team.id), order, whole: Math.floor(exact), remainder: exact - Math.floor(exact) };
+  });
+  let leftOver = capUnits - shares.reduce((sum, share) => sum + share.whole, 0);
+  const byRemainder = [...shares].sort((left, right) => right.remainder - left.remainder || left.order - right.order);
+  for (const share of byRemainder) {
+    if (leftOver <= 0) break;
+    share.whole += 1;
+    leftOver -= 1;
+  }
+
+  return shares.map((share) => ({ team_id: share.team_id, permits_won: share.whole, payment: 0 }));
 }
 
 /**
@@ -233,15 +352,16 @@ function stepSeriesFromSortedUnits(sortedBids) {
  * the part of each step inside the cap. `own_bids`
  * expands the team's bids to one row per permit, highest first. A team
  * always wins its highest bids first, so its k winning permits are its k
- * highest bids, and each one costs the common clearing price.
+ * highest bids. Each costs the common clearing price under uniform pricing
+ * and its own bid under pay-as-bid pricing.
  *
  * @param {number} cap total permits for sale
  * @param {Array<{team_id: string, bid_price: number, bid_quantity: number, submitted_at?: string}>} bidRows
  * @param {string} teamId the team requesting the report
  */
-export function studentAuctionReport(cap, bidRows, teamId) {
+export function studentAuctionReport(cap, bidRows, teamId, { pricing = "uniform" } = {}) {
   const id = String(teamId);
-  const cleared = clearAuction(cap, bidRows);
+  const cleared = clearAuction(cap, bidRows, { pricing });
   const rankedBids = rankAuctionBids(bidRows);
 
   // Adjacent bids at the same price from the same side (own or other) are
@@ -269,7 +389,8 @@ export function studentAuctionReport(cap, bidRows, teamId) {
     }
   }
 
-  const permitsWon = cleared.allocations.find((row) => row.team_id === id)?.permits_won ?? 0;
+  const ownAllocation = cleared.allocations.find((row) => row.team_id === id);
+  const permitsWon = ownAllocation?.permits_won ?? 0;
   const ownUnitPrices = rankedBids
     .filter((bid) => bid.team_id === id)
     .flatMap((bid) => Array.from({ length: bid.bid_quantity }, () => bid.bid_price));
@@ -278,19 +399,18 @@ export function studentAuctionReport(cap, bidRows, teamId) {
     permit_number: index + 1,
     bid_price: price,
     won: index < permitsWon,
-    price_paid: index < permitsWon ? cleared.clearing_price : null,
+    price_paid: index < permitsWon ? (pricing === "pay_as_bid" ? price : cleared.clearing_price) : null,
   }));
 
   return {
     cap: cleared.cap,
+    pricing,
     clearing_price: cleared.clearing_price,
     total_bid_quantity: cleared.total_bid_quantity,
     stack,
     own_bids: ownBids,
     permits_won: permitsWon,
-    payment: cleared.clearing_price === null
-      ? 0
-      : Math.round(permitsWon * cleared.clearing_price * 100) / 100,
+    payment: ownAllocation?.payment ?? 0,
   };
 }
 
@@ -299,11 +419,12 @@ export function studentAuctionReport(cap, bidRows, teamId) {
  * team's value schedule. Used for the efficiency benchmark and the debrief
  * chart of bids against true values.
  * @param {Array<{id: string, baseline_emissions: number, mac_slope: number}>} teams
+ * @param {(team: object) => number} slopeFor MAC slope to use (default: unshocked)
  */
-export function truthfulUnitBids(teams) {
+export function truthfulUnitBids(teams, slopeFor = (team) => Number(team.mac_slope)) {
   const unitBids = [];
   for (const team of teams ?? []) {
-    for (const step of valueSchedule(Number(team.baseline_emissions), Number(team.mac_slope))) {
+    for (const step of valueSchedule(Number(team.baseline_emissions), slopeFor(team))) {
       unitBids.push({
         team_id: String(team.id),
         bid_price: step.value,
@@ -318,24 +439,32 @@ export function truthfulUnitBids(teams) {
 /**
  * Efficient benchmark for a round: clear the auction as if every team bid
  * its true value schedule. Returns the benchmark price and, per team, the
- * efficient permit count and the score from buying it at that price.
+ * efficient permit count and the score from reaching it at that price:
+ * buying all of it when permits are sold, or trading from the free
+ * endowment when permits are given away. `slopeFor` supplies the MAC slope
+ * (after any cost shock).
  * @param {Array<{id: string, baseline_emissions: number, mac_slope: number}>} teams
  * @param {number} cap
+ * @param {{slopeFor?: (team: object) => number, endowments?: Map<string, number>}} options
  */
-export function benchmarkForRound(teams, cap) {
-  const cleared = clearAuction(cap, truthfulUnitBids(teams));
+export function benchmarkForRound(teams, cap, {
+  slopeFor = (team) => Number(team.mac_slope),
+  endowments = new Map(),
+} = {}) {
+  const cleared = clearAuction(cap, truthfulUnitBids(teams, slopeFor));
   const allocationByTeam = new Map(
     cleared.allocations.map((row) => [row.team_id, row.permits_won]),
   );
 
   const perTeam = (teams ?? []).map((team) => {
     const e0 = Number(team.baseline_emissions);
-    const slope = Number(team.mac_slope);
+    const slope = slopeFor(team);
     const permits = allocationByTeam.get(String(team.id)) ?? 0;
+    const endowment = Number(endowments.get(String(team.id)) ?? 0);
     const price = cleared.clearing_price ?? 0;
     const score = grossValue(e0, slope)
       - abatementCost(slope, e0 - Math.min(e0, permits))
-      - price * permits;
+      - price * (permits - endowment);
 
     return {
       team_id: String(team.id),
@@ -430,13 +559,15 @@ export function matchIncomingOrder(incoming, openOrders) {
 }
 
 /**
- * Permits a team currently holds in a round: auction allocation plus banked
- * carry-in plus net executed purchases.
+ * Permits a team currently holds in a round: allocation plus net carry-in
+ * from Round 1 (banked minus owed, so negative for a team that borrowed)
+ * plus net executed purchases. A team that borrowed can hold a negative
+ * number of permits until it covers the debt.
  */
-export function holdingsForTeam(teamId, allocation, bankedIn, trades) {
+export function holdingsForTeam(teamId, allocation, carryIn, trades) {
   const id = String(teamId);
   let holdings = Math.max(0, Math.floor(Number(allocation ?? 0)))
-    + Math.max(0, Math.floor(Number(bankedIn ?? 0)));
+    + Math.floor(Number(carryIn ?? 0));
 
   for (const trade of trades ?? []) {
     if (String(trade.buyer_team_id) === id) {
@@ -454,7 +585,7 @@ export function holdingsForTeam(teamId, allocation, bankedIn, trades) {
  * Holdings not already committed to open ask orders: the most a team can
  * offer for sale. Blocks short selling.
  */
-export function freeHoldings(teamId, allocation, bankedIn, trades, openOrders) {
+export function freeHoldings(teamId, allocation, carryIn, trades, openOrders) {
   const id = String(teamId);
   const committed = (openOrders ?? [])
     .filter((order) => (
@@ -465,24 +596,58 @@ export function freeHoldings(teamId, allocation, bankedIn, trades, openOrders) {
     ))
     .reduce((sum, order) => sum + Number(order.remaining_quantity), 0);
 
-  return holdingsForTeam(teamId, allocation, bankedIn, trades) - committed;
+  return holdingsForTeam(teamId, allocation, carryIn, trades) - committed;
+}
+
+/**
+ * What a team carries from Round 1 into Round 2, read from its Round 1 score:
+ * permits banked (when banking is on) and permits owed (when borrowing is
+ * on). `net` is banked minus owed.
+ * @param {Record<string, unknown>} session
+ * @param {Record<string, unknown> | undefined} round1Score
+ */
+export function carryIntoRound2(session, round1Score) {
+  const banked = session?.banking_enabled ? Math.max(0, Math.floor(Number(round1Score?.permits_banked_out ?? 0))) : 0;
+  const owed = session?.borrowing_enabled ? Math.max(0, Math.floor(Number(round1Score?.permits_borrowed_out ?? 0))) : 0;
+  return { banked, owed, net: banked - owed };
 }
 
 /**
  * Score one team's round once the market closes.
  *
- * score = gross value - abatement cost - auction payment - net market spend.
- * With banking on (and not in the final round), permits beyond the baseline
- * carry to the next round instead of expiring.
+ * score = gross value - abatement cost - auction payment - net market spend
+ *         - shortfall penalty.
+ *
+ * Costs use the round's MAC slope after any cost shock (`mac_shock`). Net
+ * permits are the allocation, plus banked permits and minus owed permits
+ * carried in, plus net purchases.
+ *
+ * In a round that is not the last, the team's emissions are its
+ * `emissions_choice` (default: use its permits, up to baseline), limited to
+ * [0, baseline]. Without borrowing it cannot emit more than it holds; without
+ * banking it uses all the permits it holds up to baseline. Permits left over
+ * are banked (with banking on); emissions above holdings are borrowed from
+ * the next round.
+ *
+ * In the last round emissions follow the permits held; if owed permits leave
+ * the team short, each missing permit pays `shortfall_penalty_per_permit`.
  */
 export function scoreTeamRound(team, input) {
   const e0 = Number(team.baseline_emissions);
-  const slope = Number(team.mac_slope);
+  const shock = Number.isFinite(Number(input.mac_shock)) && Number(input.mac_shock) > 0
+    ? Number(input.mac_shock)
+    : 1;
+  const slope = Number(team.mac_slope) * shock;
   const id = String(team.id);
 
   const allocation = Math.max(0, Math.floor(Number(input.permits_from_auction ?? 0)));
   const auctionPayment = Number(input.auction_payment ?? 0);
   const bankedIn = Math.max(0, Math.floor(Number(input.permits_banked_in ?? 0)));
+  const owedIn = Math.max(0, Math.floor(Number(input.permits_owed_in ?? 0)));
+  const isFinalRound = Boolean(input.is_final_round);
+  const bankingEnabled = Boolean(input.banking_enabled);
+  const borrowingEnabled = Boolean(input.borrowing_enabled);
+  const penaltyPerPermit = Math.max(0, Number(input.shortfall_penalty_per_permit ?? 0));
 
   let buys = 0;
   let sells = 0;
@@ -498,30 +663,57 @@ export function scoreTeamRound(team, input) {
     }
   }
 
-  const permitsEnd = allocation + bankedIn + buys - sells;
-  const emissions = Math.min(e0, Math.max(0, permitsEnd));
+  const permitsEnd = allocation + bankedIn - owedIn + buys - sells;
+  const coveredByPermits = Math.min(e0, Math.max(0, permitsEnd));
+
+  let emissions = coveredByPermits;
+  let bankedOut = 0;
+  let borrowedOut = 0;
+  let shortfall = 0;
+
+  if (isFinalRound) {
+    shortfall = Math.max(0, -permitsEnd);
+  } else {
+    const choice = input.emissions_choice;
+    if (choice !== null && choice !== undefined && Number.isFinite(Number(choice))) {
+      emissions = Math.min(e0, Math.max(0, Math.floor(Number(choice))));
+    }
+    if (!borrowingEnabled) {
+      emissions = Math.min(emissions, Math.max(0, permitsEnd));
+    }
+    if (!bankingEnabled) {
+      emissions = Math.max(emissions, coveredByPermits);
+    }
+    const leftOver = permitsEnd - emissions;
+    bankedOut = bankingEnabled ? Math.max(0, leftOver) : 0;
+    borrowedOut = Math.max(0, -leftOver);
+  }
+
   const abatement = e0 - emissions;
   const cost = abatementCost(slope, abatement);
-  const bankedOut = (input.banking_enabled && !input.is_final_round)
-    ? Math.max(0, permitsEnd - e0)
-    : 0;
-
-  const score = grossValue(e0, slope) - cost - auctionPayment - netSpend;
+  const penalty = shortfall * penaltyPerPermit;
+  const score = grossValue(e0, slope) - cost - auctionPayment - netSpend - penalty;
+  const round2 = (value) => Math.round(value * 100) / 100;
 
   return {
     team_id: id,
     permits_from_auction: allocation,
-    auction_payment: Math.round(auctionPayment * 100) / 100,
+    auction_payment: round2(auctionPayment),
     permits_banked_in: bankedIn,
+    permits_owed_in: owedIn,
     market_buys: buys,
     market_sells: sells,
-    market_net_spend: Math.round(netSpend * 100) / 100,
+    market_net_spend: round2(netSpend),
     permits_end: permitsEnd,
     emissions,
     abatement,
-    abatement_cost: cost,
+    abatement_cost: round2(cost),
     permits_banked_out: bankedOut,
-    score: Math.round(score * 100) / 100,
+    permits_borrowed_out: borrowedOut,
+    shortfall,
+    shortfall_penalty: round2(penalty),
+    mac_shock: shock,
+    score: round2(score),
   };
 }
 

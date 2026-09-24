@@ -1,3 +1,4 @@
+import { ALLOCATION_METHODS } from "./_lib/permit_market.mts";
 import {
   createSession,
   requireAdminUser,
@@ -36,12 +37,32 @@ export default async function permitAdminCreateSession(req) {
       return jsonResponse(400, { error: "round_seconds must be an integer between 30 and 3600" });
     }
 
+    const allocation1 = String(body.allocation_round1 ?? "uniform");
+    const allocation2 = String(body.allocation_round2 ?? "uniform");
+    for (const [label, method] of [["allocation_round1", allocation1], ["allocation_round2", allocation2]]) {
+      if (!ALLOCATION_METHODS.includes(method)) {
+        return jsonResponse(400, { error: `${label} must be one of ${ALLOCATION_METHODS.join(", ")}` });
+      }
+    }
+
+    // Penalty per borrowed permit not covered by the end of Round 2.
+    const shortfallPenalty = Number(body.shortfall_penalty ?? 50);
+    if (!Number.isFinite(shortfallPenalty) || shortfallPenalty < 0 || shortfallPenalty > 999) {
+      return jsonResponse(400, { error: "shortfall_penalty must be a number between 0 and 999" });
+    }
+
     const session = await createSession({
       session_name: sessionName,
       expected_team_count: expectedTeamCount,
       cap_share_round1: capShare1,
       cap_share_round2: capShare2,
       banking_enabled: Boolean(body.banking_enabled),
+      borrowing_enabled: Boolean(body.borrowing_enabled),
+      shortfall_penalty: shortfallPenalty,
+      allocation_round1: allocation1,
+      allocation_round2: allocation2,
+      shock_round1: Boolean(body.shock_round1),
+      shock_round2: Boolean(body.shock_round2),
       round_seconds: roundSeconds,
       created_by: adminUser.id,
     });

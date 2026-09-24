@@ -26,6 +26,13 @@
 - Evidence: games/permit-market-online/tests/permit-auction-guide.test.mts.
 - Action: In xaringan decks, do not put `--` increments inside `.pull-left[]`/`.pull-right[]`; repeat the slide and reuse the figure with `knitr::fig_chunk`, as the existing decks do. Do not start a slide or an increment with `Word:` (for example "Example:" or "Solve:"): remark reads it as a slide property and hides the line.
 
+[LEARN:permit-game-options]
+- Date: 2026-09-24
+- Trigger: User found the game too easy: with a uniform-price auction and truthful bids, the auction lands on the efficient allocation, the market has nothing to do, and every team scores its benchmark.
+- Right: Per-round session options: allocation (uniform, pay-as-bid, free by baseline), cost shock (MAC slope x0.5/x1/x1.5, balanced thirds, revealed when the market opens), banking and borrowing without limits via a Round 1 emissions choice, and a per-permit penalty for permits still owed at the end.
+- Evidence: EPA Acid Rain Program auctions were pay-as-bid (GAO-10-377); about 2.8% of allowances were auctioned. Migration 003_game_options.sql; games/permit-market-online/tests/permit-game-options.test.mts.
+- Action: Apply migration 003 before deploying. Keep the default settings reproducing the earlier game. Per-round benchmarks ignore banking and borrowing; compare cumulative scores.
+
 <!-- Claude Code stores [LEARN] entries here. Prefer structured entries:
 [LEARN:category]
 - Date: YYYY-MM-DD

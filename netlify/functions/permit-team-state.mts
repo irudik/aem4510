@@ -1,12 +1,19 @@
 import {
   AUCTION_PHASES,
   MARKET_PHASES,
+  allocationMethodForRound,
+  bidQuantityLimit,
   bookLevels,
+  carryIntoRound2,
+  effectiveSlope,
+  freeAllocation,
   freeHoldings,
   holdingsForTeam,
   leaderboardRows,
   roundForPhase,
   scoreTeamRound,
+  shockFactor,
+  shockRevealed,
   studentAuctionReport,
   valueSchedule,
 } from "./_lib/permit_market.mts";
@@ -15,6 +22,7 @@ import {
   getAllocationsForSession,
   getAuctionResultsForSession,
   getBidsForSession,
+  getEmissionChoicesForSession,
   getOrdersForSession,
   getRoundScoresForSession,
   getTeamByJoinToken,
@@ -51,8 +59,10 @@ export default async function permitTeamState(req) {
     const phase = String(session.current_phase ?? "");
     const roundKey = roundForPhase(phase);
     const auctionKey = roundKey === "round2" ? "auction2" : "auction1";
+    // The round whose MAC the firm card shows; at the end, Round 2.
+    const displayRound = phase === "complete" ? "round2" : roundKey;
 
-    const [teams, bids, results, allocations, orders, trades, scores] = await Promise.all([
+    const [teams, bids, results, allocations, orders, trades, scores, emissionChoices] = await Promise.all([
       getTeamsForSession(sessionId),
       getBidsForSession(sessionId),
       getAuctionResultsForSession(sessionId),
@@ -60,7 +70,11 @@ export default async function permitTeamState(req) {
       getOrdersForSession(sessionId),
       getTradesForSession(sessionId),
       getRoundScoresForSession(sessionId),
+      getEmissionChoicesForSession(sessionId),
     ]);
+
+    const allocationMethod = roundKey ? allocationMethodForRound(session, roundKey) : null;
+    const currentCap = roundKey === "round2" ? session.cap_round2 : session.cap_round1;
 
     const ownBids = AUCTION_PHASES.has(phase)
       ? bids
@@ -85,19 +99,35 @@ export default async function permitTeamState(req) {
       )) ?? null
       : null;
 
-    const bankedIn = (roundKey === "round2" && session.banking_enabled)
-      ? Number(scores.find((row) => (
+    // Round 2 starts from banked permits minus permits owed from Round 1.
+    const carry = roundKey === "round2"
+      ? carryIntoRound2(session, scores.find((row) => (
         String(row.round_key) === "round1" && String(row.team_id) === teamId
-      ))?.permits_banked_out ?? 0)
-      : 0;
+      )))
+      : { banked: 0, owed: 0, net: 0 };
+
+    // Cost shocks stay hidden until the round's market opens.
+    const revealedShock = (key) => (shockRevealed(session, key, phase) ? shockFactor(team, key) : null);
+    const shocks = { round1: revealedShock("round1"), round2: revealedShock("round2") };
+    const displaySlope = displayRound && shocks[displayRound] !== null
+      ? effectiveSlope(team, displayRound)
+      : Number(team.mac_slope ?? 0);
+
+    // During a free-allocation round, each team sees its permits right away.
+    const freeAllocationPreview = (AUCTION_PHASES.has(phase) && allocationMethod === "free"
+      && team.baseline_emissions && currentCap)
+      ? freeAllocation(teams, Number(currentCap)).find((row) => row.team_id === teamId)?.permits_won ?? 0
+      : null;
 
     // For every auction that has cleared, show the team how the price was
     // set: the class's bids as a demand curve (prices and quantities, no team
-    // names) against the permits for sale, with its own bids marked.
+    // names) against the permits for sale, with its own bids marked. Free
+    // rounds have no bids to show.
     const auctionReports = {};
     for (const clearedKey of ["auction1", "auction2"]) {
       const result = results.find((row) => String(row.round_key) === clearedKey);
-      auctionReports[clearedKey] = (result && phase !== clearedKey)
+      const method = allocationMethodForRound(session, roundForPhase(clearedKey));
+      auctionReports[clearedKey] = (result && phase !== clearedKey && method !== "free")
         ? studentAuctionReport(
           Number(result.cap),
           bids
@@ -109,6 +139,7 @@ export default async function permitTeamState(req) {
               submitted_at: row.submitted_at,
             })),
           teamId,
+          { pricing: method },
         )
         : null;
     }
@@ -118,11 +149,16 @@ export default async function permitTeamState(req) {
       const marketOrders = orders.filter((row) => String(row.round_key) === phase);
       const openOrders = marketOrders.filter((row) => String(row.status) === "open");
       const marketTrades = trades.filter((row) => String(row.round_key) === phase);
+      const choice = roundKey === "round1"
+        ? emissionChoices.find((row) => (
+          String(row.team_id) === teamId && String(row.round_key) === "round1"
+        ))?.emissions ?? null
+        : null;
 
       const holdings = holdingsForTeam(
         teamId,
         ownAllocation?.permits_won ?? 0,
-        bankedIn,
+        carry.net,
         marketTrades,
       );
 
@@ -131,10 +167,15 @@ export default async function permitTeamState(req) {
         ? scoreTeamRound(team, {
           permits_from_auction: ownAllocation?.permits_won ?? 0,
           auction_payment: ownAllocation?.payment ?? 0,
-          permits_banked_in: bankedIn,
+          permits_banked_in: carry.banked,
+          permits_owed_in: carry.owed,
           trades: marketTrades,
           banking_enabled: Boolean(session.banking_enabled),
+          borrowing_enabled: Boolean(session.borrowing_enabled),
+          emissions_choice: choice,
           is_final_round: roundKey === "round2",
+          shortfall_penalty_per_permit: Number(session.shortfall_penalty ?? 0),
+          mac_shock: shockFactor(team, roundKey),
         })
         : null;
 
@@ -164,10 +205,11 @@ export default async function permitTeamState(req) {
         sellable: freeHoldings(
           teamId,
           ownAllocation?.permits_won ?? 0,
-          bankedIn,
+          carry.net,
           marketTrades,
           openOrders,
         ),
+        emissions_choice: choice,
         score_preview: preview,
       };
     }
@@ -180,6 +222,7 @@ export default async function permitTeamState(req) {
         permits_from_auction: row.permits_from_auction,
         auction_payment: row.auction_payment,
         permits_banked_in: row.permits_banked_in,
+        permits_owed_in: row.permits_owed_in,
         market_buys: row.market_buys,
         market_sells: row.market_sells,
         market_net_spend: row.market_net_spend,
@@ -188,6 +231,10 @@ export default async function permitTeamState(req) {
         abatement: row.abatement,
         abatement_cost: row.abatement_cost,
         permits_banked_out: row.permits_banked_out,
+        permits_borrowed_out: row.permits_borrowed_out,
+        shortfall: row.shortfall,
+        shortfall_penalty: row.shortfall_penalty,
+        mac_shock: row.mac_shock,
         score: row.score,
         benchmark_price: row.benchmark_price,
         benchmark_score: row.benchmark_score,
@@ -204,6 +251,12 @@ export default async function permitTeamState(req) {
         cap_round1: session.cap_round1 ?? null,
         cap_round2: session.cap_round2 ?? null,
         banking_enabled: Boolean(session.banking_enabled),
+        borrowing_enabled: Boolean(session.borrowing_enabled),
+        shortfall_penalty: Number(session.shortfall_penalty ?? 0),
+        allocation_round1: allocationMethodForRound(session, "round1"),
+        allocation_round2: allocationMethodForRound(session, "round2"),
+        shock_round1: Boolean(session.shock_round1),
+        shock_round2: Boolean(session.shock_round2),
       },
       server_now: new Date().toISOString(),
       team: {
@@ -211,10 +264,17 @@ export default async function permitTeamState(req) {
         team_name: team.team_name,
         baseline_emissions: team.baseline_emissions ?? null,
         mac_slope: team.mac_slope ?? null,
+        display_mac_slope: team.mac_slope ? displaySlope : null,
+        shocks,
         value_schedule: team.baseline_emissions
           ? valueSchedule(Number(team.baseline_emissions), Number(team.mac_slope))
           : [],
       },
+      allocation_method: allocationMethod,
+      bid_quantity_limit: AUCTION_PHASES.has(phase) && team.baseline_emissions
+        ? bidQuantityLimit(session, team, currentCap)
+        : null,
+      free_allocation: freeAllocationPreview,
       own_bids: ownBids,
       auction_result: currentResult
         ? {
@@ -231,7 +291,8 @@ export default async function permitTeamState(req) {
         }
         : null,
       auction_reports: auctionReports,
-      permits_banked_in: bankedIn,
+      permits_banked_in: carry.banked,
+      permits_owed_in: carry.owed,
       market,
       own_scores: ownScores,
       leaderboard: leaderboardRows(teams, scores),

@@ -60,11 +60,52 @@
               <input id="round-seconds-create" type="number" min="30" max="3600" step="30" value="300" />
             </div>
             <div>
+              <label for="allocation-1">Round 1 Permits</label>
+              <select id="allocation-1">
+                <option value="uniform">Uniform-price auction</option>
+                <option value="pay_as_bid">Pay-as-bid auction (ARP)</option>
+                <option value="free">Free, by baseline</option>
+              </select>
+            </div>
+            <div>
+              <label for="allocation-2">Round 2 Permits</label>
+              <select id="allocation-2">
+                <option value="uniform">Uniform-price auction</option>
+                <option value="pay_as_bid">Pay-as-bid auction (ARP)</option>
+                <option value="free">Free, by baseline</option>
+              </select>
+            </div>
+            <div>
+              <label for="shock-1">Round 1 Cost Shock</label>
+              <select id="shock-1">
+                <option value="">Off</option>
+                <option value="on">On (slope ×0.5, ×1, ×1.5)</option>
+              </select>
+            </div>
+            <div>
+              <label for="shock-2">Round 2 Cost Shock</label>
+              <select id="shock-2">
+                <option value="">Off</option>
+                <option value="on">On (slope ×0.5, ×1, ×1.5)</option>
+              </select>
+            </div>
+            <div>
               <label for="banking-enabled">Banking</label>
               <select id="banking-enabled">
-                <option value="">Off: permits expire each round</option>
-                <option value="on">On: unused permits carry to round 2</option>
+                <option value="on">On (unused permits carry over)</option>
+                <option value="">Off (permits expire)</option>
               </select>
+            </div>
+            <div>
+              <label for="borrowing-enabled">Borrowing</label>
+              <select id="borrowing-enabled">
+                <option value="on">On (repay in Round 2)</option>
+                <option value="">Off</option>
+              </select>
+            </div>
+            <div>
+              <label for="shortfall-penalty">Penalty per Unrepaid Permit ($)</label>
+              <input id="shortfall-penalty" type="number" min="0" max="999" step="1" value="50" />
             </div>
           </div>
           <div class="row" style="margin-top: 0.6rem">

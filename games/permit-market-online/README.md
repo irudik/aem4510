@@ -27,12 +27,44 @@ The earlier quiz-style emissions-trading game remains available at
   abated at quadratic total cost.
 - Round score = avoided abatement cost - auction payment - net market
   spending. A team that never gets a permit and never trades scores 0.
-- Benchmark: clearing the auction on true value schedules gives the
-  efficient allocation and price p*; each team's benchmark score is what it
-  would earn buying its efficient quantity at p*. The leaderboard ranks by
-  cumulative (score - benchmark), so no firm type has a built-in advantage.
-  The round-2 benchmark ignores banking, so banked permits make the
-  benchmark easier to beat there; that is a debrief point, not a bug.
+- Benchmark: clearing the auction on true value schedules (after any cost
+  shock) gives the efficient allocation and price p*; each team's benchmark
+  score is what it would earn buying its efficient quantity at p*, or, in a
+  free round, trading from its free permits to that quantity at p*. The
+  leaderboard ranks by cumulative (score - benchmark), so no firm type has a
+  built-in advantage. Per-round benchmarks ignore banking and borrowing, so
+  a borrower beats the Round 1 benchmark and falls behind in Round 2; the
+  cumulative comparison is the meaningful one. If every team bids its MAC
+  in a uniform auction with no shock, every team scores exactly its
+  benchmark and the market has nothing to do; under pay-as-bid, bidding MAC
+  scores below the benchmark.
+
+## Game Options (set per session)
+
+- Allocation per round: uniform-price auction (default), pay-as-bid
+  auction (each winner pays its own bids, as in EPA's Acid Rain Program
+  auctions), or free allocation in proportion to baseline emissions
+  (grandfathering; whole permits by largest remainder). In a free round the
+  auction phase shows each team its permits; there is nothing to bid on.
+- Cost shock per round: when the round's market opens, each firm learns
+  whether its MAC slope is multiplied by 0.5, 1, or 1.5. A third of firms get
+  each (balanced draw at game start, random order); each team sees only its
+  own. Students know the odds when they bid. Costs, scores, and the round's
+  benchmark use the shocked slope; the instructor auction charts show
+  unshocked MACs, which is what bidders knew.
+- Banking and borrowing (each on or off): during the Round 1 market a team
+  chooses its Round 1 emissions (default: use the permits it holds, up to
+  baseline). Emitting less banks the rest; emitting more borrows from Round
+  2. There are no limits beyond emissions between zero and baseline. Round 2
+  holdings start from banked minus owed permits (negative for a borrower);
+  any permit still owed at the end pays the penalty (default $50, above the
+  highest possible shocked MAC of $36). With banking or borrowing on,
+  auction bids are limited only by the permits for sale, and in Round 1 with
+  banking students can add extra bid boxes for permits to bank.
+- Suggested classroom setups: "ARP style" = Round 1 free with a shock,
+  Round 2 pay-as-bid with a shock, banking and borrowing on. "Auction
+  formats" = Round 1 uniform, Round 2 pay-as-bid, no shocks. The default
+  (uniform both rounds, no shocks) is the earlier game.
 
 ## Market Rules
 
@@ -72,10 +104,12 @@ The earlier quiz-style emissions-trading game remains available at
 ## One-Time Setup Checklist
 
 1. Reuse the class Supabase project (email/password auth already on).
-2. Apply `games/permit-market-online/supabase/001_permit_market_schema.sql`.
-   On an existing database, also apply `002_flexible_auction_bids.sql` in
-   the same folder before deploying the flexible bid form. Rerunning
-   `001` alone does not remove an existing four-row limit.
+2. Apply `games/permit-market-online/supabase/001_permit_market_schema.sql`,
+   then `002_flexible_auction_bids.sql` and `003_game_options.sql` in the
+   same folder, before deploying the matching site code. Rerunning `001`
+   alone does not remove an existing four-row limit. `003` only adds columns
+   with defaults and one table, so earlier sessions keep working; it can be
+   rerun safely.
 3. The instructor auth user id must be in `public.admin_users` (already
    true if the other games run).
 4. Netlify environment variables are shared with the other games.
@@ -106,6 +140,10 @@ The earlier quiz-style emissions-trading game remains available at
 7. `Download Scores CSV` exports the per-team accounting.
 
 ## Debrief Pointers
+
+The "After the permit game" section at the end of lecture 06 also has
+debrief slides on why trading after an auction matters (cost shocks,
+banking and borrowing) and on pay-as-bid auctions in the Acid Rain Program.
 
 Lecture 06 has an auction block after the permit-allocation slide: MAC
 as permit demand, the auction as supply meeting demand, the game's rules,
