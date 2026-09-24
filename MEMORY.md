@@ -94,3 +94,12 @@ Do not edit manually unless you are intentionally maintaining the template. -->
 - Scope: The regulator's emissions-allocation problem in the permits lecture.
 - Evidence: User wording corrections to slides/06-slides-permits.Rmd.
 - Action: Preserve these terms in later revisions of this material.
+
+[LEARN:permit-admin-controls]
+- Date: 2026-09-24
+- Trigger: The phase selector reverted to the current phase during dashboard refreshes.
+- Wrong: Copying session values into instructor controls on every refresh, or protecting an input only while focused.
+- Right: Preserve unapplied phase and timer edits across refreshes and blur; resume synchronization after a successful apply or a different session.
+- Scope: Permit-game instructor controls.
+- Evidence: games/permit-market-online/tests/phase-controls.test.mts.
+- Action: Test pending edits across multiple refreshes before changing dashboard controls.

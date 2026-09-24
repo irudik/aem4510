@@ -1,4 +1,5 @@
 import { auctionComparisonHtml } from "./auction-charts.mjs";
+import { phaseControls } from "./phase-controls.mjs";
 import {
   apiJson,
   clearStatus,
@@ -51,6 +52,7 @@ const sessionStatus = document.getElementById("session-status");
 
 const phaseInput = document.getElementById("set-phase");
 const roundSecondsInput = document.getElementById("round-seconds");
+const phaseControlEdits = phaseControls(phaseInput, roundSecondsInput);
 const applyPhaseButton = document.getElementById("apply-phase-btn");
 const closePhaseButton = document.getElementById("close-phase-btn");
 let closingPhase = false;
@@ -258,12 +260,7 @@ function renderAllTables(state) {
     vs_benchmark: formatNumber(row.points_vs_benchmark, 2),
   })));
 
-  if (state?.session?.current_phase) {
-    phaseInput.value = String(state.session.current_phase);
-  }
-  if (state?.session?.round_seconds && document.activeElement !== roundSecondsInput) {
-    roundSecondsInput.value = String(state.session.round_seconds);
-  }
+  phaseControlEdits.sync(state?.session);
 }
 
 async function loadPublicConfig() {
@@ -405,6 +402,10 @@ async function startGame() {
 async function applyPhaseUpdate() {
   if (closingPhase) return;
   clearStatus(phaseStatus);
+  const submitted = {
+    current_phase: phaseInput.value,
+    round_seconds: roundSecondsInput.value,
+  };
 
   try {
     await apiJson("/api/permit-market/admin/set-phase", {
@@ -414,11 +415,12 @@ async function applyPhaseUpdate() {
         Authorization: `Bearer ${getAdminToken()}`,
       },
       body: JSON.stringify({
-        phase: phaseInput.value,
-        round_seconds: roundSecondsInput.value ? Number(roundSecondsInput.value) : undefined,
+        phase: submitted.current_phase,
+        round_seconds: submitted.round_seconds ? Number(submitted.round_seconds) : undefined,
       }),
     });
 
+    phaseControlEdits.applied(submitted);
     setStatus(phaseStatus, "good", "Phase updated.");
     await fetchAdminState();
   } catch (error) {
