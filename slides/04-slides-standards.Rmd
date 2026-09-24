@@ -20,7 +20,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
 )
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
@@ -912,17 +912,13 @@ The regulator chooses $\bar{E}$ to be the emission level where MAC = MD: $\bar{E
 # Emission standards: graphical
 
 .pull-left[
-```{r standard, echo = FALSE, fig.show = 'hide', warning = F}
+```{r standard-base, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) 1
-ab_cost <- tibble(x = c(1.5, 1.5, 3),
-                     y = c(1, 0, 0))
-ggplot() +
-  geom_polygon(data = ab_cost, aes(x = x, y = y), fill = "red", alpha = 0.2) +
+standard_plot = ggplot() +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
   annotate("text", x = 2.5, y = 1.2, label = "MD", size = 8) +
   annotate("text", x = 1.7, y = 2.5, label = expression(bar(E)), size = 8) +
-  annotate("text", x = 2.15, y = .25, label = "B", size = 8) +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
@@ -946,9 +942,11 @@ ggplot() +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(1.5,3), labels = c(expression(E^'*'), expression(E[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
 
+standard_plot
+
 ```
 
-![standards](`r knitr::fig_chunk("standard", "png")`)
+![standards](`r knitr::fig_chunk("standard-base", "png")`)
 ]
 
 .pull-right[
@@ -966,6 +964,13 @@ You can think of this as the regulator setting a tax equal to 0 on the first $\b
 # Emission standards: graphical
 
 .pull-left[
+```{r standard, echo = FALSE, fig.show = 'hide', warning = F}
+ab_cost = tibble(x = c(1.5, 1.5, 3), y = c(1, 0, 0))
+standard_plot +
+  geom_polygon(data = ab_cost, aes(x = x, y = y), fill = "red", alpha = 0.2) +
+  annotate("text", x = 2.15, y = .25, label = "B", size = 8)
+```
+
 ![standards](`r knitr::fig_chunk("standard", "png")`)
 ]
 
@@ -1058,7 +1063,7 @@ In 2000, the Tier 2 program established one set of standards for both
 
 --
 
-Currently, Tier 3 standards are being phased in
+Tier 3 standards are currently in effect
 
 ---
 

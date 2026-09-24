@@ -38,44 +38,8 @@ exclude: true
 ``` r
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
 )
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## Warning: package 'tweetrmd' is not available for this version of R
-## 
-## A version of this package for your version of R might be available elsewhere,
-## see the ideas at
-## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
-```
-
-```
-## Warning: 'BiocManager' not available.  Could not check Bioconductor.
-## 
-## Please use `install.packages('BiocManager')` and then retry.
-```
-
-```
-## Warning in p_install(package, character.only = TRUE, ...):
-```
-
-```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
-```
-
-```
-## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
-## tweetrmd
-```
-
-``` r
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -173,7 +137,7 @@ Coal power is one of the largest sources of several of the most harmful air poll
 
 # Coal power: air pollutants
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-coal-pollutants.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/04-standards-coal-pollutants.mp4" type="video/mp4"><track kind="captions" src="videos/04-standards-coal-pollutants.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -254,7 +218,7 @@ Activated carbon injection technology can reduce mercury  emissions by up to 90 
 
 # Coal power: air pollutants 
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-coal-pollution-news.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/04-standards-coal-pollution-news.mp4" type="video/mp4"><track kind="captions" src="videos/04-standards-coal-pollution-news.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -278,7 +242,7 @@ Beach and Hanlon (2018)
 
 # Coal going forward
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-coal-future.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/04-standards-coal-future.mp4" type="video/mp4"><track kind="captions" src="videos/04-standards-coal-future.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -784,7 +748,7 @@ The regulator chooses `\(\bar{E}\)` to be the emission level where MAC = MD: `\(
 .pull-left[
 
 
-![standards](04-slides-standards_files/figure-html/standard-1.png)
+![standards](04-slides-standards_files/figure-html/standard-base-1.png)
 ]
 
 .pull-right[
@@ -802,6 +766,8 @@ You can think of this as the regulator setting a tax equal to 0 on the first `\(
 # Emission standards: graphical
 
 .pull-left[
+
+
 ![standards](04-slides-standards_files/figure-html/standard-1.png)
 ]
 
@@ -894,7 +860,7 @@ In 2000, the Tier 2 program established one set of standards for both
 
 --
 
-Currently, Tier 3 standards are being phased in
+Tier 3 standards are currently in effect
 
 ---
 
@@ -946,7 +912,7 @@ First state to mandate a complete phase-out of internal combustion engines
 
 # California's EV mandate
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/04-standards-california-ev-mandate.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/04-standards-california-ev-mandate.mp4" type="video/mp4"><track kind="captions" src="videos/04-standards-california-ev-mandate.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
