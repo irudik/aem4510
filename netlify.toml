@@ -25,3 +25,9 @@
   for = "index.xml"
   [headers.values]
     Content-Type = "application/rss+xml"
+
+# Short link shown on the lecture 06 slides for joining the permit market game.
+[[redirects]]
+  from = "/permits"
+  to = "/games/permit-market-online/student.html"
+  status = 302

@@ -143,8 +143,10 @@ The earlier quiz-style emissions-trading game remains available at
 
 Lecture 06 introduces the game in a "Let's trade: the permit market game"
 section after the banking and borrowing slides: how the game works, the
-options that may be on, the join path, and predictions to check against the
-class results. It is followed by an "After the permit game" debrief section:
+options that may be on, predictions to check against the class results,
+and a join slide with a QR code for the student login
+(`slides/files/06-permit-game-qr.png`) and the short link
+aem4510.ivanrudik.com/permits, a redirect defined in `netlify.toml`. It is followed by an "After the permit game" debrief section:
 demand reduction, why trading after an auction matters (cost shocks,
 banking and borrowing), and pay-as-bid auctions in the Acid Rain Program.
 
