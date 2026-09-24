@@ -1,3 +1,4 @@
+import { auctionComparisonHtml } from "./auction-charts.mjs";
 import {
   apiJson,
   clearStatus,
@@ -102,113 +103,11 @@ function renderTable(target, rows) {
   target.innerHTML = tableHtml(rows);
 }
 
-/**
- * Draw one auction's clearing picture as an SVG: the submitted bid stack,
- * the true demand stack, the cap, and the clearing/benchmark prices.
- */
-function auctionChartSvg(chart) {
-  const width = 660;
-  const height = 330;
-  const margin = { top: 16, right: 20, bottom: 34, left: 44 };
-  const plotWidth = width - margin.left - margin.right;
-  const plotHeight = height - margin.top - margin.bottom;
-
-  const stacks = [chart.bid_stack ?? [], chart.true_demand_stack ?? []];
-  const maxQuantity = Math.max(
-    Number(chart.cap) * 1.25,
-    ...stacks.map((stack) => stack.length > 0 ? stack[stack.length - 1].to_quantity : 0),
-    1,
-  );
-  const maxPrice = Math.max(
-    ...stacks.flatMap((stack) => stack.map((step) => Number(step.price))),
-    Number(chart.clearing_price ?? 0),
-    Number(chart.benchmark_price ?? 0),
-    1,
-  ) * 1.15;
-
-  const x = (quantity) => margin.left + (quantity / maxQuantity) * plotWidth;
-  const y = (price) => margin.top + plotHeight - (price / maxPrice) * plotHeight;
-
-  const stackPath = (stack) => {
-    if (!stack || stack.length === 0) {
-      return "";
-    }
-    let path = `M ${x(stack[0].from_quantity)} ${y(stack[0].price)}`;
-    for (const step of stack) {
-      path += ` L ${x(step.from_quantity)} ${y(step.price)} L ${x(step.to_quantity)} ${y(step.price)}`;
-    }
-    return path;
-  };
-
-  const priceTicks = [];
-  const tickCount = 5;
-  for (let index = 0; index <= tickCount; index += 1) {
-    priceTicks.push(Math.round((maxPrice / tickCount) * index));
-  }
-
-  const clearingLine = chart.clearing_price == null ? "" : `
-    <line x1="${margin.left}" y1="${y(chart.clearing_price)}" x2="${width - margin.right}" y2="${y(chart.clearing_price)}"
-      stroke="#0d5bd7" stroke-width="1.5" stroke-dasharray="6 4" />
-    <text x="${width - margin.right}" y="${y(chart.clearing_price) - 5}" text-anchor="end" font-size="12" fill="#0d5bd7">
-      clearing ${formatNumber(chart.clearing_price, 2)}
-    </text>
-  `;
-
-  const benchmarkLine = chart.benchmark_price == null ? "" : `
-    <line x1="${margin.left}" y1="${y(chart.benchmark_price)}" x2="${width - margin.right}" y2="${y(chart.benchmark_price)}"
-      stroke="#5d6d83" stroke-width="1" stroke-dasharray="2 4" />
-    <text x="${margin.left + 4}" y="${y(chart.benchmark_price) - 5}" font-size="12" fill="#5d6d83">
-      efficient ${formatNumber(chart.benchmark_price, 2)}
-    </text>
-  `;
-
-  return `
-    <svg viewBox="0 0 ${width} ${height}" width="100%" role="img">
-      <rect x="0" y="0" width="${width}" height="${height}" fill="#ffffff" />
-      ${priceTicks.map((tick) => `
-        <line x1="${margin.left}" y1="${y(tick)}" x2="${width - margin.right}" y2="${y(tick)}" stroke="#eef2f8" />
-        <text x="${margin.left - 6}" y="${y(tick) + 4}" text-anchor="end" font-size="11" fill="#5d6d83">${tick}</text>
-      `).join("")}
-      <path d="${stackPath(chart.true_demand_stack)}" fill="none" stroke="#b8c4d6" stroke-width="2.5" />
-      <path d="${stackPath(chart.bid_stack)}" fill="none" stroke="#0d5bd7" stroke-width="2.5" />
-      <line x1="${x(chart.cap)}" y1="${margin.top}" x2="${x(chart.cap)}" y2="${margin.top + plotHeight}"
-        stroke="#b01b2f" stroke-width="2" />
-      <text x="${x(chart.cap) + 4}" y="${margin.top + 12}" font-size="12" fill="#b01b2f">cap ${formatNumber(chart.cap, 0)}</text>
-      ${clearingLine}
-      ${benchmarkLine}
-      <line x1="${margin.left}" y1="${margin.top + plotHeight}" x2="${width - margin.right}" y2="${margin.top + plotHeight}" stroke="#17212f" />
-      <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + plotHeight}" stroke="#17212f" />
-      <text x="${margin.left + plotWidth / 2}" y="${height - 8}" text-anchor="middle" font-size="12" fill="#17212f">Permits (cumulative)</text>
-      <text x="12" y="${margin.top + plotHeight / 2}" text-anchor="middle" font-size="12" fill="#17212f"
-        transform="rotate(-90 12 ${margin.top + plotHeight / 2})">Price</text>
-    </svg>
-  `;
-}
-
 function renderAuctionCharts(state) {
-  const charts = state?.auction_charts ?? {};
-  const keys = Object.keys(charts);
-  if (keys.length === 0) {
-    auctionChartsElement.innerHTML = "<p><small class=\"note\">The chart appears once an auction opens and bids arrive.</small></p>";
-    return;
-  }
-
-  auctionChartsElement.innerHTML = keys.map((key) => {
-    const chart = charts[key];
-    const title = key === "auction1" ? "Round 1 Auction" : "Round 2 Auction";
-    const liveTag = chart.is_live ? " <span class=\"badge\">live</span>" : "";
-    return `
-      <div class="chart-box" style="margin-bottom: 0.8rem">
-        <h4>${title}${liveTag} &middot; ${formatNumber(chart.total_bid_quantity, 0)} units bid for ${formatNumber(chart.cap, 0)} permits</h4>
-        ${auctionChartSvg(chart)}
-        <p class="chart-legend">
-          <span class="swatch" style="background:#0d5bd7"></span>Submitted bids
-          <span class="swatch" style="background:#b8c4d6; margin-left: 0.8rem"></span>True permit values
-          <span class="swatch" style="background:#b01b2f; margin-left: 0.8rem"></span>Cap
-        </p>
-      </div>
-    `;
-  }).join("");
+  const keys = ["auction1", "auction2"].filter((key) => state?.auction_charts?.[key]);
+  auctionChartsElement.innerHTML = keys.length
+    ? keys.map((key) => auctionComparisonHtml(state, key)).join("")
+    : "<p class=\"mac-note\">The charts appear when an auction opens and firms have been assigned.</p>";
 }
 
 function renderSessionSummary(state) {

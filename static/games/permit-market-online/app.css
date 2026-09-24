@@ -450,6 +450,54 @@ small.note {
 
 /* Permit market additions */
 
+#bid-rows input { min-width: 4rem; }
+#bid-rows .bid-number { white-space: nowrap; font-weight: 500; }
+#bid-rows .remove-bid { padding: 0.4rem; font-size: 0.8rem; }
+
+@media (max-width: 520px) {
+  .bid-table-head { display: none; }
+  #bid-rows { display: block; }
+  #bid-rows tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; padding: 0.6rem; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 0.6rem; }
+  #bid-rows td, #bid-rows th { padding: 0; border: 0; background: transparent; text-align: left; }
+  #bid-rows .bid-number { align-self: center; font-weight: 600; }
+  #bid-rows td:nth-child(2)::before { content: "Price per permit"; }
+  #bid-rows td:nth-child(3)::before { content: "Quantity"; }
+  #bid-rows td:nth-child(2)::before, #bid-rows td:nth-child(3)::before { display: block; font-size: 0.8rem; margin-bottom: 0.3rem; }
+  #bid-rows td:nth-child(4) { grid-row: 1; grid-column: 2; text-align: right; }
+  #bid-rows input { min-width: 0; }
+  #bid-rows .remove-bid { width: auto; }
+}
+
+/* Compare class emissions with each firm's emissions, using one price scale. */
+.auction-popout main { max-width: 1700px; }
+.auction-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.auction-heading h3 { margin: 0; }
+.auction-round + .auction-round { border-top: 1px solid var(--line); padding-top: 1.5rem; margin-top: 1.5rem; }
+.chart-popout-link { font-size: 0.9rem; font-weight: 600; }
+.chart-round-choice { min-width: 140px; }
+.auction-summary { margin: 0.5rem 0; color: var(--muted); }
+.auction-prices { display: flex; gap: 0.6rem 1.5rem; flex-wrap: wrap; background: #f2f6fd; border-radius: 8px; padding: 0.8rem; margin: 0.8rem 0 1rem; font-size: 0.9rem; }
+.auction-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.auction-figure { min-width: 0; margin: 0; }
+.auction-figure h4 { margin: 0 0 0.5rem; }
+.auction-mac-chart { display: block; width: 100%; height: auto; font-size: 18px; fill: var(--muted); }
+.auction-legend { display: flex; gap: 0.5rem 1rem; flex-wrap: wrap; font-size: 0.85rem; }
+.auction-price-key, .auction-benchmark-key, .auction-bid-key, .auction-cap-key { display: inline-block; width: 1.3rem; vertical-align: middle; margin-right: 0.35rem; }
+.auction-price-key { border-top: 2px dashed #17212f; }
+.auction-benchmark-key { border-top: 2px dotted #718096; }
+.auction-bid-key { border-top: 3px solid #0d5bd7; }
+.auction-cap-key { border-top: 2px solid #b01b2f; }
+.firm-curve-legend { display: grid; gap: 0.35rem; font-size: 0.85rem; }
+.firm-curve-legend > span { display: flex; align-items: baseline; gap: 0.5rem; overflow-wrap: anywhere; }
+.firm-curve-legend svg { width: 2rem; height: 0.8rem; flex: 0 0 2rem; }
+.firm-curve-legend small { color: var(--muted); white-space: nowrap; }
+.auction-reading-note { margin-bottom: 0; }
+
+@media (max-width: 800px) {
+  .auction-comparison { grid-template-columns: 1fr; }
+  .auction-mac-chart { font-size: 21px; }
+}
+
 .book-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -479,8 +527,97 @@ small.note {
   background: #eef4ff;
 }
 
-.value-schedule td, .value-schedule th {
-  padding: 0.25rem 0.45rem;
+/* The MAC figure uses emissions on the horizontal axis, as in lecture. */
+.student-game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.student-game-layout > .card { min-width: 0; }
+.student-game-layout .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.student-game-layout .kv { grid-template-columns: 80px 1fr; }
+.student-game-layout .position-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.firm-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.firm-heading button { width: auto; font-size: 0.85rem; }
+
+.student-game-layout #firm-card {
+  position: sticky;
+  top: 1rem;
+}
+
+.mac-figure {
+  margin: 0;
+  max-width: 760px;
+}
+
+.mac-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-size: 20px;
+  fill: var(--muted);
+}
+
+.mac-axis-label {
+  fill: var(--ink);
+  font-weight: 600;
+}
+
+.mac-grid-line { stroke: #e5eaf2; }
+.mac-axis { stroke: #5d6d83; stroke-width: 1.2; }
+.mac-cost-area { fill: #dde8fa; }
+.mac-curve { fill: none; stroke: #ca5670; stroke-width: 3; }
+.mac-price-line { stroke: #3566a8; stroke-width: 2; stroke-dasharray: 7 5; }
+.mac-position-line { stroke: #17212f; stroke-width: 2; stroke-dasharray: 2 4; }
+
+.mac-figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+.mac-key {
+  display: inline-block;
+  width: 1.3rem;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.mac-key-curve { border-top: 3px solid #ca5670; }
+.mac-key-price { border-top: 2px dashed #3566a8; }
+.mac-key-position { border-top: 2px dotted #17212f; }
+.mac-key-cost { height: 0.75rem; background: #dde8fa; }
+.mac-note { color: var(--muted); font-size: 0.9rem; max-width: 85ch; }
+.mac-position { margin: 0.75rem 0; }
+
+.learning-prompt {
+  margin: 0.8rem 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #ca5670;
+  background: #fcf6f8;
+  border-radius: 0 8px 8px 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .student-game-layout { grid-template-columns: 1fr; gap: 0; }
+  .student-game-layout #firm-card { position: static; }
+}
+
+@media (max-width: 520px) {
+  .student-game-layout .grid { grid-template-columns: 1fr; }
+  .mac-chart { font-size: 24px; }
 }
 
 .chart-box {

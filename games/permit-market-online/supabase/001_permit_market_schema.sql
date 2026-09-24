@@ -65,7 +65,7 @@ create table if not exists public.permit_auction_bids (
   session_id uuid not null references public.permit_sessions(id) on delete cascade,
   team_id uuid not null references public.permit_teams(id) on delete cascade,
   round_key text not null check (round_key in ('auction1', 'auction2')),
-  bid_index integer not null check (bid_index between 1 and 4),
+  bid_index integer not null check (bid_index > 0),
   bid_price numeric not null check (bid_price >= 0),
   bid_quantity integer not null check (bid_quantity > 0),
   submitted_at timestamptz not null default now(),

@@ -1,5 +1,22 @@
 # Project Memory
 
+[LEARN:permit-game-teaching]
+- Date: 2026-09-24
+- Trigger: User found the student permit-value table confusing and wanted the game to match the slides.
+- Wrong: Presenting a schedule of what successive permits are worth as the main student reference.
+- Right: Show MAC against emissions, as in lecture 06. Let students discover the price comparison through bidding, trading, and changes in required abatement. Explain MAC = P after play, allowing for whole permits.
+- Scope: Permit-market student interface.
+- Evidence: User instruction on 2026-09-24; slides/06-slides-permits.Rmd.
+- Action: Use MAC and emissions language in student guidance and verify any displayed costs against the game’s scoring rules.
+
+[LEARN:permit-game-bid-limit]
+- Date: 2026-09-24
+- Trigger: User noted that four bid rows cannot express more than four steps of a firm's MAC schedule.
+- Right: Allow a separate bid for every unit of baseline emissions, while keeping total bid quantity at most baseline. Both API validation and the database constraint must allow this.
+- Scope: Permit-market auction bidding and instructor MAC comparisons.
+- Evidence: Migration 002_flexible_auction_bids.sql applied to class project vuporrnrpfuibrtwqxww; the validated constraint is bid_index > 0 and all eight pre-existing bid records remained. Full-schedule bids for all firm types pass tests.
+- Action: Keep instructor charts on the lecture's emissions axis: aggregate MAC beside individual firm MACs on a common axis, with identical firms explicitly listed together. Apply database migrations before deploying the corresponding website changes.
+
 <!-- Claude Code stores [LEARN] entries here. Prefer structured entries:
 [LEARN:category]
 - Date: YYYY-MM-DD

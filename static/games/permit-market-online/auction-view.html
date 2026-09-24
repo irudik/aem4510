@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MAC Charts | Permit Market Game</title>
+    <link rel="stylesheet" href="/games/permit-market-online/app.css" />
+  </head>
+  <body class="auction-popout">
+    <main>
+      <header class="card hero-card">
+        <div class="auction-heading">
+          <div><h1>Permit market: MAC &amp; auction clearing</h1><p id="chart-session-name">Instructor view</p></div>
+          <div class="chart-round-choice">
+            <label for="chart-round">Auction</label>
+            <select id="chart-round"><option value="auction1">Round 1</option><option value="auction2">Round 2</option></select>
+          </div>
+        </div>
+        <p class="mac-note">Updates every 4 seconds. This instructor view reveals all firms' MACs and submitted bids.</p>
+        <a href="/games/permit-market-online/admin.html" target="_blank" rel="noopener">Open Admin Dashboard to sign in or control the game</a>
+        <div id="chart-status" class="status hidden" role="status"></div>
+      </header>
+      <section id="chart-display" class="card"></section>
+    </main>
+    <script type="module" src="/games/permit-market-online/auction-view.mjs"></script>
+  </body>
+</html>

@@ -4,6 +4,7 @@ import {
   formatNumber,
   setStatus,
 } from "/games/permit-market-online/shared.mjs";
+import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
 
 const PHASE_LABELS = {
   setup: "Setup",
@@ -17,6 +18,7 @@ const PHASE_LABELS = {
 const JOIN_TOKEN_KEY = "permit_market_join_token";
 const POLL_INTERVAL_MS = 2500;
 
+const joinCard = document.getElementById("join-card");
 const joinStatus = document.getElementById("join-status");
 const joinButton = document.getElementById("join-btn");
 const resetTokenButton = document.getElementById("reset-token-btn");
@@ -24,7 +26,7 @@ const teamNameInput = document.getElementById("team-name");
 
 const firmCard = document.getElementById("firm-card");
 const firmKv = document.getElementById("firm-kv");
-const valueScheduleElement = document.getElementById("value-schedule");
+const macCurveElement = document.getElementById("mac-curve");
 const stageCard = document.getElementById("stage-card");
 const stageTitle = document.getElementById("stage-title");
 const phaseLabelElement = document.getElementById("phase-label");
@@ -135,10 +137,6 @@ function renderFirmCard(state) {
   const entries = [
     ["Session", session.session_name],
     ["Team", team.team_name],
-    ["Phase", phaseLabel(session.current_phase)],
-    ["Baseline Emissions", team.baseline_emissions ?? "Assigned at game start"],
-    ["MAC Slope", team.mac_slope ?? "-"],
-    ["Banking", session.banking_enabled ? "On: unused permits carry to round 2" : "Off"],
   ];
 
   firmKv.innerHTML = "";
@@ -150,30 +148,19 @@ function renderFirmCard(state) {
     firmKv.append(dt, dd);
   }
 
-  if (team.value_schedule && team.value_schedule.length > 0) {
-    const scheduleRow = {};
-    for (const step of team.value_schedule) {
-      scheduleRow[`p${step.permit_number}`] = formatNumber(step.value, 0);
-    }
-    valueScheduleElement.innerHTML = `
-      <p><small class="note">What each permit is worth to you (avoided abatement cost), from your 1st to your last:</small></p>
-      <table class="value-schedule">
-        <thead><tr>${team.value_schedule.map((step) => `<th>#${step.permit_number}</th>`).join("")}</tr></thead>
-        <tbody><tr>${team.value_schedule.map((step) => `<td>${formatNumber(step.value, 0)}</td>`).join("")}</tr></tbody>
-      </table>
-      <p><small class="note">Keep this private: it is your bidding and trading guide.</small></p>
-    `;
-  } else {
-    valueScheduleElement.innerHTML = "<p><small class=\"note\">Your firm's cost schedule appears when the instructor starts the game.</small></p>";
-  }
+  macCurveElement.innerHTML = macPanel(state);
 }
 
 async function submitBids() {
   const bids = [];
-  for (let index = 1; index <= 4; index += 1) {
-    const price = document.getElementById(`bid-price-${index}`)?.value;
-    const quantity = document.getElementById(`bid-qty-${index}`)?.value;
-    if (price !== "" && quantity !== "" && price != null && quantity != null) {
+  for (const [index, row] of [...document.querySelectorAll("#bid-rows tr")].entries()) {
+    const price = row.querySelector(".bid-price").value;
+    const quantity = row.querySelector(".bid-quantity").value;
+    if ((price === "") !== (quantity === "")) {
+      setStatus(stageStatus, "warn", `Bid ${index + 1}: enter both price and quantity, or leave both blank.`);
+      return;
+    }
+    if (price !== "" && quantity !== "") {
       bids.push({ bid_price: Number(price), bid_quantity: Number(quantity) });
     }
   }
@@ -250,37 +237,37 @@ function renderAuctionStage(state) {
   const phase = String(session.current_phase);
   const cap = phase === "auction1" ? session.cap_round1 : session.cap_round2;
   const ownBids = state.own_bids ?? [];
+  const maxRows = Number(state.team.baseline_emissions);
 
-  const bidRow = (index) => {
-    const existing = ownBids.find((bid) => Number(bid.bid_index) === index);
+  const bidRow = (index, existing) => {
     return `
       <tr>
-        <td>Bid ${index}</td>
-        <td><input id="bid-price-${index}" type="number" min="0" step="0.5" inputmode="decimal" value="${existing ? existing.bid_price : ""}" ${expired ? "disabled" : ""} /></td>
-        <td><input id="bid-qty-${index}" type="number" min="1" step="1" inputmode="numeric" value="${existing ? existing.bid_quantity : ""}" ${expired ? "disabled" : ""} /></td>
+        <th scope="row" class="bid-number">Bid ${index}</th>
+        <td><input id="bid-price-${index}" class="bid-price" aria-label="Bid ${index} price per permit" type="number" min="0" step="0.01" inputmode="decimal" value="${existing ? existing.bid_price : ""}" ${expired ? "disabled" : ""} /></td>
+        <td><input id="bid-qty-${index}" class="bid-quantity" aria-label="Bid ${index} quantity" type="number" min="1" max="${maxRows}" step="1" inputmode="numeric" value="${existing ? existing.bid_quantity : ""}" ${expired ? "disabled" : ""} /></td>
+        <td><button class="remove-bid secondary" aria-label="Remove bid ${index}" type="button" ${expired ? "disabled" : ""}>Remove</button></td>
       </tr>
     `;
   };
 
   stageContainer.innerHTML = `
     <p class="called-price-callout">${formatNumber(cap, 0)} permits for sale</p>
-    <ol class="phase-steps" aria-label="Auction steps">
-      <li>Review your private permit values above.</li>
-      <li>Enter up to four price and quantity bids.</li>
-      <li>Submit before time expires; you may revise while the auction is open.</li>
-    </ol>
     <p><small class="note">
-      Sealed uniform-price auction: rank your bids by price; the top ${formatNumber(cap, 0)} bid units win and
-      everyone pays the lowest accepted price. Bid up to 4 price/quantity pairs; total quantity at most your
-      baseline (${state.team.baseline_emissions ?? "-"}). Your value table above tells you what each permit is worth.
+      Sealed uniform-price auction: bids are ranked by price; the top ${formatNumber(cap, 0)} bid units win and
+      everyone pays the lowest accepted price. Each row can request several permits at one price.
+      Add rows to bid a different price for each permit if you wish. Total quantity cannot exceed your
+      baseline (${maxRows}). Each row adds to the total; quantities are not cumulative.
     </small></p>
+    <p class="learning-prompt">Before bidding: if you won one more permit, which unit of abatement would you avoid?</p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th></th><th>Price per permit</th><th>Quantity</th></tr></thead>
-        <tbody>${[1, 2, 3, 4].map(bidRow).join("")}</tbody>
+        <thead class="bid-table-head"><tr><th>Bid</th><th>Price per permit</th><th>Quantity</th><th></th></tr></thead>
+        <tbody id="bid-rows">${(ownBids.length ? [...ownBids].sort((a, b) => a.bid_index - b.bid_index) : [null])
+          .map((bid, index) => bidRow(index + 1, bid)).join("")}</tbody>
       </table>
     </div>
     <div class="row" style="margin-top: 0.6rem">
+      <button id="add-bid-btn" class="secondary" type="button">Add Bid Row</button>
       <button id="submit-bids-btn" class="primary" type="button" ${expired ? "disabled" : ""}>
         ${ownBids.length > 0 ? "Revise Bids" : "Submit Bids"}
       </button>
@@ -289,6 +276,37 @@ function renderAuctionStage(state) {
     ${expired ? "<p><small class=\"note\">The auction has closed. Waiting for the instructor to clear it.</small></p>" : ""}
   `;
 
+  const bidRows = document.getElementById("bid-rows");
+  const addBidButton = document.getElementById("add-bid-btn");
+  const updateRows = () => {
+    [...bidRows.rows].forEach((row, index) => {
+      const number = index + 1;
+      row.querySelector(".bid-number").textContent = `Bid ${number}`;
+      const price = row.querySelector(".bid-price");
+      price.id = `bid-price-${number}`;
+      price.setAttribute("aria-label", `Bid ${number} price per permit`);
+      const quantity = row.querySelector(".bid-quantity");
+      quantity.id = `bid-qty-${number}`;
+      quantity.setAttribute("aria-label", `Bid ${number} quantity`);
+      const removeButton = row.querySelector(".remove-bid");
+      removeButton.setAttribute("aria-label", `Remove bid ${number}`);
+      removeButton.disabled = expired || bidRows.rows.length === 1;
+    });
+    addBidButton.disabled = expired || bidRows.rows.length >= maxRows;
+  };
+  addBidButton.addEventListener("click", () => {
+    if (deadlineExpired() || bidRows.rows.length >= maxRows) return;
+    bidRows.insertAdjacentHTML("beforeend", bidRow(bidRows.rows.length + 1, null));
+    updateRows();
+    bidRows.lastElementChild.querySelector(".bid-price").focus();
+  });
+  bidRows.addEventListener("click", (event) => {
+    const removeButton = event.target.closest(".remove-bid");
+    if (!removeButton || deadlineExpired() || bidRows.rows.length <= 1) return;
+    removeButton.closest("tr").remove();
+    updateRows();
+  });
+  updateRows();
   document.getElementById("submit-bids-btn")?.addEventListener("click", submitBids);
 }
 
@@ -298,11 +316,13 @@ function renderMarketScaffold(state) {
   stageContainer.innerHTML = `
     <div id="auction-outcome"></div>
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
-    <ol class="phase-steps" aria-label="Market steps">
-      <li>Check your permits held and how many are available to sell.</li>
-      <li>Choose buy or sell, then enter your limit price and quantity.</li>
-      <li>Watch the order book and cancel or revise resting orders as prices change.</li>
-    </ol>
+    <h3>Current Offers</h3>
+    <div class="book-grid" style="margin-top: 0.6rem">
+      <div><h4>Buyers (bids)</h4><div id="book-bids" class="table-wrap"></div></div>
+      <div><h4>Sellers (asks)</h4><div id="book-asks" class="table-wrap"></div></div>
+    </div>
+    <p class="learning-prompt">Before trading: would buying one permit save more in abatement costs than you would pay?
+      Would selling one earn more than the additional abatement would cost?</p>
     <h3>Place an Order</h3>
     <form id="order-form" class="grid">
       <div>
@@ -326,10 +346,6 @@ function renderMarketScaffold(state) {
     </form>
     <p><small class="note">A buy at or above the best ask (or a sell at or below the best bid) trades immediately at the resting order's price; otherwise it waits in the book. Selling is limited to permits you hold.</small></p>
     <div id="own-orders"></div>
-    <div class="book-grid" style="margin-top: 0.6rem">
-      <div><h4>Buyers (bids)</h4><div id="book-bids" class="table-wrap"></div></div>
-      <div><h4>Sellers (asks)</h4><div id="book-asks" class="table-wrap"></div></div>
-    </div>
     <h4 style="margin-top: 0.6rem">Trade Ticker</h4>
     <ul id="trade-ticker" class="ticker"></ul>
     ${expired ? "<p><small class=\"note\">The market has closed. Waiting for the instructor to score the round.</small></p>" : ""}
@@ -356,7 +372,7 @@ function renderMarketLiveData(state) {
     const banked = Number(state.permits_banked_in ?? 0);
     outcome.innerHTML = result
       ? `
-        <p class="called-price-callout">Auction cleared at ${result.clearing_price == null ? "no price (no bids)" : formatNumber(result.clearing_price, 2)}</p>
+        <p><strong>Auction result:</strong> ${result.clearing_price == null ? "no price (no bids)" : `$${formatNumber(result.clearing_price, 2)} per permit`}.</p>
         <p><small class="note">
           You won ${formatNumber(allocation?.permits_won ?? 0, 0)} permit(s) for ${formatNumber(allocation?.payment ?? 0, 2)}${banked > 0 ? `, plus ${banked} banked from round 1` : ""}.
           Cap: ${formatNumber(result.cap, 0)}; total bids: ${formatNumber(result.total_bid_quantity, 0)}.
@@ -368,10 +384,13 @@ function renderMarketLiveData(state) {
   const tiles = document.getElementById("position-tiles");
   if (tiles) {
     const preview = market.score_preview;
+    const position = macModel(state);
     tiles.innerHTML = `
       <div class="cell"><div class="label">Permits held</div><div class="value">${formatNumber(market.holdings, 0)}</div></div>
+      <div class="cell"><div class="label">Emissions, E</div><div class="value">${formatNumber(position?.emissions, 0)}</div></div>
+      <div class="cell"><div class="label">Required abatement</div><div class="value">${formatNumber(position?.abatement, 0)}</div></div>
       <div class="cell"><div class="label">Available to sell</div><div class="value">${formatNumber(market.sellable, 0)}</div></div>
-      <div class="cell"><div class="label">Bought / sold</div><div class="value">${formatNumber(preview?.market_buys ?? 0, 0)} / ${formatNumber(preview?.market_sells ?? 0, 0)}</div></div>
+      <div class="cell"><div class="label">Abatement cost</div><div class="value">$${formatNumber(position?.cost, 2)}</div></div>
       <div class="cell"><div class="label">Round score if market closed now</div><div class="value">${preview ? formatNumber(preview.score, 2) : "-"}</div></div>
     `;
   }
@@ -464,7 +483,19 @@ function renderStage(state, options = {}) {
       renderMarketScaffold(state);
     } else if (phase === "complete") {
       stageTitle.textContent = "Game Over";
-      stageContainer.innerHTML = "<p><small class=\"note\">The market is closed. Final standings are on the leaderboard below.</small></p>";
+      stageContainer.innerHTML = `
+        <p>The market is closed. Compare your final emissions with your earlier trading decisions.</p>
+        <div class="learning-prompt">
+          <h3>When did another trade stop helping?</h3>
+          <p>Buying a permit lets you emit more and avoid abatement. Selling a permit requires more abatement,
+            unless you have surplus permits. Compare the cost change with the price paid or received.</p>
+          <p>With competitive trading and divisible emissions, an interior cost-minimizing choice has
+            <strong>MAC = P</strong>. Firms facing the same price then have the same MAC, so total abatement cost is minimized.</p>
+          <p>Here permits are whole units. At an interior stopping point, a common price can lie between
+            the cost saved by buying one more permit and the cost added by selling one.
+            Did the class exhaust those gains from trade, or did time run out first?</p>
+          ${state.session.banking_enabled ? "<p>For Round 1, also consider the future use of any surplus permits you banked.</p>" : ""}
+        </div>`;
     }
   }
 
@@ -533,6 +564,7 @@ function renderLeaderboard(state) {
 async function refreshState() {
   const joinToken = getJoinToken();
   if (!joinToken) {
+    joinCard.classList.remove("hidden");
     firmCard.classList.add("hidden");
     stageCard.classList.add("hidden");
     resultsCard.classList.add("hidden");
@@ -543,6 +575,7 @@ async function refreshState() {
   try {
     const state = await apiJson(`/api/permit-market/team/state?join_token=${encodeURIComponent(joinToken)}`);
     latestState = state;
+    joinCard.classList.add("hidden");
     clearStatus(joinStatus);
     syncCountdown(state);
     renderFirmCard(state);
@@ -550,6 +583,7 @@ async function refreshState() {
     renderResults(state);
     renderLeaderboard(state);
   } catch (error) {
+    joinCard.classList.remove("hidden");
     setStatus(joinStatus, "bad", error.message);
   }
 }
@@ -591,12 +625,14 @@ teamNameInput.addEventListener("keydown", (event) => {
 
 resetTokenButton.addEventListener("click", () => {
   clearJoinToken();
+  joinCard.classList.remove("hidden");
   clearStatus(joinStatus);
   firmCard.classList.add("hidden");
   stageCard.classList.add("hidden");
   resultsCard.classList.add("hidden");
   leaderboardCard.classList.add("hidden");
-  setStatus(joinStatus, "warn", "Stored join token cleared.");
+  setStatus(joinStatus, "warn", "Enter a team name to join or rejoin.");
+  teamNameInput.focus();
 });
 
 if (getJoinToken()) {

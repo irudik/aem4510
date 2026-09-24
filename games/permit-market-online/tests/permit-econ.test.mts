@@ -88,6 +88,21 @@ test("uniform-price clearing fills from the top and prices at the lowest accepte
   assert.equal(byTeam.get("B").payment, 16);
 });
 
+test("every firm can bid its entire MAC schedule one permit at a time", () => {
+  for (const firm of FIRM_TYPES) {
+    const bids = valueSchedule(firm.baseline_emissions, firm.mac_slope)
+      .map((step) => ({ bid_price: step.value, bid_quantity: 1 }));
+    const accepted = validateBidSet(firm, bids);
+    assert.equal(accepted.length, firm.baseline_emissions);
+    assert.deepEqual(accepted.map((bid) => bid.bid_index), bids.map((_, index) => index + 1));
+    assert.equal(accepted.reduce((sum, bid) => sum + bid.bid_quantity, 0), firm.baseline_emissions);
+    assert.throws(() => validateBidSet(firm, [...bids, { bid_price: 0, bid_quantity: 1 }]), /cannot exceed your baseline/);
+    const cleared = clearAuction(firm.baseline_emissions, accepted.map((bid) => ({ ...bid, team_id: "A" })));
+    assert.equal(cleared.allocations[0].permits_won, firm.baseline_emissions);
+    assert.equal(cleared.clearing_price, firm.mac_slope);
+  }
+});
+
 test("clearing handles undersubscription, ties, and empty books", () => {
   const undersubscribed = clearAuction(10, [
     { team_id: "A", bid_price: 7, bid_quantity: 2, submitted_at: "t1" },

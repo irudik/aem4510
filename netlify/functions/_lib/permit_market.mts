@@ -18,8 +18,6 @@ export const MARKET_PHASES = new Set(["market1", "market2"]);
 
 export const PHASE_ORDER = ["setup", "auction1", "market1", "auction2", "market2", "complete"];
 
-export const MAX_BIDS_PER_TEAM = 4;
-
 /** Round that each active phase belongs to. */
 export function roundForPhase(phase) {
   const normalized = String(phase ?? "").trim();
@@ -101,17 +99,14 @@ export function grossValue(baselineEmissions, macSlope) {
 }
 
 /**
- * Validate a team's auction bid set. Bids are up to MAX_BIDS_PER_TEAM
- * (price, quantity) pairs whose total quantity cannot exceed the baseline.
+ * Validate price/quantity bids whose total quantity cannot exceed baseline
+ * emissions. Positive whole quantities allow at most one row per permit.
  * @param {{baseline_emissions: number}} team
  * @param {Array<{bid_price: unknown, bid_quantity: unknown}>} bids
  */
 export function validateBidSet(team, bids) {
   if (!Array.isArray(bids) || bids.length === 0) {
     throw new Error("Submit at least one bid (price and quantity)");
-  }
-  if (bids.length > MAX_BIDS_PER_TEAM) {
-    throw new Error(`At most ${MAX_BIDS_PER_TEAM} bids per auction`);
   }
 
   const normalized = bids.map((bid, index) => {

@@ -10,6 +10,7 @@ the instructor turns banking on.
 
 - Student portal: `/games/permit-market-online/student.html`
 - Admin dashboard: `/games/permit-market-online/admin.html`
+- Instructor MAC pop-out: `/games/permit-market-online/auction-view.html`
 - Landing page: `/games/permit-market-online/index.html`
 - Backend API: Netlify Functions under `/api/permit-market/*`
 - Database schema: `games/permit-market-online/supabase/001_permit_market_schema.sql`
@@ -35,10 +36,12 @@ The earlier quiz-style emissions-trading game remains available at
 
 ## Market Rules
 
-- Auction (sealed, uniform price): up to 4 (price, quantity) bids per team,
+- Auction (sealed, uniform price): flexible (price, quantity) bids per team,
   revisable until the deadline; total quantity at most the baseline. Bid
   units are stacked by price (ties to the earlier submission); the top cap
   units win and all winners pay the lowest accepted price.
+  Each row may cover several permits, or students can add one row per
+  permit to express their full MAC schedule. There is no four-row limit.
 - Secondary market (continuous double auction): limit orders rest in a
   book; an incoming order trades against the best crossing resting orders
   at the resting price, ties to the earlier order. Partial fills rest.
@@ -54,6 +57,9 @@ The earlier quiz-style emissions-trading game remains available at
 
 1. Reuse the class Supabase project (email/password auth already on).
 2. Apply `games/permit-market-online/supabase/001_permit_market_schema.sql`.
+   On an existing database, also apply `002_flexible_auction_bids.sql` in
+   the same folder before deploying the flexible bid form. Rerunning
+   `001` alone does not remove an existing four-row limit.
 3. The instructor auth user id must be in `public.admin_users` (already
    true if the other games run).
 4. Netlify environment variables are shared with the other games.
@@ -68,6 +74,12 @@ The earlier quiz-style emissions-trading game remains available at
    firm types are assigned at the start; rejoining is always fine).
 4. Click `Start Game`: firm types are assigned and auction 1 opens with
    its countdown. The clearing chart shows the live bid stack.
+   Under `Auction Clearing`, use `Pop out MAC charts` for a larger view
+   with aggregate MAC and all firms' individual MACs side by side. The
+   window shares the dashboard login, updates every 4 seconds, and has
+   a round selector. It contains no game controls. Project it only when
+   you intend to reveal MACs and bids. Identical firm curves coincide;
+   the legend lists every team sharing each curve.
 5. Move phases forward in order: auction1 -> market1 -> auction2 ->
    market2 -> complete. Leaving an auction clears it (students then see
    the clearing price and their allocations); leaving a market scores the
@@ -79,10 +91,20 @@ The earlier quiz-style emissions-trading game remains available at
 
 ## Debrief Pointers
 
-- Auction chart: submitted bids (blue) against true values (grey) shows
-  whether the class bid near its true demand; the uniform price makes
-  truthful bidding roughly optimal, which is why real allowance auctions
-  (RGGI, the EU ETS) use this design.
+The student page shows a descending MAC curve against emissions, matching
+lecture 06. Whole-unit steps match the game's exact abatement costs. During
+trading, the graph marks current emissions and shades total abatement cost;
+an observed trade price (or the auction price before any trades) provides a
+comparison. The auction and market prompts ask students to reason through
+one more permit. The MAC = P explanation appears after the game, with the
+whole-unit qualification. Students are not shown a permit-value table.
+
+- Auction charts: submitted bids (blue) against aggregate MAC (rose) show
+  how bids differ from avoided abatement costs. The adjacent graph puts
+  every firm's MAC on the same emissions axis, without adding quantities.
+  Both graphs use the same price scale and show the auction and efficient
+  benchmark prices. With multiple units, uniform-price auctions can induce
+  demand reduction; bidding the full MAC schedule is not always optimal.
 - Market trades should flow from low-MAC to high-MAC firms and prices
   should converge toward the efficient price.
 - Round 2's tighter cap raises the clearing price; with banking on, round 1
