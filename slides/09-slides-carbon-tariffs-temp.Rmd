@@ -1,0 +1,194 @@
+class: inverse, center, middle
+name: solar
+
+# Solar tariffs
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Solar tariffs: the opposite-sign case
+
+```{r fig-solar-mirror-case, out.width = "100%", fig.width = 11.2, fig.height = 3.9, echo = FALSE, fig.align = "center"}
+st_plot_mirror_case("both")
+```
+
+- Carbon tariffs tax a .hi[dirty good]
+- Solar tariffs tax a .hi[clean input]
+- The missing wedge is on the .hi[benefit side], not the cost side
+
+---
+
+# Free trade benchmark for solar modules
+
+.pull-left[
+```{r fig-solar-free-trade, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("free_trade")
+```
+]
+
+.pull-right[
+
+At price $P_W$:
+- Domestic manufacturing is $q_i^S$
+- Domestic purchases/installations are $q_i^D$
+- Imports are $q_i^D - q_i^S$
+
+]
+
+---
+count: false
+# The tariff wedge for solar modules
+
+.pull-left[
+```{r fig-solar-tariff-price, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("price")
+```
+]
+
+.pull-right[
+
+- A tariff raises the domestic module price
+- Domestic manufacturers can charge the higher price
+- Imported units now enter at the tariff-inclusive price $P_W + \tau$
+
+]
+
+---
+count: false
+# Quantity effects of a solar tariff
+
+.pull-left[
+```{r fig-solar-tariff-quantities, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("quantities")
+```
+]
+
+.pull-right[
+
+- Domestic manufacturing rises to $q_{i\tau}^S$
+- Domestic purchases/installations fall to $q_{i\tau}^D$
+- Imports shrink
+- In the simple 2-country model, foreign production falls with imports
+
+]
+
+---
+count: false
+# Same private tariff geometry as before
+
+.pull-left[
+```{r fig-solar-tariff-welfare, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_tariff("welfare")
+```
+]
+
+.pull-right[
+
+- Producer gain = $a+b$
+- Buyers/installers lose = $a+b+c+d+e$
+- Government revenue = $d$
+- Private deadweight loss = $c+e$
+- .hi[Privately], a solar tariff looks just like any ordinary tariff
+
+]
+
+---
+<!-- Sources: One Earth paper on climate and health benefits of imported solar PV in the US: https://www.sciencedirect.com/science/article/abs/pii/S2590332225002933 -->
+# Solar deployment has a positive externality
+
+.pull-left[
+```{r fig-solar-externality-private, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("private")
+```
+]
+
+.pull-right[
+
+- Solar deployment displaces fossil generation
+
+]
+
+---
+count: false
+# Solar deployment has a positive externality
+
+.pull-left[
+```{r fig-solar-externality-smb, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("smb")
+```
+]
+
+.pull-right[
+
+- Solar deployment displaces fossil generation
+- Private demand understates social value
+
+]
+
+---
+count: false
+# Solar deployment has a positive externality
+
+.pull-left[
+```{r fig-solar-externality-smb-final, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("smb")
+```
+]
+
+.pull-right[
+
+- Solar deployment displaces fossil generation
+- Private demand understates social value
+- The efficient quantity is higher than the private-market quantity
+
+]
+
+---
+
+# Solar tariff with deployment benefits
+
+.pull-left[
+```{r fig-solar-tariff-social, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("tariff_social")
+```
+]
+
+.pull-right[
+
+- The standard tariff losses $c+e$ are still there
+- There is an extra environmental loss $g$
+- If domestic and foreign manufacturing have the same environmental intensity, then $\Delta W_i^{social} = -(c + e + g)$
+
+]
+
+---
+
+# When could a solar tariff help the climate?
+
+.pull-left[
+```{r fig-solar-manufacturing-offset, out.width = "100%", fig.width = 5.6, fig.height = 4.3, echo = FALSE, fig.align = "center"}
+st_plot_solar_externality("manufacturing_offset")
+```
+]
+
+.pull-right[
+
+- Cleaner domestic manufacturing can create an upstream environmental gain
+- $\Delta W_i^{social} = h - (c + e + g)$
+- A solar tariff helps the climate only if $h$ is large enough to offset $g$ and the usual tariff distortions
+- If domestic manufacturing is .hi[dirtier], then $h < 0$ and the case gets weaker
+
+]
+
+---
+<!-- Sources: NBER working paper on strategic avoidance and welfare impacts of U.S. solar tariffs: https://www.nber.org/system/files/working_papers/w34401/w34401.pdf -->
+# Trade diversion in practice
+
+- Country-specific tariffs often shift production to .hi[third countries], not just back home
+- That weakens the domestic-manufacturing argument
+- It also makes climate accounting messier
+- This is the solar analogue of .hi[leakage / resource shuffling]
+- Chinese manufacturers' offshore manufacturing share rose from `5%` in `2012` to `20%` by `2019`
+
+<!-- TODO numerical examples: (i) linear D and S with constant deployment wedge B; (ii) cleaner domestic manufacturing case with h > 0; (iii) trade-diversion case with third-country supply. -->
