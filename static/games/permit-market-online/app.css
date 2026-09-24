@@ -484,6 +484,26 @@ small.note {
   gap: 0.8rem;
 }
 
+.market-depth { margin: 0.8rem 0; padding: 1rem; border: 1px solid #d8e2e8; border-radius: 10px; background: #fafcfd; }
+.market-depth h4 { margin: 0 0 0.4rem; }
+.depth-summary { font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.depth-legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem; font-weight: 600; }
+.depth-buy-label { color: #087b64; }
+.depth-sell-label { color: #b44f21; }
+.depth-chart { display: block; width: 100%; height: auto; margin: 0.5rem 0; }
+.depth-chart text { font-size: 16px; fill: #34495a; }
+.depth-grid { stroke: #d8e2e8; stroke-width: 1; }
+.depth-bid { stroke: #087b64; fill: #087b64; }
+.depth-ask { stroke: #b44f21; fill: #b44f21; }
+.depth-area { opacity: 0.14; stroke: none; }
+.depth-line { fill: none; stroke-width: 3; }
+.depth-line.depth-ask { stroke-dasharray: 7 3; }
+@media (max-width: 500px) {
+  .market-depth { padding: 0.5rem; }
+  .depth-chart text { font-size: 30px; }
+  .market-depth .note { font-size: 0.8rem; }
+}
+
 .book-grid h4 {
   margin: 0 0 0.3rem 0;
 }

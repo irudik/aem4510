@@ -1,5 +1,6 @@
 import { auctionComparisonHtml } from "./auction-charts.mjs";
 import { phaseControls } from "./phase-controls.mjs";
+import { marketDepthHtml } from "./market-depth.mjs";
 import {
   apiJson,
   clearStatus,
@@ -216,6 +217,12 @@ function renderAllTables(state) {
     price: formatNumber(level.price, 2),
     quantity: level.quantity,
   })));
+  const depth = document.getElementById("market-depth");
+  const marketPhase = ["market1", "market2"].includes(state.session?.current_phase);
+  depth.innerHTML = marketPhase ? marketDepthHtml(state.open_book, {
+    closed: Boolean(state.session.phase_closed) || (state.session.phase_deadline_at != null
+      && Date.parse(state.session.phase_deadline_at) <= Date.now()),
+  }) : "<p class=\"note\">Market depth appears during an open-market phase.</p>";
   renderTable(bookAsksElement, (state.open_book?.asks ?? []).map((level) => ({
     price: formatNumber(level.price, 2),
     quantity: level.quantity,

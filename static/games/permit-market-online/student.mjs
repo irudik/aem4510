@@ -5,6 +5,7 @@ import {
   setStatus,
 } from "/games/permit-market-online/shared.mjs";
 import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
+import { marketDepthHtml } from "./market-depth.mjs";
 import {
   auctionRulesHtml,
   biddablePermits,
@@ -456,6 +457,7 @@ function renderMarketScaffold(state) {
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
     ${showPlan ? emissionsPlanHtml(state, expired) : ""}
     <h3>Current Offers</h3>
+    <div id="market-depth"></div>
     <div class="book-grid" style="margin-top: 0.6rem">
       <div><h4>Buyers (bids)</h4><div id="book-bids" class="table-wrap"></div></div>
       <div><h4>Sellers (asks)</h4><div id="book-asks" class="table-wrap"></div></div>
@@ -617,6 +619,8 @@ function renderMarketLiveData(state) {
   }
 
   const bookBids = document.getElementById("book-bids");
+  const depth = document.getElementById("market-depth");
+  if (depth) depth.innerHTML = marketDepthHtml(market.book, { closed: deadlineExpired() });
   const bookAsks = document.getElementById("book-asks");
   if (bookBids && bookAsks) {
     bookBids.innerHTML = tableHtml(
