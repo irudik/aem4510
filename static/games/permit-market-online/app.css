@@ -487,6 +487,17 @@ small.note {
 .market-depth { margin: 0.8rem 0; padding: 1rem; border: 1px solid #d8e2e8; border-radius: 10px; background: #fafcfd; }
 .market-depth h4 { margin: 0 0 0.4rem; }
 .depth-summary { font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.benchmark-price-panel { padding: 1rem; margin: 0.8rem 0; background: #eef5fc; border-left: 4px solid #356b9a; }
+.benchmark-price-panel h3 { margin-top: 0; }
+.benchmark-price-value { font-size: 2rem; font-weight: 700; margin: 0.5rem 0; }
+.benchmark-price-value span { font-size: 1rem; font-weight: 400; }
+.mac-distribution { margin-bottom: 1.5rem; }
+.mac-hist-chart { display: block; width: 100%; max-width: 850px; height: auto; }
+.mac-hist-chart text { font-size: 17px; fill: #34495a; }
+.mac-hist-initial { fill: #356b9a; opacity: 0.22; }
+.mac-hist-final { fill: #356b9a; }
+.mac-hist-price { stroke: #b44f21; stroke-width: 3; stroke-dasharray: 7 4; }
+@media (max-width: 500px) { .mac-hist-chart text { font-size: 28px; } }
 .depth-legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem; font-weight: 600; }
 .depth-buy-label { color: #087b64; }
 .depth-sell-label { color: #b44f21; }

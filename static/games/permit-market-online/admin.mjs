@@ -1,6 +1,8 @@
 import { auctionComparisonHtml } from "./auction-charts.mjs";
 import { phaseControls } from "./phase-controls.mjs";
 import { marketDepthHtml } from "./market-depth.mjs";
+import { benchmarkPriceHtml } from "./benchmark-price.mjs";
+import { macDistributionsHtml } from "./mac-distribution.mjs";
 import {
   apiJson,
   clearStatus,
@@ -173,6 +175,12 @@ function renderSessionSummary(state) {
 }
 
 function renderAllTables(state) {
+  const distributions = document.getElementById("mac-distributions");
+  const distributionKey = JSON.stringify(state.mac_distributions ?? []);
+  if (distributions.dataset.contents !== distributionKey) {
+    distributions.innerHTML = macDistributionsHtml(state.mac_distributions);
+    distributions.dataset.contents = distributionKey;
+  }
   renderSessionSummary(state);
   renderAuctionCharts(state);
 
@@ -218,6 +226,7 @@ function renderAllTables(state) {
     quantity: level.quantity,
   })));
   const depth = document.getElementById("market-depth");
+  document.getElementById("cost-effective-price").innerHTML = benchmarkPriceHtml(state.cost_effective_benchmark);
   const marketPhase = ["market1", "market2"].includes(state.session?.current_phase);
   depth.innerHTML = marketPhase ? marketDepthHtml(state.open_book, {
     closed: Boolean(state.session.phase_closed) || (state.session.phase_deadline_at != null

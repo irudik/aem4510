@@ -110,7 +110,7 @@ export function auctionComparisonHtml(state, roundKey, { popoutLink = true } = {
       <span><i class="auction-price-key"></i>${model.pricing === "pay_as_bid"
         ? (model.live ? "Lowest winning bid if closed now" : "Lowest winning bid (pay as bid)")
         : (model.live ? "Clearing price if closed now" : "Auction clearing price")}: <strong>${dollars(model.clearingPrice)}</strong></span>
-      <span><i class="auction-benchmark-key"></i>Efficient benchmark price: <strong>${dollars(model.benchmarkPrice)}</strong></span>
+      <span><i class="auction-benchmark-key"></i>Cost-effective price before any shock: <strong>${dollars(model.benchmarkPrice)}</strong></span>
     </div>
     <div class="auction-comparison">
       <figure class="auction-figure"><h4>Aggregate MAC &amp; auction bids</h4>
