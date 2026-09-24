@@ -20,7 +20,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
 )
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
@@ -888,10 +888,7 @@ Because firms treat permit prices and a tax identically in decisionmaking
 
 # Tradable permits: cost-effectiveness
 
-Tradable permit systems are .hi[always] cost-effective: whatever emissions limit you set, it will be achieved at least-cost<sup>1</sup>
-.footnote[
-<sup>1</sup> Try to see if you can use the same mathematical derivation to show that taxes are also always cost-effective.
-]
+Tradable permit systems are .hi[always] cost-effective: whatever emissions limit you set, it will be achieved at least-cost
 
 --
 
