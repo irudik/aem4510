@@ -72,6 +72,7 @@ const bookBidsElement = document.getElementById("book-bids");
 const bookAsksElement = document.getElementById("book-asks");
 const tradesTableElement = document.getElementById("trades-table");
 const scoresTableElement = document.getElementById("scores-table");
+const costEffectivenessElement = document.getElementById("cost-effectiveness");
 const leaderboardTableElement = document.getElementById("leaderboard-table");
 
 /** @type {{supabaseUrl: string, supabaseAnonKey: string} | null} */
@@ -120,6 +121,24 @@ function tableHtml(rows) {
 
 function renderTable(target, rows) {
   target.innerHTML = tableHtml(rows);
+}
+
+function costEffectivenessHtml(reports, teamNamesById) {
+  if (!reports?.length) return "";
+  return reports.map((report) => {
+    const round = report.round_key === "round2" ? "Round 2" : "Round 1";
+    if (report.achieved) {
+      return `<h3>${round}: cost-effective allocation</h3><p><strong>The market achieved cost-effectiveness.</strong></p>`;
+    }
+    const rows = report.firms_off_allocation.map((row) => ({
+      firm: teamNamesById.get(String(row.team_id)) ?? "",
+      final_permits: row.actual_permits,
+      cost_effective_permits: row.cost_effective_permits,
+      difference: row.permit_difference,
+    }));
+    return `<h3>${round}: firms off the cost-effective allocation</h3>`
+      + `<p><strong>The market did not achieve cost-effectiveness.</strong></p>${tableHtml(rows)}`;
+  }).join("");
 }
 
 function renderAuctionCharts(state) {
@@ -187,6 +206,7 @@ function renderAllTables(state) {
   const teamNamesById = new Map(
     (state.teams ?? []).map((row) => [String(row.id), String(row.team_name ?? "")]),
   );
+  costEffectivenessElement.innerHTML = costEffectivenessHtml(state.cost_effectiveness, teamNamesById);
 
   const shocksOn = Boolean(state.session?.shock_round1 || state.session?.shock_round2);
   renderTable(teamsTableElement, (state.teams ?? []).map((row) => ({

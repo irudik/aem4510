@@ -23,6 +23,7 @@ import { jsonResponse } from "./_lib/http.mts";
 import { phaseIsClosed } from "./_lib/permit_closed.mts";
 import { currentCostEffectivePrice } from "./_lib/permit_benchmark.mts";
 import { closedMacDistributions } from "./_lib/permit_mac_distribution.mts";
+import { roundCostEffectiveness } from "./_lib/permit_cost_effectiveness.mts";
 
 export default async function permitAdminState(req) {
   if (req.method !== "GET") {
@@ -115,6 +116,7 @@ export default async function permitAdminState(req) {
       open_book: bookLevels(openOrders),
       cost_effective_benchmark: currentCostEffectivePrice(session, teams),
       mac_distributions: closedMacDistributions(session, teams, results, allocations, scores),
+      cost_effectiveness: roundCostEffectiveness(teams, scores),
       trades,
       scores,
       leaderboard: leaderboardRows(teams, scores),

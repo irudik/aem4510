@@ -54,6 +54,7 @@ const stageContainer = document.getElementById("stage-container");
 const resultsCard = document.getElementById("results-card");
 const macDistributionsCard = document.getElementById("mac-distributions-card");
 const macDistributionsElement = document.getElementById("mac-distributions");
+const resultsCostEffectiveness = document.getElementById("results-cost-effectiveness");
 const resultsTable = document.getElementById("results-table");
 const leaderboardCard = document.getElementById("leaderboard-card");
 const leaderboardTable = document.getElementById("leaderboard-table");
@@ -706,6 +707,7 @@ function renderResults(state) {
   const scores = state?.own_scores ?? [];
   if (scores.length === 0) {
     resultsCard.classList.add("hidden");
+    resultsCostEffectiveness.innerHTML = "";
     resultsTable.innerHTML = "";
     return;
   }
@@ -734,6 +736,10 @@ function renderResults(state) {
   }));
 
   resultsCard.classList.remove("hidden");
+  resultsCostEffectiveness.innerHTML = (state.cost_effectiveness ?? []).map((report) => {
+    const round = report.round_key === "round2" ? "Round 2" : "Round 1";
+    return `<p><strong>The market ${report.achieved ? "did" : "did not"} achieve cost-effectiveness in ${round}.</strong></p>`;
+  }).join("");
   resultsTable.innerHTML = tableHtml(rows);
 }
 
