@@ -37,6 +37,13 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+``` r
 pacman::p_load(
   tidyverse, xaringanExtra, rlang, patchwork, nycflights13
 )
@@ -809,11 +816,11 @@ Each permit lets the firm emit one more unit, so it is worth the abatement cost 
 .pull-right[
 Firm 1: `\(MAC_1 = 90 - E_1\)`
 
-At `\(p = 70\)`: wants 20 permits
+At `\(p = 70\)`: wants 20 permits&lt;br&gt;At `\(p = 50\)`: wants 40 permits
 
-At `\(p = 50\)`: wants 40 permits
+Firm 2: `\(MAC_2 = 150 - 2E_2\)`
 
-Lower price, more permits: an ordinary demand curve
+Setting `\(MAC_2 = p\)` gives `\(E_2 = 75 - p/2\)`&lt;br&gt;At `\(p = 70\)`: wants 40 permits&lt;br&gt;At `\(p = 50\)`: wants 50 permits
 ]
 
 ---
@@ -828,6 +835,8 @@ Lower price, more permits: an ordinary demand curve
 
 .pull-right[
 .hi-blue[Supply]: the cap, `\(\bar{E} = 90\)`
+
+.hi-blue[Firm 2]: `\(MAC_2 = 150 - 2E_2\)`&lt;br&gt;At price `\(p\)`, it wants `\(75 - p/2\)` permits
 
 .hi-blue[Demand]: add up the firms' demands&lt;sup&gt;1&lt;/sup&gt;
 `$$(90 - p) + (75 - p/2)$$`
@@ -848,16 +857,12 @@ Lower price, more permits: an ordinary demand curve
 .pull-right[
 .hi-blue[Supply]: the cap, `\(\bar{E} = 90\)`
 
-.hi-blue[Demand]: add up the firms' demands&lt;sup&gt;1&lt;/sup&gt;
+.hi-blue[Demand] for `\(p \leq 90\)`:
 `$$(90 - p) + (75 - p/2)$$`
 
 Set equal: `\(165 - 1.5p = 90\)`, so `\(p = 50\)`
 
 `\(E_1 = 40\)`, `\(E_2 = 50\)`: .hi[the trading equilibrium]
-]
-
-.footnote[
-&lt;sup&gt;1&lt;/sup&gt; For `\(p \leq 90\)`; above that, firm 1 wants no permits.
 ]
 
 ---
@@ -917,24 +922,139 @@ Top 5 bids win: 12, 10, 9, 8, 7
 
 Price = lowest winning bid = .hi[7]
 
-A: 2 permits for 14&lt;br&gt;B: 2 permits for 14&lt;br&gt;C: 1 permit for 7
+All winners pay only .hi[7 per permit], even when they bid higher
 
-A bid 12 but pays only 7
+Your bid mostly decides .hi[whether] you win a permit; the price is the lowest winning bid, usually someone else's
 ]
 
 ---
 
-# Permit auctions: why bid close to your MAC?
+class: inverse, center, middle
+name: permit-game
 
-Your bid mostly decides .hi[whether] you win a permit; the price is the lowest winning bid, usually someone else's
+# Let's trade: the permit market game
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# The permit market game: auctions and trading
+
+Each team runs a firm with its own baseline emissions and MAC curve: keep yours private
 
 --
 
-.hi-red[Bid far below MAC]: C bids 5 instead of 8 for its first permit. It wins nothing, and its surplus falls from 1 to 0
+Two rounds, each with a cap (tighter in Round 2): permits are .hi[auctioned] or .hi[given away], then teams .hi[trade] in a live market
 
 --
 
-.hi-red[Bid above MAC]: C bids 7.5 for its second permit, worth only 5. Its bid becomes the price: C pays 15 for permits worth 13, and its surplus falls from 1 to -2
+No banking or borrowing: each round's permits cover only that round's emissions
+
+--
+
+Emissions your permits do not cover are abated at your MAC; the leaderboard compares you with an efficient benchmark
+
+---
+
+# The permit market game: options we may turn on
+
+.hi[Cost shocks:] when the market opens, your MAC slope becomes 0.5, 1, or 1.5 times what it was
+
+--
+
+.hi[Free permits:] a round gives permits away in proportion to baseline emissions
+
+--
+
+.hi[Pay as you bid:] an auction charges each winner its own bid
+
+---
+
+# The permit market game: what should happen?
+
+If the market works, what do we expect to see in the data?
+
+--
+
+- Auction prices near where total demand, the sum of MACs, meets the cap
+- Trades from low-MAC to high-MAC firms, especially after a cost shock
+- Free and auctioned rounds ending with similar allocations but different payments
+- A higher Round 2 price when the cap tightens, holding MACs fixed
+
+--
+
+We will check the class results against these predictions after we play
+
+---
+
+# Join the permit market game
+
+.center[
+Scan to open the student login, then join with your team name
+
+&lt;img src="files/06-permit-game-qr.png" alt="QR code for the permit market student login" width="30%" /&gt;
+
+Or open .hi[[aem4510.ivanrudik.com/permits](https://aem4510.ivanrudik.com/permits)]
+]
+
+---
+
+class: inverse, center, middle
+name: after-the-game
+
+# After the permit game
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+# Debrief: should big firms bid their MAC?
+
+If your bid might be the lowest winning bid, it sets the price you pay on .hi[all] your permits
+
+--
+
+For example, A cuts its second bid from 9 to 6. The price falls to 6, and A still wins 2 permits, paying 12 instead of 14
+
+--
+
+This is .hi[demand reduction]: bidders who might set the price, especially large buyers, shade their bids below MAC
+
+--
+
+Here only revenue falls (35 to 30). In general, shading can misallocate permits, which later trading can fix
+
+---
+
+# Debrief: why trade after an auction?
+
+If every firm bids its MAC and nothing changes, the auction already equalizes MACs: there is nothing left to trade
+
+--
+
+In the game, costs changed after the auction: real MACs move with fuel prices, demand, outages, and new technology
+
+--
+
+The permit market lets firms whose MAC rose buy from firms whose MAC fell, until MACs are equal again
+
+---
+
+# Debrief: pay as you bid
+
+EPA's Acid Rain Program auctions (from 1993) were .hi[pay-as-bid]; they sold about 2.8% of allowances, and the rest were given away
+
+--
+
+Bidding your MAC then earns nothing on the permits you win, so bidders shade toward the price they expect
+
+--
+
+Bids stop revealing MACs, and bidders who guess the price wrong end up with too few or too many permits
+
+--
+
+Svendsen and Christensen (1999): a uniform-price design "would probably have generated better price signals"
 
 ---
 
@@ -1665,135 +1785,71 @@ Borrowing is limited in practice; EU design relies much more on banking than bor
 ---
 
 class: inverse, center, middle
-name: permit-game
+name: permit-game-banking
 
-# Let's trade: the permit market game
+# The permit game: banking and borrowing
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
 
 ---
 
-# The permit market game
+# The permit game: decisions across rounds
 
-Each team runs a firm with its own baseline emissions and MAC curve: keep yours private
-
---
-
-Two rounds, each with a cap (tighter in Round 2): permits are .hi[auctioned] or .hi[given away], then teams .hi[trade] in a live market
+We now allow permits to move between the two rounds
 
 --
 
-Emissions your permits do not cover are abated at your MAC; the leaderboard compares you with an efficient benchmark
+.hi[Bank:] emit less than your permits cover in Round 1 and save the unused permits for Round 2
+
+--
+
+.hi[Borrow:] emit more than your permits cover in Round 1 and repay the difference with Round 2 permits
+
+--
+
+Use the emissions choice in Round 1. Unrepaid borrowing pays a penalty at the end of Round 2
 
 ---
 
-# The permit market game: options we may turn on
+# The permit game: predictions across rounds
 
-.hi[Cost shocks:] when the market opens, your MAC slope becomes 0.5, 1, or 1.5 times what it was
-
---
-
-.hi[Free permits:] a round gives permits away in proportion to baseline emissions
+How should expected Round 2 conditions change your Round 1 decisions?
 
 --
 
-.hi[Pay as you bid:] an auction charges each winner its own bid
+- Bank when permits are more valuable in Round 2
+- Borrow when permits are more valuable in Round 1, accounting for repayment
+- Trading across rounds brings marginal abatement costs closer together
 
 --
 
-.hi[Bank and borrow:] in Round 1, emit less to bank permits for Round 2, or emit more to borrow from Round 2; unrepaid borrowing pays a penalty
+Compare these results with the game without banking and borrowing
 
 ---
 
-# The permit market game: what should happen?
-
-If the market works, what do we expect to see in the data?
-
---
-
-- Auction prices near where total demand, the sum of MACs, meets the cap
-- Trades from low-MAC to high-MAC firms, especially after a cost shock
-- Free and auctioned rounds ending with similar allocations but different payments
-- A higher Round 2 price, and banking in Round 1 if teams expect it
-
---
-
-We will check the class results against these predictions after we play
-
----
-
-# Join the permit market game
+# Rejoin the permit game: banking and borrowing
 
 .center[
 Scan to open the student login, then join with your team name
 
 &lt;img src="files/06-permit-game-qr.png" alt="QR code for the permit market student login" width="30%" /&gt;
 
-Or type .hi[aem4510.ivanrudik.com/permits]
+Or open .hi[[aem4510.ivanrudik.com/permits](https://aem4510.ivanrudik.com/permits)]
 ]
 
 ---
 
-class: inverse, center, middle
-name: after-the-game
+# Debrief: banking and borrowing
 
-# After the permit game
-
-&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
-
----
-
-# Debrief: should big firms bid their MAC?
-
-If your bid might be the lowest winning bid, it sets the price you pay on .hi[all] your permits
+Did teams bank before the tighter Round 2 cap? Did any teams borrow instead?
 
 --
 
-For example, A cuts its second bid from 9 to 6. The price falls to 6, and A still wins 2 permits, paying 12 instead of 14
+Compare your MAC across rounds: could shifting one more permit have reduced your total abatement cost?
 
 --
 
-This is .hi[demand reduction]: bidders who might set the price, especially large buyers, shade their bids below MAC
-
---
-
-Here only revenue falls (35 to 30). In general, shading can misallocate permits, which later trading can fix
-
----
-
-# Debrief: why trade after an auction?
-
-If every firm bids its MAC and nothing changes, the auction already equalizes MACs: there is nothing left to trade
-
---
-
-In the game, costs changed after the auction: real MACs move with fuel prices, demand, outages, and new technology
-
---
-
-The permit market lets firms whose MAC rose buy from firms whose MAC fell, until MACs are equal again
-
---
-
-Banking and borrowing do the same across time: each firm equalizes its own MAC across rounds
-
----
-
-# Debrief: pay as you bid
-
-EPA's Acid Rain Program auctions (from 1993) were .hi[pay-as-bid]; they sold about 2.8% of allowances, and the rest were given away
-
---
-
-Bidding your MAC then earns nothing on the permits you win, so bidders shade toward the price they expect
-
---
-
-Bids stop revealing MACs, and bidders who guess the price wrong end up with too few or too many permits
-
---
-
-Svendsen and Christensen (1999): a uniform-price design "would probably have generated better price signals"
+Banking and borrowing extend the gains from trade across time
 
 ---
 
