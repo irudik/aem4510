@@ -63,3 +63,9 @@ Do not edit manually unless you are intentionally maintaining the template. -->
 - Scope: All slide decks and content pages in this repo.
 - Evidence: Lecture 03 data center rebuild, 2026-09-01.
 - Action: Follow this build order after editing any deck: render html, chrome_print pdf, re-render affected content pages.
+
+[LEARN:equimarginal-slides]
+- Date: 2026-09-22
+- Trigger: User corrected the figures following slide 45 of lecture 05.
+- Right: Preserve the existing common emissions axis and MAC curves; omit MD when illustrating cost minimization at fixed total emissions. Use the two red triangles, as in lecture 06 permits, to show excess abatement cost. The user wants no grey rectangles or rectangle-cancellation discussion, concise text, and no numerical emissions values. Keep math outside xaringan color/bold wrappers and constrain plotted MAC domains to avoid missing-value warnings.
+- Scope: Equimarginal-principle figures in course slides.

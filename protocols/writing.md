@@ -76,6 +76,35 @@ unlock, empower, transformative, paradigm shift, "in today's world", "there
 has been growing interest in". Avoid filler transitions at paragraph
 openings and motivational filler generally.
 
+## Mannered Prose
+
+Write the plain sentence and stop. Prose is mannered when a sentence does
+something other than convey its content: it signposts, performs, balances
+clauses for effect, or comments on itself. Cut it or rewrite it flat. None
+of the following is acceptable in any register this guide covers:
+
+- Signposting and throat-clearing: "It's worth noting", "Notably",
+  "Importantly", "Crucially", "To be clear", "Put differently", "In short",
+  "The upshot is", "Here's the thing", "That said", and "In other words"
+  when the first words were fine.
+- Performative candor or confidence: "frankly", "honestly", "I'll be
+  direct", "let me be blunt", "the truth is".
+- Rhetorical questions, and sentence fragments or one-word sentences used
+  for emphasis.
+- Balanced constructions used for effect: "not X but Y", "less about X than
+  Y", "X, not Y", tricolons, deliberate parallelism across clauses.
+- Editorial asides on how interesting, elegant, satisfying, or telling a
+  result is. Report the result and let the reader judge it.
+- Aphoristic closers or tag lines that restate the paragraph ("That is the
+  whole story.", "Simple as that.").
+- Dramatised transitions or reveals ("And then the picture changed.",
+  "Which brings us to ...").
+
+The test: if deleting the phrase or flattening the construction loses no
+information, do it. This applies to conversation replies, issues, pull
+request text, commit messages, plans, handoffs, comments, docstrings, and
+paper prose alike.
+
 ## Voice
 
 - Use first person. In issues, pull request comments, and notes, write "I",
