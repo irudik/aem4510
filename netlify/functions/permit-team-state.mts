@@ -31,6 +31,7 @@ import {
 } from "./_lib/permit_game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
 import { phaseIsClosed } from "./_lib/permit_closed.mts";
+import { closedMacDistributions } from "./_lib/permit_mac_distribution.mts";
 
 export default async function permitTeamState(req) {
   if (req.method !== "GET") {
@@ -293,6 +294,7 @@ export default async function permitTeamState(req) {
         }
         : null,
       auction_reports: auctionReports,
+      mac_distributions: closedMacDistributions(session, teams, results, allocations, scores),
       permits_banked_in: carry.banked,
       permits_owed_in: carry.owed,
       market,

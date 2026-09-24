@@ -6,6 +6,7 @@ import {
 } from "/games/permit-market-online/shared.mjs";
 import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
 import { marketDepthHtml } from "./market-depth.mjs";
+import { macDistributionsHtml } from "./mac-distribution.mjs";
 import {
   auctionRulesHtml,
   biddablePermits,
@@ -51,6 +52,8 @@ const roundTimerElement = document.getElementById("round-timer");
 const stageStatus = document.getElementById("stage-status");
 const stageContainer = document.getElementById("stage-container");
 const resultsCard = document.getElementById("results-card");
+const macDistributionsCard = document.getElementById("mac-distributions-card");
+const macDistributionsElement = document.getElementById("mac-distributions");
 const resultsTable = document.getElementById("results-table");
 const leaderboardCard = document.getElementById("leaderboard-card");
 const leaderboardTable = document.getElementById("leaderboard-table");
@@ -688,6 +691,17 @@ function renderStage(state, options = {}) {
   }
 }
 
+/** Keep closed-phase comparisons visible without resetting expanded details on refresh. */
+function renderMacDistributions(state) {
+  const reports = state.mac_distributions ?? [];
+  macDistributionsCard.classList.toggle("hidden", reports.length === 0);
+  const signature = JSON.stringify(reports);
+  if (macDistributionsElement.dataset.signature !== signature) {
+    macDistributionsElement.innerHTML = reports.length ? macDistributionsHtml(reports) : "";
+    macDistributionsElement.dataset.signature = signature;
+  }
+}
+
 function renderResults(state) {
   const scores = state?.own_scores ?? [];
   if (scores.length === 0) {
@@ -761,6 +775,7 @@ async function refreshState() {
     stageCard.classList.add("hidden");
     resultsCard.classList.add("hidden");
     leaderboardCard.classList.add("hidden");
+    macDistributionsCard.classList.add("hidden");
     return;
   }
 
@@ -772,6 +787,7 @@ async function refreshState() {
     syncCountdown(state);
     renderFirmCard(state);
     renderStage(state);
+    renderMacDistributions(state);
     renderResults(state);
     renderLeaderboard(state);
   } catch (error) {
@@ -823,6 +839,7 @@ resetTokenButton.addEventListener("click", () => {
   stageCard.classList.add("hidden");
   resultsCard.classList.add("hidden");
   leaderboardCard.classList.add("hidden");
+  macDistributionsCard.classList.add("hidden");
   setStatus(joinStatus, "warn", "Enter a team name to join or rejoin.");
   teamNameInput.focus();
 });

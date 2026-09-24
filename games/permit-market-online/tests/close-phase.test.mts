@@ -149,10 +149,36 @@ test("closed auction reports are visible before advancing and new bids are rejec
   assert.equal(state.session.phase_closed, true);
   assert.ok(state.auction_reports.auction1);
   assert.equal(state.own_allocation.permits_won, 1);
+  assert.deepEqual(state.mac_distributions, dashboard.mac_distributions);
+  assert.equal(state.mac_distributions[0].phase, "auction1");
   const bid = await submitBids(new Request("https://game.invalid", { method: "POST",
     headers: { "Content-Type": "application/json" }, body: JSON.stringify({ join_token: "a", bids: [] }) }));
   assert.equal(bid.status, 400);
   assert.equal((await bid.json()).error, "The auction has closed. Bids are locked.");
+});
+
+test("students receive finalized MAC histograms with the free-allocation comparison", async (t) => {
+  const { db } = database(t);
+  db.permit_sessions[0].allocation_round1 = "free";
+  const studentState = async () => (await teamState(new Request("https://game.invalid?join_token=a"))).json();
+  assert.deepEqual((await studentState()).mac_distributions, []);
+  await closePhase(request("auction1"));
+  assert.equal((await studentState()).mac_distributions.length, 1);
+  await setPhase(request("market1"));
+  assert.equal((await studentState()).mac_distributions.length, 1);
+  await closePhase(request("market1"));
+  const state = await studentState();
+  const dashboard = await (await adminState(new Request("https://game.invalid", {
+    headers: { Authorization: "Bearer test" },
+  }))).json();
+  assert.deepEqual(state.mac_distributions, dashboard.mac_distributions);
+  const report = state.mac_distributions[1];
+  assert.equal(report.phase, "market1");
+  assert.equal(report.macs.length, 2);
+  assert.equal(report.initial_macs.length, 2);
+  assert.ok(Number.isFinite(report.benchmark_price));
+  await setPhase(request("auction2"));
+  assert.deepEqual((await studentState()).mac_distributions, state.mac_distributions);
 });
 
 test("stale, non-timed, and unauthorized close requests do not change data", async (t) => {
