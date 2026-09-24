@@ -298,7 +298,7 @@ function renderAuctionStage(state) {
   const allowMore = roundKey === "round1" && Boolean(session.banking_enabled);
   const needed = biddablePermits(firm.baseline, firm.bankedIn, firm.owedIn);
   const quantityLimit = Number(state.bid_quantity_limit ?? firm.baseline);
-  const savedPrices = permitPricesFromBids(ownBids).slice(0, Math.max(needed, allowMore ? quantityLimit : needed));
+  const savedPrices = permitPricesFromBids(ownBids).slice(0, allowMore ? quantityLimit : Math.min(needed, quantityLimit));
   const pricing = method === "pay_as_bid" ? "pay_as_bid" : "uniform";
   const rangeMax = priceRangeMax(firm, savedPrices);
   if (whatIfPrice === null || whatIfPrice > rangeMax) {
@@ -320,6 +320,7 @@ function renderAuctionStage(state) {
       owedIn: firm.owedIn,
       penalty: firm.penalty,
       allowMore,
+      quantityLimit,
     })}
     <div class="row" style="margin-top: 0.6rem">
       <button id="clear-bids-btn" class="secondary" type="button" ${expired || noBoxes ? "disabled" : ""}>Clear Boxes</button>

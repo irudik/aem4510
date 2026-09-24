@@ -238,7 +238,8 @@ export function permitBoxHtml(number, value, { kind = "", disabled = false } = {
 /**
  * One price box per permit, in the order the permits would be used: owed
  * permits first, then one per unit of emissions not already covered, then
- * any extra permits to bank. `allowMore` adds a button for more extra boxes.
+ * any extra permits to bank, up to the server's quantity limit. `allowMore`
+ * adds a button for more extra boxes within that limit.
  */
 export function permitBidInputsHtml(baseline, prices, {
   disabled = false,
@@ -246,14 +247,17 @@ export function permitBidInputsHtml(baseline, prices, {
   owedIn = 0,
   penalty = 0,
   allowMore = false,
+  quantityLimit = Infinity,
 } = {}) {
   const needed = biddablePermits(baseline, bankedIn, owedIn);
+  const maximum = Number.isFinite(Number(quantityLimit))
+    ? Math.max(0, Math.floor(Number(quantityLimit))) : Infinity;
   if (needed === 0 && !allowMore) {
     return `<p class="mac-note">Your ${bankedIn} banked permits already cover all ${baseline} units of your emissions.
       Any permit you won this round would be worth $0 to you, so there is nothing to bid for.</p>`;
   }
 
-  const boxCount = Math.max(needed, prices.length);
+  const boxCount = Math.min(maximum, Math.max(needed, prices.length));
   const kindFor = (index) => (index < owedIn ? "owed" : (index >= needed ? "extra" : ""));
   const boxes = Array.from({ length: boxCount }, (_, index) => permitBoxHtml(
     index + 1,
@@ -274,12 +278,15 @@ export function permitBidInputsHtml(baseline, prices, {
   }
   const extraNote = allowMore
     ? ` Banking is on: permits beyond your ${needed} are extra and carry to Round 2, where the cap is tighter.
-      Add as many extra boxes as you like.`
+      Add extra boxes up to this auction's bid limit.`
+    : "";
+  const limitNote = needed > maximum
+    ? ` You can bid for at most ${maximum} permits in this auction; any additional permits must be bought during trading.`
     : "";
 
-  return `<p class="mac-note">${coverage} Each permit you win lets you emit one more unit instead of abating it.${extraNote}</p>
+  return `<p class="mac-note">${coverage} Each permit you win lets you emit one more unit instead of abating it.${extraNote}${limitNote}</p>
     <div class="permit-bid-grid" id="permit-bid-grid" data-needed="${needed}" data-owed="${owedIn}">${boxes}</div>
-    ${allowMore ? `<button id="add-permit-boxes-btn" class="secondary" type="button" ${disabled ? "disabled" : ""}>Add 5 extra permits to bank</button>` : ""}`;
+    ${allowMore ? `<button id="add-permit-boxes-btn" class="secondary" type="button" ${disabled || boxCount >= maximum ? "disabled" : ""}>Add 5 extra permits to bank</button>` : ""}`;
 }
 
 /** Bars for the team's own bids, colored by whether they win at `price`. */

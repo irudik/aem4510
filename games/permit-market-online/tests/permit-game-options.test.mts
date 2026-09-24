@@ -344,6 +344,29 @@ test("bid boxes: owed permits first, then emissions, then extra permits to bank"
   assert.doesNotMatch(permitBidInputsHtml(6, [], {}), /add-permit-boxes-btn/);
 });
 
+test("borrowed permits and saved bids cannot create more boxes than the auction accepts", () => {
+  const team = { baseline_emissions: 10, mac_slope: 1 };
+  for (const cap of [7, 12]) {
+    const limit = bidQuantityLimit({ borrowing_enabled: true }, team, cap);
+    const html = permitBidInputsHtml(10, Array(14).fill(20), {
+      owedIn: 4, penalty: 50, quantityLimit: limit,
+    });
+    const boxes = (html.match(/class="permit-bid-price"/g) ?? []).length;
+    assert.equal(boxes, limit);
+    assert.equal((html.match(/repays a borrowed permit\)<\/span>/g) ?? []).length, 4);
+    assert.match(html, /additional permits must be bought during trading/);
+    assert.doesNotThrow(() => validateBidSet(team,
+      Array.from({ length: boxes }, () => ({ bid_price: 20, bid_quantity: 1 })),
+      { maxQuantity: limit }));
+  }
+
+  const extra = permitBidInputsHtml(6, Array(12).fill(10), {
+    allowMore: true, quantityLimit: 8,
+  });
+  assert.equal((extra.match(/class="permit-bid-price"/g) ?? []).length, 8);
+  assert.match(extra, /id="add-permit-boxes-btn"[^>]*disabled/);
+});
+
 test("free rounds show each firm its grandfathered permits", () => {
   const html = freeAllocationHtml({ cap: 22, permits: 5, baseline: 8, roundLabel: "Round 1" });
   assert.match(html, /22 permits given away free/);
