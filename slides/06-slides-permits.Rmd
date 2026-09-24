@@ -1247,7 +1247,7 @@ ggplot() +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 155), breaks = c(p_star, 90, 150))
 ```
 
-![permit auction supply and demand](`r knitr::fig_chunk("permits-auction-supply-demand", "png")`)
+<img src="`r knitr::fig_chunk("permits-auction-supply-demand", "png")`" alt="permit auction supply and demand" style="width:90%;">
 ]
 
 .pull-right[
@@ -1266,7 +1266,7 @@ $$(90 - p) + (75 - p/2)$$
 # Permit auctions: supply meets demand
 
 .pull-left[
-![permit auction supply and demand](`r knitr::fig_chunk("permits-auction-supply-demand", "png")`)
+<img src="`r knitr::fig_chunk("permits-auction-supply-demand", "png")`" alt="permit auction supply and demand" style="width:90%;">
 ]
 
 .pull-right[
