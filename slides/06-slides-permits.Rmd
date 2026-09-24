@@ -1175,27 +1175,39 @@ permit_auction_theme <-
     axis.line = element_line(colour = "black")
   )
 
-# Firm 1 from the numerical example: at price p it wants permits until MAC = p.
+# Each firm's permit demand sets its own MAC equal to the permit price.
 mac1 = function(x) 90 - x
+mac2 = function(x) 150 - 2*x
 high_price = 70
 low_price = 50
 
 ggplot() +
   stat_function(fun = mac1, xlim = c(0, 90), color = "#ca5670", linewidth = 1.5) +
-  annotate("text", x = 12, y = 86, label = "MAC[1] == permit~demand", parse = TRUE,
+  stat_function(fun = mac2, xlim = c(0, 75), color = "#638ccc", linewidth = 1.5) +
+  annotate("text", x = 12, y = 92, label = "MAC[1]", parse = TRUE,
            color = "#ca5670", size = 8, hjust = 0) +
-  annotate("segment", x = 0, xend = 90 - high_price, y = high_price, yend = high_price,
+  annotate("text", x = 12, y = 142, label = "MAC[2]", parse = TRUE,
+           color = "#638ccc", size = 8, hjust = 0) +
+  annotate("segment", x = 0, xend = (150 - high_price)/2, y = high_price, yend = high_price,
            linetype = "dotted", linewidth = 1.3) +
   annotate("segment", x = 90 - high_price, xend = 90 - high_price, y = 0, yend = high_price,
            linetype = "dashed", linewidth = 1.3, color = "grey50") +
-  annotate("segment", x = 0, xend = 90 - low_price, y = low_price, yend = low_price,
+  annotate("segment", x = 0, xend = (150 - low_price)/2, y = low_price, yend = low_price,
            linetype = "dotted", linewidth = 1.3) +
   annotate("segment", x = 90 - low_price, xend = 90 - low_price, y = 0, yend = low_price,
            linetype = "dashed", linewidth = 1.3, color = "grey50") +
+  annotate("segment", x = (150 - high_price)/2, xend = (150 - high_price)/2,
+           y = 0, yend = high_price, linetype = "dashed", linewidth = 1, color = "#638ccc") +
+  annotate("segment", x = (150 - low_price)/2, xend = (150 - low_price)/2,
+           y = 0, yend = low_price, linetype = "dashed", linewidth = 1, color = "#638ccc") +
+  annotate("point", x = c(90 - high_price, 90 - low_price), y = c(high_price, low_price),
+           color = "#ca5670", size = 4) +
+  annotate("point", x = c((150 - high_price)/2, (150 - low_price)/2), y = c(high_price, low_price),
+           color = "#638ccc", size = 4) +
   permit_auction_theme +
   labs(x = "Permits held = emissions", y = "$ per permit") +
-  scale_x_continuous(expand = c(0, 0), limits = c(0, 95), breaks = c(20, 40, 90)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 100), breaks = c(low_price, high_price, 90))
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 95), breaks = c(20, 40, 50, 75, 90)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 160), breaks = c(low_price, high_price, 90, 150))
 ```
 
 ![MAC as permit demand](`r knitr::fig_chunk("permits-auction-demand", "png")`)
