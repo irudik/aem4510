@@ -141,16 +141,18 @@ The earlier quiz-style emissions-trading game remains available at
 
 ## Debrief Pointers
 
-The "After the permit game" section at the end of lecture 06 also has
-debrief slides on why trading after an auction matters (cost shocks,
-banking and borrowing) and on pay-as-bid auctions in the Acid Rain Program.
+Lecture 06 introduces the game in a "Let's trade: the permit market game"
+section after the banking and borrowing slides: how the game works, the
+options that may be on, the join path, and predictions to check against the
+class results. It is followed by an "After the permit game" debrief section:
+demand reduction, why trading after an auction matters (cost shocks,
+banking and borrowing), and pay-as-bid auctions in the Acid Rain Program.
 
 Lecture 06 has an auction block after the permit-allocation slide: MAC
 as permit demand, the auction as supply meeting demand, the game's rules,
 the three-firm clearing example the student page also uses, and why bidding
 close to MAC is close to optimal when no single bid is likely to set the
-price. The demand-reduction debrief slide is in a separate "After the
-permit game" section at the end of the deck. The lecture's rule slide notes
+price. The lecture's rule slide notes
 that RGGI charges the highest losing bid, while the game, the EU ETS, and
 California-Quebec charge the lowest winning bid.
 
