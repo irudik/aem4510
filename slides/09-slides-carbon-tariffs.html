@@ -52,7 +52,8 @@ knitr::opts_hooks$set(fig.callout = function(options) {
 knitr::opts_chunk$set(
   cache = TRUE,
   cache.extra = list(
-    tools::md5sum("R/09-carbon-tariffs-figures.R")
+    tools::md5sum("R/09-carbon-tariffs-figures.R"),
+    tools::md5sum("R/video_helpers.R")
   ),
   echo = TRUE,
   fig.align = "center",
@@ -144,7 +145,7 @@ Carbon tariffs aim to "level the playing field" and reduce leakage
 
 # Understanding border carbon adjustments
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/09-carbon-tariffs-bca-explained.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/09-carbon-tariffs-bca-explained.mp4" type="video/mp4"><track kind="captions" src="videos/09-carbon-tariffs-bca-explained.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -235,7 +236,7 @@ In this market:
 # Free trade benchmark
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -252,7 +253,7 @@ count: false
 # The tariff wedge
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -269,7 +270,7 @@ count: false
 # Quantity effects of a tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage2.1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage2.1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -286,7 +287,7 @@ count: false
 # Consumer surplus refresher
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-consumer-surplus-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-consumer-surplus-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -303,7 +304,7 @@ count: false
 # Producer surplus refresher
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-producer-surplus-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-producer-surplus-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -320,7 +321,7 @@ count: false
 # Welfare accounting under a tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage3-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -338,7 +339,7 @@ count: false
 # Consumer loss and redistribution
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage3.05-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage3.05-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -355,7 +356,7 @@ count: false
 # Tariff welfare accounting
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage3.1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage3.1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -374,7 +375,7 @@ count: false
 # Production distortion
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage4-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -390,7 +391,7 @@ count: false
 # Consumption distortion
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage5-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig1-tariff-stage5-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -459,7 +460,7 @@ SMC lies above the private supply curve by the external cost `\(e \times d\)`
 &lt;!-- FIGURE 2a: Country i with SMC curve above S, showing pollution externality --&gt;
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -473,7 +474,7 @@ count: false
 # Free trade with pollution
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -489,7 +490,7 @@ count: false
 # Free trade with pollution
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-stage3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-stage3-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -503,7 +504,7 @@ count: false
 # Free trade with pollution
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-stage4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2a-pollution-stage4-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -521,7 +522,7 @@ That triangle is the set of units for which marginal benefit exceeds private sup
 &lt;!-- FIGURE 2b: World supply and demand with SMC --&gt;
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2b-world-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2b-world-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -537,7 +538,7 @@ From a global perspective:
 
 # Country and global perspectives
 
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2-comparison-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig2-comparison-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 
 Global DWL on the right is the sum of each country's DWL on the left
 
@@ -595,7 +596,7 @@ So the carbon tax reduces the net price domestic producers receive from `\(P_W\)
 &lt;!-- FIGURE 3: Unilateral carbon tax showing tax revenue Rt, deadweight loss d, and leakage --&gt;
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -612,7 +613,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -629,7 +630,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage3-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -647,7 +648,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage4-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -663,7 +664,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage6-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage6-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -678,7 +679,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage7-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage7-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -694,7 +695,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage8-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage8-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -710,7 +711,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage9-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage9-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -726,7 +727,7 @@ count: false
 # Effects of unilateral carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage10-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig3-unilateral-stage10-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -921,7 +922,7 @@ So tax + tariff works like a consumption tax in the end
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-only-stage1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-only-stage1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -940,7 +941,7 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-only-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-only-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -959,7 +960,7 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ] 
 
 .pull-right[
@@ -977,7 +978,7 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage2.1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage2.1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -994,7 +995,7 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage3-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1012,7 +1013,7 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage4-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1029,7 +1030,7 @@ count: false
 # Adding a carbon tariff
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage4.1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig4-tax-tariff-stage4.1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1238,14 +1239,14 @@ So tariff alone works like a consumption tax plus a production subsidy in the en
 
 # Carbon tariff alone in practice
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/09-carbon-tariffs-tariff-alone-practice.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/09-carbon-tariffs-tariff-alone-practice.mp4" type="video/mp4"><track kind="captions" src="videos/09-carbon-tariffs-tariff-alone-practice.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
 # Carbon tariff alone
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1263,7 +1264,7 @@ count: false
 # Carbon tariff alone
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1281,7 +1282,7 @@ count: false
 # Carbon tariff alone
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage3-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1299,7 +1300,7 @@ count: false
 # Carbon tariff alone
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage4-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage4-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1315,7 +1316,7 @@ count: false
 # Carbon tariff alone
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage5-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage5-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1332,7 +1333,7 @@ count: false
 # Carbon tariff alone
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage5.1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig5-tariff-alone-stage5.1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1483,7 +1484,7 @@ name: world-tax
 &lt;!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary --&gt;
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1501,7 +1502,7 @@ Suppose the rest of the world already prices carbon so `\(P_W\)` reflects the ca
 &lt;!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary --&gt;
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax.1-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax.1-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1519,7 +1520,7 @@ Suppose the rest of the world already prices carbon so `\(P_W\)` reflects the ca
 &lt;!-- FIGURE 6: World carbon tax showing efficient outcome, tariff unnecessary --&gt;
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax.2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax.2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1538,7 +1539,7 @@ count: false
 # World carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax-stage2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax-stage2-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1557,7 +1558,7 @@ count: false
 # World carbon tax
 
 .pull-left[
-&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax-stage3-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="09-slides-carbon-tariffs_files/figure-html/fig6-world-tax-stage3-1.png" alt="" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -1607,7 +1608,7 @@ Several factors complicate carbon tariff design:
 
 Trading partners may retaliate
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/09-carbon-tariffs-retaliation-trade-war.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/09-carbon-tariffs-retaliation-trade-war.mp4" type="video/mp4"><track kind="captions" src="videos/09-carbon-tariffs-retaliation-trade-war.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
