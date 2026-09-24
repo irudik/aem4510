@@ -19,7 +19,7 @@ export function closedMacDistributions(session, teams, results, allocations, sco
     const values = teams.map(team => ({ team_name: team.team_name, mac: mac(team, holdings(team), Number(team.mac_slope)) }));
     const common = { round_key: round, free_allocation: free,
       across_rounds: Boolean(session.banking_enabled || session.borrowing_enabled) };
-    reports.push({ ...common, phase: auction, macs: values, initial_macs: [],
+    reports.push({ ...common, phase: auction, phase_closed: true, macs: values, initial_macs: [],
       benchmark_price: benchmarkForRound(teams, Number(result.cap)).benchmark_price });
     // Incomplete scoring must not look like a finalized distribution.
     if (!teams.every(team => scoreByTeam.has(String(team.id)))) continue;
@@ -31,7 +31,7 @@ export function closedMacDistributions(session, teams, results, allocations, sco
       const score = scoreByTeam.get(String(team.id));
       return { team_name: team.team_name, mac: mac(team, holdings(team), Number(team.mac_slope) * Number(score.mac_shock ?? 1)) };
     }) : [];
-    reports.push({ ...common, phase: market, macs: finalMacs, initial_macs: initialMacs,
+    reports.push({ ...common, phase: market, phase_closed: true, macs: finalMacs, initial_macs: initialMacs,
       benchmark_price: Number(scoreByTeam.values().next().value.benchmark_price) });
   }
   return reports;

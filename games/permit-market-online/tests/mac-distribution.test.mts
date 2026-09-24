@@ -29,6 +29,7 @@ test("free allocation overlays initial MACs and conserves the number of firms in
   assert.match(html, /mac-hist-initial/);
   assert.match(html, /mac-hist-price/);
   assert.match(html, /Cost-effective price: \$14.00/);
+  assert.doesNotMatch(macDistributionsHtml([{ ...report, phase_closed: false }]), /mac-hist-price|Cost-effective price/);
 });
 test("initial and final MACs use the same realized costs, and auction rounds omit the free overlay", () => {
   const shocked = scores.map(score => ({ ...score, mac_shock: 1.5 }));
