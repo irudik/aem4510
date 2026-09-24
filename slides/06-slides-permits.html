@@ -895,7 +895,7 @@ Major permit auctions (RGGI, California-Quebec, EU ETS) are .hi[uniform-price se
 
 # Permit auctions: example
 
-Three firms bid their MACs for .hi[5 permits]:
+Three firms bid for .hi[5 permits]:
 
 |        | Permit 1 | Permit 2 | Permit 3 | Permit 4 |
 |--------|---------:|---------:|---------:|---------:|
@@ -925,6 +925,24 @@ Price = lowest winning bid = .hi[7]
 All winners pay only .hi[7 per permit], even when they bid higher
 
 Your bid mostly decides .hi[whether] you win a permit; the price is the lowest winning bid, usually someone else's
+]
+
+---
+
+# Permit auctions: the gain to the firm
+
+.pull-left[
+![clearing the example auction](06-slides-permits_files/figure-html/permits-auction-clearing-1.png)
+]
+
+.pull-right[
+A permit avoids one unit of abatement. The firm's .hi[gain] is the avoided MAC minus the price paid:
+
+`$$\text{Gain} = MAC - p$$`
+
+Example: `\(12 - 7 =\)` .hi[5 gained per permit]
+
+The bars show bids, not necessarily MACs
 ]
 
 ---
@@ -984,6 +1002,20 @@ If the market works, what do we expect to see in the data?
 --
 
 We will check the class results against these predictions after we play
+
+---
+
+# The permit market game: scoring
+
+Your .hi[round score] is the abatement cost your permits save, plus permit sales revenue, minus spending on permits
+
+`$$\text{Score} = \text{avoided abatement cost} + \text{sales} - \text{purchases}$$`
+
+Avoided cost is relative to abating all baseline emissions. Purchases include auction payments, which are zero with free allocation
+
+.hi[Leaderboard points] = your score minus your firm's benchmark score, summed over rounds
+
+The benchmark gives your firm its cost-effective permit quantity at the cost-effective price, accounting for its free permits
 
 ---
 
