@@ -36,12 +36,28 @@ The earlier quiz-style emissions-trading game remains available at
 
 ## Market Rules
 
-- Auction (sealed, uniform price): flexible (price, quantity) bids per team,
-  revisable until the deadline; total quantity at most the baseline. Bid
-  units are stacked by price (ties to the earlier submission); the top cap
-  units win and all winners pay the lowest accepted price.
-  Each row may cover several permits, or students can add one row per
-  permit to express their full MAC schedule. There is no four-row limit.
+- Auction (sealed, uniform price): students enter the most they would pay
+  for each permit, one box per permit up to their baseline; blank boxes are
+  not bids. Each box is sent as a one-permit (price, quantity) bid, sorted
+  from highest to lowest, so the server rules are unchanged: total quantity
+  at most the baseline, revisable until the deadline. Bid units are stacked
+  by price (ties to the earlier submission); the top cap units win and all
+  winners pay the lowest accepted price. The API still accepts rows covering
+  several permits; the student form shows those as separate boxes.
+- Auction help on the student page: plain-language rules with a worked
+  three-firm example, and a "what if the price were...?" slider that uses
+  only the team's own typed bids to show permits won, payment, emissions,
+  abatement cost, and the round score before trading.
+- After each auction clears, students see it as supply and demand: the
+  class's bids stacked into a step demand curve (no team names or MACs), a
+  vertical supply curve at the cap, and the clearing price, with their own
+  bids marked, plus a table of their bids, which won, and the price paid.
+  The newest auction's chart is open during its market and at the end of
+  the game; earlier rounds stay available as collapsed sections, including
+  while students bid in round 2.
+- In round 2 with banking on, the bid form shows one box per unit of
+  emissions not already covered by banked permits, since any permit beyond
+  that is worth nothing in the final round.
 - Secondary market (continuous double auction): limit orders rest in a
   book; an incoming order trades against the best crossing resting orders
   at the resting price, ties to the earlier order. Partial fills rest.
@@ -91,13 +107,23 @@ The earlier quiz-style emissions-trading game remains available at
 
 ## Debrief Pointers
 
+Lecture 06 has an auction block after the permit-allocation slide: MAC
+as permit demand, the auction as supply meeting demand, the game's rules,
+the three-firm clearing example the student page also uses, and why bidding
+close to MAC is close to optimal when no single bid is likely to set the
+price. The demand-reduction debrief slide is in a separate "After the
+permit game" section at the end of the deck. The lecture's rule slide notes
+that RGGI charges the highest losing bid, while the game, the EU ETS, and
+California-Quebec charge the lowest winning bid.
+
 The student page shows a descending MAC curve against emissions, matching
 lecture 06. Whole-unit steps match the game's exact abatement costs. During
 trading, the graph marks current emissions and shades total abatement cost;
 an observed trade price (or the auction price before any trades) provides a
 comparison. The auction and market prompts ask students to reason through
-one more permit. The MAC = P explanation appears after the game, with the
-whole-unit qualification. Students are not shown a permit-value table.
+one more permit. The student page itself leaves the MAC = P explanation to
+the end of the game, with the whole-unit qualification; the lecture covers
+the firm's MAC = p condition and bidding before play. Students are not shown a permit-value table.
 
 - Auction charts: submitted bids (blue) against aggregate MAC (rose) show
   how bids differ from avoided abatement costs. The adjacent graph puts

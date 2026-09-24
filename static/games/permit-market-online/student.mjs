@@ -5,6 +5,19 @@ import {
   setStatus,
 } from "/games/permit-market-online/shared.mjs";
 import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
+import {
+  auctionRulesHtml,
+  biddablePermits,
+  bidsFromPermitPrices,
+  clearedAuctionsHtml,
+  outcomeAtPrice,
+  outcomeSummaryHtml,
+  permitBidInputsHtml,
+  permitPricesFromBids,
+  priceRangeMax,
+  typedPermitPrices,
+  whatIfChartSvg,
+} from "/games/permit-market-online/auction-guide.mjs";
 
 const PHASE_LABELS = {
   setup: "Setup",
@@ -47,6 +60,8 @@ let deadlineMs = null;
 /** Signature of the last rendered stage scaffolding, to keep inputs stable. */
 let renderedStageSignature = null;
 let latestState = null;
+/** Price chosen on the what-if slider, kept when the auction form is redrawn. */
+let whatIfPrice = null;
 
 function phaseLabel(phase) {
   return PHASE_LABELS[String(phase ?? "")] ?? String(phase ?? "unknown");
@@ -151,22 +166,27 @@ function renderFirmCard(state) {
   macCurveElement.innerHTML = macPanel(state);
 }
 
+/**
+ * Contents of the per-permit price boxes, permit 1 first. A number box
+ * reports text it cannot read (such as "12,50" on some keyboards) as empty,
+ * so those boxes are marked unreadable instead of being skipped silently.
+ */
+function readPermitBoxes() {
+  return [...document.querySelectorAll(".permit-bid-price")]
+    .map((input) => (input.validity?.badInput ? "unreadable" : input.value));
+}
+
 async function submitBids() {
-  const bids = [];
-  for (const [index, row] of [...document.querySelectorAll("#bid-rows tr")].entries()) {
-    const price = row.querySelector(".bid-price").value;
-    const quantity = row.querySelector(".bid-quantity").value;
-    if ((price === "") !== (quantity === "")) {
-      setStatus(stageStatus, "warn", `Bid ${index + 1}: enter both price and quantity, or leave both blank.`);
-      return;
-    }
-    if (price !== "" && quantity !== "") {
-      bids.push({ bid_price: Number(price), bid_quantity: Number(quantity) });
-    }
+  let converted;
+  try {
+    converted = bidsFromPermitPrices(readPermitBoxes());
+  } catch (error) {
+    setStatus(stageStatus, "warn", error.message);
+    return;
   }
 
-  if (bids.length === 0) {
-    setStatus(stageStatus, "warn", "Fill in at least one bid row (price and quantity).");
+  if (converted.bids.length === 0) {
+    setStatus(stageStatus, "warn", "Enter a price for at least one permit.");
     return;
   }
 
@@ -175,9 +195,12 @@ async function submitBids() {
     await apiJson("/api/permit-market/team/submit-bids", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ join_token: getJoinToken(), bids }),
+      body: JSON.stringify({ join_token: getJoinToken(), bids: converted.bids }),
     });
-    setStatus(stageStatus, "good", "Bids submitted. You can revise them until the auction closes.");
+    const orderNote = converted.reordered
+      ? " Your bids are now listed from highest to lowest: if you win some permits, they are always your highest bids."
+      : "";
+    setStatus(stageStatus, "good", `Bids submitted.${orderNote} You can revise them until the auction closes.`);
     await refreshState();
   } catch (error) {
     setStatus(stageStatus, "bad", error.message);
@@ -235,86 +258,86 @@ function renderAuctionStage(state) {
   const expired = deadlineExpired();
   const session = state.session;
   const phase = String(session.current_phase);
-  const cap = phase === "auction1" ? session.cap_round1 : session.cap_round2;
+  const cap = formatNumber(phase === "auction1" ? session.cap_round1 : session.cap_round2, 0);
   const ownBids = state.own_bids ?? [];
-  const maxRows = Number(state.team.baseline_emissions);
-
-  const bidRow = (index, existing) => {
-    return `
-      <tr>
-        <th scope="row" class="bid-number">Bid ${index}</th>
-        <td><input id="bid-price-${index}" class="bid-price" aria-label="Bid ${index} price per permit" type="number" min="0" step="0.01" inputmode="decimal" value="${existing ? existing.bid_price : ""}" ${expired ? "disabled" : ""} /></td>
-        <td><input id="bid-qty-${index}" class="bid-quantity" aria-label="Bid ${index} quantity" type="number" min="1" max="${maxRows}" step="1" inputmode="numeric" value="${existing ? existing.bid_quantity : ""}" ${expired ? "disabled" : ""} /></td>
-        <td><button class="remove-bid secondary" aria-label="Remove bid ${index}" type="button" ${expired ? "disabled" : ""}>Remove</button></td>
-      </tr>
-    `;
+  const firm = {
+    baseline: Number(state.team.baseline_emissions),
+    slope: Number(state.team.mac_slope),
+    bankedIn: Number(state.permits_banked_in ?? 0),
   };
+  const boxCount = biddablePermits(firm.baseline, firm.bankedIn);
+  const savedPrices = permitPricesFromBids(ownBids).slice(0, boxCount);
+  const rangeMax = priceRangeMax(firm, savedPrices);
+  if (whatIfPrice === null || whatIfPrice > rangeMax) {
+    whatIfPrice = Math.round(rangeMax * 0.4);
+  }
+  const noBoxes = boxCount === 0;
 
   stageContainer.innerHTML = `
-    <p class="called-price-callout">${formatNumber(cap, 0)} permits for sale</p>
-    <p><small class="note">
-      Sealed uniform-price auction: bids are ranked by price; the top ${formatNumber(cap, 0)} bid units win and
-      everyone pays the lowest accepted price. Each row can request several permits at one price.
-      Add rows to bid a different price for each permit if you wish. Total quantity cannot exceed your
-      baseline (${maxRows}). Each row adds to the total; quantities are not cumulative.
-    </small></p>
+    <p class="called-price-callout">${cap} permits for sale</p>
+    ${auctionRulesHtml(cap)}
+    ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
+    <h3>Your bids</h3>
     <p class="learning-prompt">Before bidding: if you won one more permit, which unit of abatement would you avoid?</p>
-    <div class="table-wrap">
-      <table>
-        <thead class="bid-table-head"><tr><th>Bid</th><th>Price per permit</th><th>Quantity</th><th></th></tr></thead>
-        <tbody id="bid-rows">${(ownBids.length ? [...ownBids].sort((a, b) => a.bid_index - b.bid_index) : [null])
-          .map((bid, index) => bidRow(index + 1, bid)).join("")}</tbody>
-      </table>
-    </div>
+    ${permitBidInputsHtml(firm.baseline, savedPrices, { disabled: expired, bankedIn: firm.bankedIn })}
     <div class="row" style="margin-top: 0.6rem">
-      <button id="add-bid-btn" class="secondary" type="button">Add Bid Row</button>
-      <button id="submit-bids-btn" class="primary" type="button" ${expired ? "disabled" : ""}>
+      <button id="clear-bids-btn" class="secondary" type="button" ${expired || noBoxes ? "disabled" : ""}>Clear Boxes</button>
+      <button id="submit-bids-btn" class="primary" type="button" ${expired || noBoxes ? "disabled" : ""}>
         ${ownBids.length > 0 ? "Revise Bids" : "Submit Bids"}
       </button>
       ${ownBids.length > 0 ? "<span class=\"badge\">Bids in</span>" : ""}
     </div>
+    <p class="mac-note">You can revise your bids until the clock runs out; only your latest submission counts.
+      Clear Boxes only empties the form: bids you already submitted stay in until you submit new ones.</p>
     ${expired ? "<p><small class=\"note\">The auction has closed. Waiting for the instructor to clear it.</small></p>" : ""}
+    <section class="whatif" aria-labelledby="whatif-heading">
+      <h3 id="whatif-heading">What if the price were...?</h3>
+      <p class="mac-note">No one knows the price until the auction clears. Move the slider to see what the bids typed
+        above would get you at different prices. Only your own bids are used.</p>
+      <label for="whatif-price">Possible auction price: <strong id="whatif-price-value"></strong></label>
+      <input id="whatif-price" type="range" min="0" max="${rangeMax}" step="0.5" value="${whatIfPrice}" />
+      <div id="whatif-chart"></div>
+      <div id="whatif-summary"></div>
+    </section>
   `;
 
-  const bidRows = document.getElementById("bid-rows");
-  const addBidButton = document.getElementById("add-bid-btn");
-  const updateRows = () => {
-    [...bidRows.rows].forEach((row, index) => {
-      const number = index + 1;
-      row.querySelector(".bid-number").textContent = `Bid ${number}`;
-      const price = row.querySelector(".bid-price");
-      price.id = `bid-price-${number}`;
-      price.setAttribute("aria-label", `Bid ${number} price per permit`);
-      const quantity = row.querySelector(".bid-quantity");
-      quantity.id = `bid-qty-${number}`;
-      quantity.setAttribute("aria-label", `Bid ${number} quantity`);
-      const removeButton = row.querySelector(".remove-bid");
-      removeButton.setAttribute("aria-label", `Remove bid ${number}`);
-      removeButton.disabled = expired || bidRows.rows.length === 1;
-    });
-    addBidButton.disabled = expired || bidRows.rows.length >= maxRows;
+  const slider = document.getElementById("whatif-price");
+  const updateWhatIf = () => {
+    const prices = typedPermitPrices(readPermitBoxes()).slice(0, boxCount);
+    // Widen the slider when a typed bid goes above its current range.
+    const sliderMax = Math.max(rangeMax, priceRangeMax(firm, prices));
+    slider.max = String(sliderMax);
+    whatIfPrice = Number(slider.value);
+    document.getElementById("whatif-price-value").textContent = `$${whatIfPrice.toFixed(2)}`;
+    document.getElementById("whatif-chart").innerHTML = whatIfChartSvg(boxCount, prices, whatIfPrice, sliderMax);
+    document.getElementById("whatif-summary").innerHTML = prices.length === 0 && firm.bankedIn === 0
+      ? "<p class=\"mac-note\">Enter bids above to see what they would win.</p>"
+      : outcomeSummaryHtml(outcomeAtPrice(firm, prices, whatIfPrice), firm.baseline);
   };
-  addBidButton.addEventListener("click", () => {
-    if (deadlineExpired() || bidRows.rows.length >= maxRows) return;
-    bidRows.insertAdjacentHTML("beforeend", bidRow(bidRows.rows.length + 1, null));
-    updateRows();
-    bidRows.lastElementChild.querySelector(".bid-price").focus();
+
+  slider.addEventListener("input", updateWhatIf);
+  for (const input of document.querySelectorAll(".permit-bid-price")) {
+    input.addEventListener("input", updateWhatIf);
+  }
+  document.getElementById("clear-bids-btn")?.addEventListener("click", () => {
+    if (deadlineExpired()) return;
+    for (const input of document.querySelectorAll(".permit-bid-price")) {
+      input.value = "";
+    }
+    updateWhatIf();
   });
-  bidRows.addEventListener("click", (event) => {
-    const removeButton = event.target.closest(".remove-bid");
-    if (!removeButton || deadlineExpired() || bidRows.rows.length <= 1) return;
-    removeButton.closest("tr").remove();
-    updateRows();
-  });
-  updateRows();
   document.getElementById("submit-bids-btn")?.addEventListener("click", submitBids);
+  updateWhatIf();
 }
 
 function renderMarketScaffold(state) {
   const expired = deadlineExpired();
-
+  // The auction charts do not change during a market, so they are drawn once
+  // here rather than on every refresh; that keeps them open or closed as the
+  // student left them.
   stageContainer.innerHTML = `
     <div id="auction-outcome"></div>
+    ${clearedAuctionsHtml(state.auction_reports)}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
     <h3>Current Offers</h3>
     <div class="book-grid" style="margin-top: 0.6rem">
@@ -374,7 +397,7 @@ function renderMarketLiveData(state) {
       ? `
         <p><strong>Auction result:</strong> ${result.clearing_price == null ? "no price (no bids)" : `$${formatNumber(result.clearing_price, 2)} per permit`}.</p>
         <p><small class="note">
-          You won ${formatNumber(allocation?.permits_won ?? 0, 0)} permit(s) for ${formatNumber(allocation?.payment ?? 0, 2)}${banked > 0 ? `, plus ${banked} banked from round 1` : ""}.
+          You won ${formatNumber(allocation?.permits_won ?? 0, 0)} permit(s) for $${formatNumber(allocation?.payment ?? 0, 2)}${banked > 0 ? `, plus ${banked} banked from round 1` : ""}.
           Cap: ${formatNumber(result.cap, 0)}; total bids: ${formatNumber(result.total_bid_quantity, 0)}.
         </small></p>
       `
@@ -454,6 +477,7 @@ function stageSignature(state) {
     phase,
     state?.team?.baseline_emissions ? "assigned" : "unassigned",
     bidsJson,
+    Object.keys(state?.auction_reports ?? {}).filter((key) => state.auction_reports[key]).join("+"),
     deadlineExpired() ? "expired" : "live",
   ].join("|");
 }
@@ -495,7 +519,8 @@ function renderStage(state, options = {}) {
             the cost saved by buying one more permit and the cost added by selling one.
             Did the class exhaust those gains from trade, or did time run out first?</p>
           ${state.session.banking_enabled ? "<p>For Round 1, also consider the future use of any surplus permits you banked.</p>" : ""}
-        </div>`;
+        </div>
+        ${clearedAuctionsHtml(state.auction_reports)}`;
     }
   }
 

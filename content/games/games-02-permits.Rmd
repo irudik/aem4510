@@ -29,9 +29,8 @@ happens is up to you.
 ## How we will play
 
 - Each team joins with a team name (one browser per team) and is assigned a
-  firm: baseline emissions and a marginal abatement cost schedule. Your
-  page shows exactly what each permit is worth to your firm. Keep it
-  private.
+  firm: baseline emissions and a marginal abatement cost (MAC) curve. Your
+  page draws your MAC against emissions, as in lecture. Keep it private.
 - The game runs two rounds, each with two timed phases:
   1. A sealed-bid auction, then
   2. An open trading market.
@@ -40,11 +39,24 @@ happens is up to you.
 
 ## The auction
 
-Submit up to four price/quantity bids before the clock runs out. All bids
-are stacked from the highest price down and the top bids win until the
-permits run out. Everyone pays the same price: the lowest accepted bid.
-Think about what this pricing rule means for how honestly you should bid.
-Real allowance auctions (RGGI, the EU ETS) use exactly this design.
+The auction is supply and demand. Supply is the fixed number of permits the
+regulator sells; your bids are your demand curve.
+
+- For each permit, enter the most you would pay for it. Leave a box blank if
+  you do not want that permit.
+- When the clock runs out, every team's bids are ranked from highest to
+  lowest, and the top bids win until the permits run out.
+- Everyone pays the same price: the lowest winning bid. If you bid \$15 and
+  the price is \$9, you pay \$9.
+
+Bids are sealed: nobody sees anyone else's bids until the auction clears.
+While you bid, a "what if the price were...?" slider shows what your own bids
+would win, and cost, at any price. After the auction clears, your page shows
+the auction as supply and demand: all bids stacked into a demand curve
+(without team names), the fixed supply of permits, and the price where they
+meet. Think about what this pricing rule means for how honestly you should
+bid. Real allowance auctions (RGGI, California-Quebec, the EU ETS) are also
+sealed-bid, uniform-price auctions.
 
 ## The market
 

@@ -448,26 +448,6 @@ small.note {
   }
 }
 
-/* Permit market additions */
-
-#bid-rows input { min-width: 4rem; }
-#bid-rows .bid-number { white-space: nowrap; font-weight: 500; }
-#bid-rows .remove-bid { padding: 0.4rem; font-size: 0.8rem; }
-
-@media (max-width: 520px) {
-  .bid-table-head { display: none; }
-  #bid-rows { display: block; }
-  #bid-rows tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; padding: 0.6rem; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 0.6rem; }
-  #bid-rows td, #bid-rows th { padding: 0; border: 0; background: transparent; text-align: left; }
-  #bid-rows .bid-number { align-self: center; font-weight: 600; }
-  #bid-rows td:nth-child(2)::before { content: "Price per permit"; }
-  #bid-rows td:nth-child(3)::before { content: "Quantity"; }
-  #bid-rows td:nth-child(2)::before, #bid-rows td:nth-child(3)::before { display: block; font-size: 0.8rem; margin-bottom: 0.3rem; }
-  #bid-rows td:nth-child(4) { grid-row: 1; grid-column: 2; text-align: right; }
-  #bid-rows input { min-width: 0; }
-  #bid-rows .remove-bid { width: auto; }
-}
-
 /* Compare class emissions with each firm's emissions, using one price scale. */
 .auction-popout main { max-width: 1700px; }
 .auction-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
@@ -664,4 +644,114 @@ small.note {
 .position-kv .cell .value {
   font-weight: 800;
   font-size: 1.15rem;
+}
+
+/* Auction help: plain-language rules, per-permit bids, what-if price tool. */
+.auction-rules {
+  margin: 0.6rem 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f7f9fd;
+}
+
+.auction-rules h3 { margin-bottom: 0.4rem; }
+.auction-rules ol { margin: 0 0 0.5rem; padding-left: 1.3rem; }
+.auction-rules li + li { margin-top: 0.3rem; }
+
+.worked-example summary,
+.auction-report summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #123d8f;
+}
+
+.worked-example table { margin: 0.6rem 0; max-width: 32rem; }
+.worked-example p { margin: 0.4rem 0; }
+
+.permit-bid-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.2rem, 1fr));
+  gap: 0.55rem;
+}
+
+.permit-bid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.permit-bid-input {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--ink);
+}
+
+.whatif {
+  margin-top: 1.1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.whatif input[type="range"] { padding: 0; margin: 0.4rem 0 0.6rem; }
+
+.whatif-chart,
+.report-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-size: 18px;
+  fill: var(--muted);
+}
+
+.whatif-bar-win { fill: #0d5bd7; }
+.whatif-bar-lose { fill: #d5dde9; }
+.whatif-price-line,
+.report-price-line { stroke: #17212f; stroke-width: 2; stroke-dasharray: 9 5; }
+.whatif-price-label,
+.report-price-label { fill: var(--ink); font-weight: 700; }
+
+/* Supply-and-demand chart of each cleared auction, shown to students. */
+.auction-report {
+  margin: 0.6rem 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.report-figure { margin: 0.6rem 0 0; }
+
+.report-figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+}
+
+.report-demand { fill: none; stroke: #0d5bd7; stroke-width: 3; stroke-linejoin: round; }
+.report-own-bid { stroke: #e07b00; stroke-width: 7; stroke-linecap: butt; }
+.report-supply { stroke: #b01b2f; stroke-width: 3; }
+.report-supply-label { fill: #b01b2f; font-weight: 700; }
+.report-price-point { fill: #17212f; }
+
+.report-key {
+  display: inline-block;
+  width: 1.3rem;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.report-key-demand { border-top: 3px solid #0d5bd7; }
+.report-key-own { border-top: 6px solid #e07b00; }
+.report-key-supply { border-top: 3px solid #b01b2f; }
+.report-key-price { border-top: 2px dashed #17212f; }
+
+@media (max-width: 520px) {
+  .whatif-chart,
+  .report-chart { font-size: 22px; }
 }

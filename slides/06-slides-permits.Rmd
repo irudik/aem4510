@@ -1136,6 +1136,285 @@ This is one of the key reasons the 1990 CAA amendments were able to be passed
 
 ---
 
+# Permit auctions
+
+Recall the firm's problem when a permit costs $p$:
+$$\min_E\; C(E) + pE \quad\Rightarrow\quad MAC(E) = p$$
+
+--
+
+Flip it around: at price $p$, the firm wants permits up to where $MAC(E) = p$
+
+--
+
+.hi[The MAC curve is the firm's demand curve for permits]
+
+--
+
+Each permit lets the firm emit one more unit, so it is worth the abatement cost it avoids
+
+---
+
+# Permit auctions: MAC is permit demand
+
+.pull-left[
+```{r permits-auction-demand, echo = FALSE, fig.show = 'hide', warning = F}
+# Theme shared by the permit-auction figures, matching the other permit figures.
+permit_auction_theme <-
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(size = 22),
+    axis.text.y = element_text(size = 18),
+    axis.title.x = element_text(size = 24),
+    axis.title.y = element_text(size = 24),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    plot.background = element_rect(fill = "#ffffff", colour = NA),
+    axis.line = element_line(colour = "black")
+  )
+
+# Firm 1 from the numerical example: at price p it wants permits until MAC = p.
+mac1 = function(x) 90 - x
+high_price = 70
+low_price = 50
+
+ggplot() +
+  stat_function(fun = mac1, color = "#ca5670", linewidth = 1.5) +
+  annotate("text", x = 12, y = 86, label = "MAC[1] == permit~demand", parse = TRUE,
+           color = "#ca5670", size = 8, hjust = 0) +
+  annotate("segment", x = 0, xend = 90 - high_price, y = high_price, yend = high_price,
+           linetype = "dotted", linewidth = 1.3) +
+  annotate("segment", x = 90 - high_price, xend = 90 - high_price, y = 0, yend = high_price,
+           linetype = "dashed", linewidth = 1.3, color = "grey50") +
+  annotate("segment", x = 0, xend = 90 - low_price, y = low_price, yend = low_price,
+           linetype = "dotted", linewidth = 1.3) +
+  annotate("segment", x = 90 - low_price, xend = 90 - low_price, y = 0, yend = low_price,
+           linetype = "dashed", linewidth = 1.3, color = "grey50") +
+  permit_auction_theme +
+  labs(x = "Permits held = emissions", y = "$ per permit") +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 95), breaks = c(20, 40, 90)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 100), breaks = c(low_price, high_price, 90))
+```
+
+![MAC as permit demand](`r knitr::fig_chunk("permits-auction-demand", "png")`)
+]
+
+.pull-right[
+Firm 1: $MAC_1 = 90 - E_1$
+
+At $p = 70$: wants 20 permits
+
+At $p = 50$: wants 40 permits
+
+Lower price, more permits: an ordinary demand curve
+]
+
+---
+
+# Permit auctions: supply meets demand
+
+.pull-left[
+```{r permits-auction-supply-demand, echo = FALSE, fig.show = 'hide', warning = F, dependson = "permits-auction-demand"}
+# Horizontal sum of the two MACs is the class's demand for permits; the cap is supply.
+# Firm 1 demands 90 - p (for p <= 90) and firm 2 demands 75 - p/2 (for p <= 150).
+mac1 = function(x) 90 - x
+mac2 = function(x) 150 - 2*x
+aggregate_demand = function(q) ifelse(q <= 30, 150 - 2*q, 110 - q/1.5)
+e_bar = 90
+p_star = 50
+
+# Total demand is drawn first so the firm curves stay visible where they coincide.
+ggplot() +
+  stat_function(fun = aggregate_demand, xlim = c(0, 165), color = "black", linewidth = 1.8) +
+  stat_function(fun = mac1, xlim = c(0, 90), color = "#ca5670", linewidth = 1.2) +
+  stat_function(fun = mac2, xlim = c(0, 75), color = "#638ccc", linewidth = 1.2) +
+  annotate("segment", x = e_bar, xend = e_bar, y = 0, yend = 150,
+           linewidth = 1.8, color = "#EB811B") +
+  annotate("segment", x = 0, xend = e_bar, y = p_star, yend = p_star,
+           linetype = "dotted", linewidth = 1.3) +
+  annotate("text", x = 8, y = 142, label = "MAC[2]", parse = TRUE, color = "#638ccc", size = 7, hjust = 0) +
+  annotate("text", x = 8, y = 78, label = "MAC[1]", parse = TRUE, color = "#ca5670", size = 7, hjust = 0) +
+  annotate("point", x = c(40, 50, e_bar), y = p_star, size = 4) +
+  annotate("text", x = 40, y = p_star - 9, label = "E[1] == 40", parse = TRUE, size = 6) +
+  annotate("text", x = 58, y = p_star + 9, label = "E[2] == 50", parse = TRUE, size = 6) +
+  annotate("text", x = 100, y = 62, label = "Total demand", size = 7, hjust = 0) +
+  annotate("text", x = e_bar + 3, y = 140, label = "Supply = cap", color = "#EB811B", size = 7, hjust = 0) +
+  permit_auction_theme +
+  labs(x = "Permits", y = "$ per permit") +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 170), breaks = c(e_bar)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 155), breaks = c(p_star, 90, 150))
+```
+
+![permit auction supply and demand](`r knitr::fig_chunk("permits-auction-supply-demand", "png")`)
+]
+
+.pull-right[
+.hi-blue[Supply]: the cap, $\bar{E} = 90$
+
+.hi-blue[Demand]: add up the firms' demands<sup>1</sup>
+$$(90 - p) + (75 - p/2)$$
+]
+
+.footnote[
+<sup>1</sup> For $p \leq 90$; above that, firm 1 wants no permits.
+]
+
+---
+
+# Permit auctions: supply meets demand
+
+.pull-left[
+![permit auction supply and demand](`r knitr::fig_chunk("permits-auction-supply-demand", "png")`)
+]
+
+.pull-right[
+.hi-blue[Supply]: the cap, $\bar{E} = 90$
+
+.hi-blue[Demand]: add up the firms' demands<sup>1</sup>
+$$(90 - p) + (75 - p/2)$$
+
+Set equal: $165 - 1.5p = 90$, so $p = 50$
+
+$E_1 = 40$, $E_2 = 50$: .hi[the trading equilibrium]
+]
+
+.footnote[
+<sup>1</sup> For $p \leq 90$; above that, firm 1 wants no permits.
+]
+
+---
+
+# Permit auctions: the rules
+
+Major permit auctions (RGGI, California-Quebec, EU ETS) are .hi[uniform-price sealed-bid] auctions. The rules in our game:<sup>1</sup>
+
+--
+
+1. Each firm privately bids the most it would pay for each permit
+
+--
+
+2. The regulator ranks all bids from highest to lowest
+
+--
+
+3. The top $\bar{E}$ bids win
+
+--
+
+4. .hi[Every] winner pays the same price: the lowest winning bid
+
+.footnote[
+<sup>1</sup> The EU ETS and California-Quebec also charge the lowest winning bid; RGGI charges the highest losing bid.
+]
+
+---
+
+# Permit auctions: example
+
+Three firms bid their MACs for .hi[5 permits]:
+
+|        | Permit 1 | Permit 2 | Permit 3 | Permit 4 |
+|--------|---------:|---------:|---------:|---------:|
+| Firm A | 12       | 9        | 6        | 3        |
+| Firm B | 10       | 7        | 4        | 1        |
+| Firm C | 8        | 5        | 2        |          |
+
+--
+
+Which bids win? What is the price? What does each firm pay?
+
+---
+
+# Permit auctions: example
+
+.pull-left[
+```{r permits-auction-clearing, echo = FALSE, fig.show = 'hide', warning = F, dependson = "permits-auction-demand"}
+# Three firms bid their MAC for each permit; 5 permits are for sale.
+example_bids <- tibble::tribble(
+  ~firm, ~bid,
+  "A", 12, "A", 9, "A", 6, "A", 3,
+  "B", 10, "B", 7, "B", 4, "B", 1,
+  "C", 8, "C", 5, "C", 2
+)
+permits_for_sale = 5
+
+ranked_bids <- example_bids |>
+  dplyr::arrange(dplyr::desc(bid)) |>
+  dplyr::mutate(
+    rank = dplyr::row_number(),
+    wins = rank <= permits_for_sale
+  )
+clearing_price <- min(ranked_bids$bid[ranked_bids$wins])
+
+ggplot(ranked_bids, aes(x = rank, y = bid, fill = firm, alpha = wins)) +
+  geom_col(width = 0.85) +
+  geom_text(aes(label = firm), vjust = -0.4, size = 8, alpha = 1) +
+  annotate("segment", x = permits_for_sale + 0.5, xend = permits_for_sale + 0.5, y = 0, yend = 14,
+           linewidth = 1.6, color = "#EB811B") +
+  annotate("text", x = permits_for_sale + 0.65, y = 13.5, label = "5 permits for sale",
+           color = "#EB811B", size = 7, hjust = 0) +
+  annotate("segment", x = 0.4, xend = 11.6, y = clearing_price, yend = clearing_price,
+           linetype = "dashed", linewidth = 1.2) +
+  annotate("text", x = 11.6, y = clearing_price + 0.7, label = "Price = 7",
+           size = 7, hjust = 1) +
+  scale_fill_manual(values = c(A = "#ca5670", B = "#638ccc", C = "#6aa05b")) +
+  scale_alpha_manual(values = c(`TRUE` = 1, `FALSE` = 0.3)) +
+  permit_auction_theme +
+  labs(x = "Bids, ranked from highest", y = "Bid ($ per permit)") +
+  scale_x_continuous(expand = c(0, 0), limits = c(0.4, 11.6), breaks = 1:11) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 14.5), breaks = c(0, 4, 7, 10, 14))
+```
+
+![clearing the example auction](`r knitr::fig_chunk("permits-auction-clearing", "png")`)
+]
+
+.pull-right[
+Top 5 bids win: 12, 10, 9, 8, 7
+
+Price = lowest winning bid = .hi[7]
+
+A: 2 permits for 14<br>B: 2 permits for 14<br>C: 1 permit for 7
+
+A bid 12 but pays only 7
+]
+
+---
+
+# Permit auctions: why bid close to your MAC?
+
+Your bid mostly decides .hi[whether] you win a permit; the price is the lowest winning bid, usually someone else's
+
+--
+
+.hi-red[Bid far below MAC]: C bids 5 instead of 8 for its first permit. It wins nothing, and its surplus falls from 1 to 0
+
+--
+
+.hi-red[Bid above MAC]: C bids 7.5 for its second permit, worth only 5. Its bid becomes the price: C pays 15 for permits worth 13, and its surplus falls from 1 to -2
+
+---
+
+# Permit auctions: bidding and cost-effectiveness
+
+With many bidders, your bid rarely sets the price, so bidding close to your MAC is close to the best you can do
+
+--
+
+Then every firm buys permits until its MAC is about equal to $p$
+
+--
+
+.hi[The auction is cost-effective, like a Pigouvian tax]
+
+--
+
+Shading your bid pays only when your bid ends up setting the price, and you cannot know that in advance
+
+---
+
 # Permit market challenges
 
 .hi-red[How do we set up trading rules?]
@@ -2735,3 +3014,30 @@ Taxes and subsidies give the firm extra benefits for further reductions
 ```{r, echo = FALSE}
 local_video("videos/06-permits-cap-and-trade.mp4")
 ```
+
+---
+
+class: inverse, center, middle
+name: after-the-game
+
+# After the permit game
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# Debrief: should big firms bid their MAC?
+
+If your bid might be the lowest winning bid, it sets the price you pay on .hi[all] your permits
+
+--
+
+For example, A cuts its second bid from 9 to 6. The price falls to 6, and A still wins 2 permits, paying 12 instead of 14
+
+--
+
+This is .hi[demand reduction]: bidders who might set the price, especially large buyers, shade their bids below MAC
+
+--
+
+Here only revenue falls (35 to 30). In general, shading can misallocate permits, which later trading can fix

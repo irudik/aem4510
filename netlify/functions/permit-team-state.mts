@@ -7,6 +7,7 @@ import {
   leaderboardRows,
   roundForPhase,
   scoreTeamRound,
+  studentAuctionReport,
   valueSchedule,
 } from "./_lib/permit_market.mts";
 import {
@@ -89,6 +90,28 @@ export default async function permitTeamState(req) {
         String(row.round_key) === "round1" && String(row.team_id) === teamId
       ))?.permits_banked_out ?? 0)
       : 0;
+
+    // For every auction that has cleared, show the team how the price was
+    // set: the class's bids as a demand curve (prices and quantities, no team
+    // names) against the permits for sale, with its own bids marked.
+    const auctionReports = {};
+    for (const clearedKey of ["auction1", "auction2"]) {
+      const result = results.find((row) => String(row.round_key) === clearedKey);
+      auctionReports[clearedKey] = (result && phase !== clearedKey)
+        ? studentAuctionReport(
+          Number(result.cap),
+          bids
+            .filter((row) => String(row.round_key) === clearedKey)
+            .map((row) => ({
+              team_id: row.team_id,
+              bid_price: row.bid_price,
+              bid_quantity: row.bid_quantity,
+              submitted_at: row.submitted_at,
+            })),
+          teamId,
+        )
+        : null;
+    }
 
     let market = null;
     if (MARKET_PHASES.has(phase)) {
@@ -207,6 +230,7 @@ export default async function permitTeamState(req) {
           payment: ownAllocation.payment,
         }
         : null,
+      auction_reports: auctionReports,
       permits_banked_in: bankedIn,
       market,
       own_scores: ownScores,

@@ -17,6 +17,15 @@
 - Evidence: Migration 002_flexible_auction_bids.sql applied to class project vuporrnrpfuibrtwqxww; the validated constraint is bid_index > 0 and all eight pre-existing bid records remained. Full-schedule bids for all firm types pass tests.
 - Action: Keep instructor charts on the lecture's emissions axis: aggregate MAC beside individual firm MACs on a common axis, with identical firms explicitly listed together. Apply database migrations before deploying the corresponding website changes.
 
+[LEARN:permit-auction-teaching]
+- Date: 2026-09-24
+- Trigger: User reported that students do not know what a uniform-price sealed-bid auction is.
+- Wrong: Describing the auction in auction-theory terms ("bid units are stacked", "quantities are not cumulative") with free-form price/quantity rows.
+- Right: Present the auction as supply (the cap) meeting demand (the bids), with the MAC curve as the firm's permit demand from min C(E) + pE. Students enter one price per permit; a what-if price slider uses only their own bids; after each auction clears they see the class's bids as a step demand curve against a vertical supply curve at the cap, with the clearing price. The three-firm example (A 12/9/6/3, B 10/7/4/1, C 8/5/2, five permits, price 7) is shared by lecture 06 and the student page; tests check its numbers, not the slide text. Under the game's lowest-winning-bid rule, shading pays whenever a bid may set the price, so slides say bidding close to MAC is close to optimal with many bidders, not that it is always optimal. RGGI charges the highest losing bid; the EU ETS and California-Quebec charge the lowest winning bid.
+- Scope: Permit-market student auction and lecture 06 slides.
+- Evidence: games/permit-market-online/tests/permit-auction-guide.test.mts.
+- Action: In xaringan decks, do not put `--` increments inside `.pull-left[]`/`.pull-right[]`; repeat the slide and reuse the figure with `knitr::fig_chunk`, as the existing decks do. Do not start a slide or an increment with `Word:` (for example "Example:" or "Solve:"): remark reads it as a slide property and hides the line.
+
 <!-- Claude Code stores [LEARN] entries here. Prefer structured entries:
 [LEARN:category]
 - Date: YYYY-MM-DD

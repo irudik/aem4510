@@ -135,6 +135,26 @@ export function validateBidSet(team, bids) {
 }
 
 /**
+ * Order bids the way the auction fills them: highest price first, ties to
+ * the earlier submission. Rows without a positive quantity or a finite price
+ * are dropped.
+ */
+function rankAuctionBids(bidRows) {
+  return [...(bidRows ?? [])]
+    .map((bid) => ({
+      team_id: String(bid.team_id),
+      bid_price: Number(bid.bid_price),
+      bid_quantity: Math.max(0, Math.floor(Number(bid.bid_quantity))),
+      submitted_at: String(bid.submitted_at ?? ""),
+    }))
+    .filter((bid) => bid.bid_quantity > 0 && Number.isFinite(bid.bid_price))
+    .sort((left, right) => (
+      right.bid_price - left.bid_price
+      || left.submitted_at.localeCompare(right.submitted_at)
+    ));
+}
+
+/**
  * Clear a uniform-price auction.
  *
  * Bid units are stacked from the highest price down (ties go to the earlier
@@ -151,19 +171,7 @@ export function validateBidSet(team, bids) {
  */
 export function clearAuction(cap, bidRows) {
   const capUnits = Math.max(0, Math.floor(Number(cap)));
-
-  const sortedBids = [...(bidRows ?? [])]
-    .map((bid) => ({
-      team_id: String(bid.team_id),
-      bid_price: Number(bid.bid_price),
-      bid_quantity: Math.max(0, Math.floor(Number(bid.bid_quantity))),
-      submitted_at: String(bid.submitted_at ?? ""),
-    }))
-    .filter((bid) => bid.bid_quantity > 0 && Number.isFinite(bid.bid_price))
-    .sort((left, right) => (
-      right.bid_price - left.bid_price
-      || left.submitted_at.localeCompare(right.submitted_at)
-    ));
+  const sortedBids = rankAuctionBids(bidRows);
 
   const totalBidQuantity = sortedBids.reduce((sum, bid) => sum + bid.bid_quantity, 0);
 
@@ -213,6 +221,77 @@ function stepSeriesFromSortedUnits(sortedBids) {
     cumulative += bid.bid_quantity;
   }
   return steps;
+}
+
+/**
+ * What one team sees about a cleared auction, so students can see how the
+ * price was set without learning who bid what.
+ *
+ * `stack` lists every bid in the order the auction filled it (price and
+ * quantity only, no team names), so it traces the class's step demand
+ * curve; `own` marks the requesting team's bids and `accepted_quantity` is
+ * the part of each step inside the cap. `own_bids`
+ * expands the team's bids to one row per permit, highest first. A team
+ * always wins its highest bids first, so its k winning permits are its k
+ * highest bids, and each one costs the common clearing price.
+ *
+ * @param {number} cap total permits for sale
+ * @param {Array<{team_id: string, bid_price: number, bid_quantity: number, submitted_at?: string}>} bidRows
+ * @param {string} teamId the team requesting the report
+ */
+export function studentAuctionReport(cap, bidRows, teamId) {
+  const id = String(teamId);
+  const cleared = clearAuction(cap, bidRows);
+  const rankedBids = rankAuctionBids(bidRows);
+
+  // Adjacent bids at the same price from the same side (own or other) are
+  // merged, which keeps the report small in a large class without changing
+  // the curve.
+  let cumulative = 0;
+  const stack = [];
+  for (const bid of rankedBids) {
+    const fromQuantity = cumulative;
+    cumulative += bid.bid_quantity;
+    const own = bid.team_id === id;
+    const accepted = Math.max(0, Math.min(bid.bid_quantity, cleared.cap - fromQuantity));
+    const previous = stack[stack.length - 1];
+    if (previous && previous.own === own && previous.price === bid.bid_price) {
+      previous.to_quantity = cumulative;
+      previous.accepted_quantity += accepted;
+    } else {
+      stack.push({
+        from_quantity: fromQuantity,
+        to_quantity: cumulative,
+        price: bid.bid_price,
+        accepted_quantity: accepted,
+        own,
+      });
+    }
+  }
+
+  const permitsWon = cleared.allocations.find((row) => row.team_id === id)?.permits_won ?? 0;
+  const ownUnitPrices = rankedBids
+    .filter((bid) => bid.team_id === id)
+    .flatMap((bid) => Array.from({ length: bid.bid_quantity }, () => bid.bid_price));
+
+  const ownBids = ownUnitPrices.map((price, index) => ({
+    permit_number: index + 1,
+    bid_price: price,
+    won: index < permitsWon,
+    price_paid: index < permitsWon ? cleared.clearing_price : null,
+  }));
+
+  return {
+    cap: cleared.cap,
+    clearing_price: cleared.clearing_price,
+    total_bid_quantity: cleared.total_bid_quantity,
+    stack,
+    own_bids: ownBids,
+    permits_won: permitsWon,
+    payment: cleared.clearing_price === null
+      ? 0
+      : Math.round(permitsWon * cleared.clearing_price * 100) / 100,
+  };
 }
 
 /**
