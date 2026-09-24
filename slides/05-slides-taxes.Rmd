@@ -17,13 +17,15 @@ output:
 
 ---
 exclude: true
-```{r setup}
+```{r setup, include = FALSE}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
 )
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
+# Keep R diagnostics out of the projected slides.
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
     options$echo <- FALSE
@@ -42,7 +44,7 @@ xaringanExtra::use_xaringan_extra(c("panelset", "webcam"))
 
 ```
 ```{r echo=FALSE}
-xaringanExtra::style_panelset(panel_tab_color_active = "red")
+xaringanExtra::style_panelset_tabs(active_foreground = "red")
 ```
 
 ---
@@ -815,10 +817,113 @@ Even if we don't set the tax equal to MD, whatever emission reduction we get wil
 
 ---
 
+```{r equimarginal-setup, include = FALSE}
+# Holding total emissions fixed, unequal marginal abatement costs imply
+# extra abatement cost relative to the cost-minimizing allocation.
+equimarginal_mac1 = function(emissions) 2 - 2 / 3 * emissions
+equimarginal_mac2 = function(emissions) 3 - emissions
+equimarginal_total = 3.5
+equimarginal_optimum = 1.5
+
+# Keep the two firms on the same emissions axis as the preceding tax figure.
+# The areas around the common MAC sum to excess total abatement cost.
+equimarginal_figure = function(shift = 0, shade = FALSE) {
+  emissions1 = 1.5 + shift
+  emissions2 = 2 - shift
+  figure = ggplot()
+  if (shade) {
+    firm1_area = tibble(x = c(1.5, emissions1, emissions1),
+                        y = c(1, 1, equimarginal_mac1(emissions1)))
+    firm2_area = tibble(x = c(2, emissions2, emissions2),
+                        y = c(1, 1, equimarginal_mac2(emissions2)))
+    figure = figure +
+      geom_polygon(data = firm1_area, aes(x = x, y = y), fill = "red", alpha = 0.5) +
+      geom_polygon(data = firm2_area, aes(x = x, y = y), fill = "red", alpha = 0.5)
+  }
+  figure = figure +
+    annotate("text", x = .3, y = 2, label = expression(MAC[1]), size = 8) +
+    annotate("text", x = .3, y = 3, label = expression(MAC[2]), size = 8) +
+    stat_function(fun = equimarginal_mac2, xlim = c(0, 3), color = "#000000", linewidth = 1.5) +
+    stat_function(fun = equimarginal_mac1, xlim = c(0, 3), color = "#ca5670", linewidth = 1.5) +
+    annotate("text", x = 2.5, y = 1.15, label = expression(tau), size = 8) +
+    annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
+             linetype = "dashed", linewidth = 1.5, color = "grey50") +
+    annotate("segment", x = 2, xend = 2, y = 0, yend = .99,
+             linetype = "dashed", linewidth = 1.5, color = "grey50") +
+    annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
+             linetype = "longdash", linewidth = 1.5, color = "red") +
+    theme_minimal() +
+    theme(legend.position = "none", title = element_text(size = 24),
+          axis.text.x = element_text(size = 24),
+          axis.text.y = element_text(size = 24, color = "#ffffff"),
+          axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+          panel.grid = element_blank(),
+          panel.background = element_rect(fill = "#ffffff", colour = NA),
+          plot.background = element_rect(fill = "#ffffff", colour = NA),
+          axis.line = element_line(colour = "black")) +
+    labs(x = "Emissions", y = "Capital/$") +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, 3.1))
+  emission_breaks = c(1.5, 2, 3)
+  emission_labels = c("E[1]^'*'", "E[2]^'*'", "E[0]")
+  if (shift != 0) {
+    emission_breaks = c(emission_breaks, emissions1, emissions2)
+    emission_labels = c(emission_labels, "E[1]", "E[2]")
+    figure = figure +
+      annotate("segment", x = emissions1, xend = emissions1, y = 0,
+               yend = max(1, equimarginal_mac1(emissions1)),
+               linetype = "dashed", color = "#EB811B", linewidth = 1.2) +
+      annotate("segment", x = emissions2, xend = emissions2, y = 0,
+               yend = max(1, equimarginal_mac2(emissions2)),
+               linetype = "dashed", color = "#EB811B", linewidth = 1.2) +
+      annotate("segment", x = 1.5, xend = emissions1, y = .15, yend = .15,
+               arrow = grid::arrow(length = grid::unit(.12, "inches")),
+               color = "#ca5670", linewidth = 1.2) +
+      annotate("segment", x = 2, xend = emissions2, y = .3, yend = .3,
+               arrow = grid::arrow(length = grid::unit(.12, "inches")),
+               color = "black", linewidth = 1.2) +
+      annotate("point", x = c(emissions1, emissions2),
+               y = c(equimarginal_mac1(emissions1), equimarginal_mac2(emissions2)), size = 3)
+  }
+  figure + scale_x_continuous(expand = c(0, 0), limits = c(0, 3.1),
+                              breaks = emission_breaks, labels = parse(text = emission_labels),
+                              guide = guide_axis(n.dodge = if (shift > 0) 2 else 1))
+}
+
+# Check that both reallocations preserve emissions and raise total costs by
+# exactly the shaded area between the two marginal abatement cost curves.
+equimarginal_cost = function(emissions1) {
+  (3 - emissions1)^2 / 3 + (3 - (3.5 - emissions1))^2 / 2
+}
+stopifnot(abs(equimarginal_mac1(1.5) - equimarginal_mac2(2)) < 1e-12)
+for (shift in c(-0.75, 0.15)) {
+  emissions1 = 1.5 + shift
+  emissions2 = 2 - shift
+  if (shift > 0) stopifnot(1.5 < emissions1, emissions1 < emissions2, emissions2 < 2)
+  shaded_area = integrate(function(emissions) {
+    abs(equimarginal_mac1(emissions) - equimarginal_mac2(3.5 - emissions))
+  }, min(1.5, emissions1), max(1.5, emissions1))$value
+  extra_cost = equimarginal_cost(emissions1) - equimarginal_cost(1.5)
+  triangle_layers = ggplot_build(equimarginal_figure(shift, shade = TRUE))$data[1:2]
+  plotted_area = sum(vapply(triangle_layers, function(vertices) {
+    # The shoelace formula measures each plotted triangle directly.
+    next_vertex = c(2:nrow(vertices), 1)
+    abs(sum(vertices$x * vertices$y[next_vertex] -
+              vertices$y * vertices$x[next_vertex])) / 2
+  }, numeric(1)))
+  stopifnot(abs(plotted_area - extra_cost) < 1e-12)
+  stopifnot(abs(emissions1 + emissions2 - 3.5) < 1e-12,
+            extra_cost > 0, abs(shaded_area - extra_cost) < 1e-12,
+            abs(0.5 * abs(shift) * (abs(equimarginal_mac1(emissions1) - 1) +
+                abs(equimarginal_mac2(emissions2) - 1)) - extra_cost) < 1e-12)
+}
+```
+
 # Optimal policy with multiple firms
 
 .pull-left[
-![taxes](`r knitr::fig_chunk("multi-tax", "png")`)
+```{r equimarginal-slide45, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure()
+```
 ]
 
 .pull-right[
@@ -827,6 +932,109 @@ If standards are applied uniformly across heterogeneous firms, costs are not min
 
 If firms face a common emissions price, abatement is reallocated toward low-MAC sources
 
+]
+
+---
+
+
+# Deviating from the equimarginal principle
+
+
+
+.pull-left[
+```{r equimarginal-efficient, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure()
+```
+]
+
+.pull-right[
+Holding total emissions constant
+
+Costs are minimized when $MAC_1 = MAC_2$
+]
+
+---
+count: false
+
+# Deviating from the equimarginal principle
+
+.pull-left[
+```{r equimarginal-more-firm1, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure(shift = 0.15)
+```
+]
+
+.pull-right[
+Firm 1 emits more; firm 2 emits less
+
+Now $MAC_1 < MAC_2$
+]
+
+---
+count: false
+
+# Deviating from the equimarginal principle
+
+.pull-left[
+```{r equimarginal-dwl-firm1, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure(shift = 0.15, shade = TRUE)
+```
+]
+
+.pull-right[
+The .hi-red[red area] is DWL relative to the cost-minimizing allocation
+
+Shift emissions back toward firm 2 to equalize MACs
+]
+
+---
+
+# Deviating in the other direction
+
+.pull-left[
+```{r equimarginal-reset, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure()
+```
+]
+
+.pull-right[
+Start again where $MAC_1 = MAC_2$
+
+Holding total emissions constant
+]
+
+---
+count: false
+
+# Deviating in the other direction
+
+.pull-left[
+```{r equimarginal-more-firm2, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure(shift = -0.75)
+```
+]
+
+.pull-right[
+Firm 1 emits less; firm 2 emits more
+
+Now $MAC_1 > MAC_2$
+]
+
+---
+count: false
+
+# Deviating in the other direction
+
+.pull-left[
+```{r equimarginal-dwl-firm2, echo = FALSE, fig.width = 7, fig.height = 7, out.width = '100%'}
+equimarginal_figure(shift = -0.75, shade = TRUE)
+```
+]
+
+.pull-right[
+The .hi-red[red area] is DWL relative to the cost-minimizing allocation
+
+Shift emissions back toward firm 1 to equalize MACs
 ]
 
 ---

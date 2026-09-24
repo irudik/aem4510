@@ -35,79 +35,8 @@ class: center, middle, inverse, title-slide
 
 exclude: true
 
-``` r
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
-)
-```
 
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## Warning: package 'tweetrmd' is not available for this version of R
-## 
-## A version of this package for your version of R might be available elsewhere,
-## see the ideas at
-## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
-```
-
-```
-## Warning: 'BiocManager' not available.  Could not check Bioconductor.
-## 
-## Please use `install.packages('BiocManager')` and then retry.
-```
-
-```
-## Warning in p_install(package, character.only = TRUE, ...):
-```
-
-```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
-```
-
-```
-## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
-## tweetrmd
-```
-
-``` r
-source("R/video_helpers.R")
-options(htmltools.dir.version = FALSE)
-knitr::opts_hooks$set(fig.callout = function(options) {
-  if (options$fig.callout) {
-    options$echo &lt;- FALSE
-  }
-knitr::opts_chunk$set(
-  cache = TRUE,
-  cache.extra = list(tools::md5sum("R/video_helpers.R")),
-  echo = TRUE,
-  fig.align = "center"
-)
-  options
-})
-```
-
-
-```
-## Warning in xaringanExtra::style_panelset(panel_tab_color_active = "red"): 'xaringanExtra::style_panelset' is deprecated.
-## Use 'style_panelset_tabs' instead.
-## See help("Deprecated")
-```
-
-```
-## Warning in style_panelset_tabs(...): The argument names of `style_panelset()`
-## changed in xaringanExtra 0.1.0. Please refer to the documentation to update to
-## the latest names.
-```
-
-```
-## NULL
-```
+<style>:root{--panel-tab-active-foreground:red;}</style>
 
 ---
 
@@ -131,7 +60,7 @@ name: taxes
 
 # Emission taxes
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-emission-taxes-intro.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/05-taxes-emission-taxes-intro.mp4" type="video/mp4"><track kind="captions" src="videos/05-taxes-emission-taxes-intro.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -485,13 +414,13 @@ In January 2025, NYC became the first US city to implement congestion pricing
 
 # NYC congestion pricing explained
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-nyc-congestion-explained.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/05-taxes-nyc-congestion-explained.mp4" type="video/mp4"><track kind="captions" src="videos/05-taxes-nyc-congestion-explained.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
 # NYC congestion pricing: one year later
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-nyc-congestion-one-year.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/05-taxes-nyc-congestion-one-year.mp4" type="video/mp4"><track kind="captions" src="videos/05-taxes-nyc-congestion-one-year.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -578,7 +507,7 @@ The response: .hi-red[Yellow Vest protests] (Gilets Jaunes)
 
 # France's Yellow Vest protests
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-france-yellow-vests.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/05-taxes-france-yellow-vests.mp4" type="video/mp4"><track kind="captions" src="videos/05-taxes-france-yellow-vests.fr.vtt" srclang="fr" label="French" default></video>
 
 ---
 
@@ -715,10 +644,12 @@ Even if we don't set the tax equal to MD, whatever emission reduction we get wil
 
 ---
 
+
+
 # Optimal policy with multiple firms
 
 .pull-left[
-![taxes](05-slides-taxes_files/figure-html/multi-tax-1.png)
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-slide45-1.png" alt="" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -727,6 +658,97 @@ If standards are applied uniformly across heterogeneous firms, costs are not min
 
 If firms face a common emissions price, abatement is reallocated toward low-MAC sources
 
+]
+
+---
+
+
+# Deviating from the equimarginal principle
+
+
+
+.pull-left[
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-efficient-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+Holding total emissions constant
+
+Costs are minimized when `\(MAC_1 = MAC_2\)`
+]
+
+---
+count: false
+
+# Deviating from the equimarginal principle
+
+.pull-left[
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-more-firm1-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+Firm 1 emits more; firm 2 emits less
+
+Now `\(MAC_1 &lt; MAC_2\)`
+]
+
+---
+count: false
+
+# Deviating from the equimarginal principle
+
+.pull-left[
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-dwl-firm1-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+The .hi-red[red area] is DWL relative to the cost-minimizing allocation
+
+Shift emissions back toward firm 2 to equalize MACs
+]
+
+---
+
+# Deviating in the other direction
+
+.pull-left[
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-reset-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+Start again where `\(MAC_1 = MAC_2\)`
+
+Holding total emissions constant
+]
+
+---
+count: false
+
+# Deviating in the other direction
+
+.pull-left[
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-more-firm2-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+Firm 1 emits less; firm 2 emits more
+
+Now `\(MAC_1 &gt; MAC_2\)`
+]
+
+---
+count: false
+
+# Deviating in the other direction
+
+.pull-left[
+&lt;img src="05-slides-taxes_files/figure-html/equimarginal-dwl-firm2-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+The .hi-red[red area] is DWL relative to the cost-minimizing allocation
+
+Shift emissions back toward firm 1 to equalize MACs
 ]
 
 ---
@@ -748,7 +770,7 @@ If firms face a common emissions price, abatement is reallocated toward low-MAC 
 
 # Emission taxes
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/05-taxes-emission-taxes-2.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/05-taxes-emission-taxes-2.mp4" type="video/mp4"><track kind="captions" src="videos/05-taxes-emission-taxes-2.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
