@@ -19,6 +19,7 @@ import {
 } from "./permit_market.mts";
 import {
   clearPhaseDataForEntry,
+  getAuctionResultsForSession,
   getAllocationsForSession,
   getBidsForSession,
   getEmissionChoicesForSession,
@@ -29,6 +30,7 @@ import {
   upsertRoundScores,
   writeAuctionClearing,
 } from "./permit_game_service.mts";
+import { phaseIsClosed } from "./permit_closed.mts";
 
 function capForRound(session, roundKey) {
   return roundKey === "round1"
@@ -158,6 +160,12 @@ export async function closeMarketPhase(session, marketKey) {
  * Close the phase being left when moving forward through the game.
  */
 export async function closePhaseForward(session, currentPhase) {
+  const [teams, results, scores] = await Promise.all([
+    getTeamsForSession(String(session.id)),
+    getAuctionResultsForSession(String(session.id)),
+    getRoundScoresForSession(String(session.id)),
+  ]);
+  if (phaseIsClosed(currentPhase, teams, results, scores)) return;
   if (AUCTION_PHASES.has(currentPhase)) {
     await closeAuctionPhase(session, currentPhase);
   }

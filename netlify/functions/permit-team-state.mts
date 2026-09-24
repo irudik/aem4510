@@ -30,6 +30,7 @@ import {
   getTradesForSession,
 } from "./_lib/permit_game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
+import { phaseIsClosed } from "./_lib/permit_closed.mts";
 
 export default async function permitTeamState(req) {
   if (req.method !== "GET") {
@@ -127,7 +128,7 @@ export default async function permitTeamState(req) {
     for (const clearedKey of ["auction1", "auction2"]) {
       const result = results.find((row) => String(row.round_key) === clearedKey);
       const method = allocationMethodForRound(session, roundForPhase(clearedKey));
-      auctionReports[clearedKey] = (result && phase !== clearedKey && method !== "free")
+      auctionReports[clearedKey] = (result && method !== "free")
         ? studentAuctionReport(
           Number(result.cap),
           bids
@@ -245,6 +246,7 @@ export default async function permitTeamState(req) {
         id: session.id,
         session_name: session.session_name,
         current_phase: session.current_phase,
+        phase_closed: phaseIsClosed(phase, teams, results, scores),
         has_started: session.has_started,
         round_seconds: session.round_seconds ?? null,
         phase_deadline_at: session.phase_deadline_at ?? null,

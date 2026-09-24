@@ -135,11 +135,12 @@
             </div>
           </div>
           <div class="row" style="margin-top: 0.6rem">
+            <button id="close-phase-btn" class="secondary" type="button" disabled>Close Phase</button>
             <button id="apply-phase-btn" class="primary" type="button">Apply Phase Update</button>
             <button id="refresh-admin-btn" class="secondary" type="button">Refresh Dashboard</button>
             <button id="download-csv-btn" class="secondary" type="button">Download Scores CSV</button>
           </div>
-          <p><small class="note">Moving forward closes the current phase: leaving an auction clears it, leaving a market scores the round. Re-selecting the current phase replays it with a fresh timer.</small></p>
+          <p><small class="note">Close Phase stops submissions and shows auction results or round scores without starting the next phase. When ready, select the next phase and click Apply Phase Update. Moving forward also closes an unfinished phase. Re-selecting the current phase clears its data and restarts its timer.</small></p>
           <div id="phase-status" class="status hidden"></div>
         </section>
 

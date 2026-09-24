@@ -20,6 +20,7 @@ import {
   requireAdminUser,
 } from "./_lib/permit_game_service.mts";
 import { jsonResponse } from "./_lib/http.mts";
+import { phaseIsClosed } from "./_lib/permit_closed.mts";
 
 export default async function permitAdminState(req) {
   if (req.method !== "GET") {
@@ -69,8 +70,8 @@ export default async function permitAdminState(req) {
       }
 
       const auctionBids = bids.filter((row) => String(row.round_key) === auctionKey);
-      const isLive = String(session.current_phase) === auctionKey;
       const result = results.find((row) => String(row.round_key) === auctionKey);
+      const isLive = String(session.current_phase) === auctionKey && !result;
       if (!isLive && !result && auctionBids.length === 0) {
         continue;
       }
@@ -102,7 +103,7 @@ export default async function permitAdminState(req) {
     );
 
     return jsonResponse(200, {
-      session,
+      session: { ...session, phase_closed: phaseIsClosed(phase, teams, results, scores) },
       server_now: new Date().toISOString(),
       teams,
       bids,

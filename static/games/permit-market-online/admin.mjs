@@ -52,6 +52,8 @@ const sessionStatus = document.getElementById("session-status");
 const phaseInput = document.getElementById("set-phase");
 const roundSecondsInput = document.getElementById("round-seconds");
 const applyPhaseButton = document.getElementById("apply-phase-btn");
+const closePhaseButton = document.getElementById("close-phase-btn");
+let closingPhase = false;
 const refreshButton = document.getElementById("refresh-admin-btn");
 const downloadCsvButton = document.getElementById("download-csv-btn");
 const phaseStatus = document.getElementById("phase-status");
@@ -124,6 +126,8 @@ function renderAuctionCharts(state) {
 
 function renderSessionSummary(state) {
   const session = state?.session;
+  closePhaseButton.disabled = closingPhase || !session || session.phase_closed
+    || !["auction1", "auction2", "market1", "market2"].includes(session.current_phase);
   if (!session) {
     sessionKv.innerHTML = "<dt>Status</dt><dd>No active session</dd>";
     return;
@@ -140,6 +144,7 @@ function renderSessionSummary(state) {
   const entries = [
     ["Session", session.session_name],
     ["Phase", phaseLabel(session.current_phase)],
+    ["Phase Status", session.phase_closed ? "Closed — waiting for instructor" : "Not finalized"],
     ["Phase Deadline", deadlineText],
     ["Teams Joined", (state.teams ?? []).length],
     ["Expected Teams", session.expected_team_count],
@@ -398,6 +403,7 @@ async function startGame() {
 }
 
 async function applyPhaseUpdate() {
+  if (closingPhase) return;
   clearStatus(phaseStatus);
 
   try {
@@ -417,6 +423,28 @@ async function applyPhaseUpdate() {
     await fetchAdminState();
   } catch (error) {
     setStatus(phaseStatus, "bad", error.message);
+  }
+}
+
+async function closeCurrentPhase() {
+  if (closingPhase || !latestState?.session) return;
+  closingPhase = true;
+  closePhaseButton.disabled = true;
+  applyPhaseButton.disabled = true;
+  clearStatus(phaseStatus);
+  try {
+    await apiJson("/api/permit-market/admin/close-phase", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getAdminToken()}` },
+      body: JSON.stringify({ phase: latestState.session.current_phase }),
+    });
+    setStatus(phaseStatus, "good", "Phase closed. Results are ready; the next phase has not started.");
+  } catch (error) {
+    setStatus(phaseStatus, "bad", error.message);
+  } finally {
+    closingPhase = false;
+    applyPhaseButton.disabled = false;
+    await fetchAdminState();
   }
 }
 
@@ -477,6 +505,7 @@ logoutButton.addEventListener("click", adminLogout);
 createSessionButton.addEventListener("click", createSession);
 startGameButton.addEventListener("click", startGame);
 applyPhaseButton.addEventListener("click", applyPhaseUpdate);
+closePhaseButton.addEventListener("click", closeCurrentPhase);
 refreshButton.addEventListener("click", fetchAdminState);
 downloadCsvButton.addEventListener("click", downloadScoresCsv);
 

@@ -313,23 +313,6 @@ export async function getAllocationsForSession(sessionId) {
  * Store the outcome of clearing one auction.
  */
 export async function writeAuctionClearing(sessionId, auctionKey, clearing) {
-  await supabaseRequest("/rest/v1/permit_auction_results", {
-    method: "POST",
-    queryParams: {
-      on_conflict: "session_id,round_key",
-    },
-    body: [{
-      session_id: sessionId,
-      round_key: auctionKey,
-      cap: clearing.cap,
-      clearing_price: clearing.clearing_price,
-      total_bid_quantity: clearing.total_bid_quantity,
-      cleared_at: new Date().toISOString(),
-    }],
-    prefer: "resolution=merge-duplicates,return=minimal",
-    useServiceRole: true,
-  });
-
   await supabaseRequest("/rest/v1/permit_auction_allocations", {
     method: "DELETE",
     queryParams: {
@@ -353,6 +336,23 @@ export async function writeAuctionClearing(sessionId, auctionKey, clearing) {
       useServiceRole: true,
     });
   }
+
+  // Publish the final result only after allocations are stored, so a failed
+  // allocation write can be retried instead of appearing to be finalized.
+  await supabaseRequest("/rest/v1/permit_auction_results", {
+    method: "POST",
+    queryParams: { on_conflict: "session_id,round_key" },
+    body: [{
+      session_id: sessionId,
+      round_key: auctionKey,
+      cap: clearing.cap,
+      clearing_price: clearing.clearing_price,
+      total_bid_quantity: clearing.total_bid_quantity,
+      cleared_at: new Date().toISOString(),
+    }],
+    prefer: "resolution=merge-duplicates,return=minimal",
+    useServiceRole: true,
+  });
 }
 
 /**

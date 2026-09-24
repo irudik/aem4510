@@ -272,6 +272,15 @@ function renderAuctionStage(state) {
   const roundLabel = roundKey === "round2" ? "Round 2" : "Round 1";
   const cap = formatNumber(phase === "auction1" ? session.cap_round1 : session.cap_round2, 0);
   const method = state.allocation_method ?? "uniform";
+  if (session.phase_closed) {
+    stageContainer.innerHTML = `
+      <h3>Permit allocation closed</h3>
+      <p>You received ${formatNumber(state.own_allocation?.permits_won ?? 0, 0)} permits
+      and paid $${formatNumber(state.own_allocation?.payment ?? 0, 2)}.</p>
+      ${clearedAuctionsHtml(state.auction_reports)}
+      <p class="note">Waiting for the instructor to open the market. You cannot submit more bids.</p>`;
+    return;
+  }
   const shockComing = Boolean(roundKey === "round2" ? session.shock_round2 : session.shock_round1);
   const firm = {
     baseline: Number(state.team.baseline_emissions),
@@ -478,7 +487,7 @@ function renderMarketScaffold(state) {
     <div id="own-orders"></div>
     <h4 style="margin-top: 0.6rem">Trade Ticker</h4>
     <ul id="trade-ticker" class="ticker"></ul>
-    ${expired ? "<p><small class=\"note\">The market has closed. Waiting for the instructor to score the round.</small></p>" : ""}
+    ${expired ? `<p><small class="note">${state.session.phase_closed ? "Round scored. Waiting for the instructor to start the next phase." : "The market has closed. Waiting for the instructor to score the round."}</small></p>` : ""}
   `;
 
   document.getElementById("order-form")?.addEventListener("submit", (event) => {
@@ -638,6 +647,7 @@ function stageSignature(state) {
     phase,
     state?.team?.baseline_emissions ? "assigned" : "unassigned",
     bidsJson,
+    state?.session?.phase_closed ? "closed" : "open",
     Object.keys(state?.auction_reports ?? {}).filter((key) => state.auction_reports[key]).join("+"),
     deadlineExpired() ? "expired" : "live",
   ].join("|");

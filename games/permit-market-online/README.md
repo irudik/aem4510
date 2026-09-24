@@ -130,7 +130,10 @@ The earlier quiz-style emissions-trading game remains available at
    a round selector. It contains no game controls. Project it only when
    you intend to reveal MACs and bids. Identical firm curves coincide;
    the legend lists every team sharing each curve.
-5. Move phases forward in order: auction1 -> market1 -> auction2 ->
+5. To pause for discussion, click **Close Phase**. This stops submissions,
+   clears the auction or scores the market, and displays results without
+   starting the next phase. No database migration is needed for this control.
+   Move phases forward in order: auction1 -> market1 -> auction2 ->
    market2 -> complete. Leaving an auction clears it (students then see
    the clearing price and their allocations); leaving a market scores the
    round and updates the leaderboard.
