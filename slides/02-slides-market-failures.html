@@ -37,45 +37,16 @@ exclude: true
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
-)
 ```
 
 ```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## Warning: package 'tweetrmd' is not available for this version of R
-## 
-## A version of this package for your version of R might be available elsewhere,
-## see the ideas at
-## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
-```
-
-```
-## Warning: 'BiocManager' not available.  Could not check Bioconductor.
-## 
-## Please use `install.packages('BiocManager')` and then retry.
-```
-
-```
-## Warning in p_install(package, character.only = TRUE, ...):
-```
-
-```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
-```
-
-```
-## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
-## tweetrmd
+## Loading required package: pacman
 ```
 
 ``` r
+pacman::p_load(
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
+)
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -368,7 +339,7 @@ Markets rely on prices to signal the social value of goods
 
 # Colorado River rules are being rewritten for 2027
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-colorado-river-2026.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/02-market-failures-colorado-river-2026.mp4" type="video/mp4"><track kind="captions" src="videos/02-market-failures-colorado-river-2026.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -390,7 +361,7 @@ As of August 26, 2026:
 
 # Saudi farming exposed Arizona groundwater rules
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-arizona-water.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/02-market-failures-arizona-water.mp4" type="video/mp4"><track kind="captions" src="videos/02-market-failures-arizona-water.en.vtt" srclang="en" label="English" default></video>
 
 &lt;!-- Sources:
 - CBS Mornings, "Arizona Water Controversy": https://www.youtube.com/watch?v=b78owYAd0iw
@@ -429,7 +400,7 @@ As of August 26, 2026:
 
 # Groundwater enforcement now uses settlements as well as lawsuits
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-groundwater-lawsuit-2026.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/02-market-failures-groundwater-lawsuit-2026.mp4" type="video/mp4"><track kind="captions" src="videos/02-market-failures-groundwater-lawsuit-2026.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -506,7 +477,7 @@ Used to treat lice
 
 # The birth of the environmental movement
 
-<video width="800" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-env-movement-birth.mp4" type="video/mp4"></video>
+<video width="800" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/02-market-failures-env-movement-birth.mp4" type="video/mp4"><track kind="captions" src="videos/02-market-failures-env-movement-birth.en.vtt" srclang="en" label="English" default></video>
 
 
 ---
@@ -721,7 +692,7 @@ The private actors are not accounting for the .hi[external costs] they are impos
 
 # Estimating marginal damages with EZ-Pass
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-ezpass-damages.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/02-market-failures-ezpass-damages.mp4" type="video/mp4"><track kind="captions" src="videos/02-market-failures-ezpass-damages.en.vtt" srclang="en" label="English" default></video>
 
 ---
 
@@ -947,7 +918,7 @@ The private actors are not accounting for the external benefits they confer on p
 
 # News report: the first U.S. measles deaths of 2026
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/02-market-failures-measles-deaths-2026.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/02-market-failures-measles-deaths-2026.mp4" type="video/mp4"><track kind="captions" src="videos/02-market-failures-measles-deaths-2026.en.vtt" srclang="en" label="English" default></video>
 
 ---
 

@@ -20,7 +20,7 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork
 )
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)

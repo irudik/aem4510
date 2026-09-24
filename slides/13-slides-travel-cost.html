@@ -40,57 +40,6 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
   tidyverse, magrittr, xaringanExtra, rlang, patchwork, broom, viridis, fixest, maps, tigris, sf
 )
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## 
-## viridis installed
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## also installing the dependencies 'zoo', 'Formula', 'sandwich', 'dreamerr', 'stringmagic'
-```
-
-```
-## 
-## fixest installed
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## 
-## maps installed
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## also installing the dependencies 'proxy', 'e1071', 'wk', 'classInt', 's2', 'units', 'sf'
-```
-
-```
-## 
-## tigris installed
-```
-
-``` r
 source("R/video_helpers.R")
 set.seed(1)
 options(htmltools.dir.version = FALSE)
@@ -250,7 +199,7 @@ name: background
 
 # Should we separate the Great Lakes and Mississippi?
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/13-travel-cost-great-lakes-carp.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/13-travel-cost-great-lakes-carp.mp4" type="video/mp4"><track kind="captions" src="videos/13-travel-cost-great-lakes-carp.en.vtt" srclang="en" label="English" default></video>
 
 ---
 

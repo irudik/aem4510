@@ -38,44 +38,8 @@ exclude: true
 ``` r
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13
 )
-```
-
-```
-## Installing package into '/opt/homebrew/lib/R/4.6/site-library'
-## (as 'lib' is unspecified)
-```
-
-```
-## Warning: package 'tweetrmd' is not available for this version of R
-## 
-## A version of this package for your version of R might be available elsewhere,
-## see the ideas at
-## https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
-```
-
-```
-## Warning: 'BiocManager' not available.  Could not check Bioconductor.
-## 
-## Please use `install.packages('BiocManager')` and then retry.
-```
-
-```
-## Warning in p_install(package, character.only = TRUE, ...):
-```
-
-```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called 'tweetrmd'
-```
-
-```
-## Warning in pacman::p_load(tidyverse, xaringanExtra, rlang, patchwork, nycflights13, : Failed to install/load:
-## tweetrmd
-```
-
-``` r
 source("R/video_helpers.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
@@ -130,7 +94,7 @@ name: tradable permits
 
 # Learning about arctic sea ice
 
-<video width="900" controls preload="auto" style="display:block;margin:auto;"><source src="videos/07-uncertainty-arctic-sea-ice.mp4" type="video/mp4"></video>
+<video width="900" controls preload="metadata" style="display:block;margin:auto;" onplay="document.querySelectorAll('video').forEach(v => { if (v !== this) v.pause(); });"><source src="videos/07-uncertainty-arctic-sea-ice.mp4" type="video/mp4"><track kind="captions" src="videos/07-uncertainty-arctic-sea-ice.en.vtt" srclang="en" label="English" default></video>
 
 ---
 

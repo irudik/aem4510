@@ -158,7 +158,7 @@ Some slides use the [Lato](https://fonts.google.com/specimen/Lato) font. Install
 
 ## Offline Video Playback
 
-Slides use locally-hosted MP4 files instead of YouTube embeds for reliable offline playback in classrooms.
+Slides use locally-hosted MP4 files for reliable offline playback in classrooms. Matching WebVTT caption files in `slides/videos/` appear by default in the video player. Use `.en.vtt` for English captions; `.fr.vtt` is available for the French Yellow Vests clip. Some captions come from YouTube's automatic speech recognition or translation, so check wording before class.
 
 ### Prerequisites
 
@@ -205,7 +205,15 @@ The script skips already-downloaded files, so it's safe to re-run.
    cd slides/scripts && ./download_videos.sh
    ```
 
-4. **Test:** Knit the slide deck and verify playback works offline.
+4. **Add captions:** Save an English WebVTT file next to the MP4 as `slides/videos/NN-descriptive-name.en.vtt`. For a YouTube video with captions, one way to obtain it is:
+   ```bash
+   cd slides
+   yt-dlp --skip-download --write-subs --write-auto-subs --sub-langs en --sub-format vtt \
+     -o 'videos/NN-descriptive-name.%(ext)s' 'https://www.youtube.com/watch?v=VIDEO_ID'
+   ```
+   If the source has no caption track, transcribe the local video and review the resulting text.
+
+5. **Test:** Knit the slide deck and verify that captions and playback work offline.
 
 ### Validating Videos
 
@@ -219,6 +227,6 @@ validate_videos()
 ### File Locations
 
 - `slides/video_manifest.csv` - Master list of all videos
-- `slides/videos/` - Downloaded MP4 files (git-ignored)
+- `slides/videos/` - Downloaded MP4 files (git-ignored) and tracked WebVTT captions
 - `slides/scripts/download_videos.sh` - Download script
 - `slides/R/video_helpers.R` - `local_video()` and `validate_videos()` functions
