@@ -37,8 +37,8 @@ export default async function permitAdminCreateSession(req) {
       return jsonResponse(400, { error: "round_seconds must be an integer between 30 and 3600" });
     }
 
-    const allocation1 = String(body.allocation_round1 ?? "uniform");
-    const allocation2 = String(body.allocation_round2 ?? "uniform");
+    const allocation1 = String(body.allocation_round1 ?? "free");
+    const allocation2 = String(body.allocation_round2 ?? "free");
     for (const [label, method] of [["allocation_round1", allocation1], ["allocation_round2", allocation2]]) {
       if (!ALLOCATION_METHODS.includes(method)) {
         return jsonResponse(400, { error: `${label} must be one of ${ALLOCATION_METHODS.join(", ")}` });

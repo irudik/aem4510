@@ -41,9 +41,9 @@ The earlier quiz-style emissions-trading game remains available at
 
 ## Game Options (set per session)
 
-- Allocation per round: uniform-price auction (default), pay-as-bid
+- Allocation per round: uniform-price auction, pay-as-bid
   auction (each winner pays its own bids, as in EPA's Acid Rain Program
-  auctions), or free allocation in proportion to baseline emissions
+  auctions), or free allocation (default) in proportion to baseline emissions
   (grandfathering; whole permits by largest remainder). In a free round the
   auction phase shows each team its permits; there is nothing to bid on.
 - Cost shock per round: when the round's market opens, each firm learns
@@ -52,7 +52,7 @@ The earlier quiz-style emissions-trading game remains available at
   own. Students know the odds when they bid. Costs, scores, and the round's
   benchmark use the shocked slope; the instructor auction charts show
   unshocked MACs, which is what bidders knew.
-- Banking and borrowing (each on or off): during the Round 1 market a team
+- Banking and borrowing (both off by default): during the Round 1 market a team
   chooses its Round 1 emissions (default: use the permits it holds, up to
   baseline). Emitting less banks the rest; emitting more borrows from Round
   2. There are no limits beyond emissions between zero and baseline. Round 2
@@ -64,7 +64,7 @@ The earlier quiz-style emissions-trading game remains available at
 - Suggested classroom setups: "ARP style" = Round 1 free with a shock,
   Round 2 pay-as-bid with a shock, banking and borrowing on. "Auction
   formats" = Round 1 uniform, Round 2 pay-as-bid, no shocks. The default
-  (uniform both rounds, no shocks) is the earlier game.
+  is free allocation in both rounds, no shocks, and no banking or borrowing.
 
 ## Market Rules
 
