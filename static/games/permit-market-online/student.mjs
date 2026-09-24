@@ -456,12 +456,8 @@ function renderMarketScaffold(state) {
     ${clearedAuctionsHtml(state.auction_reports)}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
     ${showPlan ? emissionsPlanHtml(state, expired) : ""}
-    <h3>Current Offers</h3>
+    <h3>Buy and Sell Orders</h3>
     <div id="market-depth"></div>
-    <div class="book-grid" style="margin-top: 0.6rem">
-      <div><h4>Buyers (bids)</h4><div id="book-bids" class="table-wrap"></div></div>
-      <div><h4>Sellers (asks)</h4><div id="book-asks" class="table-wrap"></div></div>
-    </div>
     <p class="learning-prompt">Before trading: would buying one permit save more in abatement costs than you would pay?
       Would selling one earn more than the additional abatement would cost?</p>
     <h3>Place an Order</h3>
@@ -618,20 +614,8 @@ function renderMarketLiveData(state) {
     }
   }
 
-  const bookBids = document.getElementById("book-bids");
   const depth = document.getElementById("market-depth");
   if (depth) depth.innerHTML = marketDepthHtml(market.book, { closed: deadlineExpired() });
-  const bookAsks = document.getElementById("book-asks");
-  if (bookBids && bookAsks) {
-    bookBids.innerHTML = tableHtml(
-      market.book.bids.map((level) => ({ price: formatNumber(level.price, 2), quantity: level.quantity })),
-      ["Price", "Quantity"],
-    );
-    bookAsks.innerHTML = tableHtml(
-      market.book.asks.map((level) => ({ price: formatNumber(level.price, 2), quantity: level.quantity })),
-      ["Price", "Quantity"],
-    );
-  }
 
   const ticker = document.getElementById("trade-ticker");
   if (ticker) {
