@@ -69,3 +69,12 @@ Do not edit manually unless you are intentionally maintaining the template. -->
 - Trigger: User corrected the figures following slide 45 of lecture 05.
 - Right: Preserve the existing common emissions axis and MAC curves; omit MD when illustrating cost minimization at fixed total emissions. Use the two red triangles, as in lecture 06 permits, to show excess abatement cost. The user wants no grey rectangles or rectangle-cancellation discussion, concise text, and no numerical emissions values. Keep math outside xaringan color/bold wrappers and constrain plotted MAC domains to avoid missing-value warnings.
 - Scope: Equimarginal-principle figures in course slides.
+
+[LEARN:permit-terminology]
+- Date: 2026-09-24
+- Trigger: User corrected slide 5 of the permits lecture.
+- Wrong: Calling the firm's cost "compliance/abatement cost" and the regulator's optimization "Planner problem."
+- Right: Use "abatement cost" and "Regulator problem" for this formulation. Describe the decentralized permit market as achieving the target condition, not decentralizing the condition itself.
+- Scope: The regulator's emissions-allocation problem in the permits lecture.
+- Evidence: User wording corrections to slides/06-slides-permits.Rmd.
+- Action: Preserve these terms in later revisions of this material.
