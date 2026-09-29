@@ -115,6 +115,7 @@ test("colored cost labels correspond to outlined one-unit areas on either side o
   assert.match(html, /class="mac-total-label">Total abatement cost/);
   assert.match(html, /class="mac-next-label">Cost of the next unit of abatement/);
   assert.match(html, /class="mac-savings-label">Cost savings from emitting one more unit/);
+  assert.equal((html.match(/scale\(0\.88 0\.94\)/g) ?? []).length, 2);
   assert.match(html, /class="mac-next-area"\s+d="M 270 278 L 270 158 L 323 178 L 323 278 Z"/);
   assert.match(html, /class="mac-savings-area"\s+d="M 323 278 L 323 178 L 376 198 L 376 278 Z"/);
   assert.doesNotMatch(macPanel(stateFor(FIRM_TYPES[0], 0)), /class="mac-next-area"/);

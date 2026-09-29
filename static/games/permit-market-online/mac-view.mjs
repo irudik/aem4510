@@ -69,8 +69,15 @@ export function macChart(model) {
     d="M ${x(emissions)} ${bottom} L ${x(emissions)} ${y(model.currentMac)} L ${x(baseline)} ${bottom} Z" />`;
   const curve = `M ${x(0)} ${y(slope * baseline)} L ${x(baseline)} ${y(0)}`;
   // Integrating MAC over the adjacent unit gives its full cost or savings.
-  const unitArea = (from, to, className, label, amount) => `<path class="${className}"
-    d="M ${x(from)} ${bottom} L ${x(from)} ${y(slope * (baseline - from))} L ${x(to)} ${y(slope * (baseline - to))} L ${x(to)} ${bottom} Z"><title>${label}: $${amount.toFixed(2)}</title></path>`;
+  const unitArea = (from, to, className, label, amount) => {
+    const centerX = (x(from) + x(to)) / 2;
+    const centerY = (2 * bottom + y(slope * (baseline - from)) + y(slope * (baseline - to))) / 4;
+    // Inset the outline within its own cost region to separate shared borders.
+    // The underlying one-unit interval and reported cost remain unchanged.
+    return `<path class="${className}"
+      d="M ${x(from)} ${bottom} L ${x(from)} ${y(slope * (baseline - from))} L ${x(to)} ${y(slope * (baseline - to))} L ${x(to)} ${bottom} Z"
+      transform="translate(${centerX} ${centerY}) scale(0.88 0.94) translate(${-centerX} ${-centerY})"><title>${label}: $${amount.toFixed(2)}</title></path>`;
+  };
   const nextAbatementArea = model.nextAbatementCost === null ? "" : unitArea(
     emissions - 1, emissions, "mac-next-area", "Cost of the next unit of abatement", model.nextAbatementCost);
   const savingsArea = model.moreEmissionsSavings === null ? "" : unitArea(
