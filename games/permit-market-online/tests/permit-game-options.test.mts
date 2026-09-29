@@ -293,9 +293,11 @@ test("two rounds with every option on conserve permits and cash", () => {
 
 test("pay-as-bid rules, what-if payments, and report wording", () => {
   const rules = auctionRulesHtml(5, { pricing: "pay_as_bid" });
-  assert.match(rules, /its own bid/);
+  assert.match(rules, /Bid for each permit\./);
+  assert.match(rules, /top <strong>5<\/strong> bids, you pay what you bid, not the lowest winning bid\./);
+  assert.equal((rules.match(/<li>/g) ?? []).length, 2);
   assert.doesNotMatch(rules, /worked-example|Worked example/);
-  assert.match(rules, /Acid Rain Program/);
+  assert.doesNotMatch(rules, /Acid Rain Program|most you would pay|clock runs out|mac-note/);
 
   const firm = { baseline: 8, slope: 2 };
   const outcome = outcomeAtPrice(firm, [16, 14, 12, 10, 8], 11, { pricing: "pay_as_bid" });

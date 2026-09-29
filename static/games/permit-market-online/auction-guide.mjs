@@ -154,6 +154,13 @@ export function priceRangeMax(firm, prices) {
 /** Plain-language auction rules. */
 export function auctionRulesHtml(cap, { pricing = "uniform" } = {}) {
   const payAsBid = pricing === "pay_as_bid";
+  if (payAsBid) return `<div class="auction-rules">
+    <h3>How the auction works: pay as you bid</h3>
+    <ol>
+      <li>Bid for each permit.</li>
+      <li>If you are one of the top <strong>${cap}</strong> bids, you pay what you bid, not the lowest winning bid.</li>
+    </ol>
+  </div>`;
   const paymentRule = payAsBid
     ? `Each winner pays <strong>its own bid</strong> for every permit it wins. If you bid $15 and win, you pay $15,
         even if the lowest winning bid is $9.`
