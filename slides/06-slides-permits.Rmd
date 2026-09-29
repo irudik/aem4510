@@ -1298,7 +1298,7 @@ $E_1 = 40$, $E_2 = 50$: .hi[the trading equilibrium]
 
 # Permit auctions: the rules
 
-Major permit auctions (RGGI, California-Quebec, EU ETS) are .hi[uniform-price sealed-bid] auctions. The rules in our game:<sup>1</sup>
+Major permit auctions (RGGI, California-Quebec, EU ETS) are .hi[uniform-price sealed-bid] auctions. These are our Round 1 rules:<sup>1</sup>
 
 --
 
@@ -1400,13 +1400,13 @@ Your bid mostly decides .hi[whether] you win a permit; the price is the lowest w
 ]
 
 .pull-right[
-A permit avoids one unit of abatement. The firm's .hi[gain] is the avoided MAC minus the price paid:
+A whole permit avoids one unit of abatement. Its value is the .hi[area under MAC] over that unit:
 
-$$\text{Gain} = MAC - p$$
+$$\text{Gain} = \text{avoided abatement cost} - p$$
 
-Example: $12 - 7 =$ .hi[5 gained per permit]
+If a permit saves 12 in abatement cost and costs 7, the firm gains .hi[5]
 
-The bars show bids, not necessarily MACs
+The bars show submitted bids
 ]
 
 ---
@@ -1422,64 +1422,101 @@ name: permit-game
 
 # The permit market game: auctions and trading
 
-Each team runs a firm with its own baseline emissions and MAC curve: keep yours private
+.hi[Round 1: uniform-price auction.] Every winning permit costs the lowest winning bid
 
 --
 
-Two rounds, each with a cap (tighter in Round 2): permits are .hi[auctioned] or .hi[given away], then teams .hi[trade] in a live market
+.hi[Round 2: pay-as-bid auction.] Each winning permit costs your bid, with a tighter cap
 
 --
 
-No banking or borrowing: each round's permits cover only that round's emissions
+After .hi[each auction]: your MAC shifts, then the open market begins
 
 --
 
-Emissions your permits do not cover are abated at your MAC; the leaderboard compares you with an efficient benchmark
+.hi[Round 3: transaction costs.] Restart Round 2 trading: same starting permits and post-shock MACs, plus a .hi[$3 buyer fee per permit]
+
+No banking or borrowing
 
 ---
 
-# The permit market game: options we may turn on
+# The permit market game: cost shocks
 
-.hi[Cost shocks:] when the market opens, your MAC slope becomes 0.5, 1, or 1.5 times what it was
-
---
-
-.hi[Free permits:] a round gives permits away in proportion to baseline emissions
+In Rounds 1 and 2, your MAC shifts .hi[up or down by $2 or $4] when trading opens. Its slope stays the same
 
 --
 
-.hi[Pay as you bid:] an auction charges each winner its own bid
+For example, $MAC = 24 - 2E$ becomes $26 - 2E$ or $22 - 2E$
+
+--
+
+The class has balanced upward and downward shifts. With an odd number of firms, one has no shift
+
+The caps and shifts keep cost-effective emissions in .hi[whole permits]
+
+Round 3 keeps Round 2's realized MACs
 
 ---
 
 # The permit market game: what should happen?
 
-If the market works, what do we expect to see in the data?
+- Different bidding incentives under uniform-price and pay-as-bid auctions
+- Trades from low-MAC to high-MAC firms after costs change
+- Lower total abatement costs as firms trade toward the cost-effective allocation
+- In Rounds 1 and 2, equal MACs when the class reaches that allocation
+- In Round 3, the $3 fee blocks trades whose abatement-cost savings are less than $3
 
 --
 
-- Auction prices near where total demand, the sum of MACs, meets the cap
-- Trades from low-MAC to high-MAC firms, especially after a cost shock
-- Free and auctioned rounds ending with similar allocations but different payments
-- A higher Round 2 price when the cap tightens, holding MACs fixed
-
---
-
-We will check the class results against these predictions after we play
+After trading closes, compare the MAC histogram with the cost-effective price line
 
 ---
 
 # The permit market game: scoring
 
-Your .hi[round score] is the abatement cost your permits save, plus permit sales revenue, minus spending on permits
+$$\text{Score} = \text{avoided abatement cost} + \text{sales} - \text{purchases} - \text{fees}$$
 
-$$\text{Score} = \text{avoided abatement cost} + \text{sales} - \text{purchases}$$
-
-Avoided cost is relative to abating all baseline emissions. Purchases include auction payments, which are zero with free allocation
+Avoided cost is relative to abating all baseline emissions, using your .hi[post-shock MAC]. Purchases include auction payments
 
 .hi[Leaderboard points] = your score minus your firm's benchmark score, summed over rounds
 
-The benchmark gives your firm its cost-effective permit quantity at the cost-effective price, accounting for its free permits
+The benchmark values your cost-effective permits at the no-fee price. Round 3 reuses Round 2's auction payments and deducts $3 per permit bought
+
+---
+
+# The permit market game: class cost reductions
+
+$$100 \times \frac{C_{\text{start}}-C_{\text{end}}}{C_{\text{start}}-C^*}$$
+
+- $C_{\text{start}}$: total abatement cost at the auction allocation
+- $C_{\text{end}}$: total abatement cost after trading
+- $C^*$: cost-effective total abatement cost
+
+All three use the same .hi[post-shock MACs] and exclude permit payments
+
+100% means the no-fee gap closed. A zero initial gap has no percentage
+
+Round 3 also reports .hi[abatement cost + transaction costs]
+
+---
+
+# The permit market game: bids and orders
+
+.hi[Auction:] enter one price per permit, in any order. The game ranks bids highest to lowest
+
+--
+
+.hi[Open market:] submit a buy or sell order with a price and a .hi[positive whole-number quantity]
+
+--
+
+In Rounds 1 and 2, a match trades at the .hi[waiting order's price]
+
+In Round 3, buy limits .hi[include the $3 fee]; asks specify seller receipts. A buy at 8 matches a sell at 5: buyer pays 8, seller gets 5
+
+--
+
+The instructor closes each phase to show results before starting the next
 
 ---
 
@@ -1504,9 +1541,13 @@ name: after-the-game
 
 ---
 
-# Debrief: should big firms bid their MAC?
+# Debrief: monopsony power in the auction
 
-If your bid might be the lowest winning bid, it sets the price you pay on .hi[all] your permits
+.hi[Monopsony power:] a large buyer can influence the price it pays by reducing its demand
+
+--
+
+In a uniform-price auction, lowering a bid that sets the price can lower payments on .hi[all] the buyer's winning permits
 
 --
 
@@ -1514,25 +1555,21 @@ For example, A cuts its second bid from 9 to 6. The price falls to 6, and A stil
 
 --
 
-This is .hi[demand reduction]: bidders who might set the price, especially large buyers, shade their bids below MAC
-
---
-
-Here only revenue falls (35 to 30). In general, shading can misallocate permits, which later trading can fix
+This .hi[demand reduction] uses monopsony power. It can leave high-value buyers with too few permits
 
 ---
 
 # Debrief: why trade after an auction?
 
-If every firm bids its MAC and nothing changes, the auction already equalizes MACs: there is nothing left to trade
+If bids equal the abatement costs each whole permit saves, the auction reaches the cost-effective allocation
 
 --
 
-In the game, costs changed after the auction: real MACs move with fuel prices, demand, outages, and new technology
+In our game, MACs shift after each auction, creating new gains from trade
 
 --
 
-The permit market lets firms whose MAC rose buy from firms whose MAC fell, until MACs are equal again
+Firms whose MAC rose can buy from firms whose MAC fell. Trading can also correct an auction's misallocation
 
 ---
 
@@ -1542,33 +1579,33 @@ EPA's Acid Rain Program auctions (from 1993) were .hi[pay-as-bid]; they sold abo
 
 --
 
-Bidding your MAC then earns nothing on the permits you win, so bidders shade toward the price they expect
+In pay-as-bid, firms .hi[shade bids down] below their willingness to pay
 
 --
 
-Bids stop revealing MACs, and bidders who guess the price wrong end up with too few or too many permits
+A lower winning bid means paying less. Bidding too low risks losing the permit
 
 --
 
-Svendsen and Christensen (1999): a uniform-price design "would probably have generated better price signals"
+Bids can therefore differ from avoided abatement costs, leaving gains from later trading
 
 ---
 
 # Permit auctions: bidding and cost-effectiveness
 
-With many bidders, your bid rarely sets the price, so bidding close to your MAC is close to the best you can do
+In a uniform-price auction, many small buyers have little .hi[monopsony power]: each bid is unlikely to set the price
 
 --
 
-Then every firm buys permits until its MAC is about equal to $p$
+Bids close to each permit's avoided abatement cost help allocate permits to the firms that value them most
 
 --
 
-.hi[The auction is cost-effective, like a Pigouvian tax]
+When bids equal those values, the auction produces a .hi[cost-effective allocation]
 
 --
 
-Shading your bid pays only when your bid ends up setting the price, and you cannot know that in advance
+Pay-as-bid gives even small buyers a reason to shade bids down, because each winning bid sets its own payment
 
 ---
 
@@ -2648,6 +2685,8 @@ How should expected Round 2 conditions change your Round 1 decisions?
 --
 
 Compare these results with the game without banking and borrowing
+
+The trading cost-reduction percentage is omitted here. Separate-round benchmarks do not measure cost-effectiveness across time
 
 ---
 
