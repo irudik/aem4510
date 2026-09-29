@@ -66,7 +66,9 @@ test("auction results compare aggregate smooth MAC with submitted demand", () =>
   assert.doesNotMatch(html, /report-key-price/);
   assert.doesNotMatch(html, /NaN|Infinity/);
   assert.doesNotMatch(JSON.stringify(report.aggregate_mac), /team_id|team_name/);
-  assert.doesNotMatch(auctionReportHtml(studentAuctionReport(5, unitBids(exampleBids), "A"), "Round 2"), /report-aggregate-mac/);
+  const payAsBidReport = studentAuctionReport(5, unitBids(exampleBids), "A", { teams, pricing: "pay_as_bid" });
+  assert.match(auctionReportHtml(payAsBidReport, "Round 2"), /report-aggregate-mac/);
+  assert.deepEqual(payAsBidReport.aggregate_mac, report.aggregate_mac);
 });
 
 test("the worked example clears at $7 with A, B, C winning 2, 2, 1", () => {

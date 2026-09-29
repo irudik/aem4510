@@ -152,7 +152,7 @@ export default async function permitTeamState(req) {
               submitted_at: row.submitted_at,
             })),
           teamId,
-          { pricing: method, teams: clearedKey === "auction1" ? teams : [] },
+          { pricing: method, teams },
         )
         : null;
     }

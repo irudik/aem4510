@@ -144,6 +144,7 @@ test("new games reveal balanced shifts only at market opening and report each ro
     const during = await (await teamState(new Request("https://game.invalid?join_token=a"))).json();
     assert.equal(during.team.mac_shifts[round], db.permit_teams[0]["mac_shift_" + round]);
     assert.equal(during.team.display_mac_intercept, effectiveIntercept(db.permit_teams[0], round));
+    assert.ok(during.auction_reports["auction" + number].aggregate_mac.length > 1);
     const buyer = db.permit_teams.find(team => team["mac_shift_" + round] > 0);
     const seller = db.permit_teams.find(team => team["mac_shift_" + round] < 0);
     db.permit_trades.push({ session_id: "s", round_key: "market" + number,
