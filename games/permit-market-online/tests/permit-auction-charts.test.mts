@@ -43,18 +43,18 @@ test("each individual MAC starts at zero and ends at its own baseline", () => {
     assert.equal(curve.steps[0].from, 0);
     assert.equal(curve.steps.at(-1).to, team.baseline_emissions);
     assert.equal(curve.steps.length, team.baseline_emissions);
-    assert.equal(curve.steps[0].cost, team.mac_slope * (team.baseline_emissions - 0.5));
-    assert.equal(curve.steps.at(-1).cost, team.mac_slope / 2);
+    assert.equal(curve.steps[0].cost, team.mac_intercept + team.mac_slope * (team.baseline_emissions - 0.5));
+    assert.equal(curve.steps.at(-1).cost, team.mac_intercept + team.mac_slope / 2);
   }
   assert.deepEqual(firmMacCurves([{ id: "waiting", baseline_emissions: null, mac_slope: null }]), []);
 });
 
 test("identical firms share a curve without summing or dropping teams", () => {
   const grouped = groupFirmCurves(firmMacCurves(teams));
-  assert.equal(grouped.length, FIRM_TYPES.length);
-  const repeated = grouped.find((curve) => curve.baseline === 10 && curve.slope === 1);
-  assert.deepEqual(repeated.teamIds, ["team-0", "team-6"]);
-  assert.deepEqual(repeated.names, ["Firm 1", "Firm 7"]);
+  assert.equal(grouped.length, 4);
+  const repeated = grouped.find((curve) => curve.baseline === 10 && curve.slope === 2);
+  assert.deepEqual(repeated.teamIds, ["team-0", "team-4", "team-6"]);
+  assert.deepEqual(repeated.names, ["Firm 1", "Firm 5", "Firm 7"]);
   assert.equal(repeated.steps.length, 10);
   assert.deepEqual(grouped.flatMap((curve) => curve.teamIds).sort(), teams.map((team) => team.id).sort());
 });
@@ -107,10 +107,10 @@ test("smooth aggregate horizontally sums smooth firm emissions, including betwee
     const price = (points[i - 1].price + points[i].price) / 2;
     const quantity = (points[i - 1].quantity + points[i].quantity) / 2;
     const expected = teams.reduce((sum, team) => sum
-      + Math.max(0, team.baseline_emissions - price / team.mac_slope), 0);
+      + Math.min(team.baseline_emissions, Math.max(0, team.baseline_emissions - (price - team.mac_intercept) / team.mac_slope)), 0);
     assert.ok(Math.abs(quantity - expected) < 1e-9);
   }
   const html = auctionComparisonHtml(exampleState(), "auction1");
   assert.match(html, /class="aggregate-smooth-mac"/);
-  assert.equal((html.match(/class="firm-smooth-mac"/g) ?? []).length, FIRM_TYPES.length);
+  assert.equal((html.match(/class="firm-smooth-mac"/g) ?? []).length, 4);
 });

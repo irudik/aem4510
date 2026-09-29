@@ -45,11 +45,12 @@
             </div>
             <div>
               <label for="expected-team-count">Expected Team Count</label>
-              <input id="expected-team-count" type="number" min="2" step="1" value="20" />
+              <input id="expected-team-count" type="number" min="2" step="1" value="60" />
             </div>
             <div>
               <label for="cap-share-1">Round 1 Cap (% of total baseline)</label>
               <input id="cap-share-1" type="number" min="1" max="100" step="1" value="60" />
+              <p class="note">Default 60% / 40% caps are adjusted so cost-effective emissions are whole numbers and firms' MACs are equal, including after the cost shocks. Other percentages use the entered share. Adjustment applies with banking and borrowing off.</p>
             </div>
             <div>
               <label for="cap-share-2">Round 2 Cap (% of total baseline)</label>
@@ -62,31 +63,31 @@
             <div>
               <label for="allocation-1">Round 1 Permits</label>
               <select id="allocation-1">
-                <option value="uniform">Uniform-price auction</option>
+                <option value="uniform" selected>Uniform-price auction</option>
                 <option value="pay_as_bid">Pay-as-bid auction (ARP)</option>
-                <option value="free" selected>Free, by baseline</option>
+                <option value="free">Free, by baseline</option>
               </select>
             </div>
             <div>
               <label for="allocation-2">Round 2 Permits</label>
               <select id="allocation-2">
                 <option value="uniform">Uniform-price auction</option>
-                <option value="pay_as_bid">Pay-as-bid auction (ARP)</option>
-                <option value="free" selected>Free, by baseline</option>
+                <option value="pay_as_bid" selected>Pay-as-bid auction (ARP)</option>
+                <option value="free">Free, by baseline</option>
               </select>
             </div>
             <div>
               <label for="shock-1">Round 1 Cost Shock</label>
               <select id="shock-1">
                 <option value="">Off</option>
-                <option value="on">On (slope ×0.5, ×1, ×1.5)</option>
+                <option value="on" selected>On (parallel MAC shifts)</option>
               </select>
             </div>
             <div>
               <label for="shock-2">Round 2 Cost Shock</label>
               <select id="shock-2">
                 <option value="">Off</option>
-                <option value="on">On (slope ×0.5, ×1, ×1.5)</option>
+                <option value="on" selected>On (parallel MAC shifts)</option>
               </select>
             </div>
             <div>
@@ -126,6 +127,7 @@
                 <option value="market1">Open Market (Round 1)</option>
                 <option value="auction2">Auction (Round 2)</option>
                 <option value="market2">Open Market (Round 2)</option>
+                <option value="market3">Open Market (Round 3: transaction costs)</option>
                 <option value="complete">Complete</option>
               </select>
             </div>

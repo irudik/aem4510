@@ -10,9 +10,10 @@ const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => (
 /** Keep each firm's MAC on its own emissions axis; do not sum quantities. */
 export function firmMacCurves(teams) {
   return (teams ?? []).flatMap((team) => {
-    const model = macModel({ team, session: {} });
+    const model = macModel({ team: { ...team, display_mac_slope: team.mac_slope,
+      display_mac_intercept: team.mac_intercept ?? 0 }, session: {} });
     return model ? [{ id: String(team.id), name: String(team.team_name ?? "Unnamed team"),
-      baseline: model.baseline, slope: model.slope, steps: model.steps }] : [];
+      baseline: model.baseline, slope: model.slope, intercept: model.intercept, steps: model.steps }] : [];
   });
 }
 
@@ -20,7 +21,7 @@ export function firmMacCurves(teams) {
 export function groupFirmCurves(curves) {
   const groups = new Map();
   for (const curve of curves) {
-    const key = `${curve.baseline}:${curve.slope}`;
+    const key = `${curve.baseline}:${curve.slope}:${curve.intercept ?? 0}`;
     if (!groups.has(key)) groups.set(key, { ...curve, names: [], teamIds: [] });
     groups.get(key).names.push(curve.name);
     groups.get(key).teamIds.push(curve.id);
@@ -32,10 +33,12 @@ export function groupFirmCurves(curves) {
 
 /** Horizontally sum smooth firm MACs at every change in slope. */
 export function aggregateMacPoints(curves) {
-  const prices = [...new Set([0, ...curves.map(curve => curve.slope * curve.baseline)])]
+  const prices = [...new Set([0, ...curves.flatMap(curve => [curve.intercept ?? 0,
+    (curve.intercept ?? 0) + curve.slope * curve.baseline])])]
     .sort((a, b) => b - a);
   return prices.map(price => ({
-    quantity: curves.reduce((sum, curve) => sum + Math.max(0, curve.baseline - price / curve.slope), 0),
+    quantity: curves.reduce((sum, curve) => sum + Math.min(curve.baseline,
+      Math.max(0, curve.baseline - (price - (curve.intercept ?? 0)) / curve.slope)), 0),
     price,
   }));
 }
@@ -55,7 +58,7 @@ export function auctionComparisonModel(state, roundKey) {
   const benchmarkPrice = price(chart.benchmark_price);
   const maxCost = Math.ceil(Math.max(1, clearingPrice ?? 0, benchmarkPrice ?? 0,
     ...aggregate.map((step) => step.cost), ...bids.map((step) => step.cost),
-    ...curves.map((curve) => curve.slope * curve.baseline)) * 1.1 / 4) * 4;
+    ...curves.map((curve) => curve.intercept + curve.slope * curve.baseline)) * 1.1 / 4) * 4;
   return { curves, groups: groupFirmCurves(curves), aggregate, smoothAggregate: aggregateMacPoints(curves), bids, maxCost,
     cap: Number(chart.cap), clearingPrice, benchmarkPrice, live: Boolean(chart.is_live),
     pricing: chart.pricing ?? "uniform", shock: Boolean(chart.shock),
@@ -89,7 +92,7 @@ function comparisonSvg(model, individual, id) {
     stroke="#b01b2f" stroke-width="2" />
     <text x="${x(model.cap)}" y="${top - 8}" text-anchor="middle" fill="#b01b2f">Cap: ${model.cap}</text>`;
   const curves = individual
-    ? model.groups.map((curve) => `<path class="firm-smooth-mac" d="M ${x(0)} ${y(curve.slope * curve.baseline)} L ${x(curve.baseline)} ${y(0)}"
+    ? model.groups.map((curve) => `<path class="firm-smooth-mac" d="M ${x(0)} ${y(curve.intercept + curve.slope * curve.baseline)} L ${x(curve.baseline)} ${y(curve.intercept)}"
       fill="none" stroke="${curve.color}" stroke-width="3" stroke-dasharray="${curve.dash}"><title>${escapeHtml(curve.names.join(", "))}</title></path>`).join("")
     : `<path class="aggregate-smooth-mac" d="${model.smoothAggregate.map((point, i) => `${i ? "L" : "M"} ${x(point.quantity)} ${y(point.price)}`).join(" ")}" fill="none" stroke="#ca5670" stroke-width="3"><title>Aggregate MAC</title></path>` + path(model.bids, "#0d5bd7", "", "Submitted bids");
   const title = individual ? "Individual firm MAC curves" : "Aggregate MAC and auction bids";
@@ -137,7 +140,7 @@ export function auctionComparisonHtml(state, roundKey, { popoutLink = true } = {
         ${comparisonSvg(model, true, `${roundKey}-firms`)}
         <figcaption class="firm-curve-legend">${model.groups.map((curve) => `<span>
           <svg viewBox="0 0 36 12" aria-hidden="true"><line x1="0" x2="36" y1="6" y2="6" stroke="${curve.color}" stroke-width="3" stroke-dasharray="${curve.dash}" /></svg>
-          <span>${escapeHtml(curve.names.join(", "))} <small>(E₀ = ${curve.baseline}, c = ${curve.slope})</small></span>
+          <span>${escapeHtml(curve.names.join(", "))} <small>(MAC = ${curve.intercept + curve.slope * curve.baseline} − ${curve.slope}E)</small></span>
         </span>`).join("")}</figcaption>
         <p class="mac-note">Each curve uses that firm's own emissions, not cumulative class emissions.
           Firms with identical MACs share a curve; every team is listed.</p>

@@ -1,6 +1,5 @@
 import {
   MARKET_PHASES,
-  carryIntoRound2,
   deadlinePassed,
   freeHoldings,
   matchIncomingOrder,
@@ -18,6 +17,8 @@ import {
   patchOrderRemaining,
 } from "./_lib/permit_game_service.mts";
 import { jsonResponse, readJsonBody } from "./_lib/http.mts";
+import { marketStartForTeam } from "./_lib/permit_round_start.mts";
+import { roundTransactionCost } from "./_lib/permit_transaction_costs.mts";
 
 const MAX_ORDER_QUANTITY = 25;
 const MAX_ORDER_PRICE = 999;
@@ -70,7 +71,6 @@ export default async function permitTeamOrder(req) {
 
     const sessionId = String(session.id);
     const roundKey = roundForPhase(phase);
-    const auctionKey = roundKey === "round1" ? "auction1" : "auction2";
 
     const [orders, trades, allocations, scores] = await Promise.all([
       getOrdersForSession(sessionId),
@@ -82,25 +82,15 @@ export default async function permitTeamOrder(req) {
     const marketOrders = orders.filter((row) => String(row.round_key) === phase);
     const marketTrades = trades.filter((row) => String(row.round_key) === phase);
 
-    const allocation = allocations.find((row) => (
-      String(row.round_key) === auctionKey && String(row.team_id) === String(team.id)
-    ));
-
-    // Round 2 holdings include banked permits and subtract permits owed from
-    // Round 1 borrowing.
-    const carryIn = roundKey === "round2"
-      ? carryIntoRound2(session, scores.find((row) => (
-        String(row.round_key) === "round1" && String(row.team_id) === String(team.id)
-      ))).net
-      : 0;
+    const start = marketStartForTeam(session, team, roundKey, allocations, scores);
 
     // Sellers cannot promise more permits than they hold and have not
     // already offered.
     if (side === "ask") {
       const sellable = freeHoldings(
         String(team.id),
-        allocation?.permits_won ?? 0,
-        carryIn,
+        start.allocation,
+        start.net,
         marketTrades,
         marketOrders.filter((row) => String(row.status) === "open"),
       );
@@ -126,6 +116,7 @@ export default async function permitTeamOrder(req) {
     const matching = matchIncomingOrder(
       { team_id: String(team.id), side, price, quantity },
       openBook,
+      { transactionCost: roundTransactionCost(roundKey) },
     );
 
     // Apply resting-order fills with a guard on the previous remaining
@@ -169,6 +160,8 @@ export default async function permitTeamOrder(req) {
       remaining_quantity: remaining,
       trades: executedTrades.map((trade) => ({
         price: trade.price,
+        transaction_cost_per_permit: trade.transaction_cost_per_permit,
+        buyer_price: trade.price + trade.transaction_cost_per_permit,
         quantity: trade.quantity,
       })),
     });

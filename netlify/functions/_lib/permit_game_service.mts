@@ -8,8 +8,9 @@ import { fetchSupabaseAuthUser, supabaseRequest } from "./supabase_rest.mts";
 import {
   AUCTION_PHASES,
   MARKET_PHASES,
-  drawShockFactors,
+  drawMacShifts,
   firmTypeForIndex,
+  marketPhaseForRound,
   roundForPhase,
 } from "./permit_market.mts";
 
@@ -187,7 +188,7 @@ export async function createOrFetchTeam(session, teamName) {
 
 /**
  * Assign firm types round-robin in join order, draw each round's cost-shock
- * multipliers (1 when that round has no shock), and mark the session
+ * parallel shifts (zero when that round has no shock), and mark the session
  * started. Shocks are stored now but shown to each team only when that
  * round's market opens.
  * @param {Record<string, unknown>} session
@@ -198,9 +199,10 @@ export async function startGameAndAssignFirms(session) {
     throw new Error("Need at least two teams before starting the game");
   }
 
-  const noShock = teams.map(() => 1);
-  const shocksRound1 = session.shock_round1 ? drawShockFactors(teams.length) : noShock;
-  const shocksRound2 = session.shock_round2 ? drawShockFactors(teams.length) : noShock;
+  const firms = teams.map((team, index) => ({ ...team, ...firmTypeForIndex(index) }));
+  const noShock = teams.map(() => 0);
+  const shocksRound1 = session.shock_round1 ? drawMacShifts(firms) : noShock;
+  const shocksRound2 = session.shock_round2 ? drawMacShifts(firms) : noShock;
 
   for (let index = 0; index < teams.length; index += 1) {
     const firmType = firmTypeForIndex(index);
@@ -212,8 +214,11 @@ export async function startGameAndAssignFirms(session) {
       body: {
         baseline_emissions: firmType.baseline_emissions,
         mac_slope: firmType.mac_slope,
-        mac_shock_round1: shocksRound1[index],
-        mac_shock_round2: shocksRound2[index],
+        mac_intercept: firmType.mac_intercept,
+        mac_shock_round1: 1,
+        mac_shock_round2: 1,
+        mac_shift_round1: shocksRound1[index],
+        mac_shift_round2: shocksRound2[index],
       },
       prefer: "return=minimal",
       useServiceRole: true,
@@ -467,6 +472,7 @@ export async function insertTrades(sessionId, marketKey, tradeRows) {
       buy_order_id: trade.buy_order_id,
       sell_order_id: trade.sell_order_id,
       price: trade.price,
+      transaction_cost_per_permit: Number(trade.transaction_cost_per_permit ?? 0),
       quantity: trade.quantity,
     })),
     prefer: "return=minimal",
@@ -575,8 +581,11 @@ export async function clearPhaseDataForEntry(sessionId, phase) {
     return;
   }
 
-  const marketKey = roundKey === "round1" ? "market1" : "market2";
+  const marketKey = marketPhaseForRound(roundKey);
   const auctionKey = roundKey === "round1" ? "auction1" : "auction2";
+
+  // Replaying an earlier phase invalidates the third-round comparison.
+  if (phase !== "market3") await clearPhaseDataForEntry(sessionId, "market3");
 
   if (MARKET_PHASES.has(phase) || AUCTION_PHASES.has(phase)) {
     await supabaseRequest("/rest/v1/permit_trades", {

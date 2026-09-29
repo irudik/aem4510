@@ -27,8 +27,8 @@ test("the area under MAC to the right of emissions matches every firm's scored c
       assert.equal(area, score.abatement_cost);
       for (const step of model.steps) {
         const abatement = team.baseline_emissions - step.from;
-        assert.equal(step.cost, abatementCost(team.mac_slope, abatement)
-          - abatementCost(team.mac_slope, abatement - 1));
+        assert.equal(step.cost, abatementCost(team.mac_slope, abatement, team.mac_intercept)
+          - abatementCost(team.mac_slope, abatement - 1, team.mac_intercept));
       }
     }
   }
@@ -92,26 +92,26 @@ test("the final graph uses the Round 2 outcome and does not substitute a benchma
 });
 
 test("smooth chart and five bullets show point MAC and whole-unit cost changes", () => {
-  const state = stateFor(FIRM_TYPES[0], 6);
+  const state = stateFor({ ...FIRM_TYPES[0], mac_intercept: 0 }, 6);
   const model = macModel(state);
-  assert.equal(model.currentMac, 4);
-  assert.equal(model.cost, 8);
-  assert.equal(model.nextAbatementCost, 4.5);
-  assert.equal(model.moreEmissionsSavings, 3.5);
+  assert.equal(model.currentMac, 8);
+  assert.equal(model.cost, 16);
+  assert.equal(model.nextAbatementCost, 9);
+  assert.equal(model.moreEmissionsSavings, 7);
   const html = macPanel(state);
   assert.match(html, /class="mac-curve" d="M 58 78 L 588 278"/);
   assert.match(html, /class="mac-current-line"[^>]*y1="198" y2="198"/);
-  assert.match(html, /class="mac-cost-area"[^>]*d="M 376 278 L 376 198 L 588 278 Z"/);
+  assert.match(html, /class="mac-cost-area"[^>]*d="M 376 278 L 376 198 L 588 278 L 588 278 Z"/);
   assert.equal((html.match(/<li[ >]/g) ?? []).length, 5);
-  assert.match(html, /Total abatement cost: <strong>\$8\.00<\/strong>/);
+  assert.match(html, /Total abatement cost: <strong>\$16\.00<\/strong>/);
   assert.match(html, /Total abatement cost is the cost of all required abatement/);
-  assert.match(html, /next unit of abatement: <strong>\$4\.50<\/strong>/);
-  assert.match(html, /emitting one more unit: <strong>\$3\.50<\/strong>/);
+  assert.match(html, /next unit of abatement: <strong>\$9\.00<\/strong>/);
+  assert.match(html, /emitting one more unit: <strong>\$7\.00<\/strong>/);
   assert.doesNotMatch(html, /<p class="mac-position">|Each step/);
 });
 
 test("colored cost labels correspond to outlined one-unit areas on either side of emissions", () => {
-  const html = macPanel(stateFor(FIRM_TYPES[0], 5));
+  const html = macPanel(stateFor({ ...FIRM_TYPES[0], mac_intercept: 0 }, 5));
   assert.match(html, /class="mac-total-label">Total abatement cost/);
   assert.match(html, /class="mac-next-label">Cost of the next unit of abatement/);
   assert.match(html, /class="mac-savings-label">Cost savings from emitting one more unit/);
@@ -132,12 +132,12 @@ test("whole-unit cost bullets respect emissions limits, cost shocks and emission
         state.market.score_preview = { emissions };
         const model = macModel(state);
         const abatement = firm.baseline_emissions - emissions;
-        assert.equal(model.currentMac, slope * abatement);
-        assert.equal(model.cost, slope * abatement ** 2 / 2);
+        assert.equal(model.currentMac, firm.mac_intercept + slope * abatement);
+        assert.equal(model.cost, firm.mac_intercept * abatement + slope * abatement ** 2 / 2);
         assert.equal(model.nextAbatementCost, emissions === 0 ? null
-          : abatementCost(slope, abatement + 1) - model.cost);
+          : abatementCost(slope, abatement + 1, firm.mac_intercept) - model.cost);
         assert.equal(model.moreEmissionsSavings, abatement === 0 ? null
-          : model.cost - abatementCost(slope, abatement - 1));
+          : model.cost - abatementCost(slope, abatement - 1, firm.mac_intercept));
         assert.doesNotMatch(macPanel(state), /NaN|Infinity/);
       }
     }

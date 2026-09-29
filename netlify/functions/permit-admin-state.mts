@@ -19,6 +19,7 @@ import {
   getTradesForSession,
   requireAdminUser,
 } from "./_lib/permit_game_service.mts";
+import { roundTransactionCost } from "./_lib/permit_transaction_costs.mts";
 import { jsonResponse } from "./_lib/http.mts";
 import { phaseIsClosed } from "./_lib/permit_closed.mts";
 import { currentCostEffectivePrice } from "./_lib/permit_benchmark.mts";
@@ -114,7 +115,8 @@ export default async function permitAdminState(req) {
       allocations,
       orders,
       open_book: bookLevels(openOrders),
-      cost_effective_benchmark: currentCostEffectivePrice(session, teams),
+      transaction_cost_per_permit: roundTransactionCost(roundForPhase(phase)),
+      cost_effective_benchmark: currentCostEffectivePrice(session, teams, scores),
       mac_distributions: closedMacDistributions(session, teams, results, allocations, scores),
       cost_effectiveness: roundCostEffectiveness(teams, scores, session),
       trades,

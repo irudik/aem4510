@@ -1,8 +1,9 @@
 /** Describe the firm's MAC in emissions units, including its current position. */
 export function macModel(state) {
   const baseline = Number(state?.team?.baseline_emissions);
-  // After a cost shock is revealed, the chart uses the shocked slope.
+  // Use the realized curve after this round's cost shock is revealed.
   const slope = Number(state?.team?.display_mac_slope ?? state?.team?.mac_slope);
+  const intercept = Number(state?.team?.display_mac_intercept ?? state?.team?.mac_intercept ?? 0);
   if (!Number.isInteger(baseline) || baseline <= 0 || !Number.isFinite(slope) || slope <= 0) {
     return null;
   }
@@ -12,27 +13,27 @@ export function macModel(state) {
   const steps = Array.from({ length: baseline }, (_, emissions) => ({
     from: emissions,
     to: emissions + 1,
-    cost: slope * (baseline - emissions - 0.5),
+    cost: intercept + slope * (baseline - emissions - 0.5),
   }));
   const finalScore = state.session.current_phase === "complete"
-    ? state.own_scores?.find((row) => row.round_key === "round2")
+    ? [...(state.own_scores ?? [])].sort((a, b) => b.round_key.localeCompare(a.round_key))[0]
     : null;
   const rawHoldings = state.market?.holdings ?? finalScore?.permits_end;
   const hasPosition = rawHoldings != null && Number.isFinite(Number(rawHoldings));
   const holdings = hasPosition ? Math.max(0, Math.floor(Number(rawHoldings))) : null;
   // Emissions follow the permits held unless the game reports them directly:
-  // a Round 1 choice to bank or borrow, or the final Round 2 outcome.
+  // a Round 1 choice to bank or borrow, or the last completed round.
   const reportedEmissions = state.market?.score_preview?.emissions ?? finalScore?.emissions;
   const emissions = !hasPosition ? null
     : (reportedEmissions != null && Number.isFinite(Number(reportedEmissions))
       ? Math.min(baseline, Math.max(0, Math.floor(Number(reportedEmissions))))
       : Math.min(baseline, holdings));
   const abatement = hasPosition ? baseline - emissions : null;
-  const cost = hasPosition ? slope * abatement ** 2 / 2 : null;
+  const cost = hasPosition ? intercept * abatement + slope * abatement ** 2 / 2 : null;
 
-  const currentMac = hasPosition ? slope * abatement : null;
-  const nextAbatementCost = hasPosition && emissions > 0 ? slope * (abatement + 0.5) : null;
-  const moreEmissionsSavings = hasPosition && emissions < baseline ? slope * (abatement - 0.5) : null;
+  const currentMac = hasPosition ? intercept + slope * abatement : null;
+  const nextAbatementCost = hasPosition && emissions > 0 ? intercept + slope * (abatement + 0.5) : null;
+  const moreEmissionsSavings = hasPosition && emissions < baseline ? intercept + slope * (abatement - 0.5) : null;
 
   // Keep the auction comparison fixed as market trades arrive.
   const rawPrice = state.market ? state.auction_result?.clearing_price : null;
@@ -40,19 +41,20 @@ export function macModel(state) {
     ? Number(rawPrice) : null;
   const priceLabel = price === null ? null : "Auction clearing price";
 
-  return { baseline, slope, steps, holdings, emissions, abatement, cost, currentMac,
+  return { baseline, slope, intercept, steps, holdings, emissions, abatement, cost, currentMac,
     nextAbatementCost, moreEmissionsSavings, price, priceLabel,
-    final: Boolean(finalScore) };
+    final: Boolean(finalScore), finalRound: finalScore?.round_key?.replace("round", "") };
 }
 
 /** Draw smooth MAC and its integrated abatement cost against emissions. */
 export function macChart(model) {
-  const { baseline, slope, emissions, price } = model;
+  const { baseline, slope, intercept = 0, emissions, price } = model;
+  const mac = (emissions) => intercept + slope * (baseline - emissions);
   const left = 58;
   const right = 588;
   const top = 38;
   const bottom = 278;
-  const maximumCost = Math.ceil(Math.max(slope * baseline, price ?? 0) * 1.1 / 4) * 4;
+  const maximumCost = Math.ceil(Math.max(mac(0), price ?? 0) * 1.1 / 4) * 4;
   const x = (value) => left + value / baseline * (right - left);
   const y = (value) => bottom - value / maximumCost * (bottom - top);
   const display = (value) => Number(value.toFixed(2));
@@ -66,16 +68,16 @@ export function macChart(model) {
     .map((value) => `<text x="${x(value)}" y="${bottom + 23}" text-anchor="middle">${value}</text>`)
     .join("");
   const shadedCost = emissions === null ? "" : `<path class="mac-cost-area"
-    d="M ${x(emissions)} ${bottom} L ${x(emissions)} ${y(model.currentMac)} L ${x(baseline)} ${bottom} Z" />`;
-  const curve = `M ${x(0)} ${y(slope * baseline)} L ${x(baseline)} ${y(0)}`;
+    d="M ${x(emissions)} ${bottom} L ${x(emissions)} ${y(model.currentMac)} L ${x(baseline)} ${y(intercept)} L ${x(baseline)} ${bottom} Z" />`;
+  const curve = `M ${x(0)} ${y(mac(0))} L ${x(baseline)} ${y(intercept)}`;
   // Integrating MAC over the adjacent unit gives its full cost or savings.
   const unitArea = (from, to, className, label, amount) => {
     const centerX = (x(from) + x(to)) / 2;
-    const centerY = (2 * bottom + y(slope * (baseline - from)) + y(slope * (baseline - to))) / 4;
+    const centerY = (2 * bottom + y(mac(from)) + y(mac(to))) / 4;
     // Inset the outline within its own cost region to separate shared borders.
     // The underlying one-unit interval and reported cost remain unchanged.
     return `<path class="${className}"
-      d="M ${x(from)} ${bottom} L ${x(from)} ${y(slope * (baseline - from))} L ${x(to)} ${y(slope * (baseline - to))} L ${x(to)} ${bottom} Z"
+      d="M ${x(from)} ${bottom} L ${x(from)} ${y(mac(from))} L ${x(to)} ${y(mac(to))} L ${x(to)} ${bottom} Z"
       transform="translate(${centerX} ${centerY}) scale(0.88 0.94) translate(${-centerX} ${-centerY})"><title>${label}: $${amount.toFixed(2)}</title></path>`;
   };
   const nextAbatementArea = model.nextAbatementCost === null ? "" : unitArea(
@@ -114,26 +116,31 @@ export function macPanel(state) {
     return "<p>Your MAC curve appears when the instructor starts the game.</p>";
   }
   const dollars = (value) => `$${value.toFixed(2)}`;
-  const macEquation = `${model.slope * model.baseline} − ${model.slope === 1 ? "" : model.slope}<em>E</em>`;
+  const macEquation = `${model.intercept + model.slope * model.baseline} − ${model.slope === 1 ? "" : model.slope}<em>E</em>`;
   const position = model.emissions === null
     ? "Your emissions position will appear after permits are allocated."
-    : `<li>${model.final ? "Final Round 2 emissions" : "Emissions if this round ended now"}: <strong>${model.emissions}</strong></li>
+    : `<li>${model.final ? `Final Round ${model.finalRound} emissions` : "Emissions if this round ended now"}: <strong>${model.emissions}</strong></li>
       <li>Required abatement: <strong>${model.abatement}</strong></li>
       <li class="mac-total-label">Total abatement cost: <strong>${dollars(model.cost)}</strong></li>
       <li class="mac-next-label">Cost of the next unit of abatement: <strong>${model.nextAbatementCost === null ? "Not available (zero emissions)" : dollars(model.nextAbatementCost)}</strong></li>
       <li class="mac-savings-label">Cost savings from emitting one more unit: <strong>${model.moreEmissionsSavings === null ? "Not available (at baseline emissions)" : dollars(model.moreEmissionsSavings)}</strong></li>`;
   const phase = String(state.session?.current_phase ?? "");
-  const shockRound = phase === "complete" || phase.endsWith("2") ? "round2" : "round1";
+  const shockRound = phase === "complete" || phase.endsWith("2") || phase.endsWith("3") ? "round2" : "round1";
   const shock = state.session[shockRound === "round1" ? "shock_round1" : "shock_round2"]
     ? state.team?.shocks?.[shockRound] : null;
-  const shockLine = shock != null && Number(shock) !== 1
+  const shift = Number(state.team?.mac_intercept ?? 0) > 0
+    && state.session[shockRound === "round1" ? "shock_round1" : "shock_round2"]
+    ? state.team?.mac_shifts?.[shockRound] : null;
+  const shockLine = shift != null
+    ? `<p class="shock-notice"><strong>Cost shock:</strong> ${macShiftDescription(shift)}</p>`
+    : shock != null && Number(shock) !== 1
     ? `<p class="shock-notice"><strong>Cost shock:</strong> your MAC slope is ×${shock} this round.</p>`
     : (shock != null ? `<p class="mac-note">Cost shock: your MAC slope is unchanged (×1) this round.</p>` : "");
   const carryRules = [
     state.session.banking_enabled ? "permits you do not use in Round 1 carry to Round 2" : "",
     state.session.borrowing_enabled ? "you can emit more than your permits in Round 1 and repay the difference in Round 2" : "",
   ].filter(Boolean).join("; ");
-  const banking = carryRules
+  const banking = phase !== "market3" && phase !== "complete" && carryRules
     ? `<p class="mac-note">${state.session.banking_enabled && state.session.borrowing_enabled ? "Banking and borrowing are" : (state.session.banking_enabled ? "Banking is" : "Borrowing is")} on:
       ${carryRules}. The curve shows current-round abatement costs; it does not include the future use of banked
       permits or the cost of repaying borrowed ones.</p>` : "";
@@ -154,4 +161,11 @@ export function macPanel(state) {
     <p class="mac-note">Total abatement cost is the cost of all required abatement—the area under MAC from your emissions to baseline emissions.
       ${model.price === null ? "" : "The price line records an observed price; current buy and sell offers are in the market below."}</p>
     ${banking}`;
+}
+
+/** Explain a vertical shift without changing the firm's slope. */
+export function macShiftDescription(shift) {
+  const amount = Number(shift);
+  return amount === 0 ? "Your MAC is unchanged this round."
+    : `Your MAC shifts ${amount > 0 ? "up" : "down"} by $${Math.abs(amount)} this round. Its slope is unchanged.`;
 }

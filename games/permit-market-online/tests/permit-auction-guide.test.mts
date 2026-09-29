@@ -158,7 +158,7 @@ test("per-permit boxes become one-permit bids, highest first, that the server ac
   assert.deepEqual(typedPermitPrices(["4", "abc", "", "-2", "9"]), [9, 4]);
 
   for (const firm of FIRM_TYPES) {
-    const fullSchedule = valueSchedule(firm.baseline_emissions, firm.mac_slope).map((step) => String(step.value));
+    const fullSchedule = valueSchedule(firm.baseline_emissions, firm.mac_slope, firm.mac_intercept).map((step) => String(step.value));
     const { bids } = bidsFromPermitPrices(fullSchedule);
     assert.equal(validateBidSet(firm, bids).length, firm.baseline_emissions);
   }
@@ -191,7 +191,7 @@ test("the what-if score equals the game's score for the same permits and payment
     for (const bankedIn of [0, 2]) {
       for (let price = 0; price <= 25; price += 0.5) {
         const outcome = outcomeAtPrice(
-          { baseline: firm.baseline_emissions, slope: firm.mac_slope, bankedIn },
+          { baseline: firm.baseline_emissions, slope: firm.mac_slope, intercept: firm.mac_intercept, bankedIn },
           prices,
           price,
         );
@@ -215,11 +215,12 @@ test("at any price, bidding the MAC schedule wins the permit count a price taker
   for (const firm of FIRM_TYPES) {
     const baseline = firm.baseline_emissions;
     const slope = firm.mac_slope;
-    const macBids = valueSchedule(baseline, slope).map((step) => step.value);
+    const intercept = firm.mac_intercept;
+    const macBids = valueSchedule(baseline, slope, intercept).map((step) => step.value);
     for (let price = 0.25; price <= 30; price += 0.5) {
-      const outcome = outcomeAtPrice({ baseline, slope }, macBids, price);
+      const outcome = outcomeAtPrice({ baseline, slope, intercept }, macBids, price);
       const bestScore = Math.max(...Array.from({ length: baseline + 1 }, (_, permits) => (
-        abatementCost(slope, baseline) - abatementCost(slope, baseline - permits) - price * permits
+        abatementCost(slope, baseline, intercept) - abatementCost(slope, baseline - permits, intercept) - price * permits
       )));
       assert.ok(Math.abs(outcome.score - bestScore) < 1e-9, `${JSON.stringify(firm)} at ${price}`);
     }

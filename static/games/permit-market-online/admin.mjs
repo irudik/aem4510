@@ -19,6 +19,7 @@ const PHASE_LABELS = {
   market1: "Open Market (Round 1)",
   auction2: "Auction (Round 2)",
   market2: "Open Market (Round 2)",
+  market3: "Open Market (Round 3: transaction costs)",
   complete: "Complete",
 };
 
@@ -127,9 +128,10 @@ function renderTable(target, rows) {
 function costEffectivenessHtml(reports, teamNamesById) {
   if (!reports?.length) return "";
   return reports.map((report) => {
-    const round = report.round_key === "round2" ? "Round 2" : "Round 1";
+    const round = `Round ${String(report.round_key).replace("round", "")}`;
+    const qualification = report.round_key === "round3" ? "<p class=\"note\">This allocation minimizes abatement cost before transaction costs. A remaining trade may cost more to execute than it saves.</p>" : "";
     if (report.achieved) {
-      return `<h3>${round}: cost-effective allocation</h3><p><strong>The market achieved cost-effectiveness.</strong></p>${costGapHtml(report)}`;
+      return `<h3>${round}: cost-effective allocation</h3><p><strong>The market achieved ${report.round_key === "round3" ? "the no-transaction-cost allocation" : "cost-effectiveness"}.</strong></p>${qualification}${costGapHtml(report)}`;
     }
     const rows = report.firms_off_allocation.map((row) => ({
       firm: teamNamesById.get(String(row.team_id)) ?? "",
@@ -138,7 +140,7 @@ function costEffectivenessHtml(reports, teamNamesById) {
       difference: row.permit_difference,
     }));
     return `<h3>${round}: firms off the cost-effective allocation</h3>`
-      + `<p><strong>The market did not achieve cost-effectiveness.</strong></p>${costGapHtml(report)}${tableHtml(rows)}`;
+      + `<p><strong>The market did not achieve ${report.round_key === "round3" ? "the no-transaction-cost allocation" : "cost-effectiveness"}.</strong></p>${qualification}${costGapHtml(report)}${tableHtml(rows)}`;
   }).join("");
 }
 
@@ -152,7 +154,7 @@ function renderAuctionCharts(state) {
 function renderSessionSummary(state) {
   const session = state?.session;
   closePhaseButton.disabled = closingPhase || !session || session.phase_closed
-    || !["auction1", "auction2", "market1", "market2"].includes(session.current_phase);
+    || !["auction1", "auction2", "market1", "market2", "market3"].includes(session.current_phase);
   if (!session) {
     sessionKv.innerHTML = "<dt>Status</dt><dd>No active session</dd>";
     return;
@@ -173,10 +175,11 @@ function renderSessionSummary(state) {
     ["Phase Deadline", deadlineText],
     ["Teams Joined", (state.teams ?? []).length],
     ["Expected Teams", session.expected_team_count],
-    ["Round 1 Cap", session.cap_round1 ?? `${session.cap_share_round1}% of baseline (set when auction opens)`],
-    ["Round 2 Cap", session.cap_round2 ?? `${session.cap_share_round2}% of baseline (set when auction opens)`],
+    ["Round 1 Cap", session.cap_round1 ?? `Target ${session.cap_share_round1}% of baseline (set when permits open)`],
+    ["Round 2 Cap", session.cap_round2 ?? `Target ${session.cap_share_round2}% of baseline (set when permits open)`],
     ["Round 1 Permits", `${ALLOCATION_LABELS[session.allocation_round1] ?? "Uniform-price auction"}${session.shock_round1 ? ", cost shock" : ""}`],
     ["Round 2 Permits", `${ALLOCATION_LABELS[session.allocation_round2] ?? "Uniform-price auction"}${session.shock_round2 ? ", cost shock" : ""}`],
+    ["Round 3", "Restart Round 2 trading; same starting permits and MACs; buyer pays $3 per permit in transaction costs"],
     ["Banking", boolText(session.banking_enabled)],
     ["Borrowing", session.borrowing_enabled ? `Yes (penalty $${formatNumber(session.shortfall_penalty, 2)} per permit still owed)` : "No"],
     ["Teams With Bids In", state.bids_in_current_auction ?? "-"],
@@ -214,15 +217,18 @@ function renderAllTables(state) {
     team: row.team_name,
     baseline_emissions: row.baseline_emissions ?? "-",
     mac_slope: row.mac_slope ?? "-",
+    mac_intercept: row.mac_intercept ?? 0,
     ...(shocksOn ? {
-      round_1_shock: state.session?.shock_round1 ? `×${Number(row.mac_shock_round1 ?? 1)}` : "-",
-      round_2_shock: state.session?.shock_round2 ? `×${Number(row.mac_shock_round2 ?? 1)}` : "-",
+      round_1_shock: state.session?.shock_round1 ? (Number(row.mac_intercept ?? 0) > 0 && row.mac_shift_round1 != null
+        ? `${Number(row.mac_shift_round1) >= 0 ? "+" : "−"}$${Math.abs(Number(row.mac_shift_round1))}` : `×${Number(row.mac_shock_round1 ?? 1)}`) : "-",
+      round_2_shock: state.session?.shock_round2 ? (Number(row.mac_intercept ?? 0) > 0 && row.mac_shift_round2 != null
+        ? `${Number(row.mac_shift_round2) >= 0 ? "+" : "−"}$${Math.abs(Number(row.mac_shift_round2))}` : `×${Number(row.mac_shock_round2 ?? 1)}`) : "-",
     } : {}),
     joined_at: row.created_at,
   })));
 
   const currentPhase = String(state.session?.current_phase ?? "");
-  const currentAuction = currentPhase === "auction2" || currentPhase === "market2" || currentPhase === "complete"
+  const currentAuction = currentPhase === "auction2" || currentPhase === "market2" || currentPhase === "market3" || currentPhase === "complete"
     ? "auction2"
     : "auction1";
   renderTable(bidsTableElement, (state.bids ?? [])
@@ -248,8 +254,9 @@ function renderAllTables(state) {
   })));
   const depth = document.getElementById("market-depth");
   document.getElementById("cost-effective-price").innerHTML = benchmarkPriceHtml(state.cost_effective_benchmark);
-  const marketPhase = ["market1", "market2"].includes(state.session?.current_phase);
+  const marketPhase = ["market1", "market2", "market3"].includes(state.session?.current_phase);
   depth.innerHTML = marketPhase ? marketDepthHtml(state.open_book, {
+    transactionCost: state.session.current_phase === "market3" ? 3 : 0,
     closed: Boolean(state.session.phase_closed) || (state.session.phase_deadline_at != null
       && Date.parse(state.session.phase_deadline_at) <= Date.now()),
   }) : "<p class=\"note\">Market depth appears during an open-market phase.</p>";
@@ -259,18 +266,21 @@ function renderAllTables(state) {
   })));
 
   renderTable(tradesTableElement, (state.trades ?? []).slice(-30).reverse().map((row) => ({
-    market: row.round_key === "market1" ? "Round 1" : "Round 2",
+    market: `Round ${String(row.round_key).replace("market", "")}`,
     buyer: teamNamesById.get(String(row.buyer_team_id)) ?? "",
     seller: teamNamesById.get(String(row.seller_team_id)) ?? "",
-    price: formatNumber(row.price, 2),
+    seller_receives: formatNumber(row.price, 2),
+    buyer_pays: formatNumber(Number(row.price) + Number(row.transaction_cost_per_permit ?? 0), 2),
     quantity: row.quantity,
     executed_at: row.executed_at,
   })));
 
+  const showSlopeMultiplier = (state.scores ?? []).some((row) => Number(row.mac_shock ?? 1) !== 1);
   renderTable(scoresTableElement, (state.scores ?? []).map((row) => ({
-    round: row.round_key === "round1" ? "Round 1" : "Round 2",
+    round: `Round ${String(row.round_key).replace("round", "")}`,
     team: teamNamesById.get(String(row.team_id)) ?? "",
-    ...(shocksOn ? { shock: `×${Number(row.mac_shock ?? 1)}` } : {}),
+    ...(shocksOn ? { mac_at_zero_abatement: row.mac_intercept ?? 0,
+      ...(showSlopeMultiplier ? { slope_multiplier: `×${Number(row.mac_shock ?? 1)}` } : {}) } : {}),
     permits_allocated: row.permits_from_auction,
     auction_paid: formatNumber(row.auction_payment, 2),
     banked_in: row.permits_banked_in,
@@ -280,6 +290,7 @@ function renderAllTables(state) {
     net_spend: formatNumber(row.market_net_spend, 2),
     emissions: row.emissions,
     abatement_cost: formatNumber(row.abatement_cost, 2),
+    transaction_cost: formatNumber(row.transaction_cost ?? 0, 2),
     banked_out: row.permits_banked_out,
     borrowed_out: row.permits_borrowed_out ?? 0,
     shortfall: row.shortfall ?? 0,
@@ -293,6 +304,7 @@ function renderAllTables(state) {
     team: row.team_name,
     round_1: row.round1 == null ? "-" : formatNumber(row.round1, 2),
     round_2: row.round2 == null ? "-" : formatNumber(row.round2, 2),
+    round_3: row.round3 == null ? "-" : formatNumber(row.round3, 2),
     total: formatNumber(row.total_score, 2),
     vs_benchmark: formatNumber(row.points_vs_benchmark, 2),
   })));
@@ -502,6 +514,7 @@ function downloadScoresCsv() {
     permits_from_auction: row.permits_from_auction,
     auction_payment: row.auction_payment,
     mac_shock: row.mac_shock,
+    mac_intercept: row.mac_intercept ?? 0,
     permits_banked_in: row.permits_banked_in,
     permits_owed_in: row.permits_owed_in,
     market_buys: row.market_buys,

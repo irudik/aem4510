@@ -16,9 +16,9 @@ const ordinal = (number) => {
 };
 
 /** Area under the smooth MAC curve through the chosen abatement. */
-function abatementCost(slope, abatement) {
+function abatementCost(slope, abatement, intercept = 0) {
   const units = Math.max(0, abatement);
-  return slope * units ** 2 / 2;
+  return intercept * units + slope * units ** 2 / 2;
 }
 
 /**
@@ -96,7 +96,7 @@ export function typedPermitPrices(rawPrices) {
  * abatement cost, minus the auction payment, minus the penalty on permits
  * still owed at the end of the game. Permits beyond baseline count for
  * nothing now; in Round 1 with banking they carry to Round 2.
- * @param {{baseline: number, slope: number, bankedIn?: number, owedIn?: number,
+ * @param {{baseline: number, slope: number, intercept?: number, bankedIn?: number, owedIn?: number,
  *   penalty?: number, finalRound?: boolean}} firm
  * @param {number[]} prices the team's bid prices, one per permit
  * @param {number} price hypothetical lowest winning bid
@@ -105,6 +105,7 @@ export function typedPermitPrices(rawPrices) {
 export function outcomeAtPrice(firm, prices, price, { pricing = "uniform" } = {}) {
   const baseline = Number(firm.baseline);
   const slope = Number(firm.slope);
+  const intercept = Number(firm.intercept ?? 0);
   const bankedIn = Math.max(0, Math.floor(Number(firm.bankedIn ?? 0)));
   const owedIn = Math.max(0, Math.floor(Number(firm.owedIn ?? 0)));
   const penaltyPerPermit = Math.max(0, Number(firm.penalty ?? 0));
@@ -121,8 +122,8 @@ export function outcomeAtPrice(firm, prices, price, { pricing = "uniform" } = {}
   const shortfall = firm.finalRound ? Math.max(0, -permitsHeld) : 0;
   const extraPermits = Math.max(0, permitsHeld - baseline);
   const abatement = baseline - emissions;
-  const cost = abatementCost(slope, abatement);
-  const avoidedCost = abatementCost(slope, baseline) - cost;
+  const cost = abatementCost(slope, abatement, intercept);
+  const avoidedCost = abatementCost(slope, baseline, intercept) - cost;
   const penaltyCost = shortfall * penaltyPerPermit;
 
   return {
@@ -146,7 +147,7 @@ export function outcomeAtPrice(firm, prices, price, { pricing = "uniform" } = {}
 
 /** Upper end of the what-if price range: comfortably above any bid or MAC. */
 export function priceRangeMax(firm, prices) {
-  const highest = Math.max(1, Number(firm.slope) * Number(firm.baseline), ...(prices ?? []));
+  const highest = Math.max(1, Number(firm.intercept ?? 0) + Number(firm.slope) * Number(firm.baseline), ...(prices ?? []));
   return Math.ceil(highest * 1.25 / 5) * 5;
 }
 
@@ -175,7 +176,11 @@ export function auctionRulesHtml(cap, { pricing = "uniform" } = {}) {
 }
 
 /** Notice shown while bidding in a round whose market opens with a cost shock. */
-export function shockNoticeHtml() {
+export function shockNoticeHtml({ parallel = true } = {}) {
+  if (parallel) return `<p class="shock-notice"><strong>Cost shock this round.</strong> When the market opens,
+    your MAC shifts up or down by $2 or $4, depending on your firm's slope. Its slope stays the same.
+    Equal numbers of firms shift up and down; one firm is unchanged if the class has an odd number of firms.
+    Your chart currently shows your MAC before the shock.</p>`;
   return `<p class="shock-notice"><strong>Cost shock this round.</strong> When the market opens, each firm learns whether
     its MAC slope is multiplied by 0.5, 1, or 1.5. Each is equally likely: a third of the firms get each, and only you
     see yours. Your MAC chart shows your cost before the shock, which is also your expected cost.</p>`;

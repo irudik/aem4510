@@ -24,7 +24,7 @@ export default async function permitAdminSetPhase(req) {
     const phase = String(body.phase ?? "").trim();
     if (!VALID_PHASES.has(phase)) {
       return jsonResponse(400, {
-        error: "phase must be one of setup, auction1, market1, auction2, market2, complete",
+        error: "phase must be one of setup, auction1, market1, auction2, market2, market3, complete",
       });
     }
 
@@ -42,6 +42,9 @@ export default async function permitAdminSetPhase(req) {
     }
 
     const currentPhase = String(session.current_phase ?? "setup");
+    if (phase === "market3" && !["market2", "market3", "complete"].includes(currentPhase)) {
+      return jsonResponse(400, { error: "Open Round 3 only after Round 2's open market." });
+    }
     const movingForward = PHASE_ORDER.indexOf(phase) > PHASE_ORDER.indexOf(currentPhase);
 
     // Moving forward closes the phase being left: an auction clears, a

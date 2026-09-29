@@ -37,15 +37,15 @@ test("the allocation responds to revealed cost shocks and includes firms with ze
 });
 
 test("admin benchmark switches from pre-shock to realized MAC at market opening", () => {
-  assert.equal(currentCostEffectivePrice(session, teams).price, 3);
+  assert.equal(currentCostEffectivePrice(session, teams).price, 2);
   const market = currentCostEffectivePrice({ ...session, current_phase: "market1" }, teams);
-  assert.equal(market.price, 4.5);
+  assert.equal(market.price, 3);
   assert.equal(market.after_shock, true);
-  assert.equal(currentCostEffectivePrice({ ...session, current_phase: "complete" }, teams).price, 1.5);
+  assert.equal(currentCostEffectivePrice({ ...session, current_phase: "complete" }, teams).price, 1);
 });
 test("free allocation retains the cost-effective price; banking is qualified", () => {
   const result = currentCostEffectivePrice({ ...session, allocation_round1: "free", borrowing_enabled: true }, teams);
-  assert.equal(result.price, 3);
+  assert.equal(result.price, 2);
   assert.equal(result.across_rounds, true);
   assert.match(benchmarkPriceHtml(result), /not the intertemporal equilibrium price/);
 });
@@ -58,7 +58,8 @@ test("benchmark is unavailable before assignment and cap, without stale prices",
 test("admin label distinguishes the theoretical price from orders and trades", () => {
   const html = benchmarkPriceHtml(currentCostEffectivePrice(session, teams));
   assert.match(html, /Cost-effective permit price/);
-  assert.match(html, /\$3.00/);
+  assert.match(html, /\$2.00/);
   assert.match(html, /not the last trade price/);
-  assert.match(html, /lowest accepted whole-permit value/);
+  assert.match(html, /every firm's MAC equals this price/);
+  assert.match(benchmarkPriceHtml({ ...currentCostEffectivePrice(session, teams), price_basis: "whole_permit" }), /lowest accepted whole-permit value/);
 });

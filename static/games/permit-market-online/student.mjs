@@ -4,7 +4,7 @@ import {
   formatNumber,
   setStatus,
 } from "/games/permit-market-online/shared.mjs";
-import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
+import { macModel, macPanel, macShiftDescription } from "/games/permit-market-online/mac-view.mjs";
 import { marketDepthHtml } from "./market-depth.mjs";
 import { bindQuantityValidation } from "./quantity-validation.mjs";
 import { macDistributionsHtml } from "./mac-distribution.mjs";
@@ -32,6 +32,7 @@ const PHASE_LABELS = {
   market1: "Open Market (Round 1)",
   auction2: "Auction (Round 2)",
   market2: "Open Market (Round 2)",
+  market3: "Open Market (Round 3: transaction costs)",
   complete: "Complete",
 };
 
@@ -251,7 +252,7 @@ async function postOrder() {
     if (response.filled_quantity > 0 && response.remaining_quantity > 0) {
       setStatus(stageStatus, "good", `Traded ${response.filled_quantity} right away; ${response.remaining_quantity} now resting in the book.`);
     } else if (response.filled_quantity > 0) {
-      const tradeText = response.trades.map((trade) => `${trade.quantity} at ${formatNumber(trade.price, 2)}`).join(", ");
+      const tradeText = response.trades.map((trade) => `${trade.quantity} at $${formatNumber(Number(trade.price) + (side === "bid" ? Number(trade.transaction_cost_per_permit ?? 0) : 0), 2)}${Number(trade.transaction_cost_per_permit ?? 0) > 0 ? (side === "bid" ? " paid per permit (fee included)" : " received per permit") : ""}`).join(", ");
       setStatus(stageStatus, "good", `Order filled: ${tradeText}.`);
     } else {
       setStatus(stageStatus, "good", "Order placed in the book.");
@@ -298,6 +299,7 @@ function renderAuctionStage(state) {
   const firm = {
     baseline: Number(state.team.baseline_emissions),
     slope: Number(state.team.mac_slope),
+    intercept: Number(state.team.mac_intercept ?? 0),
     bankedIn: Number(state.permits_banked_in ?? 0),
     owedIn: Number(state.permits_owed_in ?? 0),
     penalty: Number(session.shortfall_penalty ?? 0),
@@ -309,7 +311,7 @@ function renderAuctionStage(state) {
       ${freeAllocationHtml({ cap, permits: Number(state.free_allocation ?? 0), baseline: firm.baseline, roundLabel })}
       ${firm.owedIn > 0 ? `<p class="mac-note">You also owe ${firm.owedIn} permit(s) from borrowing in Round 1; your free permits cover them first.</p>` : ""}
       ${firm.bankedIn > 0 ? `<p class="mac-note">You also carry ${firm.bankedIn} banked permit(s) from Round 1.</p>` : ""}
-      ${shockComing ? shockNoticeHtml() : ""}
+      ${shockComing ? shockNoticeHtml({ parallel: Number(state.team.mac_intercept ?? 0) > 0 }) : ""}
       ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
       <p><small class="note">Waiting for the instructor to open the market.</small></p>`;
     return;
@@ -332,7 +334,7 @@ function renderAuctionStage(state) {
   stageContainer.innerHTML = `
     <p class="called-price-callout">${cap} permits for sale</p>
     ${auctionRulesHtml(cap, { pricing })}
-    ${shockComing ? shockNoticeHtml() : ""}
+    ${shockComing ? shockNoticeHtml({ parallel: Number(state.team.mac_intercept ?? 0) > 0 }) : ""}
     ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
     <h3>Your bids</h3>
     ${permitBidInputsHtml(firm.baseline, savedPrices, {
@@ -455,15 +457,22 @@ function renderMarketScaffold(state) {
   // The auction charts do not change during a market, so they are drawn once
   // here rather than on every refresh; that keeps them open or closed as the
   // student left them.
-  const roundKey = String(state.session.current_phase) === "market2" ? "round2" : "round1";
+  const replay = state.session.current_phase === "market3";
+  const fee = Number(state.market?.transaction_cost_per_permit ?? (replay ? 3 : 0));
+  const roundKey = ["market2", "market3"].includes(state.session.current_phase) ? "round2" : "round1";
   const shock = state.session[roundKey === "round1" ? "shock_round1" : "shock_round2"]
     ? state.team?.shocks?.[roundKey] : null;
-  const shockBanner = shock == null ? "" : `<p class="shock-notice"><strong>Cost shock revealed:</strong> your MAC slope is
+  const shift = Number(state.team?.mac_intercept ?? 0) > 0
+    && state.session[roundKey === "round1" ? "shock_round1" : "shock_round2"]
+    ? state.team?.mac_shifts?.[roundKey] : null;
+  const shockBanner = shift != null
+    ? `<p class="shock-notice"><strong>Cost shock revealed:</strong> ${macShiftDescription(shift)}</p>`
+    : shock == null ? "" : `<p class="shock-notice"><strong>Cost shock revealed:</strong> your MAC slope is
     ×${shock} this round${Number(shock) === 1 ? " (no change)" : `, so each unit of abatement now costs $${state.team.display_mac_slope} × a`}.
     Other firms learned theirs too, so what permits are worth has changed.</p>`;
   const showPlan = roundKey === "round1" && (state.session.banking_enabled || state.session.borrowing_enabled);
   stageContainer.innerHTML = `
-    ${shockBanner}
+    ${replay ? `<p class="shock-notice"><strong>Round 3: transaction costs.</strong> Start again with your Round 2 opening permits and the same post-shock MAC. Each permit traded costs the buyer an additional $${fee.toFixed(2)}. No new auction or shock.</p>` : shockBanner}
     <div id="auction-outcome"></div>
     ${clearedAuctionsHtml(state.auction_reports)}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
@@ -480,7 +489,7 @@ function renderMarketScaffold(state) {
         </select>
       </div>
       <div>
-        <label for="order-price">Price per permit</label>
+        <label id="order-price-label" for="order-price">${fee ? "Maximum total paid per permit (including fee)" : "Price per permit"}</label>
         <input id="order-price" type="number" min="0" step="0.5" inputmode="decimal" ${expired ? "disabled" : ""} />
       </div>
       <div>
@@ -491,7 +500,7 @@ function renderMarketScaffold(state) {
         <button id="post-order-btn" class="primary" type="submit" ${expired ? "disabled" : ""}>Send Order</button>
       </div>
     </form>
-    <p><small class="note">A buy at or above the best ask (or a sell at or below the best bid) trades immediately at the resting order's price; otherwise it waits in the book. Selling is limited to permits you hold.</small></p>
+    <p><small class="note">${fee ? `Your buy price includes the $${fee.toFixed(2)} fee; your sell price is what you receive. A trade requires the buy price to cover the sell price plus the fee. A waiting sell fixes the seller’s receipt; a waiting buy fixes the buyer’s total payment.` : "A buy at or above the best ask (or a sell at or below the best bid) trades immediately at the resting order’s price; otherwise it waits in the book."} Selling is limited to permits you hold.</small></p>
     <div id="own-orders"></div>
     <h3>Buy and Sell Orders</h3>
     <div id="market-depth"></div>
@@ -500,6 +509,11 @@ function renderMarketScaffold(state) {
     ${expired ? `<p><small class="note">${state.session.phase_closed ? "Round scored. Waiting for the instructor to start the next phase." : "The market has closed. Waiting for the instructor to score the round."}</small></p>` : ""}
   `;
 
+  document.getElementById("order-side")?.addEventListener("change", (event) => {
+    document.getElementById("order-price-label").textContent = fee
+      ? (event.target.value === "bid" ? "Maximum total paid per permit (including fee)" : "Minimum received per permit")
+      : "Price per permit";
+  });
   bindQuantityValidation(document.getElementById("order-qty"));
   document.getElementById("order-form")?.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -551,7 +565,7 @@ function renderMarketLiveData(state) {
         : (method === "pay_as_bid"
           ? `<strong>Auction result:</strong> lowest winning bid $${formatNumber(result.clearing_price, 2)}; each winner paid its own bids.`
           : `<strong>Auction result:</strong> $${formatNumber(result.clearing_price, 2)} per permit.`));
-    outcome.innerHTML = result
+    outcome.innerHTML = state.session.current_phase === "market3" ? "<p>Round 2 starting allocation restored. The Round 2 auction payment is held fixed in your score for comparison.</p>" : result
       ? `
         <p>${headline}</p>
         <p><small class="note">
@@ -578,6 +592,7 @@ function renderMarketLiveData(state) {
       <div class="cell"><div class="label">Available to sell</div><div class="value">${formatNumber(Math.max(0, market.sellable), 0)}</div></div>
       <div class="cell"><div class="label">Total abatement cost</div><div class="value">$${formatNumber(position?.cost, 2)}</div></div>
       <div class="cell"><div class="label">Round score if market closed now</div><div class="value">${preview ? formatNumber(preview.score, 2) : "-"}</div></div>
+      ${Number(market.transaction_cost_per_permit ?? 0) > 0 ? `<div class="cell"><div class="label">Transaction costs paid</div><div class="value">$${formatNumber(preview?.transaction_cost ?? 0, 2)}</div></div>` : ""}
       ${carryTiles}
     `;
   }
@@ -628,7 +643,7 @@ function renderMarketLiveData(state) {
   }
 
   const depth = document.getElementById("market-depth");
-  if (depth) depth.innerHTML = marketDepthHtml(market.book, { closed: deadlineExpired() });
+  if (depth) depth.innerHTML = marketDepthHtml(market.book, { closed: deadlineExpired(), transactionCost: Number(market.transaction_cost_per_permit ?? 0) });
 
   const ticker = document.getElementById("trade-ticker");
   if (ticker) {
@@ -636,7 +651,7 @@ function renderMarketLiveData(state) {
       ? "<li><small class=\"note\">No trades yet. Be the first.</small></li>"
       : market.recent_trades.map((trade) => {
         const ownTag = trade.you_bought ? " (you bought)" : (trade.you_sold ? " (you sold)" : "");
-        return `<li class="${ownTag ? "own-trade" : ""}">${formatNumber(trade.quantity, 0)} permit(s) at ${formatNumber(trade.price, 2)}${ownTag}</li>`;
+        return `<li class="${ownTag ? "own-trade" : ""}">${formatNumber(trade.quantity, 0)} permit(s): ${Number(trade.transaction_cost_per_permit ?? 0) > 0 ? `buyer paid $${formatNumber(Number(trade.price) + Number(trade.transaction_cost_per_permit), 2)}, seller received $${formatNumber(trade.price, 2)} each` : `$${formatNumber(trade.price, 2)} each`}${ownTag}</li>`;
       }).join("");
   }
 }
@@ -661,7 +676,7 @@ function renderStage(state, options = {}) {
 
   const phase = String(state.session.current_phase ?? "");
   phaseLabelElement.textContent = phaseLabel(phase, state);
-  const isMarket = phase === "market1" || phase === "market2";
+  const isMarket = ["market1", "market2", "market3"].includes(phase);
   tradingCard.classList.toggle("hidden", !isMarket);
   if (!isMarket) tradingContainer.innerHTML = "";
 
@@ -677,7 +692,7 @@ function renderStage(state, options = {}) {
     } else if (phase === "auction1" || phase === "auction2") {
       stageTitle.textContent = state.allocation_method === "free" ? "Free Permits" : "Permit Auction";
       renderAuctionStage(state);
-    } else if (phase === "market1" || phase === "market2") {
+    } else if (["market1", "market2", "market3"].includes(phase)) {
       stageTitle.textContent = "Open Market";
       renderMarketScaffold(state);
     } else if (phase === "complete") {
@@ -688,7 +703,8 @@ function renderStage(state, options = {}) {
           <h3>When did another trade stop helping?</h3>
           <p>Buying a permit lets you emit more and avoid abatement. Selling a permit requires more abatement,
             unless you have surplus permits. Compare the cost change with the price paid or received.</p>
-          <p>With competitive trading and divisible emissions, an interior cost-minimizing choice has
+          <p>In Round 3, the buyer pays $3 more per permit than the seller receives. A trade must save more than $3 in total abatement costs to raise the firms’ combined scores.</p>
+          <p>Without transaction costs, with competitive trading and divisible emissions, an interior cost-minimizing choice has
             <strong>MAC = P</strong>. Firms facing the same price then have the same MAC, so total abatement cost is minimized.</p>
           <p>Here permits are whole units. At an interior stopping point, a common price can lie between
             the cost saved by buying one more permit and the cost added by selling one.
@@ -699,7 +715,7 @@ function renderStage(state, options = {}) {
     }
   }
 
-  if (phase === "market1" || phase === "market2") {
+  if (["market1", "market2", "market3"].includes(phase)) {
     renderMarketLiveData(state);
   }
 }
@@ -728,8 +744,10 @@ function renderResults(state) {
   const carryOn = Boolean(session.banking_enabled || session.borrowing_enabled);
   const shocksOn = Boolean(session.shock_round1 || session.shock_round2);
   const rows = scores.map((row) => ({
-    round: row.round_key === "round1" ? "Round 1" : "Round 2",
-    ...(shocksOn ? { mac_shock: `×${Number(row.mac_shock ?? 1)}` } : {}),
+    round: `Round ${String(row.round_key).replace("round", "")}`,
+    ...(shocksOn ? { mac_shock: row.mac_intercept != null && Number(state.team.mac_intercept ?? 0) > 0
+      ? `${Number(row.mac_intercept) - Number(state.team.mac_intercept) >= 0 ? "+" : "−"}$${Math.abs(Number(row.mac_intercept) - Number(state.team.mac_intercept))}`
+      : `×${Number(row.mac_shock ?? 1)}` } : {}),
     permits_allocated: row.permits_from_auction,
     auction_paid: formatNumber(row.auction_payment, 2),
     ...(carryOn ? { banked_in: row.permits_banked_in, owed_in: row.permits_owed_in ?? 0 } : {}),
@@ -738,6 +756,7 @@ function renderResults(state) {
     market_net_spend: formatNumber(row.market_net_spend, 2),
     emissions: row.emissions,
     abatement_cost: formatNumber(row.abatement_cost, 2),
+    transaction_cost: formatNumber(row.transaction_cost ?? 0, 2),
     ...(carryOn ? {
       banked_out: row.permits_banked_out,
       borrowed_out: row.permits_borrowed_out ?? 0,
@@ -749,8 +768,8 @@ function renderResults(state) {
 
   resultsCard.classList.remove("hidden");
   resultsCostEffectiveness.innerHTML = (state.cost_effectiveness ?? []).map((report) => {
-    const round = report.round_key === "round2" ? "Round 2" : "Round 1";
-    return `<p><strong>The market ${report.achieved ? "did" : "did not"} achieve cost-effectiveness in ${round}.</strong></p>${costGapHtml(report)}`;
+    const round = `Round ${String(report.round_key).replace("round", "")}`;
+    return `<p><strong>The market ${report.achieved ? "did" : "did not"} achieve ${report.round_key === "round3" ? "the no-transaction-cost allocation" : "cost-effectiveness"} in ${round}.</strong></p>${report.round_key === "round3" ? "<p class=\"note\">Remaining abatement-cost savings may be smaller than the transaction costs needed to obtain them.</p>" : ""}${costGapHtml(report)}`;
   }).join("");
   resultsTable.innerHTML = tableHtml(rows);
 }
@@ -771,6 +790,7 @@ function renderLeaderboard(state) {
       <td>${row.team_name}</td>
       <td>${row.round1 == null ? "-" : formatNumber(row.round1, 2)}</td>
       <td>${row.round2 == null ? "-" : formatNumber(row.round2, 2)}</td>
+      <td>${row.round3 == null ? "-" : formatNumber(row.round3, 2)}</td>
       <td>${formatNumber(row.total_score, 2)}</td>
       <td>${formatNumber(row.points_vs_benchmark, 2)}</td>
     </tr>
@@ -779,7 +799,7 @@ function renderLeaderboard(state) {
   leaderboardCard.classList.remove("hidden");
   leaderboardTable.innerHTML = `
     <table>
-      <thead><tr><th>Rank</th><th>Team</th><th>Round 1</th><th>Round 2</th><th>Total</th><th>Vs Benchmark</th></tr></thead>
+      <thead><tr><th>Rank</th><th>Team</th><th>Round 1</th><th>Round 2</th><th>Round 3</th><th>Total</th><th>Vs Benchmark</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
   `;

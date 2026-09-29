@@ -13,9 +13,11 @@ export function depthLevels(levels, side) {
 }
 
 /** Market-style depth: price on the horizontal axis, cumulative permits vertically. */
-export function marketDepthHtml(book, { closed = false } = {}) {
+export function marketDepthHtml(book, { closed = false, transactionCost = 0 } = {}) {
   const bids = depthLevels(book?.bids, "bid");
-  const asks = depthLevels(book?.asks, "ask");
+  const fee = Math.max(0, Number(transactionCost) || 0);
+  // Put both curves in buyer-payment units so their overlap signals a feasible trade.
+  const asks = depthLevels((book?.asks ?? []).map(row => ({ ...row, price: Number(row.price) + fee })), "ask");
   const status = closed ? "Market closed: remaining orders cannot trade." : "Updates with the order book.";
   if (!bids.length && !asks.length) {
     return `<div class="market-depth"><h4>Market depth</h4><p>No open buy or sell orders yet.</p><p class="note">${status}</p></div>`;
@@ -51,15 +53,15 @@ export function marketDepthHtml(book, { closed = false } = {}) {
     return `<text x="${x(price)}" y="291" text-anchor="middle">${money(price)}</text>`;
   }).join("");
   const spread = bids.length && asks.length
-    ? `Best bid $${money(bids[0].price)} · Best ask $${money(asks[0].price)} · Spread $${money(asks[0].price - bids[0].price)}`
-    : bids.length ? `Best bid $${money(bids[0].price)} · No sell orders` : `Best ask $${money(asks[0].price)} · No buy orders`;
+    ? `Best bid $${money(bids[0].price)} · ${fee ? "Best ask + fee" : "Best ask"} $${money(asks[0].price)} · Spread $${money(asks[0].price - bids[0].price)}`
+    : bids.length ? `Best bid $${money(bids[0].price)} · No sell orders` : `${fee ? "Best ask + fee" : "Best ask"} $${money(asks[0].price)} · No buy orders`;
   return `<div class="market-depth"><h4>Market depth</h4>
     <p class="depth-summary">${spread}</p>
-    <div class="depth-legend"><span class="depth-buy-label">Buy orders (bids)</span><span class="depth-sell-label">Sell orders (asks)</span></div>
+    <div class="depth-legend"><span class="depth-buy-label">Buy orders (bids)</span><span class="depth-sell-label">Sell orders ${fee ? "(asks + fee)" : "(asks)"}</span></div>
     <svg class="depth-chart" viewBox="0 0 720 330" role="img" aria-label="Open-order market depth: price per permit horizontally and cumulative permits vertically. ${spread}">
       <text x="64" y="25">Cumulative permits</text>${grid}${curve(bids, "bid")}${curve(asks, "ask")}${ticks}
-      <text x="369" y="324" text-anchor="middle">Price per permit ($)</text>
+      <text x="369" y="324" text-anchor="middle">${fee ? "Buyer payment per permit, including fee ($)" : "Price per permit ($)"}</text>
     </svg>
-    <p class="note">Buy curve: permits bid for at or above each price. Sell curve: permits offered at or below each price. These are open orders, not firms' MAC curves. ${status}</p>
+    <p class="note">${fee ? `Sell offers include the $${money(fee)} buyer fee in this chart. Subtract the fee to find what sellers receive. ` : ""}Buy curve: permits bid for at or above each price. Sell curve: permits offered at or below each price. These are open orders, not firms' MAC curves. ${status}</p>
   </div>`;
 }

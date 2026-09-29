@@ -2,21 +2,21 @@
  * Economic engine for the AEM 4510 permit market game.
  *
  * Each team is a firm with integer baseline emissions e0 and MAC slope c:
- * MAC(a) = c*a and total abatement cost is c*a²/2. The q-th whole permit
- * is worth c*(e0 - q + 0.5) in avoided abatement cost. Permits are sold in a
+ * MAC(a) = d + c*a and total abatement cost is d*a + c*a²/2. The q-th whole permit
+ * is worth d + c*(e0 - q + 0.5) in avoided abatement cost. Permits are sold in a
  * uniform-price sealed-bid auction and retraded in a continuous double
  * auction. Compliance is automatic: emissions = min(e0, permits held), the
  * rest is abated.
  */
 
 export const VALID_PHASES = new Set([
-  "setup", "auction1", "market1", "auction2", "market2", "complete",
+  "setup", "auction1", "market1", "auction2", "market2", "market3", "complete",
 ]);
 
 export const AUCTION_PHASES = new Set(["auction1", "auction2"]);
-export const MARKET_PHASES = new Set(["market1", "market2"]);
+export const MARKET_PHASES = new Set(["market1", "market2", "market3"]);
 
-export const PHASE_ORDER = ["setup", "auction1", "market1", "auction2", "market2", "complete"];
+export const PHASE_ORDER = ["setup", "auction1", "market1", "auction2", "market2", "market3", "complete"];
 
 /** Round that each active phase belongs to. */
 export function roundForPhase(phase) {
@@ -27,6 +27,7 @@ export function roundForPhase(phase) {
   if (normalized === "auction2" || normalized === "market2") {
     return "round2";
   }
+  if (normalized === "market3") return "round3";
   return null;
 }
 
@@ -37,7 +38,7 @@ export function auctionPhaseForRound(roundKey) {
 
 /** Market phase belonging to a round key. */
 export function marketPhaseForRound(roundKey) {
-  return roundKey === "round1" ? "market1" : "market2";
+  return roundKey === "round1" ? "market1" : roundKey === "round3" ? "market3" : "market2";
 }
 
 /**
@@ -45,12 +46,12 @@ export function marketPhaseForRound(roundKey) {
  * a spread of cheap and expensive abaters, large and small.
  */
 export const FIRM_TYPES = Object.freeze([
-  { baseline_emissions: 10, mac_slope: 1 },
-  { baseline_emissions: 8, mac_slope: 3 },
-  { baseline_emissions: 12, mac_slope: 2 },
-  { baseline_emissions: 6, mac_slope: 4 },
-  { baseline_emissions: 10, mac_slope: 2 },
-  { baseline_emissions: 8, mac_slope: 1 },
+  { baseline_emissions: 10, mac_slope: 2, mac_intercept: 4 },
+  { baseline_emissions: 8, mac_slope: 4, mac_intercept: 4 },
+  { baseline_emissions: 12, mac_slope: 2, mac_intercept: 4 },
+  { baseline_emissions: 6, mac_slope: 4, mac_intercept: 4 },
+  { baseline_emissions: 10, mac_slope: 2, mac_intercept: 4 },
+  { baseline_emissions: 8, mac_slope: 4, mac_intercept: 4 },
 ]);
 
 /**
@@ -61,29 +62,92 @@ export function firmTypeForIndex(teamIndex) {
 }
 
 /**
+ * Balance parallel shifts in emissions units: paired +1/-1, plus zero for
+ * an odd class size. The sum of vertical shift divided by slope is zero,
+ * preserving aggregate emissions at an interior common price.
+ */
+export function drawMacShifts(teams, random = Math.random) {
+  const units = teams.map((_, index) => index < 2 * Math.floor(teams.length / 2) ? (index % 2 ? 1 : -1) : 0);
+  for (let index = units.length - 1; index > 0; index--) {
+    const swap = Math.floor(random() * (index + 1));
+    [units[index], units[swap]] = [units[swap], units[index]];
+  }
+  return teams.map((team, index) => units[index] * Number(team.mac_slope));
+}
+
+/** Realized MAC intercept at zero abatement; older games have zero shifts. */
+export function effectiveIntercept(team, roundKey) {
+  return Number(team.mac_intercept ?? 0)
+    + Number(team[roundKey === "round1" ? "mac_shift_round1" : "mac_shift_round2"] ?? 0);
+}
+
+/**
+ * Default caps give integer emissions before and after balanced parallel
+ * shifts. Custom shares and intertemporal choices retain percentage caps.
+ */
+export function resolveRoundCap(teams, session, roundKey) {
+  const share = Number(session[roundKey === "round1" ? "cap_share_round1" : "cap_share_round2"]);
+  const totalBaseline = teams.reduce((sum, team) => sum + Number(team.baseline_emissions ?? 0), 0);
+  const target = totalBaseline * share / 100;
+  const ordinaryCap = Math.max(1, Math.round(target));
+  const defaultShare = roundKey === "round1" ? 60 : 40;
+  const cleanFirms = teams.length > 0 && teams.every(team => FIRM_TYPES.some(type =>
+    Number(team.baseline_emissions) === type.baseline_emissions
+    && Number(team.mac_slope) === type.mac_slope));
+  if (share !== defaultShare || !cleanFirms || session.banking_enabled || session.borrowing_enabled) return ordinaryCap;
+  const hasShocks = Boolean(session.shock_round1 || session.shock_round2);
+  const parallelShifts = teams.every(team => Number(team.mac_intercept ?? 0) === 4
+    && shockFactor(team, "round1") === 1 && shockFactor(team, "round2") === 1);
+  if (hasShocks && !parallelShifts) return ordinaryCap;
+
+  const offsets = teams.map(team => Number(team.mac_intercept ?? 0));
+  const upper = Math.min(...teams.map((team, i) => offsets[i] + Number(team.baseline_emissions) * Number(team.mac_slope)));
+  let bestCap = ordinaryCap;
+  let bestDistance = Infinity;
+  for (let price = Math.max(...offsets) + 4; price < upper; price += 4) {
+    const emissions = teams.map((team, i) => Number(team.baseline_emissions) - (price - offsets[i]) / Number(team.mac_slope));
+    if (!emissions.every((value, i) => Number.isInteger(value) && value > 0 && value < Number(teams[i].baseline_emissions))) continue;
+    const balanced = ["round1", "round2"].every(round => {
+      if (!session[round === "round1" ? "shock_round1" : "shock_round2"]) return true;
+      const shifted = teams.map(team => Number(team.baseline_emissions) - (price - effectiveIntercept(team, round)) / Number(team.mac_slope));
+      return shifted.every((value, i) => Number.isInteger(value) && value > 0 && value < Number(teams[i].baseline_emissions))
+        && shifted.reduce((a, b) => a + b, 0) === emissions.reduce((a, b) => a + b, 0);
+    });
+    if (!balanced) continue;
+    const cap = emissions.reduce((a, b) => a + b, 0);
+    const distance = Math.abs(cap - target);
+    if (distance < bestDistance || (distance === bestDistance && cap < bestCap)) {
+      bestCap = cap;
+      bestDistance = distance;
+    }
+  }
+  return bestCap;
+}
+
+/**
  * How a round's permits reach firms: a uniform-price auction, a pay-as-bid
  * auction (each winner pays its own bid), or free allocation in proportion
  * to baseline emissions.
  */
 export const ALLOCATION_METHODS = Object.freeze(["uniform", "pay_as_bid", "free"]);
 
-/** Cost-shock multipliers on a firm's MAC slope, equally likely. */
+/** Slope multipliers retained for earlier games and their recorded scores. */
 export const SHOCK_FACTORS = Object.freeze([0.5, 1, 1.5]);
 
 /** Allocation method a session uses in a round ("round1" or "round2"). */
 export function allocationMethodForRound(session, roundKey) {
-  const raw = String((roundKey === "round2" ? session?.allocation_round2 : session?.allocation_round1) ?? "uniform");
+  const raw = String((roundKey !== "round1" ? session?.allocation_round2 : session?.allocation_round1) ?? "uniform");
   return ALLOCATION_METHODS.includes(raw) ? raw : "uniform";
 }
 
 /** Whether a session applies a cost shock when a round's market opens. */
 export function shockEnabledForRound(session, roundKey) {
-  return Boolean(roundKey === "round2" ? session?.shock_round2 : session?.shock_round1);
+  return Boolean(roundKey !== "round1" ? session?.shock_round2 : session?.shock_round1);
 }
 
 /** A team's cost-shock multiplier in a round (1 when there is no shock). */
 export function shockFactor(team, roundKey) {
-  const factor = Number(roundKey === "round2" ? team?.mac_shock_round2 : team?.mac_shock_round1);
+  const factor = Number(roundKey !== "round1" ? team?.mac_shock_round2 : team?.mac_shock_round1);
   return Number.isFinite(factor) && factor > 0 ? factor : 1;
 }
 
@@ -134,30 +198,30 @@ export function bidQuantityLimit(session, team, cap) {
 }
 
 /**
- * Cost of abating `abatement` units: the area under smooth MAC(a) = c*a.
+ * Cost of abating `abatement` units: the area under smooth MAC(a) = d + c*a.
  */
-export function abatementCost(macSlope, abatement) {
+export function abatementCost(macSlope, abatement, macIntercept = 0) {
   const a = Math.max(0, Number(abatement));
-  return macSlope * a * a / 2;
+  return macIntercept * a + macSlope * a * a / 2;
 }
 
 /**
  * Value of the q-th whole permit: total cost saved over one unit of abatement.
  */
-export function permitValue(baselineEmissions, macSlope, q) {
+export function permitValue(baselineEmissions, macSlope, q, macIntercept = 0) {
   if (!Number.isInteger(q) || q < 1 || q > baselineEmissions) {
     return 0;
   }
-  return macSlope * (baselineEmissions - q + 0.5);
+  return macIntercept + macSlope * (baselineEmissions - q + 0.5);
 }
 
 /**
  * Full value schedule for a firm, permit 1 (most valuable) to permit e0.
  */
-export function valueSchedule(baselineEmissions, macSlope) {
+export function valueSchedule(baselineEmissions, macSlope, macIntercept = 0) {
   const schedule = [];
   for (let q = 1; q <= baselineEmissions; q += 1) {
-    schedule.push({ permit_number: q, value: permitValue(baselineEmissions, macSlope, q) });
+    schedule.push({ permit_number: q, value: permitValue(baselineEmissions, macSlope, q, macIntercept) });
   }
   return schedule;
 }
@@ -167,8 +231,8 @@ export function valueSchedule(baselineEmissions, macSlope) {
  * Scores are measured against this, so a team with no permits and no trades
  * scores zero.
  */
-export function grossValue(baselineEmissions, macSlope) {
-  return abatementCost(macSlope, baselineEmissions);
+export function grossValue(baselineEmissions, macSlope, macIntercept = 0) {
+  return abatementCost(macSlope, baselineEmissions, macIntercept);
 }
 
 /**
@@ -405,10 +469,12 @@ export function studentAuctionReport(cap, bidRows, teamId, { pricing = "uniform"
   return {
     // Horizontal sum of smooth MACs, evaluated at every change in slope.
     // Auction comparisons use the costs known when firms submitted bids.
-    ...(teams.length ? { aggregate_mac: [...new Set([0, ...teams.map(team =>
-      Number(team.mac_slope) * Number(team.baseline_emissions))])].sort((a, b) => b - a)
+    ...(teams.length ? { aggregate_mac: [...new Set([0, ...teams.flatMap(team => [
+      Number(team.mac_intercept ?? 0),
+      Number(team.mac_intercept ?? 0) + Number(team.mac_slope) * Number(team.baseline_emissions)])])].sort((a, b) => b - a)
       .map(price => ({ price, quantity: teams.reduce((sum, team) => sum
-        + Math.max(0, Number(team.baseline_emissions) - price / Number(team.mac_slope)), 0) })) } : {}),
+        + Math.min(Number(team.baseline_emissions), Math.max(0, Number(team.baseline_emissions)
+          - (price - Number(team.mac_intercept ?? 0)) / Number(team.mac_slope))), 0) })) } : {}),
     cap: cleared.cap,
     pricing,
     clearing_price: cleared.clearing_price,
@@ -427,10 +493,11 @@ export function studentAuctionReport(cap, bidRows, teamId, { pricing = "uniform"
  * @param {Array<{id: string, baseline_emissions: number, mac_slope: number}>} teams
  * @param {(team: object) => number} slopeFor MAC slope to use (default: unshocked)
  */
-export function truthfulUnitBids(teams, slopeFor = (team) => Number(team.mac_slope)) {
+export function truthfulUnitBids(teams, slopeFor = (team) => Number(team.mac_slope),
+  interceptFor = team => Number(team.mac_intercept ?? 0)) {
   const unitBids = [];
   for (const team of teams ?? []) {
-    for (const step of valueSchedule(Number(team.baseline_emissions), slopeFor(team))) {
+    for (const step of valueSchedule(Number(team.baseline_emissions), slopeFor(team), interceptFor(team))) {
       unitBids.push({
         team_id: String(team.id),
         bid_price: step.value,
@@ -445,7 +512,9 @@ export function truthfulUnitBids(teams, slopeFor = (team) => Number(team.mac_slo
 /**
  * Efficient benchmark for a round: clear the auction as if every team bid
  * its true value schedule. Returns the benchmark price and, per team, the
- * efficient permit count and the score from reaching it at that price:
+ * efficient permit count and the score from reaching it at that price.
+ * Use the common MAC when all interior MACs coincide; otherwise use the
+ * lowest accepted whole-permit value. Scores assume
  * buying all of it when permits are sold, or trading from the free
  * endowment when permits are given away. `slopeFor` supplies the MAC slope
  * (after any cost shock).
@@ -455,21 +524,32 @@ export function truthfulUnitBids(teams, slopeFor = (team) => Number(team.mac_slo
  */
 export function benchmarkForRound(teams, cap, {
   slopeFor = (team) => Number(team.mac_slope),
+  interceptFor = team => Number(team.mac_intercept ?? 0),
   endowments = new Map(),
 } = {}) {
-  const cleared = clearAuction(cap, truthfulUnitBids(teams, slopeFor));
+  const cleared = clearAuction(cap, truthfulUnitBids(teams, slopeFor, interceptFor));
   const allocationByTeam = new Map(
     cleared.allocations.map((row) => [row.team_id, row.permits_won]),
   );
 
+  const interiorMacs = teams.map(team => {
+    const permits = allocationByTeam.get(String(team.id)) ?? 0;
+    const baseline = Number(team.baseline_emissions);
+    return permits > 0 && permits < baseline ? interceptFor(team) + slopeFor(team) * (baseline - permits) : null;
+  });
+  const commonMac = interiorMacs.length > 0 && interiorMacs.every(mac =>
+    mac !== null && Math.abs(mac - interiorMacs[0]) < 1e-9);
+  const benchmarkPrice = commonMac ? interiorMacs[0] : cleared.clearing_price;
+
   const perTeam = (teams ?? []).map((team) => {
     const e0 = Number(team.baseline_emissions);
     const slope = slopeFor(team);
+    const intercept = interceptFor(team);
     const permits = allocationByTeam.get(String(team.id)) ?? 0;
     const endowment = Number(endowments.get(String(team.id)) ?? 0);
-    const price = cleared.clearing_price ?? 0;
-    const score = grossValue(e0, slope)
-      - abatementCost(slope, e0 - Math.min(e0, permits))
+    const price = benchmarkPrice ?? 0;
+    const score = grossValue(e0, slope, intercept)
+      - abatementCost(slope, e0 - Math.min(e0, permits), intercept)
       - price * (permits - endowment);
 
     return {
@@ -480,7 +560,8 @@ export function benchmarkForRound(teams, cap, {
   });
 
   return {
-    benchmark_price: cleared.clearing_price,
+    benchmark_price: benchmarkPrice,
+    price_basis: commonMac ? "common_mac" : "whole_permit",
     per_team: perTeam,
     true_demand_stack: cleared.bid_stack,
   };
@@ -491,7 +572,9 @@ export function benchmarkForRound(teams, cap, {
  *
  * Standard continuous double auction: the incoming order trades against the
  * best-priced crossing resting orders (ties to the earlier order) at the
- * RESTING order's price, until it no longer crosses or is filled.
+ * resting order's price, until it no longer crosses or is filled. Bids
+ * include the buyer's transaction cost; asks are the seller's receipt.
+ * A trade requires bid >= ask + cost. Recorded prices exclude the cost.
  *
  * Pure function: returns the trades, the incoming order's remaining
  * quantity, and the resting orders' new remaining quantities.
@@ -502,7 +585,9 @@ export function benchmarkForRound(teams, cap, {
  * remaining_quantity: number, created_at: string,
  * }>} openOrders
  */
-export function matchIncomingOrder(incoming, openOrders) {
+export function matchIncomingOrder(incoming, openOrders, { transactionCost = 0 } = {}) {
+  const fee = Number(transactionCost);
+  if (!Number.isFinite(fee) || fee < 0) throw new Error("Transaction cost must be nonnegative.");
   const side = String(incoming.side);
   const oppositeSide = side === "bid" ? "ask" : "bid";
   const price = Number(incoming.price);
@@ -530,8 +615,8 @@ export function matchIncomingOrder(incoming, openOrders) {
     }
 
     const crosses = side === "bid"
-      ? price >= Number(resting.price)
-      : price <= Number(resting.price);
+      ? price >= Number(resting.price) + fee
+      : price + fee <= Number(resting.price);
     if (!crosses) {
       break;
     }
@@ -545,7 +630,8 @@ export function matchIncomingOrder(incoming, openOrders) {
       buy_order_id: side === "bid" ? null : String(resting.id),
       sell_order_id: side === "ask" ? null : String(resting.id),
       resting_order_id: String(resting.id),
-      price: Number(resting.price),
+      price: Number(resting.price) - (side === "ask" ? fee : 0),
+      transaction_cost_per_permit: fee,
       quantity: filled,
     });
 
@@ -622,9 +708,10 @@ export function carryIntoRound2(session, round1Score) {
  * Score one team's round once the market closes.
  *
  * score = gross value - abatement cost - auction payment - net market spend
- *         - shortfall penalty.
+ *         - shortfall penalty - transaction costs paid by the buyer.
  *
- * Costs use the round's MAC slope after any cost shock (`mac_shock`). Net
+ * Costs use the round's realized intercept and slope. Earlier games can also
+ * have a slope multiplier (`mac_shock`). Net
  * permits are the allocation, plus banked permits and minus owed permits
  * carried in, plus net purchases.
  *
@@ -644,6 +731,7 @@ export function scoreTeamRound(team, input) {
     ? Number(input.mac_shock)
     : 1;
   const slope = Number(team.mac_slope) * shock;
+  const intercept = Number(input.mac_intercept ?? team.mac_intercept ?? 0);
   const id = String(team.id);
 
   const allocation = Math.max(0, Math.floor(Number(input.permits_from_auction ?? 0)));
@@ -658,10 +746,12 @@ export function scoreTeamRound(team, input) {
   let buys = 0;
   let sells = 0;
   let netSpend = 0;
+  let transactionCost = 0;
   for (const trade of input.trades ?? []) {
     if (String(trade.buyer_team_id) === id) {
       buys += Number(trade.quantity);
       netSpend += Number(trade.price) * Number(trade.quantity);
+      transactionCost += Number(trade.transaction_cost_per_permit ?? 0) * Number(trade.quantity);
     }
     if (String(trade.seller_team_id) === id) {
       sells += Number(trade.quantity);
@@ -696,9 +786,9 @@ export function scoreTeamRound(team, input) {
   }
 
   const abatement = e0 - emissions;
-  const cost = abatementCost(slope, abatement);
+  const cost = abatementCost(slope, abatement, intercept);
   const penalty = shortfall * penaltyPerPermit;
-  const score = grossValue(e0, slope) - cost - auctionPayment - netSpend - penalty;
+  const score = grossValue(e0, slope, intercept) - cost - auctionPayment - netSpend - penalty - transactionCost;
   const round2 = (value) => Math.round(value * 100) / 100;
 
   return {
@@ -710,6 +800,7 @@ export function scoreTeamRound(team, input) {
     market_buys: buys,
     market_sells: sells,
     market_net_spend: round2(netSpend),
+    transaction_cost: round2(transactionCost),
     permits_end: permitsEnd,
     emissions,
     abatement,
@@ -719,6 +810,7 @@ export function scoreTeamRound(team, input) {
     shortfall,
     shortfall_penalty: round2(penalty),
     mac_shock: shock,
+    mac_intercept: intercept,
     score: round2(score),
   };
 }
@@ -752,6 +844,7 @@ export function leaderboardRows(teams, scoreRows) {
       team_name: String(team.team_name ?? ""),
       round1: byRound.round1 ?? null,
       round2: byRound.round2 ?? null,
+      round3: byRound.round3 ?? null,
       total_score: Math.round(totalScore * 100) / 100,
       benchmark_total: Math.round(totalBenchmark * 100) / 100,
       points_vs_benchmark: Math.round((totalScore - totalBenchmark) * 100) / 100,

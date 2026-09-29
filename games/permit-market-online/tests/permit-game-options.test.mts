@@ -188,10 +188,10 @@ test("benchmarks use shocked slopes and credit free endowments", () => {
   const free = benchmarkForRound(teams, cap, { slopeFor, endowments });
 
   assert.equal(free.benchmark_price, sold.benchmark_price);
-  const totalGross = teams.reduce((sum, team) => sum + grossValue(team.baseline_emissions, slopeFor(team)), 0);
+  const totalGross = teams.reduce((sum, team) => sum + grossValue(team.baseline_emissions, slopeFor(team), team.mac_intercept), 0);
   const permits = new Map(sold.per_team.map((row) => [row.team_id, row.benchmark_permits]));
   const efficientCost = teams.reduce((sum, team) => sum
-    + abatementCost(slopeFor(team), team.baseline_emissions - permits.get(team.id)), 0);
+    + abatementCost(slopeFor(team), team.baseline_emissions - permits.get(team.id), team.mac_intercept), 0);
   // With free permits, payments only move between firms: benchmarks sum to the avoided cost.
   const freeTotal = free.per_team.reduce((sum, row) => sum + row.benchmark_score, 0);
   assert.ok(Math.abs(freeTotal - (totalGross - efficientCost)) < 1e-6);

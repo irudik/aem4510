@@ -1,5 +1,62 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { benchmarkForRound, clearAuction, truthfulUnitBids, scoreTeamRound, leaderboardRows }
+  from "../../../netlify/functions/_lib/permit_market.mts";
+
+test("both auction rounds track only post-shock trading gains and preserve individual scores", () => {
+  const teams = [
+    { id: "a", team_name: "A", baseline_emissions: 10, mac_slope: 2 },
+    { id: "b", team_name: "B", baseline_emissions: 8, mac_slope: 4 },
+  ];
+  const session = { allocation_round1: "uniform", allocation_round2: "pay_as_bid",
+    shock_round1: true, shock_round2: true, banking_enabled: false, borrowing_enabled: false };
+  const scores = [];
+  for (const [round, cap, pricing, shocks, seller, buyer, expectedInitial, expectedFinal, expectedEfficient] of [
+    ["round1", 12, "uniform", [0.5, 1.5], "a", "b", 20, 15.5, 15.5],
+    ["round2", 6, "pay_as_bid", [1.5, 0.5], "b", "a", 112, 98.5, 86.5],
+  ]) {
+    const auction = clearAuction(cap, truthfulUnitBids(teams), { pricing });
+    const allocation = new Map(auction.allocations.map(row => [row.team_id, row]));
+    const shockById = new Map(teams.map((team, i) => [team.id, shocks[i]]));
+    const benchmark = benchmarkForRound(teams, cap, { slopeFor: team => team.mac_slope * shockById.get(team.id) });
+    const benchmarkById = new Map(benchmark.per_team.map(row => [row.team_id, row]));
+    const rows = trades => [...teams].reverse().map(team => ({
+      ...scoreTeamRound(team, { permits_from_auction: allocation.get(team.id).permits_won,
+        auction_payment: allocation.get(team.id).payment, mac_shock: shockById.get(team.id),
+        trades, is_final_round: round === "round2" }),
+      ...benchmarkById.get(team.id), round_key: round,
+    }));
+    // The auction and cost shock alone receive no credit for trading gains.
+    const before = roundCostEffectiveness(teams, rows([]), session)[0];
+    assert.equal(before.cost_gap.gap_closed_percent, 0);
+    const after = rows([{ seller_team_id: seller, buyer_team_id: buyer, quantity: 1, price: 10 }]);
+    scores.push(...after);
+    const report = roundCostEffectiveness(teams, after, session)[0];
+    assert.equal(report.cost_gap.initial_total_cost, expectedInitial);
+    assert.equal(report.cost_gap.final_total_cost, expectedFinal);
+    assert.equal(report.cost_gap.cost_effective_total_cost, expectedEfficient);
+    assert.ok(Math.abs(report.cost_gap.gap_closed_percent
+      - 100 * (expectedInitial - expectedFinal) / (expectedInitial - expectedEfficient)) < 1e-9);
+    assert.match(costGapHtml(report), /Open-market cost reductions/);
+    assert.match(costGapHtml(report), /permits held when the open market opened/);
+    const differentPayments = after.map(row => ({ ...row, auction_payment: 9999, market_net_spend: -9999 }));
+    assert.deepEqual(roundCostEffectiveness(teams, differentPayments, session)[0].cost_gap, report.cost_gap);
+  }
+  const reports = roundCostEffectiveness(teams, scores, session);
+  assert.deepEqual(reports.map(row => row.round_key), ["round1", "round2"]);
+  assert.equal(reports[0].cost_gap.gap_closed_percent, 100);
+  assert.ok(Math.abs(reports[1].cost_gap.gap_closed_percent - 100 * 13.5 / 25.5) < 1e-9);
+  const leaderboard = leaderboardRows(teams, scores);
+  assert.equal(leaderboard.length, 2);
+  for (const row of leaderboard) {
+    const own = scores.filter(score => score.team_id === row.team_id);
+    assert.equal(row.rounds_scored, 2);
+    assert.equal(row.round1, own.find(score => score.round_key === "round1").score);
+    assert.equal(row.round2, own.find(score => score.round_key === "round2").score);
+    assert.equal(row.total_score, own.reduce((sum, score) => sum + score.score, 0));
+    assert.equal(row.points_vs_benchmark, own.reduce((sum, score) => sum + score.score - score.benchmark_score, 0));
+  }
+});
 import { roundCostEffectiveness } from "../../../netlify/functions/_lib/permit_cost_effectiveness.mts";
 import { costGapHtml } from "../../../static/games/permit-market-online/cost-gap.mjs";
 const firms = [{ id: "comp", baseline_emissions: 10, mac_slope: 1 },

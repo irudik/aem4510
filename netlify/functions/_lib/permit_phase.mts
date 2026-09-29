@@ -9,13 +9,11 @@ import {
   MARKET_PHASES,
   allocationMethodForRound,
   benchmarkForRound,
-  carryIntoRound2,
   clearAuction,
-  effectiveSlope,
   freeAllocation,
   roundForPhase,
+  resolveRoundCap,
   scoreTeamRound,
-  shockFactor,
 } from "./permit_market.mts";
 import {
   clearPhaseDataForEntry,
@@ -31,6 +29,7 @@ import {
   writeAuctionClearing,
 } from "./permit_game_service.mts";
 import { phaseIsClosed } from "./permit_closed.mts";
+import { marketStartForTeam } from "./permit_round_start.mts";
 
 function capForRound(session, roundKey) {
   return roundKey === "round1"
@@ -79,7 +78,6 @@ export async function closeAuctionPhase(session, auctionKey) {
  */
 export async function closeMarketPhase(session, marketKey) {
   const roundKey = roundForPhase(marketKey);
-  const auctionKey = roundKey === "round1" ? "auction1" : "auction2";
   const sessionId = String(session.id);
 
   const [teams, allocations, trades, previousScores, emissionChoices] = await Promise.all([
@@ -90,19 +88,10 @@ export async function closeMarketPhase(session, marketKey) {
     getEmissionChoicesForSession(sessionId),
   ]);
 
-  const roundAllocations = new Map(
-    allocations
-      .filter((row) => String(row.round_key) === auctionKey)
-      .map((row) => [String(row.team_id), row]),
-  );
-
   const roundTrades = trades.filter((row) => String(row.round_key) === marketKey);
 
-  const round1Scores = new Map(
-    previousScores
-      .filter((row) => String(row.round_key) === "round1")
-      .map((row) => [String(row.team_id), row]),
-  );
+  const starts = new Map(teams.map(team => [String(team.id),
+    marketStartForTeam(session, team, roundKey, allocations, previousScores)]));
   const choices = new Map(
     emissionChoices
       .filter((row) => String(row.round_key) === roundKey)
@@ -113,10 +102,11 @@ export async function closeMarketPhase(session, marketKey) {
   // away, firms reach the efficient allocation by trading from their
   // endowments rather than buying everything.
   const endowments = allocationMethodForRound(session, roundKey) === "free"
-    ? new Map([...roundAllocations.entries()].map(([teamId, row]) => [teamId, Number(row.permits_won ?? 0)]))
+    ? new Map([...starts.entries()].map(([teamId, start]) => [teamId, start.allocation]))
     : new Map();
   const benchmark = benchmarkForRound(teams, capForRound(session, roundKey), {
-    slopeFor: (team) => effectiveSlope(team, roundKey),
+    slopeFor: team => Number(team.mac_slope) * starts.get(String(team.id)).shock,
+    interceptFor: team => starts.get(String(team.id)).intercept,
     endowments,
   });
   const benchmarkByTeam = new Map(
@@ -124,22 +114,20 @@ export async function closeMarketPhase(session, marketKey) {
   );
 
   const scoreRows = teams.map((team) => {
-    const allocation = roundAllocations.get(String(team.id));
-    const carry = roundKey === "round2"
-      ? carryIntoRound2(session, round1Scores.get(String(team.id)))
-      : { banked: 0, owed: 0 };
+    const start = starts.get(String(team.id));
     const scored = scoreTeamRound(team, {
-      permits_from_auction: allocation?.permits_won ?? 0,
-      auction_payment: allocation?.payment ?? 0,
-      permits_banked_in: carry.banked,
-      permits_owed_in: carry.owed,
+      permits_from_auction: start.allocation,
+      auction_payment: start.auctionPayment,
+      permits_banked_in: start.banked,
+      permits_owed_in: start.owed,
       trades: roundTrades,
-      banking_enabled: Boolean(session.banking_enabled),
-      borrowing_enabled: Boolean(session.borrowing_enabled),
-      emissions_choice: choices.get(String(team.id)) ?? null,
-      is_final_round: roundKey === "round2",
+      banking_enabled: roundKey !== "round3" && Boolean(session.banking_enabled),
+      borrowing_enabled: roundKey !== "round3" && Boolean(session.borrowing_enabled),
+      emissions_choice: roundKey === "round3" ? null : choices.get(String(team.id)) ?? null,
+      is_final_round: roundKey !== "round1",
       shortfall_penalty_per_permit: Number(session.shortfall_penalty ?? 0),
-      mac_shock: shockFactor(team, roundKey),
+      mac_shock: start.shock,
+      mac_intercept: start.intercept,
     });
 
     const teamBenchmark = benchmarkByTeam.get(String(team.id));
@@ -179,6 +167,14 @@ export async function closePhaseForward(session, currentPhase) {
  * an auction opens, and start the countdown.
  */
 export async function enterPhase(session, targetPhase, roundSeconds) {
+  if (targetPhase === "market3") {
+    const [teams, scores] = await Promise.all([
+      getTeamsForSession(String(session.id)), getRoundScoresForSession(String(session.id)),
+    ]);
+    if (!phaseIsClosed("market2", teams, [], scores)) {
+      throw new Error("Round 3 requires completed Round 2 results for every team.");
+    }
+  }
   await clearPhaseDataForEntry(String(session.id), targetPhase);
 
   const isTimedPhase = AUCTION_PHASES.has(targetPhase) || MARKET_PHASES.has(targetPhase);
@@ -192,14 +188,7 @@ export async function enterPhase(session, targetPhase, roundSeconds) {
 
   if (AUCTION_PHASES.has(targetPhase)) {
     const teams = await getTeamsForSession(String(session.id));
-    const totalBaseline = teams.reduce(
-      (sum, team) => sum + Number(team.baseline_emissions ?? 0),
-      0,
-    );
-    const share = targetPhase === "auction1"
-      ? Number(session.cap_share_round1)
-      : Number(session.cap_share_round2);
-    const cap = Math.max(1, Math.round(totalBaseline * share / 100));
+    const cap = resolveRoundCap(teams, session, roundForPhase(targetPhase));
 
     if (targetPhase === "auction1") {
       body.cap_round1 = cap;

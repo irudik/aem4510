@@ -37,8 +37,8 @@ export default async function permitAdminCreateSession(req) {
       return jsonResponse(400, { error: "round_seconds must be an integer between 30 and 3600" });
     }
 
-    const allocation1 = String(body.allocation_round1 ?? "free");
-    const allocation2 = String(body.allocation_round2 ?? "free");
+    const allocation1 = String(body.allocation_round1 ?? "uniform");
+    const allocation2 = String(body.allocation_round2 ?? "pay_as_bid");
     for (const [label, method] of [["allocation_round1", allocation1], ["allocation_round2", allocation2]]) {
       if (!ALLOCATION_METHODS.includes(method)) {
         return jsonResponse(400, { error: `${label} must be one of ${ALLOCATION_METHODS.join(", ")}` });
@@ -61,8 +61,8 @@ export default async function permitAdminCreateSession(req) {
       shortfall_penalty: shortfallPenalty,
       allocation_round1: allocation1,
       allocation_round2: allocation2,
-      shock_round1: Boolean(body.shock_round1),
-      shock_round2: Boolean(body.shock_round2),
+      shock_round1: Boolean(body.shock_round1 ?? true),
+      shock_round2: Boolean(body.shock_round2 ?? true),
       round_seconds: roundSeconds,
       created_by: adminUser.id,
     });

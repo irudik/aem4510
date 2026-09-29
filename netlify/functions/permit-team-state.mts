@@ -4,8 +4,8 @@ import {
   allocationMethodForRound,
   bidQuantityLimit,
   bookLevels,
-  carryIntoRound2,
   effectiveSlope,
+  effectiveIntercept,
   freeAllocation,
   freeHoldings,
   holdingsForTeam,
@@ -29,6 +29,8 @@ import {
   getTeamsForSession,
   getTradesForSession,
 } from "./_lib/permit_game_service.mts";
+import { marketStartForTeam } from "./_lib/permit_round_start.mts";
+import { roundTransactionCost } from "./_lib/permit_transaction_costs.mts";
 import { jsonResponse } from "./_lib/http.mts";
 import { phaseIsClosed } from "./_lib/permit_closed.mts";
 import { closedMacDistributions } from "./_lib/permit_mac_distribution.mts";
@@ -61,9 +63,7 @@ export default async function permitTeamState(req) {
     const teamId = String(team.id);
     const phase = String(session.current_phase ?? "");
     const roundKey = roundForPhase(phase);
-    const auctionKey = roundKey === "round2" ? "auction2" : "auction1";
-    // The round whose MAC the firm card shows; at the end, Round 2.
-    const displayRound = phase === "complete" ? "round2" : roundKey;
+    const auctionKey = roundKey === "round1" ? "auction1" : "auction2";
 
     const [teams, bids, results, allocations, orders, trades, scores, emissionChoices] = await Promise.all([
       getTeamsForSession(sessionId),
@@ -76,8 +76,13 @@ export default async function permitTeamState(req) {
       getEmissionChoicesForSession(sessionId),
     ]);
 
+    // Completed games retain the MAC from their last scored round.
+    const displayRound = phase === "complete"
+      ? (scores.some(row => row.round_key === "round3") ? "round3" : "round2") : roundKey;
+    const round2Score = scores.find(row => String(row.team_id) === teamId && row.round_key === "round2");
+    const start = roundKey ? marketStartForTeam(session, team, roundKey, allocations, scores) : null;
     const allocationMethod = roundKey ? allocationMethodForRound(session, roundKey) : null;
-    const currentCap = roundKey === "round2" ? session.cap_round2 : session.cap_round1;
+    const currentCap = roundKey === "round1" ? session.cap_round1 : session.cap_round2;
 
     const ownBids = AUCTION_PHASES.has(phase)
       ? bids
@@ -102,19 +107,24 @@ export default async function permitTeamState(req) {
       )) ?? null
       : null;
 
-    // Round 2 starts from banked permits minus permits owed from Round 1.
-    const carry = roundKey === "round2"
-      ? carryIntoRound2(session, scores.find((row) => (
-        String(row.round_key) === "round1" && String(row.team_id) === teamId
-      )))
-      : { banked: 0, owed: 0, net: 0 };
+    const carry = start ?? { banked: 0, owed: 0, net: 0 };
 
     // Cost shocks stay hidden until the round's market opens.
-    const revealedShock = (key) => (shockRevealed(session, key, phase) ? shockFactor(team, key) : null);
-    const shocks = { round1: revealedShock("round1"), round2: revealedShock("round2") };
-    const displaySlope = displayRound && shocks[displayRound] !== null
-      ? effectiveSlope(team, displayRound)
-      : Number(team.mac_slope ?? 0);
+    const revealedShock = key => shockRevealed(session, key, phase) ? shockFactor(team, key) : null;
+    const shocks = { round1: revealedShock("round1"), round2: revealedShock("round2"),
+      round3: round2Score ? Number(round2Score.mac_shock ?? 1) : null };
+    const revealedShift = key => shockRevealed(session, key, phase)
+      ? Number(team[key === "round1" ? "mac_shift_round1" : "mac_shift_round2"] ?? 0) : null;
+    const macShifts = { round1: revealedShift("round1"), round2: revealedShift("round2"),
+      round3: round2Score ? Number(round2Score.mac_intercept ?? team.mac_intercept ?? 0) - Number(team.mac_intercept ?? 0) : null };
+    const displayIntercept = displayRound === "round3" && round2Score
+      ? Number(round2Score.mac_intercept ?? team.mac_intercept ?? 0)
+      : displayRound && shocks[displayRound] !== null
+        ? effectiveIntercept(team, displayRound) : Number(team.mac_intercept ?? 0);
+    const displaySlope = displayRound === "round3" && round2Score
+      ? Number(team.mac_slope ?? 0) * Number(round2Score.mac_shock ?? 1)
+      : displayRound && shocks[displayRound] !== null
+        ? effectiveSlope(team, displayRound) : Number(team.mac_slope ?? 0);
 
     // During a free-allocation round, each team sees its permits right away.
     const freeAllocationPreview = (AUCTION_PHASES.has(phase) && allocationMethod === "free"
@@ -160,7 +170,7 @@ export default async function permitTeamState(req) {
 
       const holdings = holdingsForTeam(
         teamId,
-        ownAllocation?.permits_won ?? 0,
+        start?.allocation ?? 0,
         carry.net,
         marketTrades,
       );
@@ -168,21 +178,23 @@ export default async function permitTeamState(req) {
       // Live score preview: what this round pays if the market closed now.
       const preview = team.baseline_emissions
         ? scoreTeamRound(team, {
-          permits_from_auction: ownAllocation?.permits_won ?? 0,
-          auction_payment: ownAllocation?.payment ?? 0,
+          permits_from_auction: start?.allocation ?? 0,
+          auction_payment: start?.auctionPayment ?? 0,
           permits_banked_in: carry.banked,
           permits_owed_in: carry.owed,
           trades: marketTrades,
           banking_enabled: Boolean(session.banking_enabled),
           borrowing_enabled: Boolean(session.borrowing_enabled),
           emissions_choice: choice,
-          is_final_round: roundKey === "round2",
+          is_final_round: roundKey !== "round1",
           shortfall_penalty_per_permit: Number(session.shortfall_penalty ?? 0),
-          mac_shock: shockFactor(team, roundKey),
+          mac_shock: start.shock,
+          mac_intercept: start.intercept,
         })
         : null;
 
       market = {
+        transaction_cost_per_permit: roundTransactionCost(roundKey),
         book: bookLevels(openOrders),
         own_open_orders: openOrders
           .filter((row) => String(row.team_id) === teamId)
@@ -200,6 +212,7 @@ export default async function permitTeamState(req) {
           .map((row) => ({
             price: row.price,
             quantity: row.quantity,
+            transaction_cost_per_permit: Number(row.transaction_cost_per_permit ?? 0),
             executed_at: row.executed_at,
             you_bought: String(row.buyer_team_id) === teamId,
             you_sold: String(row.seller_team_id) === teamId,
@@ -207,7 +220,7 @@ export default async function permitTeamState(req) {
         holdings,
         sellable: freeHoldings(
           teamId,
-          ownAllocation?.permits_won ?? 0,
+          start?.allocation ?? 0,
           carry.net,
           marketTrades,
           openOrders,
@@ -229,6 +242,7 @@ export default async function permitTeamState(req) {
         market_buys: row.market_buys,
         market_sells: row.market_sells,
         market_net_spend: row.market_net_spend,
+        transaction_cost: Number(row.transaction_cost ?? 0),
         permits_end: row.permits_end,
         emissions: row.emissions,
         abatement: row.abatement,
@@ -238,6 +252,7 @@ export default async function permitTeamState(req) {
         shortfall: row.shortfall,
         shortfall_penalty: row.shortfall_penalty,
         mac_shock: row.mac_shock,
+        mac_intercept: row.mac_intercept,
         score: row.score,
         benchmark_price: row.benchmark_price,
         benchmark_score: row.benchmark_score,
@@ -268,10 +283,14 @@ export default async function permitTeamState(req) {
         team_name: team.team_name,
         baseline_emissions: team.baseline_emissions ?? null,
         mac_slope: team.mac_slope ?? null,
+        mac_intercept: Number(team.mac_intercept ?? 0),
+        display_round_key: displayRound,
+        display_mac_intercept: displayIntercept,
+        mac_shifts: macShifts,
         display_mac_slope: team.mac_slope ? displaySlope : null,
         shocks,
         value_schedule: team.baseline_emissions
-          ? valueSchedule(Number(team.baseline_emissions), Number(team.mac_slope))
+          ? valueSchedule(Number(team.baseline_emissions), Number(team.mac_slope), Number(team.mac_intercept ?? 0))
           : [],
       },
       allocation_method: allocationMethod,
@@ -290,8 +309,8 @@ export default async function permitTeamState(req) {
         : null,
       own_allocation: ownAllocation
         ? {
-          permits_won: ownAllocation.permits_won,
-          payment: ownAllocation.payment,
+          permits_won: start?.allocation ?? ownAllocation.permits_won,
+          payment: start?.auctionPayment ?? ownAllocation.payment,
         }
         : null,
       auction_reports: auctionReports,
