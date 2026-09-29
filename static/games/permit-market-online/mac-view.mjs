@@ -34,14 +34,11 @@ export function macModel(state) {
   const nextAbatementCost = hasPosition && emissions > 0 ? slope * (abatement + 0.5) : null;
   const moreEmissionsSavings = hasPosition && emissions < baseline ? slope * (abatement - 0.5) : null;
 
-  // An observed trade price is a comparison, not a claim of equilibrium.
-  const lastTradePrice = state.market?.recent_trades?.[0]?.price;
-  const auctionPrice = state.market ? state.auction_result?.clearing_price : null;
-  const rawPrice = lastTradePrice ?? auctionPrice;
+  // Keep the auction comparison fixed as market trades arrive.
+  const rawPrice = state.market ? state.auction_result?.clearing_price : null;
   const price = rawPrice != null && Number.isFinite(Number(rawPrice)) && Number(rawPrice) >= 0
     ? Number(rawPrice) : null;
-  const priceLabel = price === null ? null
-    : (lastTradePrice != null ? "Latest trade price" : "Auction clearing price");
+  const priceLabel = price === null ? null : "Auction clearing price";
 
   return { baseline, slope, steps, holdings, emissions, abatement, cost, currentMac,
     nextAbatementCost, moreEmissionsSavings, price, priceLabel,

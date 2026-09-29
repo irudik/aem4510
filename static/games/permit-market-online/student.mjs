@@ -6,6 +6,7 @@ import {
 } from "/games/permit-market-online/shared.mjs";
 import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
 import { marketDepthHtml } from "./market-depth.mjs";
+import { bindQuantityValidation } from "./quantity-validation.mjs";
 import { macDistributionsHtml } from "./mac-distribution.mjs";
 import {
   auctionRulesHtml,
@@ -51,6 +52,8 @@ const phaseLabelElement = document.getElementById("phase-label");
 const roundTimerElement = document.getElementById("round-timer");
 const stageStatus = document.getElementById("stage-status");
 const stageContainer = document.getElementById("stage-container");
+const tradingCard = document.getElementById("trading-card");
+const tradingContainer = document.getElementById("trading-container");
 const resultsCard = document.getElementById("results-card");
 const macDistributionsCard = document.getElementById("mac-distributions-card");
 const macDistributionsElement = document.getElementById("mac-distributions");
@@ -227,8 +230,12 @@ async function postOrder() {
   const price = Number(document.getElementById("order-price")?.value);
   const quantity = Number(document.getElementById("order-qty")?.value);
 
-  if (!Number.isFinite(price) || !Number.isInteger(quantity) || quantity <= 0) {
-    setStatus(stageStatus, "warn", "Enter a price and a whole-number quantity.");
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    setStatus(stageStatus, "warn", "Enter a positive integer for quantity (1, 2, 3, …).");
+    return;
+  }
+  if (!Number.isFinite(price)) {
+    setStatus(stageStatus, "warn", "Enter a valid price.");
     return;
   }
 
@@ -460,8 +467,8 @@ function renderMarketScaffold(state) {
     ${clearedAuctionsHtml(state.auction_reports)}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
     ${showPlan ? emissionsPlanHtml(state, expired) : ""}
-    <h3>Buy and Sell Orders</h3>
-    <div id="market-depth"></div>
+  `;
+  tradingContainer.innerHTML = `
     <h3>Place an Order</h3>
     <form id="order-form" class="grid">
       <div>
@@ -477,7 +484,7 @@ function renderMarketScaffold(state) {
       </div>
       <div>
         <label for="order-qty">Quantity</label>
-        <input id="order-qty" type="number" min="1" step="1" inputmode="numeric" ${expired ? "disabled" : ""} />
+        <input id="order-qty" type="number" min="1" step="1" required inputmode="numeric" ${expired ? "disabled" : ""} />
       </div>
       <div class="row" style="align-items: end">
         <button id="post-order-btn" class="primary" type="submit" ${expired ? "disabled" : ""}>Send Order</button>
@@ -485,11 +492,14 @@ function renderMarketScaffold(state) {
     </form>
     <p><small class="note">A buy at or above the best ask (or a sell at or below the best bid) trades immediately at the resting order's price; otherwise it waits in the book. Selling is limited to permits you hold.</small></p>
     <div id="own-orders"></div>
+    <h3>Buy and Sell Orders</h3>
+    <div id="market-depth"></div>
     <h4 style="margin-top: 0.6rem">Trade Ticker</h4>
     <ul id="trade-ticker" class="ticker"></ul>
     ${expired ? `<p><small class="note">${state.session.phase_closed ? "Round scored. Waiting for the instructor to start the next phase." : "The market has closed. Waiting for the instructor to score the round."}</small></p>` : ""}
   `;
 
+  bindQuantityValidation(document.getElementById("order-qty"));
   document.getElementById("order-form")?.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!deadlineExpired()) {
@@ -650,6 +660,9 @@ function renderStage(state, options = {}) {
 
   const phase = String(state.session.current_phase ?? "");
   phaseLabelElement.textContent = phaseLabel(phase, state);
+  const isMarket = phase === "market1" || phase === "market2";
+  tradingCard.classList.toggle("hidden", !isMarket);
+  if (!isMarket) tradingContainer.innerHTML = "";
 
   const signature = stageSignature(state);
   const scaffoldChanged = options.force || signature !== renderedStageSignature;
@@ -777,6 +790,7 @@ async function refreshState() {
     joinCard.classList.remove("hidden");
     firmCard.classList.add("hidden");
     stageCard.classList.add("hidden");
+    tradingCard.classList.add("hidden");
     resultsCard.classList.add("hidden");
     leaderboardCard.classList.add("hidden");
     macDistributionsCard.classList.add("hidden");
@@ -841,6 +855,7 @@ resetTokenButton.addEventListener("click", () => {
   clearStatus(joinStatus);
   firmCard.classList.add("hidden");
   stageCard.classList.add("hidden");
+  tradingCard.classList.add("hidden");
   resultsCard.classList.add("hidden");
   leaderboardCard.classList.add("hidden");
   macDistributionsCard.classList.add("hidden");

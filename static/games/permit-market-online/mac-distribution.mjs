@@ -15,10 +15,14 @@ export function macHistogram(report) {
   return { upper, width, final: counts(final), initial: counts(initial) };
 }
 
-/** Closed-phase histograms, newest first, retain earlier round results. */
+/** Replace each round's allocation chart with its after-trading comparison. */
 export function macDistributionsHtml(reports = []) {
   if (!reports.length) return '<p class="note">Close an auction or market phase to see the distribution of firms’ MACs.</p>';
-  return [...reports].reverse().map(report => {
+  const tradedRounds = new Set(reports.filter(report => report.phase.startsWith("market"))
+    .map(report => report.round_key));
+  const visibleReports = reports.filter(report => report.phase.startsWith("market")
+    || !tradedRounds.has(report.round_key));
+  return [...visibleReports].reverse().map(report => {
     const model = macHistogram(report);
     const peak = Math.max(1, ...model.final, ...model.initial);
     const x = value => 60 + value / model.upper * 610;
@@ -45,7 +49,7 @@ export function macDistributionsHtml(reports = []) {
         ${showPrice ? `<line class="mac-hist-price" x1="${x(price)}" x2="${x(price)}" y1="55" y2="270"/>` : ""}
         ${ticks}<text x="365" y="326" text-anchor="middle">Firm MAC ($ per permit)</text>
       </svg>
-      <p class="note">MAC is the marginal cost of abatement at each firm’s current emissions. Whole permits and firms at their emissions limits can leave MACs away from the price even when no cost-saving trade remains.${showPrice && report.across_rounds ? " The price line is a separate-round benchmark, excluding banking and borrowing incentives." : ""}</p>
+      ${showPrice && report.across_rounds ? '<p class="note">The price line is a separate-round benchmark, excluding banking and borrowing incentives.</p>' : ""}
       <details><summary>Exact firm MACs</summary><div class="table-wrap"><table><thead><tr><th>Firm</th>${initial ? "<th>Initial MAC</th>" : ""}<th>${market ? "Final" : "Allocated"} MAC</th></tr></thead><tbody>${report.macs.map((row, i) => `<tr><td>${escapeHtml(row.team_name)}</td>${initial ? `<td>$${Number(report.initial_macs[i].mac).toFixed(2)}</td>` : ""}<td>$${Number(row.mac).toFixed(2)}</td></tr>`).join("")}</tbody></table></div></details>
     </section>`;
   }).join("");

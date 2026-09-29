@@ -68,7 +68,29 @@ test("initial-allocation histograms hide the benchmark until that round's tradin
       }
       const closed = closedMacDistributions(active, teams, results, allocations, scores);
       assert.ok(closed.every(report => report.benchmark_visible));
-      assert.equal((macDistributionsHtml(closed).match(/class="mac-hist-price"/g) ?? []).length, 2);
+      assert.equal((macDistributionsHtml(closed).match(/class="mac-hist-price"/g) ?? []).length, 1);
     }
   }
+});
+
+test("one chart per round replaces initial allocation with the overlapping trading result", () => {
+  const initial = closedMacDistributions(session, teams, results, allocations, []);
+  const before = macDistributionsHtml(initial);
+  assert.equal((before.match(/class="mac-hist-chart"/g) ?? []).length, 1);
+  assert.match(before, /Round 1: initial free allocation/);
+  assert.doesNotMatch(before, /mac-hist-initial/);
+  const completed = closedMacDistributions(session, teams, results, allocations, scores);
+  for (const reports of [completed, [...completed].reverse()]) {
+    const after = macDistributionsHtml(reports);
+    assert.equal((after.match(/class="mac-hist-chart"/g) ?? []).length, 1);
+    assert.match(after, /Round 1: after trading/);
+    assert.match(after, /mac-hist-initial/);
+    assert.match(after, /mac-hist-final/);
+    assert.doesNotMatch(after, /Round 1: initial free allocation/);
+  }
+  const nextRound = initial.map(report => ({ ...report, round_key: "round2", phase: "auction2" }));
+  const both = macDistributionsHtml([...completed, ...nextRound]);
+  assert.equal((both.match(/class="mac-hist-chart"/g) ?? []).length, 2);
+  assert.match(both, /Round 1: after trading/);
+  assert.match(both, /Round 2: initial free allocation/);
 });

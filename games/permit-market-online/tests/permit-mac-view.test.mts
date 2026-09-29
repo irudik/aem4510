@@ -55,14 +55,21 @@ test("setup and auctions show no invented holdings or market price", () => {
   assert.match(macPanel(auction), /after permits are allocated/);
 });
 
-test("the latest trade replaces the labelled auction price, including a zero price", () => {
+test("latest trades never add or change a price line on the MAC chart", () => {
   const state = stateFor(FIRM_TYPES[0], 5);
+  for (const price of [0, 5, 100]) {
+    state.market.recent_trades = [{ price }];
+    assert.equal(macModel(state).price, null);
+    assert.doesNotMatch(macPanel(state), /Latest trade price|class="mac-price-line"/);
+    assert.match(macPanel(state), /class="mac-current-line"/);
+  }
   state.auction_result = { clearing_price: 7 };
   assert.equal(macModel(state).price, 7);
   assert.equal(macModel(state).priceLabel, "Auction clearing price");
   state.market.recent_trades = [{ price: 0 }];
-  assert.equal(macModel(state).price, 0);
-  assert.equal(macModel(state).priceLabel, "Latest trade price");
+  assert.equal(macModel(state).price, 7);
+  assert.equal(macModel(state).priceLabel, "Auction clearing price");
+  assert.doesNotMatch(macPanel(state), /Latest trade price/);
 });
 
 test("banked permits do not extend emissions past baseline or imply negative costs", () => {

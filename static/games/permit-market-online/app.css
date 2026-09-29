@@ -551,6 +551,8 @@ small.note {
 .student-game-layout .kv { grid-template-columns: 80px 1fr; }
 .student-game-layout .position-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
+.student-stage-column { min-width: 0; }
+
 .firm-heading {
   display: flex;
   justify-content: space-between;
