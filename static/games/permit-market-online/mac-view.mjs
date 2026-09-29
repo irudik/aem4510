@@ -145,13 +145,12 @@ export function macPanel(state) {
       <figcaption>
         <span><i class="mac-key mac-key-curve"></i>Your MAC</span>
         ${model.emissions === null ? "" : `<span><i class="mac-key mac-key-position"></i>${model.final ? "Final" : "Current"} emissions</span>
-          <span><i class="mac-key mac-key-cost"></i>Total abatement cost</span>
           <span><i class="mac-key mac-key-current"></i>Current MAC: ${dollars(model.currentMac)}</span>`}
         ${model.price === null ? "" : `<span><i class="mac-key mac-key-price"></i>${model.priceLabel}: ${dollars(model.price)}</span>`}
       </figcaption>
     </figure>
     ${model.emissions === null ? `<p class="mac-position">${position}</p>` : `<ul class="mac-position">${position}</ul>`}
-    <p class="mac-note">Total abatement cost is the cost of all required abatement—the shaded area under MAC from your emissions to baseline emissions.
+    <p class="mac-note">Total abatement cost is the cost of all required abatement—the area under MAC from your emissions to baseline emissions.
       ${model.price === null ? "" : "The price line records an observed price; current buy and sell offers are in the market below."}</p>
     ${banking}`;
 }

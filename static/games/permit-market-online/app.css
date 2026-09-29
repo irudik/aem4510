@@ -587,10 +587,10 @@ small.note {
 
 .mac-grid-line { stroke: #e5eaf2; }
 .mac-axis { stroke: #5d6d83; stroke-width: 1.2; }
-.mac-cost-area { fill: #dde8fa; stroke: #245ba0; stroke-width: 2; }
-.mac-next-area { fill: none; stroke: #23713d; stroke-width: 2.5; }
-.mac-savings-area { fill: none; stroke: #a34b00; stroke-width: 2.5; }
-.mac-total-label { color: #245ba0; }
+.mac-cost-area { fill: none; stroke: none; }
+.mac-next-area { fill: #dcf2e3; stroke: #23713d; stroke-width: 2.5; }
+.mac-savings-area { fill: #ffe3c2; stroke: #a34b00; stroke-width: 2.5; }
+.mac-total-label { color: var(--ink); }
 .mac-next-label { color: #23713d; }
 .mac-savings-label { color: #a34b00; }
 .mac-current-line { stroke: #b74364; stroke-width: 2; stroke-dasharray: 10 4; }
