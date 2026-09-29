@@ -21,23 +21,24 @@ test("firm types cycle with team index", () => {
   assert.deepEqual(firmTypeForIndex(FIRM_TYPES.length + 2), FIRM_TYPES[2]);
 });
 
-test("abatement costs and permit values follow the integer MAC schedule", () => {
-  // MAC slope 2: abating 3 units costs 2 + 4 + 6 = 12.
-  assert.equal(abatementCost(2, 3), 12);
+test("smooth MAC integrates to total cost and whole-permit savings", () => {
+  // MAC slope 2: the triangle under MAC through 3 units has area 9.
+  assert.equal(abatementCost(2, 3), 9);
+  assert.equal(abatementCost(2, 2.5), 6.25);
   assert.equal(abatementCost(2, 0), 0);
 
-  // e0 = 4, c = 2: permit values are 8, 6, 4, 2.
-  assert.equal(permitValue(4, 2, 1), 8);
-  assert.equal(permitValue(4, 2, 4), 2);
+  // Each whole permit saves the area under MAC across one unit.
+  assert.equal(permitValue(4, 2, 1), 7);
+  assert.equal(permitValue(4, 2, 4), 1);
   assert.equal(permitValue(4, 2, 5), 0);
 
   const schedule = valueSchedule(4, 2);
   assert.equal(schedule.length, 4);
-  assert.deepEqual(schedule.map((step) => step.value), [8, 6, 4, 2]);
+  assert.deepEqual(schedule.map((step) => step.value), [7, 5, 3, 1]);
 
   // Gross value equals the cost of abating everything.
-  assert.equal(grossValue(4, 2), 20);
-  assert.equal(grossValue(10, 1), 55);
+  assert.equal(grossValue(4, 2), 16);
+  assert.equal(grossValue(10, 1), 50);
 });
 
 test("phase-to-round mapping", () => {
@@ -99,7 +100,7 @@ test("every firm can bid its entire MAC schedule one permit at a time", () => {
     assert.throws(() => validateBidSet(firm, [...bids, { bid_price: 0, bid_quantity: 1 }]), /cannot exceed your baseline/);
     const cleared = clearAuction(firm.baseline_emissions, accepted.map((bid) => ({ ...bid, team_id: "A" })));
     assert.equal(cleared.allocations[0].permits_won, firm.baseline_emissions);
-    assert.equal(cleared.clearing_price, firm.mac_slope);
+    assert.equal(cleared.clearing_price, firm.mac_slope / 2);
   }
 });
 
@@ -137,15 +138,62 @@ test("benchmark clears truthful bids and scores the efficient allocation", () =>
   assert.equal(truthfulUnitBids(teams).length, 8);
 
   const benchmark = benchmarkForRound(teams, 4);
-  assert.equal(benchmark.benchmark_price, 4);
+  assert.equal(benchmark.benchmark_price, 3);
 
   const byTeam = new Map(benchmark.per_team.map((row) => [row.team_id, row]));
-  // Top four values are B's 8, 6, 4 and one of the two 4s; A holds the other.
+  // Top four whole-permit savings are B's 7, 5, 3 and A's 3.5.
   assert.equal(byTeam.get("A").benchmark_permits + byTeam.get("B").benchmark_permits, 4);
   assert.equal(byTeam.get("B").benchmark_permits, 3);
 
-  // A: V = 10, abates 3 (cost 6), pays 4 for 1 permit: score 0.
-  assert.equal(byTeam.get("A").benchmark_score, 0);
-  // B: V = 20, abates 1 (cost 2), pays 12 for 3 permits: score 6.
+  // A: V = 8, abates 3 (cost 4.5), pays 3 for 1 permit: score 0.5.
+  assert.equal(byTeam.get("A").benchmark_score, 0.5);
+  // B: V = 16, abates 1 (cost 1), pays 9 for 3 permits: score 6.
   assert.equal(byTeam.get("B").benchmark_score, 6);
+});
+
+test("whole-permit values equal finite cost savings for every firm and shock", () => {
+  for (const firm of FIRM_TYPES) {
+    for (const shock of [0.5, 1, 1.5]) {
+      const slope = firm.mac_slope * shock;
+      const baseline = firm.baseline_emissions;
+      let totalSavings = 0;
+      for (let permits = 1; permits <= baseline; permits += 1) {
+        const abatement = baseline - permits;
+        const savings = abatementCost(slope, abatement + 1) - abatementCost(slope, abatement);
+        assert.equal(permitValue(baseline, slope, permits), savings);
+        totalSavings += savings;
+      }
+      assert.equal(totalSavings, grossValue(baseline, slope));
+    }
+  }
+});
+
+test("benchmark minimizes smooth abatement costs over all small whole-permit allocations", () => {
+  const teams = [
+    { id: "A", baseline_emissions: 3, mac_slope: 1 },
+    { id: "B", baseline_emissions: 4, mac_slope: 2 },
+    { id: "C", baseline_emissions: 2, mac_slope: 3 },
+  ];
+  for (const shockA of [0.5, 1, 1.5]) {
+    for (const shockB of [0.5, 1, 1.5]) {
+      const slopes = { A: shockA, B: 2 * shockB, C: 3 };
+      const cost = (permits) => teams.reduce((total, firm) => total
+        + slopes[firm.id] * (firm.baseline_emissions - permits[firm.id]) ** 2 / 2, 0);
+      for (let cap = 0; cap <= 9; cap += 1) {
+        let minimumCost = Infinity;
+        for (let A = 0; A <= 3; A += 1) {
+          for (let B = 0; B <= 4; B += 1) {
+            for (let C = 0; C <= 2; C += 1) {
+              if (A + B + C === cap) minimumCost = Math.min(minimumCost, cost({ A, B, C }));
+            }
+          }
+        }
+        const benchmark = benchmarkForRound(teams, cap, { slopeFor: (firm) => slopes[firm.id] });
+        const permits = Object.fromEntries(benchmark.per_team.map((row) => [row.team_id, row.benchmark_permits]));
+        assert.equal(Object.keys(permits).length, teams.length);
+        assert.equal(Object.values(permits).reduce((sum, value) => sum + value, 0), cap);
+        assert.equal(cost(permits), minimumCost, `cap=${cap}, slopes=${JSON.stringify(slopes)}`);
+      }
+    }
+  }
 });

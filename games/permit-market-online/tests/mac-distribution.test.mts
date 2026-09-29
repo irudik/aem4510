@@ -53,3 +53,22 @@ test("zero MACs fit the first bin and firm names remain text", () => {
   assert.doesNotMatch(macDistributionsHtml([report]), /<script>|NaN|Infinity/);
   assert.match(macDistributionsHtml([]), /Close an auction or market/);
 });
+
+test("initial-allocation histograms hide the benchmark until that round's trading closes", () => {
+  for (const allocation_round1 of ["free", "uniform"]) {
+    for (const current_phase of ["auction1", "market1"]) {
+      const active = { allocation_round1, current_phase };
+      for (const incomplete of [[], scores.slice(0, 2)]) {
+        const reports = closedMacDistributions(active, teams, results, allocations, incomplete);
+        assert.equal(reports[0].phase_closed, true);
+        assert.equal(reports[0].benchmark_visible, false);
+        assert.doesNotMatch(macDistributionsHtml(reports), /mac-hist-price|Cost-effective price/);
+        assert.deepEqual(macHistogram(reports[0]),
+          macHistogram({ ...reports[0], benchmark_price: 9999 }));
+      }
+      const closed = closedMacDistributions(active, teams, results, allocations, scores);
+      assert.ok(closed.every(report => report.benchmark_visible));
+      assert.equal((macDistributionsHtml(closed).match(/class="mac-hist-price"/g) ?? []).length, 2);
+    }
+  }
+});

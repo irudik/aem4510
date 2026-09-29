@@ -17,7 +17,10 @@ export function closedMacDistributions(session, teams, results, allocations, sco
       + (round === "round2" ? carryIntoRound2(session, priorByTeam.get(String(team.id))).net : 0);
     const mac = (team, permits, slope) => slope * Math.max(0, Number(team.baseline_emissions) - Math.max(0, permits));
     const values = teams.map(team => ({ team_name: team.team_name, mac: mac(team, holdings(team), Number(team.mac_slope)) }));
-    const common = { round_key: round, free_allocation: free,
+    // Allocation results remain visible while students trade, but the benchmark
+    // is revealed only once this round's trading has been scored for every firm.
+    const tradingClosed = teams.every(team => scoreByTeam.has(String(team.id)));
+    const common = { round_key: round, free_allocation: free, benchmark_visible: tradingClosed,
       across_rounds: Boolean(session.banking_enabled || session.borrowing_enabled) };
     reports.push({ ...common, phase: auction, phase_closed: true, macs: values, initial_macs: [],
       benchmark_price: benchmarkForRound(teams, Number(result.cap)).benchmark_price });

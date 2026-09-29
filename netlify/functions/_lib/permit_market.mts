@@ -2,8 +2,8 @@
  * Economic engine for the AEM 4510 permit market game.
  *
  * Each team is a firm with integer baseline emissions e0 and MAC slope c:
- * the k-th unit of abatement costs c*k, so the q-th permit a firm holds is
- * worth c*(e0 - q + 1) in avoided abatement cost. Permits are sold in a
+ * MAC(a) = c*a and total abatement cost is c*a²/2. The q-th whole permit
+ * is worth c*(e0 - q + 0.5) in avoided abatement cost. Permits are sold in a
  * uniform-price sealed-bid auction and retraded in a continuous double
  * auction. Compliance is automatic: emissions = min(e0, permits held), the
  * rest is abated.
@@ -134,21 +134,21 @@ export function bidQuantityLimit(session, team, cap) {
 }
 
 /**
- * Cost of abating `abatement` units at MAC slope c: sum of c*k.
+ * Cost of abating `abatement` units: the area under smooth MAC(a) = c*a.
  */
 export function abatementCost(macSlope, abatement) {
-  const a = Math.max(0, Math.floor(abatement));
-  return macSlope * a * (a + 1) / 2;
+  const a = Math.max(0, Number(abatement));
+  return macSlope * a * a / 2;
 }
 
 /**
- * Value of holding the q-th permit: the marginal abatement cost avoided.
+ * Value of the q-th whole permit: total cost saved over one unit of abatement.
  */
 export function permitValue(baselineEmissions, macSlope, q) {
   if (!Number.isInteger(q) || q < 1 || q > baselineEmissions) {
     return 0;
   }
-  return macSlope * (baselineEmissions - q + 1);
+  return macSlope * (baselineEmissions - q + 0.5);
 }
 
 /**

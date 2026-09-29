@@ -462,8 +462,6 @@ function renderMarketScaffold(state) {
     ${showPlan ? emissionsPlanHtml(state, expired) : ""}
     <h3>Buy and Sell Orders</h3>
     <div id="market-depth"></div>
-    <p class="learning-prompt">Before trading: would buying one permit save more in abatement costs than you would pay?
-      Would selling one earn more than the additional abatement would cost?</p>
     <h3>Place an Order</h3>
     <form id="order-form" class="grid">
       <div>
@@ -567,7 +565,7 @@ function renderMarketLiveData(state) {
       <div class="cell"><div class="label">Emissions, E</div><div class="value">${formatNumber(position?.emissions, 0)}</div></div>
       <div class="cell"><div class="label">Required abatement</div><div class="value">${formatNumber(position?.abatement, 0)}</div></div>
       <div class="cell"><div class="label">Available to sell</div><div class="value">${formatNumber(Math.max(0, market.sellable), 0)}</div></div>
-      <div class="cell"><div class="label">Abatement cost</div><div class="value">$${formatNumber(position?.cost, 2)}</div></div>
+      <div class="cell"><div class="label">Total abatement cost</div><div class="value">$${formatNumber(position?.cost, 2)}</div></div>
       <div class="cell"><div class="label">Round score if market closed now</div><div class="value">${preview ? formatNumber(preview.score, 2) : "-"}</div></div>
       ${carryTiles}
     `;
@@ -586,7 +584,7 @@ function renderMarketLiveData(state) {
       ? " Borrowing raises this round's score, but the borrowed permits must come out of Round 2."
       : (preview.permits_banked_out > 0 ? " Banking lowers this round's score, but the banked permits are yours to use in Round 2." : "");
     planSummary.textContent = `${choice == null ? "Using your permits" : `Your choice: emit ${choice}`}. If the market closed now you would
-      emit ${preview.emissions}, holding ${market.holdings} permit(s) and ${carryText}; this round's abatement cost would be
+      emit ${preview.emissions}, holding ${market.holdings} permit(s) and ${carryText}; this round's total abatement cost would be
       $${formatNumber(preview.abatement_cost, 2)}.${tradeoff}`;
   }
 

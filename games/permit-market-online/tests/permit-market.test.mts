@@ -107,13 +107,13 @@ test("round scoring combines abatement, auction, and market cash flows", () => {
     is_final_round: false,
   });
 
-  // Holdings 6 + 2 - 1 = 7: abate 3 at cost 6; V = 55.
-  // Net market spend 8 - 5 = 3. Score = 55 - 6 - 18 - 3 = 28.
+  // Holdings 6 + 2 - 1 = 7: abate 3 at cost 4.5; V = 50.
+  // Net market spend 8 - 5 = 3. Score = 50 - 4.5 - 18 - 3 = 24.5.
   assert.equal(result.permits_end, 7);
   assert.equal(result.emissions, 7);
-  assert.equal(result.abatement_cost, 6);
+  assert.equal(result.abatement_cost, 4.5);
   assert.equal(result.market_net_spend, 3);
-  assert.equal(result.score, 28);
+  assert.equal(result.score, 24.5);
   assert.equal(result.permits_banked_out, 0);
 });
 

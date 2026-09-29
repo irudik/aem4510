@@ -43,8 +43,8 @@ test("each individual MAC starts at zero and ends at its own baseline", () => {
     assert.equal(curve.steps[0].from, 0);
     assert.equal(curve.steps.at(-1).to, team.baseline_emissions);
     assert.equal(curve.steps.length, team.baseline_emissions);
-    assert.equal(curve.steps[0].cost, team.mac_slope * team.baseline_emissions);
-    assert.equal(curve.steps.at(-1).cost, team.mac_slope);
+    assert.equal(curve.steps[0].cost, team.mac_slope * (team.baseline_emissions - 0.5));
+    assert.equal(curve.steps.at(-1).cost, team.mac_slope / 2);
   }
   assert.deepEqual(firmMacCurves([{ id: "waiting", baseline_emissions: null, mac_slope: null }]), []);
 });
@@ -96,4 +96,21 @@ test("team names remain labels in chart legends", () => {
   const html = auctionComparisonHtml(state, "auction1");
   assert.match(html, /Energy &amp; &lt;Power&gt; &quot;A&quot;/);
   assert.doesNotMatch(html, /<Power>/);
+});
+
+test("smooth aggregate horizontally sums smooth firm emissions, including between knots", () => {
+  const model = auctionComparisonModel(exampleState(), "auction1");
+  const points = model.smoothAggregate;
+  assert.equal(points[0].quantity, 0);
+  assert.equal(points.at(-1).price, 0);
+  for (let i = 1; i < points.length; i++) {
+    const price = (points[i - 1].price + points[i].price) / 2;
+    const quantity = (points[i - 1].quantity + points[i].quantity) / 2;
+    const expected = teams.reduce((sum, team) => sum
+      + Math.max(0, team.baseline_emissions - price / team.mac_slope), 0);
+    assert.ok(Math.abs(quantity - expected) < 1e-9);
+  }
+  const html = auctionComparisonHtml(exampleState(), "auction1");
+  assert.match(html, /class="aggregate-smooth-mac"/);
+  assert.equal((html.match(/class="firm-smooth-mac"/g) ?? []).length, FIRM_TYPES.length);
 });

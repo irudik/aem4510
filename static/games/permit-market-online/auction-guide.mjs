@@ -15,10 +15,10 @@ const ordinal = (number) => {
   return `${number}${({ 1: "st", 2: "nd", 3: "rd" })[number % 10] ?? "th"}`;
 };
 
-/** Total cost of abating `abatement` units when the k-th unit costs slope * k. */
+/** Area under the smooth MAC curve through the chosen abatement. */
 function abatementCost(slope, abatement) {
-  const units = Math.max(0, Math.floor(abatement));
-  return slope * units * (units + 1) / 2;
+  const units = Math.max(0, abatement);
+  return slope * units ** 2 / 2;
 }
 
 /**
@@ -144,7 +144,7 @@ export function outcomeAtPrice(firm, prices, price, { pricing = "uniform" } = {}
   };
 }
 
-/** Upper end of the what-if price range: comfortably above any bid or MAC step. */
+/** Upper end of the what-if price range: comfortably above any bid or MAC. */
 export function priceRangeMax(firm, prices) {
   const highest = Math.max(1, Number(firm.slope) * Number(firm.baseline), ...(prices ?? []));
   return Math.ceil(highest * 1.25 / 5) * 5;
@@ -269,12 +269,12 @@ export function permitBidInputsHtml(baseline, prices, {
   if (owedIn > 0) {
     coverage = `You owe ${owedIn} permit${owedIn === 1 ? "" : "s"} from borrowing in Round 1. The first ${owedIn} permit${owedIn === 1 ? "" : "s"}
       you win repay ${owedIn === 1 ? "it" : "them"}; each one still owed at the end of the game costs $${Number(penalty).toFixed(2)}.
-      After that, each permit covers one unit of emissions, starting with the leftmost step on your MAC chart.`;
+      After that, each permit covers one unit of emissions, starting with the leftmost unit on your emissions axis.`;
   } else if (bankedIn > 0) {
     coverage = `Your ${bankedIn} banked permit${bankedIn === 1 ? "" : "s"} from Round 1 already cover${bankedIn === 1 ? "s" : ""} your first
       ${bankedIn} unit${bankedIn === 1 ? "" : "s"} of emissions, so permit 1 here covers your ${ordinal(bankedIn + 1)} unit, permit 2 the next, and so on.`;
   } else {
-    coverage = "Permit 1 covers your first unit of emissions (the leftmost step on your MAC chart), permit 2 your second unit, and so on.";
+    coverage = "Permit 1 covers your first unit of emissions (the leftmost unit on your emissions axis), permit 2 your second unit, and so on.";
   }
   const extraNote = allowMore
     ? ` Banking is on: permits beyond your ${needed} are extra and carry to Round 2, where the cap is tighter.

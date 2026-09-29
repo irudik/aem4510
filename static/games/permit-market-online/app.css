@@ -586,6 +586,10 @@ small.note {
 .mac-grid-line { stroke: #e5eaf2; }
 .mac-axis { stroke: #5d6d83; stroke-width: 1.2; }
 .mac-cost-area { fill: #dde8fa; }
+.mac-current-line { stroke: #b74364; stroke-width: 2; stroke-dasharray: 10 4; }
+.mac-key-current { border-top: 2px dashed #b74364; }
+ul.mac-position { padding-left: 1.3rem; }
+ul.mac-position li { margin: 0.35rem 0; }
 .mac-curve { fill: none; stroke: #ca5670; stroke-width: 3; }
 .mac-price-line { stroke: #3566a8; stroke-width: 2; stroke-dasharray: 7 5; }
 .mac-position-line { stroke: #17212f; stroke-width: 2; stroke-dasharray: 2 4; }

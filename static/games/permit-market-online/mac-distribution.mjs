@@ -4,7 +4,7 @@ const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&":
 export function macHistogram(report) {
   const final = report.macs.map(row => Number(row.mac));
   const initial = (report.initial_macs ?? []).map(row => Number(row.mac));
-  const upper = Math.max(1, Number(report.benchmark_price ?? 0), ...final, ...initial) * 1.1;
+  const upper = Math.max(1, (report.benchmark_visible === true ? Number(report.benchmark_price ?? 0) : 0), ...final, ...initial) * 1.1;
   const bins = 10;
   const width = upper / bins;
   const counts = values => {
@@ -34,7 +34,7 @@ export function macDistributionsHtml(reports = []) {
       return `<rect class="mac-hist-bar ${background ? "mac-hist-initial" : "mac-hist-final"}" x="${left + inset}" y="${y(count)}" width="${full - 2 * inset}" height="${270 - y(count)}"><title>${background ? "Initial" : "Final"}: ${count} firms, MAC $${(i * model.width).toFixed(2)}–$${((i + 1) * model.width).toFixed(2)}</title></rect>`;
     }).join("");
     const price = Number(report.benchmark_price);
-    const showPrice = report.phase_closed === true;
+    const showPrice = report.phase_closed === true && report.benchmark_visible === true;
     const ticks = [0, 0.25, 0.5, 0.75, 1].map(f => `<text x="${x(f * model.upper)}" y="295" text-anchor="middle">${(f * model.upper).toFixed(1)}</text>`).join("");
     const grid = [...new Set([0, Math.ceil(peak / 2), peak])].map(n => `<line x1="60" x2="670" y1="${y(n)}" y2="${y(n)}" stroke="#d8e2e8"/><text x="50" y="${y(n) + 5}" text-anchor="end">${n}</text>`).join("");
     return `<section class="mac-distribution"><h3>${title}</h3>
@@ -45,7 +45,7 @@ export function macDistributionsHtml(reports = []) {
         ${showPrice ? `<line class="mac-hist-price" x1="${x(price)}" x2="${x(price)}" y1="55" y2="270"/>` : ""}
         ${ticks}<text x="365" y="326" text-anchor="middle">Firm MAC ($ per permit)</text>
       </svg>
-      <p class="note">MAC is the cost of the last unit abated (zero with no abatement). Whole permits and firms at their emissions limits can leave MACs away from the price even when no cost-saving trade remains.${report.across_rounds ? " The price line is a separate-round benchmark, excluding banking and borrowing incentives." : ""}</p>
+      <p class="note">MAC is the marginal cost of abatement at each firm’s current emissions. Whole permits and firms at their emissions limits can leave MACs away from the price even when no cost-saving trade remains.${showPrice && report.across_rounds ? " The price line is a separate-round benchmark, excluding banking and borrowing incentives." : ""}</p>
       <details><summary>Exact firm MACs</summary><div class="table-wrap"><table><thead><tr><th>Firm</th>${initial ? "<th>Initial MAC</th>" : ""}<th>${market ? "Final" : "Allocated"} MAC</th></tr></thead><tbody>${report.macs.map((row, i) => `<tr><td>${escapeHtml(row.team_name)}</td>${initial ? `<td>$${Number(report.initial_macs[i].mac).toFixed(2)}</td>` : ""}<td>$${Number(row.mac).toFixed(2)}</td></tr>`).join("")}</tbody></table></div></details>
     </section>`;
   }).join("");

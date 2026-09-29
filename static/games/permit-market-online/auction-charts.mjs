@@ -30,6 +30,16 @@ export function groupFirmCurves(curves) {
       dash: DASHES[index % DASHES.length] }));
 }
 
+/** Horizontally sum smooth firm MACs at every change in slope. */
+export function aggregateMacPoints(curves) {
+  const prices = [...new Set([0, ...curves.map(curve => curve.slope * curve.baseline)])]
+    .sort((a, b) => b - a);
+  return prices.map(price => ({
+    quantity: curves.reduce((sum, curve) => sum + Math.max(0, curve.baseline - price / curve.slope), 0),
+    price,
+  }));
+}
+
 /** Use the same vertical scale for aggregate MAC, bids, and individual MACs. */
 export function auctionComparisonModel(state, roundKey) {
   const chart = state?.auction_charts?.[roundKey];
@@ -45,8 +55,8 @@ export function auctionComparisonModel(state, roundKey) {
   const benchmarkPrice = price(chart.benchmark_price);
   const maxCost = Math.ceil(Math.max(1, clearingPrice ?? 0, benchmarkPrice ?? 0,
     ...aggregate.map((step) => step.cost), ...bids.map((step) => step.cost),
-    ...curves.flatMap((curve) => curve.steps.map((step) => step.cost))) * 1.1 / 4) * 4;
-  return { curves, groups: groupFirmCurves(curves), aggregate, bids, maxCost,
+    ...curves.map((curve) => curve.slope * curve.baseline)) * 1.1 / 4) * 4;
+  return { curves, groups: groupFirmCurves(curves), aggregate, smoothAggregate: aggregateMacPoints(curves), bids, maxCost,
     cap: Number(chart.cap), clearingPrice, benchmarkPrice, live: Boolean(chart.is_live),
     pricing: chart.pricing ?? "uniform", shock: Boolean(chart.shock),
     totalBidQuantity: Number(chart.total_bid_quantity),
@@ -54,7 +64,7 @@ export function auctionComparisonModel(state, roundKey) {
     firmMax: Math.max(1, ...curves.map((curve) => curve.baseline)) };
 }
 
-/** Draw whole-unit MAC curves and the auction price comparisons. */
+/** Draw smooth MAC curves and whole-permit auction bids. */
 function comparisonSvg(model, individual, id) {
   const left = 52;
   const right = 592;
@@ -79,8 +89,9 @@ function comparisonSvg(model, individual, id) {
     stroke="#b01b2f" stroke-width="2" />
     <text x="${x(model.cap)}" y="${top - 8}" text-anchor="middle" fill="#b01b2f">Cap: ${model.cap}</text>`;
   const curves = individual
-    ? model.groups.map((curve) => path(curve.steps, curve.color, curve.dash, curve.names.join(", "))).join("")
-    : path(model.aggregate, "#ca5670", "", "Aggregate MAC") + path(model.bids, "#0d5bd7", "", "Submitted bids");
+    ? model.groups.map((curve) => `<path class="firm-smooth-mac" d="M ${x(0)} ${y(curve.slope * curve.baseline)} L ${x(curve.baseline)} ${y(0)}"
+      fill="none" stroke="${curve.color}" stroke-width="3" stroke-dasharray="${curve.dash}"><title>${escapeHtml(curve.names.join(", "))}</title></path>`).join("")
+    : `<path class="aggregate-smooth-mac" d="${model.smoothAggregate.map((point, i) => `${i ? "L" : "M"} ${x(point.quantity)} ${y(point.price)}`).join(" ")}" fill="none" stroke="#ca5670" stroke-width="3"><title>Aggregate MAC</title></path>` + path(model.bids, "#0d5bd7", "", "Submitted bids");
   const title = individual ? "Individual firm MAC curves" : "Aggregate MAC and auction bids";
   const description = individual
     ? `${model.curves.length} firms, each measured against its own emissions. Identical curves coincide and share a legend entry.`
@@ -133,7 +144,7 @@ export function auctionComparisonHtml(state, roundKey, { popoutLink = true } = {
       </figure>
     </div>
     ${model.shock ? '<p class="mac-note">This round has a cost shock: MACs shown are before the shock, which is what bidders knew. Scored benchmarks use the shocked MACs.</p>' : ""}
-    <p class="mac-note auction-reading-note">Both graphs use the same price scale. Steps represent whole permits; firms can have no gains from trading when price lies between adjacent MAC steps.
+    <p class="mac-note auction-reading-note">Both graphs use the same price scale. MAC curves are smooth; bids and trades use whole permits. A permit’s value is the area under MAC over that unit of emissions. The whole-permit benchmark can differ from the smooth aggregate curve’s intersection with the cap.
       ${state.session?.banking_enabled ? "The benchmark measures current-round abatement costs and excludes the future value of banked permits." : ""}</p>
   </section>`;
 }

@@ -34,13 +34,13 @@ test("the area under MAC to the right of emissions matches every firm's scored c
   }
 });
 
-test("an interior price between adjacent MAC steps eliminates gains from one-unit trades", () => {
+test("an interior price between whole-unit abatement costs eliminates gains from one-unit trades", () => {
   const team = { baseline_emissions: 8, mac_slope: 3 };
   const model = macModel(stateFor(team, 5));
   const buySavings = model.cost - macModel(stateFor(team, 6)).cost;
   const sellCost = macModel(stateFor(team, 4)).cost - model.cost;
-  assert.equal(buySavings, 9);
-  assert.equal(sellCost, 12);
+  assert.equal(buySavings, 7.5);
+  assert.equal(sellCost, 10.5);
   assert.ok(buySavings - 10 <= 0);
   assert.ok(10 - sellCost <= 0);
 });
@@ -52,7 +52,7 @@ test("setup and auctions show no invented holdings or market price", () => {
   const auction = stateFor(FIRM_TYPES[0]);
   assert.equal(macModel(auction).emissions, null);
   assert.equal(macModel(auction).price, null);
-  assert.match(macPanel(auction), /after the auction clears/);
+  assert.match(macPanel(auction), /after permits are allocated/);
 });
 
 test("the latest trade replaces the labelled auction price, including a zero price", () => {
@@ -82,4 +82,46 @@ test("the final graph uses the Round 2 outcome and does not substitute a benchma
   assert.equal(macModel(state).emissions, 3);
   assert.equal(macModel(state).price, null);
   assert.match(macPanel(state), /Final Round 2 emissions/);
+});
+
+test("smooth chart and five bullets show point MAC and whole-unit cost changes", () => {
+  const state = stateFor(FIRM_TYPES[0], 6);
+  const model = macModel(state);
+  assert.equal(model.currentMac, 4);
+  assert.equal(model.cost, 8);
+  assert.equal(model.nextAbatementCost, 4.5);
+  assert.equal(model.moreEmissionsSavings, 3.5);
+  const html = macPanel(state);
+  assert.match(html, /class="mac-curve" d="M 58 78 L 588 278"/);
+  assert.match(html, /class="mac-current-line"[^>]*y1="198" y2="198"/);
+  assert.match(html, /class="mac-cost-area"[^>]*d="M 376 278 L 376 198 L 588 278 Z"/);
+  assert.equal((html.match(/<li>/g) ?? []).length, 5);
+  assert.match(html, /Total abatement cost: <strong>\$8\.00<\/strong>/);
+  assert.match(html, /Total abatement cost is the cost of all required abatement/);
+  assert.match(html, /next unit of abatement: <strong>\$4\.50<\/strong>/);
+  assert.match(html, /emitting one more unit: <strong>\$3\.50<\/strong>/);
+  assert.doesNotMatch(html, /<p class="mac-position">|Each step/);
+});
+
+test("whole-unit cost bullets respect emissions limits, cost shocks and emissions choices", () => {
+  for (const firm of FIRM_TYPES) {
+    for (const shock of [0.5, 1, 1.5]) {
+      const slope = firm.mac_slope * shock;
+      for (let emissions = 0; emissions <= firm.baseline_emissions; emissions++) {
+        const state = stateFor({ ...firm, display_mac_slope: slope }, 5);
+        state.market.score_preview = { emissions };
+        const model = macModel(state);
+        const abatement = firm.baseline_emissions - emissions;
+        assert.equal(model.currentMac, slope * abatement);
+        assert.equal(model.cost, slope * abatement ** 2 / 2);
+        assert.equal(model.nextAbatementCost, emissions === 0 ? null
+          : abatementCost(slope, abatement + 1) - model.cost);
+        assert.equal(model.moreEmissionsSavings, abatement === 0 ? null
+          : model.cost - abatementCost(slope, abatement - 1));
+        assert.doesNotMatch(macPanel(state), /NaN|Infinity/);
+      }
+    }
+  }
+  assert.match(macPanel(stateFor(FIRM_TYPES[0], 0)), /Not available \(zero emissions\)/);
+  assert.match(macPanel(stateFor(FIRM_TYPES[0], 12)), /Not available \(at baseline emissions\)/);
 });

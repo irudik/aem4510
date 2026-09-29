@@ -10,7 +10,7 @@ export function benchmarkPriceHtml(benchmark) {
     <p class="benchmark-price-value">$${price} <span>per permit</span></p>
     <p>Target from firms' actual MAC curves and this round's cap of ${Number(benchmark.cap)} permits${benchmark.after_shock ? ", after the cost shock" : ", before any cost shock"}.</p>
     <p class="note">This is a theoretical benchmark, not the last trade price, auction payment, or midpoint of the bid–ask spread. Remaining buy and sell orders need not meet here.</p>
-    <p class="note">With whole permits, several prices can support the same allocation. This benchmark uses the lowest accepted MAC bid.</p>
+    <p class="note">With whole permits, several prices can support the same allocation. This benchmark uses the lowest accepted whole-permit value: the abatement cost saved by that permit.</p>
     ${benchmark.across_rounds ? '<p class="note"><strong>Banking/borrowing:</strong> this is a separate-round benchmark. It excludes the value of moving permits across rounds, so it is not the intertemporal equilibrium price.</p>' : ""}
   </div>`;
 }
