@@ -19,5 +19,6 @@ export function currentCostEffectivePrice(session, teams) {
   }));
   return { round_key: round, cap: Number(cap), price: benchmark.benchmark_price, allocations,
     after_shock: afterShock,
+    shock_enabled: Boolean(session[round === "round1" ? "shock_round1" : "shock_round2"]),
     across_rounds: Boolean(session.banking_enabled || session.borrowing_enabled) };
 }

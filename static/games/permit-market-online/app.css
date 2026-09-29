@@ -776,6 +776,8 @@ ul.mac-position li { margin: 0.35rem 0; }
 }
 
 .report-demand { fill: none; stroke: #0d5bd7; stroke-width: 3; stroke-linejoin: round; }
+.report-aggregate-mac { fill: none; stroke: #b74364; stroke-width: 3; stroke-dasharray: 9 4; }
+.report-key-mac { border-top: 3px dashed #b74364; }
 .report-own-bid { stroke: #e07b00; stroke-width: 7; stroke-linecap: butt; }
 .report-supply { stroke: #b01b2f; stroke-width: 3; }
 .report-supply-label { fill: #b01b2f; font-weight: 700; }

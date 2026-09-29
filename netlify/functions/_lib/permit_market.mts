@@ -359,7 +359,7 @@ function stepSeriesFromSortedUnits(sortedBids) {
  * @param {Array<{team_id: string, bid_price: number, bid_quantity: number, submitted_at?: string}>} bidRows
  * @param {string} teamId the team requesting the report
  */
-export function studentAuctionReport(cap, bidRows, teamId, { pricing = "uniform" } = {}) {
+export function studentAuctionReport(cap, bidRows, teamId, { pricing = "uniform", teams = [] } = {}) {
   const id = String(teamId);
   const cleared = clearAuction(cap, bidRows, { pricing });
   const rankedBids = rankAuctionBids(bidRows);
@@ -403,6 +403,12 @@ export function studentAuctionReport(cap, bidRows, teamId, { pricing = "uniform"
   }));
 
   return {
+    // Horizontal sum of smooth MACs, evaluated at every change in slope.
+    // Auction comparisons use the costs known when firms submitted bids.
+    ...(teams.length ? { aggregate_mac: [...new Set([0, ...teams.map(team =>
+      Number(team.mac_slope) * Number(team.baseline_emissions))])].sort((a, b) => b - a)
+      .map(price => ({ price, quantity: teams.reduce((sum, team) => sum
+        + Math.max(0, Number(team.baseline_emissions) - price / Number(team.mac_slope)), 0) })) } : {}),
     cap: cleared.cap,
     pricing,
     clearing_price: cleared.clearing_price,

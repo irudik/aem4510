@@ -150,7 +150,7 @@ export function priceRangeMax(firm, prices) {
   return Math.ceil(highest * 1.25 / 5) * 5;
 }
 
-/** Plain-language auction rules with a worked example students can open. */
+/** Plain-language auction rules. */
 export function auctionRulesHtml(cap, { pricing = "uniform" } = {}) {
   const payAsBid = pricing === "pay_as_bid";
   const paymentRule = payAsBid
@@ -163,12 +163,6 @@ export function auctionRulesHtml(cap, { pricing = "uniform" } = {}) {
         the auction clears.`
     : `Think of it as supply and demand. Supply is the ${cap} permits. Your bids are your demand curve.
         The price is where the class's total demand equals supply. Nobody sees anyone else's bids until the auction clears.`;
-  const exampleResult = payAsBid
-    ? `<p>Each winner pays its own bids. A wins 2 permits and pays $12 + $9 = <strong>$21</strong>, B pays $10 + $7 = $17,
-        and C pays $8. Under a uniform price all winners would have paid $7 a permit, so A would have paid $14.</p>`
-    : `<p>The price is the lowest winning bid, <strong>$7</strong>. A wins 2 permits and pays $14, B wins 2 and pays $14,
-        C wins 1 and pays $7. A bid $12 for its first permit but pays only $7 for it.</p>`;
-
   return `<div class="auction-rules">
     <h3>How the auction works${payAsBid ? ": pay as you bid" : ""}</h3>
     <ol>
@@ -177,19 +171,6 @@ export function auctionRulesHtml(cap, { pricing = "uniform" } = {}) {
       <li>${paymentRule}</li>
     </ol>
     <p class="mac-note">${supplyDemand}</p>
-    <details class="worked-example">
-      <summary>Worked example: 3 firms, 5 permits</summary>
-      <table>
-        <thead><tr><th scope="col">Firm</th><th scope="col">Permit 1</th><th scope="col">Permit 2</th><th scope="col">Permit 3</th><th scope="col">Permit 4</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">A</th><td>$12</td><td>$9</td><td>$6</td><td>$3</td></tr>
-          <tr><th scope="row">B</th><td>$10</td><td>$7</td><td>$4</td><td>$1</td></tr>
-          <tr><th scope="row">C</th><td>$8</td><td>$5</td><td>$2</td><td></td></tr>
-        </tbody>
-      </table>
-      <p>Ranked from highest: $12, $10, $9, $8, <strong>$7</strong> are the top 5 bids, so they win. The next bid, $6, just misses.</p>
-      ${exampleResult}
-    </details>
   </div>`;
 }
 
@@ -274,7 +255,7 @@ export function permitBidInputsHtml(baseline, prices, {
     coverage = `Your ${bankedIn} banked permit${bankedIn === 1 ? "" : "s"} from Round 1 already cover${bankedIn === 1 ? "s" : ""} your first
       ${bankedIn} unit${bankedIn === 1 ? "" : "s"} of emissions, so permit 1 here covers your ${ordinal(bankedIn + 1)} unit, permit 2 the next, and so on.`;
   } else {
-    coverage = "Permit 1 covers your first unit of emissions (the leftmost unit on your emissions axis), permit 2 your second unit, and so on.";
+    coverage = "Each box is a bid for one permit.";
   }
   const extraNote = allowMore
     ? ` Banking is on: permits beyond your ${needed} are extra and carry to Round 2, where the cap is tighter.
@@ -284,7 +265,7 @@ export function permitBidInputsHtml(baseline, prices, {
     ? ` You can bid for at most ${maximum} permits in this auction; any additional permits must be bought during trading.`
     : "";
 
-  return `<p class="mac-note">${coverage} Each permit you win lets you emit one more unit instead of abating it.${extraNote}${limitNote}</p>
+  return `<p class="mac-note">${coverage} Enter prices in any order; they do not need to decline. The auction ranks your bids from highest to lowest. Each permit you win lets you emit one more unit instead of abating it.${extraNote}${limitNote}</p>
     <div class="permit-bid-grid" id="permit-bid-grid" data-needed="${needed}" data-owed="${owedIn}">${boxes}</div>
     ${allowMore ? `<button id="add-permit-boxes-btn" class="secondary" type="button" ${disabled || boxCount >= maximum ? "disabled" : ""}>Add 5 extra permits to bank</button>` : ""}`;
 }
@@ -325,7 +306,7 @@ export function whatIfChartSvg(baseline, prices, price, maxPrice, { pricing = "u
     <line class="mac-axis" x1="${left}" x2="${right}" y1="${bottom}" y2="${bottom}" />
     <line class="mac-axis" x1="${left}" x2="${left}" y1="${top}" y2="${bottom}" />
     ${labels}
-    <text class="mac-axis-label" x="${(left + right) / 2}" y="255" text-anchor="middle">Permit number</text>
+    <text class="mac-axis-label" x="${(left + right) / 2}" y="255" text-anchor="middle">Bids (highest to lowest)</text>
   </svg>`;
 }
 
@@ -375,11 +356,13 @@ export function auctionReportChartSvg(report, idPrefix = "report") {
   const top = 48;
   const bottom = 270;
   const stack = report.stack ?? [];
-  const maxQuantity = Math.max(1, report.total_bid_quantity, report.cap) * 1.06;
-  const highest = Math.max(1, report.clearing_price ?? 0, ...stack.map((step) => step.price));
+  const aggregateMac = report.aggregate_mac ?? [];
+  const maxQuantity = Math.max(1, report.total_bid_quantity, report.cap, ...aggregateMac.map(point => point.quantity)) * 1.06;
+  const highest = Math.max(1, report.clearing_price ?? 0, ...stack.map((step) => step.price), ...aggregateMac.map(point => point.price));
   const maxPrice = Math.ceil(highest * 1.1 / 4) * 4;
   const x = (quantity) => left + quantity / maxQuantity * (right - left);
   const y = (price) => bottom - price / maxPrice * (bottom - top);
+  const macPath = aggregateMac.map((point, i) => `${i ? "L" : "M"} ${x(point.quantity)} ${y(point.price)}`).join(" ");
 
   // Demand: horizontal at each bid's price, dropping between bids, and to
   // zero after the last bid.
@@ -423,11 +406,12 @@ export function auctionReportChartSvg(report, idPrefix = "report") {
     <text class="mac-axis-label" x="${left}" y="20">$ per permit</text>
     ${ticks}
     <path class="report-demand" d="${demandPath}" />
+    ${aggregateMac.length ? `<path class="report-aggregate-mac" d="${macPath}"><title>Aggregate MAC</title></path>` : ""}
     ${ownSegments}${supply}${price}
     <line class="mac-axis" x1="${left}" x2="${right}" y1="${bottom}" y2="${bottom}" />
     <line class="mac-axis" x1="${left}" x2="${left}" y1="${top}" y2="${bottom}" />
     ${quantityTicks}
-    <text class="mac-axis-label" x="${(left + right) / 2}" y="322" text-anchor="middle">Permits (all bids, highest first)</text>
+    <text class="mac-axis-label" x="${(left + right) / 2}" y="322" text-anchor="middle">Total emissions / permits (units)</text>
   </svg>`;
 }
 
@@ -485,6 +469,7 @@ export function auctionReportHtml(report, roundLabel, { open = true } = {}) {
       ${auctionReportChartSvg(report, idPrefix)}
       <figcaption>
         <span><i class="report-key report-key-demand"></i>Demand: all bids, highest first</span>
+        ${report.aggregate_mac?.length ? '<span><i class="report-key report-key-mac"></i>Aggregate MAC</span>' : ""}
         <span><i class="report-key report-key-own"></i>Your bids</span>
         <span><i class="report-key report-key-supply"></i>Supply: permits for sale</span>
         <span><i class="report-key report-key-price"></i>${payAsBid ? "Lowest winning bid" : "Clearing price"}</span>

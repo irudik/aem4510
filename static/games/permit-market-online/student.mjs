@@ -8,6 +8,7 @@ import { macModel, macPanel } from "/games/permit-market-online/mac-view.mjs";
 import { marketDepthHtml } from "./market-depth.mjs";
 import { bindQuantityValidation } from "./quantity-validation.mjs";
 import { macDistributionsHtml } from "./mac-distribution.mjs";
+import { costGapHtml } from "./cost-gap.mjs";
 import {
   auctionRulesHtml,
   biddablePermits,
@@ -334,7 +335,6 @@ function renderAuctionStage(state) {
     ${shockComing ? shockNoticeHtml() : ""}
     ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
     <h3>Your bids</h3>
-    <p class="learning-prompt">Before bidding: if you won one more permit, which unit of abatement would you avoid?</p>
     ${permitBidInputsHtml(firm.baseline, savedPrices, {
       disabled: expired,
       bankedIn: firm.bankedIn,
@@ -456,7 +456,8 @@ function renderMarketScaffold(state) {
   // here rather than on every refresh; that keeps them open or closed as the
   // student left them.
   const roundKey = String(state.session.current_phase) === "market2" ? "round2" : "round1";
-  const shock = state.team?.shocks?.[roundKey];
+  const shock = state.session[roundKey === "round1" ? "shock_round1" : "shock_round2"]
+    ? state.team?.shocks?.[roundKey] : null;
   const shockBanner = shock == null ? "" : `<p class="shock-notice"><strong>Cost shock revealed:</strong> your MAC slope is
     ×${shock} this round${Number(shock) === 1 ? " (no change)" : `, so each unit of abatement now costs $${state.team.display_mac_slope} × a`}.
     Other firms learned theirs too, so what permits are worth has changed.</p>`;
@@ -749,7 +750,7 @@ function renderResults(state) {
   resultsCard.classList.remove("hidden");
   resultsCostEffectiveness.innerHTML = (state.cost_effectiveness ?? []).map((report) => {
     const round = report.round_key === "round2" ? "Round 2" : "Round 1";
-    return `<p><strong>The market ${report.achieved ? "did" : "did not"} achieve cost-effectiveness in ${round}.</strong></p>`;
+    return `<p><strong>The market ${report.achieved ? "did" : "did not"} achieve cost-effectiveness in ${round}.</strong></p>${costGapHtml(report)}`;
   }).join("");
   resultsTable.innerHTML = tableHtml(rows);
 }

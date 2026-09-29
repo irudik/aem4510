@@ -142,7 +142,7 @@ export default async function permitTeamState(req) {
               submitted_at: row.submitted_at,
             })),
           teamId,
-          { pricing: method },
+          { pricing: method, teams: clearedKey === "auction1" ? teams : [] },
         )
         : null;
     }
@@ -296,7 +296,7 @@ export default async function permitTeamState(req) {
         : null,
       auction_reports: auctionReports,
       mac_distributions: closedMacDistributions(session, teams, results, allocations, scores),
-      cost_effectiveness: roundCostEffectiveness(teams, scores),
+      cost_effectiveness: roundCostEffectiveness(teams, scores, session),
       permits_banked_in: carry.banked,
       permits_owed_in: carry.owed,
       market,

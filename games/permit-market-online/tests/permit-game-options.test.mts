@@ -294,7 +294,7 @@ test("two rounds with every option on conserve permits and cash", () => {
 test("pay-as-bid rules, what-if payments, and report wording", () => {
   const rules = auctionRulesHtml(5, { pricing: "pay_as_bid" });
   assert.match(rules, /its own bid/);
-  assert.match(rules, /\$12 \+ \$9 = <strong>\$21<\/strong>/);
+  assert.doesNotMatch(rules, /worked-example|Worked example/);
   assert.match(rules, /Acid Rain Program/);
 
   const firm = { baseline: 8, slope: 2 };
@@ -376,7 +376,7 @@ test("free rounds show each firm its grandfathered permits", () => {
 test("after a shock is revealed, the MAC chart uses the shocked slope and the chosen emissions", () => {
   const state = {
     team: { id: "T", baseline_emissions: 8, mac_slope: 2, display_mac_slope: 3, shocks: { round1: 1.5, round2: null } },
-    session: { current_phase: "market1", banking_enabled: true, borrowing_enabled: true },
+    session: { current_phase: "market1", banking_enabled: true, borrowing_enabled: true, shock_round1: true },
     market: { holdings: 5, recent_trades: [], score_preview: { emissions: 3 } },
     own_scores: [],
   };

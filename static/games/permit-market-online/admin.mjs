@@ -3,6 +3,7 @@ import { phaseControls } from "./phase-controls.mjs";
 import { marketDepthHtml } from "./market-depth.mjs";
 import { benchmarkPriceHtml } from "./benchmark-price.mjs";
 import { macDistributionsHtml } from "./mac-distribution.mjs";
+import { costGapHtml } from "./cost-gap.mjs";
 import {
   apiJson,
   clearStatus,
@@ -128,7 +129,7 @@ function costEffectivenessHtml(reports, teamNamesById) {
   return reports.map((report) => {
     const round = report.round_key === "round2" ? "Round 2" : "Round 1";
     if (report.achieved) {
-      return `<h3>${round}: cost-effective allocation</h3><p><strong>The market achieved cost-effectiveness.</strong></p>`;
+      return `<h3>${round}: cost-effective allocation</h3><p><strong>The market achieved cost-effectiveness.</strong></p>${costGapHtml(report)}`;
     }
     const rows = report.firms_off_allocation.map((row) => ({
       firm: teamNamesById.get(String(row.team_id)) ?? "",
@@ -137,7 +138,7 @@ function costEffectivenessHtml(reports, teamNamesById) {
       difference: row.permit_difference,
     }));
     return `<h3>${round}: firms off the cost-effective allocation</h3>`
-      + `<p><strong>The market did not achieve cost-effectiveness.</strong></p>${tableHtml(rows)}`;
+      + `<p><strong>The market did not achieve cost-effectiveness.</strong></p>${costGapHtml(report)}${tableHtml(rows)}`;
   }).join("");
 }
 
@@ -269,7 +270,7 @@ function renderAllTables(state) {
   renderTable(scoresTableElement, (state.scores ?? []).map((row) => ({
     round: row.round_key === "round1" ? "Round 1" : "Round 2",
     team: teamNamesById.get(String(row.team_id)) ?? "",
-    shock: `×${Number(row.mac_shock ?? 1)}`,
+    ...(shocksOn ? { shock: `×${Number(row.mac_shock ?? 1)}` } : {}),
     permits_allocated: row.permits_from_auction,
     auction_paid: formatNumber(row.auction_payment, 2),
     banked_in: row.permits_banked_in,

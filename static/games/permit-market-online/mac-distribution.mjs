@@ -43,7 +43,7 @@ export function macDistributionsHtml(reports = []) {
     const grid = [...new Set([0, Math.ceil(peak / 2), peak])].map(n => `<line x1="60" x2="670" y1="${y(n)}" y2="${y(n)}" stroke="#d8e2e8"/><text x="50" y="${y(n) + 5}" text-anchor="end">${n}</text>`).join("");
     return `<section class="mac-distribution"><h3>${title}</h3>
       ${showPrice ? `<p><strong>Cost-effective price: $${price.toFixed(2)} per permit</strong> (vertical line)</p>` : ""}
-      <p class="note">${initial ? "Light bars: initial free allocation. Dark bars: after trading. Both use the same realized MAC curves, so the comparison isolates changes in emissions." : market ? "Dark bars: firms’ MACs at final emissions." : "Bars: firms’ MACs at the permit allocation, before any cost shock."}</p>
+      <p class="note">${initial ? "Light bars: initial free allocation. Dark bars: after trading. Both use the same realized MAC curves, so the comparison isolates changes in emissions." : market ? "Dark bars: firms’ MACs at final emissions." : "Bars: firms’ MACs at the permit allocation."}</p>
       <svg class="mac-hist-chart" viewBox="0 0 720 335" role="img" aria-label="${title}. Histogram of firm marginal abatement costs.${showPrice ? ` Cost-effective price $${price.toFixed(2)}.` : ""}">
         <text x="60" y="28">Number of firms</text>${grid}${initial ? bar(model.initial, true) : ""}${bar(model.final, false)}
         ${showPrice ? `<line class="mac-hist-price" x1="${x(price)}" x2="${x(price)}" y1="55" y2="270"/>` : ""}

@@ -116,7 +116,7 @@ export default async function permitAdminState(req) {
       open_book: bookLevels(openOrders),
       cost_effective_benchmark: currentCostEffectivePrice(session, teams),
       mac_distributions: closedMacDistributions(session, teams, results, allocations, scores),
-      cost_effectiveness: roundCostEffectiveness(teams, scores),
+      cost_effectiveness: roundCostEffectiveness(teams, scores, session),
       trades,
       scores,
       leaderboard: leaderboardRows(teams, scores),

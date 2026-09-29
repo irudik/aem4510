@@ -124,7 +124,8 @@ export function macPanel(state) {
       <li class="mac-savings-label">Cost savings from emitting one more unit: <strong>${model.moreEmissionsSavings === null ? "Not available (at baseline emissions)" : dollars(model.moreEmissionsSavings)}</strong></li>`;
   const phase = String(state.session?.current_phase ?? "");
   const shockRound = phase === "complete" || phase.endsWith("2") ? "round2" : "round1";
-  const shock = state.team?.shocks?.[shockRound];
+  const shock = state.session[shockRound === "round1" ? "shock_round1" : "shock_round2"]
+    ? state.team?.shocks?.[shockRound] : null;
   const shockLine = shock != null && Number(shock) !== 1
     ? `<p class="shock-notice"><strong>Cost shock:</strong> your MAC slope is ×${shock} this round.</p>`
     : (shock != null ? `<p class="mac-note">Cost shock: your MAC slope is unchanged (×1) this round.</p>` : "");

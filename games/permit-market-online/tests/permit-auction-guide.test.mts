@@ -48,14 +48,33 @@ function exampleSurplus(submittedBids) {
   return { price: cleared.clearing_price, surplus };
 }
 
+test("auction results compare aggregate smooth MAC with submitted demand", () => {
+  const teams = [{ baseline_emissions: 10, mac_slope: 1 }, { baseline_emissions: 8, mac_slope: 3 }];
+  const report = studentAuctionReport(5, unitBids(exampleBids), "A", { teams });
+  assert.equal(report.aggregate_mac[0].quantity, 0);
+  assert.equal(report.aggregate_mac[0].price, 24);
+  assert.deepEqual(report.aggregate_mac.at(-1), { price: 0, quantity: 18 });
+  for (const point of report.aggregate_mac) {
+    assert.ok(Math.abs(point.quantity - teams.reduce((sum, team) =>
+      sum + Math.max(0, team.baseline_emissions - point.price / team.mac_slope), 0)) < 1e-9);
+  }
+  const html = auctionReportHtml(report, "Round 1");
+  assert.match(html, /class="report-aggregate-mac"/);
+  assert.match(html, /class="report-demand"/);
+  assert.match(html, /Aggregate MAC/);
+  assert.doesNotMatch(html, /NaN|Infinity/);
+  assert.doesNotMatch(JSON.stringify(report.aggregate_mac), /team_id|team_name/);
+  assert.doesNotMatch(auctionReportHtml(studentAuctionReport(5, unitBids(exampleBids), "A"), "Round 2"), /report-aggregate-mac/);
+});
+
 test("the worked example clears at $7 with A, B, C winning 2, 2, 1", () => {
   const cleared = clearAuction(5, unitBids(exampleBids));
   assert.equal(cleared.clearing_price, 7);
   const won = Object.fromEntries(cleared.allocations.map((row) => [row.team_id, row.permits_won]));
   assert.deepEqual(won, { A: 2, B: 2, C: 1 });
   const rules = auctionRulesHtml(5);
-  assert.match(rules, /lowest winning bid, <strong>\$7<\/strong>/);
-  assert.match(rules, /A wins 2 permits and pays \$14, B wins 2 and pays \$14,\s+C wins 1 and pays \$7/);
+  assert.match(rules, /lowest winning bid/);
+  assert.doesNotMatch(rules, /worked-example|Worked example/);
 });
 
 test("slide examples: underbidding and overbidding hurt C; shading helps A when it sets the price", () => {
@@ -257,4 +276,22 @@ test("cleared auctions list the newest round first and open only that one", () =
   assert.equal(clearedAuctionsHtml({ auction1: null, auction2: null }), "");
   assert.notEqual(html.indexOf('id="report-round-1-title"'), -1);
   assert.notEqual(html.indexOf('id="report-round-2-title"'), -1);
+});
+
+test("unordered bids produce the same winners, payments and preview as descending bids", () => {
+  const orders = [["3", "12", "6", "9"], ["9", "3", "12", "6"], ["12", "9", "6", "3"]];
+  for (const pricing of ["uniform", "pay_as_bid"]) {
+    const expected = bidsFromPermitPrices(orders[2]);
+    for (const raw of orders) {
+      const converted = bidsFromPermitPrices(raw);
+      assert.deepEqual(converted.bids, expected.bids);
+      assert.deepEqual(typedPermitPrices(raw), expected.prices);
+      const rivals = unitBids({ B: [10, 7, 4], C: [8, 5, 2] });
+      const auction = bids => clearAuction(5, [...bids.map(bid => ({ ...bid, team_id: "A", submitted_at: "1" })), ...rivals], { pricing });
+      assert.deepEqual(auction(converted.bids), auction(expected.bids));
+      assert.deepEqual(outcomeAtPrice({ baseline: 4, slope: 3 }, typedPermitPrices(raw), 7, { pricing }),
+        outcomeAtPrice({ baseline: 4, slope: 3 }, expected.prices, 7, { pricing }));
+    }
+  }
+  assert.match(permitBidInputsHtml(4, []), /Enter prices in any order; they do not need to decline/);
 });
