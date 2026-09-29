@@ -98,6 +98,7 @@ export function macPanel(state) {
     return "<p>Your MAC curve appears when the instructor starts the game.</p>";
   }
   const dollars = (value) => `$${value.toFixed(2)}`;
+  const macEquation = `${model.slope * model.baseline} − ${model.slope === 1 ? "" : model.slope}<em>E</em>`;
   const position = model.emissions === null
     ? "Your emissions position will appear after the auction clears."
     : `${model.final ? "Final Round 2 emissions" : "Emissions if this round ended now"}: <strong>${model.emissions}</strong>.
@@ -106,8 +107,7 @@ export function macPanel(state) {
   const shockRound = phase === "complete" || phase.endsWith("2") ? "round2" : "round1";
   const shock = state.team?.shocks?.[shockRound];
   const shockLine = shock != null && Number(shock) !== 1
-    ? `<p class="shock-notice"><strong>Cost shock:</strong> your MAC slope is ×${shock} this round, so each unit of abatement
-      costs $${model.slope} × a instead of $${state.team.mac_slope} × a.</p>`
+    ? `<p class="shock-notice"><strong>Cost shock:</strong> your MAC slope is ×${shock} this round.</p>`
     : (shock != null ? `<p class="mac-note">Cost shock: your MAC slope is unchanged (×1) this round.</p>` : "");
   const carryRules = [
     state.session.banking_enabled ? "permits you do not use in Round 1 carry to Round 2" : "",
@@ -118,9 +118,8 @@ export function macPanel(state) {
       ${carryRules}. The curve shows current-round abatement costs; it does not include the future use of banked
       permits or the cost of repaying borrowed ones.</p>` : "";
   return `<h3>Your marginal abatement cost (MAC)</h3>
-    <p>Without abatement, your firm emits <strong>${model.baseline} units</strong>.
-      Abating the <em>a</em>th unit costs <strong>$${model.slope} × a</strong>, where
-      <em>a</em> = ${model.baseline} − <em>E</em>.</p>
+    <p><strong>MAC(<em>E</em>) = ${macEquation}</strong></p>
+    <p><em>E</em> is your emissions. MAC is measured in dollars per unit of abatement.</p>
     ${shockLine}
     <figure class="mac-figure">
       ${macChart(model)}
