@@ -477,7 +477,6 @@ export function auctionReportHtml(report, roundLabel, { open = true } = {}) {
         ${report.aggregate_mac?.length ? '<span><i class="report-key report-key-mac"></i>Aggregate MAC</span>' : ""}
         <span><i class="report-key report-key-own"></i>Your bids</span>
         <span><i class="report-key report-key-supply"></i>Supply: permits for sale</span>
-        <span><i class="report-key report-key-price"></i>${payAsBid ? "Lowest winning bid" : "Clearing price"}</span>
       </figcaption>
     </figure>
     <p class="mac-note">${howPriceWasSet}${example} When bids tie at the price and not all of them fit, the bids submitted

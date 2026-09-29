@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   FIRM_TYPES,
   abatementCost,
@@ -62,6 +63,7 @@ test("auction results compare aggregate smooth MAC with submitted demand", () =>
   assert.match(html, /class="report-aggregate-mac"/);
   assert.match(html, /class="report-demand"/);
   assert.match(html, /Aggregate MAC/);
+  assert.doesNotMatch(html, /report-key-price/);
   assert.doesNotMatch(html, /NaN|Infinity/);
   assert.doesNotMatch(JSON.stringify(report.aggregate_mac), /team_id|team_name/);
   assert.doesNotMatch(auctionReportHtml(studentAuctionReport(5, unitBids(exampleBids), "A"), "Round 2"), /report-aggregate-mac/);
@@ -268,6 +270,8 @@ test("when fewer permits are bid for than are for sale, every bid wins and the r
 });
 
 test("cleared auctions list the newest round first and open only that one", () => {
+  const studentSource = readFileSync(new URL("../../../static/games/permit-market-online/student.mjs", import.meta.url), "utf8");
+  assert.match(studentSource, /<div id="auction-outcome"><\/div>\s+\$\{clearedAuctionsHtml\(state\.auction_reports, \{ openNewest: false \}\)\}/);
   const bids = unitBids(exampleBids);
   const reports = { auction1: studentAuctionReport(5, bids, "A"), auction2: studentAuctionReport(4, bids, "A") };
   const html = clearedAuctionsHtml(reports);

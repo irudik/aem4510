@@ -474,7 +474,7 @@ function renderMarketScaffold(state) {
   stageContainer.innerHTML = `
     ${replay ? `<p class="shock-notice"><strong>Round 3: transaction costs.</strong> Start again with your Round 2 opening permits and the same post-shock MAC. Each permit traded costs the buyer an additional $${fee.toFixed(2)}. No new auction or shock.</p>` : shockBanner}
     <div id="auction-outcome"></div>
-    ${clearedAuctionsHtml(state.auction_reports)}
+    ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
     ${showPlan ? emissionsPlanHtml(state, expired) : ""}
   `;
