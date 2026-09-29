@@ -587,7 +587,12 @@ small.note {
 
 .mac-grid-line { stroke: #e5eaf2; }
 .mac-axis { stroke: #5d6d83; stroke-width: 1.2; }
-.mac-cost-area { fill: #dde8fa; }
+.mac-cost-area { fill: #dde8fa; stroke: #245ba0; stroke-width: 2; }
+.mac-next-area { fill: #dcf2e3; stroke: #23713d; stroke-width: 2.5; }
+.mac-savings-area { fill: #ffe3c2; stroke: #a34b00; stroke-width: 2.5; }
+.mac-total-label { color: #245ba0; }
+.mac-next-label { color: #23713d; }
+.mac-savings-label { color: #a34b00; }
 .mac-current-line { stroke: #b74364; stroke-width: 2; stroke-dasharray: 10 4; }
 .mac-key-current { border-top: 2px dashed #b74364; }
 ul.mac-position { padding-left: 1.3rem; }
@@ -614,7 +619,7 @@ ul.mac-position li { margin: 0.35rem 0; }
 .mac-key-curve { border-top: 3px solid #ca5670; }
 .mac-key-price { border-top: 2px dashed #3566a8; }
 .mac-key-position { border-top: 2px dotted #17212f; }
-.mac-key-cost { height: 0.75rem; background: #dde8fa; }
+.mac-key-cost { height: 0.75rem; background: #dde8fa; border: 1px solid #245ba0; }
 .mac-note { color: var(--muted); font-size: 0.9rem; max-width: 85ch; }
 .mac-position { margin: 0.75rem 0; }
 

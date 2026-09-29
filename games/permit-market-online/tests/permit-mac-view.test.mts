@@ -102,12 +102,24 @@ test("smooth chart and five bullets show point MAC and whole-unit cost changes",
   assert.match(html, /class="mac-curve" d="M 58 78 L 588 278"/);
   assert.match(html, /class="mac-current-line"[^>]*y1="198" y2="198"/);
   assert.match(html, /class="mac-cost-area"[^>]*d="M 376 278 L 376 198 L 588 278 Z"/);
-  assert.equal((html.match(/<li>/g) ?? []).length, 5);
+  assert.equal((html.match(/<li[ >]/g) ?? []).length, 5);
   assert.match(html, /Total abatement cost: <strong>\$8\.00<\/strong>/);
   assert.match(html, /Total abatement cost is the cost of all required abatement/);
   assert.match(html, /next unit of abatement: <strong>\$4\.50<\/strong>/);
   assert.match(html, /emitting one more unit: <strong>\$3\.50<\/strong>/);
   assert.doesNotMatch(html, /<p class="mac-position">|Each step/);
+});
+
+test("colored cost labels correspond to outlined one-unit areas on either side of emissions", () => {
+  const html = macPanel(stateFor(FIRM_TYPES[0], 5));
+  assert.match(html, /class="mac-total-label">Total abatement cost/);
+  assert.match(html, /class="mac-next-label">Cost of the next unit of abatement/);
+  assert.match(html, /class="mac-savings-label">Cost savings from emitting one more unit/);
+  assert.match(html, /class="mac-next-area"\s+d="M 270 278 L 270 158 L 323 178 L 323 278 Z"/);
+  assert.match(html, /class="mac-savings-area"\s+d="M 323 278 L 323 178 L 376 198 L 376 278 Z"/);
+  assert.doesNotMatch(macPanel(stateFor(FIRM_TYPES[0], 0)), /class="mac-next-area"/);
+  assert.doesNotMatch(macPanel(stateFor(FIRM_TYPES[0], 10)), /class="mac-savings-area"/);
+  assert.doesNotMatch(macPanel(stateFor(FIRM_TYPES[0])), /class="mac-next-area"|class="mac-savings-area"/);
 });
 
 test("whole-unit cost bullets respect emissions limits, cost shocks and emissions choices", () => {

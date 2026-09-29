@@ -68,6 +68,13 @@ export function macChart(model) {
   const shadedCost = emissions === null ? "" : `<path class="mac-cost-area"
     d="M ${x(emissions)} ${bottom} L ${x(emissions)} ${y(model.currentMac)} L ${x(baseline)} ${bottom} Z" />`;
   const curve = `M ${x(0)} ${y(slope * baseline)} L ${x(baseline)} ${y(0)}`;
+  // Integrating MAC over the adjacent unit gives its full cost or savings.
+  const unitArea = (from, to, className, label, amount) => `<path class="${className}"
+    d="M ${x(from)} ${bottom} L ${x(from)} ${y(slope * (baseline - from))} L ${x(to)} ${y(slope * (baseline - to))} L ${x(to)} ${bottom} Z"><title>${label}: $${amount.toFixed(2)}</title></path>`;
+  const nextAbatementArea = model.nextAbatementCost === null ? "" : unitArea(
+    emissions - 1, emissions, "mac-next-area", "Cost of the next unit of abatement", model.nextAbatementCost);
+  const savingsArea = model.moreEmissionsSavings === null ? "" : unitArea(
+    emissions, emissions + 1, "mac-savings-area", "Cost savings from emitting one more unit", model.moreEmissionsSavings);
   const currentMacLine = emissions === null ? "" : `<line class="mac-current-line" x1="${left}" x2="${right}"
     y1="${y(model.currentMac)}" y2="${y(model.currentMac)}"><title>Current MAC: $${model.currentMac.toFixed(2)}</title></line>`;
   const priceLine = price === null ? "" : `<line class="mac-price-line" x1="${left}" x2="${right}"
@@ -83,7 +90,7 @@ export function macChart(model) {
       Each additional unit of abatement costs ${slope} more than the preceding unit.
       ${positionDescription} ${price === null ? "No observed price is shown." : `${model.priceLabel} is ${price}.`}</desc>
     <text class="mac-axis-label" x="${left}" y="20">MAC / price ($ per unit)</text>
-    ${ticks}${shadedCost}
+    ${ticks}${shadedCost}${nextAbatementArea}${savingsArea}
     <path class="mac-curve" d="${curve}" />
     ${priceLine}${positionLine}${currentMacLine}
     <line class="mac-axis" x1="${left}" x2="${right}" y1="${bottom}" y2="${bottom}" />
@@ -105,9 +112,9 @@ export function macPanel(state) {
     ? "Your emissions position will appear after permits are allocated."
     : `<li>${model.final ? "Final Round 2 emissions" : "Emissions if this round ended now"}: <strong>${model.emissions}</strong></li>
       <li>Required abatement: <strong>${model.abatement}</strong></li>
-      <li>Total abatement cost: <strong>${dollars(model.cost)}</strong></li>
-      <li>Cost of the next unit of abatement: <strong>${model.nextAbatementCost === null ? "Not available (zero emissions)" : dollars(model.nextAbatementCost)}</strong></li>
-      <li>Cost savings from emitting one more unit: <strong>${model.moreEmissionsSavings === null ? "Not available (at baseline emissions)" : dollars(model.moreEmissionsSavings)}</strong></li>`;
+      <li class="mac-total-label">Total abatement cost: <strong>${dollars(model.cost)}</strong></li>
+      <li class="mac-next-label">Cost of the next unit of abatement: <strong>${model.nextAbatementCost === null ? "Not available (zero emissions)" : dollars(model.nextAbatementCost)}</strong></li>
+      <li class="mac-savings-label">Cost savings from emitting one more unit: <strong>${model.moreEmissionsSavings === null ? "Not available (at baseline emissions)" : dollars(model.moreEmissionsSavings)}</strong></li>`;
   const phase = String(state.session?.current_phase ?? "");
   const shockRound = phase === "complete" || phase.endsWith("2") ? "round2" : "round1";
   const shock = state.team?.shocks?.[shockRound];
