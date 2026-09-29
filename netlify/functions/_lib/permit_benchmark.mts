@@ -1,6 +1,6 @@
 import { benchmarkForRound, effectiveSlope, roundForPhase, shockRevealed } from "./permit_market.mts";
 
-/** Current-round cost-minimizing price, independent of the submitted orders. */
+/** Current-round cost-minimizing price and allocation, independent of orders. */
 export function currentCostEffectivePrice(session, teams) {
   const phase = String(session.current_phase);
   const round = phase === "complete" ? "round2" : roundForPhase(phase);
@@ -11,7 +11,13 @@ export function currentCostEffectivePrice(session, teams) {
   const benchmark = benchmarkForRound(teams, Number(cap), {
     slopeFor: team => afterShock ? effectiveSlope(team, round) : Number(team.mac_slope),
   });
-  return { round_key: round, cap: Number(cap), price: benchmark.benchmark_price,
+  const names = new Map(teams.map(team => [String(team.id), String(team.team_name ?? "")]));
+  const allocations = benchmark.per_team.map(row => ({
+    team_id: row.team_id,
+    team_name: names.get(row.team_id) ?? "",
+    permits: row.benchmark_permits,
+  }));
+  return { round_key: round, cap: Number(cap), price: benchmark.benchmark_price, allocations,
     after_shock: afterShock,
     across_rounds: Boolean(session.banking_enabled || session.borrowing_enabled) };
 }
