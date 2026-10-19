@@ -1,11 +1,13 @@
 ---
 title: Schedule, Lecture Notes, and Readings
-date: 2026-04-20
 menu:
   content:
     parent: 
     weight: 2
 type: docs
+output:
+  blogdown::html_page:
+    toc: false
 ---
 
 Each section is approximately 1-2 days of class. KO denotes readings from the Keohane and Olmstead book. Any readings without links can be obtained through the Cornell library website. <span style="color:#CF4446">**Required readings for students enrolled at the 5000 level are in *italics*.** </span>
@@ -111,16 +113,10 @@ Each section is approximately 1-2 days of class. KO denotes readings from the Ke
 
 ### Green instruments
 
-  - [Lecture notes](17-green-instruments)
   - Flammer, Caroline. "[Green bonds: effectiveness and implications for public policy.](https://www-journals-uchicago-edu.proxy.library.cornell.edu/doi/10.1086/706794)" Environmental and Energy Policy and the Economy 1, no. 1 (2020): 95-128.
   - *Baker, Malcolm, Daniel Bergstresser, George Serafeim, and Jeffrey Wurgler. "[Financing the response to climate change: The pricing and ownership of US green bonds.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3275327)" (2018).*
 
   
-<!-- ### Corporate Governance
-
-  - [Lecture notes](18-corporate-governance)
-  - XYZ
- -->
 
 <!-- ### Climate change science -->
 

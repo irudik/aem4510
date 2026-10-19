@@ -7,6 +7,7 @@ menu:
     parent: Schedule, Lecture Notes, and Readings
     weight: 17
 type: docs
+draft: true
 #bibliography: "../../static/bib/references.bib"
 #csl: "../../static/bib/chicago-syllabus-no-bib.csl"
 slides: "17-slides-green-instruments"

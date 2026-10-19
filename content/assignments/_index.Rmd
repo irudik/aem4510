@@ -1,61 +1,38 @@
 ---
 title: Assignments and Grading
-date: "`r format(Sys.time())`"
 menu:
   content:
-    parent: 
+    parent:
     weight: 1
 type: docs
+output:
+  blogdown::html_page:
+    toc: false
 ---
+
+See [Canvas](https://canvas.cornell.edu/) for assignments, deadlines, exam logistics, and announcements.
 
 ## Grading
 
-**4 Problem sets (20%):** 5% each 
+| Component | Share of course grade |
+|---|---:|
+| Four problem sets | 12% (3% each) |
+| Four prelims | 68% (17% each) |
+| Optional final exam | 20% |
 
-**4 Prelims (80%):** 20% each
+If you take all four in-class prelims, you may skip the final and receive your average prelim grade as your final exam grade. If you miss one prelim, its 17% weight transfers to the final, which becomes required and counts for 37% of the course grade.
 
-**Final course letter grades:** A (93%–100%), A- (90%–92%), B+ (87%–89%), B (83%–86%), B- (80%–82%), C+ (77%–79%), C (73%–76%), C- (70%–72%), D+ (67%–69%), D (63%–66%), D- (60%-62%), F (below 60%)
+**Final course letter grades:** A (93%–100%), A− (90%–92%), B+ (87%–89%), B (83%–86%), B− (80%–82%), C+ (77%–79%), C (73%–76%), C− (70%–72%), D+ (67%–69%), D (63%–66%), D− (60%–62%), F (below 60%).
 
-## Problem sets
+## Problem Sets
 
-You will have 4 problem sets, 1 due before each prelim. You may consult with me or the TAs during office hours. <span style="color:#CF4446">**Students taking the class at the 5000 level may have extra problems in some problem sets.**</span> 
- 
-**When are they due?** 
+There are four problem sets, one before each prelim. You may consult with me or the teaching assistants if you have questions or need guidance. See Canvas for deadlines.
 
-- Problem set due dates: Feb 10, Mar 12, Apr 9, Apr 30.
-- Problem sets are due on 11:59PM on the listed due date. You have unlimited submissions before the deadline.
-- <span style="color:#3C93DC">No</span> late problem sets will be accepted.
+- You have unlimited submissions before the deadline. No late problem sets will be accepted because the answer key is posted immediately after the deadline. Aim to submit early enough to handle any problems.
+- You may work in teams of up to three. Submit one problem set per team through Gradescope on Canvas, with all group members' names on it.
+- If you work on paper, scan and convert your work to a PDF using a tool such as [Adobe Scan](https://www.adobe.com/acrobat/mobile/scanner-app.html). Pictures will not be accepted and will receive a zero.
+- You are responsible for submitting the correct file. Unreadable or corrupted files will not be accepted. Your final submission before the deadline is what will be graded.
 
-**Who can I work with?**
+## Grade Appeals
 
-- You may work in teams of up to 3 on problem sets.
-
-**How do I submit them?** 
- 
-- On Canvas, submit one problem set per team with all group members names on it.
-- If you are doing the problem set on pen and paper you **must** scan and convert it into a pdf using something like [Adobe Scan](https://www.adobe.com/acrobat/mobile/scanner-app.html). Pictures will not be accepted and will receive a zero.
-- It is your responsibility to submit the correct file. Unreadable or corrupted files will not be accepted. Your final submission prior to the deadline is what will be graded.
-
-
-## Prelims 
-
-**When are the prelims?**
-
-- Prelim dates: Feb 12, Mar 17, Apr 14, May 5.
-- The prelims are in class during our regular class time.
-
-**What do the prelims cover?**
-
-- All material prior to the prelim date. They will focus on new content since the previous prelim, but you are still responsible for knowing all prior course material since the materials builds on itself throughout the semester.
-- The prelims will have questions based on the slides and readings assigned.
-
-**What can I bring to the prelim?**
-
-- Pen or pencil.
-- No electronics, calculators, or notes.
-
-**How do I review for the prelims?**
-
-- The problem sets serve as the main way to review for the prelims. Answer keys will be posted the day after each problem set is due.
-- An extra set of review questions will be posted on Canvas the class before each prelim.
-- If time permits, we may review some questions in class the day before the prelim.
+Submit appeals through Gradescope within the 24-hour appeal window. I reserve the right to regrade the entire assignment, and the new grade, higher or lower, will be final.

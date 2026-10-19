@@ -35,30 +35,11 @@ This page provides the general course syllabus. See [Canvas](https://canvas.corn
 - Other readings are papers linked on the [course topics and lecture slides page](/lecture-notes/), or freely available through the [Cornell library](https://www.library.cornell.edu/) or [Google Scholar](https://scholar.google.com/).
 - [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/) by Cunningham is free and useful for background on the econometric techniques used in readings in the second half of the course, or for students interested in environmental economics research.
 
-## Grading
-
-| Component | Share of course grade |
-|---|---:|
-| Four problem sets | 12% (3% each) |
-| Four prelims | 68% (17% each) |
-| Optional final exam | 20% |
-
-**Final course letter grades:** A (93%–100%), A− (90%–92%), B+ (87%–89%), B (83%–86%), B− (80%–82%), C+ (77%–79%), C (73%–76%), C− (70%–72%), D+ (67%–69%), D (63%–66%), D− (60%–62%), F (below 60%).
-
-## Problem Sets
-
-There are four problem sets, one before each prelim. You may consult with me or the teaching assistants if you have questions or need guidance. See Canvas for deadlines.
-
-- You have unlimited submissions before the deadline. No late problem sets will be accepted because the answer key is posted immediately after the deadline. Aim to submit early enough to handle any problems.
-- You may work in teams of up to three. Submit one problem set per team through Gradescope on Canvas, with all group members' names on it.
-- If you work on paper, scan and convert your work to a PDF using a tool such as [Adobe Scan](https://www.adobe.com/acrobat/mobile/scanner-app.html). Pictures will not be accepted and will receive a zero.
-- You are responsible for submitting the correct file. Unreadable or corrupted files will not be accepted. Your final submission before the deadline is what will be graded.
+See [Assignments and Grading](/assignments/) for assessment weights, submission instructions, and grading policies.
 
 ## Other Policies
 
 **Attendance:** Class attendance is not explicitly required but is highly recommended.
-
-**Grade appeals:** Submit appeals through Gradescope within the 24-hour appeal window. I reserve the right to regrade the entire assignment, and the new grade, higher or lower, will be final.
 
 **Integrity of credit:** I expect every student to abide by the [Cornell University Code of Academic Integrity](https://cuinfo.cornell.edu/aic.cfm). I strongly encourage collaboration, but each student is responsible for following the rules in this syllabus and the Code of Academic Integrity. Any student found to have violated the stated policies on an assignment will receive a zero on that assignment. Violations may result in failure of the course.
 
