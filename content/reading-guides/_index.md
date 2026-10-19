@@ -2,6 +2,13 @@
 title: "Reading Guides"
 date: 2026-04-19
 draft: false
+type: docs
+menu:
+  content:
+    weight: 3
+cascade:
+  type: docs
+  menu_name: content
 summary: "Short reading guides for the backbone papers from Lecture 11 onward."
 ---
 
