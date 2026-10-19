@@ -17,6 +17,7 @@ import {
   biddablePermits,
   bidsFromPermitPrices,
   clearedAuctionsHtml,
+  currentRoundAuctionReports,
   outcomeAtPrice,
   permitBidInputsHtml,
   permitPricesFromBids,
@@ -273,7 +274,11 @@ test("when fewer permits are bid for than are for sale, every bid wins and the r
 
 test("cleared auctions list the newest round first and open only that one", () => {
   const studentSource = readFileSync(new URL("../../../static/games/permit-market-online/student.mjs", import.meta.url), "utf8");
-  assert.match(studentSource, /<div id="auction-outcome"><\/div>\s+\$\{clearedAuctionsHtml\(state\.auction_reports, \{ openNewest: false \}\)\}/);
+  assert.match(studentSource, /clearedAuctionsHtml\(currentRoundAuctionReports\(state\.auction_reports, state\.session\.current_phase\), \{ openNewest: false \}\)/);
+  const rounds = { auction1: { cap: 12 }, auction2: { cap: 6 } };
+  for (const phase of ["auction1", "market1"]) assert.deepEqual(currentRoundAuctionReports(rounds, phase), { auction1: rounds.auction1 });
+  for (const phase of ["auction2", "market2"]) assert.deepEqual(currentRoundAuctionReports(rounds, phase), { auction2: rounds.auction2 });
+  for (const phase of ["setup", "market3", "complete"]) assert.deepEqual(currentRoundAuctionReports(rounds, phase), {});
   const bids = unitBids(exampleBids);
   const reports = { auction1: studentAuctionReport(5, bids, "A"), auction2: studentAuctionReport(4, bids, "A") };
   const html = clearedAuctionsHtml(reports);

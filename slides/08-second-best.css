@@ -1,0 +1,42 @@
+/* Each welfare step uses the same graph position and its own highlight. */
+.perfect-comp-walkthrough .pull-left {
+  width: 52%;
+}
+
+.perfect-comp-walkthrough .pull-right {
+  width: 44%;
+}
+
+.perfect-comp-walkthrough .pull-right p {
+  margin: 0 0 0.7em;
+}
+
+.perfect-comp-walkthrough .pull-left img {
+  display: block;
+  width: 100%;
+  max-height: 430px;
+  object-fit: contain;
+}
+
+.perfect-comp-walkthrough .pc-loss { color: #ca5670; font-weight: 600; }
+.perfect-comp-walkthrough .pc-damages { color: #2B8C7F; font-weight: 600; }
+.perfect-comp-walkthrough .pc-revenue { color: #D99000; font-weight: 600; }
+.perfect-comp-walkthrough .pc-gain { color: #638ccc; font-weight: 600; }
+
+/* Reserve two text lines so the market diagrams stay fixed at each pause. */
+.intensity-market-walkthrough .market-caption {
+  min-height: 3em;
+}
+
+.intensity-market-walkthrough .market-caption p,
+.intensity-market-walkthrough .market-figure p {
+  margin: 0;
+}
+
+.intensity-market-walkthrough .market-figure img {
+  display: block;
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  margin: 0 auto;
+}

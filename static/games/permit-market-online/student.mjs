@@ -14,6 +14,7 @@ import {
   biddablePermits,
   bidsFromPermitPrices,
   clearedAuctionsHtml,
+  currentRoundAuctionReports,
   freeAllocationHtml,
   outcomeAtPrice,
   outcomeSummaryHtml,
@@ -291,7 +292,7 @@ function renderAuctionStage(state) {
       <h3>Permit allocation closed</h3>
       <p>You received ${formatNumber(state.own_allocation?.permits_won ?? 0, 0)} permits
       and paid $${formatNumber(state.own_allocation?.payment ?? 0, 2)}.</p>
-      ${clearedAuctionsHtml(state.auction_reports)}
+      ${clearedAuctionsHtml(currentRoundAuctionReports(state.auction_reports, state.session.current_phase))}
       <p class="note">Waiting for the instructor to open the market. You cannot submit more bids.</p>`;
     return;
   }
@@ -312,7 +313,7 @@ function renderAuctionStage(state) {
       ${firm.owedIn > 0 ? `<p class="mac-note">You also owe ${firm.owedIn} permit(s) from borrowing in Round 1; your free permits cover them first.</p>` : ""}
       ${firm.bankedIn > 0 ? `<p class="mac-note">You also carry ${firm.bankedIn} banked permit(s) from Round 1.</p>` : ""}
       ${shockComing ? shockNoticeHtml({ parallel: Number(state.team.mac_intercept ?? 0) > 0 }) : ""}
-      ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
+      ${clearedAuctionsHtml(currentRoundAuctionReports(state.auction_reports, state.session.current_phase), { openNewest: false })}
       <p><small class="note">Waiting for the instructor to open the market.</small></p>`;
     return;
   }
@@ -335,7 +336,7 @@ function renderAuctionStage(state) {
     <p class="called-price-callout">${cap} permits for sale</p>
     ${auctionRulesHtml(cap, { pricing })}
     ${shockComing ? shockNoticeHtml({ parallel: Number(state.team.mac_intercept ?? 0) > 0 }) : ""}
-    ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
+    ${clearedAuctionsHtml(currentRoundAuctionReports(state.auction_reports, state.session.current_phase), { openNewest: false })}
     <h3>Your bids</h3>
     ${permitBidInputsHtml(firm.baseline, savedPrices, {
       disabled: expired,
@@ -474,7 +475,7 @@ function renderMarketScaffold(state) {
   stageContainer.innerHTML = `
     ${replay ? `<p class="shock-notice"><strong>Round 3: transaction costs.</strong> Start again with your Round 2 opening permits and the same post-shock MAC. Each permit traded costs the buyer an additional $${fee.toFixed(2)}. No new auction or shock.</p>` : shockBanner}
     <div id="auction-outcome"></div>
-    ${clearedAuctionsHtml(state.auction_reports, { openNewest: false })}
+    ${clearedAuctionsHtml(currentRoundAuctionReports(state.auction_reports, state.session.current_phase), { openNewest: false })}
     <div id="position-tiles" class="position-kv" style="margin: 0.6rem 0"></div>
     ${showPlan ? emissionsPlanHtml(state, expired) : ""}
   `;
@@ -711,7 +712,7 @@ function renderStage(state, options = {}) {
             Did the class exhaust those gains from trade, or did time run out first?</p>
           ${state.session.banking_enabled ? "<p>For Round 1, also consider the future use of any surplus permits you banked.</p>" : ""}
         </div>
-        ${clearedAuctionsHtml(state.auction_reports)}`;
+        ${clearedAuctionsHtml(currentRoundAuctionReports(state.auction_reports, state.session.current_phase))}`;
     }
   }
 
@@ -733,7 +734,13 @@ function renderMacDistributions(state) {
 
 function renderResults(state) {
   const scores = state?.own_scores ?? [];
-  if (scores.length === 0) {
+  const auctionHistory = clearedAuctionsHtml(state.auction_reports, { openNewest: false });
+  const historyElement = document.getElementById("results-auctions");
+  if (historyElement.dataset.signature !== auctionHistory) {
+    historyElement.innerHTML = auctionHistory;
+    historyElement.dataset.signature = auctionHistory;
+  }
+  if (scores.length === 0 && !auctionHistory && !(state.mac_distributions ?? []).length) {
     resultsCard.classList.add("hidden");
     resultsCostEffectiveness.innerHTML = "";
     resultsTable.innerHTML = "";

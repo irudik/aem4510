@@ -5,7 +5,7 @@ author: Ivan Rudik
 date: AEM 4510
 output:
   xaringan::moon_reader:
-    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css', '08-second-best.css']
     # self_contained: true
     nature:
       highlightStyle: github
@@ -20,9 +20,11 @@ exclude: true
 ```{r setup}
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
-  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, tweetrmd, vembedr
+  tidyverse, xaringanExtra, rlang, patchwork, nycflights13, vembedr
 )
 source("R/08-second-best-intensity-figures.R")
+source("R/08-second-best-diagram.R")
+source("R/08-perfect-competition-figures.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -30,7 +32,10 @@ knitr::opts_hooks$set(fig.callout = function(options) {
   }
 knitr::opts_chunk$set(
   cache = TRUE,
-  cache.extra = list(tools::md5sum("R/08-second-best-intensity-figures.R")),
+  cache.extra = list(tools::md5sum(c(
+    "R/08-second-best-intensity-figures.R", "R/08-second-best-diagram.R",
+    "R/08-perfect-competition-figures.R"
+  ))),
   echo = TRUE,
   fig.align = "center"
 )
@@ -80,139 +85,113 @@ In both cases we will assume that:
 
 ---
 
+class: perfect-comp-walkthrough
+
 # Perfect competition
 
-
 .pull-left[
-
-```{r perf-comp, echo = FALSE, fig.show = 'hide', warning = F}
-mc1 <- function(x) 1
-mc2 <- function(x) 1.5
-d <- function(x) 2.5 - x
-
-ggplot() +
-  annotate("text", x = .5, y = 2.5, label = "Demand", size = 8) +
-  annotate("text", x = 2.5, y = 1.6, label = "SMC", size = 8) +
-  annotate("text", x = 2.5, y = 1.1, label = "MC", size = 8) +
-  stat_function(fun = mc2, color = "#000000", size = 1.5) +
-  stat_function(fun = mc1, color = "#ca5670", size = 1.5) +
-  stat_function(fun = d, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1.5,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1, xend = 1, y = 0, yend = 1.5,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("text", x = 0.5, y = 1.25, label = "A", size = 8, color = "black") +
-  annotate("text", x = 1.15, y = 1.15, label = "B", size = 8, color = "black") +
-  annotate("text", x = 1.35, y = 1.35, label = "C", size = 8, color = "black") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff",colour = NA),
-    plot.background = element_rect(fill = "#ffffff",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Emissions / Output",
-       y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1,1.5), labels = c(expression(q^'*'), expression(q[0]))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
-
+```{r perf-comp-area-01, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%"}
+sb_competition_plot(1)
 ```
-
-![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
 ]
 
 .pull-right[
 
-The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+A tax of $SMC - MC$ moves output from $q_0$ to $q^*$
+
+Track the welfare effects using areas A, B, and C
 
 ]
-
 
 ---
 
+class: perfect-comp-walkthrough
+
 # Perfect competition
 
-
 .pull-left[
-![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+```{r perf-comp-area-02, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%"}
+sb_competition_plot(2)
+```
 ]
 
 .pull-right[
 
-The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+A tax of $SMC - MC$ moves output from $q_0$ to $q^*$
 
-Loss in CS: -(A+B)
+.pc-loss[Loss in CS:] $-(A+B)$
 
 ]
-
 
 ---
 
+class: perfect-comp-walkthrough
+
 # Perfect competition
 
-
 .pull-left[
-![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+```{r perf-comp-area-03, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%"}
+sb_competition_plot(3)
+```
 ]
 
 .pull-right[
 
-The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+A tax of $SMC - MC$ moves output from $q_0$ to $q^*$
 
-Loss in CS: -(A+B)
+Loss in CS: $-(A+B)$
 
-Avoided damages: B+C
+.pc-damages[Avoided damages:] $B+C$
 
 ]
-
 
 ---
 
+class: perfect-comp-walkthrough
+
 # Perfect competition
 
-
 .pull-left[
-![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+```{r perf-comp-area-04, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%"}
+sb_competition_plot(4)
+```
 ]
 
 .pull-right[
 
-The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+A tax of $SMC - MC$ moves output from $q_0$ to $q^*$
 
-Loss in CS: -(A+B)
+Loss in CS: $-(A+B)$
 
-Avoided damages: B+C
+Avoided damages: $B+C$
 
-Tax revenue: A
+.pc-revenue[Tax revenue:] $A$
 
 ]
-
 
 ---
 
+class: perfect-comp-walkthrough
+
 # Perfect competition
 
-
 .pull-left[
-![perfect competition](`r knitr::fig_chunk("perf-comp", "png")`)
+```{r perf-comp-area-05, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%"}
+sb_competition_plot(5)
+```
 ]
 
 .pull-right[
 
-The effect of moving from $q_0 \rightarrow q^*$ using a tax equal to marginal damage (SMC - MC):
+A tax of $SMC - MC$ moves output from $q_0$ to $q^*$
 
-Loss in CS: -(A+B)
+Loss in CS: $-(A+B)$
 
-Avoided damages: B+C
+Avoided damages: $B+C$
 
-Tax revenue: A
+Tax revenue: $A$
 
-.hi-blue[Net gain: -(A+B) + (B+C) + A = C]
+.pc-gain[Net gain:] $-(A+B)+(B+C)+A=C$
 
 ]
 
@@ -988,18 +967,17 @@ Welfare gain from this correction is the reduction in overproduction between $q^
 
 # Monopoly: more generally
 
-So this was a .hi[special case]: we assumed the marginal damage from production was constant
+This was a .hi[special case]: marginal damage from output was constant
 
 --
 
-If we generalize this so that the emission and output decisions are separate, we still have the two opposing market failures<sup>1</sup>
-.footnote[
-<sup>1</sup> The key thing here is that emissions are no longer a single function of output like $E = f(q)$. This means we can no longer write MD as a function of output $q$.
-]
+When emissions and output are separate choices, both market failures remain
+
+We can no longer write $E = f(q)$ or marginal damage as a function of output alone
 
 --
 
-What changes is we can no longer fix them both with just a pollution tax/subsidy
+A pollution tax/subsidy alone cannot correct both market failures
 
 ---
 
@@ -1133,10 +1111,10 @@ Now let's break the link between output and emissions by writing down a slightly
 
 Here's our model:
 
-- General production function using labor and emissions as inputs: $Q = f(L,E)$
-- The firm pays wages $w$ to labor and rental rate $r$ for the emissions-generating input $E$
+- Production uses labor $L$ and energy $E$: $Q = f(L,E)$
+- Labor costs $w$ per unit and energy costs $r$ per unit
 - The firm receives a price $p$ per unit of output
-- Emissions cause marginal damage $d$
+- 1 unit of energy causes 1 unit of emissions, with marginal damage $d$ per unit of emissions
 
 --
 
@@ -1257,23 +1235,22 @@ knitr::include_graphics("files/07-rps.png")
 
 # Intensity standards: the constraint
 
-Suppose we have a high-emissions product $H$ and a lower-emissions product $L$
+Let $H$ be the dirtier product and $L$ the cleaner product
 
 --
 
-An intensity standard can be written as:
+An intensity standard requires:
 $$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} \leq \sigma$$
 
 --
 
-Here:
-- $\beta_H$ and $\beta_L$ are emissions coefficients: each unit of $H$ emits $\beta_H$ units and each unit of $L$ emits $\beta_L$ units
-- $\sigma$ is the policy target: the maximum average emissions rate per unit of total output
-- Usually $\beta_H > \sigma > \beta_L$, so $H$ is dirtier than the standard while $L$ is cleaner than the standard
+- $\beta_i$: emissions per unit of product $i$
+- $\sigma$: maximum average emissions per unit of output
+- Assume $\beta_H > \sigma > \beta_L$: $H$ is above the standard, $L$ below
 
 --
 
-The policy limits average emissions per unit of output, not total emissions directly
+The standard limits average emissions; total emissions can still rise
 
 ---
 
@@ -1331,13 +1308,11 @@ $$\lambda(\beta_i-\sigma) = \underbrace{\lambda\beta_i}_{\text{emissions tax pie
 
 --
 
-So an intensity standard is equivalent to:
-- a tax on emissions intensity
-- plus an output subsidy applied to all output
+An .hi-red[emissions tax] of $\lambda$ per unit of emissions costs $\lambda\beta_i$ per unit of output, so dirtier goods pay more
 
 --
 
-This is exactly why it can perform like a second-best policy
+An .hi-blue[output subsidy] of $\lambda\sigma$ per unit is the same for every good, regardless of $\beta_i$
 
 ---
 
@@ -1361,94 +1336,218 @@ That is the core problem: we generally do .hi-red[not] want to subsidize positiv
 
 ---
 
+class: intensity-market-walkthrough
+
 # Intensity standards: baseline DWL
 
-.pull-left[
-<div style="margin-top:-28px;">
-```{r intensity-markets-baseline-dwl, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
-sb_plot_intensity_market_pair(show_policy = FALSE, dwl_mode = "baseline", ncol = 1)
-```
-</div>
+.market-caption[
+Firms take prices as given and choose output where $p_i = MC_i$
 ]
 
-.pull-right[
-Start from the unregulated allocation $(q_H^0, q_L^0)$:
-- Each market overproduces relative to $q_X^*$ because firms ignore $\beta_X MD$
-- The red triangle is baseline DWL from moving from $q_X^*$ to $q_X^0$
-- At this stage there is .hi[no] implicit tax or subsidy layered onto the market graph yet
+.market-figure[
+```{r intensity-market-step-01, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(1)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: baseline DWL
+
+.market-caption[
+Social marginal cost adds emissions damages: $SMC_i = MC_i + \beta_i MD$
+]
+
+.market-figure[
+```{r intensity-market-step-02, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(2)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: baseline DWL
+
+.market-caption[
+Efficient output is where $p_i = SMC_i$; both markets overproduce
+]
+
+.market-figure[
+```{r intensity-market-step-03, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(3)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: baseline DWL
+
+.market-caption[
+In $H$, the red triangle is DWL from output above $q_H^*$
+]
+
+.market-figure[
+```{r intensity-market-step-04, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(4)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: baseline DWL
+
+.market-caption[
+The cleaner good also pollutes, so $L$ has a baseline DWL too
+]
+
+.market-figure[
+```{r intensity-market-step-05, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(5)
+```
 ]
 
 ---
 
-# Intensity standards: separate output markets
+class: intensity-market-walkthrough
 
-.pull-left[
-<div style="margin-top:-28px;">
-```{r intensity-markets, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
-sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "none", ncol = 1)
-```
-</div>
+# Intensity standards: the implicit tax
+
+.market-caption[
+For $H$, the implicit tax shifts the firm's marginal cost up
 ]
 
-.pull-right[
-Market-by-market intuition:
-- In market $X \in \{H,L\}$, PMB is the flat price line $p_X$ and PMC is the upward-sloping cost curve $MC_X$
-- Social marginal cost is $SMC_X = MC_X + \beta_X MD$
-- The intensity standard shifts PMC .hi-red[up] for $H$ and .hi-blue[down] for $L$
+.market-figure[
+```{r intensity-market-step-06, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(6)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: the implicit tax
+
+.market-caption[
+Output falls from $q_H^0$ to $q_H^{IS}$, toward $q_H^*$
+]
+
+.market-figure[
+```{r intensity-market-step-07, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(7)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: the implicit subsidy
+
+.market-caption[
+For $L$, the implicit subsidy shifts the firm's marginal cost down
+]
+
+.market-figure[
+```{r intensity-market-step-08, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(8)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: the implicit subsidy
+
+.market-caption[
+Output rises from $q_L^0$ to $q_L^{IS}$, farther from $q_L^*$
+]
+
+.market-figure[
+```{r intensity-market-step-09, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(9)
+```
 ]
 
 ---
 
-# Intensity standards: DWL changes by market
+class: intensity-market-walkthrough
 
-.pull-left[
-<div style="margin-top:-28px;">
-```{r intensity-markets-dwl, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
-sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "baseline", ncol = 1)
-```
-</div>
+# Intensity standards: baseline DWL
+
+.market-caption[
+The red triangles show the DWL before the standard
 ]
 
-.pull-right[
-Relative to no policy:
-- The red triangle is baseline DWL under no policy
+.market-figure[
+```{r intensity-market-step-10, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(10)
+```
 ]
 
 ---
 
-# Intensity standards: DWL changes by market
+class: intensity-market-walkthrough
 
-.pull-left[
-<div style="margin-top:-28px;">
-```{r intensity-markets-dwl-2, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
-sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "change", ncol = 1)
-```
-</div>
+# Intensity standards: DWL after the standard
+
+.market-caption[
+In $H$, the smaller blue triangle shows the remaining DWL after the implicit tax
 ]
 
-.pull-right[
-Relative to no policy:
-- The red triangle is baseline DWL under no policy
-- The blue triangle shows the DWL after the implicit tax/subsidy wedges are layered onto the markets
-- Both goods still pollute, so the subsidy on $L$ keeps the policy from reaching the socially optimal allocation
+.market-figure[
+```{r intensity-market-step-11, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(11)
+```
+]
+
+---
+count: false
+
+class: intensity-market-walkthrough
+
+# Intensity standards: DWL after the standard
+
+.market-caption[
+In $L$, the larger blue triangle shows DWL rising with the implicit subsidy
+]
+
+.market-figure[
+```{r intensity-market-step-12, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(12)
+```
 ]
 
 ---
 
-# Intensity standards: DWL changes by market
+class: intensity-market-walkthrough
 
-.pull-left[
-<div style="margin-top:-28px;">
-```{r intensity-markets-dwl-3, out.width = "80%", fig.width = 5.8, fig.height = 8.4, dpi = 180, echo = FALSE, fig.align = "center"}
-sb_plot_intensity_market_pair(show_policy = TRUE, dwl_mode = "change", ncol = 1)
-```
-</div>
+# Intensity standards: why DWL changes
+
+.market-caption[
+Since DWL increases for $L$, we can't achieve the efficient outcome
 ]
 
-.pull-right[
-Relative to no policy:
-- The implicit tax on $H$ shifts $MC_H$ up and moves output toward $q_H^*$, so DWL falls in the $H$ market
-- The implicit subsidy on $L$ shifts $MC_L$ down and moves output away from $q_L^*$, so DWL rises in the $L$ market
+.market-figure[
+```{r intensity-market-step-13, out.width = "100%", fig.width = 12, fig.height = 4.6, dpi = 180, echo = FALSE, fig.path = "files/08-"}
+sb_intensity_market_step(13)
+```
 ]
 
 ---
@@ -1488,117 +1587,489 @@ So total emissions can rise if the scale effect dominates the composition effect
 
 ---
 
-# Intensity standards: perverse incentives
-
-.pull-left[
-
-.hi[How to read this figure:]
-
-1. The dashed ovals are iso-profit curves: each oval is a set of $(Q_H,Q_L)$ choices with the same private profit
-2. The intensity-standard line is the policy constraint:
-   $$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$
-
-]
-
-.pull-right[
-<center>
-```{r, out.width = "95%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/07-int-standard2.png")
-```
-</center>
-]
-
----
+class: intensity-walkthrough
 
 # Intensity standards: perverse incentives
 
 .pull-left[
 
-.hi[How to read this figure:]
+Horizontal axis: dirty output $Q_H$
 
-1. Point A is the unregulated profit-maximizing choice
-2. The line through A labeled $K$ shows choices with the same total emissions as A
-3. Points up and to the right of $K$ imply higher total emissions
+Vertical axis: cleaner output $Q_L$
+
+Both outputs pollute: $0 < \beta_L < \beta_H$
 
 ]
 
 .pull-right[
-<center>
-```{r, out.width = "95%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/07-int-standard2.png")
+```{r intensity-diagram-01, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(1)
 ```
-</center>
 ]
 
 ---
+count: false
+
+class: intensity-walkthrough
 
 # Intensity standards: perverse incentives
 
 .pull-left[
 
-.hi[What the standard does:]
+.hi[Iso-profit curves] are the firm's indifference curves: equal profit along each oval
 
-1. The intensity standard forces choices onto the intensity line
-2. The firm moves from A to C, where the highest attainable iso-profit oval touches that line
+At given prices, rising MC eventually exceeds price, so producing more is not always better
+
+This makes the curves ovals, with higher profit toward the center
 
 ]
 
 .pull-right[
-<center>
-```{r, out.width = "95%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/07-int-standard2.png")
+```{r intensity-diagram-02, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(2)
 ```
-</center>
 ]
 
 ---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+A is the .hi[unregulated profit-maximizing choice]
+
+It maximizes profit, ignoring emissions damages
+
+Moving away from A lowers profit
+
+]
+
+.pull-right[
+```{r intensity-diagram-03, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(3)
+```
+]
+
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+The red line holds .hi[total emissions] fixed at A's level
+$$\beta_H Q_H + \beta_L Q_L = K$$
+
+Its slope is $-\beta_H/\beta_L$
+
+]
+
+.pull-right[
+```{r intensity-diagram-04, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(4)
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+Above the red line: .hi-red[more emissions than A]
+
+Below the line: fewer emissions
+
+The shaded region has $E > K$
+
+]
+
+.pull-right[
+```{r intensity-diagram-05, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(5)
+```
+]
+
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+The blue line is the .hi[binding standard]
+$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$
+
+On the line, emissions intensity equals $\sigma$
+
+]
+
+.pull-right[
+```{r intensity-diagram-06, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(6, show_feasible = FALSE)
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+The blue line is the .hi[binding standard]
+$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$
+
+A violates the standard; feasible choices lie on or above the blue line
+
+]
+
+.pull-right[
+```{r intensity-diagram-06-feasible, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(6)
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: perverse incentives
+
+.pull-left[
+
+C is the .hi[regulated profit-maximizing choice]
+
+The highest attainable iso-profit curve is tangent to the standard at C
+
+C lies above the red line: emissions increase
+
+]
+
+.pull-right[
+```{r intensity-diagram-07, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(7)
+```
+]
+
+---
+
+class: intensity-walkthrough
 
 # Intensity standards: intuition
 
 .pull-left[
 
-.hi[What the standard does:]
+Dirty output falls: $Q_H^{IS} < Q_H^0$
 
-1. Relative to A, the firm cuts dirty output $H$, but expands cleaner output $L$
-2. Emissions intensity falls by construction, but total output can still rise
+Cleaner output rises: $Q_L^{IS} > Q_L^0$
 
 ]
 
 .pull-right[
-<center>
-```{r, out.width = "95%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/07-int-standard2.png")
+```{r intensity-diagram-08, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(8)
 ```
-</center>
 ]
 
 ---
+count: false
+
+class: intensity-walkthrough
 
 # Intensity standards: intuition
 
 .pull-left[
 
-Two forces are operating at once:
+Tall ovals mean expanding cleaner output reduces profit less than an equal cut in dirty output
 
-1. .hi[Composition effect:] shifts production toward lower-emissions output
-2. .hi[Scale effect:] implicit output subsidy encourages more production
-
-If the scale effect dominates, total emissions can rise even as emissions per unit fall
-
-.hi[Takeaway:] intensity standards are useful second-best tools, but they can misfire relative to direct emissions pricing
+Here, .hi[total output rises] while emissions intensity falls
 
 ]
 
 .pull-right[
-<center>
-```{r, out.width = "95%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/07-int-standard2.png")
+```{r intensity-diagram-09, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(9)
 ```
-</center>
 ]
 
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: intuition
+
+.pull-left[
+
+At C, the purple emissions line lies above A's red line
+
+Extra emissions from $L$ exceed the savings from $H$
+
+.hi-red[Total emissions rise even though intensity falls]
+
+]
+
+.pull-right[
+```{r intensity-diagram-10, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(10)
+```
+]
 
 ---
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+Horizontal axis: dirty output $Q_H$
+
+Vertical axis: cleaner output $Q_L$
+
+Keep the same emissions rates and standard
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-01, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(1, emissions_case = "fall")
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+These fatter .hi[iso-profit curves] are the firm's indifference curves: equal profit along each oval
+
+At given prices, rising MC eventually exceeds price, so producing more is not always better
+
+This makes the curves ovals, with higher profit toward the center
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-02, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(2, emissions_case = "fall")
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+A is the .hi[unregulated profit-maximizing choice]
+
+It maximizes profit, ignoring emissions damages
+
+Moving away from A lowers profit
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-03, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(3, emissions_case = "fall")
+```
+]
+
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+The red line holds .hi[total emissions] fixed at A's level
+$$\beta_H Q_H + \beta_L Q_L = K$$
+
+Its slope is $-\beta_H/\beta_L$
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-04, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(4, emissions_case = "fall")
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+Above the red line: .hi-red[more emissions than A]
+
+Below the line: fewer emissions
+
+The shaded region has $E > K$
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-05, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(5, emissions_case = "fall")
+```
+]
+
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+The blue line is the .hi[binding standard]
+$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$
+
+On the line, emissions intensity equals $\sigma$
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-06, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(6, show_feasible = FALSE, emissions_case = "fall")
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+The blue line is the .hi[binding standard]
+$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$
+
+A violates the standard; feasible choices lie on or above the blue line
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-06-feasible, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(6, emissions_case = "fall")
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions can fall
+
+.pull-left[
+
+C is the .hi[regulated profit-maximizing choice]
+
+The highest attainable iso-profit curve is tangent to the standard at C
+
+C lies below the red line: emissions decrease
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-07, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(7, emissions_case = "fall")
+```
+]
+
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions fall
+
+.pull-left[
+
+Dirty output falls: $Q_H^{IS} < Q_H^0$
+
+Cleaner output rises: $Q_L^{IS} > Q_L^0$
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-08, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(8, emissions_case = "fall")
+```
+]
+
+---
+count: false
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions fall
+
+.pull-left[
+
+Fatter ovals make cutting dirty output less costly relative to expanding cleaner output
+
+Here, the .hi[shift toward cleaner output] dominates the increase in total output
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-09, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(9, emissions_case = "fall")
+```
+]
+
+---
+
+class: intensity-walkthrough
+
+# Intensity standards: emissions fall
+
+.pull-left[
+
+At C, the purple emissions line lies below A's red line
+
+Emissions saved from $H$ exceed the extra emissions from $L$
+
+.hi[Total emissions fall along with emissions intensity]
+
+]
+
+.pull-right[
+```{r intensity-fall-diagram-10, echo = FALSE, fig.width = 6.3, fig.height = 5.2, dpi = 180, fig.path = "files/08-", out.width = "100%", warning = FALSE}
+sb_intensity_diagram(10, emissions_case = "fall")
+```
+]
+
+---
+exclude: true
+
 <!-- --- -->
 
 <!-- # Intensity standards -->

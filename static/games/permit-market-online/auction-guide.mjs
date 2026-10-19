@@ -497,6 +497,13 @@ export function auctionReportHtml(report, roundLabel, { open = true } = {}) {
  * when `openNewest` is set; earlier rounds start collapsed.
  * @param {{auction1?: object | null, auction2?: object | null}} reports
  */
+/** Keep prior auctions out of the current round's activity area. */
+export function currentRoundAuctionReports(reports, phase) {
+  const key = ["auction1", "market1"].includes(phase) ? "auction1"
+    : ["auction2", "market2"].includes(phase) ? "auction2" : null;
+  return key && reports?.[key] ? { [key]: reports[key] } : {};
+}
+
 export function clearedAuctionsHtml(reports, { openNewest = true } = {}) {
   const rounds = [["auction2", "Round 2"], ["auction1", "Round 1"]]
     .filter(([key]) => reports?.[key]);

@@ -1488,12 +1488,6 @@ Round 3 also reports .hi[abatement cost + transaction costs]
 
 .hi[Open market:] submit a buy or sell order with a price and a .hi[positive whole-number quantity]
 
---
-
-In Rounds 1 and 2, a match trades at the .hi[waiting order's price]
-
-In Round 3, buy limits .hi[include the $3 fee]; asks specify seller receipts. A buy at 8 matches a sell at 5: buyer pays 8, seller gets 5
-
 ---
 
 # Join the permit market game
@@ -2084,20 +2078,113 @@ The permit system can deliver a welfare improvement
 
 ---
 
-# Permit systems and heterogeneous MDs: graphical
-
+# When the uniform standard has higher welfare
 
 .pull-left[
-![permits heterogeneous damages](`r knitr::fig_chunk("permits-hetero2", "png")`)
+```{r permits-welfare-standard, echo = FALSE, fig.show = 'hide', warning = F}
+# Trading moves emissions toward firm 2. Moving its marginal damage changes
+# whether the resulting damage exceeds the saving in abatement costs.
+permit_welfare_plot = function(md_2) {
+  firm_1_permit_loss = tibble(x = c(75, 75, 100), y = c(125, 100, 100))
+  firm_1_standard_loss = tibble(x = c(100, 125, 125), y = c(100, 75, 100))
+  firm_2_loss = if (md_2 == 175) {
+    tibble(x = c(125, 175, 175), y = c(175, 125, 175))
+  } else {
+    tibble(x = c(125, 125, 175), y = c(175, 125, 125))
+  }
+
+  welfare_plot = ggplot() +
+    geom_polygon(data = firm_1_permit_loss, aes(x = x, y = y),
+                 fill = "red", alpha = 0.75) +
+    geom_polygon(data = firm_1_standard_loss, aes(x = x, y = y),
+                 fill = "blue", alpha = 0.75) +
+    geom_polygon(data = firm_2_loss, aes(x = x, y = y),
+                 fill = if (md_2 == 175) "red" else "blue", alpha = 0.75) +
+    stat_function(fun = function(emissions) 200 - emissions,
+                  color = "#ca5670", size = 1.5) +
+    stat_function(fun = function(emissions) 300 - emissions,
+                  color = "#638ccc", size = 1.5) +
+    geom_hline(yintercept = 100, color = "black", size = 1.2) +
+    geom_hline(yintercept = 150, color = "darkslateblue",
+               linetype = "dashed", alpha = 0.3, size = 1) +
+    annotate("text", x = 225, y = 160,
+             label = expression(MD[2]^{old}), color = "darkslateblue",
+             alpha = 0.3, size = 7) +
+    geom_hline(yintercept = md_2, color = "darkslateblue", size = 1.2) +
+    geom_hline(yintercept = 125, color = "orange", linetype = "dotted", size = 1.2) +
+    geom_vline(xintercept = c(75, 125, 175), color = "grey60", linetype = "dashed") +
+    annotate("text", x = 25, y = 210, label = expression(MAC[1]), size = 7) +
+    annotate("text", x = 25, y = 295, label = expression(MAC[2]), size = 7) +
+    annotate("text", x = 275, y = 90, label = expression(MD[1]), size = 7) +
+    theme_minimal() +
+    theme(
+      axis.text = element_text(size = 18),
+      axis.title = element_text(size = 24),
+      panel.grid = element_blank(),
+      panel.background = element_rect(fill = "white", colour = NA),
+      plot.background = element_rect(fill = "white", colour = NA),
+      axis.line = element_line(colour = "black")
+    ) +
+    labs(x = "Emissions", y = "Marginal cost or damage") +
+    scale_x_continuous(expand = c(0, 0), limits = c(0, 310),
+                       breaks = c(75, 125, 175),
+                       labels = c(expression(E[1]^p),
+                                  expression(frac(bar(E), 2)),
+                                  expression(E[2]^p))) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, 310))
+
+  if (md_2 == 125) {
+    welfare_plot = welfare_plot +
+      annotate("text", x = 265, y = 140,
+               label = expression(MD[2] == p), size = 7)
+  } else {
+    welfare_plot = welfare_plot +
+      annotate("text", x = 275, y = md_2 + 10,
+               label = expression(MD[2]), size = 7) +
+      annotate("text", x = 275, y = 135, label = "p", size = 7)
+  }
+
+  welfare_plot
+}
+permit_welfare_plot(175)
+```
+
+![High damages at firm 2](`r knitr::fig_chunk("permits-welfare-standard", "png")`)
 ]
 
 .pull-right[
 
-What if the high MAC firm was the low MD firm?
+The welfare ranking depends on the MACs and MDs
 
-i.e: what if the correlation between MAC and MD was .hi-red[negative] instead of .hi-blue[positive]?
+Raise $MD_2$ (solid line); the dashed line shows its previous level
 
-What might we expect the correlation to be?
+.hi-red[Red permit losses] exceed .hi-blue[blue standard losses]
+
+.hi[The uniform standard has higher welfare]
+
+]
+
+---
+
+# When permit trading has higher welfare
+
+.pull-left[
+```{r permits-welfare-trading, echo = FALSE, fig.show = 'hide', warning = F}
+permit_welfare_plot(125)
+```
+
+![Lower damages at firm 2](`r knitr::fig_chunk("permits-welfare-trading", "png")`)
+]
+
+.pull-right[
+
+Lower $MD_2$ (solid line); the dashed line shows its previous level
+
+.hi-blue[Blue standard losses] exceed .hi-red[red permit losses]
+
+.hi[Permit trading has higher welfare]
+
+Changing the MACs and MDs can make either policy better, or leave them tied
 
 ]
 
@@ -2194,73 +2281,6 @@ knitr::include_graphics("files/06-arp5.jpg")
 
 ---
 
-# Zonal trading: RECLAIM
-
-Regional Clean Air Management (RECLAIM) Program
-
---
-
-California South Coast Air Quality Management District (SCAQMD)
-
---
-
-Started in 1994, goal of cutting NOx and SOx  emissions by 80% by 2003
-
---
-
-RECLAIM is a facility-level tradable permit system
-
----
-
-# Zonal trading: RECLAIM
-
-14% of permits allocated to power generators
-
---
-
-Permit prices driven by electricity sector
-
---
-
-During 2000 electricity price spikes, lots of very dirty plants brought on-line to meet demand
-
---
-
-Permit prices rose dramatically for everyone else
-
---
-
-$4,284 per ton of NOx in 1999
-
---
-
-$39,000 per ton of NOx in 2000
-
----
-
-# Zonal trading: RECLAIM
-
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-reclaim1.png")
-```
-</center>
-]
-
-.pull-right[
-
-LA Basin has two distinct zones with very different MD’s
-
-1. Old heavy industry (high MAC) and mountains trap NOx emissions and heat them up $\rightarrow$ smog (high MD)
-
-2. Newer firms (low MAC) close to the ocean, breezes dissipate pollution before it can turn into smog (low MD)
-
-
-]
-
----
-
 # Other permit market examples
 
 Tradble permit systems are increasingly common:
@@ -2297,30 +2317,58 @@ knitr::include_graphics("files/06-rggi2.png")
 # AB32
 
 <center>
-```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-ab32.png")
+```{r ab32-prices, out.width = "82%", fig.width = 10, fig.height = 4.4, echo = FALSE, cache = FALSE}
+permit_prices = readr::read_csv("data/06-permit-prices.csv", show_col_types = FALSE)
+permit_prices |>
+  dplyr::filter(region == "California") |>
+  ggplot2::ggplot(ggplot2::aes(date, price)) +
+  ggplot2::geom_line(color = "#EB811B", linewidth = 1.2) +
+  ggplot2::geom_point(color = "#EB811B", size = 1.4) +
+  ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  ggplot2::labs(x = NULL, y = "USD per metric ton CO2e", subtitle = "Current-vintage auction settlement price") +
+  ggplot2::theme_minimal(base_size = 16)
 ```
 </center>
+
+<!-- Source: [California Air Resources Board auction results](https://ww2.arb.ca.gov/sites/default/files/2020-08/results_summary.pdf). California-only auctions through August 2014; joint auctions thereafter. -->
 
 ---
 
 # EU-ETS
 
 <center>
-```{r, out.width = "70%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-eu-ets.png")
+```{r eu-ets-prices, out.width = "82%", fig.width = 10, fig.height = 4.4, echo = FALSE, cache = FALSE}
+permit_prices |>
+  dplyr::filter(region == "EU ETS") |>
+  ggplot2::ggplot(ggplot2::aes(date, price)) +
+  ggplot2::geom_line(color = "#EB811B", linewidth = 1.2) +
+  ggplot2::scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  ggplot2::labs(x = NULL, y = "EUR per metric ton CO2", subtitle = "Monthly mean of primary auction settlement prices") +
+  ggplot2::theme_minimal(base_size = 16)
 ```
 </center>
+
+<!-- Source: [European Energy Exchange primary auction reports](https://www.eex.com/en/market-data/market-data-hub/environmentals/eex-eua-primary-auction-spot-download). 2026 series ends in September. -->
 
 ---
 
 # China ETS
 
 <center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/06-china.png")
+```{r china-ets-prices, out.width = "82%", fig.width = 10, fig.height = 4.4, echo = FALSE, cache = FALSE}
+permit_prices |>
+  dplyr::filter(region == "China national ETS") |>
+  dplyr::mutate(year = lubridate::year(date)) |>
+  ggplot2::ggplot(ggplot2::aes(year, price)) +
+  ggplot2::geom_line(color = "#EB811B", linewidth = 1.2) +
+  ggplot2::geom_point(color = "#EB811B", size = 3) +
+  ggplot2::scale_x_continuous(breaks = 2021:2025) +
+  ggplot2::labs(x = NULL, y = "CNY per metric ton CO2", subtitle = "National ETS year-end closing price") +
+  ggplot2::theme_minimal(base_size = 16)
 ```
 </center>
+
+<!-- Sources: [China MEE 2021](https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202112/t20211231_965906.shtml), [Shanghai exchange 2022](https://overview.cneeex.com/c/2022-12-31/493627.shtml), [China MEE 2024 report](https://www.mee.gov.cn/ywdt/xwfb/202407/W020240722528848347594.pdf), [2024](https://www.mee.gov.cn/ywgz/ydqhbh/syqhbh/202501/t20250105_1099975.shtml), [2025](https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202601/t20260101_1139528.shtml). -->
 
 
 ---
@@ -2347,19 +2395,34 @@ In cap-and-trade, permits may be shifted across time if we allow for banking and
 
 --
 
-Let $\bar{E}_t$ be permits issued in period $t$, $E_t$ emissions, and $B_t$ the end-of-period bank:
+Without borrowing, the firm can only use permits it already has
+
+---
+
+# The firm's permit balance
+
 $$B_t = B_{t-1} + \bar{E}_t - E_t$$
 
 --
 
-Banking only: $B_t \geq 0$  
-Borrowing allowed: $B_t$ can be negative (typically with limits/penalties)
+- $\bar{E}_t$: new permits you receive in year $t$
+- $B_{t-1}$: permits saved from last year, or debt if negative
+- $E_t$: permits used for this year's emissions
+
+--
+
+$B_t$ is what remains after adding new permits and subtracting those used
+
+--
+
+- $B_t > 0$: extra permits you are saving for later
+- $B_t < 0$: borrowed permits you must give back later
 
 ---
 
 # Banking and borrowing in permits
 
-Two-period cost-minimization benchmark:
+Consider how one firm allocates its abatement effort over two periods:
 
 $$\min_{E_1,E_2} C_1(E_1) + C_2(E_2)$$
 $$\text{subject to: }E_1 + E_2 = \bar{E}_1 + \bar{E}_2$$
@@ -2392,7 +2455,7 @@ Banking and borrowing add .hi-blue[across-period trade within a firm]
 
 --
 
-So a firm can effectively "trade with itself over time"
+So a firm can effectively trade with itself over time
 
 --
 
@@ -2432,139 +2495,121 @@ With these shocks, banking/borrowing lowers compliance cost relative to a rigid 
 
 # Banking and borrowing in permits
 
-.pull-left[
-```{r permits-time-rule, echo = FALSE, fig.show = 'hide', warning = F}
-mac1 = function(x) 2 - 2/3*x
-mac2 = function(x) 3 - x
-e_cap = 3.5/2
-e1_star = 1.5
-e2_star = 2
-p_star = 1
+```{r permits-time-plot-function, include = FALSE, cache = FALSE}
+plot_time_allocation = function(case, stage) {
+  banking = case == "banking"
+  mac1 = if (banking) function(emissions) 2 - 2 / 3 * emissions else function(emissions) 3 - emissions
+  mac2 = if (banking) function(emissions) 3 - emissions else function(emissions) 2 - 2 / 3 * emissions
+  cap = 1.75
+  emissions1 = if (banking) 1.5 else 2
+  emissions2 = if (banking) 2 else 1.5
+  price = 1
 
-ggplot() +
-  annotate("text", x = .58, y = 2.05, label = "MAC1 (period 1)", color = "#ca5670", size = 7) +
-  annotate("text", x = .58, y = 2.95, label = "MAC2 (period 2)", color = "#638ccc", size = 7) +
-  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
-  stat_function(fun = mac1, color = "#ca5670", size = 1.5) +
-  annotate("segment", x = e_cap, xend = e_cap, y = 0, yend = 3.1,
-           linetype = "longdash", size = 1.4, color = "black") +
-  annotate("segment", x = e1_star, xend = e1_star, y = 0, yend = p_star,
-           linetype = "dashed", size = 1.3, color = "grey50") +
-  annotate("segment", x = e2_star, xend = e2_star, y = 0, yend = p_star,
-           linetype = "dashed", size = 1.3, color = "grey50") +
-  annotate("segment", x = 0, xend = 3, y = p_star, yend = p_star,
-           linetype = "dotted", size = 1.3, color = "black") +
-  annotate("curve", x = e_cap, y = 0.38, xend = e1_star, yend = 0.38,
-           curvature = .35, arrow = arrow(length = unit(0.16, "cm")),
-           color = "#ca5670", size = 1.1) +
-  annotate("curve", x = e_cap, y = 0.60, xend = e2_star, yend = 0.60,
-           curvature = -.35, arrow = arrow(length = unit(0.16, "cm")),
-           color = "#638ccc", size = 1.1) +
-  annotate("text", x = 1.00, y = 0.88, label = "Bank permits", color = "#638ccc", size = 6.5) +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22, color = "#ffffff"),
-    axis.title.x = element_text(size = 24),
-    axis.title.y = element_text(size = 24),
-    panel.grid.minor = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.background = element_rect(fill = "#ffffff", colour = NA),
-    plot.background = element_rect(fill = "#ffffff", colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Emissions in each period", y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
-                     breaks = c(e1_star, e_cap, e2_star),
-                     labels = c(expression(E[1]^"*"), expression(bar(E)), expression(E[2]^"*"))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+  plot = ggplot() +
+    stat_function(fun = mac1, color = "#ca5670", linewidth = 1.5) +
+    stat_function(fun = mac2, color = "#638ccc", linewidth = 1.5) +
+    annotate("text", x = 0.58, y = if (banking) 2.05 else 2.95,
+             label = "MAC1 (period 1)", color = "#ca5670", size = 7) +
+    annotate("text", x = 0.58, y = if (banking) 2.95 else 2.05,
+             label = "MAC2 (period 2)", color = "#638ccc", size = 7) +
+    annotate("segment", x = cap, xend = cap, y = 0, yend = 3.1,
+             linetype = "longdash", linewidth = 1.4, color = "black")
 
+  if (stage >= 1) {
+    plot = plot +
+      annotate("point", x = cap, y = mac1(cap), color = "#ca5670", size = 4) +
+      annotate("point", x = cap, y = mac2(cap), color = "#638ccc", size = 4)
+  }
+
+  if (stage >= 2) {
+    # A firm shifts emissions toward the period with higher abatement costs.
+    plot = plot +
+      annotate("segment", x = 0, xend = 3, y = price, yend = price,
+               linetype = "dotted", linewidth = 1.3, color = "black") +
+      annotate("segment", x = emissions1, xend = emissions1, y = 0, yend = price,
+               linetype = "dashed", linewidth = 1.3, color = "grey50") +
+      annotate("segment", x = emissions2, xend = emissions2, y = 0, yend = price,
+               linetype = "dashed", linewidth = 1.3, color = "grey50") +
+      annotate("curve", x = cap, y = 0.38, xend = emissions1, yend = 0.38,
+               curvature = if (banking) 0.35 else -0.35,
+               arrow = arrow(length = unit(0.16, "cm")),
+               color = "#ca5670", linewidth = 1.1) +
+      annotate("curve", x = cap, y = 0.60, xend = emissions2, yend = 0.60,
+               curvature = if (banking) -0.35 else 0.35,
+               arrow = arrow(length = unit(0.16, "cm")),
+               color = "#638ccc", linewidth = 1.1) +
+      annotate("text", x = if (banking) 1.00 else 0.95, y = 0.88,
+               label = if (banking) "Bank permits" else "Borrow permits",
+               color = if (banking) "#638ccc" else "#ca5670", size = 6.5)
+  }
+
+  plot +
+    theme_minimal() +
+    theme(
+      legend.position = "none",
+      axis.text.x = element_text(size = 22),
+      axis.text.y = element_text(size = 22, color = "#ffffff"),
+      axis.title.x = element_text(size = 24),
+      axis.title.y = element_text(size = 24),
+      panel.grid = element_blank(),
+      panel.background = element_rect(fill = "#ffffff", colour = NA),
+      plot.background = element_rect(fill = "#ffffff", colour = NA),
+      axis.line = element_line(colour = "black")
+    ) +
+    labs(x = "Emissions in each period", y = "Capital/$") +
+    scale_x_continuous(expand = c(0, 0), limits = c(0, 3.1),
+                       breaks = if (stage >= 2) sort(c(emissions1, cap, emissions2)) else cap,
+                       labels = if (stage >= 2) {
+                         if (banking) c(expression(E[1]^"*"), expression(bar(E)), expression(E[2]^"*"))
+                         else c(expression(E[2]^"*"), expression(bar(E)), expression(E[1]^"*"))
+                       } else expression(bar(E))) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, 3.1))
+}
 ```
 
-![banking graphic](`r knitr::fig_chunk("permits-time-rule", "png")`)
-]
+```{r permits-time-banking-stages, echo = FALSE, fig.show = 'hide', warning = FALSE, cache = FALSE}
+for (stage in 0:2) print(plot_time_allocation("banking", stage))
+```
 
-.pull-right[
+<img class="permit-time-graph" src="`r knitr::fig_chunk("permits-time-banking-stages", "png", 1)`">
 
-Decision rule at the no-flex caps:
+<div class="permit-time-note-1">Compare the firm's MAC at each period's original emissions limit</div>
 
-If $MAC_2(\bar{E}_2) > MAC_1(\bar{E}_1)$, period 2 abatement is more expensive
+--
 
-Banking is optimal: $E_1^* < \bar{E}_1$ and $E_2^* > \bar{E}_2$
+<img class="permit-time-graph" src="`r knitr::fig_chunk("permits-time-banking-stages", "png", 2)`">
 
-If $MAC_1(\bar{E}_1) > MAC_2(\bar{E}_2)$, borrowing is optimal
+<div class="permit-time-note-2">If MAC<sub>2</sub>(Ē<sub>2</sub>) &gt; MAC<sub>1</sub>(Ē<sub>1</sub>), period 2 abatement is more expensive</div>
 
-]
+--
+
+<img class="permit-time-graph" src="`r knitr::fig_chunk("permits-time-banking-stages", "png", 3)`">
+
+<div class="permit-time-note-3">Banking is optimal: E<sub>1</sub><sup>*</sup> &lt; Ē<sub>1</sub> and E<sub>2</sub><sup>*</sup> &gt; Ē<sub>2</sub></div>
 
 ---
 
 # Banking and borrowing in permits
 
-.pull-left[
-```{r permits-time-borrowing, echo = FALSE, fig.show = 'hide', warning = F}
-mac1 = function(x) 3 - x
-mac2 = function(x) 2 - 2/3*x
-e_cap = 3.5/2
-e1_star = 2
-e2_star = 1.5
-p_star = 1
-
-ggplot() +
-  annotate("text", x = .58, y = 2.95, label = "MAC1 (period 1)", color = "#ca5670", size = 7) +
-  annotate("text", x = .58, y = 2.05, label = "MAC2 (period 2)", color = "#638ccc", size = 7) +
-  stat_function(fun = mac1, color = "#ca5670", size = 1.5) +
-  stat_function(fun = mac2, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = e_cap, xend = e_cap, y = 0, yend = 3.1,
-           linetype = "longdash", size = 1.4, color = "black") +
-  annotate("segment", x = e2_star, xend = e2_star, y = 0, yend = p_star,
-           linetype = "dashed", size = 1.3, color = "grey50") +
-  annotate("segment", x = e1_star, xend = e1_star, y = 0, yend = p_star,
-           linetype = "dashed", size = 1.3, color = "grey50") +
-  annotate("segment", x = 0, xend = 3, y = p_star, yend = p_star,
-           linetype = "dotted", size = 1.3, color = "black") +
-  annotate("curve", x = e_cap, y = 0.42, xend = e1_star, yend = 0.42,
-           curvature = -.35, arrow = arrow(length = unit(0.16, "cm")),
-           color = "#ca5670", size = 1.1) +
-  annotate("curve", x = e_cap, y = 0.62, xend = e2_star, yend = 0.62,
-           curvature = .35, arrow = arrow(length = unit(0.16, "cm")),
-           color = "#638ccc", size = 1.1) +
-  annotate("text", x = 0.95, y = 0.90, label = "Borrow permits", color = "#ca5670", size = 6.5) +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22, color = "#ffffff"),
-    axis.title.x = element_text(size = 24),
-    axis.title.y = element_text(size = 24),
-    panel.grid.minor = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.background = element_rect(fill = "#ffffff", colour = NA),
-    plot.background = element_rect(fill = "#ffffff", colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Emissions in each period", y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.1),
-                     breaks = c(e2_star, e_cap, e1_star),
-                     labels = c(expression(E[2]^"*"), expression(bar(E)), expression(E[1]^"*"))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
-
+```{r permits-time-borrowing-stages, echo = FALSE, fig.show = 'hide', warning = FALSE, cache = FALSE}
+for (stage in 0:2) print(plot_time_allocation("borrowing", stage))
 ```
 
-![borrowing graphic](`r knitr::fig_chunk("permits-time-borrowing", "png")`)
-]
+<img class="permit-time-graph" src="`r knitr::fig_chunk("permits-time-borrowing-stages", "png", 1)`">
 
-.pull-right[
+<div class="permit-time-note-1">Compare the firm's MAC at each period's original emissions limit</div>
 
-Borrowing case: period 1 starts with the higher MAC at cap
+--
 
-Cost minimization shifts emissions toward period 1 and away from period 2
+<img class="permit-time-graph" src="`r knitr::fig_chunk("permits-time-borrowing-stages", "png", 2)`">
 
-$E_1^* > \bar{E}_1$ and $E_2^* < \bar{E}_2$
+<div class="permit-time-note-2">If MAC<sub>1</sub>(Ē<sub>1</sub>) &gt; MAC<sub>2</sub>(Ē<sub>2</sub>), period 1 abatement is more expensive</div>
 
-Both banking and borrowing are intertemporal permit trade that aligns MACs across time
+--
 
-]
+<img class="permit-time-graph" src="`r knitr::fig_chunk("permits-time-borrowing-stages", "png", 3)`">
+
+<div class="permit-time-note-3">Borrowing is optimal: E<sub>1</sub><sup>*</sup> &gt; Ē<sub>1</sub> and E<sub>2</sub><sup>*</sup> &lt; Ē<sub>2</sub></div>
 
 ---
 
@@ -2840,34 +2885,74 @@ This won't always be true in the real world
 Key identity:
 $$E = \left(\frac{E}{q}\right)\times q$$
 
-Firms can reduce total emissions either by lowering emissions intensity per unit of output $q$: $\left(\frac{E}{q}\right)$, or by lowering output $q$
+Firms can reduce total emissions by lowering emissions intensity $E/q$, output $q$, or both
 
 ---
 
-# Output effects
+# Output effects: the firm's choices
 
-Why can emissions policy reduce output?
+The firm chooses output $q>0$ and emissions intensity $e=E/q$, so $E=eq$
 
-1. Taxes and standards make cleaner production more costly per unit of output
-2. That increases marginal cost of supplying output
-3. With downward-sloping demand, higher MC implies lower profit-maximizing output
+--
 
-Even when the policy directly targets emissions, output can move as an indirect equilibrium response
+Let $R(q)$ be revenue and $C_0(q)$ production cost before abatement
 
+Let $a(e)$ be abatement cost per unit of output, so total cost is
+$$C_0(q)+q a(e)$$
+
+--
+
+Unregulated intensity is $e_0$, with $a(e_0)=0$
+
+For $e<e_0$, assume $a'(e)<0$: cleaner production costs more
 
 ---
 
-# The output set up
+# Deriving the MAC
 
-.pull-left[
+Holding $q$ fixed, MAC is the cost of avoiding one more unit of emissions
+$$MAC(E,q)=-\frac{\partial[q a(E/q)]}{\partial E}$$
+
+--
+
+Applying the chain rule gives
+$$MAC(E,q)=-q a'(E/q)\frac{1}{q}=-a'(e)$$
+
+---
+
+# Output effects: choosing intensity
+
+Hold output fixed and use the familiar abatement rules
+
+- A tax saves $\tau$ for each unit of emissions avoided
+- A subsidy pays $s$ for each unit of emissions avoided
+
+--
+
+Stop abating when $MAC(e^*)=\tau$ under the tax, or $MAC(e^*)=s$ under the subsidy
+
+--
+
+For this comparison, the standard limits emissions *per unit of output*, such as one ton per MWh
+
+This is an .hi[intensity standard], $e\leq\bar e$, whereas the earlier cap limited total emissions
+
+--
+
+Set $\bar e=e^*$ and $\tau=s=MAC(e^*)$ to match emissions intensity across policies
+
+---
+
+# Output effects: intensity then output
+
 ```{r output1, echo = FALSE, fig.show = 'hide', warning = F}
 mac = function(x) 2 - 2/3*x
 policy_price = function(x) 1
 
 ggplot() +
-  annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
-  annotate("text", x = 2.55, y = 1.18, label = "Tax (t)", size = 7, color = "#638ccc") +
-  annotate("text", x = 2.55, y = .84, label = "Subsidy (s)", size = 7, color = "#638ccc") +
+  annotate("text", x = .07, y = 2.1,
+           label = expression(MAC == -a*minute*(e)), hjust = 0, size = 8) +
+  annotate("text", x = 2.45, y = 1.18, label = "Tax / subsidy", size = 7, color = "#638ccc") +
   annotate("text", x = 1.62, y = 2.55, label = "Standard", angle = 90, size = 6.5, color = "grey35") +
   annotate("text", x = 2.15, y = .25, label = "A", size = 10, color = "black") +
   annotate("text", x = .5, y = .5, label = "B", size = 10, color = "black") +
@@ -2890,70 +2975,152 @@ ggplot() +
     plot.background = element_rect(fill = "#ffffff",colour = NA),
     axis.line = element_line(colour = "black")
   ) +
-  labs(x = "Emissions/Output",
-       y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1.5,3), labels = c(expression(E^'*'/q^'*'), expression(E[0]/q[0]))) +
+  labs(x = "Emissions intensity (e = E/q)",
+       y = "$ per unit of emissions") +
+  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1.5,3), labels = c(expression(e^'*'), expression(e[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
 
 ```
 
-![base set up](`r knitr::fig_chunk("output1", "png")`)
-]
 
-.pull-right[
+```{r output2, echo = FALSE, fig.show = 'hide', warning = FALSE}
+intensity_unregulated = 3
+intensity_policy = 1.5
+policy_rate = mac(intensity_policy)
+abatement_cost_per_output = integrate(mac, intensity_policy, intensity_unregulated)$value
+tax_per_output = policy_rate * intensity_policy
+net_subsidy_per_output = policy_rate * (intensity_unregulated - intensity_policy) - abatement_cost_per_output
+output_cost_shifts = c(
+  tax = abatement_cost_per_output + tax_per_output,
+  standard = abatement_cost_per_output,
+  subsidy = -net_subsidy_per_output
+)
 
-```{r output2, echo = FALSE, fig.show = 'hide', warning = F}
-mc1 <- function(x) 1
-mc2 <- function(x) 1.5
-md <- function(x) 2.5 - x
+# Plot the firm's output choice after its emissions intensity has been chosen.
+plot_output_response = function(policy) {
+  baseline_mc = 1
+  policy_mc = baseline_mc + output_cost_shifts[[policy]]
+  marginal_revenue = function(output) 4 - output
+  unregulated_output = 4 - baseline_mc
+  policy_output = 4 - policy_mc
+  area_label = switch(policy, tax = "A+B", standard = "A", subsidy = "C")
+  output_label = switch(policy, tax = expression(q^"*"),
+                        standard = expression(q[std]^"*"),
+                        subsidy = expression(q[sub]^"*"))
 
-ggplot() +
-  annotate("text", x = .3, y = 2, label = "D", size = 8) +
-  annotate("text", x = 2.5, y = 1.6, label = expression(MC^'*'), size = 8) +
-  annotate("text", x = 2.5, y = 1.1, label = expression(MC[0]), size = 8) +
-  annotate("segment", x = .7, xend = .7, y = 1, yend = 1.5,
-           arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
-           size = 1.2, color = "black") +
-  annotate("text", x = .45, y = 1.27, label = "A+B", size = 8) +
-  stat_function(fun = mc2, color = "#000000", size = 1.5) +
-  stat_function(fun = mc1, color = "#ca5670", size = 1.5) +
-  stat_function(fun = md, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1, xend = 1, y = 0, yend = 1.5,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff",colour = NA),
-    plot.background = element_rect(fill = "#ffffff",colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Output",
-       y = "Capital/$") +
-  scale_x_continuous(expand = c(0,0), limits = c(0,3.2), breaks = c(1,1.5), labels = c(expression(q^'*'), expression(q[0]))) +
-  scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
+  ggplot() +
+    annotate("text", x = .45, y = 3.85, label = "MR", size = 8) +
+    annotate("text", x = if (policy == "subsidy") 2.5 else 3.4,
+             y = policy_mc + .15, label = expression(MC^"*"), size = 8) +
+    annotate("text", x = 3.4, y = baseline_mc + .15, label = expression(MC[0]), size = 8) +
+    annotate("segment", x = .55, xend = .55, y = baseline_mc, yend = policy_mc,
+             arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
+             linewidth = 1.2, color = "black") +
+    annotate("text", x = .25, y = (baseline_mc + policy_mc) / 2,
+             label = area_label, size = 8) +
+    geom_hline(yintercept = policy_mc, color = "black", linewidth = 1.5) +
+    geom_hline(yintercept = baseline_mc, color = "#ca5670", linewidth = 1.5) +
+    stat_function(fun = marginal_revenue, xlim = c(0, 4), color = "#638ccc", linewidth = 1.5) +
+    annotate("segment", x = unregulated_output, xend = unregulated_output,
+             y = 0, yend = baseline_mc, linetype = "dashed", linewidth = 1.5, color = "grey50") +
+    annotate("segment", x = policy_output, xend = policy_output,
+             y = 0, yend = policy_mc, linetype = "dashed", linewidth = 1.5, color = "grey50") +
+    theme_minimal() +
+    theme(
+      legend.position = "none",
+      title = element_text(size = 24),
+      axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
+      axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
+      panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
+      panel.background = element_rect(fill = "#ffffff", colour = NA),
+      plot.background = element_rect(fill = "#ffffff", colour = NA),
+      axis.line = element_line(colour = "black")
+    ) +
+    labs(x = "Output", y = "$ per unit of output") +
+    scale_x_continuous(expand = c(0, 0), limits = c(0, 4.1),
+                       breaks = c(policy_output, unregulated_output),
+                       labels = c(output_label, expression(q[0]))) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, 4.1))
+}
 
+plot_output_response("tax")
 ```
 
-![base set up](`r knitr::fig_chunk("output2", "png")`)
-]
+<div class="output-walkthrough">
+<img src="`r knitr::fig_chunk("output1", "png")`" alt="Emissions intensity and costs per unit of output">
+<div class="output-walkthrough-text">
+<p>All areas are dollars per unit of output</p>
+</div>
+</div>
+
+--
+
+<div class="output-walkthrough">
+<img src="`r knitr::fig_chunk("output1", "png")`" alt="Emissions intensity and costs per unit of output">
+<div class="output-walkthrough-text">
+<p>All areas are dollars per unit of output</p>
+<p>The firm chooses e<sup>*</sup> where MAC equals the tax rate</p>
+</div>
+</div>
+
+--
+
+<div class="output-walkthrough">
+<img src="`r knitr::fig_chunk("output1", "png")`" alt="Emissions intensity and costs per unit of output">
+<div class="output-walkthrough-text">
+<p>All areas are dollars per unit of output</p>
+<p>The firm chooses e<sup>*</sup> where MAC equals the tax rate</p>
+<p>Cost per unit of output: A in abatement + B in tax</p>
+</div>
+</div>
+
+--
+
+<div class="output-walkthrough">
+<img src="`r knitr::fig_chunk("output1", "png")`" alt="Emissions intensity and costs per unit of output">
+<img src="`r knitr::fig_chunk("output2", "png")`" alt="Tax raises marginal production cost by A+B and reduces output">
+</div>
+
+--
+
+<div class="output-walkthrough">
+<div class="output-walkthrough-text">
+<p>Abatement and tax payments raise the cost per unit of output by A+B</p>
+</div>
+<img src="`r knitr::fig_chunk("output2", "png")`" alt="Tax raises marginal production cost by A+B and reduces output">
+</div>
+
+--
+
+<div class="output-walkthrough">
+<div class="output-walkthrough-text">
+<p>Abatement and tax payments raise the cost per unit of output by A+B</p>
+<p>At MR = MC, profit-maximizing output falls from q<sub>0</sub> to q<sup>*</sup></p>
+</div>
+<img src="`r knitr::fig_chunk("output2", "png")`" alt="Tax raises marginal production cost by A+B and reduces output">
+</div>
+
+--
+
+<div class="output-walkthrough">
+<div class="output-walkthrough-text">
+<p>Abatement and tax payments raise the cost per unit of output by A+B</p>
+<p>At MR = MC, profit-maximizing output falls from q<sub>0</sub> to q<sup>*</sup></p>
+<p>Lower intensity and lower output both reduce total emissions</p>
+</div>
+<img src="`r knitr::fig_chunk("output2", "png")`" alt="Tax raises marginal production cost by A+B and reduces output">
+</div>
 
 ---
 
 # The output results
 
 Emission tax:
-- Firm chooses $E^*/q^*$
-- Firm pays A+B in tax and abatement cost .hi[per unit of output]
-- This raises the MC of production by A+B to MC<sup>*</sup>
-- Output $q^*$ falls
-- Pollution $(E^*/q^*)*q^*$ falls even more since the tax lowers the optimal $E^*/q^*$, and increased MC lowers $q^*$
+- The firm chooses intensity $e^*$ where MAC equals the tax rate
+- Abatement cost A plus tax payment B raises output MC by A+B
+- Profit-maximizing output satisfies $MR=MC$, so higher MC lowers output
+- Both lower intensity and lower output reduce total emissions
 
 ---
 
@@ -2961,55 +3128,18 @@ Emission tax:
 
 .pull-left[
 
-Emission standard:
-- Firm pays A in abatement cost per unit of output
-- This raises the MC of production by A
-- Output and $(E^*/q^*)*q^*$ fall, but not by as much as under the tax
+Emissions-intensity standard:
+- Require $e \leq e^*$, where $e=E/q$
+- The firm pays A in abatement cost per unit of output, with no tax payment
+- This raises the marginal cost of output by A
+- Output and total emissions fall, but by less than under the tax
 
 ]
 
 .pull-right[
 
-```{r output2_standard, echo = FALSE, fig.show = 'hide', warning = F}
-mc0 = function(x) 1
-mc_std = function(x) 1.25
-demand = function(x) 2.5 - x
-
-ggplot() +
-  annotate("text", x = .3, y = 2, label = "D", size = 8) +
-  annotate("text", x = 2.5, y = 1.35, label = expression(MC^'*'), size = 8) +
-  annotate("text", x = 2.5, y = 1.05, label = expression(MC[0]), size = 8) +
-  annotate("segment", x = .7, xend = .7, y = 1, yend = 1.25,
-           arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
-           size = 1.2, color = "black") +
-  annotate("text", x = .45, y = 1.125, label = "A", size = 8) +
-  stat_function(fun = mc_std, color = "#000000", size = 1.5) +
-  stat_function(fun = mc0, color = "#ca5670", size = 1.5) +
-  stat_function(fun = demand, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1.25, xend = 1.25, y = 0, yend = 1.25,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff", colour = NA),
-    plot.background = element_rect(fill = "#ffffff", colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Output",
-       y = "Capital/$") +
-  scale_x_continuous(
-    expand = c(0, 0), limits = c(0, 3.2),
-    breaks = c(1.25, 1.5),
-    labels = c(expression(q[std]^"*"), expression(q[0]))
-  ) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 3.1))
+```{r output2_standard, echo = FALSE, fig.show = 'hide', warning = FALSE}
+plot_output_response("standard")
 ```
 
 ![standard output effect](`r knitr::fig_chunk("output2_standard", "png")`)
@@ -3022,55 +3152,19 @@ ggplot() +
 .pull-left[
 
 Abatement subsidy:
-- Reduces firm costs per unit of output by C
-- This reduces the MC of production by C
-- This .hi[raises] output
-- Even though $E/q$ goes down because the subsidy induces a lower emission intensity, total emissions may go up because $q$ will rise
+- Pay $s(e_0-e)$ per unit of output relative to baseline intensity $e_0$
+- Gross subsidy A+C minus abatement cost A leaves net gain C per unit of output
+- Output MC falls by C, so output rises
+- Total emissions $E=e^*q^*$ can rise or fall
+
+A subsidy $s(E_0-E)$ from a fixed total baseline instead has the same marginal output effect as a tax
 
 ]
 
 .pull-right[
 
-```{r output2_subsidy, echo = FALSE, fig.show = 'hide', warning = F}
-mc0 = function(x) 1
-mc_sub = function(x) 0.8
-demand = function(x) 2.5 - x
-
-ggplot() +
-  annotate("text", x = .3, y = 2, label = "D", size = 8) +
-  annotate("text", x = 2.5, y = 1.12, label = expression(MC[0]), size = 8) +
-  annotate("text", x = 2.5, y = .85, label = expression(MC^'*'), size = 8) +
-  annotate("segment", x = .7, xend = .7, y = .8, yend = 1,
-           arrow = arrow(length = unit(0.16, "cm"), ends = "both"),
-           size = 1.2, color = "black") +
-  annotate("text", x = .45, y = .9, label = "C", size = 8) +
-  stat_function(fun = mc0, color = "#ca5670", size = 1.5) +
-  stat_function(fun = mc_sub, color = "#000000", size = 1.5) +
-  stat_function(fun = demand, color = "#638ccc", size = 1.5) +
-  annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  annotate("segment", x = 1.7, xend = 1.7, y = 0, yend = .8,
-           linetype = "dashed", size = 1.5, color = "grey50") +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    title = element_text(size = 24),
-    axis.text.x = element_text(size = 24), axis.text.y = element_text(size = 24, color = "#ffffff"),
-    axis.title.x = element_text(size = 24), axis.title.y = element_text(size = 24),
-    panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(),
-    panel.grid.minor.y = element_blank(), panel.grid.major.x = element_blank(),
-    panel.background = element_rect(fill = "#ffffff", colour = NA),
-    plot.background = element_rect(fill = "#ffffff", colour = NA),
-    axis.line = element_line(colour = "black")
-  ) +
-  labs(x = "Output",
-       y = "Capital/$") +
-  scale_x_continuous(
-    expand = c(0, 0), limits = c(0, 3.2),
-    breaks = c(1.5, 1.7),
-    labels = c(expression(q[0]), expression(q[sub]^"*"))
-  ) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 3.1))
+```{r output2_subsidy, echo = FALSE, fig.show = 'hide', warning = FALSE}
+plot_output_response("subsidy")
 ```
 
 ![subsidy output effect](`r knitr::fig_chunk("output2_subsidy", "png")`)
@@ -3153,8 +3247,17 @@ When does C&C / technology standards make sense?
 
 # Dynamic incentives
 
+.dynamic-motivation[
+Firms may innovate or adopt new technologies that lower their marginal abatement costs, shifting MAC down
 
-.pull-left[
+What incentives do different policy instruments give firms to make these improvements?
+
+To determine this, we need to work out how a lower MAC changes the firm's abatement costs and tax or subsidy payments
+]
+
+--
+
+.pull-left.dynamic-comparison[
 ```{r dynamic, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 mac2 <- function(x) 3 - x

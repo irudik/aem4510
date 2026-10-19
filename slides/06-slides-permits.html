@@ -1024,12 +1024,6 @@ Round 3 also reports .hi[abatement cost + transaction costs]
 
 .hi[Open market:] submit a buy or sell order with a price and a .hi[positive whole-number quantity]
 
---
-
-In Rounds 1 and 2, a match trades at the .hi[waiting order's price]
-
-In Round 3, buy limits .hi[include the $3 fee]; asks specify seller receipts. A buy at 8 matches a sell at 5: buyer pays 8, seller gets 5
-
 ---
 
 # Join the permit market game
@@ -1410,20 +1404,45 @@ The permit system can deliver a welfare improvement
 
 ---
 
-# Permit systems and heterogeneous MDs: graphical
-
+# When the uniform standard has higher welfare
 
 .pull-left[
-![permits heterogeneous damages](06-slides-permits_files/figure-html/permits-hetero2-1.png)
+
+
+![High damages at firm 2](06-slides-permits_files/figure-html/permits-welfare-standard-1.png)
 ]
 
 .pull-right[
 
-What if the high MAC firm was the low MD firm?
+The welfare ranking depends on the MACs and MDs
 
-i.e: what if the correlation between MAC and MD was .hi-red[negative] instead of .hi-blue[positive]?
+Raise `\(MD_2\)` (solid line); the dashed line shows its previous level
 
-What might we expect the correlation to be?
+.hi-red[Red permit losses] exceed .hi-blue[blue standard losses]
+
+.hi[The uniform standard has higher welfare]
+
+]
+
+---
+
+# When permit trading has higher welfare
+
+.pull-left[
+
+
+![Lower damages at firm 2](06-slides-permits_files/figure-html/permits-welfare-trading-1.png)
+]
+
+.pull-right[
+
+Lower `\(MD_2\)` (solid line); the dashed line shows its previous level
+
+.hi-blue[Blue standard losses] exceed .hi-red[red permit losses]
+
+.hi[Permit trading has higher welfare]
+
+Changing the MACs and MDs can make either policy better, or leave them tied
 
 ]
 
@@ -1512,71 +1531,6 @@ Chan et al. (2018) JEEM:
 
 ---
 
-# Zonal trading: RECLAIM
-
-Regional Clean Air Management (RECLAIM) Program
-
---
-
-California South Coast Air Quality Management District (SCAQMD)
-
---
-
-Started in 1994, goal of cutting NOx and SOx  emissions by 80% by 2003
-
---
-
-RECLAIM is a facility-level tradable permit system
-
----
-
-# Zonal trading: RECLAIM
-
-14% of permits allocated to power generators
-
---
-
-Permit prices driven by electricity sector
-
---
-
-During 2000 electricity price spikes, lots of very dirty plants brought on-line to meet demand
-
---
-
-Permit prices rose dramatically for everyone else
-
---
-
-$4,284 per ton of NOx in 1999
-
---
-
-$39,000 per ton of NOx in 2000
-
----
-
-# Zonal trading: RECLAIM
-
-.pull-left[
-&lt;center&gt;
-&lt;img src="files/06-reclaim1.png" alt="" width="100%" /&gt;
-&lt;/center&gt;
-]
-
-.pull-right[
-
-LA Basin has two distinct zones with very different MD’s
-
-1. Old heavy industry (high MAC) and mountains trap NOx emissions and heat them up `\(\rightarrow\)` smog (high MD)
-
-2. Newer firms (low MAC) close to the ocean, breezes dissipate pollution before it can turn into smog (low MD)
-
-
-]
-
----
-
 # Other permit market examples
 
 Tradble permit systems are increasingly common:
@@ -1609,24 +1563,30 @@ Tradble permit systems are increasingly common:
 # AB32
 
 &lt;center&gt;
-&lt;img src="files/06-ab32.png" alt="" width="70%" /&gt;
+&lt;img src="06-slides-permits_files/figure-html/ab32-prices-1.png" alt="" width="82%" /&gt;
 &lt;/center&gt;
+
+&lt;!-- Source: [California Air Resources Board auction results](https://ww2.arb.ca.gov/sites/default/files/2020-08/results_summary.pdf). California-only auctions through August 2014; joint auctions thereafter. --&gt;
 
 ---
 
 # EU-ETS
 
 &lt;center&gt;
-&lt;img src="files/06-eu-ets.png" alt="" width="70%" /&gt;
+&lt;img src="06-slides-permits_files/figure-html/eu-ets-prices-1.png" alt="" width="82%" /&gt;
 &lt;/center&gt;
+
+&lt;!-- Source: [European Energy Exchange primary auction reports](https://www.eex.com/en/market-data/market-data-hub/environmentals/eex-eua-primary-auction-spot-download). 2026 series ends in September. --&gt;
 
 ---
 
 # China ETS
 
 &lt;center&gt;
-&lt;img src="files/06-china.png" alt="" width="100%" /&gt;
+&lt;img src="06-slides-permits_files/figure-html/china-ets-prices-1.png" alt="" width="82%" /&gt;
 &lt;/center&gt;
+
+&lt;!-- Sources: [China MEE 2021](https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202112/t20211231_965906.shtml), [Shanghai exchange 2022](https://overview.cneeex.com/c/2022-12-31/493627.shtml), [China MEE 2024 report](https://www.mee.gov.cn/ywdt/xwfb/202407/W020240722528848347594.pdf), [2024](https://www.mee.gov.cn/ywgz/ydqhbh/syqhbh/202501/t20250105_1099975.shtml), [2025](https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202601/t20260101_1139528.shtml). --&gt;
 
 
 ---
@@ -1653,19 +1613,34 @@ In cap-and-trade, permits may be shifted across time if we allow for banking and
 
 --
 
-Let `\(\bar{E}_t\)` be permits issued in period `\(t\)`, `\(E_t\)` emissions, and `\(B_t\)` the end-of-period bank:
+Without borrowing, the firm can only use permits it already has
+
+---
+
+# The firm's permit balance
+
 `$$B_t = B_{t-1} + \bar{E}_t - E_t$$`
 
 --
 
-Banking only: `\(B_t \geq 0\)`  
-Borrowing allowed: `\(B_t\)` can be negative (typically with limits/penalties)
+- `\(\bar{E}_t\)`: new permits you receive in year `\(t\)`
+- `\(B_{t-1}\)`: permits saved from last year, or debt if negative
+- `\(E_t\)`: permits used for this year's emissions
+
+--
+
+`\(B_t\)` is what remains after adding new permits and subtracting those used
+
+--
+
+- `\(B_t &gt; 0\)`: extra permits you are saving for later
+- `\(B_t &lt; 0\)`: borrowed permits you must give back later
 
 ---
 
 # Banking and borrowing in permits
 
-Two-period cost-minimization benchmark:
+Consider how one firm allocates its abatement effort over two periods:
 
 `$$\min_{E_1,E_2} C_1(E_1) + C_2(E_2)$$`
 `$$\text{subject to: }E_1 + E_2 = \bar{E}_1 + \bar{E}_2$$`
@@ -1698,7 +1673,7 @@ Banking and borrowing add .hi-blue[across-period trade within a firm]
 
 --
 
-So a firm can effectively "trade with itself over time"
+So a firm can effectively trade with itself over time
 
 --
 
@@ -1738,45 +1713,47 @@ With these shocks, banking/borrowing lowers compliance cost relative to a rigid 
 
 # Banking and borrowing in permits
 
-.pull-left[
 
 
-![banking graphic](06-slides-permits_files/figure-html/permits-time-rule-1.png)
-]
 
-.pull-right[
 
-Decision rule at the no-flex caps:
+&lt;img class="permit-time-graph" src="06-slides-permits_files/figure-html/permits-time-banking-stages-1.png"&gt;
 
-If `\(MAC_2(\bar{E}_2) &gt; MAC_1(\bar{E}_1)\)`, period 2 abatement is more expensive
+&lt;div class="permit-time-note-1"&gt;Compare the firm's MAC at each period's original emissions limit&lt;/div&gt;
 
-Banking is optimal: `\(E_1^* &lt; \bar{E}_1\)` and `\(E_2^* &gt; \bar{E}_2\)`
+--
 
-If `\(MAC_1(\bar{E}_1) &gt; MAC_2(\bar{E}_2)\)`, borrowing is optimal
+&lt;img class="permit-time-graph" src="06-slides-permits_files/figure-html/permits-time-banking-stages-2.png"&gt;
 
-]
+&lt;div class="permit-time-note-2"&gt;If MAC&lt;sub&gt;2&lt;/sub&gt;(Ē&lt;sub&gt;2&lt;/sub&gt;) &amp;gt; MAC&lt;sub&gt;1&lt;/sub&gt;(Ē&lt;sub&gt;1&lt;/sub&gt;), period 2 abatement is more expensive&lt;/div&gt;
+
+--
+
+&lt;img class="permit-time-graph" src="06-slides-permits_files/figure-html/permits-time-banking-stages-3.png"&gt;
+
+&lt;div class="permit-time-note-3"&gt;Banking is optimal: E&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &amp;lt; Ē&lt;sub&gt;1&lt;/sub&gt; and E&lt;sub&gt;2&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &amp;gt; Ē&lt;sub&gt;2&lt;/sub&gt;&lt;/div&gt;
 
 ---
 
 # Banking and borrowing in permits
 
-.pull-left[
 
 
-![borrowing graphic](06-slides-permits_files/figure-html/permits-time-borrowing-1.png)
-]
+&lt;img class="permit-time-graph" src="06-slides-permits_files/figure-html/permits-time-borrowing-stages-1.png"&gt;
 
-.pull-right[
+&lt;div class="permit-time-note-1"&gt;Compare the firm's MAC at each period's original emissions limit&lt;/div&gt;
 
-Borrowing case: period 1 starts with the higher MAC at cap
+--
 
-Cost minimization shifts emissions toward period 1 and away from period 2
+&lt;img class="permit-time-graph" src="06-slides-permits_files/figure-html/permits-time-borrowing-stages-2.png"&gt;
 
-`\(E_1^* &gt; \bar{E}_1\)` and `\(E_2^* &lt; \bar{E}_2\)`
+&lt;div class="permit-time-note-2"&gt;If MAC&lt;sub&gt;1&lt;/sub&gt;(Ē&lt;sub&gt;1&lt;/sub&gt;) &amp;gt; MAC&lt;sub&gt;2&lt;/sub&gt;(Ē&lt;sub&gt;2&lt;/sub&gt;), period 1 abatement is more expensive&lt;/div&gt;
 
-Both banking and borrowing are intertemporal permit trade that aligns MACs across time
+--
 
-]
+&lt;img class="permit-time-graph" src="06-slides-permits_files/figure-html/permits-time-borrowing-stages-3.png"&gt;
+
+&lt;div class="permit-time-note-3"&gt;Borrowing is optimal: E&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &amp;gt; Ē&lt;sub&gt;1&lt;/sub&gt; and E&lt;sub&gt;2&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &amp;lt; Ē&lt;sub&gt;2&lt;/sub&gt;&lt;/div&gt;
 
 ---
 
@@ -2011,48 +1988,145 @@ This won't always be true in the real world
 Key identity:
 `$$E = \left(\frac{E}{q}\right)\times q$$`
 
-Firms can reduce total emissions either by lowering emissions intensity per unit of output `\(q\)`: `\(\left(\frac{E}{q}\right)\)`, or by lowering output `\(q\)`
+Firms can reduce total emissions by lowering emissions intensity `\(E/q\)`, output `\(q\)`, or both
 
 ---
 
-# Output effects
+# Output effects: the firm's choices
 
-Why can emissions policy reduce output?
+The firm chooses output `\(q&gt;0\)` and emissions intensity `\(e=E/q\)`, so `\(E=eq\)`
 
-1. Taxes and standards make cleaner production more costly per unit of output
-2. That increases marginal cost of supplying output
-3. With downward-sloping demand, higher MC implies lower profit-maximizing output
+--
 
-Even when the policy directly targets emissions, output can move as an indirect equilibrium response
+Let `\(R(q)\)` be revenue and `\(C_0(q)\)` production cost before abatement
 
+Let `\(a(e)\)` be abatement cost per unit of output, so total cost is
+`$$C_0(q)+q a(e)$$`
+
+--
+
+Unregulated intensity is `\(e_0\)`, with `\(a(e_0)=0\)`
+
+For `\(e&lt;e_0\)`, assume `\(a'(e)&lt;0\)`: cleaner production costs more
 
 ---
 
-# The output set up
+# Deriving the MAC
 
-.pull-left[
+Holding `\(q\)` fixed, MAC is the cost of avoiding one more unit of emissions
+`$$MAC(E,q)=-\frac{\partial[q a(E/q)]}{\partial E}$$`
+
+--
+
+Applying the chain rule gives
+`$$MAC(E,q)=-q a'(E/q)\frac{1}{q}=-a'(e)$$`
+
+---
+
+# Output effects: choosing intensity
+
+Hold output fixed and use the familiar abatement rules
+
+- A tax saves `\(\tau\)` for each unit of emissions avoided
+- A subsidy pays `\(s\)` for each unit of emissions avoided
+
+--
+
+Stop abating when `\(MAC(e^*)=\tau\)` under the tax, or `\(MAC(e^*)=s\)` under the subsidy
+
+--
+
+For this comparison, the standard limits emissions *per unit of output*, such as one ton per MWh
+
+This is an .hi[intensity standard], `\(e\leq\bar e\)`, whereas the earlier cap limited total emissions
+
+--
+
+Set `\(\bar e=e^*\)` and `\(\tau=s=MAC(e^*)\)` to match emissions intensity across policies
+
+---
+
+# Output effects: intensity then output
 
 
-![base set up](06-slides-permits_files/figure-html/output1-1.png)
-]
-
-.pull-right[
 
 
 
-![base set up](06-slides-permits_files/figure-html/output2-1.png)
-]
+
+&lt;div class="output-walkthrough"&gt;
+&lt;img src="06-slides-permits_files/figure-html/output1-1.png" alt="Emissions intensity and costs per unit of output"&gt;
+&lt;div class="output-walkthrough-text"&gt;
+&lt;p&gt;All areas are dollars per unit of output&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+--
+
+&lt;div class="output-walkthrough"&gt;
+&lt;img src="06-slides-permits_files/figure-html/output1-1.png" alt="Emissions intensity and costs per unit of output"&gt;
+&lt;div class="output-walkthrough-text"&gt;
+&lt;p&gt;All areas are dollars per unit of output&lt;/p&gt;
+&lt;p&gt;The firm chooses e&lt;sup&gt;*&lt;/sup&gt; where MAC equals the tax rate&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+--
+
+&lt;div class="output-walkthrough"&gt;
+&lt;img src="06-slides-permits_files/figure-html/output1-1.png" alt="Emissions intensity and costs per unit of output"&gt;
+&lt;div class="output-walkthrough-text"&gt;
+&lt;p&gt;All areas are dollars per unit of output&lt;/p&gt;
+&lt;p&gt;The firm chooses e&lt;sup&gt;*&lt;/sup&gt; where MAC equals the tax rate&lt;/p&gt;
+&lt;p&gt;Cost per unit of output: A in abatement + B in tax&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+--
+
+&lt;div class="output-walkthrough"&gt;
+&lt;img src="06-slides-permits_files/figure-html/output1-1.png" alt="Emissions intensity and costs per unit of output"&gt;
+&lt;img src="06-slides-permits_files/figure-html/output2-1.png" alt="Tax raises marginal production cost by A+B and reduces output"&gt;
+&lt;/div&gt;
+
+--
+
+&lt;div class="output-walkthrough"&gt;
+&lt;div class="output-walkthrough-text"&gt;
+&lt;p&gt;Abatement and tax payments raise the cost per unit of output by A+B&lt;/p&gt;
+&lt;/div&gt;
+&lt;img src="06-slides-permits_files/figure-html/output2-1.png" alt="Tax raises marginal production cost by A+B and reduces output"&gt;
+&lt;/div&gt;
+
+--
+
+&lt;div class="output-walkthrough"&gt;
+&lt;div class="output-walkthrough-text"&gt;
+&lt;p&gt;Abatement and tax payments raise the cost per unit of output by A+B&lt;/p&gt;
+&lt;p&gt;At MR = MC, profit-maximizing output falls from q&lt;sub&gt;0&lt;/sub&gt; to q&lt;sup&gt;*&lt;/sup&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;img src="06-slides-permits_files/figure-html/output2-1.png" alt="Tax raises marginal production cost by A+B and reduces output"&gt;
+&lt;/div&gt;
+
+--
+
+&lt;div class="output-walkthrough"&gt;
+&lt;div class="output-walkthrough-text"&gt;
+&lt;p&gt;Abatement and tax payments raise the cost per unit of output by A+B&lt;/p&gt;
+&lt;p&gt;At MR = MC, profit-maximizing output falls from q&lt;sub&gt;0&lt;/sub&gt; to q&lt;sup&gt;*&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Lower intensity and lower output both reduce total emissions&lt;/p&gt;
+&lt;/div&gt;
+&lt;img src="06-slides-permits_files/figure-html/output2-1.png" alt="Tax raises marginal production cost by A+B and reduces output"&gt;
+&lt;/div&gt;
 
 ---
 
 # The output results
 
 Emission tax:
-- Firm chooses `\(E^*/q^*\)`
-- Firm pays A+B in tax and abatement cost .hi[per unit of output]
-- This raises the MC of production by A+B to MC&lt;sup&gt;*&lt;/sup&gt;
-- Output `\(q^*\)` falls
-- Pollution `\((E^*/q^*)*q^*\)` falls even more since the tax lowers the optimal `\(E^*/q^*\)`, and increased MC lowers `\(q^*\)`
+- The firm chooses intensity `\(e^*\)` where MAC equals the tax rate
+- Abatement cost A plus tax payment B raises output MC by A+B
+- Profit-maximizing output satisfies `\(MR=MC\)`, so higher MC lowers output
+- Both lower intensity and lower output reduce total emissions
 
 ---
 
@@ -2060,10 +2134,11 @@ Emission tax:
 
 .pull-left[
 
-Emission standard:
-- Firm pays A in abatement cost per unit of output
-- This raises the MC of production by A
-- Output and `\((E^*/q^*)*q^*\)` fall, but not by as much as under the tax
+Emissions-intensity standard:
+- Require `\(e \leq e^*\)`, where `\(e=E/q\)`
+- The firm pays A in abatement cost per unit of output, with no tax payment
+- This raises the marginal cost of output by A
+- Output and total emissions fall, but by less than under the tax
 
 ]
 
@@ -2081,10 +2156,12 @@ Emission standard:
 .pull-left[
 
 Abatement subsidy:
-- Reduces firm costs per unit of output by C
-- This reduces the MC of production by C
-- This .hi[raises] output
-- Even though `\(E/q\)` goes down because the subsidy induces a lower emission intensity, total emissions may go up because `\(q\)` will rise
+- Pay `\(s(e_0-e)\)` per unit of output relative to baseline intensity `\(e_0\)`
+- Gross subsidy A+C minus abatement cost A leaves net gain C per unit of output
+- Output MC falls by C, so output rises
+- Total emissions `\(E=e^*q^*\)` can rise or fall
+
+A subsidy `\(s(E_0-E)\)` from a fixed total baseline instead has the same marginal output effect as a tax
 
 ]
 
@@ -2172,8 +2249,17 @@ When does C&amp;C / technology standards make sense?
 
 # Dynamic incentives
 
+.dynamic-motivation[
+Firms may innovate or adopt new technologies that lower their marginal abatement costs, shifting MAC down
 
-.pull-left[
+What incentives do different policy instruments give firms to make these improvements?
+
+To determine this, we need to work out how a lower MAC changes the firm's abatement costs and tax or subsidy payments
+]
+
+--
+
+.pull-left.dynamic-comparison[
 
 
 ![taxes](06-slides-permits_files/figure-html/dynamic-1.png)

@@ -49,14 +49,15 @@ xaringanExtra::style_panelset(panel_tab_color_active = "red")
 
 # Roadmap
 
-1. What role does uncertainty play in economic analysis of the environment?
-2. What are the implications of uncertainty for policy choice and welfare?
+1. Motivating examples of environmental uncertainty
+2. Weitzman: taxes versus standards under MD and MAC uncertainty
+3. Manne–Richel: abatement today under uncertainty about the future
 
 
 ---
 
 class: inverse, center, middle
-name: tradable permits
+name: uncertainty
 
 # Uncertainty and the environment
 
@@ -72,28 +73,82 @@ local_video("videos/07-uncertainty-arctic-sea-ice.mp4")
 
 ---
 
-# Uncertainty and risk
+# Uncertainty in marginal damages
 
-.hi[Risk] refers to situations where the classification of states, events or alternatives is objective and known, and their probabilities can be objectively determined
+It is very likely that we don’t know much about how damaging a particular pollutant is<sup>1</sup>
+.footnote[
+<sup>1</sup>This is even ignoring the fact that we probably don't even know the slope of the marginal damage curve
+]
 
-.hi[Uncertainty] arises from "the impossibility of exhaustive classification of states": nature/economy can be so complex that all possible states are simply not known
+--
+
+What are the actual health effects?
+
+--
+
+Who are affected?
+
+--
+
+Given health effects and affected groups, how do we value lives/health?
+
+--
+
+How do we value threatened environmental amenities?
 
 ---
 
-# Uncertainty and risk
+# Climate change
+
+.pull-left[
+<center>
+```{r, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/09-climate-sens.png")
+```
+</center>
+]
+
+.pull-right[
+These are our best estimates of the distribution of the .hi[equilibrium climate sensitivity:] how much the earth warms on average if we double CO<sub>2</sub> concentrations
+
+Uncertainty in ECS means we are uncertain about the true costs of emitting a ton of CO<sub>2</sub> (the social cost of CO<sub>2</sub>)
+
+]
+
+
+---
+
+# Climate change
+
+.pull-left[
+<center>
+```{r, out.width = "100%", fig.pos="c", echo = FALSE}
+knitr::include_graphics("files/09-damages.png")
+```
+</center>
+Rudik (2020)
+
+]
+
+.pull-right[
+There's also uncertainty over how costly a given amount of warming will be
+- How bad is 1 degree of warming for agricultural yields?
+
+These are distributions of damages to global GDP at given levels of warming
+
+]
+
+---
+
+# Uncertainty
 
 Uncertainty can factor into environmental policy-making in a number of ways:
 --
 
-- Scientific (uncertainty in MD)
+- Uncertainty in marginal damages (MD)
 --
 
-- Strategic (uncertainty about MAC)
---
-
-- Dynamic (uncertainty about what MD will be in the future)
---
-
+- Uncertainty in marginal abatement costs (MAC)
 
 The type of uncertainty can have implications for instrument choice
 
@@ -153,94 +208,22 @@ Will this hold true even with uncertainty about MD or MAC?
 
 ---
 
-# Scientific uncertainty
+# Policy under MD uncertainty
 
-It is very likely that we don’t know much about how damaging a particular pollutant is<sup>1</sup>
-.footnote[
-<sup>1</sup>This is even ignoring the fact that we probably don't even know the slope of the marginal damage curve.
-]
-
---
-
-What are the actual health risks?
-
---
-
-Who are affected?
-
---
-
-Given risks and affected groups, how do we value lives/health?
-
---
-
-How do we value threatened environmental amenities?
-
----
-
-# Climate change
-
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/09-climate-sens.png")
-```
-</center>
-]
-
-.pull-right[
-These are our best estimates of the distribution of the .hi[equilibrium climate sensitivity:] how much the earth warms on average if we double CO<sub>2</sub> concentrations
-
-Uncertainty in ECS means we are uncertain about the true costs of emitting a ton of CO<sub>2</sub> (i.e. the social cost of CO<sub>2</sub>)
-
-]
-
-
----
-
-# Climate change
-
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/09-damages.png")
-```
-</center>
-Rudik (2020)
-
-]
-
-.pull-right[
-There's also uncertainty over how costly a given amount of warming will be
-- How bad is 1 degree of warming for agricultural yields?
-
-These are distributions of damages to global GDP at given levels of warming
-
-]
-
----
-
-# Policy under scientific uncertainty
-
-.pull-left[
 ```{r science_uncertain, echo = FALSE, fig.show = 'hide', warning = F}
-mac <- function(x) 2 - 2/3*x
-md <- function(x) x - 0.5
-mdh <- function(x) x + 0.5
-mdl <- function(x) x - 1.5
-ab_cost <- tibble(x = c(1.5, 1.5, 3),
+mac = function(x) 2 - 2/3*x
+md = function(x) x - 0.5
+mdh = function(x) x + 0.5
+mdl = function(x) x - 1.5
+ab_cost = tibble(x = c(1.5, 1.5, 3),
                      y = c(1, 0, 0))
-tax_payment <- tibble(x = c(1.5, 1.5, 0, 0),
+tax_payment = tibble(x = c(1.5, 1.5, 0, 0),
                      y = c(1, 0, 0, 1))
-ggplot() +
+science_uncertain_expected_plot = ggplot() +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD[e]), size = 8) +
-  annotate("text", x = 1.6, y = 2.5, label = expression(MD[h]), size = 8) +
-  annotate("text", x = 2.5, y = 1.3, label = expression(MD[l]), size = 8) +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5, linetype = "dashed") +
-  stat_function(fun = mdh, color = "#000000", size = 1.5) +
-  stat_function(fun = mdl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -258,9 +241,34 @@ ggplot() +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(3), labels = c( expression(E[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
 
+
+
+# Retain the expected damages curve as new information changes the comparison.
+science_uncertain_low_plot = science_uncertain_expected_plot +
+  annotate("text", x = 2.5, y = 1.3, label = expression(MD[l]), size = 8) +
+  stat_function(fun = mdl, color = "#000000", size = 1.5)
+science_uncertain_all_plot = science_uncertain_low_plot +
+  annotate("text", x = 1.6, y = 2.5, label = expression(MD[h]), size = 8) +
+  stat_function(fun = mdh, color = "#000000", size = 1.5)
+science_uncertain_all_plot
 ```
 
-![taxes and standards both work efficiently with perfect info](`r knitr::fig_chunk("science_uncertain", "png")`)
+```{r science_uncertain_expected, echo = FALSE, fig.show = 'hide', warning = FALSE}
+science_uncertain_expected_plot
+```
+```{r science_uncertain_low, echo = FALSE, fig.show = 'hide', warning = FALSE}
+science_uncertain_low_plot
+```
+
+<style>
+/* Each pause replaces the graph while retaining the paragraphs already shown. */
+.md-uncertainty-step:has(~ .md-uncertainty-step),
+.mac-uncertainty-step:has(~ .mac-uncertainty-step) { display: none; }
+</style>
+
+.md-uncertainty-step[
+.pull-left[
+![Marginal damages and marginal abatement costs](`r knitr::fig_chunk("science_uncertain_expected", "png")`)
 ]
 
 .pull-right[
@@ -269,20 +277,53 @@ If we are uncertain about MD how should we set policy?
 
 Suppose we have a best estimate, $MD_e$
 
+]
+]
+
+--
+
+.md-uncertainty-step[
+.pull-left[
+![Marginal damages and marginal abatement costs](`r knitr::fig_chunk("science_uncertain", "png")`)
+]
+
+.pull-right[
+
+If we are uncertain about MD how should we set policy?
+
+Suppose we have a best estimate, $MD_e$
+
+Unfortunately our estimate was wrong, and the true MD curve is given by $MD_h$ or $MD_l$
+
+]
+]
+
+--
+
+.md-uncertainty-step[
+.pull-left[
+![Marginal damages and marginal abatement costs](`r knitr::fig_chunk("science_uncertain_low", "png")`)
+]
+
+.pull-right[
+
+If we are uncertain about MD how should we set policy?
+
+Suppose we have a best estimate, $MD_e$
 
 Unfortunately our estimate was wrong, and the true MD curve is given by $MD_h$ or $MD_l$
 
 Let's say the actual MD is $MD_l$, what happens under our policies?
 
 ]
-
+]
 
 ---
 
-# Policy under scientific uncertainty
+# Policy under MD uncertainty
 
 .pull-left[
-![taxes and standards both work efficiently with perfect info](`r knitr::fig_chunk("science_uncertain", "png")`)
+![taxes and standards both work efficiently with perfect info](`r knitr::fig_chunk("science_uncertain_low", "png")`)
 ]
 
 .pull-right[
@@ -295,13 +336,12 @@ First: what tax and standard does the regulator set?
 
 ---
 
-# Policy under scientific uncertainty
+# Policy under MD uncertainty
 
 .pull-left[
 ```{r science_uncertain2, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
-mdh <- function(x) x + 0.5
 mdl <- function(x) x - 1.5
 ab_cost <- tibble(x = c(1.5, 1.5, 3),
                      y = c(1, 0, 0))
@@ -310,7 +350,6 @@ tax_payment <- tibble(x = c(1.5, 1.5, 0, 0),
 ggplot() +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD[e]), size = 8) +
-  annotate("text", x = 1.6, y = 2.5, label = expression(MD[h]), size = 8) +
   annotate("text", x = 2.5, y = 1.3, label = expression(MD[l]), size = 8) +
   annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
            linetype = "dotted", size = 2, color = "firebrick") +
@@ -318,7 +357,6 @@ ggplot() +
            linetype = "dotted", size = 2, color = "firebrick") +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5, linetype = "dashed") +
-  stat_function(fun = mdh, color = "#000000", size = 1.5) +
   stat_function(fun = mdl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
@@ -356,7 +394,7 @@ With these two policies in place, what does the firm do?
 
 ---
 
-# Policy under scientific uncertainty
+# Policy under MD uncertainty
 
 .pull-left[
 ![taxes and standards both work efficiently with perfect info](`r knitr::fig_chunk("science_uncertain2", "png")`)
@@ -377,13 +415,12 @@ If so, how much?
 
 ---
 
-# Policy under scientific uncertainty
+# Policy under MD uncertainty
 
 .pull-left[
 ```{r science_uncertain3, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
-mdh <- function(x) x + 0.5
 mdl <- function(x) x - 1.5
 ab_cost <- tibble(x = c(1.5, 1.5, 3),
                      y = c(1, 0, 0))
@@ -392,7 +429,6 @@ tax_payment <- tibble(x = c(1.5, 1.5, 0, 0),
 ggplot() +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD[e]), size = 8) +
-  annotate("text", x = 1.6, y = 2.5, label = expression(MD[h]), size = 8) +
   annotate("text", x = 2.5, y = 1.3, label = expression(MD[l]), size = 8) +
   annotate("segment", x = 21/10, xend = 21/10, y = 0, yend = 2- 2*21/10/3,
            linetype = "dotted", size = 2, color = "firebrick") +
@@ -400,7 +436,6 @@ ggplot() +
            linetype = "dotted", size = 2, color = "firebrick") +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5, linetype = "dashed") +
-  stat_function(fun = mdh, color = "#000000", size = 1.5) +
   stat_function(fun = mdl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
@@ -436,13 +471,12 @@ What is the DWL associated with under-emission?
 
 ---
 
-# Policy under scientific uncertainty
+# Policy under MD uncertainty
 
 .pull-left[
 ```{r science_uncertain4, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
-mdh <- function(x) x + 0.5
 mdl <- function(x) x - 1.5
 dwl <- tibble(x = c(21/10, 1.5, 1.5),
                      y = c(2- 2*21/10/3, 0, 1))
@@ -450,7 +484,6 @@ ggplot() +
   geom_polygon(data = dwl, aes(x = x, y = y), fill = "red", alpha = 0.2) +
   annotate("text", x = .3, y = 2, label = "MAC", size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD[e]), size = 8) +
-  annotate("text", x = 1.6, y = 2.5, label = expression(MD[h]), size = 8) +
   annotate("text", x = 2.5, y = 1.3, label = expression(MD[l]), size = 8) +
   annotate("segment", x = 21/10, xend = 21/10, y = 0, yend = 2- 2*21/10/3,
            linetype = "dotted", size = 2, color = "firebrick") +
@@ -458,7 +491,6 @@ ggplot() +
            linetype = "dotted", size = 2, color = "firebrick") +
   stat_function(fun = mac, color = "#ca5670", size = 1.5) +
   stat_function(fun = md, color = "#638ccc", size = 1.5, linetype = "dashed") +
-  stat_function(fun = mdh, color = "#000000", size = 1.5) +
   stat_function(fun = mdl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
@@ -489,37 +521,30 @@ This is the area in red
 
 With uncertain MD, we do not get the efficient outcome!
 
-Will the story be any different if the true MD was instead MD<sub>h</sub>?
-
 ]
 
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
-.pull-left[
 ```{r strategy_uncertain, echo = FALSE, fig.show = 'hide', warning = F}
-mac <- function(x) 2 - 2/3*x
-md <- function(x) x - 0.5
-mach <- function(x) 2.5 - 2/3*x
-macl <- function(x) 1 - 2/3*x
+mac = function(x) 2 - 2/3*x
+md = function(x) x - 0.5
+mach = function(x) 2.5 - 2/3*x
+macl = function(x) 1 - 2/3*x
 # dwl <- tibble(x = c(21/10, 21/10, 1.5),
 #                      y = c(2- 2*21/10/3, 21/10-.5, 1))
-ggplot() +
+strategy_uncertain_expected_plot = ggplot() +
   # geom_polygon(data = dwl, aes(x = x, y = y), fill = "red", alpha = 0.2) +
   annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD), size = 8) +
-  annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
-  annotate("text", x = .3, y = .6, label = expression(MAC[l]), size = 8) +
   # annotate("segment", x = 21/10, xend = 21/10, y = 0, yend = 2- 2*21/10/3,
   #          linetype = "dotted", size = 2, color = "firebrick") +
   # annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 1,
   #          linetype = "dotted", size = 2, color = "firebrick") +
   stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
   stat_function(fun = md, color = "#638ccc", size = 1.5, linetype = "solid") +
-  stat_function(fun = mach, color = "#000000", size = 1.5) +
-  stat_function(fun = macl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -537,31 +562,86 @@ ggplot() +
   scale_x_continuous(expand = c(0,0), limits = c(0,3.1), breaks = c(3), labels = c(expression(E[0]))) +
   scale_y_continuous(expand = c(0,0), limits = c(0,3.1))
 
+
+
+# Hold expected abatement costs fixed while revealing the possible true costs.
+strategy_uncertain_high_plot = strategy_uncertain_expected_plot +
+  annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
+  stat_function(fun = mach, color = "#000000", size = 1.5)
+strategy_uncertain_all_plot = strategy_uncertain_high_plot +
+  annotate("text", x = .3, y = .6, label = expression(MAC[l]), size = 8) +
+  stat_function(fun = macl, color = "#000000", size = 1.5)
+strategy_uncertain_all_plot
 ```
-![taxes and standards work differently if MACs are uncertain](`r knitr::fig_chunk("strategy_uncertain", "png")`)
+
+```{r strategy_uncertain_expected, echo = FALSE, fig.show = 'hide', warning = FALSE}
+strategy_uncertain_expected_plot
+```
+```{r strategy_uncertain_high, echo = FALSE, fig.show = 'hide', warning = FALSE}
+strategy_uncertain_high_plot
+```
+
+.mac-uncertainty-step[
+.pull-left[
+![Marginal abatement costs and marginal damages](`r knitr::fig_chunk("strategy_uncertain_expected", "png")`)
 ]
 
 .pull-right[
 
-Now what if we have .hi[strategic uncertainty:] the regulator does not know the firms' MAC curves
+Now suppose the regulator does not know the firms' .hi[MAC curves]
 
-The regulator thinks the MAC is MAC<sub>e</sub> but it may be MAC<sub>h</sub> or MAC<sub>l</sub>
-
-Suppose the true MAC is MAC<sub>h</sub>
+The regulator's best estimate is $MAC_e$
 
 ]
+]
 
+--
+
+.mac-uncertainty-step[
+.pull-left[
+![Marginal abatement costs and marginal damages](`r knitr::fig_chunk("strategy_uncertain", "png")`)
+]
+
+.pull-right[
+
+Now suppose the regulator does not know the firms' .hi[MAC curves]
+
+The regulator's best estimate is $MAC_e$
+
+The true MAC may instead be $MAC_h$ or $MAC_l$
+
+]
+]
+
+--
+
+.mac-uncertainty-step[
+.pull-left[
+![Marginal abatement costs and marginal damages](`r knitr::fig_chunk("strategy_uncertain_high", "png")`)
+]
+
+.pull-right[
+
+Now suppose the regulator does not know the firms' .hi[MAC curves]
+
+The regulator's best estimate is $MAC_e$
+
+The true MAC may instead be $MAC_h$ or $MAC_l$
+
+Suppose the true MAC is $MAC_h$
+
+]
+]
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_uncertain2, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
 mach <- function(x) 2.5 - 2/3*x
-macl <- function(x) 1 - 2/3*x
 # dwl <- tibble(x = c(21/10, 21/10, 1.5),
 #                      y = c(2- 2*21/10/3, 21/10-.5, 1))
 ggplot() +
@@ -569,7 +649,6 @@ ggplot() +
   annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD), size = 8) +
   annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
-  annotate("text", x = .3, y = .6, label = expression(MAC[l]), size = 8) +
   annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
            linetype = "dotted", size = 2, color = "firebrick") +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 3,
@@ -579,7 +658,6 @@ ggplot() +
   stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   stat_function(fun = mach, color = "#000000", size = 1.5) +
-  stat_function(fun = macl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -614,7 +692,7 @@ What level of emissions do we actually get?
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ![taxes and standards work differently if MACs are uncertain](`r knitr::fig_chunk("strategy_uncertain2", "png")`)
@@ -630,14 +708,13 @@ Under a standard we get E<sub>e</sub>
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_uncertain3, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
 mach <- function(x) 2.5 - 2/3*x
-macl <- function(x) 1 - 2/3*x
 # dwl <- tibble(x = c(21/10, 21/10, 1.5),
 #                      y = c(2- 2*21/10/3, 21/10-.5, 1))
 ggplot() +
@@ -645,7 +722,6 @@ ggplot() +
   annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD), size = 8) +
   annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
-  annotate("text", x = .3, y = .6, label = expression(MAC[l]), size = 8) +
   annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
            linetype = "dotted", size = 2, color = "firebrick") +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 3,
@@ -657,7 +733,6 @@ ggplot() +
   stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   stat_function(fun = mach, color = "#000000", size = 1.5) +
-  stat_function(fun = macl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -687,7 +762,7 @@ Under a tax we get $E_\tau$
 
 Since we get different levels of emissions under the two policies, they may give us different levels of deadweight loss
 
-Let's see..
+Let's see
 
 ]
 
@@ -695,14 +770,13 @@ Let's see..
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_uncertain4, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
 mach <- function(x) 2.5 - 2/3*x
-macl <- function(x) 1 - 2/3*x
 dwl <- tibble(x = c(9/5, 1.5, 1.5),
                      y = c(9/5-.5, 1.5, 1))
 ggplot() +
@@ -710,7 +784,6 @@ ggplot() +
   annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD), size = 8) +
   annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
-  annotate("text", x = .3, y = .6, label = expression(MAC[l]), size = 8) +
   annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
            linetype = "dotted", size = 2, color = "firebrick") +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 3,
@@ -722,7 +795,6 @@ ggplot() +
   stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   stat_function(fun = mach, color = "#000000", size = 1.5) +
-  stat_function(fun = macl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -756,14 +828,13 @@ This is caused by .hi[too little emissions]
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_uncertain5, echo = FALSE, fig.show = 'hide', warning = F}
 mac <- function(x) 2 - 2/3*x
 md <- function(x) x - 0.5
 mach <- function(x) 2.5 - 2/3*x
-macl <- function(x) 1 - 2/3*x
 dwl <- tibble(x = c(9/5, 1.5, 1.5),
                      y = c(9/5-.5, 1.5, 1))
 dwl2 <- tibble(x = c(9/5, 2.25, 2.25),
@@ -774,7 +845,6 @@ ggplot() +
   annotate("text", x = .3, y = 2, label = expression(MAC[e]), size = 8) +
   annotate("text", x = 2.5, y = 2.3, label = expression(MD), size = 8) +
   annotate("text", x = .3, y = 2.5, label = expression(MAC[h]), size = 8) +
-  annotate("text", x = .3, y = .6, label = expression(MAC[l]), size = 8) +
   annotate("segment", x = 0, xend = 3, y = 1, yend = 1,
            linetype = "dotted", size = 2, color = "firebrick") +
   annotate("segment", x = 1.5, xend = 1.5, y = 0, yend = 3,
@@ -786,7 +856,6 @@ ggplot() +
   stat_function(fun = mac, color = "#ca5670", size = 1.5, linetype = "dashed") +
   stat_function(fun = md, color = "#638ccc", size = 1.5) +
   stat_function(fun = mach, color = "#000000", size = 1.5) +
-  stat_function(fun = macl, color = "#000000", size = 1.5) +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -824,7 +893,7 @@ This is caused by .hi[too many emissions]
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ![taxes and standards work differently if MACs are uncertain](`r knitr::fig_chunk("strategy_uncertain5", "png")`)
@@ -844,7 +913,7 @@ Why do we get the DWLs?
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ![taxes and standards work differently if MACs are uncertain](`r knitr::fig_chunk("strategy_uncertain5", "png")`)
@@ -864,7 +933,7 @@ The same error leads to different qualitative outcomes
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ![taxes and standards work differently if MACs are uncertain](`r knitr::fig_chunk("strategy_uncertain5", "png")`)
@@ -884,7 +953,7 @@ Try to solve for the policy choices and DWLs yourself
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_steep, echo = FALSE, fig.show = 'hide', warning = F}
@@ -969,7 +1038,7 @@ Collapse of Greenland ice sheet: could lead to a 7m rise in sea level
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_perfect_steep, echo = FALSE, fig.show = 'hide', warning = F}
@@ -1035,11 +1104,28 @@ The tax still lets emissions move to $E_\tau$ when MAC is higher than expected
 ]
 
 ---
+name: perfectly-steep-intuition
+
+# Perfectly steep MD and instrument choice
+
+If MD is .hi[perfectly steep], damages spike at $E^*$, so we do not need to know MAC to identify the efficient quantity
+
+A .hi[standard] set at $E^*$ pins down emissions at the efficient quantity
+
+--
+
+Under a .hi[tax], firms choose emissions where $MAC = \tau$, so unknown MAC prevents us from reliably hitting $E^*$
+
+--
+
+The tax can cause .hi[too much abatement], or .hi[too little abatement] and emissions beyond the damage threshold, potentially causing catastrophic damages
+
+---
 
 # Tipping points
 
 Collapse of western Antarctic ice sheet
-- Immediate risk of sea level rise
+- Potential for immediate sea level rise
 
 --
 
@@ -1049,11 +1135,11 @@ Die-back of Amazonian rainforest
 
 --
 
-Collapse of W. African monsoon season and many others
+Collapse of West African monsoon season and many others
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_flat, echo = FALSE, fig.show = 'hide', warning = F}
@@ -1102,7 +1188,7 @@ Solve for the regulator's chosen policies and their associated DWL
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_flat2, echo = FALSE, fig.show = 'hide', warning = F}
@@ -1162,7 +1248,7 @@ Why?
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ![taxes and standards work differently if MACs are uncertain](`r knitr::fig_chunk("strategy_flat2", "png")`)
@@ -1181,7 +1267,7 @@ Taxes impose a constant incentive on the firm, closer representation of the MD
 
 ---
 
-# Policy under strategic uncertainty
+# Policy under MAC uncertainty
 
 .pull-left[
 ```{r strategy_perfect_flat, echo = FALSE, fig.show = 'hide', warning = F}
@@ -1248,30 +1334,21 @@ There is .hi[no DWL under the tax], while the standard still fixes the wrong qua
 ]
 
 ---
+name: perfectly-flat-intuition
 
-# Dynamic uncertainty
+# Perfectly flat MD and instrument choice
 
+If MD is .hi[perfectly flat], the marginal external cost of emissions is known and constant, so we do not need to know MAC to identify the efficient price
 
-.pull-left[
-<center>
-```{r, out.width = "100%", fig.pos="c", echo = FALSE}
-knitr::include_graphics("files/09-tax.png")
-```
-Optimal carbon tax = MD
-</center>
-]
+A .hi[tax] set at $\tau = MD$ makes the firm pay that cost and choose $MAC = MD$, even though the regulator does not know MAC
 
-.pull-right[
-Current MD may be zero, but future MD could be very high
+--
 
+Under a .hi[standard], the implicit marginal price of emissions is MAC at the allowed quantity and depends on the firm's unknown MAC
 
-e.g. greenhouse gases
+--
 
-
-1 ton emitted today is not as costly as 1 ton emitted tomorrow for a lot of reasons
-
-]
-
+The implicit price can be .hi[too high or too low] relative to MD, so the standard can cause .hi[too much or too little abatement]
 
 ---
 
@@ -1285,7 +1362,7 @@ Two possible states of nature in the future (“good” with probability (1-p) a
 
 --
 
-The bad state is the climate is .hi[very] sensitive to greenhouse gases, good state is the climate is not very sensitive (climate change is fake news!)
+In the bad state, the climate is .hi[very] sensitive to greenhouse gases; in the good state, it is less sensitive
 
 --
 
@@ -1304,7 +1381,7 @@ Greenhouse gases are stock pollutants
 
 --
 
-Since greenhouse gases are very long-lived, abatement activity is cumulative (i.e. doing abatement activity today is as good as doing abatement activity in the future)
+Since greenhouse gases are very long-lived, abatement activity is cumulative (doing abatement activity today is as good as doing abatement activity in the future)
 
 --
 
@@ -1381,36 +1458,3 @@ In marginal terms: we want to equate the MAC today with the *expected* MAC in th
 --
 
 $$a^*_1 = p(1-a^*_1)$$
-
---
-
-Now, what are some complications of this simple model?
-
----
-
-# The Manne-Richel model
-
-Abatement tech can improve: 
-
-- future MAC different than current MAC
-- future MAC might depend on current abatement (learning by doing)
-
-
----
-
-# The Manne-Richel model
-
-Discounting: how should we weigh future costs and benefits?
-
-- Does this matter whether the future is the same generation or unborn generations?
-- Does it matter how wealthy we think people are?
-
----
-
-# The Manne-Richel model
-
-Alternative decision frameworks:
-
-- We just minimized expected total cost
-- We could instead do .hi[minimax regret:] minimize the cost of the worst-case outcome
-- We could use the .hi[precautionary principle:] use whatever is necessary to avoid irreversible damage

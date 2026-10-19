@@ -103,3 +103,44 @@ Do not edit manually unless you are intentionally maintaining the template. -->
 - Scope: Permit-game instructor controls.
 - Evidence: games/permit-market-online/tests/phase-controls.test.mts.
 - Action: Test pending edits across multiple refreshes before changing dashboard controls.
+
+[LEARN:slide-punctuation]
+- Date: 2026-10-06
+- Trigger: User repeated the instruction to omit periods from slide sentences
+- Right: Use concise slide prose without sentence periods, including within paragraphs; preserve punctuation needed for math, code, paths, and Markdown lists
+- Scope: Course slide decks
+- Action: Check newly written slide prose for sentence periods before rendering
+
+[LEARN:intensity-standard-diagram]
+- Date: 2026-10-06
+- Trigger: User identified the lecture 08 diagram as Holland, Hughes, and Knittel, AEJ: Economic Policy (2009)
+- Right: Figure 2 uses iso-private-surplus curves (consumer plus producer surplus before emissions damages), not firm iso-profit curves; A and C are competitive equilibria
+- Scope: Lecture 08 slides 54–58; retain the lecture term "intensity standards"
+- Evidence: Section 3.2 and Figure 2, https://jonathan-e-hughes.github.io/publications/JHughes_LowCarbonFuelStandards.pdf; published DOI 10.1257/pol.1.1.106
+- Lecture wording (2026-10-08): User explicitly requests "iso-profit curves"; describe the lecture illustration at given output prices and use profit consistently for A, C, and the contours
+
+[LEARN:replacement-slide-reveals]
+- Date: 2026-10-06
+- Trigger: Lecture 08 walkthrough accumulated earlier diagrams and text at each pause
+- Right: For a reveal that replaces the entire layout, use a new slide (`---`) with `count: false`; `--` always inherits earlier content even with `template: false`
+- Action: Verify the interpreted slides each contain one heading, one pair of columns, and one diagram; reserve quantity-label space to keep axes fixed across reveals
+- Evidence: Remark parser test reproduced up to three inherited figures; corrected lecture 08 has ten separate layouts numbered 54–58
+
+[LEARN:slide-font-consistency]
+- Date: 2026-10-08
+- Trigger: User asked that lecture 08 slides 54–58 match the other slides and omit the visible HHK adaptation credit
+- Right: Use the shared slide typography (32px body text); shorten prose to fit rather than adding a smaller font override
+- Scope: Lecture slide editing; no visible HHK adaptation credit on this walkthrough
+
+[LEARN:intensity-market-slides]
+- Date: 2026-10-08
+- Trigger: User asked to simplify lecture 08 slides 47–50 and walk through the graphs more slowly
+- Right: Show beta_i MD as the vertical distance from MC to SMC on the y-axis, without a dotted horizontal damage line; introduce social costs, efficient quantities, policy curves, quantities, and DWL in separate reveals with one short caption
+- Scope: Intensity-standard market diagrams; retain the shared 32px slide text and existing slide numbering
+
+[LEARN:welfare-slide-formatting]
+- Date: 2026-10-08
+- Trigger: User caught small text and broken colored math in lecture 08's welfare walkthrough
+- Wrong: The perfect-competition class overrode the shared 32px font with 26px and nested equations in Remark color wrappers
+- Right: Inherit the shared body font; keep equations outside colored prose labels; shorten repeated prose and adjust paragraph spacing to fit
+- Action: Run the typography and color-wrapper checks in slides/R/08-test-intensity-slides.R after editing lecture 08
