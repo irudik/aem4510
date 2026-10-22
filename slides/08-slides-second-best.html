@@ -51,6 +51,7 @@ pacman::p_load(
 source("R/08-second-best-intensity-figures.R")
 source("R/08-second-best-diagram.R")
 source("R/08-perfect-competition-figures.R")
+source("R/08-rps-figures.R")
 options(htmltools.dir.version = FALSE)
 knitr::opts_hooks$set(fig.callout = function(options) {
   if (options$fig.callout) {
@@ -60,7 +61,8 @@ knitr::opts_chunk$set(
   cache = TRUE,
   cache.extra = list(tools::md5sum(c(
     "R/08-second-best-intensity-figures.R", "R/08-second-best-diagram.R",
-    "R/08-perfect-competition-figures.R"
+    "R/08-perfect-competition-figures.R", "R/08-rps-figures.R",
+    "files/08-rps-targets-june-2026.xlsx", "files/08-us-state-boundaries.geojson"
   ))),
   echo = TRUE,
   fig.align = "center"
@@ -803,6 +805,121 @@ These policies are common when direct emissions monitoring is difficult but outp
 
 ---
 
+class: rps-map-slide
+
+# State RPS mandates, April 2026
+
+.pull-left[
+&lt;img src="files/08-rps-map-1.png" alt="" width="100%" /&gt;
+]
+
+.pull-right[
+
+.hi[27 states + DC] have mandatory RPS policies
+
+About 500 TWh of renewable electricity required in 2026
+
+Broader clean electricity standards can also count nuclear
+
+]
+
+???
+
+Source: Berkeley Lab, June 2026 update
+https://emp.lbl.gov/projects/renewables-portfolio
+
+The map shows mandatory RPS policies, not voluntary goals or broader clean
+electricity standards, and does not imply uniform coverage or stringency
+across states. The 2026 RPS demand estimate is rounded from the Berkeley Lab
+report's demand projection. It is a required quantity, not a causal estimate
+of new renewable generation attributable to RPS policies.
+
+---
+
+class: rps-example
+
+# RPS compliance: a 30% example
+
+An illustrative requirement for an electricity retailer
+
+| Electricity sales | RPS target | RECs required |
+|:--:|:--:|:--:|
+| 100 MWh | 30% | 30 |
+
+One .hi[renewable energy certificate (REC)] records 1 MWh of eligible renewable generation
+
+Each state defines which technologies and locations qualify
+
+???
+
+Sources:
+https://www.epa.gov/green-power-markets/renewable-energy-certificates-recs
+https://www.eia.gov/energyexplained/renewable-sources/portfolio-standards.php
+
+---
+
+class: rps-example
+
+# RPS compliance: a 30% example
+
+An illustrative requirement for an electricity retailer
+
+| Electricity sales | RPS target | RECs required |
+|:--:|:--:|:--:|
+| 100 MWh | 30% | 30 |
+
+The retailer buys and retires 30 eligible RECs so they cannot be used again
+
+REC sales add revenue to renewable generation: an implicit subsidy
+
+Nonrenewable sales require buying RECs but earn none: an implicit tax
+
+???
+
+RECs can trade separately from electricity, subject to state eligibility
+rules. The compliance obligation falls on the retailer, rather than directly
+on the nonrenewable generator. This example assumes the retailer buys its
+RECs; a retailer can also obtain them from its own eligible generation.
+
+The requirement applies to all electricity sales. At a 30% standard and a
+REC price of r, each additional MWh sold requires 0.3 RECs, an implicit tax
+of 0.3r. Each renewable MWh also creates a REC worth r, so its net incentive
+is a subsidy of 0.7r. Nonrenewable generation earns no REC and bears the
+implicit tax. These relative incentives foreshadow the tax and output
+subsidy decomposition of the intensity standard below.
+
+Sources:
+https://www.epa.gov/green-power-markets/energy-attribute-tracking-systems
+https://www.eia.gov/energyexplained/renewable-sources/portfolio-standards.php
+
+---
+
+class: rps-example
+
+# RPS compliance: a 30% example
+
+What happens if electricity sales double?
+
+| Electricity sales | RPS target | RECs required |
+|:--:|:--:|:--:|
+| 100 MWh | 30% | 30 |
+| 200 MWh | 30% | 60 |
+
+The requirement rises with sales, while the renewable share stays fixed
+
+Other generation can rise from 70 to 140 MWh, so meeting an RPS does not cap emissions
+
+???
+
+This example abstracts from credit multipliers, banking, resource-specific
+requirements, and alternative compliance payments. For the final comparison,
+interpret the retailer as serving the whole illustrative system, with no
+cross-system REC trades. If remaining generation is fossil and its emissions
+rate is unchanged, its emissions double as sales rise from 100 to 200 MWh.
+In actual REC markets, physical electricity flows need not track REC trades.
+
+---
+
 # Intensity standards: the constraint
 
 Let `\(H\)` be the dirtier product and `\(L\)` the cleaner product
@@ -1200,7 +1317,10 @@ class: intensity-walkthrough
 .pull-left[
 
 The red line holds .hi[total emissions] fixed at A's level
-`$$\beta_H Q_H + \beta_L Q_L = K$$`
+`$$\beta_H Q_H + \beta_L Q_L = E$$`
+
+Solving for `\(Q_L\)`:
+`$$Q_L = \frac{E}{\beta_L} - \frac{\beta_H}{\beta_L} Q_H$$`
 
 Its slope is `\(-\beta_H/\beta_L\)`
 
@@ -1223,7 +1343,7 @@ Above the red line: .hi-red[more emissions than A]
 
 Below the line: fewer emissions
 
-The shaded region has `\(E &gt; K\)`
+The shaded region has higher emissions than at A
 
 ]
 
@@ -1240,9 +1360,10 @@ class: intensity-walkthrough
 .pull-left[
 
 The blue line is the .hi[binding standard]
-`$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
+`$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} = \sigma$$`
 
-On the line, emissions intensity equals `\(\sigma\)`
+Solving for `\(Q_L\)`:
+`$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
 
 ]
 
@@ -1259,8 +1380,11 @@ class: intensity-walkthrough
 
 .pull-left[
 
-The blue line is the .hi[binding standard]
-`$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
+The .hi[intensity standard] requires
+`$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} \leq \sigma$$`
+
+Equivalently,
+`$$Q_L \geq \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
 
 A violates the standard; feasible choices lie on or above the blue line
 
@@ -1419,7 +1543,10 @@ class: intensity-walkthrough
 .pull-left[
 
 The red line holds .hi[total emissions] fixed at A's level
-`$$\beta_H Q_H + \beta_L Q_L = K$$`
+`$$\beta_H Q_H + \beta_L Q_L = E$$`
+
+Solving for `\(Q_L\)`:
+`$$Q_L = \frac{E}{\beta_L} - \frac{\beta_H}{\beta_L} Q_H$$`
 
 Its slope is `\(-\beta_H/\beta_L\)`
 
@@ -1442,7 +1569,7 @@ Above the red line: .hi-red[more emissions than A]
 
 Below the line: fewer emissions
 
-The shaded region has `\(E &gt; K\)`
+The shaded region has higher emissions than at A
 
 ]
 
@@ -1459,9 +1586,10 @@ class: intensity-walkthrough
 .pull-left[
 
 The blue line is the .hi[binding standard]
-`$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
+`$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} = \sigma$$`
 
-On the line, emissions intensity equals `\(\sigma\)`
+Solving for `\(Q_L\)`:
+`$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
 
 ]
 
@@ -1478,8 +1606,11 @@ class: intensity-walkthrough
 
 .pull-left[
 
-The blue line is the .hi[binding standard]
-`$$Q_L = \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
+The .hi[intensity standard] requires
+`$$\frac{\beta_H Q_H + \beta_L Q_L}{Q_H + Q_L} \leq \sigma$$`
+
+Equivalently,
+`$$Q_L \geq \frac{\beta_H-\sigma}{\sigma-\beta_L}Q_H$$`
 
 A violates the standard; feasible choices lie on or above the blue line
 
@@ -1973,9 +2104,9 @@ exclude: true
 &lt;!-- ] --&gt;
 
 &lt;!-- .pull-right[ --&gt;
-&lt;!-- `\(\beta_H Q_H + \beta_L Q_L = K\)` is the line showing all combinations of `\(Q_L,Q_H\)` that generate `\(K\)` units of emissions --&gt;
+&lt;!-- `\(\beta_H Q_H + \beta_L Q_L = E\)` is the line showing all combinations of `\(Q_L,Q_H\)` that generate `\(E\)` units of emissions --&gt;
 
-&lt;!-- K crosses through point `\(A\)` which is the unregulated profit-maximizing choice by the firm --&gt;
+&lt;!-- The emissions isoquant crosses through point `\(A\)` which is the unregulated profit-maximizing choice by the firm --&gt;
 
 &lt;!-- Anything to the top right of the line is .hi-red[more emissions] --&gt;
 &lt;!-- ] --&gt;

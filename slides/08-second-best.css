@@ -40,3 +40,21 @@
   object-fit: contain;
   margin: 0 auto;
 }
+
+/* Keep the policy map large while retaining the lecture's shared text size. */
+.rps-map-slide .pull-left { width: 62%; }
+.rps-map-slide .pull-right { width: 34%; }
+.rps-map-slide .pull-left img {
+  width: 100%;
+  max-height: 410px;
+  object-fit: contain;
+}
+/* The course-wide table rule is smaller than lecture prose; inherit here. */
+.rps-example table {
+  font: inherit;
+  line-height: 1.4;
+  width: 100%;
+  margin: 0.6em 0 0.9em;
+}
+.rps-example th, .rps-example td { padding: 0.2em 0.5em; }
+.rps-example p { margin: 0.65em 0; }

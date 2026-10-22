@@ -101,7 +101,7 @@ sb_intensity_diagram = function(stage = 10L, show_feasible = stage >= 6,
         label = "Feasible\nregion", color = blue, size = 5)
   }
 
-  # The region above the emissions line contains choices with E > K.
+  # The region above the emissions line contains choices with higher emissions than at A.
   # Add its fill before the other objects so it never obscures their labels.
   if (stage >= 5) {
     boundary = data.frame(h = seq(0, 10, length.out = 301))
@@ -133,7 +133,7 @@ sb_intensity_diagram = function(stage = 10L, show_feasible = stage >= 6,
       # Keep the label outside the band between the two emissions lines.
       ggplot2::annotate("text", x = if (emissions_rise) 4.55 else 5.5,
         y = if (emissions_rise) 7.8 else 7.9,
-        label = "beta[H]*Q[H]+beta[L]*Q[L]==K",
+        label = "beta[H]*Q[H]+beta[L]*Q[L]==E",
         parse = TRUE, color = red, size = 5, angle = -64)
   }
   if (stage >= 6) {
@@ -141,7 +141,7 @@ sb_intensity_diagram = function(stage = 10L, show_feasible = stage >= 6,
       ggplot2::geom_abline(intercept = 0, slope = choices$slope,
         color = blue, linewidth = 1.2) +
       ggplot2::annotate("text", x = 2.7, y = 1.7,
-        label = "Q[L]==frac(beta[H]-sigma,sigma-beta[L])*Q[H]",
+        label = "frac(beta[H]*Q[H]+beta[L]*Q[L],Q[H]+Q[L])==sigma",
         parse = TRUE, color = blue, size = 5, angle = 40)
   }
   if (stage >= 7) {
@@ -229,7 +229,7 @@ test_sb_intensity_diagram = function() {
       layer$label
     }))
     stopifnot(!("Feasible\nregion" %in% line_only_labels))
-    stopifnot("Q[L]==frac(beta[H]-sigma,sigma-beta[L])*Q[H]" %in% line_only_labels)
+    stopifnot("frac(beta[H]*Q[H]+beta[L]*Q[L],Q[H]+Q[L])==sigma" %in% line_only_labels)
     layer_counts = vapply(1:10, function(stage) {
       built_plot = ggplot2::ggplot_build(sb_intensity_diagram(stage, emissions_case = emissions_case))
       stopifnot(all(vapply(built_plot$data, function(layer) {
