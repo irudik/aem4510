@@ -144,3 +144,21 @@ Do not edit manually unless you are intentionally maintaining the template. -->
 - Wrong: The perfect-competition class overrode the shared 32px font with 26px and nested equations in Remark color wrappers
 - Right: Inherit the shared body font; keep equations outside colored prose labels; shorten repeated prose and adjust paragraph spacing to fit
 - Action: Run the typography and color-wrapper checks in slides/R/08-test-intensity-slides.R after editing lecture 08
+
+[LEARN:slide-figure-layout]
+- Date: 2026-10-22
+- Trigger: Staggering quantity labels compressed lecture 09 figures and changed their dimensions between pauses
+- Wrong: Use multiple rows of axis labels to avoid overlap
+- Right: Keep quantity labels on one row and preserve uniform figure dimensions and plot areas across every reveal; reduce quantity label size uniformly when needed
+- Scope: Lecture graph sequences, especially lecture 09 slide 12
+- Evidence: User explicitly requested the original size, no staggered labels, and uniform graphs
+- Action: Reserve axis space before labels appear and test equal plot dimensions across the complete sequence
+
+[LEARN:slide-currency-and-video]
+- Date: 2026-10-27
+- Trigger: Lecture 09's CCA charge rendered as broken math and its YouTube player failed
+- Right: Escape currency dollar signs in Rmd prose and inspect the generated HTML for unintended math delimiters
+- Right: Use local_video with a local H.264/AAC MP4 for lecture playback, and verify decoding before claiming the video works
+- Action: Keep background and policy detail on separate replacement frames when the shared 32px text would otherwise crowd the slide
+- Scope: User presents lecture HTML in Safari, prefer a fresh filename and constrained baseline H.264/AAC MP4 when replacing a video that plays audio without a picture
+- Check: A successful ffmpeg decode does not confirm Safari playback, distinguish the file checks from a browser playback check

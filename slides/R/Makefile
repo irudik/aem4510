@@ -7,3 +7,7 @@ test-08:
 
 test-08-rps: 08-rps-figures.R ../files/08-rps-targets-june-2026.xlsx ../files/08-us-state-boundaries.geojson
 	Rscript -e 'source("08-rps-figures.R"); test_sb_rps_figures()'
+
+.PHONY: test-09
+test-09: 09-carbon-tariffs-figures.R
+	Rscript -e 'source("09-carbon-tariffs-figures.R"); test_ct_module_one_figures()'
